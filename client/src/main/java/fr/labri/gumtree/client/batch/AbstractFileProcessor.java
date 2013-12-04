@@ -12,6 +12,7 @@ public abstract class AbstractFileProcessor extends AbstractProcessor {
 	public AbstractFileProcessor(String inFolder, String outFolder) {
 		super(inFolder);
 		this.outFolder = outFolder;
+		ensureFolder(outFolder);
 	}
 	
 	public AbstractFileProcessor(String inFolder) {

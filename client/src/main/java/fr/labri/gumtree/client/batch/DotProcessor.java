@@ -9,8 +9,12 @@ import fr.labri.gumtree.tree.Tree;
 public class DotProcessor extends AbstractFileProcessor {
 	
 	public static void main(String[] args) {
-		DotProcessor g = new DotProcessor(args[0],"/home/falleri/Out/");
+		DotProcessor g = new DotProcessor(args[0]);
 		g.process();
+	}
+	
+	public DotProcessor(String inFolder) {
+		super(inFolder, "dot");
 	}
 
 	public DotProcessor(String inFolder, String outFolder) {

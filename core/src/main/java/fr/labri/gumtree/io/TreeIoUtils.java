@@ -24,7 +24,7 @@ public final class TreeIoUtils {
 	private TreeIoUtils() {
 	}
 	
-	public static Tree fromXML(String file) {
+	public static Tree fromXml(String file) {
 		XMLInputFactory fact = XMLInputFactory.newInstance();
 		try {
 			Tree root = null;
@@ -58,18 +58,17 @@ public final class TreeIoUtils {
 		return null;
 	}
 	
-	public static void toXML(String file, Tree t) {
+	public static void toXml(Tree t, String file) {
 		try {
 			FileWriter f = new FileWriter(file);
-			f.append(toXML(t));
+			f.append(toXml(t));
 			f.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 	
-	public static String toXML(Tree t) {
+	public static String toXml(Tree t) {
 		XMLOutputFactory fact = XMLOutputFactory.newInstance();
 		StringWriter s = new StringWriter();
 		String result = null;
@@ -99,17 +98,17 @@ public final class TreeIoUtils {
 		w.writeEndElement();
 	}
 	
-	public static void toCompactXML(String file, Tree t) {
+	public static void toCompactXml(Tree t, String file) {
 		try {
 			FileWriter f = new FileWriter(file);
-			f.append(toCompactXML(t));
+			f.append(toCompactXml(t));
 			f.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static String toCompactXML(Tree t) {
+	public static String toCompactXml(Tree t) {
 		XMLOutputFactory fact = XMLOutputFactory.newInstance();
 		StringWriter s = new StringWriter();
 		String result = null;

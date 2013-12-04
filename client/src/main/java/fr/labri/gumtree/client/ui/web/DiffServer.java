@@ -60,17 +60,17 @@ public class DiffServer extends NanoHTTPD {
 			if ("/src".equals(uri))
 				return respond("text/plain", new FileInputStream(fSrc));
 			else if ("/src/xml".equals(uri)) 
-				return respond("text/xml", TreeIoUtils.toXML(tSrc));
+				return respond("text/xml", TreeIoUtils.toXml(tSrc));
 			else if ("/src/cxml".equals(uri)) 
-				return respond("text/xml", TreeIoUtils.toCompactXML(tSrc));
+				return respond("text/xml", TreeIoUtils.toCompactXml(tSrc));
 			else if ("/src/dot".equals(uri)) 
 				return respond("text/plain", TreeIoUtils.toDot(tSrc));
 			else if ("/dst".equals(uri)) 
 				return respond("text/plain", new FileInputStream(fDst));
 			else if ("/dst/xml".equals(uri)) 
-				return respond("text/xml", TreeIoUtils.toXML(tDst));
+				return respond("text/xml", TreeIoUtils.toXml(tDst));
 			else if ("/dst/cxml".equals(uri)) 
-				return respond("text/xml", TreeIoUtils.toCompactXML(tDst));
+				return respond("text/xml", TreeIoUtils.toCompactXml(tDst));
 			else if ("/dst/dot".equals(uri)) 
 				return respond("text/plain", TreeIoUtils.toDot(tDst));
 			else if ("/diff".equals(uri) || "/".equals(uri))

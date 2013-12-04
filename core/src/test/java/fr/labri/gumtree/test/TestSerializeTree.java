@@ -22,8 +22,8 @@ public class TestSerializeTree {
 		e.setParentAndUpdateChildren(a);
 		// Refresh metrics is called because it is automatically called in fromXML
 		a.refreshMetrics();
-		TreeIoUtils.toXML("target/test-classes/test-serialize.xml", a);
-		Tree ca = TreeIoUtils.fromXML("target/test-classes/test-serialize.xml");
+		TreeIoUtils.toXml(a, "target/test-classes/test-serialize.xml");
+		Tree ca = TreeIoUtils.fromXml("target/test-classes/test-serialize.xml");
 		
 		assertTrue(a.isClone(ca));
 		assertTrue(ca.getType() == 0);
