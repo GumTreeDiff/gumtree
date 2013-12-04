@@ -1,0 +1,71 @@
+.add {
+	border: 1px solid black;
+	background-color: greenyellow;
+}
+
+.del {
+	border: 1px solid black;
+	background-color: tomato;
+}
+
+.mv {
+	border: 1px solid black;
+	background-color: lightblue;
+}
+
+.upd {
+	border: 1px solid black;
+	background-color: gold;
+	font-weight: bold;
+}
+
+.cupd {
+	font-weight: normal;
+	color: grey;
+}
+
+.selected {
+	background-color: silver;	
+}
+
+.marker {
+	margin: 0;
+	padding: 0;
+}
+
+.container-fluid {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 95%;
+} 
+
+.scrollable {
+	overflow: scroll;
+}
+
+.no-overflow {
+	overflow: hidden;
+}
+
+body, html {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+div {
+	margin: 0px;
+	padding: 0px;
+}
+
+.max-height {
+	height: 100%;
+}
+
+.pre {
+	margin: 0px;
+	padding: 0px;
+	font-size: 10pt;
+	color: black;
+	font-family: monospace;
+}

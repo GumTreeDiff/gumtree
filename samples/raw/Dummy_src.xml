@@ -1,0 +1,7 @@
+<tree type="0" typeLabel="0" label="a" pos="0" length="0">
+	<tree type="1" typeLabel="1" label="b" pos="0" length="0">
+		<tree type="3" typeLabel="3" label="c" pos="0" length="0"/>
+		<tree type="3" typeLabel="3" label="d" pos="0" length="0"/>
+	</tree>
+	<tree type="2" typeLabel="2" label="e" pos="0" length="0"/>
+</tree>
