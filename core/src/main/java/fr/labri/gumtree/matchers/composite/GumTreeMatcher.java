@@ -1,5 +1,6 @@
 package fr.labri.gumtree.matchers.composite;
 
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.heuristic.*;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;

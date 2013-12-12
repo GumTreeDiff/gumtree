@@ -9,8 +9,8 @@ import java.util.TreeSet;
 import fr.labri.gumtree.actions.RootsClassifier;
 import fr.labri.gumtree.client.MatcherFactory;
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
-import fr.labri.gumtree.matchers.composite.Matcher;
-import fr.labri.gumtree.tree.MappingStore;
+import fr.labri.gumtree.matchers.MappingStore;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
 
 public class ActionDistributionProcessor extends AbstractFilePairsProcessor {

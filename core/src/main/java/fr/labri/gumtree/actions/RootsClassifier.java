@@ -9,8 +9,8 @@ import fr.labri.gumtree.actions.model.Insert;
 import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Permute;
 import fr.labri.gumtree.actions.model.Update;
-import fr.labri.gumtree.matchers.composite.Matcher;
-import fr.labri.gumtree.tree.Mapping;
+import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
 
 public class RootsClassifier extends TreeClassifier {

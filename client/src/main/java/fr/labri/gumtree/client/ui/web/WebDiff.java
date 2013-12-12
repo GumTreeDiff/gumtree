@@ -2,7 +2,7 @@ package fr.labri.gumtree.client.ui.web;
 
 import fr.labri.gumtree.client.DiffClient;
 import fr.labri.gumtree.client.DiffOptions;
-import fr.labri.gumtree.matchers.composite.Matcher;
+import fr.labri.gumtree.matchers.Matcher;
 
 public class WebDiff extends DiffClient {
 

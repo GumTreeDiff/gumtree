@@ -7,7 +7,7 @@ import java.io.IOException;
 import fr.labri.gumtree.client.MatcherFactory;
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.client.ui.web.BootstrapGenerator;
-import fr.labri.gumtree.matchers.composite.Matcher;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
 
 public final class WebDiffProcessor extends AbstractFilePairsProcessor {

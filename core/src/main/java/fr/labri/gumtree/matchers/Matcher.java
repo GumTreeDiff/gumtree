@@ -1,12 +1,10 @@
-package fr.labri.gumtree.matchers.composite;
+package fr.labri.gumtree.matchers;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import fr.labri.gumtree.tree.Mapping;
-import fr.labri.gumtree.tree.MappingStore;
 import fr.labri.gumtree.tree.Tree;
 
 public abstract class Matcher {

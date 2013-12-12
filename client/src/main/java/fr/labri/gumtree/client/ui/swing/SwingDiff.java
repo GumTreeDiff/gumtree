@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 import fr.labri.gumtree.client.DiffClient;
 import fr.labri.gumtree.client.DiffOptions;
-import fr.labri.gumtree.matchers.composite.Matcher;
+import fr.labri.gumtree.matchers.Matcher;
 
 public final class SwingDiff extends DiffClient {
 

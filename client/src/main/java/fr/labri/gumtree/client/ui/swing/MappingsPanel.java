@@ -22,8 +22,8 @@ import javax.swing.tree.TreePath;
 
 import fr.labri.gumtree.actions.RootsClassifier;
 import fr.labri.gumtree.actions.TreeClassifier;
-import fr.labri.gumtree.matchers.composite.Matcher;
-import fr.labri.gumtree.tree.MappingStore;
+import fr.labri.gumtree.matchers.MappingStore;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
 
 public class MappingsPanel extends JPanel implements TreeSelectionListener {

@@ -2,7 +2,7 @@ package fr.labri.gumtree.matchers.optimal.rted;
 
 import java.util.List;
 
-import fr.labri.gumtree.matchers.composite.Matcher;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 

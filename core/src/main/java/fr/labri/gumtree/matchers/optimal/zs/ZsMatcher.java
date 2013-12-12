@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import fr.labri.gumtree.matchers.composite.Matcher;
-import fr.labri.gumtree.tree.Mapping;
+import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
 
 public class ZsMatcher extends Matcher {

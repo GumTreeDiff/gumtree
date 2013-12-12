@@ -8,10 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import fr.labri.gumtree.matchers.composite.Matcher;
-import fr.labri.gumtree.tree.Mapping;
-import fr.labri.gumtree.tree.MappingStore;
-import fr.labri.gumtree.tree.MultiMappingStore;
+import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.MappingStore;
+import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.MultiMappingStore;
 import fr.labri.gumtree.tree.Tree;
 
 public class GreedySubTreeMatcher extends Matcher {

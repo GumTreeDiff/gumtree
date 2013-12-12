@@ -3,8 +3,8 @@ package fr.labri.gumtree.client;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.composite.GumTreeMatcher;
-import fr.labri.gumtree.matchers.composite.Matcher;
 import fr.labri.gumtree.tree.Tree;
 
 public class MatcherFactory {

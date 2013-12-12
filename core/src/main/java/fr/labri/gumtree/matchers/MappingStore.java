@@ -1,10 +1,12 @@
-package fr.labri.gumtree.tree;
+package fr.labri.gumtree.matchers;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import fr.labri.gumtree.tree.Tree;
 
 public class MappingStore implements Iterable<Mapping> {
 	

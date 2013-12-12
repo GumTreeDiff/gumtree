@@ -7,9 +7,9 @@ import java.util.List;
 
 import fr.labri.gumtree.actions.model.Action;
 
-public final class SerializeEditScript {
+public final class ActionsSerializer {
 	
-	private SerializeEditScript() {
+	private ActionsSerializer() {
 	}
 
 	public static String toText(List<Action> script) {

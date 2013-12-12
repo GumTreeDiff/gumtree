@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
-import fr.labri.gumtree.matchers.composite.Matcher;
-import fr.labri.gumtree.tree.Mapping;
-import fr.labri.gumtree.tree.MappingStore;
+import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.MappingStore;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 

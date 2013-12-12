@@ -8,8 +8,8 @@ import fr.labri.gumtree.actions.model.Delete;
 import fr.labri.gumtree.actions.model.Insert;
 import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Update;
-import fr.labri.gumtree.matchers.composite.Matcher;
-import fr.labri.gumtree.tree.Mapping;
+import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
 
 public class LeavesClassifier extends TreeClassifier {

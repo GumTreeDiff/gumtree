@@ -1,8 +1,8 @@
 package fr.labri.gumtree.io;
 
-public final class DebugMatrix {
+public final class MatrixDebugger {
 	
-	private DebugMatrix() {
+	private MatrixDebugger() {
 	}
 	
 	public static void dump(Object[][] mat) {

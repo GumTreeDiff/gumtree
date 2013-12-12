@@ -7,9 +7,9 @@ import java.util.Map;
 
 import fr.labri.gumtree.actions.ActionGenerator;
 import fr.labri.gumtree.client.ui.web.NanoHTTPD.Response.Status;
-import fr.labri.gumtree.io.SerializeEditScript;
+import fr.labri.gumtree.io.ActionsSerializer;
 import fr.labri.gumtree.io.TreeIoUtils;
-import fr.labri.gumtree.matchers.composite.Matcher;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
 
 public class DiffServer extends NanoHTTPD {
@@ -76,7 +76,7 @@ public class DiffServer extends NanoHTTPD {
 			else if ("/diff".equals(uri) || "/".equals(uri))
 				return respond(BootstrapGenerator.produceHTML(fSrc, fDst, tSrc, tDst, matcher));
 			else if ("/script".equals(uri))
-				return respond("text/plain", SerializeEditScript.toText(new ActionGenerator(tSrc, tDst, matcher.getMappingSet()).getActions()));
+				return respond("text/plain", ActionsSerializer.toText(new ActionGenerator(tSrc, tDst, matcher.getMappingSet()).getActions()));
 			else if ("/quit".equals(uri)) System.exit(0);
 			else if (uri.startsWith("/assets")) {
 				String res = uri.substring(1);

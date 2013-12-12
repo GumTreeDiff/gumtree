@@ -2,8 +2,9 @@ package fr.labri.gumtree.matchers.composite;
 
 import java.util.Iterator;
 
+import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
-import fr.labri.gumtree.tree.Mapping;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 
