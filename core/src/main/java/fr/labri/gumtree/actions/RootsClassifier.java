@@ -3,17 +3,23 @@ package fr.labri.gumtree.actions;
 import java.util.List;
 import java.util.Set;
 
+import fr.labri.gumtree.actions.model.Action;
+import fr.labri.gumtree.actions.model.Delete;
+import fr.labri.gumtree.actions.model.Insert;
+import fr.labri.gumtree.actions.model.Move;
+import fr.labri.gumtree.actions.model.Permute;
+import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.composite.Matcher;
 import fr.labri.gumtree.tree.Mapping;
 import fr.labri.gumtree.tree.Tree;
 
-public class ClassifyRoots extends ClassifyTrees {
+public class RootsClassifier extends TreeClassifier {
 
-	public ClassifyRoots(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> script) {
+	public RootsClassifier(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> script) {
 		super(src, dst, rawMappings, script);	
 	}
 	
-	public ClassifyRoots(Tree src, Tree dst, Matcher m) {
+	public RootsClassifier(Tree src, Tree dst, Matcher m) {
 		super(src, dst, m);
 	}
 	

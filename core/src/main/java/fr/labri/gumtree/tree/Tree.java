@@ -11,7 +11,7 @@ public class Tree {
 
 	public static final String NO_LABEL = "";
 
-	public static final int NO_METRIC = -1;
+	public static final int NO_VALUE = -1;
 
 	private static final String OPEN_SYMBOL = "[(";
 	
@@ -69,11 +69,11 @@ public class Tree {
 		this.typeLabel = typeLabel;
 		this.children = new ArrayList<Tree>();
 		this.id = NO_ID;
-		this.depth = NO_METRIC;
-		this.digest = NO_METRIC;
-		this.height = NO_METRIC;
-		this.depth = NO_METRIC;
-		this.size = NO_METRIC;
+		this.depth = NO_VALUE;
+		this.digest = NO_VALUE;
+		this.height = NO_VALUE;
+		this.depth = NO_VALUE;
+		this.size = NO_VALUE;
 		this.matched = false;
 	}
 

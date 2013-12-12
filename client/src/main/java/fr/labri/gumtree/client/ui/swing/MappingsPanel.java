@@ -20,8 +20,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
-import fr.labri.gumtree.actions.ClassifyRoots;
-import fr.labri.gumtree.actions.ClassifyTrees;
+import fr.labri.gumtree.actions.RootsClassifier;
+import fr.labri.gumtree.actions.TreeClassifier;
 import fr.labri.gumtree.matchers.composite.Matcher;
 import fr.labri.gumtree.tree.MappingStore;
 import fr.labri.gumtree.tree.Tree;
@@ -32,7 +32,7 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 
 	private Tree src;
 	private Tree dst;
-	private ClassifyTrees classifyTrees;
+	private TreeClassifier classifyTrees;
 	private MappingStore mappings;
 
 	private TreePanel panSrc;
@@ -50,7 +50,7 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 		super(new GridLayout(1, 0));
 		this.src = src;
 		this.dst = dst;
-		this.classifyTrees = new ClassifyRoots(src, dst, m);
+		this.classifyTrees = new RootsClassifier(src, dst, m);
 		this.mappings = new MappingStore(m.getMappingSet());
 		this.panSrc = new TreePanel(src, new MappingsCellRenderer(true));
 		this.panSrc.getJTree().addTreeSelectionListener(this);

@@ -4,12 +4,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import fr.labri.gumtree.actions.Action;
-import fr.labri.gumtree.actions.Delete;
-import fr.labri.gumtree.actions.GenerateActions;
-import fr.labri.gumtree.actions.Insert;
-import fr.labri.gumtree.actions.Move;
-import fr.labri.gumtree.actions.Update;
+import fr.labri.gumtree.actions.ActionGenerator;
+import fr.labri.gumtree.actions.model.Action;
+import fr.labri.gumtree.actions.model.Delete;
+import fr.labri.gumtree.actions.model.Insert;
+import fr.labri.gumtree.actions.model.Move;
+import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.client.MatcherFactory;
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.matchers.composite.Matcher;
@@ -55,7 +55,7 @@ public class MetricsProcessor extends AbstractFilePairsProcessor {
 		toc = System.currentTimeMillis();
 		long tMatch = toc - tic;
 		tic = System.currentTimeMillis();
-		GenerateActions g = new GenerateActions(src, dst, matcher.getMappingSet());
+		ActionGenerator g = new ActionGenerator(src, dst, matcher.getMappingSet());
 		toc = System.currentTimeMillis();
 		long tScript = toc - tic;
 		long tTotal = tParse + tMatch + tScript;

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.labri.gumtree.actions.ClassifyRootsAndLeaves;
+import fr.labri.gumtree.actions.RootAndLeavesClassifier;
 import fr.labri.gumtree.algo.StringAlgorithms;
 import fr.labri.gumtree.matchers.composite.Matcher;
 import fr.labri.gumtree.tree.MappingStore;
@@ -39,7 +39,7 @@ public final class BootstrapGenerator {
 	}
 	
 	public static String produceHTML(String srcPath, String dstPath, Tree src, Tree dst, Matcher matcher) throws IOException {
-		ClassifyRootsAndLeaves c = new ClassifyRootsAndLeaves(src, dst, matcher);
+		RootAndLeavesClassifier c = new RootAndLeavesClassifier(src, dst, matcher);
 		MappingStore mappings = new MappingStore(matcher.getMappingSet());
 		Map<Integer, Integer> ids = new HashMap<Integer, Integer>();
 		

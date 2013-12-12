@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
-import fr.labri.gumtree.actions.Action;
+import fr.labri.gumtree.actions.model.Action;
 
 public final class SerializeEditScript {
 	

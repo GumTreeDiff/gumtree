@@ -7,12 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import fr.labri.gumtree.actions.model.Action;
+import fr.labri.gumtree.actions.model.Delete;
+import fr.labri.gumtree.actions.model.Insert;
+import fr.labri.gumtree.actions.model.Move;
+import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.tree.Mapping;
 import fr.labri.gumtree.tree.MappingStore;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 
-public class GenerateActions {
+public class ActionGenerator {
 	
 	private Tree origSrc;
 	
@@ -38,7 +43,7 @@ public class GenerateActions {
 	
 	private Map<Integer, Tree> cpySrcTrees;
 	
-	public GenerateActions(Tree src, Tree dst, Set<Mapping> mappings) {
+	public ActionGenerator(Tree src, Tree dst, Set<Mapping> mappings) {
 		this.origSrc = src;
 		this.cpySrc = this.origSrc.deepCopy();
 		this.dst = dst;

@@ -4,12 +4,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import fr.labri.gumtree.actions.model.Action;
 import fr.labri.gumtree.matchers.composite.Matcher;
 import fr.labri.gumtree.tree.Mapping;
 import fr.labri.gumtree.tree.MappingStore;
 import fr.labri.gumtree.tree.Tree;
 
-public abstract class ClassifyTrees {
+public abstract class TreeClassifier {
 	
 	protected Set<Tree> srcUpdTrees;
 
@@ -31,20 +32,20 @@ public abstract class ClassifyTrees {
 	
 	protected List<Action> actions;
 	
-	public ClassifyTrees(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> actions) {
+	public TreeClassifier(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> actions) {
 		this(src, dst, rawMappings);
 		this.actions = actions;
 		classify();
 	}
 	
-	public ClassifyTrees(Tree src, Tree dst, Matcher m) {
+	public TreeClassifier(Tree src, Tree dst, Matcher m) {
 		this(src, dst, m.getMappingSet());
-		GenerateActions g = new GenerateActions(src, dst, m.getMappingSet());
+		ActionGenerator g = new ActionGenerator(src, dst, m.getMappingSet());
 		this.actions = g.getActions();
 		classify();
 	}
 	
-	private ClassifyTrees(Tree src, Tree dst, Set<Mapping> rawMappings) {
+	private TreeClassifier(Tree src, Tree dst, Set<Mapping> rawMappings) {
 		this.src = src;
 		this.dst = dst;
 		this.mappings = new MappingStore(rawMappings);

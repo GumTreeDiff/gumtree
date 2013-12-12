@@ -4,21 +4,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import fr.labri.gumtree.actions.model.Action;
+import fr.labri.gumtree.actions.model.Delete;
+import fr.labri.gumtree.actions.model.Insert;
+import fr.labri.gumtree.actions.model.Move;
+import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.composite.Matcher;
 import fr.labri.gumtree.tree.Mapping;
 import fr.labri.gumtree.tree.Tree;
 
-public class ClassifyRootsAndLeaves extends ClassifyTrees {
+public class RootAndLeavesClassifier extends TreeClassifier {
 	
 	private Set<Tree> srcModifiedTrees;
 
 	private Set<Tree> dstModifiedTrees;
 	
-	public ClassifyRootsAndLeaves(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> actions) {
+	public RootAndLeavesClassifier(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> actions) {
 		super(src, dst, rawMappings, actions);
 	}
 
-	public ClassifyRootsAndLeaves(Tree src, Tree dst, Matcher m) {
+	public RootAndLeavesClassifier(Tree src, Tree dst, Matcher m) {
 		super(src, dst, m);
 	}
 

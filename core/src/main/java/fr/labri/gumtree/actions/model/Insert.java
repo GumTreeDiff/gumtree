@@ -1,4 +1,4 @@
-package fr.labri.gumtree.actions;
+package fr.labri.gumtree.actions.model;
 
 import fr.labri.gumtree.tree.Tree;
 

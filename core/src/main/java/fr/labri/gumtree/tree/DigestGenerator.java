@@ -31,7 +31,7 @@ public abstract class DigestGenerator {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		return Tree.NO_METRIC;
+		return Tree.NO_VALUE;
 	}
 
 	public static class StdHashGenerator extends DigestGenerator {

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-import fr.labri.gumtree.actions.ClassifyRoots;
+import fr.labri.gumtree.actions.RootsClassifier;
 import fr.labri.gumtree.client.MatcherFactory;
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.matchers.composite.Matcher;
@@ -36,7 +36,7 @@ public class ActionDistributionProcessor extends AbstractFilePairsProcessor {
 		Tree src = TreeGeneratorRegistry.getInstance().getTree(fsrc);
 		Tree dst = TreeGeneratorRegistry.getInstance().getTree(fdst);
 		Matcher matcher = MatcherFactory.createMatcher(src, dst);
-		ClassifyRoots c = new ClassifyRoots(src, dst, matcher);
+		RootsClassifier c = new RootsClassifier(src, dst, matcher);
 		c.classify();
 		MappingStore mappings = matcher.getMappings();
 		for (Tree t: c.getDstUpdTrees()) inc("UPD " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
