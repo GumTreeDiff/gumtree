@@ -49,12 +49,12 @@ public class TreeGeneratorRegistry {
 	
 	public Tree getTree(String file) throws IOException {
 		TreeGenerator p = getGenerator(file, null);
-		return p.generate(file);
+		return p.fromFile(file);
 	}
 	
 	public Tree getTree(String file, String[] generators) throws IOException {
 		TreeGenerator p = getGenerator(file, generators);
-		return p.generate(file);
+		return p.fromFile(file);
 	}
 
 }

@@ -17,15 +17,10 @@ public abstract class Matcher {
 
 	protected MappingStore mappings;
 	
-	public Matcher(Tree src, Tree dst, MappingStore mappings) {
-		super();
+	public Matcher(Tree src, Tree dst) {
 		this.src = src;
 		this.dst = dst;
-		this.mappings = mappings;
-	}
-	
-	public Matcher(Tree src, Tree dst) {
-		this(src, dst, new MappingStore());
+		this.mappings = new MappingStore();
 	}
 	
 	public abstract void match();
@@ -34,8 +29,12 @@ public abstract class Matcher {
 		return mappings;
 	}
 	
+	public void setMappings(MappingStore mappings) {
+		this.mappings = mappings;
+	}
+	
 	public Set<Mapping> getMappingSet() {
-		return mappings.getMappings();
+		return mappings.asSet();
 	}
 	
 	public Tree getSrc() {

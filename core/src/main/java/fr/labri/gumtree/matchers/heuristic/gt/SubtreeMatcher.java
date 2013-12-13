@@ -1,42 +1,26 @@
-package fr.labri.gumtree.matchers.heuristic;
+package fr.labri.gumtree.matchers.heuristic.gt;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
-import fr.labri.gumtree.matchers.Mapping;
-import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MultiMappingStore;
 import fr.labri.gumtree.tree.Tree;
 
-public class PrioritySubTreeMatcher extends Matcher {
+public abstract class SubtreeMatcher extends Matcher {
 
-	private static final int MIN_HEIGHT = 2;
+	private static final int MIN_HEIGHT = 1;
 
-	private int maxSize;
-
-	public PrioritySubTreeMatcher(Tree src, Tree dst, MappingStore mappings) {
-		super(src, dst, mappings);
-		maxSize = Math.max(src.getSize(), dst.getSize());
-		match();
-	}
-
-	public PrioritySubTreeMatcher(Tree src, Tree dst) {
-		this(src, dst, new MappingStore());
+	public SubtreeMatcher(Tree src, Tree dst) {
+		super(src, dst);
 	}
 	
 	private void popLarger(PriorityTreeList srcs, PriorityTreeList dsts) {
-		if (srcs.peekHeight() > dsts.peekHeight()) srcs.open();
-		else dsts.open();
+		if (srcs.peekHeight() > dsts.peekHeight()) srcs.open(); else dsts.open();
 	}
 
 	public void match() {
-		MultiMappingStore mmappings = new MultiMappingStore();
+		MultiMappingStore multiMappings = new MultiMappingStore();
 		
 		PriorityTreeList srcs = new PriorityTreeList(src);
 		PriorityTreeList dsts = new PriorityTreeList(dst);
@@ -54,8 +38,9 @@ public class PrioritySubTreeMatcher extends Matcher {
 				for (int j = 0; j < hDsts.size(); j++) {
 					Tree src = hSrcs.get(i);
 					Tree dst = hDsts.get(j);
+					
 					if (src.isClone(dst)) {
-						mmappings.link(src, dst);
+						multiMappings.link(src, dst);
 						srcMarks[i] = true;
 						dstMarks[j] = true;
 					}
@@ -68,39 +53,12 @@ public class PrioritySubTreeMatcher extends Matcher {
 			dsts.updateHeight();
 		}
 
-		// System.out.println("phase unique");
-		// Select unique mappings first and extract ambiguous mappings
-		List<Mapping> ambiguousList = new LinkedList<>();
-		Set<Tree> ignored = new HashSet<>();
-		for (Tree src: mmappings.getSrcs()) {
-			if (mmappings.isSrcUnique(src))
-				addFullMapping(src, mmappings.getDst(src).iterator().next());
-			else if (!ignored.contains(src)) {
-				Set<Tree> adsts = mmappings.getDst(src);
-				Set<Tree> asrcs = mmappings.getSrc(mmappings.getDst(src).iterator().next());
-				for (Tree asrc : asrcs) for(Tree adst: adsts) ambiguousList.add(new Mapping(asrc, adst));
-				ignored.addAll(asrcs);
-			}
-		}
-
-		// System.out.println("phase sorting");
-		// Select the best ambiguous mappings
-		Set<Tree> srcIgnored = new HashSet<>();
-		Set<Tree> dstIgnored = new HashSet<>();
-		Collections.sort(ambiguousList, new MappingComparator());
-
-		// System.out.println("phase ambiguous");
-		while (ambiguousList.size() > 0) {
-			Mapping ambiguous = ambiguousList.remove(0);
-			if (!(srcIgnored.contains(ambiguous.getFirst()) || dstIgnored.contains(ambiguous.getSecond()))) {
-				addFullMapping(ambiguous.getFirst(), ambiguous.getSecond());
-				srcIgnored.add(ambiguous.getFirst());
-				dstIgnored.add(ambiguous.getSecond());
-			}
-		}
+		filterMappings(multiMappings);
 	}
+	
+	public abstract void filterMappings(MultiMappingStore mmappings);
 
-	private double sim(Tree src, Tree dst) {
+	protected double sim(Tree src, Tree dst) {
 		double jaccard = jaccardSimilarity(src.getParent(), dst.getParent());
 		int posSrc = (src.isRoot()) ? 0 : src.getParent().getChildPosition(src);
 		int posDst = (dst.isRoot()) ? 0 : dst.getParent().getChildPosition(dst);
@@ -108,18 +66,12 @@ public class PrioritySubTreeMatcher extends Matcher {
 		int maxDstPos =  (dst.isRoot()) ? 1 : dst.getParent().getChildren().size();
 		int maxPosDiff = Math.max(maxSrcPos, maxDstPos);
 		double pos = 1D - ((double) Math.abs(posSrc - posDst) / (double) maxPosDiff);
-		double po = 1D - ((double) Math.abs(src.getId() - dst.getId()) / (double) this.maxSize);
+		double po = 1D - ((double) Math.abs(src.getId() - dst.getId()) / (double) this.getMaxTreeSize());
 		return 100 * jaccard + 10 * pos + po;
 	}
-
-	private class MappingComparator implements Comparator<Mapping> {
-
-		@Override
-		public int compare(Mapping m1, Mapping m2) {
-			return Double.compare(PrioritySubTreeMatcher.this.sim(m2.getFirst(), m2.getSecond()), 
-					PrioritySubTreeMatcher.this.sim(m1.getFirst(), m1.getSecond()));
-		}
-
+	
+	protected int getMaxTreeSize() {
+		return Math.max(src.getSize(), dst.getSize());
 	}
 
 	private static class PriorityTreeList {
@@ -130,6 +82,7 @@ public class PrioritySubTreeMatcher extends Matcher {
 
 		private int currentIdx;
 
+		@SuppressWarnings("unchecked")
 		public PriorityTreeList(Tree tree) {
 			trees = (List<Tree>[]) new ArrayList[tree.getHeight() - MIN_HEIGHT + 1];
 			maxHeight = tree.getHeight();
@@ -177,10 +130,6 @@ public class PrioritySubTreeMatcher extends Matcher {
 		
 		public void open(Tree tree) {
 			for(Tree c: tree.getChildren()) addTree(c);
-		}
-		
-		public List<Tree> peek() {
-			return (currentIdx == -1) ? null : trees[currentIdx];
 		}
 		
 		public int peekHeight() {

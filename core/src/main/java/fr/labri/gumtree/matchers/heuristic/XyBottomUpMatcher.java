@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.tree.Tree;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source and destination trees
@@ -23,30 +25,22 @@ public class XyBottomUpMatcher extends Matcher {
 
 	private static final double SIM_THRESHOLD = 0.001D;
 	
-	private Map<Integer, Tree> srcs = new HashMap<Integer, Tree>();
+	private TIntObjectMap<Tree> srcs = new TIntObjectHashMap<>();
 	
-	private Map<Integer, Tree> dsts = new HashMap<Integer, Tree>();
+	private TIntObjectMap<Tree> dsts = new TIntObjectHashMap<>();
 
-	public XyBottomUpMatcher(Tree src, Tree dst, MappingStore mappings) {
-		super(src, dst, mappings);
-		match();
+	public XyBottomUpMatcher(Tree src, Tree dst) {
+		super(src, dst);
 	}
 
 	public void match() {
-		List<Tree> poSrc = postOrder(src);
-		List<Tree> poDst = postOrder(dst);
-		for (Tree t : poSrc) srcs.put(t.getId(), t);
-		for (Tree t : poDst) dsts.put(t.getId(), t);
+		for (Tree t : src.getTrees()) srcs.put(t.getId(), t);
+		for (Tree t : dst.getTrees()) dsts.put(t.getId(), t);
 		
-		match(poSrc, poDst);
-		clean();
-	}
-
-	private void match(List<Tree> poSrc, List<Tree> poDst) {
-		for (Tree src: poSrc)  {
+		for (Tree src: postOrder(this.src))  {
 			if (src.isRoot()) {
-				addMapping(src, dst);
-				lastChanceMatch(src, dst);
+				addMapping(src, this.dst);
+				lastChanceMatch(src, this.dst);
 			} else if (!(src.isMatched() || src.isLeaf())) {
 				Set<Tree> candidates = getDstCandidates(src);
 				Tree best = null;
@@ -66,6 +60,7 @@ public class XyBottomUpMatcher extends Matcher {
 				}
 			}
 		}
+		clean();
 	}
 
 	private Set<Tree> getDstCandidates(Tree src) {
@@ -105,6 +100,15 @@ public class XyBottomUpMatcher extends Matcher {
 			if (srcKinds.get(t).size() == dstKinds.get(t).size() && srcKinds.get(t).size() == 1)
 				addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));
 
+	}
+	
+	public static class XyBottomUpMatcherFactory implements MatcherFactory {
+
+		@Override
+		public Matcher newMatcher(Tree src, Tree dst) {
+			return new XyBottomUpMatcher(src, dst);
+		}
+		
 	}
 
 }

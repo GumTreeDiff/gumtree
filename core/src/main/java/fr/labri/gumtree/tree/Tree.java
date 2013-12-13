@@ -144,8 +144,11 @@ public class Tree {
 		}
 	}
 
-	public void refreshMetrics() {
-		TreeUtils.computeAllMetrics(this);
+	public void refresh() {
+		TreeUtils.computeSize(this);
+		TreeUtils.computeDepth(this);
+		TreeUtils.computeHeight(this);
+		TreeUtils.computeDigest(this);
 	}
 	
 	/**

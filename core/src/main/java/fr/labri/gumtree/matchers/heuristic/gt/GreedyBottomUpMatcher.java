@@ -1,15 +1,15 @@
-package fr.labri.gumtree.matchers.heuristic;
+package fr.labri.gumtree.matchers.heuristic.gt;
 
 import static fr.labri.gumtree.tree.TreeUtils.postOrder;
-import static fr.labri.gumtree.tree.TreeUtils.removeMapped;
+import static fr.labri.gumtree.tree.TreeUtils.removeMatched;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import fr.labri.gumtree.matchers.Mapping;
-import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
@@ -29,12 +29,11 @@ public class GreedyBottomUpMatcher extends Matcher {
 	private Map<Integer, Tree> srcIds = new HashMap<Integer, Tree>();
 	
 	private Map<Integer, Tree> dstIds = new HashMap<Integer, Tree>();
-
-	public GreedyBottomUpMatcher(Tree src, Tree dst, MappingStore mappings) {
-		super(src, dst, mappings);
-		match();
+	
+	public GreedyBottomUpMatcher(Tree src, Tree dst) {
+		super(src, dst);
 	}
-
+	
 	public void match() {
 		List<Tree> srcs = postOrder(src);
 		List<Tree> dsts = postOrder(dst);
@@ -61,8 +60,8 @@ public class GreedyBottomUpMatcher extends Matcher {
 
 	//FIXME checks if it is better or not to remove the already found mappings.
 	private void lastChanceMatch(Tree src, Tree dst) {
-		Tree cSrc = removeMapped(src.deepCopy());
-		Tree cDst = removeMapped(dst.deepCopy());
+		Tree cSrc = removeMatched(src.deepCopy());
+		Tree cDst = removeMatched(dst.deepCopy());
 		if (cSrc.getSize() < SIZE_THESHOLD && cDst.getSize() < SIZE_THESHOLD) {
 			Matcher m = new RtedMatcher(cSrc, cDst);
 			for (Mapping candidate: m.getMappings()) {
@@ -83,6 +82,15 @@ public class GreedyBottomUpMatcher extends Matcher {
 			for(Tree t : cDst.getTrees()) dstIds.get(t.getId()).setMatched(true);
 		}
 
+	}
+	
+	public static class GreedyBottumUpMatcherFactory implements MatcherFactory {
+
+		@Override
+		public Matcher newMatcher(Tree src, Tree dst) {
+			return new GreedyBottomUpMatcher(src, dst);
+		}
+		
 	}
 
 }

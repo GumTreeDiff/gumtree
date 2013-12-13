@@ -21,7 +21,7 @@ public class TestSerializeTree {
 		Tree e = new Tree(2, "e");
 		e.setParentAndUpdateChildren(a);
 		// Refresh metrics is called because it is automatically called in fromXML
-		a.refreshMetrics();
+		a.refresh();
 		TreeIoUtils.toXml(a, "target/test-classes/test-serialize.xml");
 		Tree ca = TreeIoUtils.fromXml("target/test-classes/test-serialize.xml");
 		

@@ -10,9 +10,9 @@ import fr.labri.gumtree.actions.model.Delete;
 import fr.labri.gumtree.actions.model.Insert;
 import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Update;
-import fr.labri.gumtree.client.MatcherFactory;
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.MatcherFactories;
 import fr.labri.gumtree.tree.Tree;
 
 public class MetricsProcessor extends AbstractFilePairsProcessor {
@@ -51,7 +51,7 @@ public class MetricsProcessor extends AbstractFilePairsProcessor {
 		int sDst = dst.getSize();
 		long tParse = toc - tic;
 		tic = System.currentTimeMillis();
-		Matcher matcher = MatcherFactory.createMatcher(src, dst);
+		Matcher matcher = MatcherFactories.newMatcher(src, dst);
 		toc = System.currentTimeMillis();
 		long tMatch = toc - tic;
 		tic = System.currentTimeMillis();

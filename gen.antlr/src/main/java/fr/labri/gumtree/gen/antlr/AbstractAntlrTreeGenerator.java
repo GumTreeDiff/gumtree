@@ -34,7 +34,7 @@ public abstract class AbstractAntlrTreeGenerator extends TreeGenerator {
 	protected abstract CommonTree getStartSymbol(String file) throws RecognitionException, IOException;
 	
 	@Override
-	public Tree doGenerate(String file) throws IOException {
+	public Tree generate(String file) throws IOException {
 		try {
 			loadChars(file);
 			CommonTree ct = getStartSymbol(file);

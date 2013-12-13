@@ -29,7 +29,7 @@ import fr.labri.gumtree.tree.Tree;
 
 public class RhinoTreeGenerator extends TreeGenerator {
 
-	public Tree doGenerate(String file) {
+	public Tree generate(String file) {
 		Parser p = new Parser();
 		try {
 			AstRoot root = p.parse(new FileReader(file), file, 1);

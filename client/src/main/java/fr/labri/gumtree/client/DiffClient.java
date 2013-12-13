@@ -8,6 +8,7 @@ import org.kohsuke.args4j.CmdLineParser;
 import fr.labri.gumtree.client.ui.swing.SwingDiff;
 import fr.labri.gumtree.client.ui.web.WebDiff;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.MatcherFactories;
 import fr.labri.gumtree.tree.Tree;
 
 public abstract class DiffClient {
@@ -35,7 +36,7 @@ public abstract class DiffClient {
 	public abstract void start();
 	
 	protected Matcher getMatcher() {
-		return MatcherFactory.createMatcher(getSrcTree(), getDstTree(), diffOptions.getMatcher());
+		return MatcherFactories.newMatcher(getSrcTree(), getDstTree(), diffOptions.getMatcher());
 	}
 	
 	private Tree getSrcTree() {

@@ -11,7 +11,6 @@ public class LcsMatcher extends Matcher {
 
 	public LcsMatcher(Tree src, Tree dst) {
 		super(src, dst);
-		match();
 	}
 
 	@Override

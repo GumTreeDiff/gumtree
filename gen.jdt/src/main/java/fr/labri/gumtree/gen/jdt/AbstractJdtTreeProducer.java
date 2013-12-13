@@ -12,7 +12,7 @@ import fr.labri.gumtree.tree.Tree;
 public abstract class AbstractJdtTreeProducer extends TreeGenerator {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Tree doGenerate(String file) {
+	public Tree generate(String file) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		Map pOptions = JavaCore.getOptions();

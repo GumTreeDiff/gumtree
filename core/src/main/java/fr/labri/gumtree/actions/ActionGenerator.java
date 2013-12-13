@@ -1,10 +1,8 @@
 package fr.labri.gumtree.actions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import fr.labri.gumtree.actions.model.Action;
@@ -16,6 +14,8 @@ import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class ActionGenerator {
 	
@@ -39,9 +39,9 @@ public class ActionGenerator {
 	
 	private List<Action> actions;
 	
-	private Map<Integer, Tree> origSrcTrees;
+	private TIntObjectMap<Tree> origSrcTrees;
 	
-	private Map<Integer, Tree> cpySrcTrees;
+	private TIntObjectMap<Tree> cpySrcTrees;
 	
 	public ActionGenerator(Tree src, Tree dst, Set<Mapping> mappings) {
 		this.origSrc = src;
@@ -49,9 +49,9 @@ public class ActionGenerator {
 		this.dst = dst;
 		this.origMappings = mappings;
 		
-		origSrcTrees = new HashMap<Integer, Tree>();
+		origSrcTrees = new TIntObjectHashMap<Tree>();
 		for (Tree t: origSrc.getTrees()) origSrcTrees.put(t.getId(), t);
-		cpySrcTrees = new HashMap<Integer, Tree>();
+		cpySrcTrees = new TIntObjectHashMap<Tree>();
 		for (Tree t: cpySrc.getTrees()) cpySrcTrees.put(t.getId(), t);
 		cpyMappings = new HashSet<>();
 		for (Mapping m: origMappings) this.cpyMappings.add(new Mapping(cpySrcTrees.get(m.getFirst().getId()), m.getSecond()));

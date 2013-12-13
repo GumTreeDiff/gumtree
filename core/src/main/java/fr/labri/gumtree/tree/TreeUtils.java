@@ -13,13 +13,6 @@ public final class TreeUtils {
 	private TreeUtils() {
 	}
 
-	public static void computeAllMetrics(Tree tree) {
-		computeSize(tree);
-		computeDepth(tree);
-		computeHeight(tree);
-		computeDigest(tree);
-	}
-
 	/**
 	 * Compute the depth of every node of the tree. The size is set
 	 * directly on the nodes and is then accessible using {@link Tree#getSize()}.
@@ -187,14 +180,14 @@ public final class TreeUtils {
 	 * @param tree 
 	 * @return
 	 */
-	public static Tree removeMapped(Tree tree) {
+	public static Tree removeMatched(Tree tree) {
 		for (Tree t: tree.getTrees()) {
 			if (t.isMatched()) {
 				if (t.getParent() != null) t.getParent().getChildren().remove(t);
 				t.setParent(null);
 			}
 		}
-		tree.refreshMetrics();
+		tree.refresh();
 		return tree;
 	}
 

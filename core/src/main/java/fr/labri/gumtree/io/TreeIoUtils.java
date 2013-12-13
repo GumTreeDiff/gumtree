@@ -50,7 +50,7 @@ public final class TreeIoUtils {
 					trees.push(t);
 				} else if (e instanceof EndElement) trees.pop();
 			}
-			root.refreshMetrics();
+			root.refresh();
 			return root;
 		} catch (Exception e) {
 			e.printStackTrace();

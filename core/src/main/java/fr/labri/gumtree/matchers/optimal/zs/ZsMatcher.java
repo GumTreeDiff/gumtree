@@ -1,8 +1,7 @@
 package fr.labri.gumtree.matchers.optimal.zs;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Iterator;
 
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
@@ -15,19 +14,14 @@ public class ZsMatcher extends Matcher {
 	private double[][] dist;
 	
 	private ComputeTreeCost cost;
-
-	public ZsMatcher(Tree src, Tree dst, Set<Mapping> mappings) {
+	
+	public ZsMatcher(Tree src, Tree dst) {
 		super(src, dst);
 		this.src = new TreeInfo(src);
 		this.dst = new TreeInfo(dst);
 		dist = new double[src.getSize()][dst.getSize()];
 		cost = new ComputeTreeCost();
 		for (int i = 0; i < dist.length; i++) Arrays.fill(dist[i], -1);
-		match();
-	}
-	
-	public ZsMatcher(Tree src, Tree dst) {
-		this(src, dst, new HashSet<Mapping>());
 	}
 	
 	private void computeMappings() {
@@ -129,6 +123,14 @@ public class ZsMatcher extends Matcher {
 	public void match() {
 		align();
 		computeMappings();
+		Iterator<Mapping> mIt = mappings.iterator();
+		while (mIt.hasNext()) {
+			Mapping m = mIt.next();
+			if (m.getFirst().getType() != m.getSecond().getType()) {
+				mIt.remove();
+				System.err.println("Trying to map not compatible nodes.");
+			}
+		}
 	}
 	
 	private final class TreeInfo {

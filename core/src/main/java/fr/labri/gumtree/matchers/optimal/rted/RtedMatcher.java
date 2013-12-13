@@ -10,7 +10,6 @@ public class RtedMatcher extends Matcher {
 
 	public RtedMatcher(Tree src, Tree dst) {
 		super(src, dst);
-		match();
 	}
 
 	@Override
@@ -22,7 +21,11 @@ public class RtedMatcher extends Matcher {
 		List<int[]> arrayMappings = a.computeEditMapping();
 		List<Tree> srcs = TreeUtils.postOrder(src);
 		List<Tree> dsts = TreeUtils.postOrder(dst);
-		for (int[] m: arrayMappings) if (m[0] != 0 && m[1] != 0) addMapping(srcs.get(m[0] - 1), dsts.get(m[1] - 1));
+		for (int[] m: arrayMappings) if (m[0] != 0 && m[1] != 0) {
+			Tree src = srcs.get(m[0] - 1);
+			Tree dst = dsts.get(m[1] - 1);
+			if (src.isMatchable(dst)) addMapping(src, dst);
+		}
 	}
 
 }

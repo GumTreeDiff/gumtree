@@ -30,10 +30,14 @@ public class MappingStore implements Iterable<Mapping> {
 		dsts = new HashMap<Tree, Tree>(size);
 	}
 	
-	public Set<Mapping> getMappings() {
+	public Set<Mapping> asSet() {
 		Set<Mapping> mappings = new HashSet<>();
 		for (Tree src : srcs.keySet()) mappings.add(new Mapping(src, srcs.get(src)));
 		return mappings;
+	}
+	
+	public MappingStore copy() {
+		return new MappingStore(asSet());
 	}
 	
 	public void link(Tree src, Tree dst) {
@@ -92,7 +96,7 @@ public class MappingStore implements Iterable<Mapping> {
 
 	@Override
 	public Iterator<Mapping> iterator() {
-		return getMappings().iterator();
+		return asSet().iterator();
 	}
 
 }

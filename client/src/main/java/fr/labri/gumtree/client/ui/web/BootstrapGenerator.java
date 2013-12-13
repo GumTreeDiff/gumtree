@@ -7,15 +7,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import fr.labri.gumtree.actions.RootAndLeavesClassifier;
+import fr.labri.gumtree.actions.TreeClassifier;
 import fr.labri.gumtree.algo.StringAlgorithms;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.Tree;
+import gnu.trove.map.TIntIntMap;
+import gnu.trove.map.hash.TIntIntHashMap;
 
 public final class BootstrapGenerator {
 	
@@ -39,9 +40,9 @@ public final class BootstrapGenerator {
 	}
 	
 	public static String produceHTML(String srcPath, String dstPath, Tree src, Tree dst, Matcher matcher) throws IOException {
-		RootAndLeavesClassifier c = new RootAndLeavesClassifier(src, dst, matcher);
+		TreeClassifier c = new RootAndLeavesClassifier(src, dst, matcher);
 		MappingStore mappings = new MappingStore(matcher.getMappingSet());
-		Map<Integer, Integer> ids = new HashMap<Integer, Integer>();
+		TIntIntMap ids = new TIntIntHashMap();
 		
 		int uId = 1;
 		int mId = 1;

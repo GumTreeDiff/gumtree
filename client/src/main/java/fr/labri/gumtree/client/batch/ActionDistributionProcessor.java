@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import fr.labri.gumtree.actions.RootsClassifier;
-import fr.labri.gumtree.client.MatcherFactory;
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.MatcherFactories;
 import fr.labri.gumtree.tree.Tree;
 
 public class ActionDistributionProcessor extends AbstractFilePairsProcessor {
@@ -35,7 +35,7 @@ public class ActionDistributionProcessor extends AbstractFilePairsProcessor {
 	public void processFilePair(String fsrc, String fdst) throws IOException {
 		Tree src = TreeGeneratorRegistry.getInstance().getTree(fsrc);
 		Tree dst = TreeGeneratorRegistry.getInstance().getTree(fdst);
-		Matcher matcher = MatcherFactory.createMatcher(src, dst);
+		Matcher matcher = MatcherFactories.newMatcher(src, dst);
 		RootsClassifier c = new RootsClassifier(src, dst, matcher);
 		c.classify();
 		MappingStore mappings = matcher.getMappings();

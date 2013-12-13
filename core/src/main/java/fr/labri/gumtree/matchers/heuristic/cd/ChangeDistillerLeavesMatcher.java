@@ -1,4 +1,4 @@
-package fr.labri.gumtree.matchers.heuristic;
+package fr.labri.gumtree.matchers.heuristic.cd;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,8 +10,8 @@ import java.util.Set;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
 import fr.labri.gumtree.matchers.Mapping;
-import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 
@@ -21,9 +21,8 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 
 	private static final QGramsDistance QGRAM = new QGramsDistance();
 
-	public ChangeDistillerLeavesMatcher(Tree src, Tree dst, MappingStore mappings) {
-		super(src, dst, mappings);
-		match();
+	public ChangeDistillerLeavesMatcher(Tree src, Tree dst) {
+		super(src, dst);
 	}
 
 	@Override
@@ -76,6 +75,14 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 		}
 
 	}
+	
+	public static class ChangeDistillerLeavesMatcherFactory implements MatcherFactory {
 
+		@Override
+		public Matcher newMatcher(Tree src, Tree dst) {
+			return new ChangeDistillerLeavesMatcher(src, dst);
+		}
+		
+	}
 
 }

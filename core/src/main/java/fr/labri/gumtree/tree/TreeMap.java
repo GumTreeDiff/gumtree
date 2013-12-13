@@ -1,14 +1,14 @@
 package fr.labri.gumtree.tree;
 
-import java.util.HashMap;
-import java.util.Map;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class TreeMap {
 	
-	Map<Integer, Tree> trees;
+	private TIntObjectMap<Tree> trees;
 	
 	public TreeMap(Tree tree) {
-		trees = new HashMap<Integer, Tree>();
+		trees = new TIntObjectHashMap<Tree>();
 		for(Tree t: tree.getTrees()) trees.put(t.getId(), t);
 	}
 	
