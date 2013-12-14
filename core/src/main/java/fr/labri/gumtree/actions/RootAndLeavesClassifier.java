@@ -53,10 +53,9 @@ public class RootAndLeavesClassifier extends TreeClassifier {
 		}
 		
 		Set<Tree> fDstAddTrees = new HashSet<>(dstAddTrees);
-		for (Tree t: dstAddTrees) {
+		for (Tree t: dstAddTrees)
 			if (dstAddTrees.containsAll(t.getDescendants()))
 				fDstAddTrees.removeAll(t.getDescendants());
-		}
 		dstAddTrees = fDstAddTrees;
 		
 		Set<Tree> fSrcDelTrees = new HashSet<>(srcDelTrees);

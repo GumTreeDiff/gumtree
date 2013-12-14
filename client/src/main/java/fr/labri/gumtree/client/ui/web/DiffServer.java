@@ -75,9 +75,11 @@ public class DiffServer extends NanoHTTPD {
 				return respond("text/plain", TreeIoUtils.toDot(tDst));
 			else if ("/diff".equals(uri) || "/".equals(uri))
 				return respond(BootstrapGenerator.produceHTML(fSrc, fDst, tSrc, tDst, matcher));
-			else if ("/script".equals(uri))
-				return respond("text/plain", ActionsSerializer.toText(new ActionGenerator(tSrc, tDst, matcher.getMappingSet()).getActions()));
-			else if ("/quit".equals(uri)) System.exit(0);
+			else if ("/script".equals(uri)) {
+				ActionGenerator g = new ActionGenerator(tSrc, tDst, matcher.getMappings());
+				g.generate();
+				return respond("text/plain", ActionsSerializer.toText(g.getActions()));
+			} else if ("/quit".equals(uri)) System.exit(0);
 			else if (uri.startsWith("/assets")) {
 				String res = uri.substring(1);
 				InputStream data = ClassLoader.getSystemClassLoader().getResourceAsStream(res);

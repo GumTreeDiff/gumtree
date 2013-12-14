@@ -55,7 +55,8 @@ public class MetricsProcessor extends AbstractFilePairsProcessor {
 		toc = System.currentTimeMillis();
 		long tMatch = toc - tic;
 		tic = System.currentTimeMillis();
-		ActionGenerator g = new ActionGenerator(src, dst, matcher.getMappingSet());
+		ActionGenerator g = new ActionGenerator(src, dst, matcher.getMappings());
+		g.generate();
 		toc = System.currentTimeMillis();
 		long tScript = toc - tic;
 		long tTotal = tParse + tMatch + tScript;

@@ -267,14 +267,14 @@ public class Tree {
 		if (!"".equals(getLabel())) {
 			return getTypeLabel() + ": " + getLabel();
 		} else {
-			if (!"".equals(getChildrenLabels())) return getTypeLabel() + ": " + getChildrenLabels();
-			else return getTypeLabel();
+			/*if (!"".equals(getChildrenLabels())) return getTypeLabel() + ": " + getChildrenLabels();
+			else*/ return getTypeLabel();
 		}
 
 	}
 
 	public String toTreeString() {
-		if (isLeaf()) return this.toString();
+		/*if (isLeaf()) return this.toString();
 		else {
 			StringBuffer b = new StringBuffer();
 			b.append(toString() + " (");
@@ -286,7 +286,16 @@ public class Tree {
 			}
 			b.append(")");
 			return b.toString();
-		}	
+		}*/
+		StringBuffer b = new StringBuffer();
+		for (Tree t : TreeUtils.preOrder(this)) b.append(indent(t) + t.toString() + "\n");
+		return b.toString();
+	}
+	
+	private String indent(Tree t) {
+		StringBuffer b = new StringBuffer();
+		for (int i = 0; i < t.getDepth(); i++) b.append("\t");
+		return b.toString();
 	}
 
 	public String toCompleteString() {

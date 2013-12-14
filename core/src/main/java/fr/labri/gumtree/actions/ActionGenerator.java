@@ -21,15 +21,13 @@ public class ActionGenerator {
 	
 	private Tree origSrc;
 	
-	private Set<Mapping> origMappings;
+	private Tree newSrc;
+
+	private Tree origDst;
 	
-	private Set<Mapping> cpyMappings;
+	private MappingStore origMappings;
 	
-	private Tree cpySrc;
-	
-	private Tree dst;
-	
-	private MappingStore mappings;
+	private MappingStore newMappings;
 	
 	private Set<Tree> dstInOrder;
 	
@@ -43,20 +41,19 @@ public class ActionGenerator {
 	
 	private TIntObjectMap<Tree> cpySrcTrees;
 	
-	public ActionGenerator(Tree src, Tree dst, Set<Mapping> mappings) {
+	public ActionGenerator(Tree src, Tree dst, MappingStore mappings) {
 		this.origSrc = src;
-		this.cpySrc = this.origSrc.deepCopy();
-		this.dst = dst;
-		this.origMappings = mappings;
+		this.newSrc = this.origSrc.deepCopy();
+		this.origDst = dst;
 		
 		origSrcTrees = new TIntObjectHashMap<Tree>();
 		for (Tree t: origSrc.getTrees()) origSrcTrees.put(t.getId(), t);
 		cpySrcTrees = new TIntObjectHashMap<Tree>();
-		for (Tree t: cpySrc.getTrees()) cpySrcTrees.put(t.getId(), t);
-		cpyMappings = new HashSet<>();
-		for (Mapping m: origMappings) this.cpyMappings.add(new Mapping(cpySrcTrees.get(m.getFirst().getId()), m.getSecond()));
+		for (Tree t: newSrc.getTrees()) cpySrcTrees.put(t.getId(), t);
 		
-		generate();
+		origMappings = new MappingStore();
+		for (Mapping m: mappings) this.origMappings.link(cpySrcTrees.get(m.getFirst().getId()), m.getSecond());
+		this.newMappings = origMappings.copy();
 	}
 	
 	public List<Action> getActions() {
@@ -68,24 +65,23 @@ public class ActionGenerator {
 		Tree vdst = new Tree(-1, "");
 		vsrc.setId(-1);
 		vdst.setId(-1);
-		vsrc.addChild(cpySrc);
-		vdst.addChild(dst);
+		vsrc.addChild(newSrc);
+		vdst.addChild(origDst);
 		
 		actions = new ArrayList<Action>();
-		mappings = new MappingStore(cpyMappings);
 		dstInOrder = new HashSet<Tree>();
 		srcInOrder = new HashSet<Tree>();
 		
-		lastId = cpySrc.getSize() + 1;
-		mappings.link(vsrc, vdst);
+		lastId = newSrc.getSize() + 1;
+		newMappings.link(vsrc, vdst);
 		
-		List<Tree> bfsDst = TreeUtils.bfsOrder(dst); 
+		List<Tree> bfsDst = TreeUtils.bfsOrder(origDst); 
 		for (Tree x: bfsDst) {
 			Tree w = null;
 			Tree y = x.getParent();
-			Tree z = mappings.getSrc(y);
+			Tree z = newMappings.getSrc(y);
 			
-			if (!mappings.hasDst(x)) {
+			if (!newMappings.hasDst(x)) {
 				int k = findPos(x);
 				// Insertion case : insert new node.
 				int wId = newId();
@@ -99,20 +95,20 @@ public class ActionGenerator {
 				// generated ID.
 				actions.add(new Insert(x, origSrcTrees.get(z.getId()), k));
 				origSrcTrees.put(w.getId(), x);
-				mappings.link(w, x);
+				newMappings.link(w, x);
 				z.getChildren().add(k, w);
 				w.setParent(z);
 				srcInOrder.add(w);
 				dstInOrder.add(x);
 			} else {
-				w = mappings.getSrc(x);
-				if (!x.equals(dst)) {
+				w = newMappings.getSrc(x);
+				if (!x.equals(origDst)) {
 					Tree v = w.getParent();
 					if (!w.getLabel().equals(x.getLabel())) {
 						actions.add(new Update(origSrcTrees.get(w.getId()), x.getLabel()));
 						w.setLabel(x.getLabel());
 					}
-					if (!mappings.getSrc(y).equals(v)) {
+					if (!newMappings.getSrc(y).equals(v)) {
 						int k = findPos(x);
 						actions.add(new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(z.getId()), k));
 						w.getParent().getChildren().remove(w);
@@ -124,13 +120,16 @@ public class ActionGenerator {
 			alignChildren(w, x);
 		}
 		
-		List<Tree> poSrc = TreeUtils.postOrder(cpySrc);	
+		List<Tree> poSrc = TreeUtils.postOrder(newSrc);	
 		for (Tree w : poSrc) {
-			if (!mappings.hasSrc(w)) {
+			if (!newMappings.hasSrc(w)) {
 				actions.add(new Delete(origSrcTrees.get(w.getId())));
 				w.getParent().getChildren().remove(w);
 			}
-		} 
+		}
+		
+		if (!newSrc.toDigestString().equals(origDst.toDigestString()))
+				System.out.println(origDst.toTreeString());
 	}
 	
 	private void alignChildren(Tree w, Tree x) {
@@ -138,10 +137,10 @@ public class ActionGenerator {
 		dstInOrder.removeAll(x.getChildren());
 		
 		List<Tree> s1 = new ArrayList<Tree>();
-		for (Tree c: w.getChildren()) if (mappings.hasSrc(c)) if (x.getChildren().contains(mappings.getDst(c))) s1.add(c);
+		for (Tree c: w.getChildren()) if (newMappings.hasSrc(c)) if (x.getChildren().contains(newMappings.getDst(c))) s1.add(c);
 		
 		List<Tree> s2 = new ArrayList<Tree>();
-		for (Tree c: x.getChildren()) if (mappings.hasDst(c)) if (w.getChildren().contains(mappings.getSrc(c))) s2.add(c);
+		for (Tree c: x.getChildren()) if (newMappings.hasDst(c)) if (w.getChildren().contains(newMappings.getSrc(c))) s2.add(c);
 
 		List<Mapping> lcs = lcs(s1, s2);
 		
@@ -152,9 +151,8 @@ public class ActionGenerator {
 		
 		for (Tree a : s1) {
 			for (Tree b: s2) {
-				Mapping m = new Mapping(a, b);
-				if (cpyMappings.contains(m)) {
-					if (!lcs.contains(m)) {
+				if (origMappings.has(a, b)) {
+					if (!lcs.contains(new Mapping(a, b))) {
 						int k = findPos(b);
 						actions.add(new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k));
 						a.getParent().getChildren().remove(a);
@@ -188,7 +186,7 @@ public class ActionGenerator {
 		//if (v == null) throw new RuntimeException("No rightmost sibling in order");
 		if (v == null) return 0;
 		
-		Tree u = mappings.getSrc(v);
+		Tree u = newMappings.getSrc(v);
 		siblings = u.getParent().getChildren();
 		int upos = siblings.indexOf(u);
 		int r = 0;
@@ -209,14 +207,14 @@ public class ActionGenerator {
         int[][] opt = new int[m + 1][n + 1];
         for (int i = m - 1; i >= 0; i--) {
             for (int j = n - 1; j >= 0; j--) {
-                if (mappings.getSrc(y.get(j)).equals(x.get(i))) opt[i][j] = opt[i + 1][j + 1] + 1;
+                if (newMappings.getSrc(y.get(j)).equals(x.get(i))) opt[i][j] = opt[i + 1][j + 1] + 1;
                 else  opt[i][j] = Math.max(opt[i + 1][j], opt[i][j + 1]);
             }
         }
      
         int i = 0, j = 0;
         while (i < m && j < n) {
-            if (mappings.getSrc(y.get(j)).equals(x.get(i))) {
+            if (newMappings.getSrc(y.get(j)).equals(x.get(i))) {
             	lcs.add(new Mapping(x.get(i), y.get(j)));
                 i++;
                 j++;

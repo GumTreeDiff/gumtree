@@ -40,7 +40,8 @@ public abstract class TreeClassifier {
 	
 	public TreeClassifier(Tree src, Tree dst, Matcher m) {
 		this(src, dst, m.getMappingSet());
-		ActionGenerator g = new ActionGenerator(src, dst, m.getMappingSet());
+		ActionGenerator g = new ActionGenerator(src, dst, m.getMappings());
+		g.generate();
 		this.actions = g.getActions();
 		classify();
 	}
