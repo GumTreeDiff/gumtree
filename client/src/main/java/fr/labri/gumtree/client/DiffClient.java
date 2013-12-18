@@ -36,7 +36,9 @@ public abstract class DiffClient {
 	public abstract void start();
 	
 	protected Matcher getMatcher() {
-		return MatcherFactories.newMatcher(getSrcTree(), getDstTree(), diffOptions.getMatcher());
+		Matcher m = (diffOptions.getMatcher() == null) ? MatcherFactories.newMatcher(getSrcTree(), getDstTree()) : MatcherFactories.newMatcher(getSrcTree(), getDstTree(), diffOptions.getMatcher());
+		m.match();
+		return m;
 	}
 	
 	private Tree getSrcTree() {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import fr.labri.gumtree.actions.model.Action;
 import fr.labri.gumtree.actions.model.Delete;
@@ -18,6 +19,8 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class ActionGenerator {
+	
+	public final static Logger LOGGER = Logger.getLogger("fr.labri.gumtree.actions");
 	
 	private Tree origSrc;
 	
@@ -93,13 +96,13 @@ public class ActionGenerator {
 				// In order to use the real nodes from the second tree, we
 				// furnish x instead of w and fake that x has the newly
 				// generated ID.
-				actions.add(new Insert(x, origSrcTrees.get(z.getId()), k));
+				Action ins = new Insert(x, origSrcTrees.get(z.getId()), k);
+				actions.add(ins);
+				//System.out.println(ins);
 				origSrcTrees.put(w.getId(), x);
 				newMappings.link(w, x);
 				z.getChildren().add(k, w);
 				w.setParent(z);
-				srcInOrder.add(w);
-				dstInOrder.add(x);
 			} else {
 				w = newMappings.getSrc(x);
 				if (!x.equals(origDst)) {
@@ -110,13 +113,19 @@ public class ActionGenerator {
 					}
 					if (!newMappings.getSrc(y).equals(v)) {
 						int k = findPos(x);
-						actions.add(new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(z.getId()), k));
+						Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(z.getId()), k);
+						actions.add(mv);
+						//System.out.println(mv);
 						w.getParent().getChildren().remove(w);
 						z.getChildren().add(k, w);
 						w.setParent(z);
 					}
 				}			
 			}
+			
+			//FIXME not sure why :D
+			srcInOrder.add(w);
+			dstInOrder.add(x);
 			alignChildren(w, x);
 		}
 		
@@ -128,8 +137,12 @@ public class ActionGenerator {
 			}
 		}
 		
-		if (!newSrc.toDigestString().equals(origDst.toDigestString()))
-				System.out.println(origDst.toTreeString());
+		if (!newSrc.toDigestTreeString().equals(origDst.toDigestTreeString())) {
+			LOGGER.severe("Trees not isomorphics!");
+			newSrc.refresh();
+			//System.out.println(newSrc.toTreeString());
+			//System.out.println(origDst.toTreeString());
+		}
 	}
 	
 	private void alignChildren(Tree w, Tree x) {
@@ -137,10 +150,16 @@ public class ActionGenerator {
 		dstInOrder.removeAll(x.getChildren());
 		
 		List<Tree> s1 = new ArrayList<Tree>();
-		for (Tree c: w.getChildren()) if (newMappings.hasSrc(c)) if (x.getChildren().contains(newMappings.getDst(c))) s1.add(c);
+		for (Tree c: w.getChildren()) 
+			if (newMappings.hasSrc(c)) 
+				if (x.getChildren().contains(newMappings.getDst(c))) 
+					s1.add(c);
 		
 		List<Tree> s2 = new ArrayList<Tree>();
-		for (Tree c: x.getChildren()) if (newMappings.hasDst(c)) if (w.getChildren().contains(newMappings.getSrc(c))) s2.add(c);
+		for (Tree c: x.getChildren()) 
+			if (newMappings.hasDst(c)) 
+				if (w.getChildren().contains(newMappings.getSrc(c))) 
+					s2.add(c);
 
 		List<Mapping> lcs = lcs(s1, s2);
 		
@@ -150,11 +169,13 @@ public class ActionGenerator {
 		}
 		
 		for (Tree a : s1) {
-			for (Tree b: s2) {
+			for (Tree b: s2 ) {
 				if (origMappings.has(a, b)) {
 					if (!lcs.contains(new Mapping(a, b))) {
 						int k = findPos(b);
-						actions.add(new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k));
+						Action mv = new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k);
+						actions.add(mv);
+						//System.out.println(mv);
 						a.getParent().getChildren().remove(a);
 						w.getChildren().add(k, a);
 						a.setParent(w);
@@ -169,6 +190,7 @@ public class ActionGenerator {
 	private int findPos(Tree x) {
 		Tree y = x.getParent();
 		List<Tree> siblings = y.getChildren();
+		
 		for (Tree c : siblings) {
 			if (dstInOrder.contains(c)) {
 				if (c.equals(x)) return 0;

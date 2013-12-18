@@ -131,7 +131,7 @@ public final class BootstrapGenerator {
 	}
 	
 	private static String tooltip(Tree t) {
-		return t.getParent().getTypeLabel() + "/" + t.getTypeLabel();
+		return (t.getParent() != null) ? t.getParent().getTypeLabel() + "/" + t.getTypeLabel() : t.getTypeLabel();
 	}
 
 	private static void append(char cr, Writer w) throws IOException {
