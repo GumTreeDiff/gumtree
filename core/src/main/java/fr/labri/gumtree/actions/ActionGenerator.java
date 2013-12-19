@@ -116,8 +116,9 @@ public class ActionGenerator {
 						Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(z.getId()), k);
 						actions.add(mv);
 						//System.out.println(mv);
-						w.getParent().getChildren().remove(w);
+						int oldk = w.positionInParent();
 						z.getChildren().add(k, w);
+						w.getParent().getChildren().remove(oldk);
 						w.setParent(z);
 					}
 				}			
@@ -140,8 +141,8 @@ public class ActionGenerator {
 		if (!newSrc.toDigestTreeString().equals(origDst.toDigestTreeString())) {
 			LOGGER.severe("Trees not isomorphics!");
 			newSrc.refresh();
-			//System.out.println(newSrc.toTreeString());
-			//System.out.println(origDst.toTreeString());
+//			System.out.println(newSrc.toTreeString());
+//			System.out.println(origDst.toTreeString());
 		}
 	}
 	
@@ -176,8 +177,11 @@ public class ActionGenerator {
 						Action mv = new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k);
 						actions.add(mv);
 						//System.out.println(mv);
-						a.getParent().getChildren().remove(a);
+						int oldk = a.positionInParent();
 						w.getChildren().add(k, a);
+						if(k  < oldk ) // FIXME this is an ugly way to patch the index
+							oldk ++;
+						a.getParent().getChildren().remove(oldk);
 						a.setParent(w);
 						srcInOrder.add(a);
 				 		dstInOrder.add(b);
@@ -198,7 +202,7 @@ public class ActionGenerator {
 			}
 		}
 		
-		int xpos = siblings.indexOf(x);
+		int xpos = x.positionInParent();
 		Tree v = null;
 		for (int i = 0; i < xpos; i++) {
 			Tree c = siblings.get(i);
@@ -209,12 +213,14 @@ public class ActionGenerator {
 		if (v == null) return 0;
 		
 		Tree u = newMappings.getSrc(v);
-		siblings = u.getParent().getChildren();
-		int upos = siblings.indexOf(u);
-		int r = 0;
-		for (int i = 0; i <= upos; i++) if (srcInOrder.contains(siblings.get(i))) r++;
-		
-		return r;
+//		siblings = u.getParent().getChildren();
+//		int upos = siblings.indexOf(u);
+		int upos = u.positionInParent(); 
+//		int r = 0;
+//		for (int i = 0; i <= upos; i++)
+//			if (srcInOrder.contains(siblings.get(i))) r++;
+//		
+		return upos + 1;
 	}
 	
 	private int newId() {
