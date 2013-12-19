@@ -1,9 +1,7 @@
 package fr.labri.gumtree.tree;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
 
 public class Tree {
 	
@@ -446,4 +444,10 @@ public class Tree {
 		this.tmpData = tmpData;
 	}
 
+	public int positionInParent() {
+		if (parent == null)
+			return -1;
+		else
+			return parent.children.indexOf(this);
+	}
 }
