@@ -23,16 +23,12 @@ public class CTreeGenerator extends TreeGenerator {
 			StringBuffer buf = new StringBuffer();
 			BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String line;
-	        while ((line = r.readLine()) != null) {
+	        while ((line = r.readLine()) != null)
 	            buf.append(line + "\n");
-	            System.out.println(line);
-	        }
 	        p.waitFor();
 			if (p.exitValue() != 0)  throw new RuntimeException();
 	        r.close();
 	        String xml = buf.toString();
-	        System.out.println(xml);
-	        
 	        Tree t = TreeIoUtils.fromXmlString(xml);
             return t;
 		} catch (IOException | InterruptedException e) {
