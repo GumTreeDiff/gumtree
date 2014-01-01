@@ -23,7 +23,7 @@ public class TestSerializeTree {
 		// Refresh metrics is called because it is automatically called in fromXML
 		a.refresh();
 		TreeIoUtils.toXml(a, "target/test-classes/test-serialize.xml");
-		Tree ca = TreeIoUtils.fromXml("target/test-classes/test-serialize.xml");
+		Tree ca = TreeIoUtils.fromXmlFile("target/test-classes/test-serialize.xml");
 		
 		assertTrue(a.isClone(ca));
 		assertTrue(ca.getType() == 0);

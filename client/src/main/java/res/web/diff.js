@@ -37,7 +37,6 @@ function isSrc(eltId) {
 
 $("body").keypress(
 	function (event) {
-		console.log(event.which.toString());
 		if (event.which == 110) {
 			var mapping = nextMapping();
 			$('html, body').animate({scrollTop: $(mapping).offset().top - 200}, 100);
@@ -47,9 +46,13 @@ $("body").keypress(
 			$("html, body").animate({ scrollTop: $(document).height() }, 100);
 		} else if (event.which == 113) {
 			window.location = "/quit";
+		} else if (event.which == 108) {
+			window.location = "/list";
 		}
 	}	
 )
+
+$("#infos").popover()
 
 $("span.mv.token, span.token.upd").click(
 	function(event) {

@@ -19,7 +19,7 @@
 package fr.labri.gumtree.gen.jdt;
 
 
-public class JdtTreeGenerator extends AbstractJdtTreeProducer {
+public class JdtTreeGenerator extends AbstractJdtTreeGenerator {
 
 	@Override
 	public boolean handleFile(String file) {

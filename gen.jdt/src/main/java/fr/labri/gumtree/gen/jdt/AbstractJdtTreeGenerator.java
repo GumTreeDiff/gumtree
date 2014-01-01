@@ -9,7 +9,7 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import fr.labri.gumtree.io.TreeGenerator;
 import fr.labri.gumtree.tree.Tree;
 
-public abstract class AbstractJdtTreeProducer extends TreeGenerator {
+public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Tree generate(String file) {

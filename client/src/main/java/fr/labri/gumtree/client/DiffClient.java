@@ -1,6 +1,7 @@
 package fr.labri.gumtree.client;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -15,6 +16,7 @@ public abstract class DiffClient {
 	
 	public static void main(String[] args) {
 		DiffOptions diffOptions = new DiffOptions();
+		System.out.println(Arrays.toString(args));
 		CmdLineParser parser = new CmdLineParser(diffOptions);
 		try {
 			parser.parseArgument(args);

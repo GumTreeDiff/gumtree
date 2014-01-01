@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.labri.gumtree.gen.c.CTreeGenerator;
 import fr.labri.gumtree.gen.jdt.JdtTreeGenerator;
 import fr.labri.gumtree.gen.jdt.cd.CdJdtTreeGenerator;
 import fr.labri.gumtree.gen.js.RhinoTreeGenerator;
@@ -29,6 +30,7 @@ public class TreeGeneratorRegistry {
 		producers.add(new CdJdtTreeGenerator());
 		producers.add(new RhinoTreeGenerator());
 		producers.add(new XMLTreeGenerator());
+		producers.add(new CTreeGenerator());
 	}
 	
 	private TreeGenerator getGenerator(String file, String[] generators) {

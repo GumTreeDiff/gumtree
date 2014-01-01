@@ -18,7 +18,7 @@ public class TestTree {
 
 	@Test
 	public void testIdComparator() {
-		Tree root = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		List<Tree> nodes = root.getTrees();
 		assertTrue(nodes.get(0).getLabel().equals("a"));
 		assertTrue(nodes.get(1).getLabel().equals("b"));
@@ -39,7 +39,7 @@ public class TestTree {
 
 	@Test
 	public void testGetParents() {
-		Tree tree = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree tree = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		List<Tree> trees = new LinkedList<Tree>(tree.getTrees());
 		Tree n = trees.get(2);
 		assertTrue(n.getLabel().equals("c"));
@@ -51,7 +51,7 @@ public class TestTree {
 	
 	@Test
 	public void testDeepCopy() {
-		Tree root = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		TreeUtils.postOrderNumbering(root);
 		Tree croot = root.deepCopy();
 		assertTrue(croot.getSize() == root.getSize());
@@ -68,7 +68,7 @@ public class TestTree {
 	
 	@Test
 	public void testIsClone() {
-		Tree tree = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree tree = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		Tree copy = tree.deepCopy();
 		assertFalse(tree.equals(copy));
 		assertTrue(tree.isClone(copy));

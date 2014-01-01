@@ -15,7 +15,7 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testPostOrderNumbering() {
-		Tree root = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		TreeUtils.postOrderNumbering(root);
 		assertEquals(root.getId(), 4);
 		assertEquals(root.getChildren().get(0).getId(), 2);
@@ -26,7 +26,7 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testDepth() {
-		Tree root = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		TreeUtils.computeDepth(root);
 		assertEquals(root.getDepth(), 0);
 		assertEquals(root.getChildren().get(0).getDepth(), 1);
@@ -37,7 +37,7 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testHeight() {
-		Tree root = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		assertEquals(2, root.getHeight()); // depth of a 
 		assertEquals(1, root.getChildren().get(0).getHeight()); // depth of b
 		assertEquals(0, root.getChildren().get(0).getChildren().get(0).getHeight()); // depth of c
@@ -47,7 +47,7 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testPreOrderNumbering() {
-		Tree root = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		TreeUtils.preOrderNumbering(root);
 		assertEquals(0, root.getId()); // id of a
 		assertEquals(1, root.getChildren().get(0).getId()); // id of b
@@ -58,7 +58,7 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testBreadthFirstNumbering() {
-		Tree tree = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree tree = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		TreeUtils.bfsOrderNumbering(tree);
 		assertEquals(tree.getId(), 0);
 		assertEquals(tree.getChildren().get(0).getId(), 1);
@@ -69,7 +69,7 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testDigest() {
-		Tree root = TreeIoUtils.fromXml(DUMMY_SRC);
+		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		Tree croot = root.deepCopy();
 		TreeUtils.computeDigest(root);
 		TreeUtils.computeDigest(croot);
@@ -82,7 +82,7 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testRemoveCompletelyMappedDescendants() {
-		Tree root = TreeIoUtils.fromXml(DUMMY_DST);
+		Tree root = TreeIoUtils.fromXmlFile(DUMMY_DST);
 		root.getChildren().get(0).setMatched(true);
 		root.getChildren().get(0).getChildren().get(0).getChildren().get(0).setMatched(true);
 		root.getChildren().get(1).setMatched(true);

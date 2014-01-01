@@ -14,10 +14,10 @@ public class DiffOptions {
 	@Option(name="-o", aliases={"--output"}, usage="web for the web-based client and swing for the swing-based client.")
 	private String output = "web";
 	
-	@Argument(index=0,required=true)
+	@Argument(index=0, required=true)
 	private String src;
 	
-	@Argument(index=1,required=true)
+	@Argument(index=1, required=true)
 	private String dst;
 
 	public String getMatcher() {

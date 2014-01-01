@@ -1,45 +1,38 @@
 package fr.labri.gumtree.client.ui.web;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
-import fr.labri.gumtree.actions.ActionGenerator;
+import org.rendersnake.HtmlCanvas;
+import org.rendersnake.Renderable;
+
 import fr.labri.gumtree.client.ui.web.NanoHTTPD.Response.Status;
-import fr.labri.gumtree.io.ActionsSerializer;
-import fr.labri.gumtree.io.TreeIoUtils;
-import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.client.ui.web.views.DirectoryComparatorView;
+import fr.labri.gumtree.client.ui.web.views.DiffView;
+import fr.labri.gumtree.client.ui.web.views.ScriptView;
+import fr.labri.gumtree.io.DirectoryComparator;
+import fr.labri.gumtree.tree.Pair;
 
 public class DiffServer extends NanoHTTPD {
 
 	public static final int PORT = 4754;
 	
-	private String fSrc;
-
-	private String fDst;
-
-	private Tree tSrc;
-
-	private Tree tDst;
-
-	private Matcher matcher;
+	public DirectoryComparator comparator;
 	
-	public DiffServer(String fSrc, String fDst, Tree tSrc, Tree tDst, Matcher matcher) {
+	public DiffServer(String src, String dst) {
 		super(PORT);
-		this.fSrc = fSrc;
-		this.fDst = fDst;
-		this.tSrc = tSrc;
-		this.tDst = tDst;
-		this.matcher = matcher;
+		comparator = new DirectoryComparator(src, dst);
+		comparator.compare();
 	}
 	
     public static void start(NanoHTTPD server) {
         try {
             server.start();
-        } catch (IOException ioe) {
-            System.err.println("Couldn't start server:" + ioe);
+        } catch (IOException e) {
+            System.err.println("Couldn't start server:" + e);
             System.exit(-1);
         }
 
@@ -47,6 +40,7 @@ public class DiffServer extends NanoHTTPD {
         try {
         	System.in.read();
         } catch (Throwable ignored) {
+        	ignored.printStackTrace();
         }
 
         server.stop();
@@ -55,42 +49,47 @@ public class DiffServer extends NanoHTTPD {
 
 	@Override
 	public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> parms, Map<String, String> files) {
-		System.out.println("Requested: " + uri);
 		try {
-			if ("/src".equals(uri))
-				return respond("text/plain", new FileInputStream(fSrc));
-			else if ("/src/xml".equals(uri)) 
-				return respond("text/xml", TreeIoUtils.toXml(tSrc));
-			else if ("/src/cxml".equals(uri)) 
-				return respond("text/xml", TreeIoUtils.toCompactXml(tSrc));
-			else if ("/src/dot".equals(uri)) 
-				return respond("text/plain", TreeIoUtils.toDot(tSrc));
-			else if ("/dst".equals(uri)) 
-				return respond("text/plain", new FileInputStream(fDst));
-			else if ("/dst/xml".equals(uri)) 
-				return respond("text/xml", TreeIoUtils.toXml(tDst));
-			else if ("/dst/cxml".equals(uri)) 
-				return respond("text/xml", TreeIoUtils.toCompactXml(tDst));
-			else if ("/dst/dot".equals(uri)) 
-				return respond("text/plain", TreeIoUtils.toDot(tDst));
-			else if ("/diff".equals(uri) || "/".equals(uri))
-				return respond(BootstrapGenerator.produceHTML(fSrc, fDst, tSrc, tDst, matcher));
-			else if ("/script".equals(uri)) {
-				ActionGenerator g = new ActionGenerator(tSrc, tDst, matcher.getMappings());
-				g.generate();
-				return respond("text/plain", ActionsSerializer.toText(g.getActions()));
+			if ("/list".equals(uri)) {
+				DirectoryComparatorView view = new DirectoryComparatorView(comparator);
+				return respond(view);
+			} else if ("/diff".equals(uri)) {
+				int id = Integer.parseInt(parms.get("id"));
+				Pair<File, File> pair = comparator.getModifiedFiles().get(id);
+				return respond(new DiffView(pair.getFirst(), pair.getSecond()));
+			} else if ("/script".equals(uri)) {
+				int id = Integer.parseInt(parms.get("id"));
+				Pair<File, File> pair = comparator.getModifiedFiles().get(id);
+				return respond(new ScriptView(pair.getFirst(), pair.getSecond()));
 			} else if ("/quit".equals(uri)) System.exit(0);
-			else if (uri.startsWith("/assets")) {
+			else if (uri.startsWith("/res/")) {
 				String res = uri.substring(1);
 				InputStream data = ClassLoader.getSystemClassLoader().getResourceAsStream(res);
 				if (uri.endsWith(".css")) return new Response(Status.OK, "text/css", data);
 				else if (uri.endsWith(".js")) return new Response(Status.OK, "text/javascript", data);
-			} 
+			} else if ("/".equals(uri)) {
+				if (comparator.isDirMode()) return serve("/list", method, header, parms, files);
+				else {
+					parms = new HashMap<String, String>();
+					parms.put("id", "0");
+					return serve("/diff", method, header, parms, files);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return null;
+	}
+	
+	private Response respond(Renderable r) {
+		HtmlCanvas c = new HtmlCanvas();
+		try {
+			r.renderOn(c);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new Response(c.toHtml());
 	}
 
 	private Response respond(String s) {

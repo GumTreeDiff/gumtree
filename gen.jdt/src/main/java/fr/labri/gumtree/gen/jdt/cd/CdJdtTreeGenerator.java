@@ -1,9 +1,9 @@
 package fr.labri.gumtree.gen.jdt.cd;
 
 import fr.labri.gumtree.gen.jdt.AbstractJdtVisitor;
-import fr.labri.gumtree.gen.jdt.AbstractJdtTreeProducer;
+import fr.labri.gumtree.gen.jdt.AbstractJdtTreeGenerator;
 
-public class CdJdtTreeGenerator extends AbstractJdtTreeProducer {
+public class CdJdtTreeGenerator extends AbstractJdtTreeGenerator {
 
 	@Override
 	public String getName() {

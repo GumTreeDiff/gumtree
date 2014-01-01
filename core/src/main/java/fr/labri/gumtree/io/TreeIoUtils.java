@@ -1,8 +1,11 @@
 package fr.labri.gumtree.io;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Stack;
 
@@ -24,12 +27,12 @@ public final class TreeIoUtils {
 	private TreeIoUtils() {
 	}
 	
-	public static Tree fromXml(String file) {
+	public static Tree fromXml(Reader source) {
 		XMLInputFactory fact = XMLInputFactory.newInstance();
 		try {
 			Tree root = null;
 			Stack<Tree> trees = new Stack<Tree>();
-			XMLEventReader r = fact.createXMLEventReader(new FileReader(file));
+			XMLEventReader r = fact.createXMLEventReader(source);
 			while (r.hasNext()) {
 				XMLEvent e = r.nextEvent();
 				if (e instanceof StartElement) {
@@ -51,8 +54,22 @@ public final class TreeIoUtils {
 				} else if (e instanceof EndElement) trees.pop();
 			}
 			root.refresh();
+			TreeUtils.postOrderNumbering(root);
 			return root;
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Tree fromXmlString(String xml) {
+		return fromXml(new StringReader(xml));
+	}
+	
+	public static Tree fromXmlFile(String path) {
+		try {
+			return fromXml(new FileReader(path));
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		return null;
