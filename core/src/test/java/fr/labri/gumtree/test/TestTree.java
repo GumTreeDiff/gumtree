@@ -1,14 +1,12 @@
 package fr.labri.gumtree.test;
 
-import static org.junit.Assert.assertFalse;
+import static fr.labri.gumtree.test.TestConstants.DUMMY_SRC;
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
-
-import static fr.labri.gumtree.test.TestConstants.*;
 
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.Tree;
@@ -70,7 +68,6 @@ public class TestTree {
 	public void testIsClone() {
 		Tree tree = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		Tree copy = tree.deepCopy();
-		assertFalse(tree.equals(copy));
 		assertTrue(tree.isClone(copy));
 	}
 
