@@ -52,7 +52,8 @@ $("body").keypress(
 	}	
 )
 
-$("#infos").popover()
+$("#legend").popover()
+$("#shortcuts").popover()
 
 $("span.mv.token, span.token.upd").click(
 	function(event) {
