@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>gen.c</artifactId>
 	<packaging>jar</packaging>
-	<name>Gumtree JS Tree Generator</name>
+	<name>Gumtree C Tree Generator</name>
 	<dependencies>
 		<dependency>
 			<groupId>fr.labri.gumtree</groupId>
