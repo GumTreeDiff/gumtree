@@ -21,6 +21,14 @@ public class DirectoryComparator {
 
 	private Path src;
 
+	public Path getSrc() {
+		return src;
+	}
+
+	public Path getDst() {
+		return dst;
+	}
+
 	private Path dst;
 	
 	private List<Pair<File, File>> modifiedFiles;
