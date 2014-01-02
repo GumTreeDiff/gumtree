@@ -16,7 +16,6 @@ public abstract class DiffClient {
 	
 	public static void main(String[] args) {
 		DiffOptions diffOptions = new DiffOptions();
-		System.out.println(Arrays.toString(args));
 		CmdLineParser parser = new CmdLineParser(diffOptions);
 		try {
 			parser.parseArgument(args);
