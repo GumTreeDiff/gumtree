@@ -14,7 +14,7 @@ import org.rendersnake.Renderable;
 import fr.labri.gumtree.actions.ActionGenerator;
 import fr.labri.gumtree.actions.model.Action;
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
-import fr.labri.gumtree.io.ActionsSerializer;
+import fr.labri.gumtree.io.ActionsIoUtils;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
 import fr.labri.gumtree.tree.Tree;
@@ -53,7 +53,7 @@ public class ScriptView implements Renderable {
 							.write("Script ")
 							.small().content(String.format("%s -> %s", fSrc.getName(), fDst.getName()))
 							._h3()
-							.pre().content(ActionsSerializer.toText(this.script))
+							.pre().content(ActionsIoUtils.toText(this.script))
 						._div()
 					._div()
 				._div()
