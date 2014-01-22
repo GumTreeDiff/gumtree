@@ -55,11 +55,11 @@ public final class ActionsIoUtils {
 	}
 
 	public static String toXml(List<Action> actions, MappingStore mappings) {
-		XMLOutputFactory fact = XMLOutputFactory.newInstance();
+		XMLOutputFactory f = XMLOutputFactory.newInstance();
 		StringWriter s = new StringWriter();
 		String result = null;
 		try {
-			XMLStreamWriter w = fact.createXMLStreamWriter(s);
+			XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(s));
 			w.writeStartDocument();
 			w.writeStartElement("actions");
 			writeActions(actions, mappings, w);
@@ -81,26 +81,42 @@ public final class ActionsIoUtils {
 			if (a instanceof Move || a instanceof Update) {
 				Tree src = a.getNode();
 				Tree dst = mappings.getDst(src);
-				w.writeStartElement("before");
-				w.writeAttribute("pos", Integer.toString(src.getPos()));
-				w.writeAttribute("length", Integer.toString(src.getLength()));
-				w.writeEndElement();
-				w.writeStartElement("after");
-				w.writeAttribute("pos", Integer.toString(dst.getPos()));
-				w.writeAttribute("length", Integer.toString(dst.getLength()));
-				w.writeEndElement();
+				w.writeEmptyElement("before");
+				if (src.getLcPosStart() != null) {
+					w.writeAttribute("begin_line", Integer.toString(src.getLcPosStart()[0]));
+					w.writeAttribute("begin_col", Integer.toString(src.getLcPosStart()[1]));
+					w.writeAttribute("end_line", Integer.toString(src.getLcPosEnd()[0]));
+					w.writeAttribute("end_col", Integer.toString(src.getLcPosEnd()[1]));
+				}
+				//w.writeEndElement();
+				w.writeEmptyElement("after");
+				if (dst.getLcPosStart() != null) {
+					w.writeAttribute("begin_line", Integer.toString(dst.getLcPosStart()[0]));
+					w.writeAttribute("begin_col", Integer.toString(dst.getLcPosStart()[1]));
+					w.writeAttribute("end_line", Integer.toString(dst.getLcPosEnd()[0]));
+					w.writeAttribute("end_col", Integer.toString(dst.getLcPosEnd()[1]));
+				}
+				//w.writeEndElement();
 			} else if (a instanceof Insert) {
 				Tree dst = a.getNode();
-				w.writeStartElement("after");
-				w.writeAttribute("pos", Integer.toString(dst.getPos()));
-				w.writeAttribute("length", Integer.toString(dst.getLength()));
-				w.writeEndElement();
+				w.writeEmptyElement("after");
+				if (dst.getLcPosStart() != null) {
+					w.writeAttribute("begin_line", Integer.toString(dst.getLcPosStart()[0]));
+					w.writeAttribute("begin_col", Integer.toString(dst.getLcPosStart()[1]));
+					w.writeAttribute("end_line", Integer.toString(dst.getLcPosEnd()[0]));
+					w.writeAttribute("end_col", Integer.toString(dst.getLcPosEnd()[1]));
+				}
+				//w.writeEndElement();
 			} else if (a instanceof Delete) {
 				Tree src = a.getNode();
-				w.writeStartElement("before");
-				w.writeAttribute("pos", Integer.toString(src.getPos()));
-				w.writeAttribute("length", Integer.toString(src.getLength()));
-				w.writeEndElement();
+				w.writeEmptyElement("before");
+				if (src.getLcPosStart() != null) {
+					w.writeAttribute("begin_line", Integer.toString(src.getLcPosStart()[0]));
+					w.writeAttribute("begin_col", Integer.toString(src.getLcPosStart()[1]));
+					w.writeAttribute("end_line", Integer.toString(src.getLcPosEnd()[0]));
+					w.writeAttribute("end_col", Integer.toString(src.getLcPosEnd()[1]));
+				}
+				//w.writeEndElement();
 			}
 			w.writeEndElement();
 		}

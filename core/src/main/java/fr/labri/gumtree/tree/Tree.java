@@ -52,6 +52,26 @@ public class Tree {
 
 	// Needed for Rted :(
 	private Object tmpData;
+	
+	private int[] lcPosStart;
+	
+	private int[] lcPosEnd;
+
+	public int[] getLcPosStart() {
+		return lcPosStart;
+	}
+
+	public void setLcPosStart(int[] lcPosStart) {
+		this.lcPosStart = lcPosStart;
+	}
+
+	public int[] getLcPosEnd() {
+		return lcPosEnd;
+	}
+
+	public void setLcPosEnd(int[] lcPosEnd) {
+		this.lcPosEnd = lcPosEnd;
+	}
 
 	public Tree(int type) {
 		this(type, NO_LABEL);

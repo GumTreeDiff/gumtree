@@ -8,6 +8,7 @@ import org.kohsuke.args4j.CmdLineParser;
 
 import fr.labri.gumtree.client.ui.swing.SwingDiff;
 import fr.labri.gumtree.client.ui.web.WebDiff;
+import fr.labri.gumtree.client.ui.xml.XmlDiff;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
 import fr.labri.gumtree.tree.Tree;
@@ -21,6 +22,7 @@ public abstract class DiffClient {
 			parser.parseArgument(args);
 			DiffClient client;
 			if ("swing".equals(diffOptions.getOutput())) client = new SwingDiff(diffOptions);
+			else if ("xml".equals(diffOptions.getOutput())) client = new XmlDiff(diffOptions);
 			else client = new WebDiff(diffOptions);
 			client.start();
 		} catch (CmdLineException e) {

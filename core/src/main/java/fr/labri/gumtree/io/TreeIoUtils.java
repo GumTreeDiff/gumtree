@@ -23,6 +23,16 @@ import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 
 public final class TreeIoUtils {
+	
+	private final static QName TYPE = new QName("type");
+	private final static QName LABEL = new QName("label");
+	private final static QName TYPE_LABEL = new QName("typeLabel");
+	private final static QName POS = new QName("pos");
+	private final static QName LENGTH = new QName("length");
+	private final static QName LINE_BEFORE = new QName("line_before");
+	private final static QName LINE_AFTER = new QName("line_after");
+	private final static QName COL_BEFORE = new QName("col_before");
+	private final static QName COL_AFTER = new QName("col_after");
 
 	private TreeIoUtils() {
 	}
@@ -37,14 +47,27 @@ public final class TreeIoUtils {
 				XMLEvent e = r.nextEvent();
 				if (e instanceof StartElement) {
 					StartElement s = (StartElement) e;
-					int type = Integer.parseInt(s.getAttributeByName(new QName("type")).getValue());
-					String label = s.getAttributeByName(new QName("label")).getValue();
-					String typeLabel = s.getAttributeByName(new QName("typeLabel")).getValue();
-					int pos = Integer.parseInt(s.getAttributeByName(new QName("pos")).getValue());
-					int length = Integer.parseInt(s.getAttributeByName(new QName("length")).getValue());
+					int type = Integer.parseInt(s.getAttributeByName(TYPE).getValue());
+					String label = s.getAttributeByName(LABEL).getValue();
+					String typeLabel = s.getAttributeByName(TYPE_LABEL).getValue();
 					Tree t = new Tree(type, label, typeLabel);
-					t.setPos(pos);
-					t.setLength(length);
+					
+					if (s.getAttributeByName(POS) != null) {
+						int pos = Integer.parseInt(s.getAttributeByName(POS).getValue());
+						int length = Integer.parseInt(s.getAttributeByName(LENGTH).getValue());
+						t.setPos(pos);
+						t.setLength(length);
+					}
+					
+					if (s.getAttributeByName(LINE_BEFORE) != null) {
+						int l0 = Integer.parseInt(s.getAttributeByName(LINE_BEFORE).getValue());
+						int c0 = Integer.parseInt(s.getAttributeByName(COL_BEFORE).getValue());
+						int l1 = Integer.parseInt(s.getAttributeByName(LINE_AFTER).getValue());
+						int c1 = Integer.parseInt(s.getAttributeByName(COL_AFTER).getValue());
+						t.setLcPosStart(new int[] {l0, c0});
+						t.setLcPosEnd(new int[] {l1, c1});
+					}
+					
 					if (root == null) root = t;
 					else {
 						Tree parent = trees.peek();
