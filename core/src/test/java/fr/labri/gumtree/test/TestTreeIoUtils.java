@@ -7,7 +7,7 @@ import org.junit.Test;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.Tree;
 
-public class TestSerializeTree {
+public class TestTreeIoUtils {
 
 	@Test
 	public void testSerializeTree() {
@@ -18,10 +18,11 @@ public class TestSerializeTree {
 		c.setParentAndUpdateChildren(b);
 		Tree d = new Tree(3, "d");
 		d.setParentAndUpdateChildren(b);
-		Tree e = new Tree(2, "e");
+		Tree e = new Tree(2);
 		e.setParentAndUpdateChildren(a);
 		// Refresh metrics is called because it is automatically called in fromXML
 		a.refresh();
+		System.out.println(TreeIoUtils.toXml(a));
 		TreeIoUtils.toXml(a, "target/test-classes/test-serialize.xml");
 		Tree ca = TreeIoUtils.fromXmlFile("target/test-classes/test-serialize.xml");
 		

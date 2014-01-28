@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import static fr.labri.gumtree.test.TestConstants.*;
+import static fr.labri.gumtree.test.Constants.*;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;

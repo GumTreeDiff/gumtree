@@ -1,6 +1,6 @@
 package fr.labri.gumtree.test;
 
-public class TestConstants {
+public class Constants {
 	
 	public static final String DUMMY_SRC = "../samples/raw/Dummy_v0.xml";
 	

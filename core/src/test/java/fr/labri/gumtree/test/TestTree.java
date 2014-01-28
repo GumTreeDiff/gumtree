@@ -1,6 +1,6 @@
 package fr.labri.gumtree.test;
 
-import static fr.labri.gumtree.test.TestConstants.DUMMY_SRC;
+import static fr.labri.gumtree.test.Constants.DUMMY_SRC;
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;

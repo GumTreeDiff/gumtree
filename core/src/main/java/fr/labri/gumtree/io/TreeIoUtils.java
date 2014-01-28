@@ -48,15 +48,25 @@ public final class TreeIoUtils {
 				if (e instanceof StartElement) {
 					StartElement s = (StartElement) e;
 					int type = Integer.parseInt(s.getAttributeByName(TYPE).getValue());
-					String label = s.getAttributeByName(LABEL).getValue();
-					String typeLabel = s.getAttributeByName(TYPE_LABEL).getValue();
-					Tree t = new Tree(type, label, typeLabel);
+					
+					Tree t = new Tree(type);
+					
+					if (s.getAttributeByName(LABEL) != null) {
+						String label = s.getAttributeByName(LABEL).getValue();
+						t.setLabel(label);
+					}
+					
+					if (s.getAttributeByName(TYPE_LABEL) != null) {
+						String typeLabel = s.getAttributeByName(TYPE_LABEL).getValue();
+						t.setTypeLabel(typeLabel);
+					}
 					
 					if (s.getAttributeByName(POS) != null) {
 						int pos = Integer.parseInt(s.getAttributeByName(POS).getValue());
 						int length = Integer.parseInt(s.getAttributeByName(LENGTH).getValue());
 						t.setPos(pos);
 						t.setLength(length);
+						
 					}
 					
 					if (s.getAttributeByName(LINE_BEFORE) != null) {
@@ -109,11 +119,11 @@ public final class TreeIoUtils {
 	}
 	
 	public static String toXml(Tree t) {
-		XMLOutputFactory fact = XMLOutputFactory.newInstance();
+		XMLOutputFactory f = XMLOutputFactory.newInstance();
 		StringWriter s = new StringWriter();
 		String result = null;
 		try {
-			XMLStreamWriter w = fact.createXMLStreamWriter(s);
+			XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(s));
 			w.writeStartDocument();
 			writeTree(t, w);
 			w.writeEndDocument();
@@ -129,10 +139,18 @@ public final class TreeIoUtils {
 	private static void writeTree(Tree t, XMLStreamWriter w) throws XMLStreamException {
 		w.writeStartElement("tree");
 		w.writeAttribute("type", Integer.toString(t.getType()));
-		w.writeAttribute("label", t.getLabel());
-		w.writeAttribute("typeLabel", t.getTypeLabel());
-		w.writeAttribute("pos", Integer.toString(t.getPos()));
-		w.writeAttribute("length", Integer.toString(t.getLength()));
+		if (!Tree.NO_LABEL.equals(t.getLabel())) w.writeAttribute("label", t.getLabel());
+		if (!Tree.NO_LABEL.equals(t.getTypeLabel())) w.writeAttribute("typeLabel", t.getTypeLabel());
+		if (Tree.NO_VALUE != t.getPos()) {
+			w.writeAttribute("pos", Integer.toString(t.getPos()));
+			w.writeAttribute("length", Integer.toString(t.getLength()));
+		}
+		if (t.getLcPosStart() != null) {
+			w.writeAttribute("line_before", Integer.toString(t.getLcPosStart()[0]));
+			w.writeAttribute("col_before", Integer.toString(t.getLcPosStart()[1]));
+			w.writeAttribute("line_after", Integer.toString(t.getLcPosEnd()[0]));
+			w.writeAttribute("col_after", Integer.toString(t.getLcPosEnd()[1]));
+		}
 		for (Tree c: t.getChildren())
 			writeTree(c, w);
 		w.writeEndElement();
@@ -149,11 +167,11 @@ public final class TreeIoUtils {
 	}
 
 	public static String toCompactXml(Tree t) {
-		XMLOutputFactory fact = XMLOutputFactory.newInstance();
+		XMLOutputFactory f = XMLOutputFactory.newInstance();
 		StringWriter s = new StringWriter();
 		String result = null;
 		try {
-			XMLStreamWriter w = fact.createXMLStreamWriter(s);
+			XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(s));
 			w.writeStartDocument();
 			writeCompactTree(t, w);
 			w.writeEndDocument();
