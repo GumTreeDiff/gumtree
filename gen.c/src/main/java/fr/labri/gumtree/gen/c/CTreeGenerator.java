@@ -11,7 +11,7 @@ import fr.labri.gumtree.tree.Tree;
 
 public class CTreeGenerator extends TreeGenerator {
 	
-	private static final String COCCI_CMD = "spatch";
+	private static final String COCCI_CMD = "cgum";
 
 	@Override
 	public Tree generate(String file) {
