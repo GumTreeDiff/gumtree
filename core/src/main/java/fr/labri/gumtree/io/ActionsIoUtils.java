@@ -84,7 +84,6 @@ public final class ActionsIoUtils {
 				Tree dst = mappings.getDst(src);
 				writeTreePos(w, true, src);
 				writeTreePos(w, false, dst);
-				w.writeEmptyElement("before");
 			} else if (a instanceof Insert) {
 				Tree dst = a.getNode();
 				if (dst.isRoot()) writeInsertPos(w, true, new int[] {0, 0});
@@ -94,7 +93,6 @@ public final class ActionsIoUtils {
 					else writeInsertPos(w, true, dst.getParent().getChildren().get(idx -1).getLcPosEnd());
 				}
 				writeTreePos(w, false, dst);
-				w.writeEmptyElement("after");
 			} else if (a instanceof Delete) {
 				Tree src = a.getNode();
 				writeTreePos(w, true, src);
