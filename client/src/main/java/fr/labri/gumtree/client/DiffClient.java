@@ -1,13 +1,13 @@
 package fr.labri.gumtree.client;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
 import fr.labri.gumtree.client.ui.swing.SwingDiff;
 import fr.labri.gumtree.client.ui.web.WebDiff;
+import fr.labri.gumtree.client.ui.xml.AnnotatedXmlDiff;
 import fr.labri.gumtree.client.ui.xml.XmlDiff;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
@@ -23,6 +23,8 @@ public abstract class DiffClient {
 			DiffClient client;
 			if ("swing".equals(diffOptions.getOutput())) client = new SwingDiff(diffOptions);
 			else if ("xml".equals(diffOptions.getOutput())) client = new XmlDiff(diffOptions);
+			else if ("asrc".equals(diffOptions.getOutput())) client = new AnnotatedXmlDiff(diffOptions, true);
+			else if ("adst".equals(diffOptions.getOutput())) client = new AnnotatedXmlDiff(diffOptions, false);
 			else client = new WebDiff(diffOptions);
 			client.start();
 		} catch (CmdLineException e) {

@@ -19,6 +19,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 
@@ -135,6 +136,24 @@ public final class TreeIoUtils {
 		}
 		return result;
 	}
+	
+	public static String toAnnotatedXml(Tree t, MappingStore m, boolean isSrc) {
+		XMLOutputFactory f = XMLOutputFactory.newInstance();
+		StringWriter s = new StringWriter();
+		String result = null;
+		try {
+			XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(s));
+			w.writeStartDocument();
+			writeTree(t, m, isSrc, w);
+			w.writeEndDocument();
+			w.close();
+			result = s.toString();
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	private static void writeTree(Tree t, XMLStreamWriter w) throws XMLStreamException {
 		w.writeStartElement("tree");
@@ -153,6 +172,43 @@ public final class TreeIoUtils {
 		}
 		for (Tree c: t.getChildren())
 			writeTree(c, w);
+		w.writeEndElement();
+	}
+	
+	private static void writeTree(Tree t, MappingStore m, boolean isSrc, XMLStreamWriter w) throws XMLStreamException {
+		w.writeStartElement("tree");
+		w.writeAttribute("type", Integer.toString(t.getType()));
+		if (!Tree.NO_LABEL.equals(t.getLabel())) w.writeAttribute("label", t.getLabel());
+		if (!Tree.NO_LABEL.equals(t.getTypeLabel())) w.writeAttribute("typeLabel", t.getTypeLabel());
+		if (Tree.NO_VALUE != t.getPos()) {
+			w.writeAttribute("pos", Integer.toString(t.getPos()));
+			w.writeAttribute("length", Integer.toString(t.getLength()));
+		}
+		if (t.getLcPosStart() != null) {
+			w.writeAttribute("line_before", Integer.toString(t.getLcPosStart()[0]));
+			w.writeAttribute("col_before", Integer.toString(t.getLcPosStart()[1]));
+			w.writeAttribute("line_after", Integer.toString(t.getLcPosEnd()[0]));
+			w.writeAttribute("col_after", Integer.toString(t.getLcPosEnd()[1]));
+		}
+		Tree o = null;
+		if (isSrc && m.hasSrc(t)) o = m.getDst(t);
+		if (!isSrc && m.hasDst(t)) o = m.getSrc(t);
+		
+		if (o != null) {
+			if (Tree.NO_VALUE != o.getPos()) {
+				w.writeAttribute("other_pos", Integer.toString(o.getPos()));
+				w.writeAttribute("other_length", Integer.toString(o.getLength()));
+			}
+			if (o.getLcPosStart() != null) {
+				w.writeAttribute("other_line_before", Integer.toString(o.getLcPosStart()[0]));
+				w.writeAttribute("other_col_before", Integer.toString(o.getLcPosStart()[1]));
+				w.writeAttribute("other_line_after", Integer.toString(o.getLcPosEnd()[0]));
+				w.writeAttribute("other_col_after", Integer.toString(o.getLcPosEnd()[1]));
+			}
+		}
+		
+		for (Tree c: t.getChildren())
+			writeTree(c, m, isSrc, w);
 		w.writeEndElement();
 	}
 	
