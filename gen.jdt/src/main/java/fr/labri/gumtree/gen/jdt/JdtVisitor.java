@@ -18,19 +18,12 @@
 
 package fr.labri.gumtree.gen.jdt;
 
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.Assignment;
-import org.eclipse.jdt.core.dom.BooleanLiteral;
-import org.eclipse.jdt.core.dom.CharacterLiteral;
-import org.eclipse.jdt.core.dom.InfixExpression;
-import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.Name;
-import org.eclipse.jdt.core.dom.NumberLiteral;
-import org.eclipse.jdt.core.dom.PostfixExpression;
-import org.eclipse.jdt.core.dom.PrefixExpression;
-import org.eclipse.jdt.core.dom.QualifiedName;
-import org.eclipse.jdt.core.dom.StringLiteral;
-import org.eclipse.jdt.core.dom.Type;
+import java.util.Stack;
+
+import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.internal.compiler.ast.BinaryExpression;
+
+import fr.labri.gumtree.tree.Tree;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
 	
