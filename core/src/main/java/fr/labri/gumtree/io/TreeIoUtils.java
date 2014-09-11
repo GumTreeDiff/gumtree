@@ -19,6 +19,8 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import com.google.gson.stream.JsonWriter;
+
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
@@ -279,6 +281,66 @@ public final class TreeIoUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void toJSON(Tree t, String file) {
+		try {
+			FileWriter f = new FileWriter(file);
+			f.append(toJSON(t));
+			f.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static String toJSON(Tree t) {
+		StringWriter s = new StringWriter();
+		String result = null;
+		try {
+			JsonWriter w = new JsonWriter(s);
+			w.setIndent("\t");
+			
+			//w.writeStartDocument();
+			writeJSONTree(t, w);
+			//w.writeEndDocument();
+		
+			w.close();
+			
+			result = s.toString();
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private static void writeJSONTree(Tree t, JsonWriter w) throws IOException {
+		w.beginObject();
+		
+		w.name("type").value(Integer.toString(t.getType()));
+
+		if (!Tree.NO_LABEL.equals(t.getLabel())) w.name("label").value(t.getLabel());
+		if (!Tree.NO_LABEL.equals(t.getTypeLabel())) w.name("typeLabel").value(t.getTypeLabel());
+		
+		if (Tree.NO_VALUE != t.getPos()) {
+			w.name("pos").value(Integer.toString(t.getPos()));
+			w.name("length").value(Integer.toString(t.getLength()));
+		}
+		
+		if (t.getLcPosStart() != null) {
+			w.name("line_before").value(Integer.toString(t.getLcPosStart()[0]));
+			w.name("col_before").value(Integer.toString(t.getLcPosStart()[1]));
+			w.name("line_after").value(Integer.toString(t.getLcPosEnd()[0]));
+			w.name("col_after").value(Integer.toString(t.getLcPosEnd()[1]));
+		}
+		
+		w.name("children");
+		w.beginArray();
+		for (Tree c: t.getChildren())
+			writeJSONTree(c, w);
+		w.endArray();
+		
+		w.endObject();
 	}
 
 }
