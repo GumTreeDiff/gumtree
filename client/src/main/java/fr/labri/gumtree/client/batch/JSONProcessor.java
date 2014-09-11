@@ -14,7 +14,7 @@ public class JSONProcessor extends AbstractFileProcessor {
 	}
 
 	public JSONProcessor(String inFolder) {
-		super(inFolder, "xml");
+		super(inFolder, "json");
 	}
 	
 	public JSONProcessor(String inFolder, String outFolder) {
@@ -24,7 +24,7 @@ public class JSONProcessor extends AbstractFileProcessor {
 	@Override
 	public void process(String file) throws IOException {
 		Tree t = TreeGeneratorRegistry.getInstance().getTree(file);
-		if (t != null) TreeIoUtils.toXml(t, file + ".xml");
+		if (t != null) TreeIoUtils.toJSON(t, file + ".json");
 	}
 
 }
