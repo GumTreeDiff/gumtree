@@ -298,12 +298,8 @@ public final class TreeIoUtils {
 		String result = null;
 		try {
 			JsonWriter w = new JsonWriter(s);
-			w.setIndent("\t");
-			
-			//w.writeStartDocument();
+			w.setIndent("\t");			
 			writeJSONTree(t, w);
-			//w.writeEndDocument();
-		
 			w.close();
 			
 			result = s.toString();
