@@ -293,7 +293,7 @@ public final class TreeIoUtils {
 		}
 	}
 
-	private static String toJSON(Tree t) {
+	public static String toJSON(Tree t) {
 		StringWriter s = new StringWriter();
 		String result = null;
 		try {
