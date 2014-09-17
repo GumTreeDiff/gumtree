@@ -10,7 +10,7 @@ public class Example {
 		System.out.println("Adds 10");
 		System.out.println("Multiplies by 10");
 		System.out.println("And displays it");
-		i = random();
+		int i = random();
 		System.out.println(i);
 	}
 	
