@@ -27,13 +27,14 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 
 	@Override
 	public void match() {
-		List<Tree> srcLeaves = retainLeaves(TreeUtils.postOrder(src));
 		List<Tree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
 
 		List<Mapping> leafMappings = new LinkedList<Mapping>();
 
-		for (Tree srcLeaf: srcLeaves) {
+		for (Iterator<Tree> srcLeaves = TreeUtils.leafIterator(
+				TreeUtils.postOrderIterator(src)); srcLeaves.hasNext();) {
 			for (Tree dstLeaf: dstLeaves) {
+				Tree srcLeaf = srcLeaves.next();
 				if (srcLeaf.isMatchable(dstLeaf)) {
 					double sim = QGRAM.getSimilarity(srcLeaf.getLabel(), dstLeaf.getLabel());
 					if (sim > LABEL_SIM_THRESHOLD) leafMappings.add(new Mapping(srcLeaf, dstLeaf));

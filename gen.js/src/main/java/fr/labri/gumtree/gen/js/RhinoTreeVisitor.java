@@ -52,10 +52,9 @@ public class RhinoTreeVisitor implements NodeVisitor {
 	}
 	
 	private Tree buildTree(AstNode node)  {
-		Tree t = new Tree(node.getType());
+		Tree t = new Tree(node.getType(), Tree.NO_LABEL, Token.typeToName(node.getType()));
 		t.setPos(node.getAbsolutePosition());
 		t.setLength(node.getLength());
-		t.setTypeLabel(Token.typeToName(node.getType()));
 		trees.put(node, t);
 		return t;
 	}

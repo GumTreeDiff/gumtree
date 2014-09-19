@@ -53,7 +53,7 @@ public abstract class DigestGenerator {
 
 		@Override
 		public void computeDigest(Tree tree) {
-			for(Tree t: TreeUtils.postOrder(tree)) {
+			for(Tree t: tree.postOrder()) {
 				if (t.isLeaf()) t.setDigest(t.toDigestString().hashCode());
 				else {
 					int digest = 0;
@@ -74,7 +74,7 @@ public abstract class DigestGenerator {
 
 		@Override
 		public void computeDigest(Tree tree) {
-			for(Tree t: TreeUtils.postOrder(tree)) {
+			for(Tree t: tree.postOrder()) {
 				if (t.isLeaf()) t.setDigest(md5digest(t.toDigestString()));
 				else {
 					int digest = 0;
@@ -97,7 +97,7 @@ public abstract class DigestGenerator {
 
 		@Override
 		public void computeDigest(Tree tree) {
-			for(Tree t: TreeUtils.postOrder(tree)) {
+			for(Tree t: tree.postOrder()) {
 				if (t.isLeaf()) t.setDigest(rdmDigest(t.toDigestString()));
 				else {
 					int digest = 0;

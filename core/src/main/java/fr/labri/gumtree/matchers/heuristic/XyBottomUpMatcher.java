@@ -37,7 +37,7 @@ public class XyBottomUpMatcher extends Matcher {
 		for (Tree t : src.getTrees()) srcs.put(t.getId(), t);
 		for (Tree t : dst.getTrees()) dsts.put(t.getId(), t);
 		
-		for (Tree src: postOrder(this.src))  {
+		for (Tree src: src.postOrder())  {
 			if (src.isRoot()) {
 				addMapping(src, this.dst);
 				lastChanceMatch(src, this.dst);

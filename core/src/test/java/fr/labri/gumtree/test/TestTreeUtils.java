@@ -1,9 +1,11 @@
 package fr.labri.gumtree.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import static fr.labri.gumtree.test.Constants.*;
@@ -12,10 +14,17 @@ import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 
 public class TestTreeUtils {
+	Tree root, src;
+	Tree dst;
+
+	@Before // FIXME Could it be before class ?
+	public void init() {
+		src = root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC));
+		dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_DST));
+	}
 	
 	@Test
 	public void testPostOrderNumbering() {
-		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		TreeUtils.postOrderNumbering(root);
 		assertEquals(root.getId(), 4);
 		assertEquals(root.getChildren().get(0).getId(), 2);
@@ -26,7 +35,6 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testDepth() {
-		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		TreeUtils.computeDepth(root);
 		assertEquals(root.getDepth(), 0);
 		assertEquals(root.getChildren().get(0).getDepth(), 1);
@@ -37,7 +45,6 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testHeight() {
-		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		assertEquals(2, root.getHeight()); // depth of a 
 		assertEquals(1, root.getChildren().get(0).getHeight()); // depth of b
 		assertEquals(0, root.getChildren().get(0).getChildren().get(0).getHeight()); // depth of c
@@ -47,7 +54,6 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testPreOrderNumbering() {
-		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		TreeUtils.preOrderNumbering(root);
 		assertEquals(0, root.getId()); // id of a
 		assertEquals(1, root.getChildren().get(0).getId()); // id of b
@@ -58,18 +64,16 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testBreadthFirstNumbering() {
-		Tree tree = TreeIoUtils.fromXmlFile(DUMMY_SRC);
-		TreeUtils.bfsOrderNumbering(tree);
-		assertEquals(tree.getId(), 0);
-		assertEquals(tree.getChildren().get(0).getId(), 1);
-		assertEquals(tree.getChildren().get(0).getChildren().get(0).getId(), 3);
-		assertEquals(tree.getChildren().get(0).getChildren().get(1).getId(), 4);
-		assertEquals(tree.getChildren().get(1).getId(), 2);
+		TreeUtils.bfsOrderNumbering(root);
+		assertEquals(root.getId(), 0);
+		assertEquals(root.getChildren().get(0).getId(), 1);
+		assertEquals(root.getChildren().get(0).getChildren().get(0).getId(), 3);
+		assertEquals(root.getChildren().get(0).getChildren().get(1).getId(), 4);
+		assertEquals(root.getChildren().get(1).getId(), 2);
 	}
 	
 	@Test
 	public void testDigest() {
-		Tree root = TreeIoUtils.fromXmlFile(DUMMY_SRC);
 		Tree croot = root.deepCopy();
 		TreeUtils.computeDigest(root);
 		TreeUtils.computeDigest(croot);
@@ -82,14 +86,46 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testRemoveCompletelyMappedDescendants() {
-		Tree root = TreeIoUtils.fromXmlFile(DUMMY_DST);
-		root.getChildren().get(0).setMatched(true);
-		root.getChildren().get(0).getChildren().get(0).getChildren().get(0).setMatched(true);
-		root.getChildren().get(1).setMatched(true);
-		root.getChildren().get(1).getChildren().get(0).setMatched(true);
-		root = TreeUtils.removeCompletelyMapped(root);
-		TreeUtils.computeSize(root);
-		assertTrue(root.getSize() == 5);
+		dst.getChildren().get(0).setMatched(true);
+		dst.getChildren().get(0).getChildren().get(0).getChildren().get(0).setMatched(true);
+		dst.getChildren().get(1).setMatched(true);
+		dst.getChildren().get(1).getChildren().get(0).setMatched(true);
+		dst = TreeUtils.removeCompletelyMapped(dst);
+		TreeUtils.computeSize(dst);
+		assertTrue(dst.getSize() == 5);
 	}
+	
+	@Test
+	public void testPostOrder() {
+		List<Tree> lst = TreeUtils.postOrder(src);
+		Iterator<Tree> it = TreeUtils.postOrderIterator(src);
+		
+		for (Tree i: lst)
+			assertEquals(i, it.next());
+		assertFalse(it.hasNext());
+	}
+	
+	@Test
+	public void testPostOrder2() {
+		List<Tree> lst = TreeUtils.postOrder(dst);
+		Iterator<Tree> it = TreeUtils.postOrderIterator(dst);
+		
+		for (Tree i: lst)
+			assertEquals(i, it.next());
+		
+		assertFalse(it.hasNext());
+	}
+	
+	@Test
+	public void testPostOrder3() {
+		Tree big = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_BIG));
 
+		List<Tree> lst = TreeUtils.postOrder(big);
+		Iterator<Tree> it = TreeUtils.postOrderIterator(big);
+		
+		for (Tree i: lst)
+			assertEquals(i, it.next());
+		
+		assertFalse(it.hasNext());
+	}
 }

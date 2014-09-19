@@ -1,7 +1,10 @@
 package fr.labri.gumtree.tree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class Tree {
 	
@@ -51,9 +54,9 @@ public class Tree {
 
 	// Takes a lot of useless memory, should not be implemented this way.
 	//TODO fix implementation of type label.
-	private String typeLabel;
+	private Symbol typeLabel;
 	
-	// Needed for Rted :(
+	// Needed for RTED :(
 	private Object tmpData;
 	
 	public Tree(int type) {
@@ -66,8 +69,8 @@ public class Tree {
 
 	public Tree(int type, String label, String typeLabel) {
 		this.type = type;
-		this.label = (label == null ) ? "" : label;
-		this.typeLabel = typeLabel;
+		this.typeLabel = getSymbol(typeLabel);
+		this.label = (label == null ) ? NO_LABEL : label;
 		this.children = new ArrayList<Tree>();
 		this.id = NO_ID;
 		this.depth = NO_VALUE;
@@ -103,8 +106,7 @@ public class Tree {
 	 * @return a shallow copy of the tree, including type, id, label, typeLabel, position and length. 
 	 */
 	public Tree copy() {
-		Tree t = new Tree(this.getType(), this.getLabel());
-		t.setTypeLabel(this.getTypeLabel());
+		Tree t = new Tree(this.getType(), this.getLabel(), this.getTypeLabel());
 		t.setId(this.getId());
 		t.setMatched(this.isMatched());
 		t.setPos(this.getPos());
@@ -255,7 +257,7 @@ public class Tree {
 	}
 	
 	public String getTypeLabel() {
-		return typeLabel;
+		return typeLabel.toString();
 	}
 
 	@Override
@@ -328,6 +330,15 @@ public class Tree {
 		return true;
 	}
 
+	public Iterable<Tree> postOrder() {
+		return new Iterable<Tree>() {
+			@Override
+			public Iterator<Tree> iterator() {
+				return TreeUtils.postOrderIterator(Tree.this);
+			}
+		};
+	}
+	
 	public int positionInParent() {
 		if (parent == null)
 			return -1;
@@ -409,10 +420,6 @@ public class Tree {
 		this.type = type;
 	}
 
-	public void setTypeLabel(String typeLabel) {
-		this.typeLabel = typeLabel;
-	}
-
 	public String toCompleteString() {
 		return label + "@" + typeLabel + ":" + type + " [id=" + id + ", depth:" + depth + ", maxdepth=" + height + ", digest=" + digest + ", pos=" + pos + ", length=" + length + "]";
 	}
@@ -470,5 +477,26 @@ public class Tree {
 		StringBuffer b = new StringBuffer();
 		for (Tree t : TreeUtils.preOrder(this)) b.append(indent(t) + t.toString() + "\n");
 		return b.toString();
+	}
+
+	static Map<String, Symbol> symbolMap = new HashMap<String, Symbol>();
+	static private Symbol getSymbol(String name) {
+		Symbol sym = symbolMap.get(name);
+		if (sym == null) {
+			sym = new Symbol(name);
+			symbolMap.put(name, sym);
+		}
+		return sym;
+	}
+
+	static class Symbol {
+		String name;
+		private Symbol(String text) {
+			name = text;
+		}
+
+		public String toString() {
+			return name;
+		}
 	}
 }
