@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -39,6 +41,10 @@ public final class TreeIoUtils {
 	private final static QName COL_AFTER = new QName("col_after");
 
 	private TreeIoUtils() {
+	}
+	
+	public static Tree fromXml(InputStream iStream) {
+		return fromXml(new InputStreamReader(iStream));
 	}
 	
 	public static Tree fromXml(Reader source) {

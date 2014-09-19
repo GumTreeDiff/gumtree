@@ -1,0 +1,19 @@
+<tree type="0" label="a" >
+	<tree type="1" label="b" >
+		<tree type="3" label="c" />
+		<tree type="3" label="d" />
+	</tree>
+	<tree type="2" label="e" />
+	<tree type="0" label="a" >
+	<tree type="4" label="f" >
+		<tree type="1" label="b" >
+			<tree type="3" label="c" />
+			<tree type="3" label="d" />
+			<tree type="5" label="h" />
+		</tree>
+	</tree>
+	<tree type="2" label="i" >
+		<tree type="2" label="j" />
+	</tree>
+</tree>
+	</tree>

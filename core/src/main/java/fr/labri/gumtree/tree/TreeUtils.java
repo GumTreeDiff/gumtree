@@ -1,9 +1,12 @@
 package fr.labri.gumtree.tree;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import fr.labri.gumtree.matchers.Mapping;
 
@@ -150,7 +153,48 @@ public final class TreeUtils {
 		if (!tree.isLeaf()) for (Tree c: tree.getChildren()) postOrder(c, trees);
 		trees.add(tree);
 	}
+	
+	public static Iterator<Tree> postOrderIterator(final Tree tree) {
+		return new Iterator<Tree>() {
+			Deque<Pair<Tree, Iterator<Tree>>> stack = new ArrayDeque<Pair<Tree, Iterator<Tree>>>();
+			{
+				push(tree);
+			}
+			
+			@Override
+			public boolean hasNext() {
+				return stack.size() > 0;
+			}
 
+			@Override
+			public Tree next() {
+				if (stack.isEmpty())
+					throw new NoSuchElementException();
+				return selectNextChild(stack.peek().getSecond());
+			}
+			
+			Tree selectNextChild(Iterator<Tree> it) {
+				if (!it.hasNext())
+					return stack.pop().getFirst();
+				Tree item = it.next();
+				if (item.isLeaf())
+					return item;
+				return selectNextChild(push(item));
+			}
+
+			private Iterator<Tree> push(Tree item) {
+				Iterator<Tree> it = item.getChildren().iterator();
+				stack.push(new Pair<>(item, it));
+				return it;
+			}
+
+			@Override
+			public void remove() {
+				throw new RuntimeException("Not yet implemented implemented.");
+			}
+		};
+	}
+	
 	public static void postOrderNumbering(Tree tree) {
 		List<Tree> trees = postOrder(tree);
 		for (int i = 0; i < trees.size(); i++) trees.get(i).setId(i);

@@ -2,6 +2,7 @@ package fr.labri.gumtree.tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class Tree {
 	//TODO fix implementation of type label.
 	private Symbol typeLabel;
 	
-	// Needed for Rted :(
+	// Needed for RTED :(
 	private Object tmpData;
 	
 	public Tree(int type) {
@@ -329,6 +330,15 @@ public class Tree {
 		return true;
 	}
 
+	public Iterable<Tree> postOrder() {
+		return new Iterable<Tree>() {
+			@Override
+			public Iterator<Tree> iterator() {
+				return TreeUtils.postOrderIterator(Tree.this);
+			}
+		};
+	}
+	
 	public int positionInParent() {
 		if (parent == null)
 			return -1;
