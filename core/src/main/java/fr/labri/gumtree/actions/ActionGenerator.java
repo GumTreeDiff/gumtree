@@ -88,8 +88,7 @@ public class ActionGenerator {
 				int k = findPos(x);
 				// Insertion case : insert new node.
 				int wId = newId();
-				w = new Tree(x.getType(), x.getLabel());
-				w.setTypeLabel(x.getTypeLabel());
+				w = new Tree(x.getType(), x.getLabel(), x.getTypeLabel());
 				w.setPos(x.getPos());
 				w.setLength(x.getLength());
 				w.setId(wId);

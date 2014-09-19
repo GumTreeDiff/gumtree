@@ -1,5 +1,4 @@
 package fr.labri.gumtree.gen.jdt.cd;
-
 import java.util.List;
 import java.util.Stack;
 
@@ -19,10 +18,10 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
     private boolean fEmptyJavaDoc;
     private Stack<Tree> fNodeStack = new Stack<Tree>();
     private boolean fInMethodDeclaration;
- 
+
     /**
      * Creates a new declaration transformer.
-     * 
+     *
      * @param root
      *            the root node of the tree to generate
      * @param source
@@ -35,10 +34,10 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
         fNodeStack.push(root);
     }
 
-    public CdJdtVisitor() { 
+    public CdJdtVisitor() {
         fNodeStack.clear();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -65,15 +64,15 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
         if (node.getJavadoc() != null) {
             node.getJavadoc().accept(this);
         }
-        
+
         //@Inria
         push(node,node.toString());
         //
         visitList(EntityType.MODIFIERS, node.modifiers());
         node.getType().accept(this);
         visitList(EntityType.FRAGMENTS, node.fragments());
-        
-        
+
+
         return false;
     }
 
@@ -143,11 +142,11 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
             node.getJavadoc().accept(this);
         }
         fInMethodDeclaration = true;
-       
+
         //@Inria
         push(node, node.getName().toString());
         //
-        
+
         visitList(EntityType.MODIFIERS, node.modifiers());
         if (node.getReturnType2() != null) {
             node.getReturnType2().accept(this);
@@ -155,14 +154,14 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
         visitList(EntityType.TYPE_ARGUMENTS, node.typeParameters());
         visitList(EntityType.PARAMETERS, node.parameters());
         visitList(EntityType.THROW, node.thrownExceptions());
-       
+
         //@Inria
         //The body can be null when the method declaration is from a interface
         if(node.getBody()!= null){
         	node.getBody().accept(this);
         }
         return false;
-     
+
     }
 
     /**
@@ -273,7 +272,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
     /**
      * {@inheritDoc}
      */
-    
+
     @Override
     public boolean visit(SingleVariableDeclaration node) {
         boolean isNotParam = getCurrentParent().getLabel() != EntityType.PARAMETERS.toString();//@inria
@@ -310,9 +309,9 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
         if (node.getSuperclassType() != null) {
             node.getSuperclassType().accept(this);
         }
-       
+
         visitList(EntityType.SUPER_INTERFACE_TYPES, node.superInterfaceTypes());
-       
+
         //@Inria
         //Change Distiller does not check the changes at Class Field declaration
        for (FieldDeclaration fd: node.getFields()){
@@ -452,7 +451,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 
     private void visitList(EntityType parentLabel, List<ASTNode> list) {
         int[] position = extractPosition(list);
-        push(-parentLabel.ordinal(),parentLabel.name(), "", position[0], position[1]);
+        push(-parentLabel.ordinal(), parentLabel.name(), "", position[0], position[1]);
         if (!list.isEmpty()) {
         	//@Inria
         	//As ChangeDistiller has empty nodes e.g. Type Argument, Parameter, Thown,  the push and pop are before the empty condition check	
@@ -474,16 +473,15 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
     	// push(fASTHelper.convertNode(node), value, node.getStartPosition(), node.getLength());
     	push(node, value);
     }
-    
-    
+
+
     private Tree root;
-    
+
     public Tree getRoot(){
     	return root;
     };
-    
+
     private void push(ASTNode node, String label) {
-    	
     	int type = node.getNodeType();
     	Tree t = new Tree(type, label, node.getClass().getSimpleName());
 		
@@ -503,11 +501,11 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 		}
         fNodeStack.push(t);
     }
-  
+
  private void push(int nType, String type, String label, int startPosition, int length) {
     	
     	
-    	Tree t = new Tree(nType, label,type);
+    	Tree t = new Tree(nType, label, type);
 		
 		t.setPos(startPosition);
 		t.setLength(length);
@@ -524,8 +522,8 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 		}
 	    fNodeStack.push(t);
     }
-    
-    
+
+
     private void pop() {
         fNodeStack.pop();
     }
@@ -533,12 +531,12 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 	private ASTNode fLastVisitedNode;
 	private Tree fLastAddedNode;
 
-    
+
 	private void pop(ASTNode node) {
 		fLastVisitedNode = node;
 		fLastAddedNode = fNodeStack.pop();
 	}
-    
+
     private Tree getCurrentParent() {
         return fNodeStack.peek();
     }
@@ -554,7 +552,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
         }
         return new int[]{offset, length};
     }
-    
+
   ///***************BODY VISITOR*************************
 	private static final String COLON = ":";
 	/**
@@ -953,6 +951,4 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 	public void endVisit(WhileStatement node) {
 		pop(node);
 	}
-    
-    
 }

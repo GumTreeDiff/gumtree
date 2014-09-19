@@ -15,6 +15,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
@@ -52,31 +53,21 @@ public final class TreeIoUtils {
 					StartElement s = (StartElement) e;
 					int type = Integer.parseInt(s.getAttributeByName(TYPE).getValue());
 					
-					Tree t = new Tree(type);
+					Tree t = new Tree(type, labelForAttribute(s, LABEL), labelForAttribute(s, TYPE_LABEL));
 					
-					if (s.getAttributeByName(LABEL) != null) {
-						String label = s.getAttributeByName(LABEL).getValue();
-						t.setLabel(label);
-					}
-					
-					if (s.getAttributeByName(TYPE_LABEL) != null) {
-						String typeLabel = s.getAttributeByName(TYPE_LABEL).getValue();
-						t.setTypeLabel(typeLabel);
-					}
 					
 					if (s.getAttributeByName(POS) != null) {
-						int pos = Integer.parseInt(s.getAttributeByName(POS).getValue());
-						int length = Integer.parseInt(s.getAttributeByName(LENGTH).getValue());
+						int pos = numberForAttribute(s, POS);
+						int length = numberForAttribute(s, LENGTH);
 						t.setPos(pos);
 						t.setLength(length);
-						
 					}
 					
 					if (s.getAttributeByName(LINE_BEFORE) != null) {
-						int l0 = Integer.parseInt(s.getAttributeByName(LINE_BEFORE).getValue());
-						int c0 = Integer.parseInt(s.getAttributeByName(COL_BEFORE).getValue());
-						int l1 = Integer.parseInt(s.getAttributeByName(LINE_AFTER).getValue());
-						int c1 = Integer.parseInt(s.getAttributeByName(COL_AFTER).getValue());
+						int l0 = numberForAttribute(s, LINE_BEFORE);
+						int c0 = numberForAttribute(s, COL_BEFORE);
+						int l1 = numberForAttribute(s, LINE_AFTER);
+						int c1 = numberForAttribute(s, COL_AFTER);
 						t.setLcPosStart(new int[] {l0, c0});
 						t.setLcPosEnd(new int[] {l1, c1});
 					}
@@ -339,4 +330,12 @@ public final class TreeIoUtils {
 		w.endObject();
 	}
 
+	static String labelForAttribute(StartElement s, QName attrName) {
+		Attribute attr = s.getAttributeByName(attrName);
+		return attr == null ? Tree.NO_LABEL : attr.getValue();
+	}
+
+	static int numberForAttribute(StartElement s, QName attrName) {
+		return Integer.parseInt(s.getAttributeByName(attrName).getValue());
+	}
 }
