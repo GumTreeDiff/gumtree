@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import fr.labri.gumtree.client.TreeGeneratorRegistry;
-import fr.labri.gumtree.client.ui.web.BootstrapGenerator;
-import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactories;
-import fr.labri.gumtree.tree.Tree;
+import org.rendersnake.HtmlCanvas;
+
+import fr.labri.gumtree.client.ui.web.views.DiffView;
 
 public final class WebDiffProcessor extends AbstractFilePairsProcessor {
 	
@@ -18,7 +16,7 @@ public final class WebDiffProcessor extends AbstractFilePairsProcessor {
 	}
 	
 	private static final String[] BOOTSTRAP_RESOURCES = new String[] { 
-		"assets/gumtree.js", "assets/gumtree.css", "assets/bootstrap.min.js", "assets/bootstrap.min.css", "assets/jquery.min.js"
+		"res/web/list.js", "res/web/diff.js", "res/web/script.js", "res/web/gumtree.css", "res/web/bootstrap.min.js", "res/web/bootstrap.min.css", "res/web/jquery.min.js"
 	};
 	
 	public WebDiffProcessor(String folder) {
@@ -28,21 +26,20 @@ public final class WebDiffProcessor extends AbstractFilePairsProcessor {
 	
 	@Override
 	public void processFilePair(String fsrc, String fdst) throws IOException {
-		Tree src = TreeGeneratorRegistry.getInstance().getTree(fsrc);
-		Tree dst = TreeGeneratorRegistry.getInstance().getTree(fdst);
-		Matcher matcher = MatcherFactories.newMatcher(src, dst);
-		matcher.match();
-		String diff = BootstrapGenerator.produceHTML(fsrc, fdst, src, dst, matcher);
+		DiffView v = new DiffView(new File(fsrc), new File(fdst));
+		HtmlCanvas c = new HtmlCanvas();
+		v.renderOn(c);
 		String f = inFolder + File.separatorChar + "diffs" + File.separatorChar + fileName(fsrc).replace("_v0.", "_diff.") + ".html";
 		LOGGER.info("Generating file: " + f);
 		FileWriter w = new FileWriter(f);
-		w.append(diff);
+		w.append(c.toHtml());
 		w.close();
 	}
 	
 	private void ensureBootstrap() {
 		ensureFolder("diffs");
-		ensureFolder("diffs" + File.separatorChar + "assets");
+		ensureFolder("diffs" + File.separatorChar + "res");
+		ensureFolder("diffs" + File.separatorChar + "res" + File.separatorChar + "web");
 		for (String res : BOOTSTRAP_RESOURCES) copyResource(res, "diffs" + File.separatorChar + res);
 	}
 
