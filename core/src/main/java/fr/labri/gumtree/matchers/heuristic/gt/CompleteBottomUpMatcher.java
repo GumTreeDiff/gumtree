@@ -37,7 +37,7 @@ public class CompleteBottomUpMatcher extends Matcher {
 		srcIds = new TreeMap(src);
 		dstIds = new TreeMap(dst);
 		
-		for (Tree t: TreeUtils.postOrder(this.src))  {
+		for (Tree t: src.postOrder())  {
 			if (t.isRoot()) {
 				addMapping(t, this.dst);
 				lastChanceMatch(t, this.dst);

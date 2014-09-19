@@ -19,9 +19,8 @@ public class ChangeDistillerBottumUpMatcher extends Matcher {
 
 	@Override
 	public void match() {
-		List<Tree> poSrc = TreeUtils.postOrder(src);
 		List<Tree> poDst = TreeUtils.postOrder(dst);
-		for (Tree src: poSrc) {
+		for (Tree src: src.postOrder()) {
 			int l = numberOfLeafs(src);
 			for (Tree dst: poDst) {
 				if (src.isMatchable(dst) && !(src.isLeaf() || dst.isLeaf())) {

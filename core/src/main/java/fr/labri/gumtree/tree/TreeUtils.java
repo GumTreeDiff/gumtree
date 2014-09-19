@@ -22,8 +22,7 @@ public final class TreeUtils {
 	 * @param tree a Tree
 	 */
 	public static void computeSize(Tree tree) {
-		List<Tree> trees = postOrder(tree);
-		for (Tree t: trees) {
+		for (Tree t: tree.postOrder()) {
 			int size = 1;
 			if (!t.isLeaf()) for (Tree c: t.getChildren()) size += c.getSize();
 			t.setSize(size);
@@ -64,8 +63,7 @@ public final class TreeUtils {
 	 * @param tree a Tree.
 	 */
 	public static void computeHeight(Tree tree) {
-		List<Tree> trees = postOrder(tree);
-		for (Tree t: trees) {
+		for (Tree t: tree.postOrder()) {
 			int height = 0;
 			if (!t.isLeaf()) {
 				for (Tree c: t.getChildren()) {
@@ -195,9 +193,36 @@ public final class TreeUtils {
 		};
 	}
 	
+	public static Iterator<Tree> leafIterator(final Iterator<Tree> it) {
+		return new Iterator<Tree>() {
+			Tree current = it.hasNext() ? it.next() : null;
+			@Override
+			public boolean hasNext() {
+				return current != null;
+			}
+
+			@Override
+			public Tree next() {
+				Tree val = current;
+				while (it.hasNext()) {
+					current = it.next();
+					if (current.isLeaf())
+						break;
+				}
+				return val;
+			}
+
+			@Override
+			public void remove() {
+				throw new RuntimeException("Not yet implemented implemented.");
+			}
+		};
+	}
+	
 	public static void postOrderNumbering(Tree tree) {
-		List<Tree> trees = postOrder(tree);
-		for (int i = 0; i < trees.size(); i++) trees.get(i).setId(i);
+		int i = 0;
+		for (Tree t: tree.postOrder())
+			t.setId(i++);
 	}
 
 	public static void removeMapped(Collection<? extends Mapping> mappings) {

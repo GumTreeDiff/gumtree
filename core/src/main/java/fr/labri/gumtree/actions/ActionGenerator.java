@@ -129,8 +129,7 @@ public class ActionGenerator {
 			alignChildren(w, x);
 		}
 		
-		List<Tree> poSrc = TreeUtils.postOrder(newSrc);	
-		for (Tree w : poSrc) {
+		for (Tree w : newSrc.postOrder()) {
 			if (!newMappings.hasSrc(w)) {
 				actions.add(new Delete(origSrcTrees.get(w.getId())));
 				w.getParent().getChildren().remove(w);
