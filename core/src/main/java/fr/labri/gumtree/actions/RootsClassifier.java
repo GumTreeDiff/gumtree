@@ -7,7 +7,6 @@ import fr.labri.gumtree.actions.model.Action;
 import fr.labri.gumtree.actions.model.Delete;
 import fr.labri.gumtree.actions.model.Insert;
 import fr.labri.gumtree.actions.model.Move;
-import fr.labri.gumtree.actions.model.Permute;
 import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
@@ -30,7 +29,7 @@ public class RootsClassifier extends TreeClassifier {
 			else if (a instanceof Update) {
 				srcUpdTrees.add(a.getNode());
 				dstUpdTrees.add(mappings.getDst(a.getNode()));
-			} else if (a instanceof Move || a instanceof Permute) {
+			} else if (a instanceof Move) {
 				srcMvTrees.add(a.getNode());
 				dstMvTrees.add(mappings.getDst(a.getNode()));
 			}
