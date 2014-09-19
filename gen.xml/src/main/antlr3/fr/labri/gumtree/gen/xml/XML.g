@@ -1,7 +1,7 @@
 grammar XML;
 
 options { 
-  tokenVocab=XMLLexer; 
+  //tokenVocab=XMLLexer; 
   output=AST;
   ASTLabelType = CommonTree;
 }
@@ -9,6 +9,7 @@ options {
 tokens {
   ELEMENT;
   ELEMENT_ID;
+  ATTRIBUTE;
   ATTRIBUTES;
   ATTRIBUTE_ID;
 }
