@@ -52,10 +52,6 @@ public class Tree {
 	//TODO remove the matched attribute
 	private boolean matched;
 
-	// Takes a lot of useless memory, should not be implemented this way.
-	//TODO fix implementation of type label.
-	private Symbol typeLabel;
-	
 	// Needed for RTED :(
 	private Object tmpData;
 	
@@ -69,8 +65,8 @@ public class Tree {
 
 	public Tree(int type, String label, String typeLabel) {
 		this.type = type;
-		this.typeLabel = getSymbol(typeLabel);
-		this.label = (label == null ) ? NO_LABEL : label;
+		registerTypeLabel(type, typeLabel == null ? NO_LABEL : typeLabel);
+		this.label = (label == null) ? NO_LABEL : label.intern();
 		this.children = new ArrayList<Tree>();
 		this.id = NO_ID;
 		this.depth = NO_VALUE;
@@ -257,7 +253,7 @@ public class Tree {
 	}
 	
 	public String getTypeLabel() {
-		return typeLabel.toString();
+		return typeLabels.get(type);
 	}
 
 	@Override
@@ -430,7 +426,7 @@ public class Tree {
 	}
 
 	public String toCompleteString() {
-		return label + "@" + typeLabel + ":" + type + " [id=" + id + ", depth:" + depth + ", maxdepth=" + height + ", digest=" + digest + ", pos=" + pos + ", length=" + length + "]";
+		return label + "@" + getTypeLabel() + ":" + type + " [id=" + id + ", depth:" + depth + ", maxdepth=" + height + ", digest=" + digest + ", pos=" + pos + ", length=" + length + "]";
 	}
 
 	public String toCompleteTreeString() {
@@ -488,24 +484,14 @@ public class Tree {
 		return b.toString();
 	}
 
-	static Map<String, Symbol> symbolMap = new HashMap<String, Symbol>();
-	static private Symbol getSymbol(String name) {
-		Symbol sym = symbolMap.get(name);
-		if (sym == null) {
-			sym = new Symbol(name);
-			symbolMap.put(name, sym);
-		}
-		return sym;
-	}
-
-	static class Symbol {
-		String name;
-		private Symbol(String text) {
-			name = text;
-		}
-
-		public String toString() {
-			return name;
-		}
+	static Map<Integer, String> typeLabels = new HashMap<>();
+	static private void registerTypeLabel(int type, String name) {
+		if (name.equals(NO_LABEL))
+			return;
+		String typeLabel = typeLabels.get(type);
+		if (typeLabel == null) {
+			typeLabels.put(type, name);
+		} else if (!typeLabel.equals(name))
+			throw new RuntimeException(String.format("Redefining type %d: '%s' with '%s'", type, typeLabel, name));
 	}
 }
