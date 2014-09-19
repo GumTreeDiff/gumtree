@@ -78,7 +78,7 @@ public class ActionGenerator {
 		lastId = newSrc.getSize() + 1;
 		newMappings.link(vsrc, vdst);
 		
-		List<Tree> bfsDst = TreeUtils.bfsOrder(origDst); 
+		List<Tree> bfsDst = TreeUtils.breadthFirst(origDst); 
 		for (Tree x: bfsDst) {
 			Tree w = null;
 			Tree y = x.getParent();

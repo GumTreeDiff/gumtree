@@ -14,13 +14,13 @@ import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 
 public class TestTreeUtils {
-	Tree root, src;
-	Tree dst;
+	Tree root, src, dst, big;
 
 	@Before // FIXME Could it be before class ?
 	public void init() {
 		src = root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC));
 		dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_DST));
+		big = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_BIG));
 	}
 	
 	@Test
@@ -64,12 +64,14 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testBreadthFirstNumbering() {
-		TreeUtils.bfsOrderNumbering(root);
-		assertEquals(root.getId(), 0);
-		assertEquals(root.getChildren().get(0).getId(), 1);
-		assertEquals(root.getChildren().get(0).getChildren().get(0).getId(), 3);
-		assertEquals(root.getChildren().get(0).getChildren().get(1).getId(), 4);
-		assertEquals(root.getChildren().get(1).getId(), 2);
+		System.out.println(root.toCompleteTreeString());
+		TreeUtils.breadthFirstNumbering(root);
+		System.out.println(root.toCompleteTreeString());
+		assertEquals(0, root.getId());
+		assertEquals(1, root.getChildren().get(0).getId());
+		assertEquals(2, root.getChildren().get(1).getId());
+		assertEquals(3, root.getChildren().get(0).getChildren().get(0).getId());
+		assertEquals(4, root.getChildren().get(0).getChildren().get(1).getId());
 	}
 	
 	@Test
@@ -81,7 +83,7 @@ public class TestTreeUtils {
 		croot.getChildren().get(0).getChildren().get(0).setLabel("x");
 		TreeUtils.computeDigest(croot);
 		assertFalse(root.getDigest() == croot.getDigest());
-		System.out.println(root.toDigestTreeString());
+		assertEquals("[(a@@0[(b@@1[(c@@3)][(d@@3)])][(e@@2)])]", root.toDigestTreeString());
 	}
 	
 	@Test
@@ -99,21 +101,14 @@ public class TestTreeUtils {
 	public void testPostOrder() {
 		List<Tree> lst = TreeUtils.postOrder(src);
 		Iterator<Tree> it = TreeUtils.postOrderIterator(src);
-		
-		for (Tree i: lst)
-			assertEquals(i, it.next());
-		assertFalse(it.hasNext());
+		compareListIterator(lst, it);
 	}
 	
 	@Test
 	public void testPostOrder2() {
 		List<Tree> lst = TreeUtils.postOrder(dst);
 		Iterator<Tree> it = TreeUtils.postOrderIterator(dst);
-		
-		for (Tree i: lst)
-			assertEquals(i, it.next());
-		
-		assertFalse(it.hasNext());
+		compareListIterator(lst, it);
 	}
 	
 	@Test
@@ -122,10 +117,51 @@ public class TestTreeUtils {
 
 		List<Tree> lst = TreeUtils.postOrder(big);
 		Iterator<Tree> it = TreeUtils.postOrderIterator(big);
-		
-		for (Tree i: lst)
+		compareListIterator(lst, it);
+	}
+	
+	@Test
+	public void testBFS() {
+		List<Tree> lst = TreeUtils.breadthFirst(src);
+		Iterator<Tree> it = TreeUtils.breadthFirstIterator(src);
+		compareListIterator(lst, it);
+	}
+	
+	
+	@Test
+	public void testBFSList() {
+		compareListIterator(TreeUtils.breadthFirstIterator(src), "a", "b", "e", "c", "d");
+		compareListIterator(TreeUtils.breadthFirstIterator(dst), "a", "f", "i", "b", "j", "c", "d", "h");
+		compareListIterator(TreeUtils.breadthFirstIterator(big), "a", "b", "e", "f", "c", "d", "g", "l", "h", "m", "i", "j", "k");
+	}
+	
+	void compareListIterator(List<Tree> lst, Iterator<Tree> it) {
+		for (Tree i: lst) {
 			assertEquals(i, it.next());
-		
+		}
 		assertFalse(it.hasNext());
+	}
+	
+	void compareListIterator(Iterator<Tree> it, String... expected) {
+		for(String e: expected) {
+			Tree n = it.next();
+			assertEquals(e, n.getLabel());
+		}
+		assertFalse("Iterator has next", it.hasNext());
+	}
+	
+	@Test
+	public void testBFS2() {
+		List<Tree> lst = TreeUtils.breadthFirst(dst);
+		Iterator<Tree> it = TreeUtils.breadthFirstIterator(dst);
+		compareListIterator(lst, it);
+	}
+	
+	@Test
+	public void testBFS3() {
+
+		List<Tree> lst = TreeUtils.breadthFirst(big);
+		Iterator<Tree> it = TreeUtils.breadthFirstIterator(big);
+		compareListIterator(lst, it);
 	}
 }

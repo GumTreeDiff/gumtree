@@ -339,6 +339,15 @@ public class Tree {
 		};
 	}
 	
+	public Iterable<Tree> breadthFirst() {
+		return new Iterable<Tree>() {
+			@Override
+			public Iterator<Tree> iterator() {
+				return TreeUtils.breadthFirstIterator(Tree.this);
+			}
+		};
+	}
+
 	public int positionInParent() {
 		if (parent == null)
 			return -1;
@@ -425,10 +434,10 @@ public class Tree {
 	}
 
 	public String toCompleteTreeString() {
-		if (isLeaf()) return this.toString();
+		if (isLeaf()) return toString();
 		else {
 			StringBuffer b = new StringBuffer();
-			b.append(toString() + " (");
+			b.append(toString() + "(");
 			for (Tree c : getChildren())
 				b.append(c.toCompleteTreeString() + " ");
 			b.append(")");
@@ -452,7 +461,7 @@ public class Tree {
 	@Override
 	public String toString() {
 		if (!"".equals(getLabel())) {
-			return getTypeLabel() + ": " + getLabel();
+			return getId() + ": " + getLabel();
 		} else {
 			/*if (!"".equals(getChildrenLabels())) return getTypeLabel() + ": " + getChildrenLabels();
 			else*/ return getTypeLabel();
