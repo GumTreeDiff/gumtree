@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.io.TreeIoUtils;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class JSONProcessor extends AbstractFileProcessor {
 	
@@ -23,7 +23,7 @@ public class JSONProcessor extends AbstractFileProcessor {
 
 	@Override
 	public void process(String file) throws IOException {
-		Tree t = TreeGeneratorRegistry.getInstance().getTree(file);
+		ITree t = TreeGeneratorRegistry.getInstance().getTree(file);
 		if (t != null) TreeIoUtils.toJSON(t, file + ".json");
 	}
 

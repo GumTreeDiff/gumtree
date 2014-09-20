@@ -15,7 +15,7 @@ import fr.labri.gumtree.actions.model.Insert;
 import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.MappingStore;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public final class ActionsIoUtils {
 
@@ -80,12 +80,12 @@ public final class ActionsIoUtils {
 			w.writeAttribute("type", a.getClass().getSimpleName());
 			w.writeAttribute("tree", a.getNode().getTypeLabel());
 			if (a instanceof Move || a instanceof Update) {
-				Tree src = a.getNode();
-				Tree dst = mappings.getDst(src);
+				ITree src = a.getNode();
+				ITree dst = mappings.getDst(src);
 				writeTreePos(w, true, src);
 				writeTreePos(w, false, dst);
 			} else if (a instanceof Insert) {
-				Tree dst = a.getNode();
+				ITree dst = a.getNode();
 				if (dst.isRoot()) writeInsertPos(w, true, new int[] {0, 0});
 				else {
 					int idx = dst.getParent().getChildPosition(dst);
@@ -94,14 +94,14 @@ public final class ActionsIoUtils {
 				}
 				writeTreePos(w, false, dst);
 			} else if (a instanceof Delete) {
-				Tree src = a.getNode();
+				ITree src = a.getNode();
 				writeTreePos(w, true, src);
 			}
 			w.writeEndElement();
 		}
 	}
 
-	private static void writeTreePos(XMLStreamWriter w, boolean isBefore, Tree tree) throws XMLStreamException {
+	private static void writeTreePos(XMLStreamWriter w, boolean isBefore, ITree tree) throws XMLStreamException {
 		if (isBefore) w.writeEmptyElement("before"); else w.writeEmptyElement("after");
 		if (tree.getLcPosStart() != null) {
 			w.writeAttribute("begin_line", Integer.toString(tree.getLcPosStart()[0]));

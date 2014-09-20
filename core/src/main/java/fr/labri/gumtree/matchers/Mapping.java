@@ -1,11 +1,11 @@
 package fr.labri.gumtree.matchers;
 
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Pair;
-import fr.labri.gumtree.tree.Tree;
 
-public class Mapping extends Pair<Tree, Tree> {
+public class Mapping extends Pair<ITree, ITree> {
 
-	public Mapping(Tree a, Tree b) {
+	public Mapping(ITree a, ITree b) {
 		super(a, b);
 	}
 

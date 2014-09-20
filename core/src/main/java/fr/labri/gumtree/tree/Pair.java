@@ -2,20 +2,12 @@ package fr.labri.gumtree.tree;
 
 public class Pair<T1, T2> {
 	
-	private T1 first;
+	final public T1 first;
 	
-	private T2 second;
+	final public T2 second;
 	
 	public Pair(T1 a, T2 b) {
 		this.first = a;
-		this.second = b;
-	}
-	
-	public void setFirst(T1 a) {
-		this.first = a;
-	}
-	
-	public void setSecond(T2 b) {
 		this.second = b;
 	}
 	

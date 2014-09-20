@@ -11,6 +11,7 @@ import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
 
 import fr.labri.gumtree.gen.antlr.AbstractAntlrTreeGenerator;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 
 public class XMLTreeGenerator extends AbstractAntlrTreeGenerator {
@@ -18,7 +19,7 @@ public class XMLTreeGenerator extends AbstractAntlrTreeGenerator {
 	@Override
 	public Tree generate(String file) throws IOException {
 		Tree t = super.generate(file);
-		for(Tree c: t.getTrees()) {
+		for(ITree c: t.getTrees()) {
 			if (c.getTypeLabel().equals("PCDATA") && c.getLabel().trim().equals("") ) {
 				c.setParentAndUpdateChildren(null);
 			}

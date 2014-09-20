@@ -9,7 +9,7 @@ import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeMap;
 import fr.labri.gumtree.tree.TreeUtils;
 
@@ -29,7 +29,7 @@ public class CompleteBottomUpMatcher extends Matcher {
 	
 	private TreeMap dstIds;
 
-	public CompleteBottomUpMatcher(Tree src, Tree dst) {
+	public CompleteBottomUpMatcher(ITree src, ITree dst) {
 		super(src, dst);
 	}
 
@@ -37,17 +37,17 @@ public class CompleteBottomUpMatcher extends Matcher {
 		srcIds = new TreeMap(src);
 		dstIds = new TreeMap(dst);
 		
-		for (Tree t: src.postOrder())  {
+		for (ITree t: src.postOrder())  {
 			if (t.isRoot()) {
 				addMapping(t, this.dst);
 				lastChanceMatch(t, this.dst);
 				break;
 			} else if (!(t.isMatched() || t.isLeaf())) {
-				List<Tree> candidates = getDstCandidates(t);
-				Tree best = null;
+				List<ITree> candidates = getDstCandidates(t);
+				ITree best = null;
 				double max = -1D;
 				
-				for (Tree cand: candidates ) {
+				for (ITree cand: candidates) {
 					double sim = jaccardSimilarity(t, cand);
 					if (sim > max && sim >= SIM_THRESHOLD) {
 						max = sim;
@@ -64,17 +64,17 @@ public class CompleteBottomUpMatcher extends Matcher {
 		clean();
 	}
 
-	private List<Tree> getDstCandidates(Tree src) {
-		List<Tree> seeds = new ArrayList<>();
-		for (Tree c: src.getDescendants()) {
-			Tree m = mappings.getDst(c);
+	private List<ITree> getDstCandidates(ITree src) {
+		List<ITree> seeds = new ArrayList<>();
+		for (ITree c: src.getDescendants()) {
+			ITree m = mappings.getDst(c);
 			if (m != null) seeds.add(m);
 		}
-		List<Tree> candidates = new ArrayList<>();
-		Set<Tree> visited = new HashSet<>();
-		for(Tree seed: seeds) {
+		List<ITree> candidates = new ArrayList<>();
+		Set<ITree> visited = new HashSet<>();
+		for(ITree seed: seeds) {
 			while (seed.getParent() != null) {
-				Tree parent = seed.getParent();
+				ITree parent = seed.getParent();
 				if (visited.contains(parent)) break;
 				visited.add(parent);
 				if (parent.getType() == src.getType() && !parent.isMatched() && !parent.isRoot()) candidates.add(parent);
@@ -86,9 +86,9 @@ public class CompleteBottomUpMatcher extends Matcher {
 	}
 
 	//FIXME checks if it is better or not to remove the already found mappings.
-	private void lastChanceMatch(Tree src, Tree dst) {
-		Tree cSrc = src.deepCopy();
-		Tree cDst = dst.deepCopy();
+	private void lastChanceMatch(ITree src, ITree dst) {
+		ITree cSrc = src.deepCopy();
+		ITree cDst = dst.deepCopy();
 		TreeUtils.removeMatched(cSrc);
 		TreeUtils.removeMatched(cDst);
 
@@ -96,8 +96,8 @@ public class CompleteBottomUpMatcher extends Matcher {
 			Matcher m = new RtedMatcher(cSrc, cDst);
 			m.match();
 			for (Mapping candidate: m.getMappings()) {
-				Tree left = srcIds.getTree(candidate.getFirst().getId());
-				Tree right = dstIds.getTree(candidate.getSecond().getId());
+				ITree left = srcIds.getTree(candidate.getFirst().getId());
+				ITree right = dstIds.getTree(candidate.getSecond().getId());
 
 				if (left.getId() == src.getId() || right.getId() == dst.getId()) {
 					//System.err.println("Trying to map already mapped source node.");
@@ -112,17 +112,15 @@ public class CompleteBottomUpMatcher extends Matcher {
 			}
 		}
 		
-		for (Tree t : src.getTrees()) t.setMatched(true);
-		for (Tree t : dst.getTrees()) t.setMatched(true);
+		for (ITree t : src.getTrees()) t.setMatched(true);
+		for (ITree t : dst.getTrees()) t.setMatched(true);
 	}
 	
 	public static class CompleteBottumUpMatcherFactory implements MatcherFactory {
 
 		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
+		public Matcher newMatcher(ITree src, ITree dst) {
 			return new CompleteBottomUpMatcher(src, dst);
 		}
-		
 	}
-
 }

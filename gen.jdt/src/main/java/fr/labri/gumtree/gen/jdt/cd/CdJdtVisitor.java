@@ -5,6 +5,7 @@ import java.util.Stack;
 import org.eclipse.jdt.core.dom.*;
 
 import fr.labri.gumtree.gen.jdt.AbstractJdtVisitor;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 
 /**
@@ -475,9 +476,9 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
     }
 
 
-    private Tree root;
+    private ITree root;
 
-    public Tree getRoot(){
+    public ITree getRoot(){
     	return root;
     };
 
@@ -529,7 +530,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
     }
 
 	private ASTNode fLastVisitedNode;
-	private Tree fLastAddedNode;
+	private ITree fLastAddedNode;
 
 
 	private void pop(ASTNode node) {
@@ -537,7 +538,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 		fLastAddedNode = fNodeStack.pop();
 	}
 
-    private Tree getCurrentParent() {
+    private ITree getCurrentParent() {
         return fNodeStack.peek();
     }
 

@@ -10,15 +10,16 @@ import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 
 public class LeavesClassifier extends TreeClassifier {
 
-	public LeavesClassifier(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> actions) {
+	public LeavesClassifier(ITree src, ITree dst, Set<Mapping> rawMappings, List<Action> actions) {
 		super(src, dst, rawMappings, actions);
 	}
 	
-	public LeavesClassifier(Tree src, Tree dst, Matcher m) {
+	public LeavesClassifier(ITree src, Tree dst, Matcher m) {
 		super(src, dst, m);
 	}
 
@@ -41,7 +42,7 @@ public class LeavesClassifier extends TreeClassifier {
 	}
 	
 	private boolean isLeafAction(Action a) {
-		for (Tree d: a.getNode().getDescendants()) {
+		for (ITree d: a.getNode().getDescendants()) {
 			for (Action c: actions)
 				if (a != c && d == c.getNode()) return false;
 		}

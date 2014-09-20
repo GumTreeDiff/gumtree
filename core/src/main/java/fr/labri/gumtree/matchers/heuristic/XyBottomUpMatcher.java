@@ -1,7 +1,5 @@
 package fr.labri.gumtree.matchers.heuristic;
 
-import static fr.labri.gumtree.tree.TreeUtils.postOrder;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,7 +9,7 @@ import java.util.Set;
 
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactory;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
@@ -25,28 +23,28 @@ public class XyBottomUpMatcher extends Matcher {
 
 	private static final double SIM_THRESHOLD = 0.001D;
 	
-	private TIntObjectMap<Tree> srcs = new TIntObjectHashMap<>();
+	private TIntObjectMap<ITree> srcs = new TIntObjectHashMap<>();
 	
-	private TIntObjectMap<Tree> dsts = new TIntObjectHashMap<>();
+	private TIntObjectMap<ITree> dsts = new TIntObjectHashMap<>();
 
-	public XyBottomUpMatcher(Tree src, Tree dst) {
+	public XyBottomUpMatcher(ITree src, ITree dst) {
 		super(src, dst);
 	}
 
 	public void match() {
-		for (Tree t : src.getTrees()) srcs.put(t.getId(), t);
-		for (Tree t : dst.getTrees()) dsts.put(t.getId(), t);
+		for (ITree t : src.getTrees()) srcs.put(t.getId(), t);
+		for (ITree t : dst.getTrees()) dsts.put(t.getId(), t);
 		
-		for (Tree src: src.postOrder())  {
+		for (ITree src: src.postOrder())  {
 			if (src.isRoot()) {
 				addMapping(src, this.dst);
 				lastChanceMatch(src, this.dst);
 			} else if (!(src.isMatched() || src.isLeaf())) {
-				Set<Tree> candidates = getDstCandidates(src);
-				Tree best = null;
+				Set<ITree> candidates = getDstCandidates(src);
+				ITree best = null;
 				double max = -1D;
 				
-				for (Tree cand: candidates ) {
+				for (ITree cand: candidates ) {
 					double sim = jaccardSimilarity(src, cand);
 					if (sim > max && sim >= SIM_THRESHOLD) {
 						max = sim;
@@ -63,17 +61,17 @@ public class XyBottomUpMatcher extends Matcher {
 		clean();
 	}
 
-	private Set<Tree> getDstCandidates(Tree src) {
-		Set<Tree> seeds = new HashSet<>();
-		for (Tree c: src.getDescendants()) {
-			Tree m = mappings.getDst(c);
+	private Set<ITree> getDstCandidates(ITree src) {
+		Set<ITree> seeds = new HashSet<>();
+		for (ITree c: src.getDescendants()) {
+			ITree m = mappings.getDst(c);
 			if (m != null) seeds.add(m);
 		}
-		Set<Tree> candidates = new HashSet<>();
-		Set<Tree> visited = new HashSet<>();
-		for(Tree seed: seeds) {
+		Set<ITree> candidates = new HashSet<>();
+		Set<ITree> visited = new HashSet<>();
+		for(ITree seed: seeds) {
 			while (seed.getParent() != null) {
-				Tree parent = seed.getParent();
+				ITree parent = seed.getParent();
 				if (visited.contains(parent)) break;
 				visited.add(parent);
 				if (parent.getType() == src.getType() && !parent.isMatched()) candidates.add(parent);
@@ -84,15 +82,15 @@ public class XyBottomUpMatcher extends Matcher {
 		return candidates;
 	}
 
-	private void lastChanceMatch(Tree src, Tree dst) {
-		Map<Integer,List<Tree>> srcKinds = new HashMap<>();
-		Map<Integer,List<Tree>> dstKinds = new HashMap<>();
-		for (Tree c: src.getChildren()) {
-			if (!srcKinds.containsKey(c.getType())) srcKinds.put(c.getType(), new ArrayList<Tree>());
+	private void lastChanceMatch(ITree src, ITree dst) {
+		Map<Integer,List<ITree>> srcKinds = new HashMap<>();
+		Map<Integer,List<ITree>> dstKinds = new HashMap<>();
+		for (ITree c: src.getChildren()) {
+			if (!srcKinds.containsKey(c.getType())) srcKinds.put(c.getType(), new ArrayList<ITree>());
 			srcKinds.get(c.getType()).add(c);
 		}
-		for (Tree c: dst.getChildren()) {
-			if (!dstKinds.containsKey(c.getType())) dstKinds.put(c.getType(), new ArrayList<Tree>());
+		for (ITree c: dst.getChildren()) {
+			if (!dstKinds.containsKey(c.getType())) dstKinds.put(c.getType(), new ArrayList<ITree>());
 			dstKinds.get(c.getType()).add(c);
 		}
 		
@@ -105,7 +103,7 @@ public class XyBottomUpMatcher extends Matcher {
 	public static class XyBottomUpMatcherFactory implements MatcherFactory {
 
 		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
+		public Matcher newMatcher(ITree src, ITree dst) {
 			return new XyBottomUpMatcher(src, dst);
 		}
 		

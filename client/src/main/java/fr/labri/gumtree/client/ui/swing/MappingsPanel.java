@@ -24,14 +24,14 @@ import fr.labri.gumtree.actions.RootsClassifier;
 import fr.labri.gumtree.actions.TreeClassifier;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class MappingsPanel extends JPanel implements TreeSelectionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Tree src;
-	private Tree dst;
+	private ITree src;
+	private ITree dst;
 	private TreeClassifier classifyTrees;
 	private MappingStore mappings;
 
@@ -46,7 +46,7 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 	//private static final Color MIS_COLOR = new Color(0, 0, 128);
 	private static final Color MV_COLOR = new Color(128, 0, 128);
 
-	public MappingsPanel(String srcPath, String dstPath, Tree src, Tree dst, Matcher m)  {
+	public MappingsPanel(String srcPath, String dstPath, ITree src, ITree dst, Matcher m)  {
 		super(new GridLayout(1, 0));
 		this.src = src;
 		this.dst = dst;
@@ -84,17 +84,17 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 	}
 
 	private void openNodes() {
-		for (Tree t: classifyTrees.getSrcDelTrees()) openNode(panSrc, t);
-		for (Tree t: classifyTrees.getDstAddTrees()) openNode(panDst, t); 
-		for (Tree t: classifyTrees.getSrcUpdTrees()) openNode(panSrc, t);
-		for (Tree t: classifyTrees.getDstUpdTrees()) openNode(panDst, t);
-		for (Tree t: classifyTrees.getSrcMvTrees()) openNode(panSrc, t);
-		for (Tree t: classifyTrees.getDstMvTrees()) openNode(panDst, t);
+		for (ITree t: classifyTrees.getSrcDelTrees()) openNode(panSrc, t);
+		for (ITree t: classifyTrees.getDstAddTrees()) openNode(panDst, t); 
+		for (ITree t: classifyTrees.getSrcUpdTrees()) openNode(panSrc, t);
+		for (ITree t: classifyTrees.getDstUpdTrees()) openNode(panDst, t);
+		for (ITree t: classifyTrees.getSrcMvTrees()) openNode(panSrc, t);
+		for (ITree t: classifyTrees.getDstMvTrees()) openNode(panDst, t);
 		panSrc.getJTree().scrollPathToVisible(new TreePath(panSrc.getTrees().get(src).getPath()));
 		panDst.getJTree().scrollPathToVisible(new TreePath(panDst.getTrees().get(dst).getPath()));
 	}
 
-	private void openNode(TreePanel p, Tree t) {
+	private void openNode(TreePanel p, ITree t) {
 		DefaultMutableTreeNode n = p.getTrees().get(t);
 		p.getJTree().scrollPathToVisible(new TreePath(n.getPath()));
 	}
@@ -103,10 +103,10 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 	public void valueChanged(TreeSelectionEvent e) {
 		JTree jtree = (JTree) e.getSource();
 		if (jtree.getSelectionPath() == null) return;
-		Tree sel = (Tree) ((DefaultMutableTreeNode) jtree.getLastSelectedPathComponent()).getUserObject();
+		ITree sel = (ITree) ((DefaultMutableTreeNode) jtree.getLastSelectedPathComponent()).getUserObject();
 		JTextArea selJTextArea = null;
 		boolean isMapped = false;
-		Tree match = null;
+		ITree match = null;
 		TreePanel matchTreePanel = null;
 		JTextArea matchJTextArea = null;
 
@@ -132,8 +132,8 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 		}
 	}
 
-	private void updateJTreeAndJTextArea(Tree sel, JTextArea selJTextArea, boolean isMapped, 
-			Tree match, TreePanel matchTreePanel, JTextArea matchJTextArea) throws BadLocationException {
+	private void updateJTreeAndJTextArea(ITree sel, JTextArea selJTextArea, boolean isMapped, 
+			ITree match, TreePanel matchTreePanel, JTextArea matchJTextArea) throws BadLocationException {
 		selJTextArea.getHighlighter().removeAllHighlights();
 		selJTextArea.getHighlighter().addHighlight(sel.getPos(), sel.getEndPos(), DefaultHighlighter.DefaultPainter);
 		selJTextArea.setCaretPosition(sel.getPos());
@@ -163,7 +163,7 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 		@Override
 		public Component getTreeCellRendererComponent(JTree jtree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 			super.getTreeCellRendererComponent(jtree, value, selected, expanded, leaf, row, hasFocus);
-			Tree tree = (Tree) ((DefaultMutableTreeNode) value).getUserObject();
+			ITree tree = (ITree) ((DefaultMutableTreeNode) value).getUserObject();
 			if (isSrc && classifyTrees.getSrcDelTrees().contains(tree)) setForeground(DEL_COLOR);
 			else if (!isSrc && classifyTrees.getDstAddTrees().contains(tree)) setForeground(ADD_COLOR);
 			else if (isSrc && classifyTrees.getSrcUpdTrees().contains(tree)) setForeground(UPD_COLOR);

@@ -12,7 +12,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactory;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
 
 public class ChangeDistillerLeavesMatcher extends Matcher {
@@ -21,20 +21,20 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 
 	private static final QGramsDistance QGRAM = new QGramsDistance();
 
-	public ChangeDistillerLeavesMatcher(Tree src, Tree dst) {
+	public ChangeDistillerLeavesMatcher(ITree src, ITree dst) {
 		super(src, dst);
 	}
 
 	@Override
 	public void match() {
-		List<Tree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
+		List<ITree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
 
-		List<Mapping> leafMappings = new LinkedList<Mapping>();
+		List<Mapping> leafMappings = new LinkedList<>();
 
-		for (Iterator<Tree> srcLeaves = TreeUtils.leafIterator(
+		for (Iterator<ITree> srcLeaves = TreeUtils.leafIterator(
 				TreeUtils.postOrderIterator(src)); srcLeaves.hasNext();) {
-			for (Tree dstLeaf: dstLeaves) {
-				Tree srcLeaf = srcLeaves.next();
+			for (ITree dstLeaf: dstLeaves) {
+				ITree srcLeaf = srcLeaves.next();
 				if (srcLeaf.isMatchable(dstLeaf)) {
 					double sim = QGRAM.getSimilarity(srcLeaf.getLabel(), dstLeaf.getLabel());
 					if (sim > LABEL_SIM_THRESHOLD) leafMappings.add(new Mapping(srcLeaf, dstLeaf));
@@ -42,8 +42,8 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 			}
 		}
 
-		Set<Tree> srcIgnored = new HashSet<>();
-		Set<Tree> dstIgnored = new HashSet<>();
+		Set<ITree> srcIgnored = new HashSet<>();
+		Set<ITree> dstIgnored = new HashSet<>();
 		Collections.sort(leafMappings, new LeafMappingComparator());
 		while (leafMappings.size() > 0) {
 			Mapping best = leafMappings.remove(0);
@@ -55,10 +55,10 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 		}
 	}
 
-	public List<Tree> retainLeaves(List<Tree> trees) {
-		Iterator<Tree> tIt = trees.iterator();
+	public List<ITree> retainLeaves(List<ITree> trees) {
+		Iterator<ITree> tIt = trees.iterator();
 		while (tIt.hasNext()) {
-			Tree t = tIt.next();
+			ITree t = tIt.next();
 			if (!t.isLeaf()) tIt.remove();
 		}
 		return trees;
@@ -80,7 +80,7 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 	public static class ChangeDistillerLeavesMatcherFactory implements MatcherFactory {
 
 		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
+		public Matcher newMatcher(ITree src, ITree dst) {
 			return new ChangeDistillerLeavesMatcher(src, dst);
 		}
 		

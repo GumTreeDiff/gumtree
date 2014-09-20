@@ -14,6 +14,7 @@ import fr.labri.gumtree.actions.TreeClassifier;
 import fr.labri.gumtree.algo.StringAlgorithms;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -33,13 +34,13 @@ public final class BootstrapGenerator {
 	private BootstrapGenerator() {
 	}
 
-	public static void produceHTML(String srcPath, String dstPath, Tree src, Tree dst, Matcher matcher, String output) throws IOException {
+	public static void produceHTML(String srcPath, String dstPath, ITree src, Tree dst, Matcher matcher, String output) throws IOException {
 		FileWriter w = new FileWriter(output);
 		w.write(produceHTML(srcPath, dstPath, src, dst, matcher));
 		w.close();
 	}
 	
-	public static String produceHTML(String srcPath, String dstPath, Tree src, Tree dst, Matcher matcher) throws IOException {
+	public static String produceHTML(String srcPath, String dstPath, ITree src, Tree dst, Matcher matcher) throws IOException {
 		TreeClassifier c = new RootAndLeavesClassifier(src, dst, matcher);
 		MappingStore mappings = new MappingStore(matcher.getMappingSet());
 		TIntIntMap ids = new TIntIntHashMap();
@@ -48,7 +49,7 @@ public final class BootstrapGenerator {
 		int mId = 1;
 		
 		TagIndex ltags = new TagIndex();
-		for (Tree t: src.getTrees()) {
+		for (ITree t: src.getTrees()) {
 			if (c.getSrcMvTrees().contains(t)) {
 				ids.put(mappings.getDst(t).getId(), mId);
 				ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
@@ -69,7 +70,7 @@ public final class BootstrapGenerator {
 		}
 
 		TagIndex rtags = new TagIndex();
-		for (Tree t: dst.getTrees()) {
+		for (ITree t: dst.getTrees()) {
 			if (c.getDstMvTrees().contains(t)) {
 				int dId = ids.get(t.getId());
 				rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
@@ -130,7 +131,7 @@ public final class BootstrapGenerator {
 		return w.toString();
 	}
 	
-	private static String tooltip(Tree t) {
+	private static String tooltip(ITree t) {
 		return (t.getParent() != null) ? t.getParent().getTypeLabel() + "/" + t.getTypeLabel() : t.getTypeLabel();
 	}
 

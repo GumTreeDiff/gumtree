@@ -1,12 +1,12 @@
 package fr.labri.gumtree.actions.model;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class Update extends Action {
 	
 	private String value;
 	
-	public Update(Tree node, String value) {
+	public Update(ITree node, String value) {
 		super(node);
 		this.value = value;
 	}

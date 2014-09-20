@@ -15,6 +15,7 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 
 import fr.labri.gumtree.io.TreeGenerator;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 
 public abstract class AbstractAntlrTreeGenerator extends TreeGenerator {
@@ -52,7 +53,7 @@ public abstract class AbstractAntlrTreeGenerator extends TreeGenerator {
 	protected Tree toTree(CommonTree ct) {
 		Tree t = null;
 		
-		String label = ct.getText().equals(names.get(ct.getType())) ? Tree.NO_LABEL : ct.getText();
+		String label = ct.getText().equals(names.get(ct.getType())) ? ITree.NO_LABEL : ct.getText();
 		t = new Tree(ct.getType(), label, names.get(ct.getType()));
 		
 		

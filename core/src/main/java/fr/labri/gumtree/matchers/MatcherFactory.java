@@ -1,9 +1,9 @@
 package fr.labri.gumtree.matchers;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public interface MatcherFactory {
 	
-	public Matcher newMatcher(Tree src, Tree dst);
+	public Matcher newMatcher(ITree src, ITree dst);
 
 }

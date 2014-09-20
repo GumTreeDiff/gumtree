@@ -1,20 +1,20 @@
 package fr.labri.gumtree.actions.model;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public abstract class Action {
 
-	protected Tree node;
+	protected ITree node;
 	
-	public Action(Tree node) {
+	public Action(ITree node) {
 		this.node = node;
 	}
 
-	public Tree getNode() {
+	public ITree getNode() {
 		return node;
 	}
 
-	public void setNode(Tree node) {
+	public void setNode(ITree node) {
 		this.node = node;
 	}
 

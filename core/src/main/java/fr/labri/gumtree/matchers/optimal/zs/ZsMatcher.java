@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class ZsMatcher extends Matcher {
 	
@@ -15,7 +15,7 @@ public class ZsMatcher extends Matcher {
 	
 	private ComputeTreeCost cost;
 	
-	public ZsMatcher(Tree src, Tree dst) {
+	public ZsMatcher(ITree src, ITree dst) {
 		super(src, dst);
 		this.src = new TreeInfo(src);
 		this.dst = new TreeInfo(dst);
@@ -134,16 +134,16 @@ public class ZsMatcher extends Matcher {
 	}
 	
 	private final class TreeInfo {
-		private Tree root;
-		private Tree[] nodes;
+		private ITree root;
+		private ITree[] nodes;
 		
 		private int[] lmd; // left-most descendants
 		private int[] kr; // key roots
 		
-		private TreeInfo(Tree t) {
+		private TreeInfo(ITree t) {
 			root = t;
 			int size = t.getSize();
-			nodes = new Tree[size];
+			nodes = new ITree[size];
 			lmd = new int[size];
 			kr = new int[size];
 			Arrays.fill(kr, -1);
@@ -163,9 +163,9 @@ public class ZsMatcher extends Matcher {
 			return nodes.length;
 		}
 		
-		private int postOrderNumbering(Tree t, int nb) {
+		private int postOrderNumbering(ITree t, int nb) {
 			int l = nb;
-			if (!t.isLeaf()) for (Tree n: t.getChildren()) nb = postOrderNumbering(n, nb);
+			if (!t.isLeaf()) for (ITree n: t.getChildren()) nb = postOrderNumbering(n, nb);
 			nodes[nb] = t;
 			lmd[nb] = l;
 			kr[l] = nb;

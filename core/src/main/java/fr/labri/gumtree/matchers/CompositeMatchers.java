@@ -5,14 +5,14 @@ import fr.labri.gumtree.matchers.heuristic.cd.ChangeDistillerBottumUpMatcher;
 import fr.labri.gumtree.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
 import fr.labri.gumtree.matchers.heuristic.gt.CompleteBottomUpMatcher;
 import fr.labri.gumtree.matchers.heuristic.gt.GreedySubtreeMatcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class CompositeMatchers {
 
 	public static class ChangeDistillerMatcherFactory implements MatcherFactory {
 
 		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
+		public Matcher newMatcher(ITree src, ITree dst) {
 			return new CompositeMatcher(src, dst, new MatcherFactory[] {
 					MatcherFactories.getFactory(ChangeDistillerLeavesMatcher.ChangeDistillerLeavesMatcherFactory.class),
 					MatcherFactories.getFactory(ChangeDistillerBottumUpMatcher.ChangeDistillerBottomUpMatcherFactory.class)});
@@ -23,7 +23,7 @@ public class CompositeMatchers {
 	public static class GumTreeMatcherFactory implements MatcherFactory {
 
 		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
+		public Matcher newMatcher(ITree src, ITree dst) {
 			return new CompositeMatcher(src, dst, new MatcherFactory[] {
 					MatcherFactories.getFactory(GreedySubtreeMatcher.GreedySubtreeMatcherFactory.class),
 					MatcherFactories.getFactory(CompleteBottomUpMatcher.CompleteBottumUpMatcherFactory.class)});
@@ -34,7 +34,7 @@ public class CompositeMatchers {
 	public static class XyMatcherFactory implements MatcherFactory {
 
 		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
+		public Matcher newMatcher(ITree src, ITree dst) {
 			return new CompositeMatcher(src, dst, new MatcherFactory[] {
 					MatcherFactories.getFactory(GreedySubtreeMatcher.GreedySubtreeMatcherFactory.class),
 					MatcherFactories.getFactory(XyBottomUpMatcher.XyBottomUpMatcherFactory.class)});

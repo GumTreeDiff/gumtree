@@ -13,6 +13,7 @@ import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.MappingStore;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 import gnu.trove.map.TIntObjectMap;
@@ -22,37 +23,37 @@ public class ActionGenerator {
 	
 	public final static Logger LOGGER = Logger.getLogger("fr.labri.gumtree.actions");
 	
-	private Tree origSrc;
+	private ITree origSrc;
 	
-	private Tree newSrc;
+	private ITree newSrc;
 
-	private Tree origDst;
+	private ITree origDst;
 	
 	private MappingStore origMappings;
 	
 	private MappingStore newMappings;
 	
-	private Set<Tree> dstInOrder;
+	private Set<ITree> dstInOrder;
 	
-	private Set<Tree> srcInOrder;
+	private Set<ITree> srcInOrder;
 	
 	private int lastId;
 	
 	private List<Action> actions;
 	
-	private TIntObjectMap<Tree> origSrcTrees;
+	private TIntObjectMap<ITree> origSrcTrees;
 	
-	private TIntObjectMap<Tree> cpySrcTrees;
+	private TIntObjectMap<ITree> cpySrcTrees;
 	
-	public ActionGenerator(Tree src, Tree dst, MappingStore mappings) {
+	public ActionGenerator(ITree src, ITree dst, MappingStore mappings) {
 		this.origSrc = src;
 		this.newSrc = this.origSrc.deepCopy();
 		this.origDst = dst;
 		
-		origSrcTrees = new TIntObjectHashMap<Tree>();
-		for (Tree t: origSrc.getTrees()) origSrcTrees.put(t.getId(), t);
-		cpySrcTrees = new TIntObjectHashMap<Tree>();
-		for (Tree t: newSrc.getTrees()) cpySrcTrees.put(t.getId(), t);
+		origSrcTrees = new TIntObjectHashMap<>();
+		for (ITree t: origSrc.getTrees()) origSrcTrees.put(t.getId(), t);
+		cpySrcTrees = new TIntObjectHashMap<>();
+		for (ITree t: newSrc.getTrees()) cpySrcTrees.put(t.getId(), t);
 		
 		origMappings = new MappingStore();
 		for (Mapping m: mappings) this.origMappings.link(cpySrcTrees.get(m.getFirst().getId()), m.getSecond());
@@ -71,18 +72,18 @@ public class ActionGenerator {
 		vsrc.addChild(newSrc);
 		vdst.addChild(origDst);
 		
-		actions = new ArrayList<Action>();
-		dstInOrder = new HashSet<Tree>();
-		srcInOrder = new HashSet<Tree>();
+		actions = new ArrayList<>();
+		dstInOrder = new HashSet<>();
+		srcInOrder = new HashSet<>();
 		
 		lastId = newSrc.getSize() + 1;
 		newMappings.link(vsrc, vdst);
 		
-		List<Tree> bfsDst = TreeUtils.breadthFirst(origDst); 
-		for (Tree x: bfsDst) {
-			Tree w = null;
-			Tree y = x.getParent();
-			Tree z = newMappings.getSrc(y);
+		List<ITree> bfsDst = TreeUtils.breadthFirst(origDst); 
+		for (ITree x: bfsDst) {
+			ITree w = null;
+			ITree y = x.getParent();
+			ITree z = newMappings.getSrc(y);
 			
 			if (!newMappings.hasDst(x)) {
 				int k = findPos(x);
@@ -105,7 +106,7 @@ public class ActionGenerator {
 			} else {
 				w = newMappings.getSrc(x);
 				if (!x.equals(origDst)) {
-					Tree v = w.getParent();
+					ITree v = w.getParent();
 					if (!w.getLabel().equals(x.getLabel())) {
 						actions.add(new Update(origSrcTrees.get(w.getId()), x.getLabel()));
 						w.setLabel(x.getLabel());
@@ -129,7 +130,7 @@ public class ActionGenerator {
 			alignChildren(w, x);
 		}
 		
-		for (Tree w : newSrc.postOrder()) {
+		for (ITree w : newSrc.postOrder()) {
 			if (!newMappings.hasSrc(w)) {
 				actions.add(new Delete(origSrcTrees.get(w.getId())));
 				w.getParent().getChildren().remove(w);
@@ -144,18 +145,18 @@ public class ActionGenerator {
 		}
 	}
 	
-	private void alignChildren(Tree w, Tree x) {
+	private void alignChildren(ITree w, ITree x) {
 		srcInOrder.removeAll(w.getChildren());
 		dstInOrder.removeAll(x.getChildren());
 		
-		List<Tree> s1 = new ArrayList<Tree>();
-		for (Tree c: w.getChildren()) 
+		List<ITree> s1 = new ArrayList<>();
+		for (ITree c: w.getChildren()) 
 			if (newMappings.hasSrc(c)) 
 				if (x.getChildren().contains(newMappings.getDst(c))) 
 					s1.add(c);
 		
-		List<Tree> s2 = new ArrayList<Tree>();
-		for (Tree c: x.getChildren()) 
+		List<ITree> s2 = new ArrayList<>();
+		for (ITree c: x.getChildren()) 
 			if (newMappings.hasDst(c)) 
 				if (w.getChildren().contains(newMappings.getSrc(c))) 
 					s2.add(c);
@@ -167,8 +168,8 @@ public class ActionGenerator {
 			dstInOrder.add(m.getSecond());
 		}
 		
-		for (Tree a : s1) {
-			for (Tree b: s2 ) {
+		for (ITree a : s1) {
+			for (ITree b: s2 ) {
 				if (origMappings.has(a, b)) {
 					if (!lcs.contains(new Mapping(a, b))) {
 						int k = findPos(b);
@@ -189,11 +190,11 @@ public class ActionGenerator {
 		}
 	}
 	
-	private int findPos(Tree x) {
-		Tree y = x.getParent();
-		List<Tree> siblings = y.getChildren();
+	private int findPos(ITree x) {
+		ITree y = x.getParent();
+		List<ITree> siblings = y.getChildren();
 		
-		for (Tree c : siblings) {
+		for (ITree c : siblings) {
 			if (dstInOrder.contains(c)) {
 				if (c.equals(x)) return 0;
 				else break;		
@@ -201,16 +202,16 @@ public class ActionGenerator {
 		}
 		
 		int xpos = x.positionInParent();
-		Tree v = null;
+		ITree v = null;
 		for (int i = 0; i < xpos; i++) {
-			Tree c = siblings.get(i);
+			ITree c = siblings.get(i);
 			if (dstInOrder.contains(c)) v = c;
 		}
 		
 		//if (v == null) throw new RuntimeException("No rightmost sibling in order");
 		if (v == null) return 0;
 		
-		Tree u = newMappings.getSrc(v);
+		ITree u = newMappings.getSrc(v);
 //		siblings = u.getParent().getChildren();
 //		int upos = siblings.indexOf(u);
 		int upos = u.positionInParent(); 
@@ -225,10 +226,10 @@ public class ActionGenerator {
 		return ++lastId;
 	}
 	
-    private List<Mapping> lcs(List<Tree> x, List<Tree> y) {
+    private List<Mapping> lcs(List<ITree> x, List<ITree> y) {
         int m = x.size();
         int n = y.size();
-        List<Mapping> lcs = new ArrayList<Mapping>();
+        List<Mapping> lcs = new ArrayList<>();
         
         int[][] opt = new int[m + 1][n + 1];
         for (int i = m - 1; i >= 0; i--) {

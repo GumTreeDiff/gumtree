@@ -23,6 +23,7 @@ import java.util.Stack;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.internal.compiler.ast.BinaryExpression;
 
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
@@ -35,7 +36,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
 		this.trees = new Stack<Tree>();
 	}
 
-	public Tree getRoot() {
+	public ITree getRoot() {
 		return this.root;
 	}
 

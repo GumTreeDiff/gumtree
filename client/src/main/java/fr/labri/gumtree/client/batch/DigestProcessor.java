@@ -8,7 +8,7 @@ import java.util.Set;
 
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.tree.DigestGenerator;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
 
 public class DigestProcessor extends AbstractFileProcessor {
@@ -58,7 +58,7 @@ public class DigestProcessor extends AbstractFileProcessor {
 
 	@Override
 	public void process(String file) throws IOException {
-		Tree tree = TreeGeneratorRegistry.getInstance().getTree(file);
+		ITree tree = TreeGeneratorRegistry.getInstance().getTree(file);
 		long tic = tic();
 		TreeUtils.computeDigest(tree, new DigestGenerator.StdHashGenerator());
 		stdTime += tic() - tic;
@@ -85,8 +85,8 @@ public class DigestProcessor extends AbstractFileProcessor {
 		updateDigests(tree, rRdmDigests);
 	}
 	
-	private void updateDigests(Tree tree, Map<Integer,Set<String>> digests) {
-		for (Tree t: tree.getTrees()) {
+	private void updateDigests(ITree tree, Map<Integer,Set<String>> digests) {
+		for (ITree t: tree.getTrees()) {
 			int digest = t.getDigest();
 			if (!digests.containsKey(digest)) digests.put(digest, new HashSet<String>());
 			digests.get(digest).add(t.toDigestTreeString());

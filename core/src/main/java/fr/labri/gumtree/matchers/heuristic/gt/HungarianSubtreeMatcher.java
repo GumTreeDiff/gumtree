@@ -9,25 +9,27 @@ import java.util.Set;
 
 import fr.labri.gumtree.algo.HungarianAlgorithm;
 import fr.labri.gumtree.matchers.MultiMappingStore;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class HungarianSubtreeMatcher extends SubtreeMatcher {
 
-	public HungarianSubtreeMatcher(Tree src, Tree dst) {
+	public HungarianSubtreeMatcher(ITree src, ITree dst) {
 		super(src, dst);
 	}
 	
 	public void filterMappings(MultiMappingStore mmappings) {
 		List<MultiMappingStore> ambiguousList = new ArrayList<>();
-		Set<Tree> ignored = new HashSet<>();
-		for (Tree src: mmappings.getSrcs())
+		Set<ITree> ignored = new HashSet<>();
+		for (ITree src: mmappings.getSrcs())
 			if (mmappings.isSrcUnique(src))
 				addFullMapping(src, mmappings.getDst(src).iterator().next());
 			else if (!ignored.contains(src)) {
 				MultiMappingStore ambiguous = new MultiMappingStore();
-				Set<Tree> adsts = mmappings.getDst(src);
-				Set<Tree> asrcs = mmappings.getSrc(mmappings.getDst(src).iterator().next());
-				for (Tree asrc : asrcs) for(Tree adst: adsts) ambiguous.link(asrc ,adst);
+				Set<ITree> adsts = mmappings.getDst(src);
+				Set<ITree> asrcs = mmappings.getSrc(mmappings.getDst(src).iterator().next());
+				for (ITree asrc : asrcs)
+					for(ITree adst: adsts)
+						ambiguous.link(asrc ,adst);
 				ambiguousList.add(ambiguous);
 				ignored.addAll(asrcs);
 			}
@@ -36,8 +38,8 @@ public class HungarianSubtreeMatcher extends SubtreeMatcher {
 
 		for (MultiMappingStore ambiguous: ambiguousList) {
 			System.out.println("hungarian try.");
-			List<Tree> lstSrcs = new ArrayList<>(ambiguous.getSrcs());
-			List<Tree> lstDsts = new ArrayList<>(ambiguous.getDsts());
+			List<ITree> lstSrcs = new ArrayList<>(ambiguous.getSrcs());
+			List<ITree> lstDsts = new ArrayList<>(ambiguous.getDsts());
 			double[][] matrix = new double[lstSrcs.size()][lstDsts.size()];
 			for(int i = 0; i < lstSrcs.size(); i++) 
 				for(int j = 0; j < lstDsts.size(); j++)
@@ -52,7 +54,7 @@ public class HungarianSubtreeMatcher extends SubtreeMatcher {
 		}
 	}
 	
-	private double cost(Tree src, Tree dst) {
+	private double cost(ITree src, ITree dst) {
 		return 111D - sim(src, dst);
 	}
 	
@@ -65,11 +67,11 @@ public class HungarianSubtreeMatcher extends SubtreeMatcher {
 		
 		public int impact(MultiMappingStore m) {
 			int impact = 0;
-			for (Tree src: m.getSrcs()) {
+			for (ITree src: m.getSrcs()) {
 				int pSize = src.getParents().size(); 
 				if (pSize > impact) impact = pSize;
 			}
-			for (Tree src: m.getDsts()) {
+			for (ITree src: m.getDsts()) {
 				int pSize = src.getParents().size(); 
 				if (pSize > impact) impact = pSize;
 			}

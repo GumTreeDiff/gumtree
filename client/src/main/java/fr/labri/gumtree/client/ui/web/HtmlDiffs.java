@@ -13,6 +13,7 @@ import fr.labri.gumtree.actions.TreeClassifier;
 import fr.labri.gumtree.algo.StringAlgorithms;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -30,7 +31,7 @@ public final class HtmlDiffs {
 	
 	private String dstDiff;
 	
-	private Tree src;
+	private ITree src;
 	
 	private Tree dst;
 	
@@ -42,7 +43,7 @@ public final class HtmlDiffs {
 	
 	private MappingStore mappings;
 	
-	public HtmlDiffs(File fSrc, File fDst, Tree src, Tree dst, Matcher matcher) {
+	public HtmlDiffs(File fSrc, File fDst, ITree src, Tree dst, Matcher matcher) {
 		this.fSrc = fSrc;
 		this.fDst = fDst;
 		this.src = src;
@@ -59,7 +60,7 @@ public final class HtmlDiffs {
 		int mId = 1;
 		
 		TagIndex ltags = new TagIndex();
-		for (Tree t: src.getTrees()) {
+		for (ITree t: src.getTrees()) {
 			if (c.getSrcMvTrees().contains(t)) {
 				mappingIds.put(mappings.getDst(t).getId(), mId);
 				ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
@@ -80,7 +81,7 @@ public final class HtmlDiffs {
 		}
 
 		TagIndex rtags = new TagIndex();
-		for (Tree t: dst.getTrees()) {
+		for (ITree t: dst.getTrees()) {
 			if (c.getDstMvTrees().contains(t)) {
 				int dId = mappingIds.get(t.getId());
 				rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
@@ -138,7 +139,7 @@ public final class HtmlDiffs {
 		return dstDiff;
 	}
 
-	private static String tooltip(Tree t) {
+	private static String tooltip(ITree t) {
 		return (t.getParent() != null) ? t.getParent().getTypeLabel() + "/" + t.getTypeLabel() : t.getTypeLabel();
 	}
 

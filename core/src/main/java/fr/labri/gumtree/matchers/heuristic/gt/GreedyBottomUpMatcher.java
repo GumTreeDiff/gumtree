@@ -11,7 +11,7 @@ import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
 
 /**
@@ -26,26 +26,26 @@ public class GreedyBottomUpMatcher extends Matcher {
 	
 	private static final int SIZE_THESHOLD = 200;
 
-	private Map<Integer, Tree> srcIds = new HashMap<Integer, Tree>();
+	private Map<Integer, ITree> srcIds = new HashMap<>();
 	
-	private Map<Integer, Tree> dstIds = new HashMap<Integer, Tree>();
+	private Map<Integer, ITree> dstIds = new HashMap<>();
 	
-	public GreedyBottomUpMatcher(Tree src, Tree dst) {
+	public GreedyBottomUpMatcher(ITree src, ITree dst) {
 		super(src, dst);
 	}
 	
 	public void match() {
-		List<Tree> srcs = postOrder(src);
-		List<Tree> dsts = postOrder(dst);
-		for (Tree t : srcs) srcIds.put(t.getId(), t);
-		for (Tree t : dsts) dstIds.put(t.getId(), t);
+		List<ITree> srcs = postOrder(src);
+		List<ITree> dsts = postOrder(dst);
+		for (ITree t : srcs) srcIds.put(t.getId(), t);
+		for (ITree t : dsts) dstIds.put(t.getId(), t);
 		match(TreeUtils.removeMapped(srcs), TreeUtils.removeMapped(dsts));
 		clean();
 	}
 
-	private void match(List<Tree> poSrc, List<Tree> poDst) {
-		for (Tree src: poSrc)  {
-			for (Tree dst: poDst) {
+	private void match(List<ITree> poSrc, List<ITree> poDst) {
+		for (ITree src: poSrc)  {
+			for (ITree dst: poDst) {
 				if (src.isMatchable(dst) && !(src.isLeaf() || dst.isLeaf())) {
 					double sim = jaccardSimilarity(src, dst);
 					if (sim >= SIM_THRESHOLD || (src.isRoot() && dst.isRoot()) ) {
@@ -59,14 +59,14 @@ public class GreedyBottomUpMatcher extends Matcher {
 	}
 
 	//FIXME checks if it is better or not to remove the already found mappings.
-	private void lastChanceMatch(Tree src, Tree dst) {
-		Tree cSrc = removeMatched(src.deepCopy());
-		Tree cDst = removeMatched(dst.deepCopy());
+	private void lastChanceMatch(ITree src, ITree dst) {
+		ITree cSrc = removeMatched(src.deepCopy());
+		ITree cDst = removeMatched(dst.deepCopy());
 		if (cSrc.getSize() < SIZE_THESHOLD && cDst.getSize() < SIZE_THESHOLD) {
 			Matcher m = new RtedMatcher(cSrc, cDst);
 			for (Mapping candidate: m.getMappings()) {
-				Tree left = srcIds.get(candidate.getFirst().getId());
-				Tree right = dstIds.get(candidate.getSecond().getId());
+				ITree left = srcIds.get(candidate.getFirst().getId());
+				ITree right = dstIds.get(candidate.getSecond().getId());
 				if (left.getId() == src.getId() || right.getId() == dst.getId()) {
 					continue;
 				} else if (left.isMatched() && right.isMatched()) {
@@ -78,8 +78,8 @@ public class GreedyBottomUpMatcher extends Matcher {
 				} else addMapping(left, right);
 			}
 			
-			for(Tree t : cSrc.getTrees()) srcIds.get(t.getId()).setMatched(true);
-			for(Tree t : cDst.getTrees()) dstIds.get(t.getId()).setMatched(true);
+			for(ITree t : cSrc.getTrees()) srcIds.get(t.getId()).setMatched(true);
+			for(ITree t : cDst.getTrees()) dstIds.get(t.getId()).setMatched(true);
 		}
 
 	}
@@ -87,7 +87,7 @@ public class GreedyBottomUpMatcher extends Matcher {
 	public static class GreedyBottumUpMatcherFactory implements MatcherFactory {
 
 		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
+		public Matcher newMatcher(ITree src, ITree dst) {
 			return new GreedyBottomUpMatcher(src, dst);
 		}
 		

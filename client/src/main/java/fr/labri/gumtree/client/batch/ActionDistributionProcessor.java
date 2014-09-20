@@ -11,6 +11,7 @@ import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 
 public class ActionDistributionProcessor extends AbstractFilePairsProcessor {
@@ -39,10 +40,10 @@ public class ActionDistributionProcessor extends AbstractFilePairsProcessor {
 		RootsClassifier c = new RootsClassifier(src, dst, matcher);
 		c.classify();
 		MappingStore mappings = matcher.getMappings();
-		for (Tree t: c.getDstUpdTrees()) inc("UPD " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
-		for (Tree t: c.getSrcDelTrees()) if (!c.getSrcDelTrees().contains(t.getParent())) inc("DEL " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
-		for (Tree t: c.getDstAddTrees()) if (!c.getDstAddTrees().contains(t.getParent())) inc("ADD " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
-		for (Tree t: c.getSrcMvTrees()) if (!c.getSrcMvTrees().contains(t.getParent())) inc("MOV " + t.getTypeLabel()
+		for (ITree t: c.getDstUpdTrees()) inc("UPD " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
+		for (ITree t: c.getSrcDelTrees()) if (!c.getSrcDelTrees().contains(t.getParent())) inc("DEL " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
+		for (ITree t: c.getDstAddTrees()) if (!c.getDstAddTrees().contains(t.getParent())) inc("ADD " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
+		for (ITree t: c.getSrcMvTrees()) if (!c.getSrcMvTrees().contains(t.getParent())) inc("MOV " + t.getTypeLabel()
 				+ " FROM " + t.getParent().getTypeLabel() + " TO " + mappings.getDst(t).getParent().getTypeLabel());
 	}
 	

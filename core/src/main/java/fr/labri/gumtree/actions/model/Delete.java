@@ -1,10 +1,10 @@
 package fr.labri.gumtree.actions.model;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class Delete extends Action {
 
-	public Delete(Tree node) {
+	public Delete(ITree node) {
 		super(node);
 	}
 

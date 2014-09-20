@@ -11,6 +11,7 @@ import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.NumberLiteral;
 import org.mozilla.javascript.ast.StringLiteral;
 
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 
 public class RhinoTreeVisitor implements NodeVisitor {
@@ -29,7 +30,7 @@ public class RhinoTreeVisitor implements NodeVisitor {
 			return true;
 		else {
 			Tree t = buildTree(node);
-			Tree p = trees.get(node.getParent());
+			ITree p = trees.get(node.getParent());
 			p.addChild(t);
 			
 			if (node instanceof Name) {
@@ -52,7 +53,7 @@ public class RhinoTreeVisitor implements NodeVisitor {
 	}
 	
 	private Tree buildTree(AstNode node)  {
-		Tree t = new Tree(node.getType(), Tree.NO_LABEL, Token.typeToName(node.getType()));
+		Tree t = new Tree(node.getType(), ITree.NO_LABEL, Token.typeToName(node.getType()));
 		t.setPos(node.getAbsolutePosition());
 		t.setLength(node.getLength());
 		trees.put(node, t);

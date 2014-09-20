@@ -5,13 +5,13 @@ import java.util.List;
 
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MultiMappingStore;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public abstract class SubtreeMatcher extends Matcher {
 
 	private static final int MIN_HEIGHT = 1;
 
-	public SubtreeMatcher(Tree src, Tree dst) {
+	public SubtreeMatcher(ITree src, ITree dst) {
 		super(src, dst);
 	}
 	
@@ -28,16 +28,16 @@ public abstract class SubtreeMatcher extends Matcher {
 		while (srcs.peekHeight() != -1 && dsts.peekHeight() != -1) {
 			while (srcs.peekHeight() != dsts.peekHeight()) popLarger(srcs, dsts);
 			
-			List<Tree> hSrcs = srcs.pop();
-			List<Tree> hDsts = dsts.pop();
+			List<ITree> hSrcs = srcs.pop();
+			List<ITree> hDsts = dsts.pop();
 			
 			boolean[] srcMarks = new boolean[hSrcs.size()];
 			boolean[] dstMarks = new boolean[hDsts.size()];
 			
 			for (int i = 0; i < hSrcs.size(); i++) {
 				for (int j = 0; j < hDsts.size(); j++) {
-					Tree src = hSrcs.get(i);
-					Tree dst = hDsts.get(j);
+					ITree src = hSrcs.get(i);
+					ITree dst = hDsts.get(j);
 					
 					if (src.isClone(dst)) {
 						multiMappings.link(src, dst);
@@ -58,7 +58,7 @@ public abstract class SubtreeMatcher extends Matcher {
 	
 	public abstract void filterMappings(MultiMappingStore mmappings);
 
-	protected double sim(Tree src, Tree dst) {
+	protected double sim(ITree src, ITree dst) {
 		double jaccard = jaccardSimilarity(src.getParent(), dst.getParent());
 		int posSrc = (src.isRoot()) ? 0 : src.getParent().getChildPosition(src);
 		int posDst = (dst.isRoot()) ? 0 : dst.getParent().getChildPosition(dst);
@@ -76,20 +76,20 @@ public abstract class SubtreeMatcher extends Matcher {
 
 	private static class PriorityTreeList {
 
-		private List<Tree>[] trees;
+		private List<ITree>[] trees;
 
 		private int maxHeight;
 
 		private int currentIdx;
 
 		@SuppressWarnings("unchecked")
-		public PriorityTreeList(Tree tree) {
-			trees = (List<Tree>[]) new ArrayList[tree.getHeight() - MIN_HEIGHT + 1];
+		public PriorityTreeList(ITree tree) {
+			trees = (List<ITree>[]) new ArrayList[tree.getHeight() - MIN_HEIGHT + 1];
 			maxHeight = tree.getHeight();
 			addTree(tree);
 		}
 
-		private int idx(Tree tree) {
+		private int idx(ITree tree) {
 			return idx(tree.getHeight());
 		}
 
@@ -101,35 +101,35 @@ public abstract class SubtreeMatcher extends Matcher {
 			return maxHeight - idx;
 		}
 
-		private void addTree(Tree tree) {
+		private void addTree(ITree tree) {
 			if (tree.getHeight() >= MIN_HEIGHT) {
 				int idx = idx(tree);
-				if (trees[idx] == null) trees[idx] = new ArrayList<Tree>();
+				if (trees[idx] == null) trees[idx] = new ArrayList<>();
 				trees[idx].add(tree);
 			}
 		}
 
-		public List<Tree> open() {
-			List<Tree> pop = pop();
+		public List<ITree> open() {
+			List<ITree> pop = pop();
 			if (pop != null) {
-				for (Tree tree: pop) open(tree);
+				for (ITree tree: pop) open(tree);
 				updateHeight();
 				return pop;
 			} else return null;
 		}
 		
-		public List<Tree> pop() {
+		public List<ITree> pop() {
 			if (currentIdx == -1) 
 				return null;
 			else {
-				List<Tree> pop = trees[currentIdx];
+				List<ITree> pop = trees[currentIdx];
 				trees[currentIdx] = null;
 				return pop;
 			}
 		}
 		
-		public void open(Tree tree) {
-			for(Tree c: tree.getChildren()) addTree(c);
+		public void open(ITree tree) {
+			for(ITree c: tree.getChildren()) addTree(c);
 		}
 		
 		public int peekHeight() {

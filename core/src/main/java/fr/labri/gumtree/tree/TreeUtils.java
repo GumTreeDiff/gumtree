@@ -21,10 +21,10 @@ public final class TreeUtils {
 	 * directly on the nodes and is then accessible using {@link Tree#getSize()}.
 	 * @param tree a Tree
 	 */
-	public static void computeSize(Tree tree) {
-		for (Tree t: tree.postOrder()) {
+	public static void computeSize(ITree tree) {
+		for (ITree t: tree.postOrder()) {
 			int size = 1;
-			if (!t.isLeaf()) for (Tree c: t.getChildren()) size += c.getSize();
+			if (!t.isLeaf()) for (ITree c: t.getChildren()) size += c.getSize();
 			t.setSize(size);
 		}
 	}
@@ -34,12 +34,12 @@ public final class TreeUtils {
 	 * directly on the nodes and is then accessible using {@link Tree#getDigest()}.
 	 * @param tree a Tree
 	 */
-	public static void computeDigest(Tree tree) {
+	public static void computeDigest(ITree tree) {
 		DigestGenerator.RollingMd5HashGenerator g = new DigestGenerator.RollingMd5HashGenerator();
 		g.computeDigest(tree);
 	}
 
-	public static void computeDigest(Tree tree, DigestGenerator g) {
+	public static void computeDigest(ITree tree, DigestGenerator g) {
 		g.computeDigest(tree);
 	}
 
@@ -48,9 +48,9 @@ public final class TreeUtils {
 	 * directly on the nodes and is then accessible using {@link Tree#getDepth()}.
 	 * @param tree a Tree
 	 */
-	public static void computeDepth(Tree tree) {
-		List<Tree> trees = preOrder(tree);
-		for (Tree t: trees) {
+	public static void computeDepth(ITree tree) {
+		List<ITree> trees = preOrder(tree);
+		for (ITree t: trees) {
 			int depth = 0;
 			if (!t.isRoot()) depth = t.getParent().getDepth() + 1;
 			t.setDepth(depth);
@@ -62,11 +62,11 @@ public final class TreeUtils {
 	 * directly on the nodes and is then accessible using {@link Tree#getHeight()}.
 	 * @param tree a Tree.
 	 */
-	public static void computeHeight(Tree tree) {
-		for (Tree t: tree.postOrder()) {
+	public static void computeHeight(ITree tree) {
+		for (ITree t: tree.postOrder()) {
 			int height = 0;
 			if (!t.isLeaf()) {
-				for (Tree c: t.getChildren()) {
+				for (ITree c: t.getChildren()) {
 					int cHeight = c.getHeight();
 					if (cHeight > height) height = cHeight;
 				}
@@ -81,20 +81,23 @@ public final class TreeUtils {
 	 * @param tree a Tree.
 	 * @return
 	 */
-	public static List<Tree> preOrder(Tree tree) {
-		List<Tree> trees = new ArrayList<>();
+	public static List<ITree> preOrder(ITree tree) {
+		List<ITree> trees = new ArrayList<>();
 		preOrder(tree, trees);
 		return trees;
 	}
 
-	private static void preOrder(Tree tree, List<Tree> trees) {
+	private static void preOrder(ITree tree, List<ITree> trees) {
 		trees.add(tree);
-		if (!tree.isLeaf()) for (Tree c: tree.getChildren()) preOrder(c, trees);
+		if (!tree.isLeaf())
+			for (ITree c: tree.getChildren())
+				preOrder(c, trees);
 	}
 
-	public static void preOrderNumbering(Tree tree) {
-		List<Tree> trees = preOrder(tree);
-		for (int i = 0; i < trees.size(); i++) trees.get(i).setId(i);
+	public static void preOrderNumbering(ITree tree) {
+		List<ITree> trees = preOrder(tree);
+		for (int i = 0; i < trees.size(); i++)
+			trees.get(i).setId(i);
 	}
 
 	/**
@@ -102,27 +105,28 @@ public final class TreeUtils {
 	 * @param tree a Tree.
 	 * @return
 	 */
-	public static List<Tree> breadthFirst(Tree tree) {
-		List<Tree> trees = new ArrayList<>();
-		List<Tree> currents = new ArrayList<>();
+	public static List<ITree> breadthFirst(ITree tree) {
+		List<ITree> trees = new ArrayList<>();
+		List<ITree> currents = new ArrayList<>();
 		currents.add(tree);
 		while (currents.size() > 0) {
-			Tree c = currents.remove(0);
+			ITree c = currents.remove(0);
 			trees.add(c);
 			currents.addAll(c.getChildren());
 		}
 		return trees;
 	}
 	
-	private static Tree fakeTree(Tree tree) {
-		Tree t = new Tree(-1);
+	private static ITree fakeTree(ITree tree) {
+		ITree t = new Tree(-1);
 		t.getChildren().add(tree);
 		return t;
 	}
 	
-	public static Iterator<Tree> breadthFirstIterator(final Tree tree) {
-		return new Iterator<Tree>() {
-			Deque<Iterator<Tree>> fifo = new ArrayDeque<>();
+	public static Iterator<ITree> breadthFirstIterator(final ITree tree) {
+		return new Iterator<ITree>() {
+			Deque<Iterator<ITree>> fifo = new ArrayDeque<>();
+			
 			{
 				addLasts(fakeTree(tree));
 			}
@@ -133,11 +137,11 @@ public final class TreeUtils {
 			}
 			
 			@Override
-			public Tree next() {
+			public ITree next() {
 				while (!fifo.isEmpty()) {
-					Iterator<Tree> it = fifo.getFirst();
+					Iterator<ITree> it = fifo.getFirst();
 					if (it.hasNext()) {
-						Tree item = it.next();
+						ITree item = it.next();
 						if (!it.hasNext())
 							fifo.removeFirst();
 						addLasts(item);
@@ -146,8 +150,8 @@ public final class TreeUtils {
 				}
 				throw new NoSuchElementException();
 			}
-			private void addLasts(Tree item) {
-				List<Tree> children = item.getChildren();
+			private void addLasts(ITree item) {
+				List<ITree> children = item.getChildren();
 				if (!children.isEmpty())
 					fifo.addLast(children.iterator());
 			}
@@ -158,13 +162,13 @@ public final class TreeUtils {
 		};
 	}
 	
-	public static void breadthFirstNumbering(Tree tree) {
+	public static void breadthFirstNumbering(ITree tree) {
 		numbering(tree.breadthFirst());
 	}
 	
-	public static void numbering(Iterable<Tree> iterable) {
+	public static void numbering(Iterable<ITree> iterable) {
 		int i = 0;
-		for (Tree t: iterable)
+		for (ITree t: iterable)
 			t.setId(i++);
 	}
 
@@ -173,20 +177,20 @@ public final class TreeUtils {
 	 * @param tree a Tree.
 	 * @return
 	 */
-	public static List<Tree> postOrder(Tree tree) {
-		List<Tree> trees = new ArrayList<>();
+	public static List<ITree> postOrder(ITree tree) {
+		List<ITree> trees = new ArrayList<>();
 		postOrder(tree, trees);
 		return trees;
 	}
 
-	private static void postOrder(Tree tree, List<Tree> trees) {
-		if (!tree.isLeaf()) for (Tree c: tree.getChildren()) postOrder(c, trees);
+	private static void postOrder(ITree tree, List<ITree> trees) {
+		if (!tree.isLeaf()) for (ITree c: tree.getChildren()) postOrder(c, trees);
 		trees.add(tree);
 	}
 	
-	public static Iterator<Tree> postOrderIterator(final Tree tree) {
-		return new Iterator<Tree>() {
-			Deque<Pair<Tree, Iterator<Tree>>> stack = new ArrayDeque<>();
+	public static Iterator<ITree> postOrderIterator(final ITree tree) {
+		return new Iterator<ITree>() {
+			Deque<Pair<ITree, Iterator<ITree>>> stack = new ArrayDeque<>();
 			{
 				push(tree);
 			}
@@ -197,23 +201,23 @@ public final class TreeUtils {
 			}
 
 			@Override
-			public Tree next() {
+			public ITree next() {
 				if (stack.isEmpty())
 					throw new NoSuchElementException();
 				return selectNextChild(stack.peek().getSecond());
 			}
 			
-			Tree selectNextChild(Iterator<Tree> it) {
+			ITree selectNextChild(Iterator<ITree> it) {
 				if (!it.hasNext())
 					return stack.pop().getFirst();
-				Tree item = it.next();
+				ITree item = it.next();
 				if (item.isLeaf())
 					return item;
 				return selectNextChild(push(item));
 			}
 
-			private Iterator<Tree> push(Tree item) {
-				Iterator<Tree> it = item.getChildren().iterator();
+			private Iterator<ITree> push(ITree item) {
+				Iterator<ITree> it = item.getChildren().iterator();
 				stack.push(new Pair<>(item, it));
 				return it;
 			}
@@ -225,17 +229,17 @@ public final class TreeUtils {
 		};
 	}
 	
-	public static Iterator<Tree> leafIterator(final Iterator<Tree> it) {
-		return new Iterator<Tree>() {
-			Tree current = it.hasNext() ? it.next() : null;
+	public static Iterator<ITree> leafIterator(final Iterator<ITree> it) {
+		return new Iterator<ITree>() {
+			ITree current = it.hasNext() ? it.next() : null;
 			@Override
 			public boolean hasNext() {
 				return current != null;
 			}
 
 			@Override
-			public Tree next() {
-				Tree val = current;
+			public ITree next() {
+				ITree val = current;
 				while (it.hasNext()) {
 					current = it.next();
 					if (current.isLeaf())
@@ -251,7 +255,7 @@ public final class TreeUtils {
 		};
 	}
 	
-	public static void postOrderNumbering(Tree tree) {
+	public static void postOrderNumbering(ITree tree) {
 		numbering(tree.postOrder());
 	}
 
@@ -263,10 +267,10 @@ public final class TreeUtils {
 		}
 	}
 
-	public static List<Tree> removeMapped(List<Tree> trees) {
-		Iterator<Tree> trIt = trees.iterator();
+	public static List<ITree> removeMapped(List<ITree> trees) {
+		Iterator<ITree> trIt = trees.iterator();
 		while (trIt.hasNext()) {
-			Tree t = trIt.next();
+			ITree t = trIt.next();
 			if (t.isMatched()) trIt.remove();
 		}
 		return trees;
@@ -279,8 +283,8 @@ public final class TreeUtils {
 	 * @param tree 
 	 * @return
 	 */
-	public static Tree removeMatched(Tree tree) {
-		for (Tree t: tree.getTrees()) {
+	public static ITree removeMatched(ITree tree) {
+		for (ITree t: tree.getTrees()) {
 			if (t.isMatched()) {
 				if (t.getParent() != null) t.getParent().getChildren().remove(t);
 				t.setParent(null);
@@ -297,8 +301,8 @@ public final class TreeUtils {
 	 * @param tree 
 	 * @return
 	 */
-	public static Tree removeCompletelyMapped(Tree tree) {
-		for (Tree t: tree.getTrees()) {
+	public static ITree removeCompletelyMapped(ITree tree) {
+		for (ITree t: tree.getTrees()) {
 			if (t.isMatched() && t.areDescendantsMatched()) {
 				t.getParent().getChildren().remove(t);
 				t.setParent(null);

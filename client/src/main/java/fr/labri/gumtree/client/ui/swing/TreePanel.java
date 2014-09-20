@@ -14,23 +14,23 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class TreePanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private JTree jtree;
-	private Tree tree;
-	private Map<Tree, DefaultMutableTreeNode> trees;
+	private ITree tree;
+	private Map<ITree, DefaultMutableTreeNode> trees;
 
-	public TreePanel(Tree tree, TreeCellRenderer renderer) {
+	public TreePanel(ITree tree, TreeCellRenderer renderer) {
 		super(new GridLayout(1, 0));
-		trees = new HashMap<Tree, DefaultMutableTreeNode>();
+		trees = new HashMap<>();
 		this.tree = tree;
 
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode(tree);
 		trees.put(tree, top);
-		for (Tree child: tree.getChildren()) createNodes(top, child);
+		for (ITree child: tree.getChildren()) createNodes(top, child);
 		
 		jtree = new JTree(top);
 		jtree.setCellRenderer(renderer);
@@ -43,7 +43,7 @@ public class TreePanel extends JPanel {
 		add(treeView);
 	}
 	
-	public TreePanel(Tree tree) {
+	public TreePanel(ITree tree) {
 		this(tree, new DefaultTreeCellRenderer());
 	}
 	
@@ -51,11 +51,11 @@ public class TreePanel extends JPanel {
 		return jtree;
 	}
 	
-	public Map<Tree, DefaultMutableTreeNode> getTrees() {
+	public Map<ITree, DefaultMutableTreeNode> getTrees() {
 		return trees;
 	}
 	
-	public Tree getTree() {
+	public ITree getTree() {
 		return this.tree;
 	}
 
@@ -66,11 +66,11 @@ public class TreePanel extends JPanel {
 		System.out.println(nodeInfo);
 	}
 	
-	private void createNodes(DefaultMutableTreeNode parent, Tree tree) {
+	private void createNodes(DefaultMutableTreeNode parent, ITree tree) {
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(tree);
 		trees.put(tree, node);
 		parent.add(node);
-		for (Tree child: tree.getChildren()) createNodes(node, child);
+		for (ITree child: tree.getChildren()) createNodes(node, child);
 	}
 
 }

@@ -25,6 +25,7 @@ import javax.xml.stream.events.XMLEvent;
 import com.google.gson.stream.JsonWriter;
 
 import fr.labri.gumtree.matchers.MappingStore;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 
@@ -99,7 +100,7 @@ public final class TreeIoUtils {
 		return fromXml(new StringReader(xml));
 	}
 	
-	public static Tree fromXmlFile(String path) {
+	public static ITree fromXmlFile(String path) {
 		try {
 			return fromXml(new FileReader(path));
 		} catch (FileNotFoundException e) {
@@ -108,7 +109,7 @@ public final class TreeIoUtils {
 		return null;
 	}
 	
-	public static void toXml(Tree t, String file) {
+	public static void toXml(ITree t, String file) {
 		try {
 			FileWriter f = new FileWriter(file);
 			f.append(toXml(t));
@@ -118,7 +119,7 @@ public final class TreeIoUtils {
 		}
 	}
 	
-	public static String toXml(Tree t) {
+	public static String toXml(ITree t) {
 		XMLOutputFactory f = XMLOutputFactory.newInstance();
 		StringWriter s = new StringWriter();
 		String result = null;
@@ -136,7 +137,7 @@ public final class TreeIoUtils {
 		return result;
 	}
 	
-	public static String toAnnotatedXml(Tree t, MappingStore m, boolean isSrc) {
+	public static String toAnnotatedXml(ITree t, MappingStore m, boolean isSrc) {
 		XMLOutputFactory f = XMLOutputFactory.newInstance();
 		StringWriter s = new StringWriter();
 		String result = null;
@@ -154,12 +155,12 @@ public final class TreeIoUtils {
 		return result;
 	}
 
-	private static void writeTree(Tree t, XMLStreamWriter w) throws XMLStreamException {
+	private static void writeTree(ITree t, XMLStreamWriter w) throws XMLStreamException {
 		w.writeStartElement("tree");
 		w.writeAttribute("type", Integer.toString(t.getType()));
-		if (!Tree.NO_LABEL.equals(t.getLabel())) w.writeAttribute("label", t.getLabel());
-		if (!Tree.NO_LABEL.equals(t.getTypeLabel())) w.writeAttribute("typeLabel", t.getTypeLabel());
-		if (Tree.NO_VALUE != t.getPos()) {
+		if (!ITree.NO_LABEL.equals(t.getLabel())) w.writeAttribute("label", t.getLabel());
+		if (!ITree.NO_LABEL.equals(t.getTypeLabel())) w.writeAttribute("typeLabel", t.getTypeLabel());
+		if (ITree.NO_VALUE != t.getPos()) {
 			w.writeAttribute("pos", Integer.toString(t.getPos()));
 			w.writeAttribute("length", Integer.toString(t.getLength()));
 		}
@@ -169,17 +170,17 @@ public final class TreeIoUtils {
 			w.writeAttribute("line_after", Integer.toString(t.getLcPosEnd()[0]));
 			w.writeAttribute("col_after", Integer.toString(t.getLcPosEnd()[1]));
 		}
-		for (Tree c: t.getChildren())
+		for (ITree c: t.getChildren())
 			writeTree(c, w);
 		w.writeEndElement();
 	}
 	
-	private static void writeTree(Tree t, MappingStore m, boolean isSrc, XMLStreamWriter w) throws XMLStreamException {
+	private static void writeTree(ITree t, MappingStore m, boolean isSrc, XMLStreamWriter w) throws XMLStreamException {
 		w.writeStartElement("tree");
 		w.writeAttribute("type", Integer.toString(t.getType()));
-		if (!Tree.NO_LABEL.equals(t.getLabel())) w.writeAttribute("label", t.getLabel());
-		if (!Tree.NO_LABEL.equals(t.getTypeLabel())) w.writeAttribute("typeLabel", t.getTypeLabel());
-		if (Tree.NO_VALUE != t.getPos()) {
+		if (!ITree.NO_LABEL.equals(t.getLabel())) w.writeAttribute("label", t.getLabel());
+		if (!ITree.NO_LABEL.equals(t.getTypeLabel())) w.writeAttribute("typeLabel", t.getTypeLabel());
+		if (ITree.NO_VALUE != t.getPos()) {
 			w.writeAttribute("pos", Integer.toString(t.getPos()));
 			w.writeAttribute("length", Integer.toString(t.getLength()));
 		}
@@ -189,12 +190,12 @@ public final class TreeIoUtils {
 			w.writeAttribute("line_after", Integer.toString(t.getLcPosEnd()[0]));
 			w.writeAttribute("col_after", Integer.toString(t.getLcPosEnd()[1]));
 		}
-		Tree o = null;
+		ITree o = null;
 		if (isSrc && m.hasSrc(t)) o = m.getDst(t);
 		if (!isSrc && m.hasDst(t)) o = m.getSrc(t);
 		
 		if (o != null) {
-			if (Tree.NO_VALUE != o.getPos()) {
+			if (ITree.NO_VALUE != o.getPos()) {
 				w.writeAttribute("other_pos", Integer.toString(o.getPos()));
 				w.writeAttribute("other_length", Integer.toString(o.getLength()));
 			}
@@ -206,12 +207,12 @@ public final class TreeIoUtils {
 			}
 		}
 		
-		for (Tree c: t.getChildren())
+		for (ITree c: t.getChildren())
 			writeTree(c, m, isSrc, w);
 		w.writeEndElement();
 	}
 	
-	public static void toCompactXml(Tree t, String file) {
+	public static void toCompactXml(ITree t, String file) {
 		try {
 			FileWriter f = new FileWriter(file);
 			f.append(toCompactXml(t));
@@ -221,7 +222,7 @@ public final class TreeIoUtils {
 		}
 	}
 
-	public static String toCompactXml(Tree t) {
+	public static String toCompactXml(ITree t) {
 		XMLOutputFactory f = XMLOutputFactory.newInstance();
 		StringWriter s = new StringWriter();
 		String result = null;
@@ -239,10 +240,10 @@ public final class TreeIoUtils {
 		return result;
 	}
 	
-	private static void writeCompactTree(Tree t, XMLStreamWriter w) throws XMLStreamException {
+	private static void writeCompactTree(ITree t, XMLStreamWriter w) throws XMLStreamException {
 		w.writeStartElement(t.getTypeLabel());
 		if (!"".equals(t.getLabel())) w.writeAttribute("label", t.getLabel());
-		for (Tree c: t.getChildren())
+		for (ITree c: t.getChildren())
 			writeCompactTree(c, w);
 		w.writeEndElement();
 	}
@@ -251,7 +252,7 @@ public final class TreeIoUtils {
 		StringBuffer b = new StringBuffer();
 		TreeUtils.preOrderNumbering(root);
 		b.append("digraph G {\n");
-		for (Tree t : root.getTrees()) {
+		for (ITree t : root.getTrees()) {
 			String label = t.toString();
 			if (label.contains("\"") || label.contains("\\s"))
 				label = label.replaceAll("\"", "").replaceAll("\\s", "").replaceAll("\\\\", "");
@@ -263,7 +264,7 @@ public final class TreeIoUtils {
 			b.append("];\n");
 		}
 
-		for (Tree t : root.getTrees())
+		for (ITree t : root.getTrees())
 			if (t.getParent() != null)
 				b.append(t.getParent().getId() + " -> " + t.getId() + ";\n");
 		b.append("}");
@@ -280,7 +281,7 @@ public final class TreeIoUtils {
 		}
 	}
 
-	public static void toJSON(Tree t, String file) {
+	public static void toJSON(ITree t, String file) {
 		try {
 			FileWriter f = new FileWriter(file);
 			f.append(toJSON(t));
@@ -290,7 +291,7 @@ public final class TreeIoUtils {
 		}
 	}
 
-	public static String toJSON(Tree t) {
+	public static String toJSON(ITree t) {
 		StringWriter s = new StringWriter();
 		String result = null;
 		try {
@@ -307,15 +308,15 @@ public final class TreeIoUtils {
 		return result;
 	}
 
-	private static void writeJSONTree(Tree t, JsonWriter w) throws IOException {
+	private static void writeJSONTree(ITree t, JsonWriter w) throws IOException {
 		w.beginObject();
 		
 		w.name("type").value(Integer.toString(t.getType()));
 
-		if (!Tree.NO_LABEL.equals(t.getLabel())) w.name("label").value(t.getLabel());
-		if (!Tree.NO_LABEL.equals(t.getTypeLabel())) w.name("typeLabel").value(t.getTypeLabel());
+		if (!ITree.NO_LABEL.equals(t.getLabel())) w.name("label").value(t.getLabel());
+		if (!ITree.NO_LABEL.equals(t.getTypeLabel())) w.name("typeLabel").value(t.getTypeLabel());
 		
-		if (Tree.NO_VALUE != t.getPos()) {
+		if (ITree.NO_VALUE != t.getPos()) {
 			w.name("pos").value(Integer.toString(t.getPos()));
 			w.name("length").value(Integer.toString(t.getLength()));
 		}
@@ -329,7 +330,7 @@ public final class TreeIoUtils {
 		
 		w.name("children");
 		w.beginArray();
-		for (Tree c: t.getChildren())
+		for (ITree c: t.getChildren())
 			writeJSONTree(c, w);
 		w.endArray();
 		
@@ -338,7 +339,7 @@ public final class TreeIoUtils {
 
 	static String labelForAttribute(StartElement s, QName attrName) {
 		Attribute attr = s.getAttributeByName(attrName);
-		return attr == null ? Tree.NO_LABEL : attr.getValue();
+		return attr == null ? ITree.NO_LABEL : attr.getValue();
 	}
 
 	static int numberForAttribute(StartElement s, QName attrName) {

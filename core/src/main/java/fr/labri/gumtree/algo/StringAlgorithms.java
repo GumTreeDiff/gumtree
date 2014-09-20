@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public final class StringAlgorithms {
 
@@ -83,7 +83,7 @@ public final class StringAlgorithms {
             return S1.substring(Start, (Start + Max));
     }
 
-    public static List<int[]> lcss(List<Tree> s0, List<Tree> s1) {
+    public static List<int[]> lcss(List<ITree> s0, List<ITree> s1) {
             int[][] lengths = new int[s0.size() + 1][s1.size() + 1];
             for (int i = 0; i < s0.size(); i++)
                     for (int j = 0; j < s1.size(); j++)

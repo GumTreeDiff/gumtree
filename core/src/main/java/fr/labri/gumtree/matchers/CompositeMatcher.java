@@ -2,13 +2,13 @@ package fr.labri.gumtree.matchers;
 
 import java.util.logging.Level;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class CompositeMatcher extends Matcher {
 
 	protected MatcherFactory[] factories;
 
-	public CompositeMatcher(Tree src, Tree dst, MatcherFactory[] factories) {
+	public CompositeMatcher(ITree src, ITree dst, MatcherFactory[] factories) {
 		super(src, dst);
 		this.factories = factories;
 	}

@@ -11,15 +11,16 @@ import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 
 public class RootAndLeavesClassifier extends TreeClassifier {
 	
-	public RootAndLeavesClassifier(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> actions) {
+	public RootAndLeavesClassifier(ITree src, ITree dst, Set<Mapping> rawMappings, List<Action> actions) {
 		super(src, dst, rawMappings, actions);
 	}
 
-	public RootAndLeavesClassifier(Tree src, Tree dst, Matcher m) {
+	public RootAndLeavesClassifier(ITree src, Tree dst, Matcher m) {
 		super(src, dst, m);
 	}
 
@@ -39,21 +40,21 @@ public class RootAndLeavesClassifier extends TreeClassifier {
 			}	
 		}
 
-		Set<Tree> fDstAddTrees = new HashSet<>();
-		for (Tree t: dstAddTrees) 
+		Set<ITree> fDstAddTrees = new HashSet<>();
+		for (ITree t: dstAddTrees) 
 			if (!dstAddTrees.contains(t.getParent()))
 				fDstAddTrees.add(t);
 		dstAddTrees = fDstAddTrees;
 		
-		Set<Tree> fSrcDelTrees = new HashSet<>();
-		for (Tree t: srcDelTrees) {
+		Set<ITree> fSrcDelTrees = new HashSet<>();
+		for (ITree t: srcDelTrees) {
 			if (!srcDelTrees.contains(t.getParent()))
 				fSrcDelTrees.add(t);
 		}
 		srcDelTrees = fSrcDelTrees;
 		
-		Set<Tree> fSrcMvTrees = new HashSet<>();
-		for (Tree t: srcDelTrees) {
+		Set<ITree> fSrcMvTrees = new HashSet<>(); // FIXME check why it's unused
+		for (ITree t: srcDelTrees) {
 			if (!srcDelTrees.contains(t.getParent()))
 				fSrcDelTrees.add(t);
 		}

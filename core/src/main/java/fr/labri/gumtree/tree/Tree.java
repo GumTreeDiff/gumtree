@@ -6,12 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class Tree {
+public class Tree implements ITree {
 	
-	// Begin constants
-	public static final int NO_ID = Integer.MIN_VALUE;
-	public static final String NO_LABEL = "";
-	public static final int NO_VALUE = -1;
 	private static final String OPEN_SYMBOL = "[(";
 	private static final String CLOSE_SYMBOL = ")]";
 	private static final String SEPARATE_SYMBOL = "@@";	
@@ -27,8 +23,8 @@ public class Tree {
 	private String label;
 	
 	// Begin hierarchy of the tree
-	private Tree parent;
-	private List<Tree> children;
+	private ITree parent;
+	private List<ITree> children;
 	// End hierarchy of the tree
 	
 	// Begin metrics on the tree
@@ -67,7 +63,7 @@ public class Tree {
 		this.type = type;
 		registerTypeLabel(type, typeLabel == null ? NO_LABEL : typeLabel);
 		this.label = (label == null) ? NO_LABEL : label.intern();
-		this.children = new ArrayList<Tree>();
+		this.children = new ArrayList<>();
 		this.id = NO_ID;
 		this.depth = NO_VALUE;
 		this.digest = NO_VALUE;
@@ -79,28 +75,19 @@ public class Tree {
 		this.matched = false;
 	}
 
-	/**
-	 * Add the given tree as a child, and update its parent.
-	 * @param t
-	 */
-	public void addChild(Tree t) {
+	@Override
+	public void addChild(ITree t) {
 		children.add(t);
 		t.setParent(this);
 	}
 
-	/**
-	 * Indicate whether or not all the descendants of the trees are already mapped. 
-	 * @return
-	 */
+	@Override
 	public boolean areDescendantsMatched() {
-		for (Tree c: getDescendants()) if (!c.isMatched()) return false;
+		for (ITree c: getDescendants()) if (!c.isMatched()) return false;
 		return true;
 	}
 
-	/**
-	 * Make a shallow copy of the tree.
-	 * @return a shallow copy of the tree, including type, id, label, typeLabel, position and length. 
-	 */
+	@Override
 	public Tree copy() {
 		Tree t = new Tree(this.getType(), this.getLabel(), this.getTypeLabel());
 		t.setId(this.getId());
@@ -115,13 +102,11 @@ public class Tree {
 		return t;
 	}
 
-	/**
-	 * Make a deep copy of the tree.
-	 * @return a deep copy of the tree.
-	 */
+	@Override
 	public Tree deepCopy() {
 		Tree copy = copy();
-		for (Tree child: getChildren()) copy.addChild(child.deepCopy());
+		for (ITree child: getChildren())
+			copy.addChild(child.deepCopy());
 		return copy;
 	}
 
@@ -135,87 +120,90 @@ public class Tree {
 		}
 	}
 
-	/**
-	 * Returns the position of the given child in the tree. 
-	 * @param child
-	 * @return the position of the child, or -1 if the given child is not in the children list.
-	 */
-	public int getChildPosition(Tree child) {
+	@Override
+	public int getChildPosition(ITree child) {
 		return children.indexOf(child);
 	}
 
-	public List<Tree> getChildren() {
+	@Override
+	public List<ITree> getChildren() {
 		return children;
 	}
 
+	@Override
 	public String getChildrenLabels() {
 		StringBuffer b = new StringBuffer();
-		for (Tree child: getChildren()) if (!"".equals(child.getLabel())) b.append(child.getLabel() + " ");
+		for (ITree child: getChildren()) if (!"".equals(child.getLabel())) b.append(child.getLabel() + " ");
 		return b.toString().trim();
 	}
 
+	@Override
 	public int getDepth() {
 		return depth;
 	}
 
-	/**
-	 * Returns all the descendants of the tree, using a pre-order.
-	 * @return
-	 */
-	public List<Tree> getDescendants() {
-		List<Tree> trees = TreeUtils.preOrder(this); 
+	@Override
+	public List<ITree> getDescendants() {
+		List<ITree> trees = TreeUtils.preOrder(this); 
 		trees.remove(0);
 		return trees;
 	}
 
+	@Override
 	public int getDigest() {
 		return digest;
 	}
 
+	@Override
 	public int getEndPos() {
 		return pos + length;
 	}
 
+	@Override
 	public int getHeight() {
 		return height;
 	}
 	
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public String getLabel() {
 		return label;
 	}
 
+	@Override
 	public int[] getLcPosEnd() {
 		return lcPosEnd;
 	}
 
+	@Override
 	public int[] getLcPosStart() {
 		return lcPosStart;
 	}
 
-	public List<Tree> getLeaves() {
-		List<Tree> leafs = new ArrayList<Tree>();
-		for (Tree t: this.getTrees()) if (t.isLeaf()) leafs.add(t);
+	@Override
+	public List<ITree> getLeaves() {
+		List<ITree> leafs = new ArrayList<>();
+		for (ITree t: this.getTrees()) if (t.isLeaf()) leafs.add(t);
 		return leafs;
 	}
 
+	@Override
 	public int getLength() {
 		return length;
 	}
 
-	public Tree getParent() {
+	@Override
+	public ITree getParent() {
 		return parent;
 	}
 
-	/**
-	 * Returns all the parents of the tree.
-	 * @return
-	 */
-	public List<Tree> getParents() {
-		List<Tree> parents = new ArrayList<Tree>();
+	@Override
+	public List<ITree> getParents() {
+		List<ITree> parents = new ArrayList<>();
 		if (this.getParent() == null) return parents;
 		else {
 			parents.add(getParent());
@@ -224,36 +212,39 @@ public class Tree {
 		return parents;
 	}
 
+	@Override
 	public int getPos() {
 		return pos;
 	}
 
+	@Override
 	public String getShortLabel() {
 		return label.substring(0, Math.min(50, label.length()));
 	}
 
+	@Override
 	public int getSize() {
 		return size;
 	}
 
+	@Override
 	public Object getTmpData() {
 		return tmpData;
 	}
 
-	/**
-	 * Return all the nodes contains in the tree, using a pre-order.
-	 * @return
-	 */
-	public List<Tree> getTrees() {
+	@Override
+	public List<ITree> getTrees() {
 		return TreeUtils.preOrder(this);
 	}
 
+	@Override
 	public int getType() {
 		return type;
 	}
 	
+	@Override
 	public String getTypeLabel() {
-		return typeLabels.get(type);
+		return getFromTypeLabels(type);
 	}
 
 	@Override
@@ -262,18 +253,14 @@ public class Tree {
 		else return super.hashCode();
 	}
 
-	private String indent(Tree t) {
+	private String indent(ITree t) {
 		StringBuffer b = new StringBuffer();
 		for (int i = 0; i < t.getDepth(); i++) b.append("\t");
 		return b.toString();
 	}
 
-	/**
-	 * Indicates if the two trees are isomorphics.
-	 * @param tree
-	 * @return
-	 */
-	public boolean isClone(Tree tree) {
+	@Override
+	public boolean isClone(ITree tree) {
 		if (this.getDigest() != tree.getDigest()) return false;
 		else {
 			boolean res = (this.toDigestTreeString().equals(tree.toDigestTreeString())); 
@@ -281,76 +268,67 @@ public class Tree {
 		}
 	}
 
-	/**
-	 * Indicate if the trees have the same type.
-	 * @param t
-	 * @return
-	 */
-	public boolean isCompatible(Tree t) {
+	@Override
+	public boolean isCompatible(ITree t) {
 		return this.getType() == t.getType();
 	}
 
-	/**
-	 * Indicate whether or not the tree has children.
-	 * @return
-	 */
+	@Override
 	public boolean isLeaf() {
 		return getChildren().size() == 0;
 	}
 
-	/**
-	 * Indicate whether or not the tree is mappable to the given tree.
-	 * @param t 
-	 * @return true if both trees are not mapped and if the trees have the same type, false either.
-	 */
-	public boolean isMatchable(Tree t) {
+	@Override
+	public boolean isMatchable(ITree t) {
 		return this.isCompatible(t) && !(this.isMatched()  || t.isMatched());
 	}
 
+	@Override
 	public boolean isMatched() {
 		return matched;
 	}
 
+	@Override
 	public boolean isRoot() {
 		return parent == null;
 	}
 
-	/**
-	 * Indicate whether or not the tree is similar to the given tree.
-	 * @param t
-	 * @return true if they are compatible and have same label, false either
-	 */
-	public boolean isSimilar(Tree t) {
+	@Override
+	public boolean isSimilar(ITree t) {
 		if (!this.isCompatible(t)) return false;
 		else if (!this.getLabel().equals(t.getLabel())) return false;
 		return true;
 	}
 
-	public Iterable<Tree> postOrder() {
-		return new Iterable<Tree>() {
+	@Override
+	public Iterable<ITree> postOrder() {
+		return new Iterable<ITree>() {
 			@Override
-			public Iterator<Tree> iterator() {
+			public Iterator<ITree> iterator() {
 				return TreeUtils.postOrderIterator(Tree.this);
 			}
 		};
 	}
 	
-	public Iterable<Tree> breadthFirst() {
-		return new Iterable<Tree>() {
+	@Override
+	public Iterable<ITree> breadthFirst() {
+		return new Iterable<ITree>() {
 			@Override
-			public Iterator<Tree> iterator() {
+			public Iterator<ITree> iterator() {
 				return TreeUtils.breadthFirstIterator(Tree.this);
 			}
 		};
 	}
 
+	@Override
 	public int positionInParent() {
 		if (parent == null)
 			return -1;
 		else
-			return parent.children.indexOf(this);
+			return parent.getChildren().indexOf(this);
 	}
 
+	@Override
 	public void refresh() {
 		TreeUtils.computeSize(this);
 		TreeUtils.computeDepth(this);
@@ -358,98 +336,119 @@ public class Tree {
 		TreeUtils.computeDigest(this);
 	}
 
-	public void setChildren(List<Tree> children) {
+	@Override
+	public void setChildren(List<ITree> children) {
 		this.children = children;
-		for (Tree c: children) c.setParent(this);
+		for (ITree c: children)
+			c.setParent(this);
 	}
 
+	@Override
 	public void setDepth(int depth) {
 		this.depth = depth;
 	}
 
+	@Override
 	public void setDigest(int digest) {
 		this.digest = digest;
 	}
 
+	@Override
 	public void setHeight(int height) {
 		this.height = height;
 	}
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	@Override
 	public void setLabel(String label) {
 		this.label = label;
 	}
 
+	@Override
 	public void setLcPosEnd(int[] lcPosEnd) {
 		this.lcPosEnd = lcPosEnd;
 	}
 
+	@Override
 	public void setLcPosStart(int[] lcPosStart) {
 		this.lcPosStart = lcPosStart;
 	}
 
+	@Override
 	public void setLength(int length) {
 		this.length = length;
 	}
 
+	@Override
 	public void setMatched(boolean matched) {
 		this.matched = matched;
 	}
 
-	public void setParent(Tree parent) {
+	@Override
+	public void setParent(ITree parent) {
 		this.parent = parent;
 	}
 
-	public void setParentAndUpdateChildren(Tree parent) {
+	@Override
+	public void setParentAndUpdateChildren(ITree parent) {
 		if (this.parent != null) this.parent.getChildren().remove(this);
 		this.parent = parent;
 		if (this.parent != null) parent.getChildren().add(this);
 	}
 
+	@Override
 	public void setPos(int pos) {
 		this.pos = pos;
 	}
 
+	@Override
 	public void setSize(int size) {
 		this.size = size;
 	}
 
+	@Override
 	public void setTmpData(Object tmpData) {
 		this.tmpData = tmpData;
 	}
 
+	@Override
 	public void setType(int type) {
 		this.type = type;
 	}
 
+	@Override
 	public String toCompleteString() {
 		return label + "@" + getTypeLabel() + ":" + type + " [id=" + id + ", depth:" + depth + ", maxdepth=" + height + ", digest=" + digest + ", pos=" + pos + ", length=" + length + "]";
 	}
 
+	@Override
 	public String toCompleteTreeString() {
 		if (isLeaf()) return toString();
 		else {
 			StringBuffer b = new StringBuffer();
 			b.append(toString() + "(");
-			for (Tree c : getChildren())
+			for (ITree c : getChildren())
 				b.append(c.toCompleteTreeString() + " ");
 			b.append(")");
 			return b.toString();
 		}	
 	}
 
+	@Override
 	public String toDigestString() {
 		return getLabel() + SEPARATE_SYMBOL + getType();
 	}
 
+	@Override
 	public String toDigestTreeString() {
 		StringBuffer b = new StringBuffer();
 		b.append(OPEN_SYMBOL);
 		b.append(this.toDigestString());
-		for (Tree c: this.getChildren()) b.append(c.toDigestTreeString());
+		for (ITree c: this.getChildren()) b.append(c.toDigestTreeString());
 		b.append(CLOSE_SYMBOL);
 		return b.toString();
 	}
@@ -465,6 +464,7 @@ public class Tree {
 
 	}
 
+	@Override
 	public String toTreeString() {
 		/*if (isLeaf()) return this.toString();
 		else {
@@ -480,11 +480,19 @@ public class Tree {
 			return b.toString();
 		}*/
 		StringBuffer b = new StringBuffer();
-		for (Tree t : TreeUtils.preOrder(this)) b.append(indent(t) + t.toString() + "\n");
+		for (ITree t : TreeUtils.preOrder(this)) b.append(indent(t) + t.toString() + "\n");
 		return b.toString();
 	}
 
 	static Map<Integer, String> typeLabels = new HashMap<>();
+	
+	static private String getFromTypeLabels(int type) {
+		String tl = typeLabels.get(type);
+		if (tl == null)
+			tl = NO_LABEL;
+		return tl;
+	}
+	
 	static private void registerTypeLabel(int type, String name) {
 		if (name.equals(NO_LABEL))
 			return;

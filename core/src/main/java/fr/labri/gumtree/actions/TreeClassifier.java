@@ -8,37 +8,37 @@ import fr.labri.gumtree.actions.model.Action;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public abstract class TreeClassifier {
 	
-	protected Set<Tree> srcUpdTrees;
+	protected Set<ITree> srcUpdTrees;
 
-	protected Set<Tree> dstUpdTrees;
+	protected Set<ITree> dstUpdTrees;
 
-	protected Set<Tree> srcMvTrees;
+	protected Set<ITree> srcMvTrees;
 
-	protected Set<Tree> dstMvTrees;
+	protected Set<ITree> dstMvTrees;
 
-	protected Set<Tree> srcDelTrees;
+	protected Set<ITree> srcDelTrees;
 
-	protected Set<Tree> dstAddTrees;
+	protected Set<ITree> dstAddTrees;
 	
-	protected Tree src;
+	protected ITree src;
 	
-	protected Tree dst;
+	protected ITree dst;
 	
 	protected MappingStore mappings;
 	
 	protected List<Action> actions;
 	
-	public TreeClassifier(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> actions) {
+	public TreeClassifier(ITree src, ITree dst, Set<Mapping> rawMappings, List<Action> actions) {
 		this(src, dst, rawMappings);
 		this.actions = actions;
 		classify();
 	}
 	
-	public TreeClassifier(Tree src, Tree dst, Matcher m) {
+	public TreeClassifier(ITree src, ITree dst, Matcher m) {
 		this(src, dst, m.getMappingSet());
 		ActionGenerator g = new ActionGenerator(src, dst, m.getMappings());
 		g.generate();
@@ -46,7 +46,7 @@ public abstract class TreeClassifier {
 		classify();
 	}
 	
-	private TreeClassifier(Tree src, Tree dst, Set<Mapping> rawMappings) {
+	private TreeClassifier(ITree src, ITree dst, Set<Mapping> rawMappings) {
 		this.src = src;
 		this.dst = dst;
 		this.mappings = new MappingStore(rawMappings);
@@ -60,27 +60,27 @@ public abstract class TreeClassifier {
 	
 	public abstract void classify();
 
-	public Set<Tree> getSrcUpdTrees() {
+	public Set<ITree> getSrcUpdTrees() {
 		return srcUpdTrees;
 	}
 
-	public Set<Tree> getDstUpdTrees() {
+	public Set<ITree> getDstUpdTrees() {
 		return dstUpdTrees;
 	}
 
-	public Set<Tree> getSrcMvTrees() {
+	public Set<ITree> getSrcMvTrees() {
 		return srcMvTrees;
 	}
 
-	public Set<Tree> getDstMvTrees() {
+	public Set<ITree> getDstMvTrees() {
 		return dstMvTrees;
 	}
 
-	public Set<Tree> getSrcDelTrees() {
+	public Set<ITree> getSrcDelTrees() {
 		return srcDelTrees;
 	}
 
-	public Set<Tree> getDstAddTrees() {
+	public Set<ITree> getDstAddTrees() {
 		return dstAddTrees;
 	}
 
