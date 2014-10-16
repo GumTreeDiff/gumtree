@@ -41,18 +41,10 @@ public abstract class Matcher {
 		return src;
 	}
 
-	public void setSrc(ITree src) {
-		this.src = src;
-	}
-
 	public ITree getDst() {
 		return dst;
 	}
 
-	public void setDst(ITree dst) {
-		this.dst = dst;
-	}
-	
 	protected void addMapping(ITree src, ITree dst) {
 		src.setMatched(true);
 		dst.setMatched(true);

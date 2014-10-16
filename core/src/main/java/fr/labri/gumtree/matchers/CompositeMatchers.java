@@ -17,7 +17,6 @@ public class CompositeMatchers {
 					MatcherFactories.getFactory(ChangeDistillerLeavesMatcher.ChangeDistillerLeavesMatcherFactory.class),
 					MatcherFactories.getFactory(ChangeDistillerBottumUpMatcher.ChangeDistillerBottomUpMatcherFactory.class)});
 		}
-
 	}
 	
 	public static class GumTreeMatcherFactory implements MatcherFactory {
@@ -28,7 +27,6 @@ public class CompositeMatchers {
 					MatcherFactories.getFactory(GreedySubtreeMatcher.GreedySubtreeMatcherFactory.class),
 					MatcherFactories.getFactory(CompleteBottomUpMatcher.CompleteBottumUpMatcherFactory.class)});
 		}
-
 	}
 	
 	public static class XyMatcherFactory implements MatcherFactory {
@@ -39,7 +37,6 @@ public class CompositeMatchers {
 					MatcherFactories.getFactory(GreedySubtreeMatcher.GreedySubtreeMatcherFactory.class),
 					MatcherFactories.getFactory(XyBottomUpMatcher.XyBottomUpMatcherFactory.class)});
 		}
-
 	}
 	
 }

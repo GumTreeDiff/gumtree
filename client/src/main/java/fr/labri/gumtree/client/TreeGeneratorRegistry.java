@@ -11,7 +11,7 @@ import fr.labri.gumtree.gen.jdt.cd.CdJdtTreeGenerator;
 import fr.labri.gumtree.gen.js.RhinoTreeGenerator;
 import fr.labri.gumtree.gen.xml.XMLTreeGenerator;
 import fr.labri.gumtree.io.TreeGenerator;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class TreeGeneratorRegistry {
 	
@@ -49,12 +49,12 @@ public class TreeGeneratorRegistry {
 		else return null;
 	}
 	
-	public Tree getTree(String file) throws IOException {
+	public TreeContext getTree(String file) throws IOException {
 		TreeGenerator p = getGenerator(file, null);
 		return p.fromFile(file);
 	}
 	
-	public Tree getTree(String file, String[] generators) throws IOException {
+	public TreeContext getTree(String file, String[] generators) throws IOException {
 		TreeGenerator p = getGenerator(file, generators);
 		return p.fromFile(file);
 	}

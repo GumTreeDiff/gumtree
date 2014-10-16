@@ -12,24 +12,30 @@ import org.mozilla.javascript.ast.NumberLiteral;
 import org.mozilla.javascript.ast.StringLiteral;
 
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class RhinoTreeVisitor implements NodeVisitor {
 	
-	private Tree tree;
-	
-	private Map<AstNode, Tree> trees;
+	private Map<AstNode, ITree> trees;
+	private TreeContext context;
 	
 	public RhinoTreeVisitor(AstRoot root) {
 		trees = new HashMap<>();
-		tree = buildTree(root);
+		context = new TreeContext();
+	}
+	
+	public TreeContext getTree(AstNode root) {
+		ITree tree = buildTree(root);
+		context.setRoot(tree);
+		visit(root);
+		return context;
 	}
 	
 	public boolean visit(AstNode node) {
 		if (node instanceof AstRoot)
 			return true;
 		else {
-			Tree t = buildTree(node);
+			ITree t = buildTree(node);
 			ITree p = trees.get(node.getParent());
 			p.addChild(t);
 			
@@ -48,12 +54,8 @@ public class RhinoTreeVisitor implements NodeVisitor {
 		}
 	}
 	
-	public Tree getTree() {
-		return tree;
-	}
-	
-	private Tree buildTree(AstNode node)  {
-		Tree t = new Tree(node.getType(), ITree.NO_LABEL, Token.typeToName(node.getType()));
+	private ITree buildTree(AstNode node)  {
+		ITree t = context.createTree(node.getType(), ITree.NO_LABEL, Token.typeToName(node.getType()));
 		t.setPos(node.getAbsolutePosition());
 		t.setLength(node.getLength());
 		trees.put(node, t);

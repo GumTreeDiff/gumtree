@@ -10,15 +10,15 @@ import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class RootsClassifier extends TreeClassifier {
 
-	public RootsClassifier(ITree src, ITree dst, Set<Mapping> rawMappings, List<Action> script) {
+	public RootsClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> script) {
 		super(src, dst, rawMappings, script);	
 	}
 	
-	public RootsClassifier(ITree src, ITree dst, Matcher m) {
+	public RootsClassifier(TreeContext src, TreeContext dst, Matcher m) {
 		super(src, dst, m);
 	}
 	

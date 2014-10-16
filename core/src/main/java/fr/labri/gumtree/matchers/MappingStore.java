@@ -11,23 +11,16 @@ import fr.labri.gumtree.tree.ITree;
 public class MappingStore implements Iterable<Mapping> {
 	
 	private Map<ITree, ITree> srcs;
-	
 	private Map<ITree, ITree> dsts;
 	
 	public MappingStore(Set<Mapping> mappings) {
-		srcs = new  HashMap<>();
-		dsts = new HashMap<>();
+		this();
 		for (Mapping m: mappings) link(m.getFirst(), m.getSecond());
 	}
 	
 	public MappingStore() {
 		srcs = new  HashMap<>();
 		dsts = new HashMap<>();
-	}
-	
-	public MappingStore(int size) {
-		srcs = new  HashMap<>(size);
-		dsts = new HashMap<>(size);
 	}
 	
 	public Set<Mapping> asSet() {

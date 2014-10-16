@@ -9,6 +9,7 @@ import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public abstract class TreeClassifier {
 	
@@ -24,29 +25,29 @@ public abstract class TreeClassifier {
 
 	protected Set<ITree> dstAddTrees;
 	
-	protected ITree src;
+	protected TreeContext src;
 	
-	protected ITree dst;
+	protected TreeContext dst;
 	
 	protected MappingStore mappings;
 	
 	protected List<Action> actions;
 	
-	public TreeClassifier(ITree src, ITree dst, Set<Mapping> rawMappings, List<Action> actions) {
+	public TreeClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> actions) {
 		this(src, dst, rawMappings);
 		this.actions = actions;
 		classify();
 	}
 	
-	public TreeClassifier(ITree src, ITree dst, Matcher m) {
+	public TreeClassifier(TreeContext src, TreeContext dst, Matcher m) {
 		this(src, dst, m.getMappingSet());
-		ActionGenerator g = new ActionGenerator(src, dst, m.getMappings());
+		ActionGenerator g = new ActionGenerator(src.getRoot(), dst.getRoot(), m.getMappings());
 		g.generate();
 		this.actions = g.getActions();
 		classify();
 	}
 	
-	private TreeClassifier(ITree src, ITree dst, Set<Mapping> rawMappings) {
+	private TreeClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings) {
 		this.src = src;
 		this.dst = dst;
 		this.mappings = new MappingStore(rawMappings);

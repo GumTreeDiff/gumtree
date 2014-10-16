@@ -13,8 +13,8 @@ import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.MappingStore;
+import fr.labri.gumtree.tree.AbstractTree;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -51,12 +51,15 @@ public class ActionGenerator {
 		this.origDst = dst;
 		
 		origSrcTrees = new TIntObjectHashMap<>();
-		for (ITree t: origSrc.getTrees()) origSrcTrees.put(t.getId(), t);
+		for (ITree t: origSrc.getTrees())
+			origSrcTrees.put(t.getId(), t);
 		cpySrcTrees = new TIntObjectHashMap<>();
-		for (ITree t: newSrc.getTrees()) cpySrcTrees.put(t.getId(), t);
+		for (ITree t: newSrc.getTrees())
+			cpySrcTrees.put(t.getId(), t);
 		
 		origMappings = new MappingStore();
-		for (Mapping m: mappings) this.origMappings.link(cpySrcTrees.get(m.getFirst().getId()), m.getSecond());
+		for (Mapping m: mappings)
+			this.origMappings.link(cpySrcTrees.get(m.getFirst().getId()), m.getSecond());
 		this.newMappings = origMappings.copy();
 	}
 	
@@ -65,12 +68,8 @@ public class ActionGenerator {
 	}
 	
 	public void generate() {
-		Tree vsrc = new Tree(-1, "");
-		Tree vdst = new Tree(-1, "");
-		vsrc.setId(-1);
-		vdst.setId(-1);
-		vsrc.addChild(newSrc);
-		vdst.addChild(origDst);
+		ITree vsrc = new AbstractTree.FakeTree(newSrc);
+		ITree vdst = new AbstractTree.FakeTree(origDst);
 		
 		actions = new ArrayList<>();
 		dstInOrder = new HashSet<>();
@@ -88,11 +87,8 @@ public class ActionGenerator {
 			if (!newMappings.hasDst(x)) {
 				int k = findPos(x);
 				// Insertion case : insert new node.
-				int wId = newId();
-				w = new Tree(x.getType(), x.getLabel(), x.getTypeLabel());
-				w.setPos(x.getPos());
-				w.setLength(x.getLength());
-				w.setId(wId);
+				w = new AbstractTree.FakeTree();
+				w.setId(newId());
 				// In order to use the real nodes from the second tree, we
 				// furnish x instead of w and fake that x has the newly
 				// generated ID.
@@ -101,18 +97,21 @@ public class ActionGenerator {
 				//System.out.println(ins);
 				origSrcTrees.put(w.getId(), x);
 				newMappings.link(w, x);
+//				z = z.asProxy();
 				z.getChildren().add(k, w);
 				w.setParent(z);
 			} else {
 				w = newMappings.getSrc(x);
-				if (!x.equals(origDst)) {
+				if (!x.equals(origDst)) { // TODO => x != origDst // Case of the root
 					ITree v = w.getParent();
 					if (!w.getLabel().equals(x.getLabel())) {
 						actions.add(new Update(origSrcTrees.get(w.getId()), x.getLabel()));
 						w.setLabel(x.getLabel());
 					}
-					if (!newMappings.getSrc(y).equals(v)) {
+					if (!z.equals(v)) {
 						int k = findPos(x);
+//						w = w.asProxy();
+//						z = z.asProxy();
 						Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(z.getId()), k);
 						actions.add(mv);
 						//System.out.println(mv);
@@ -133,7 +132,7 @@ public class ActionGenerator {
 		for (ITree w : newSrc.postOrder()) {
 			if (!newMappings.hasSrc(w)) {
 				actions.add(new Delete(origSrcTrees.get(w.getId())));
-				w.getParent().getChildren().remove(w);
+//				w.getParent().getChildren().remove(w);
 			}
 		}
 		

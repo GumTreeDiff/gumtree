@@ -17,8 +17,7 @@ public class XmlDiff extends DiffClient {
 		Matcher m = getMatcher();
 		ActionGenerator g = new ActionGenerator(m.getSrc(), m.getDst(), m.getMappings());
 		g.generate();
-		String xml = ActionsIoUtils.toXml(g.getActions(), m.getMappings());
+		String xml = ActionsIoUtils.toXml(getSrcTreeContext(), g.getActions(), m.getMappings());
 		System.out.println(xml);
 	}
-
 }

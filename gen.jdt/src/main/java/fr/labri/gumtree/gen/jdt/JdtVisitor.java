@@ -21,7 +21,6 @@ package fr.labri.gumtree.gen.jdt;
 import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.*;
-import org.eclipse.jdt.internal.compiler.ast.BinaryExpression;
 
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
@@ -57,7 +56,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
 		else if (n instanceof PostfixExpression) label = ((PostfixExpression) n).getOperator().toString();
 		else if (n instanceof Assignment) label = ((Assignment) n).getOperator().toString();
 
-		Tree t = new Tree(type, label, n.getClass().getSimpleName());
+		Tree t = new Tree(JdtTreeGenerator.class, type, label, n.getClass().getSimpleName());
 		t.setPos(n.getStartPosition());
 		t.setLength(n.getLength());
 

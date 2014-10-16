@@ -11,7 +11,8 @@ import fr.labri.gumtree.client.ui.xml.AnnotatedXmlDiff;
 import fr.labri.gumtree.client.ui.xml.XmlDiff;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public abstract class DiffClient {
 	
@@ -46,17 +47,36 @@ public abstract class DiffClient {
 		return m;
 	}
 	
-	private Tree getSrcTree() {
+	protected ITree getSrcTree() {
 		return getTree(diffOptions.getSrc());
 	}
 	
-	private Tree getDstTree() {
+	protected ITree getDstTree() {
 		return getTree(diffOptions.getDst());
 	}
 	
-	private Tree getTree(String file) {
+	protected TreeContext getSrcTreeContext() {
+		return getTreeContext(diffOptions.getSrc());
+	}
+	
+	protected TreeContext getDstTreeContext() {
+		return getTreeContext(diffOptions.getDst());
+	}
+	
+	
+	private ITree getTree(String file) {
 		try {
-			Tree t = TreeGeneratorRegistry.getInstance().getTree(file, diffOptions.getGenerators());
+			TreeContext t = TreeGeneratorRegistry.getInstance().getTree(file, diffOptions.getGenerators());
+			return t.getRoot();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private TreeContext getTreeContext(String file) {
+		try {
+			TreeContext t = TreeGeneratorRegistry.getInstance().getTree(file, diffOptions.getGenerators());
 			return t;
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -3,6 +3,7 @@ package fr.labri.gumtree.io;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -16,6 +17,7 @@ import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public final class ActionsIoUtils {
 
@@ -44,41 +46,49 @@ public final class ActionsIoUtils {
 		}
 	}
 
-	public static void toXml(List<Action> actions, MappingStore mappings, String file) {
+	public static void toXml(TreeContext sctx, List<Action> actions, MappingStore mappings, String file) throws IOException {
+		FileWriter f = new FileWriter(file);
 		try {
-			FileWriter f = new FileWriter(file);
-			f.append(toXml(actions, mappings));
-			f.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+			toXml(sctx, f, actions, mappings);
+		} finally {
+			try {
+				f.close();
+			} catch (IOException e) { }
 		}
 	}
 
-	public static String toXml(List<Action> actions, MappingStore mappings) {
-		XMLOutputFactory f = XMLOutputFactory.newInstance();
+	public static String toXml(TreeContext sctx, List<Action> actions, MappingStore mappings) {
 		StringWriter s = new StringWriter();
-		String result = null;
 		try {
-			XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(s));
+			toXml(sctx, s, actions, mappings);
+			return s.toString();
+		} finally {
+			try {
+				s.close();
+			} catch (IOException e) { }
+		}
+	}
+	
+	public static void toXml(TreeContext sctx, Writer writer, List<Action> actions, MappingStore mappings) {
+		XMLOutputFactory f = XMLOutputFactory.newInstance();
+		try {
+			XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(writer));
 			w.writeStartDocument();
 			w.writeStartElement("actions");
-			writeActions(actions, mappings, w);
+			writeActions(sctx, actions, mappings, w);
 			w.writeEndElement();
 			w.writeEndDocument();
 			w.close();
-			result = s.toString();
-			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;
 	}
 
-	private static void writeActions(List<Action> actions, MappingStore mappings, XMLStreamWriter w) throws XMLStreamException {
+	private static void writeActions(TreeContext sctx, List<Action> actions, MappingStore mappings, XMLStreamWriter w) throws XMLStreamException {
 		for (Action a : actions) {
 			w.writeStartElement("action");
 			w.writeAttribute("type", a.getClass().getSimpleName());
-			w.writeAttribute("tree", a.getNode().getTypeLabel());
+			w.writeAttribute("tree", sctx.getTypeLabel(a.getNode()));
 			if (a instanceof Move || a instanceof Update) {
 				ITree src = a.getNode();
 				ITree dst = mappings.getDst(src);

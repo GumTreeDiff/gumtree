@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class MatcherFactories {
 	
@@ -43,15 +43,15 @@ public class MatcherFactories {
 		return factories.get(CompositeMatchers.GumTreeMatcherFactory.class);
 	}
 	
-	public static Matcher newMatcher(Tree src, Tree dst, Class<? extends MatcherFactory> clazz) {
+	public static Matcher newMatcher(ITree src, ITree dst, Class<? extends MatcherFactory> clazz) {
 		return getFactory(clazz).newMatcher(src, dst);
 	}
 	
-	public static Matcher newMatcher(Tree src, Tree dst, String clazz) {
+	public static Matcher newMatcher(ITree src, ITree dst, String clazz) {
 		return getFactory(clazz).newMatcher(src, dst);
 	}
 
-	public static Matcher newMatcher(Tree src, Tree dst) {
+	public static Matcher newMatcher(ITree src, ITree dst) {
 		return getDefaultMatcherFactory().newMatcher(src, dst);
 	}
 

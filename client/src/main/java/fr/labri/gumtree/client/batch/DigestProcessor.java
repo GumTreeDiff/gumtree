@@ -58,7 +58,7 @@ public class DigestProcessor extends AbstractFileProcessor {
 
 	@Override
 	public void process(String file) throws IOException {
-		ITree tree = TreeGeneratorRegistry.getInstance().getTree(file);
+		ITree tree = TreeGeneratorRegistry.getInstance().getTree(file).getRoot();
 		long tic = tic();
 		TreeUtils.computeDigest(tree, new DigestGenerator.StdHashGenerator());
 		stdTime += tic() - tic;

@@ -54,7 +54,7 @@ public abstract class AbstractAntlrTreeGenerator extends TreeGenerator {
 		Tree t = null;
 		
 		String label = ct.getText().equals(names.get(ct.getType())) ? ITree.NO_LABEL : ct.getText();
-		t = new Tree(ct.getType(), label, names.get(ct.getType()));
+		t = new Tree(, ct.getType(), label, names.get(ct.getType()));
 		
 		
 		int[] pos = getPosAndLength(ct);

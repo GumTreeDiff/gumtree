@@ -117,18 +117,12 @@ public final class TreeUtils {
 		return trees;
 	}
 	
-	private static ITree fakeTree(ITree tree) {
-		ITree t = new Tree(-1);
-		t.getChildren().add(tree);
-		return t;
-	}
-	
 	public static Iterator<ITree> breadthFirstIterator(final ITree tree) {
 		return new Iterator<ITree>() {
 			Deque<Iterator<ITree>> fifo = new ArrayDeque<>();
 			
 			{
-				addLasts(fakeTree(tree));
+				addLasts(new AbstractTree.FakeTree(tree));
 			}
 			
 			@Override

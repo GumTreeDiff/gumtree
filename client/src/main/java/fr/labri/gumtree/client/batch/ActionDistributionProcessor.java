@@ -12,7 +12,7 @@ import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class ActionDistributionProcessor extends AbstractFilePairsProcessor {
 	
@@ -34,17 +34,17 @@ public class ActionDistributionProcessor extends AbstractFilePairsProcessor {
 
 	@Override
 	public void processFilePair(String fsrc, String fdst) throws IOException {
-		Tree src = TreeGeneratorRegistry.getInstance().getTree(fsrc);
-		Tree dst = TreeGeneratorRegistry.getInstance().getTree(fdst);
-		Matcher matcher = MatcherFactories.newMatcher(src, dst);
+		TreeContext src = TreeGeneratorRegistry.getInstance().getTree(fsrc);
+		TreeContext dst = TreeGeneratorRegistry.getInstance().getTree(fdst);
+		Matcher matcher = MatcherFactories.newMatcher(src.getRoot(), dst.getRoot());
 		RootsClassifier c = new RootsClassifier(src, dst, matcher);
 		c.classify();
 		MappingStore mappings = matcher.getMappings();
-		for (ITree t: c.getDstUpdTrees()) inc("UPD " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
-		for (ITree t: c.getSrcDelTrees()) if (!c.getSrcDelTrees().contains(t.getParent())) inc("DEL " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
-		for (ITree t: c.getDstAddTrees()) if (!c.getDstAddTrees().contains(t.getParent())) inc("ADD " + t.getTypeLabel() + " IN " + t.getParent().getTypeLabel());
-		for (ITree t: c.getSrcMvTrees()) if (!c.getSrcMvTrees().contains(t.getParent())) inc("MOV " + t.getTypeLabel()
-				+ " FROM " + t.getParent().getTypeLabel() + " TO " + mappings.getDst(t).getParent().getTypeLabel());
+		for (ITree t: c.getDstUpdTrees()) inc("UPD " + dst.getTypeLabel(t.getType()) + " IN " + dst.getTypeLabel(t.getParent().getType()));
+		for (ITree t: c.getSrcDelTrees()) if (!c.getSrcDelTrees().contains(t.getParent())) inc("DEL " + src.getTypeLabel(t.getType()) + " IN " + src.getTypeLabel(t.getParent().getType()));
+		for (ITree t: c.getDstAddTrees()) if (!c.getDstAddTrees().contains(t.getParent())) inc("ADD " + dst.getTypeLabel(t) + " IN " + dst.getTypeLabel(t.getParent()));
+		for (ITree t: c.getSrcMvTrees()) if (!c.getSrcMvTrees().contains(t.getParent())) inc("MOV " + src.getTypeLabel(t)
+				+ " FROM " + src.getTypeLabel(t.getParent()) + " TO " + dst.getTypeLabel(mappings.getDst(t).getParent()));
 	}
 	
 	private void inc(String key) {

@@ -13,7 +13,7 @@ import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class MetricsProcessor extends AbstractFilePairsProcessor {
 	
@@ -44,8 +44,8 @@ public class MetricsProcessor extends AbstractFilePairsProcessor {
 	public void processFilePair(String fsrc, String fdst) throws IOException {
 		long tic, toc;
 		tic = System.currentTimeMillis();
-		Tree src = TreeGeneratorRegistry.getInstance().getTree(fsrc);
-		Tree dst = TreeGeneratorRegistry.getInstance().getTree(fdst);
+		ITree src = TreeGeneratorRegistry.getInstance().getTree(fsrc).getRoot();
+		ITree dst = TreeGeneratorRegistry.getInstance().getTree(fdst).getRoot();
 		toc = System.currentTimeMillis();
 		int sSrc = src.getSize();
 		int sDst = dst.getSize();

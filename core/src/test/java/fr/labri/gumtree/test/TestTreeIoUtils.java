@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -12,36 +13,38 @@ import org.junit.Test;
 
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class TestTreeIoUtils {
 
 	@Test
-	public void testSerializeTree() {
-		ITree a = new Tree(0, "a", "type0");
-		ITree b = new Tree(1, "b");
+	public void testSerializeTree() throws IOException {
+		TreeContext tc = new TreeContext();
+		ITree a = tc.createTree(0, "a", "type0");
+		tc.setRoot(a);
+		
+		ITree b = tc.createTree(1, "b", null);
 		b.setParentAndUpdateChildren(a);
-		ITree c = new Tree(3, "c");
+		ITree c = tc.createTree(3, "c", null);
 		c.setParentAndUpdateChildren(b);
-		ITree d = new Tree(3, "d");
+		ITree d = tc.createTree(3, "d", null);
 		d.setParentAndUpdateChildren(b);
-		ITree e = new Tree(2);
+		ITree e = tc.createTree(2, null, null);
 		e.setParentAndUpdateChildren(a);
 		// Refresh metrics is called because it is automatically called in fromXML
 		a.refresh();
-		System.out.println(TreeIoUtils.toXml(a));
-		TreeIoUtils.toXml(a, "target/test-classes/test-serialize.xml");
-		ITree ca = TreeIoUtils.fromXmlFile("target/test-classes/test-serialize.xml");
+		TreeIoUtils.toXml(tc, "target/test-classes/test-serialize.xml");
+		ITree ca = TreeIoUtils.fromXmlFile("target/test-classes/test-serialize.xml").getRoot();
 		
 		assertTrue(a.isClone(ca));
 		assertTrue(ca.getType() == 0);
-		assertTrue(ca.getTypeLabel().equals("type0"));
+		assertTrue(tc.getTypeLabel(ca).equals("type0"));
 		assertTrue(ca.getLabel().equals("a"));
 	}
 
 	@Test
 	public void testLoadBigTree() {
-		ITree big = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_BIG));
+		ITree big = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_BIG)).getRoot();
 		assertEquals("a", big.getLabel());
 		compareList(big.getChildren(), "b", "e", "f");
 	}

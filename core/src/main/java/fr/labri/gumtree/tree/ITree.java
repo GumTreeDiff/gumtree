@@ -22,12 +22,6 @@ public interface ITree {
 	public abstract boolean areDescendantsMatched();
 
 	/**
-	 * Make a shallow copy of the tree.
-	 * @return a shallow copy of the tree, including type, id, label, typeLabel, position and length. 
-	 */
-	public abstract ITree copy();
-
-	/**
 	 * Make a deep copy of the tree.
 	 * @return a deep copy of the tree.
 	 */
@@ -43,6 +37,7 @@ public interface ITree {
 	public abstract int getChildPosition(ITree child);
 
 	public abstract List<ITree> getChildren();
+	public abstract ITree getChild(int position);
 
 	public abstract String getChildrenLabels();
 
@@ -62,6 +57,8 @@ public interface ITree {
 
 	public abstract int getId();
 
+
+	public abstract boolean hasLabel();
 	public abstract String getLabel();
 
 	public abstract int[] getLcPosEnd();
@@ -95,8 +92,6 @@ public interface ITree {
 	public abstract List<ITree> getTrees();
 
 	public abstract int getType();
-
-	public abstract String getTypeLabel();
 
 	public abstract int hashCode();
 
@@ -178,16 +173,14 @@ public interface ITree {
 
 	public abstract void setType(int type);
 
-	public abstract String toCompleteString();
-
-	public abstract String toCompleteTreeString();
-
 	public abstract String toDigestString();
 
 	public abstract String toDigestTreeString();
 
-	public abstract String toString();
+	public abstract String toShortString();
 
-	public abstract String toTreeString();
+	public String toTreeString();
+
+	public abstract String toPrettyString(TreeContext ctx);
 
 }

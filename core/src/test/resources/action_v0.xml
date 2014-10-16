@@ -1,0 +1,10 @@
+<tree type="0" label="a">
+	<tree type="0" label="e">
+		<tree type="0" label="f" />
+	</tree>
+	<tree type="0" label="b">
+		<tree type="0" label="c" />
+		<tree type="0" label="d" />
+	</tree>
+	<tree type="0" label="g" />
+</tree>

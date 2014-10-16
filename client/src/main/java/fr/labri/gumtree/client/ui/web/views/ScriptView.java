@@ -17,7 +17,7 @@ import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.io.ActionsIoUtils;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class ScriptView implements Renderable {
 	
@@ -30,11 +30,11 @@ public class ScriptView implements Renderable {
 	public ScriptView(File fSrc, File fDst) throws IOException {
 		this.fSrc = fSrc;
 		this.fDst = fDst;
-		Tree src = TreeGeneratorRegistry.getInstance().getTree(fSrc.getAbsolutePath());
-		Tree dst = TreeGeneratorRegistry.getInstance().getTree(fDst.getAbsolutePath());
-		Matcher matcher = MatcherFactories.newMatcher(src, dst);
+		TreeContext src = TreeGeneratorRegistry.getInstance().getTree(fSrc.getAbsolutePath());
+		TreeContext dst = TreeGeneratorRegistry.getInstance().getTree(fDst.getAbsolutePath());
+		Matcher matcher = MatcherFactories.newMatcher(src.getRoot(), dst.getRoot());
 		matcher.match();
-		ActionGenerator g = new ActionGenerator(src, dst, matcher.getMappings());
+		ActionGenerator g = new ActionGenerator(src.getRoot(), dst.getRoot(), matcher.getMappings());
 		g.generate();
 		this.script = g.getActions();
 	}

@@ -14,7 +14,7 @@ import fr.labri.gumtree.algo.StringAlgorithms;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
 
@@ -31,9 +31,9 @@ public final class HtmlDiffs {
 	
 	private String dstDiff;
 	
-	private ITree src;
+	private TreeContext src;
 	
-	private Tree dst;
+	private TreeContext dst;
 	
 	private File fSrc;
 	
@@ -43,7 +43,7 @@ public final class HtmlDiffs {
 	
 	private MappingStore mappings;
 	
-	public HtmlDiffs(File fSrc, File fDst, ITree src, Tree dst, Matcher matcher) {
+	public HtmlDiffs(File fSrc, File fDst, TreeContext src, TreeContext dst, Matcher matcher) {
 		this.fSrc = fSrc;
 		this.fDst = fDst;
 		this.src = src;
@@ -60,15 +60,15 @@ public final class HtmlDiffs {
 		int mId = 1;
 		
 		TagIndex ltags = new TagIndex();
-		for (ITree t: src.getTrees()) {
+		for (ITree t: src.getRoot().getTrees()) {
 			if (c.getSrcMvTrees().contains(t)) {
 				mappingIds.put(mappings.getDst(t).getId(), mId);
 				ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
-				ltags.addTags(t.getPos(), String.format(SRC_MV_SPAN, "token mv", mId++, tooltip(t)), t.getEndPos(), END_SPAN);
+				ltags.addTags(t.getPos(), String.format(SRC_MV_SPAN, "token mv", mId++, tooltip(src, t)), t.getEndPos(), END_SPAN);
 			} if (c.getSrcUpdTrees().contains(t)) {
 				mappingIds.put(mappings.getDst(t).getId(), mId);
 				ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
-				ltags.addTags(t.getPos(), String.format(SRC_MV_SPAN, "token upd", mId++, tooltip(t)), t.getEndPos(), END_SPAN);
+				ltags.addTags(t.getPos(), String.format(SRC_MV_SPAN, "token upd", mId++, tooltip(src, t)), t.getEndPos(), END_SPAN);
 				
 				List<int[]> hunks = StringAlgorithms.hunks(t.getLabel(), mappings.getDst(t).getLabel());
 				for(int[] hunk: hunks)
@@ -76,26 +76,26 @@ public final class HtmlDiffs {
 				
 			} if (c.getSrcDelTrees().contains(t)) {
 				ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
-				ltags.addTags(t.getPos(), String.format(ADD_DEL_SPAN, "token del", tooltip(t)), t.getEndPos(), END_SPAN);
+				ltags.addTags(t.getPos(), String.format(ADD_DEL_SPAN, "token del", tooltip(src, t)), t.getEndPos(), END_SPAN);
 			}
 		}
 
 		TagIndex rtags = new TagIndex();
-		for (ITree t: dst.getTrees()) {
+		for (ITree t: dst.getRoot().getTrees()) {
 			if (c.getDstMvTrees().contains(t)) {
 				int dId = mappingIds.get(t.getId());
 				rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
-				rtags.addTags(t.getPos(), String.format(DST_MV_SPAN, "token mv", dId, tooltip(t)), t.getEndPos(), END_SPAN);
+				rtags.addTags(t.getPos(), String.format(DST_MV_SPAN, "token mv", dId, tooltip(dst, t)), t.getEndPos(), END_SPAN);
 			} if (c.getDstUpdTrees().contains(t)) {
 				int dId = mappingIds.get(t.getId());
 				rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
-				rtags.addTags(t.getPos(), String.format(DST_MV_SPAN, "token upd", dId, tooltip(t)), t.getEndPos(), END_SPAN);
+				rtags.addTags(t.getPos(), String.format(DST_MV_SPAN, "token upd", dId, tooltip(dst, t)), t.getEndPos(), END_SPAN);
 				List<int[]> hunks = StringAlgorithms.hunks(mappings.getSrc(t).getLabel(), t.getLabel());
 				for(int[] hunk: hunks)
 					rtags.addTags(t.getPos() + hunk[2], UPD_SPAN, t.getPos() + hunk[3], END_SPAN);
 			} if (c.getDstAddTrees().contains(t)) {
 				rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
-				rtags.addTags(t.getPos(), String.format(ADD_DEL_SPAN, "token add", tooltip(t)), t.getEndPos(), END_SPAN);
+				rtags.addTags(t.getPos(), String.format(ADD_DEL_SPAN, "token add", tooltip(dst, t)), t.getEndPos(), END_SPAN);
 			}
 		}
 
@@ -139,8 +139,8 @@ public final class HtmlDiffs {
 		return dstDiff;
 	}
 
-	private static String tooltip(ITree t) {
-		return (t.getParent() != null) ? t.getParent().getTypeLabel() + "/" + t.getTypeLabel() : t.getTypeLabel();
+	private static String tooltip(TreeContext ctx, ITree t) {
+		return (t.getParent() != null) ? ctx.getTypeLabel(t.getParent()) + "/" + ctx.getTypeLabel(t) : ctx.getTypeLabel(t);
 	}
 
 	private static void append(char cr, Writer w) throws IOException {

@@ -484,7 +484,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 
     private void push(ASTNode node, String label) {
     	int type = node.getNodeType();
-    	Tree t = new Tree(type, label, node.getClass().getSimpleName());
+    	Tree t = new Tree(CdJdtTreeGenerator.class, type, label, node.getClass().getSimpleName());
 		
 		t.setPos(node.getStartPosition());
 		t.setLength(node.getLength());
@@ -506,7 +506,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
  private void push(int nType, String type, String label, int startPosition, int length) {
     	
     	
-    	Tree t = new Tree(nType, label, type);
+    	Tree t = new Tree(CdJdtTreeGenerator.class, nType, label, type);
 		
 		t.setPos(startPosition);
 		t.setLength(length);

@@ -11,13 +11,14 @@ import org.junit.Test;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 import fr.labri.gumtree.tree.TreeUtils;
 
 public class TestTree {
 
 	@Test
 	public void testIdComparator() {
-		ITree root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC));
+		ITree root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
 		List<ITree> nodes = root.getTrees();
 		assertTrue(nodes.get(0).getLabel().equals("a"));
 		assertTrue(nodes.get(1).getLabel().equals("b"));
@@ -28,8 +29,9 @@ public class TestTree {
 
 	@Test
 	public void testHashCode() {
-		ITree t1 = new Tree(0, "new1");
-		ITree t2 = new Tree(0, "new2");
+		TreeContext tc = new TreeContext();
+		ITree t1 = tc.createTree(0, "new1", null);
+		ITree t2 = tc.createTree(0, "new2", null);
 		assertTrue(t1.hashCode() != t2.hashCode());
 		t1.setId(0);
 		t2.setId(0);
@@ -38,7 +40,7 @@ public class TestTree {
 
 	@Test
 	public void testGetParents() {
-		ITree tree = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC));
+		ITree tree = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
 		List<ITree> trees = new LinkedList<>(tree.getTrees());
 		ITree n = trees.get(2);
 		assertTrue(n.getLabel().equals("c"));
@@ -50,7 +52,7 @@ public class TestTree {
 	
 	@Test
 	public void testDeepCopy() {
-		ITree root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC));
+		ITree root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
 		TreeUtils.postOrderNumbering(root);
 		ITree croot = root.deepCopy();
 		assertTrue(croot.getSize() == root.getSize());
@@ -67,7 +69,7 @@ public class TestTree {
 	
 	@Test
 	public void testIsClone() {
-		ITree tree = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC));
+		ITree tree = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
 		ITree copy = tree.deepCopy();
 		assertTrue(tree.isClone(copy));
 	}

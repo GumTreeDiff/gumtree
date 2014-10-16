@@ -11,15 +11,15 @@ import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class LeavesClassifier extends TreeClassifier {
 
-	public LeavesClassifier(ITree src, ITree dst, Set<Mapping> rawMappings, List<Action> actions) {
+	public LeavesClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> actions) {
 		super(src, dst, rawMappings, actions);
 	}
 	
-	public LeavesClassifier(ITree src, Tree dst, Matcher m) {
+	public LeavesClassifier(TreeContext src, TreeContext dst, Matcher m) {
 		super(src, dst, m);
 	}
 

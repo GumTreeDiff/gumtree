@@ -15,7 +15,7 @@ public class Delete extends Action {
 
 	@Override
 	public String toString() {
-		return getName() + " " + node.toString();
+		return getName() + " " + node.toShortString();
 	}
 
 }

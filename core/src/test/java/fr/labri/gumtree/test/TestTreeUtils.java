@@ -11,7 +11,6 @@ import org.junit.Test;
 import static fr.labri.gumtree.test.Constants.*;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeUtils;
 
 public class TestTreeUtils {
@@ -19,9 +18,9 @@ public class TestTreeUtils {
 
 	@Before // FIXME Could it be before class ?
 	public void init() {
-		src = root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC));
-		dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_DST));
-		big = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_BIG));
+		src = root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
+		dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_DST)).getRoot();
+		big = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_BIG)).getRoot();
 	}
 	
 	@Test
@@ -112,7 +111,7 @@ public class TestTreeUtils {
 	
 	@Test
 	public void testPostOrder3() {
-		Tree big = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_BIG));
+		ITree big = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_BIG)).getRoot();
 
 		List<ITree> lst = TreeUtils.postOrder(big);
 		Iterator<ITree> it = TreeUtils.postOrderIterator(big);

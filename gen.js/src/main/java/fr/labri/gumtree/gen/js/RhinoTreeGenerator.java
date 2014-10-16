@@ -25,17 +25,16 @@ import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
 
 import fr.labri.gumtree.io.TreeGenerator;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class RhinoTreeGenerator extends TreeGenerator {
 
-	public Tree generate(String file) {
+	public TreeContext generate(String file) {
 		Parser p = new Parser();
 		try {
 			AstRoot root = p.parse(new FileReader(file), file, 1);
 			RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
-			root.visit(visitor);
-			return visitor.getTree();
+			return visitor.getTree(root);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
