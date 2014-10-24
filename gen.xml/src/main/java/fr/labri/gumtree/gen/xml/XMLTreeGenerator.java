@@ -4,27 +4,27 @@ import java.io.IOException;
 
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.Parser;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
 
 import fr.labri.gumtree.gen.antlr.AbstractAntlrTreeGenerator;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class XMLTreeGenerator extends AbstractAntlrTreeGenerator {
 	
 	@Override
-	public Tree generate(String file) throws IOException {
-		Tree t = super.generate(file);
-		for(ITree c: t.getTrees()) {
-			if (c.getTypeLabel().equals("PCDATA") && c.getLabel().trim().equals("") ) {
+	public TreeContext generate(String file) throws IOException {
+		TreeContext ctx = super.generate(file);
+		ITree t = ctx.getRoot();
+		
+		for(ITree c: t.getTrees()) { // Prune top level empty pcdata
+			if (c.getType() == XMLParser.PCDATA && c.getLabel().trim().equals("") ) {
 				c.setParentAndUpdateChildren(null);
 			}
 		}
-		return t;
+		return ctx;
 	}
 
 	@Override
@@ -37,11 +37,8 @@ public class XMLTreeGenerator extends AbstractAntlrTreeGenerator {
 	}
 
 	@Override
-	protected Parser getEmptyParser() {
-		ANTLRStringStream stream = new ANTLRStringStream();
-		XMLLexer l = new XMLLexer(stream);
-		CommonTokenStream tokens = new TokenRewriteStream(l);
-		return new XMLParser(tokens);
+	final protected String[] getTokenNames() {
+		return XMLParser.tokenNames;
 	}
 	
 	@Override

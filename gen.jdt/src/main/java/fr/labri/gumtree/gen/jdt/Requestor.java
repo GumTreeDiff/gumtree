@@ -20,5 +20,4 @@ public class Requestor extends FileASTRequestor {
 		return visitor;
 	}
 
-
 }

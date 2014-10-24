@@ -1,6 +1,6 @@
 package fr.labri.gumtree.test;
 
-import static fr.labri.gumtree.test.Constants.*;
+import static fr.labri.gumtree.test.Constants.DUMMY_SRC;
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.Tree;
 import fr.labri.gumtree.tree.TreeContext;
 import fr.labri.gumtree.tree.TreeUtils;
 

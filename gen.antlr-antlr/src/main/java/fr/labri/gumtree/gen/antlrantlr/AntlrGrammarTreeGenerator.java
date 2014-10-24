@@ -2,12 +2,13 @@ package fr.labri.gumtree.gen.antlrantlr;
 
 import java.io.IOException;
 
-import org.antlr.runtime.*;
+import org.antlr.runtime.ANTLRFileStream;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
 
 import fr.labri.gumtree.gen.antlr.AbstractAntlrTreeGenerator;
-import fr.labri.gumtree.gen.antlrantlr.ANTLRv3Lexer;
-import fr.labri.gumtree.gen.antlrantlr.ANTLRv3Parser;
 
 public class AntlrGrammarTreeGenerator extends AbstractAntlrTreeGenerator {
 
@@ -21,11 +22,8 @@ public class AntlrGrammarTreeGenerator extends AbstractAntlrTreeGenerator {
 	}
 
 	@Override
-	protected Parser getEmptyParser() {
-		ANTLRStringStream stream = new ANTLRStringStream();
-		ANTLRv3Lexer l = new ANTLRv3Lexer(stream);
-		CommonTokenStream tokens = new TokenRewriteStream(l);
-		return new ANTLRv3Parser(tokens);
+	final protected String[] getTokenNames() {
+		return ANTLRv3Parser.tokenNames;
 	}
 	
 	@Override

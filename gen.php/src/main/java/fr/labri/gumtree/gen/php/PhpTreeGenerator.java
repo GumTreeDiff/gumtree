@@ -2,7 +2,10 @@ package fr.labri.gumtree.gen.php;
 
 import java.io.IOException;
 
-import org.antlr.runtime.*;
+import org.antlr.runtime.ANTLRFileStream;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
 
 import fr.labri.gumtree.gen.antlr.AbstractAntlrTreeGenerator;
@@ -19,11 +22,8 @@ public class PhpTreeGenerator extends AbstractAntlrTreeGenerator {
 	}
 
 	@Override
-	protected Parser getEmptyParser() {
-		ANTLRStringStream stream = new ANTLRStringStream();
-		PhpLexer l = new PhpLexer(stream);
-		CommonTokenStream tokens = new TokenRewriteStream(l);
-		return new PhpParser(tokens);
+	final protected String[] getTokenNames() {
+		return PhpParser.tokenNames;
 	}
 	
 	@Override

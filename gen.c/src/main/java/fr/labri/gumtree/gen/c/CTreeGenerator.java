@@ -7,14 +7,14 @@ import java.io.InputStreamReader;
 
 import fr.labri.gumtree.io.TreeGenerator;
 import fr.labri.gumtree.io.TreeIoUtils;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class CTreeGenerator extends TreeGenerator {
 	
 	private static final String COCCI_CMD = "cgum";
 
 	@Override
-	public Tree generate(String file) {
+	public TreeContext generate(String file) {
 		File f = new File(file);
 		ProcessBuilder b = new ProcessBuilder(COCCI_CMD, f.getAbsolutePath());
 		b.directory(f.getParentFile());
@@ -29,8 +29,7 @@ public class CTreeGenerator extends TreeGenerator {
 			if (p.exitValue() != 0)  throw new RuntimeException();
 	        r.close();
 	        String xml = buf.toString();
-	        Tree t = TreeIoUtils.fromXmlString(xml);
-            return t;
+	        return TreeIoUtils.fromXmlString(xml);
 		} catch (IOException | InterruptedException e) {
 			throw new RuntimeException(e);
 		}

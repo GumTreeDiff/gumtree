@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.Parser;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
@@ -22,14 +20,6 @@ public class RTreeProducer extends AbstractAntlrTreeGenerator {
 		RParser rp = new RParser(tokens);
 		return (CommonTree) rp.script().getTree();
 	}
-
-	@Override
-	protected Parser getEmptyParser() {
-		ANTLRStringStream stream = new ANTLRStringStream();
-		RLexer l = new RLexer(stream);
-		CommonTokenStream tokens = new TokenRewriteStream(l);
-		return new RParser(tokens);
-	}
 	
 	@Override
 	public boolean handleFile(String file) {
@@ -41,4 +31,8 @@ public class RTreeProducer extends AbstractAntlrTreeGenerator {
 		return "r-antlr";
 	}
 
+	@Override
+	final protected String[] getTokenNames() {
+		return RParser.tokenNames;
+	}
 }
