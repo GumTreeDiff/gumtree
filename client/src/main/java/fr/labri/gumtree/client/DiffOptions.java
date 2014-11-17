@@ -5,6 +5,9 @@ import org.kohsuke.args4j.Option;
 
 public class DiffOptions {
 
+	@Option(name="-v", usage="Be more verbose (mainly debugging purpose)")
+	private boolean verbose;
+
 	@Option(name="-m", aliases={"--matcher"}, usage="The qualified name of the class implementing the matcher.")
 	private String matcher = null;
 	
@@ -35,7 +38,11 @@ public class DiffOptions {
 	public String getDst() {
 		return dst;
 	}
-	
+
+	public boolean isVerbose() {
+		return verbose;
+	}
+
 	public String[] getGenerators() {
 		if (generators == null) return null;
 		else return generators.split("\\.");

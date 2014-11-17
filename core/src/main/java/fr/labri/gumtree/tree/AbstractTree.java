@@ -10,6 +10,7 @@ public abstract class AbstractTree implements ITree {
 	private static final String OPEN_SYMBOL = "[(";
 	private static final String CLOSE_SYMBOL = ")]";
 	private static final String SEPARATE_SYMBOL = "@@";
+
 	protected int id;
 	protected ITree parent;
 	protected List<ITree> children;
@@ -29,12 +30,12 @@ public abstract class AbstractTree implements ITree {
 	public int getChildPosition(ITree child) {
 		return getChildren().indexOf(child);
 	}
-	
+
 	@Override
 	public ITree getChild(int position) {
 		return getChildren().get(position);
 	}
-	
+
 	@Override
 	public String getChildrenLabels() {
 		StringBuffer b = new StringBuffer();
@@ -73,7 +74,7 @@ public abstract class AbstractTree implements ITree {
 	public boolean hasLabel() {
 		return !ITree.NO_LABEL.equals(getLabel());
 	}
-	
+
 	@Override
 	public List<ITree> getLeaves() {
 		List<ITree> leafs = new ArrayList<>();
@@ -85,7 +86,7 @@ public abstract class AbstractTree implements ITree {
 	public ITree getParent() {
 		return parent;
 	}
-	
+
 	@Override
 	public void setParent(ITree parent) {
 		this.parent = parent;
@@ -249,9 +250,9 @@ public abstract class AbstractTree implements ITree {
 
 	@Override
 	public String toString() {
-		throw new RuntimeException("This method should currently not be used");
+		throw new RuntimeException("This method should currently not be used (please use toShortString())");
 	}
-	
+
 	@Override
 	public String toShortString() {
 		return String.format("%d:%s", getType(), getLabel());
@@ -276,7 +277,7 @@ public abstract class AbstractTree implements ITree {
 			return ctx.getTypeLabel(this);
 		}
 	}
-	
+
 	public static class FakeTree extends AbstractTree {
 		public FakeTree(ITree... trees) {
 			children = new ArrayList<ITree>(trees.length);
@@ -286,7 +287,7 @@ public abstract class AbstractTree implements ITree {
 		private RuntimeException unsupportedOperation() {
 			return new UnsupportedOperationException("This method should not be called on a fake tree");
 		}
-		
+
 		@Override
 		public void addChild(ITree t) {
 			throw unsupportedOperation();

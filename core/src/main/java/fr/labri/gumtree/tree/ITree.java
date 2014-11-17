@@ -57,7 +57,6 @@ public interface ITree {
 
 	public abstract int getId();
 
-
 	public abstract boolean hasLabel();
 	public abstract String getLabel();
 
@@ -183,4 +182,6 @@ public interface ITree {
 
 	public abstract String toPrettyString(TreeContext ctx);
 
+	interface TreeInfo {
+	}
 }

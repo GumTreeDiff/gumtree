@@ -68,7 +68,7 @@ public final class ActionsIoUtils {
 			} catch (IOException e) { }
 		}
 	}
-	
+
 	public static void toXml(TreeContext sctx, Writer writer, List<Action> actions, MappingStore mappings) {
 		XMLOutputFactory f = XMLOutputFactory.newInstance();
 		try {
@@ -98,9 +98,13 @@ public final class ActionsIoUtils {
 				ITree dst = a.getNode();
 				if (dst.isRoot()) writeInsertPos(w, true, new int[] {0, 0});
 				else {
+					int[] pos;
 					int idx = dst.getParent().getChildPosition(dst);
-					if (idx == 0) writeInsertPos(w, true, dst.getParent().getLcPosStart());
-					else writeInsertPos(w, true, dst.getParent().getChildren().get(idx -1).getLcPosEnd());
+
+					if (idx == 0) pos = dst.getParent().getLcPosStart();
+					else pos = dst.getParent().getChildren().get(idx -1).getLcPosEnd();
+
+					writeInsertPos(w, true,pos);
 				}
 				writeTreePos(w, false, dst);
 			} else if (a instanceof Delete) {
@@ -120,7 +124,7 @@ public final class ActionsIoUtils {
 			w.writeAttribute("end_col", Integer.toString(tree.getLcPosEnd()[1]));
 		}
 	}
-	
+
 	private static void writeInsertPos(XMLStreamWriter w, boolean isBefore, int[] pos) throws XMLStreamException {
 		if (isBefore) w.writeEmptyElement("before"); else w.writeEmptyElement("after");
 		w.writeAttribute("begin_line", Integer.toString(pos[0]));

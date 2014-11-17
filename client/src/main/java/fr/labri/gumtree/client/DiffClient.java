@@ -21,6 +21,12 @@ public abstract class DiffClient {
 		CmdLineParser parser = new CmdLineParser(diffOptions);
 		try {
 			parser.parseArgument(args);
+
+			if (diffOptions.isVerbose()) {
+				System.out.printf("Current path: %s\n", System.getProperty("user.dir"));
+				System.out.printf("Diff: %s %s\n", diffOptions.getSrc(), diffOptions.getDst());
+			}
+
 			DiffClient client;
 			if ("swing".equals(diffOptions.getOutput())) client = new SwingDiff(diffOptions);
 			else if ("xml".equals(diffOptions.getOutput())) client = new XmlDiff(diffOptions);

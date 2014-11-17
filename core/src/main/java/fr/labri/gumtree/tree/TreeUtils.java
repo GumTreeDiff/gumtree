@@ -24,7 +24,9 @@ public final class TreeUtils {
 	public static void computeSize(ITree tree) {
 		for (ITree t: tree.postOrder()) {
 			int size = 1;
-			if (!t.isLeaf()) for (ITree c: t.getChildren()) size += c.getSize();
+			if (!t.isLeaf())
+				for (ITree c: t.getChildren())
+					size += c.getSize();
 			t.setSize(size);
 		}
 	}

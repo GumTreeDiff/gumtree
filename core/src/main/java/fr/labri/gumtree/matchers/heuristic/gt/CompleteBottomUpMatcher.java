@@ -111,7 +111,7 @@ public class CompleteBottomUpMatcher extends Matcher {
 				} else addMapping(left, right);
 			}
 		}
-		
+
 		for (ITree t : src.getTrees()) t.setMatched(true);
 		for (ITree t : dst.getTrees()) t.setMatched(true);
 	}
