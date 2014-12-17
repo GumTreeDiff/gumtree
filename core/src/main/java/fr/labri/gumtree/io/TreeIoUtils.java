@@ -42,8 +42,7 @@ public final class TreeIoUtils {
 	private final static QName COL_BEFORE = new QName("col_before");
 	private final static QName COL_AFTER = new QName("col_after");
 
-	private TreeIoUtils() {
-	}
+	private TreeIoUtils() {} // Forbids instantiation of TreeIOUtils
 	
 	public static TreeContext fromXml(InputStream iStream) {
 		return fromXml(new InputStreamReader(iStream));
@@ -109,97 +108,49 @@ public final class TreeIoUtils {
 		return null;
 	}
 	
-	public static void toXml(TreeContext ctx, String file) throws IOException {
-		FileWriter f = new FileWriter(file);
-		toXml(ctx, f);
-		f.close();
+	private static String labelForAttribute(StartElement s, QName attrName) {
+		Attribute attr = s.getAttributeByName(attrName);
+		return attr == null ? ITree.NO_LABEL : attr.getValue();
 	}
-	
-	public static void toXml(TreeContext ctx, Writer writer) {
-		try {
-			XMLOutputFactory f = XMLOutputFactory.newInstance();
-			XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(writer));
-			AbsXMLSerializer serializer = new XMLSerializer(w, ctx);
 
-			serialize(ctx.getRoot(), serializer);
-			w.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	private static int numberForAttribute(StartElement s, QName attrName) {
+		return Integer.parseInt(s.getAttributeByName(attrName).getValue());
 	}
 	
-	public static String toXml(TreeContext ctx) {
-		StringWriter s = new StringWriter();
-		try {
-			toXml(ctx, s);
-			return s.toString();
-		} finally {
-			try {
-				s.close();
-			} catch (IOException e) { }
-		}
+	public static TreeOutputer toXml(TreeContext ctx) {
+		return new TreeOutputer(ctx) {
+			@Override
+			protected TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws XMLStreamException {
+				return new XMLSerializer(writer, ctx);
+			}
+		};
 	}
-	
-	public static void toAnnotatedXML(TreeContext ctx, String file, boolean isSrc, MappingStore m) throws IOException {
-		FileWriter f = new FileWriter(file);
-		toAnnotatedXML(ctx, f, isSrc, m);
-		f.close();
-	}
-	
-	public static void toAnnotatedXML(TreeContext ctx, Writer writer, boolean isSrc, MappingStore m) {
-		try {
-			XMLOutputFactory f = XMLOutputFactory.newInstance();
-			XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(writer));
-			AbsXMLSerializer serializer = new XMLAnnotatedSerializer(w, ctx, isSrc, m);
 
-			serialize(ctx.getRoot(), serializer);
-			w.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public static TreeOutputer toAnnotatedXml(TreeContext ctx, boolean isSrc, MappingStore m) {
+		return new TreeOutputer(ctx) {
+			@Override
+			protected TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws XMLStreamException {
+				return new XMLAnnotatedSerializer(writer, ctx, isSrc, m);
+			}
+		};
 	}
 	
-	public static String toAnnotatedXML(TreeContext ctx, boolean isSrc, MappingStore m) throws IOException {
-		StringWriter s = new StringWriter();
-		try {
-			toAnnotatedXML(ctx, s, isSrc, m);
-			return s.toString();
-		} finally {
-			try {
-				s.close();
-			} catch (IOException e) { }
-		}
+	public static TreeOutputer toCompactXML(TreeContext ctx) {
+		return new TreeOutputer(ctx) {
+			@Override
+			protected TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws Exception {
+				return new XMLCompactSerializer(writer, ctx);
+			}
+		};
 	}
 	
-	public static void toCompactXML(TreeContext ctx, String file) throws IOException {
-		FileWriter f = new FileWriter(file);
-		toCompactXML(ctx, f);
-		f.close();
-	}
-	
-	public static void toCompactXML(TreeContext ctx, Writer writer) {
-		try {
-			XMLOutputFactory f = XMLOutputFactory.newInstance();
-			XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(writer));
-			AbsXMLSerializer serializer = new XMLCompactSerializer(w, ctx);
-
-			serialize(ctx.getRoot(), serializer);
-			w.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static String toCompactXML(TreeContext ctx) {
-		StringWriter s = new StringWriter();
-		try {
-			toCompactXML(ctx, s);
-			return s.toString();
-		} finally {
-			try {
-				s.close();
-			} catch (IOException e) { }
-		}
+	public static TreeOutputer toJSON(TreeContext ctx) {
+		return new TreeOutputer(ctx) {
+			@Override
+			protected TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws Exception {
+				return new JSONSerializer(writer, ctx);
+			}
+		};
 	}
 	
 	public static String toDot(TreeContext ctx) { // FIXME should be a Serializer
@@ -236,70 +187,72 @@ public final class TreeIoUtils {
 		}
 	}
 
-	public static void toJSON(TreeContext ctx, String file) throws IOException {
-		FileWriter f = new FileWriter(file);
-		toJSON(ctx, f);
-		f.close();
-	}
-	
-	public static void toJSON(TreeContext ctx, Writer writer) {
-		try {
-			JsonWriter w = new JsonWriter(writer);
-			JSONSerializer serializer = new JSONSerializer(w, ctx);
-			serialize(ctx.getRoot(), serializer);
-			w.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+	static public abstract class TreeOutputer {
+		TreeContext context;
+		
+		public TreeOutputer(TreeContext ctx) {
+			context = ctx;
 		}
-	}
-	
-	public static String toJSON(TreeContext ctx) {
-		StringWriter s = new StringWriter();
-		try {
-			toJSON(ctx, s);
-			return s.toString();
-		} finally {
+		
+		protected abstract TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws Exception;
+		
+		public void writeTo(Writer writer) throws Exception {
+			TreeSerializer serializer = newSerializer(context, writer);
 			try {
-				s.close();
-			} catch (IOException e) { }
+				serialize(serializer);
+			} finally {
+				serializer.close();
+			}
+		}
+		
+		public String toString() {
+			StringWriter s = new StringWriter();
+			try {
+				writeTo(s);
+				s.close(); // FIXME this is useless (do nothing) but thows an exception, thus I dont' put it in the finally block where it belongs
+			} catch(Exception e) { }
+			return s.toString();
+		}
+		
+		public void writeTo(String file) throws Exception {
+			FileWriter w = new FileWriter(file);
+			try {
+				writeTo(w);
+			} finally {
+				w.close();
+			}
+		}
+		
+		private void serialize(TreeSerializer serializer) throws Exception {
+			serializer.startSerialization();
+			writeTree(serializer, context.getRoot());
+			serializer.stopSerialization();
+		}
+		
+		private void writeTree(TreeSerializer serializer, ITree t) throws Exception {
+			serializer.startTree(t);
+			for (ITree c: t.getChildren()) // FIXME change by a preOrder / postOrder / BFSIterator
+				writeTree(serializer, c);
+			serializer.endTree(t);
 		}
 	}
-	
-	static void serialize(ITree root, TreeSerializer serializer) throws Exception {
-		serializer.startSerialization();
-		writeTree(serializer, root);
-		serializer.stopSerialization();
-	}
-	
-	private static void writeTree(TreeSerializer s, ITree t) throws Exception {
-		s.startTree(t);
-		for (ITree c: t.getChildren())
-			writeTree(s, c);
-		s.endTree(t);
-	}
 
-	static String labelForAttribute(StartElement s, QName attrName) {
-		Attribute attr = s.getAttributeByName(attrName);
-		return attr == null ? ITree.NO_LABEL : attr.getValue();
-	}
-
-	static int numberForAttribute(StartElement s, QName attrName) {
-		return Integer.parseInt(s.getAttributeByName(attrName).getValue());
-	}
-	
-	interface TreeSerializer {
+	interface TreeSerializer { // TODO or not, add context as argument of method instead of capturing it
 		void startSerialization() throws Exception;
 		void startTree(ITree tree) throws Exception;
 		void endTree(ITree tree) throws Exception;
 		void stopSerialization() throws Exception;
+		
+		void close() throws Exception;
 	}
 	
 	static abstract class AbsXMLSerializer implements TreeSerializer {
 		protected XMLStreamWriter writer;
 		protected TreeContext context;
 
-		protected AbsXMLSerializer(XMLStreamWriter w, TreeContext ctx) {
-			writer = w;
+		protected AbsXMLSerializer(Writer w, TreeContext ctx) throws XMLStreamException {
+			XMLOutputFactory f = XMLOutputFactory.newInstance();
+			writer = new IndentingXMLStreamWriter(f.createXMLStreamWriter(w));
 			context = ctx;
 		}
 
@@ -312,10 +265,15 @@ public final class TreeIoUtils {
 		public void stopSerialization() throws XMLStreamException {
 			writer.writeEndDocument();
 		}
+		
+		@Override
+		public void close() throws XMLStreamException {
+			writer.close();
+		}
 	}
 	
 	static class XMLSerializer extends AbsXMLSerializer {
-		public XMLSerializer(XMLStreamWriter w, TreeContext ctx) {
+		public XMLSerializer(Writer w, TreeContext ctx) throws XMLStreamException {
 			super(w, ctx);
 		}
 
@@ -345,7 +303,7 @@ public final class TreeIoUtils {
 	
 	static class XMLAnnotatedSerializer extends XMLSerializer {
 		final SearchOther searchOther;
-		public XMLAnnotatedSerializer(XMLStreamWriter w, TreeContext ctx, boolean isSrc, MappingStore m) {
+		public XMLAnnotatedSerializer(Writer w, TreeContext ctx, boolean isSrc, MappingStore m) throws XMLStreamException {
 			super(w, ctx);
 			
 			if (isSrc)
@@ -383,7 +341,7 @@ public final class TreeIoUtils {
 	}
 	
 	static class XMLCompactSerializer extends AbsXMLSerializer {
-		public XMLCompactSerializer(XMLStreamWriter w, TreeContext ctx) {
+		public XMLCompactSerializer(Writer w, TreeContext ctx) throws XMLStreamException {
 			super(w, ctx);
 		}
 
@@ -403,8 +361,8 @@ public final class TreeIoUtils {
 		private TreeContext context;
 		private JsonWriter writer;
 
-		public JSONSerializer(JsonWriter w, TreeContext ctx) {
-			writer = w;
+		public JSONSerializer(Writer w, TreeContext ctx) {
+			writer = new JsonWriter(w);
 			context = ctx;
 		}
 
@@ -447,6 +405,10 @@ public final class TreeIoUtils {
 		@Override
 		public void stopSerialization() throws Exception {
 		}
+		
+		@Override
+		public void close() throws Exception {
+			try { writer.close(); } catch (Exception e) {};
+		}
 	}
-
 }
