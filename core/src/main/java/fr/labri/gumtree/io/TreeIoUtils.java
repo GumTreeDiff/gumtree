@@ -28,7 +28,6 @@ import com.google.gson.stream.JsonWriter;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeContext;
-import fr.labri.gumtree.tree.TreeUtils;
 
 public final class TreeIoUtils {
 	
@@ -117,91 +116,66 @@ public final class TreeIoUtils {
 		return Integer.parseInt(s.getAttributeByName(attrName).getValue());
 	}
 	
-	public static TreeOutputer toXml(TreeContext ctx) {
-		return new TreeOutputer(ctx) {
+	public static TreeSerializer toXml(TreeContext ctx) {
+		return new TreeSerializer(ctx) {
 			@Override
-			protected TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws XMLStreamException {
-				return new XMLSerializer(writer, ctx);
+			protected TreeFormater newFormater(TreeContext ctx, Writer writer) throws XMLStreamException {
+				return new XMLFormater(writer, ctx);
 			}
 		};
 	}
 
-	public static TreeOutputer toAnnotatedXml(TreeContext ctx, boolean isSrc, MappingStore m) {
-		return new TreeOutputer(ctx) {
+	public static TreeSerializer toAnnotatedXml(TreeContext ctx, boolean isSrc, MappingStore m) {
+		return new TreeSerializer(ctx) {
 			@Override
-			protected TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws XMLStreamException {
-				return new XMLAnnotatedSerializer(writer, ctx, isSrc, m);
+			protected TreeFormater newFormater(TreeContext ctx, Writer writer) throws XMLStreamException {
+				return new XMLAnnotatedFormater(writer, ctx, isSrc, m);
 			}
 		};
 	}
 	
-	public static TreeOutputer toCompactXML(TreeContext ctx) {
-		return new TreeOutputer(ctx) {
+	public static TreeSerializer toCompactXML(TreeContext ctx) {
+		return new TreeSerializer(ctx) {
 			@Override
-			protected TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws Exception {
-				return new XMLCompactSerializer(writer, ctx);
+			protected TreeFormater newFormater(TreeContext ctx, Writer writer) throws Exception {
+				return new XMLCompactFormater(writer, ctx);
 			}
 		};
 	}
 	
-	public static TreeOutputer toJSON(TreeContext ctx) {
-		return new TreeOutputer(ctx) {
+	public static TreeSerializer toJSON(TreeContext ctx) {
+		return new TreeSerializer(ctx) {
 			@Override
-			protected TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws Exception {
-				return new JSONSerializer(writer, ctx);
+			protected TreeFormater newFormater(TreeContext ctx, Writer writer) throws Exception {
+				return new JSONFormater(writer, ctx);
 			}
 		};
 	}
 	
-	public static String toDot(TreeContext ctx) { // FIXME should be a Serializer
-		StringBuffer b = new StringBuffer();
-		ITree root = ctx.getRoot();
-		TreeUtils.preOrderNumbering(root);
-		b.append("digraph G {\n");
-		for (ITree t : root.getTrees()) {
-			String label = t.toPrettyString(ctx);
-			if (label.contains("\"") || label.contains("\\s"))
-				label = label.replaceAll("\"", "").replaceAll("\\s", "").replaceAll("\\\\", "");
-			if (label.length() > 30)
-				label = label.substring(0, 30);
-			b.append(t.getId() + " [label=\"" + label + "\"");
-			if (t.isMatched())
-				b.append(",style=filled,fillcolor=cadetblue1");
-			b.append("];\n");
-		}
-
-		for (ITree t : root.getTrees())
-			if (t.getParent() != null)
-				b.append(t.getParent().getId() + " -> " + t.getId() + ";\n");
-		b.append("}");
-		return b.toString();
-	}
-	
-	public static void toDot(TreeContext tree, String path) {
-		try {
-			FileWriter fw = new FileWriter(path);
-			fw.append(toDot(tree));
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static TreeSerializer toDot(TreeContext ctx) {
+		return new TreeSerializer(ctx) {
+			@Override
+			protected TreeFormater newFormater(TreeContext ctx, Writer writer) throws Exception {
+				return new DotFormater(writer, ctx);
+			}
+		};
 	}
 
-	static public abstract class TreeOutputer {
+	static public abstract class TreeSerializer {
 		TreeContext context;
 		
-		public TreeOutputer(TreeContext ctx) {
+		public TreeSerializer(TreeContext ctx) {
 			context = ctx;
 		}
 		
-		protected abstract TreeSerializer newSerializer(TreeContext ctx, Writer writer) throws Exception;
+		protected abstract TreeFormater newFormater(TreeContext ctx, Writer writer) throws Exception;
 		
 		public void writeTo(Writer writer) throws Exception {
-			TreeSerializer serializer = newSerializer(context, writer);
+			TreeFormater formater = newFormater(context, writer);
 			try {
-				serialize(serializer);
+				serialize(formater);
 			} finally {
-				serializer.close();
+				formater.close();
 			}
 		}
 		
@@ -223,13 +197,13 @@ public final class TreeIoUtils {
 			}
 		}
 		
-		private void serialize(TreeSerializer serializer) throws Exception {
+		private void serialize(TreeFormater serializer) throws Exception {
 			serializer.startSerialization();
 			writeTree(serializer, context.getRoot());
 			serializer.stopSerialization();
 		}
 		
-		private void writeTree(TreeSerializer serializer, ITree t) throws Exception {
+		private void writeTree(TreeFormater serializer, ITree t) throws Exception {
 			serializer.startTree(t);
 			for (ITree c: t.getChildren()) // FIXME change by a preOrder / postOrder / BFSIterator
 				writeTree(serializer, c);
@@ -237,7 +211,7 @@ public final class TreeIoUtils {
 		}
 	}
 
-	interface TreeSerializer { // TODO or not, add context as argument of method instead of capturing it
+	interface TreeFormater{ // TODO or not, add context as argument of method instead of capturing it
 		void startSerialization() throws Exception;
 		void startTree(ITree tree) throws Exception;
 		void endTree(ITree tree) throws Exception;
@@ -246,14 +220,35 @@ public final class TreeIoUtils {
 		void close() throws Exception;
 	}
 	
-	static abstract class AbsXMLSerializer implements TreeSerializer {
-		protected XMLStreamWriter writer;
-		protected TreeContext context;
+	static class TreeFormaterAdapter implements TreeFormater  {
+		final protected TreeContext context;
+		protected TreeFormaterAdapter(TreeContext ctx) {
+			context = ctx;
+		}
 
-		protected AbsXMLSerializer(Writer w, TreeContext ctx) throws XMLStreamException {
+		@Override
+		public void startSerialization() throws Exception { }
+
+		@Override
+		public void startTree(ITree tree) throws Exception { }
+
+		@Override
+		public void endTree(ITree tree) throws Exception { }
+
+		@Override
+		public void stopSerialization() throws Exception { }
+
+		@Override
+		public void close() throws Exception { }
+	}
+	
+	static abstract class AbsXMLFormater extends TreeFormaterAdapter {
+		final protected XMLStreamWriter writer;
+
+		protected AbsXMLFormater(Writer w, TreeContext ctx) throws XMLStreamException {
+			super(ctx);
 			XMLOutputFactory f = XMLOutputFactory.newInstance();
 			writer = new IndentingXMLStreamWriter(f.createXMLStreamWriter(w));
-			context = ctx;
 		}
 
 		@Override
@@ -272,8 +267,8 @@ public final class TreeIoUtils {
 		}
 	}
 	
-	static class XMLSerializer extends AbsXMLSerializer {
-		public XMLSerializer(Writer w, TreeContext ctx) throws XMLStreamException {
+	static class XMLFormater extends AbsXMLFormater {
+		public XMLFormater(Writer w, TreeContext ctx) throws XMLStreamException {
 			super(w, ctx);
 		}
 
@@ -301,9 +296,9 @@ public final class TreeIoUtils {
 		}
 	}
 	
-	static class XMLAnnotatedSerializer extends XMLSerializer {
+	static class XMLAnnotatedFormater extends XMLFormater {
 		final SearchOther searchOther;
-		public XMLAnnotatedSerializer(Writer w, TreeContext ctx, boolean isSrc, MappingStore m) throws XMLStreamException {
+		public XMLAnnotatedFormater(Writer w, TreeContext ctx, boolean isSrc, MappingStore m) throws XMLStreamException {
 			super(w, ctx);
 			
 			if (isSrc)
@@ -340,8 +335,8 @@ public final class TreeIoUtils {
 		}
 	}
 	
-	static class XMLCompactSerializer extends AbsXMLSerializer {
-		public XMLCompactSerializer(Writer w, TreeContext ctx) throws XMLStreamException {
+	static class XMLCompactFormater extends AbsXMLFormater {
+		public XMLCompactFormater(Writer w, TreeContext ctx) throws XMLStreamException {
 			super(w, ctx);
 		}
 
@@ -357,13 +352,46 @@ public final class TreeIoUtils {
 		}
 	}
 	
-	static class JSONSerializer implements TreeSerializer {
-		private TreeContext context;
-		private JsonWriter writer;
+	static class DotFormater extends TreeFormaterAdapter {
+		final protected Writer writer;
 
-		public JSONSerializer(Writer w, TreeContext ctx) {
+		protected DotFormater(Writer w, TreeContext ctx) {
+			super(ctx);
+			writer = w;
+		}
+
+		@Override
+		public void startSerialization() throws Exception {
+			writer.write("digraph G {\n");
+		}
+
+		@Override
+		public void startTree(ITree tree) throws Exception {
+			String label = tree.toPrettyString(context);
+			if (label.contains("\"") || label.contains("\\s"))
+				label = label.replaceAll("\"", "").replaceAll("\\s", "").replaceAll("\\\\", "");
+			if (label.length() > 30)
+				label = label.substring(0, 30);
+			writer.write(tree.getId() + " [label=\"" + label + "\"");
+			if (tree.isMatched())
+				writer.write(",style=filled,fillcolor=cadetblue1");
+			writer.write("];\n");
+			
+			if (tree.getParent() != null)
+				writer.write(tree.getParent().getId() + " -> " + tree.getId() + ";\n");
+		}
+		@Override
+		public void stopSerialization() throws Exception {
+			writer.write("}");
+		}
+	}
+	
+	static class JSONFormater extends TreeFormaterAdapter {
+		final private JsonWriter writer;
+
+		public JSONFormater(Writer w, TreeContext ctx) {
+			super(ctx);
 			writer = new JsonWriter(w);
-			context = ctx;
 		}
 
 		@Override
@@ -402,10 +430,6 @@ public final class TreeIoUtils {
 			writer.setIndent("\t");					
 		}
 
-		@Override
-		public void stopSerialization() throws Exception {
-		}
-		
 		@Override
 		public void close() throws Exception {
 			try { writer.close(); } catch (Exception e) {};
