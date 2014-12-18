@@ -225,25 +225,19 @@ public final class TreeUtils {
 
 	public static void visitTree(ITree root, TreeVisitor visitor) {
 		Deque<Pair<ITree, Iterator<ITree>>> stack = new ArrayDeque<>();
-		startTree(root, stack, visitor);
+		stack.push(new Pair<>(root, root.getChildren().iterator()));
+		visitor.startTree(root);
 		while(!stack.isEmpty()) {
-			if (!stopTree(stack, visitor)) {
-				startTree(stack.peek().second.next(), stack, visitor);
+			Pair<ITree, Iterator<ITree>> it = stack.peek();
+
+			if (!it.second.hasNext()) {
+				visitor.endTree(it.first);
+				stack.pop();
+				ITree child = stack.peek().second.next();
+				stack.push(new Pair<>(child, child.getChildren().iterator()));
+				visitor.startTree(child);
 			}
 		}
-	}
-	
-	private static boolean stopTree(Deque<Pair<ITree, Iterator<ITree>>> stack, TreeVisitor visitor) {
-		Pair<ITree, Iterator<ITree>> it = stack.peek();
-		if(it.second.hasNext())
-			return false;
-		visitor.endTree(it.first);
-		stack.pop();
-		return true;
-	}
-	private static void startTree(ITree tree, Deque<Pair<ITree, Iterator<ITree>>> stack, TreeVisitor visitor) {
-		stack.push(new Pair<>(tree, tree.getChildren().iterator()));
-		visitor.startTree(tree);
 	}
 	
 	public interface TreeVisitor {
