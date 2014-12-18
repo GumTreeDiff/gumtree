@@ -165,6 +165,16 @@ public abstract class AbstractTree implements ITree {
 		else if (!getLabel().equals(t.getLabel())) return false;
 		return true;
 	}
+	
+	@Override
+	public Iterable<ITree> preOrder() {
+		return new Iterable<ITree>() {
+			@Override
+			public Iterator<ITree> iterator() {
+				return TreeUtils.preOrderIterator(AbstractTree.this);
+			}
+		};
+	}
 
 	@Override
 	public Iterable<ITree> postOrder() {

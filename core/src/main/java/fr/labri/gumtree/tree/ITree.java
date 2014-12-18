@@ -132,6 +132,8 @@ public interface ITree {
 	 */
 	public abstract boolean isSimilar(ITree t);
 
+	public abstract Iterable<ITree> preOrder();
+
 	public abstract Iterable<ITree> postOrder();
 
 	public abstract Iterable<ITree> breadthFirst();

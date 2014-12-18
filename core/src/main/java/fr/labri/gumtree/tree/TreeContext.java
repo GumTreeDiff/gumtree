@@ -8,6 +8,11 @@ public class TreeContext {
 	Map<Integer, String> typeLabels = new HashMap<>();
 	
 	ITree root;
+	
+	@Override
+	public String toString() {
+		return root.toPrettyString(this);
+	}
 
 	public void setRoot(ITree root) {
 		this.root = root;

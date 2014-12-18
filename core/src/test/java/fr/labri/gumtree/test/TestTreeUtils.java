@@ -26,21 +26,21 @@ public class TestTreeUtils {
 	@Test
 	public void testPostOrderNumbering() {
 		TreeUtils.postOrderNumbering(root);
-		assertEquals(root.getId(), 4);
-		assertEquals(root.getChildren().get(0).getId(), 2);
-		assertEquals(root.getChildren().get(0).getChildren().get(0).getId(), 0);
-		assertEquals(root.getChildren().get(0).getChildren().get(1).getId(), 1);
-		assertEquals(root.getChildren().get(1).getId(), 3);
+		assertEquals(4, root.getId());
+		assertEquals(2, root.getChildren().get(0).getId());
+		assertEquals(0, root.getChildren().get(0).getChildren().get(0).getId());
+		assertEquals(1, root.getChildren().get(0).getChildren().get(1).getId());
+		assertEquals(3, root.getChildren().get(1).getId());
 	}
 	
 	@Test
 	public void testDepth() {
 		TreeUtils.computeDepth(root);
-		assertEquals(root.getDepth(), 0);
-		assertEquals(root.getChildren().get(0).getDepth(), 1);
-		assertEquals(root.getChildren().get(0).getChildren().get(0).getDepth(), 2);
-		assertEquals(root.getChildren().get(0).getChildren().get(1).getDepth(), 2);
-		assertEquals(root.getChildren().get(1).getDepth(), 1);
+		assertEquals(0, root.getDepth());
+		assertEquals(1, root.getChildren().get(0).getDepth());
+		assertEquals(2, root.getChildren().get(0).getChildren().get(0).getDepth());
+		assertEquals(2, root.getChildren().get(0).getChildren().get(1).getDepth());
+		assertEquals(1, root.getChildren().get(1).getDepth());
 	}
 	
 	@Test
@@ -131,6 +131,13 @@ public class TestTreeUtils {
 		compareListIterator(TreeUtils.breadthFirstIterator(src), "a", "b", "e", "c", "d");
 		compareListIterator(TreeUtils.breadthFirstIterator(dst), "a", "f", "i", "b", "j", "c", "d", "h");
 		compareListIterator(TreeUtils.breadthFirstIterator(big), "a", "b", "e", "f", "c", "d", "g", "l", "h", "m", "i", "j", "k");
+	}
+	
+	@Test
+	public void testPreOrderList() {
+		compareListIterator(TreeUtils.preOrderIterator(src), "a", "b", "c", "d", "e");
+		compareListIterator(TreeUtils.preOrderIterator(dst), "a", "f", "b", "c", "d", "h", "i", "j");
+		compareListIterator(TreeUtils.preOrderIterator(big), "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m");
 	}
 	
 	void compareListIterator(List<ITree> lst, Iterator<ITree> it) {

@@ -1,5 +1,6 @@
 package fr.labri.gumtree.io;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -28,6 +29,8 @@ import com.google.gson.stream.JsonWriter;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeContext;
+import fr.labri.gumtree.tree.TreeUtils;
+import fr.labri.gumtree.tree.TreeUtils.TreeVisitor;
 
 public final class TreeIoUtils {
 	
@@ -152,6 +155,15 @@ public final class TreeIoUtils {
 		};
 	}
 	
+	public static TreeSerializer toLISP(TreeContext ctx) {
+		return new TreeSerializer(ctx) {
+			@Override
+			protected TreeFormater newFormater(TreeContext ctx, Writer writer) throws Exception {
+				return new LispFormater(writer, ctx);
+			}
+		};
+	}
+	
 	public static TreeSerializer toDot(TreeContext ctx) {
 		return new TreeSerializer(ctx) {
 			@Override
@@ -173,7 +185,9 @@ public final class TreeIoUtils {
 		public void writeTo(Writer writer) throws Exception {
 			TreeFormater formater = newFormater(context, writer);
 			try {
-				serialize(formater);
+				formater.startSerialization();
+				writeTree(formater, context.getRoot());
+				formater.stopSerialization();
 			} finally {
 				formater.close();
 			}
@@ -197,27 +211,66 @@ public final class TreeIoUtils {
 			}
 		}
 		
-		private void serialize(TreeFormater serializer) throws Exception {
-			serializer.startSerialization();
-			writeTree(serializer, context.getRoot());
-			serializer.stopSerialization();
+		public void writeTo(File file) throws Exception {
+			FileWriter w = new FileWriter(file);
+			try {
+				writeTo(w);
+			} finally {
+				w.close();
+			}
 		}
-		
-		private void writeTree(TreeFormater serializer, ITree t) throws Exception {
-			serializer.startTree(t);
-			for (ITree c: t.getChildren()) // FIXME change by a preOrder / postOrder / BFSIterator
-				writeTree(serializer, c);
-			serializer.endTree(t);
+		private void forwardException(Exception e) {
+			throw new FormatException(e);
+		}
+		private void writeTree(TreeFormater formater, ITree root) throws Exception {
+			try {
+				TreeUtils.visitTree(root, new TreeVisitor() {
+					
+					@Override
+					public void startTree(ITree tree) {
+						try {
+							formater.startTree(tree);
+						} catch (Exception e) {
+							forwardException(e);
+						}
+					}
+					
+					@Override
+					public void endTree(ITree tree) {
+						try {
+							formater.endTree(tree);
+						} catch (Exception e) {
+							forwardException(e);
+						}
+					}
+				});
+			} catch (FormatException e) {
+				throw e.getCause();
+			}
 		}
 	}
 
-	interface TreeFormater{ // TODO or not, add context as argument of method instead of capturing it
+	interface TreeFormater  {
 		void startSerialization() throws Exception;
-		void startTree(ITree tree) throws Exception;
-		void endTree(ITree tree) throws Exception;
 		void stopSerialization() throws Exception;
 		
+		void startTree(ITree tree) throws Exception;
+		void endTree(ITree tree) throws Exception;
+		
 		void close() throws Exception;
+	}
+	
+	static class FormatException extends RuntimeException {
+		private static final long serialVersionUID = 593766540545763066L;
+		Exception cause;
+		public FormatException(Exception cause) {
+			super(cause);
+			this.cause = cause;
+		}
+		@Override
+		public Exception getCause() {
+			return cause;
+		}
 	}
 	
 	static class TreeFormaterAdapter implements TreeFormater  {
@@ -352,6 +405,48 @@ public final class TreeIoUtils {
 		}
 	}
 	
+	static class LispFormater extends TreeFormaterAdapter {
+		final protected Writer writer;
+		int level = 0;
+
+		protected LispFormater(Writer w, TreeContext ctx) {
+			super(ctx);
+			writer = w;
+		}
+		
+		@Override
+		public void startSerialization() throws IOException {
+			writer.write("(");
+		}
+		
+		@Override
+		public void startTree(ITree tree) throws IOException {
+			if (!tree.isRoot())	writer.write("\n");
+			for(int i = 0; i < level; i ++)
+				writer.write("    ");
+			level ++;
+			
+			String pos = (ITree.NO_VALUE == tree.getPos() ? "" : String.format("(%d %d)", 
+					tree.getPos(), tree.getLength()));
+			String lcpos = (tree.getLcPosStart() == null ? "" : String.format("%d %d %d %d",
+					tree.getLcPosStart()[0], tree.getLcPosStart()[1], tree.getLcPosEnd()[0], tree.getLcPosEnd()[1]));
+			String matched = tree.isMatched() ? ":matched " : "";
+			
+			writer.write(String.format("(%d \"%s\" \"%s\" %s(%s%s%s) (", tree.getType(), context.getTypeLabel(tree), tree.getLabel(), matched, pos, (pos != "" && lcpos != "") ? " " : "" ,lcpos));
+		}
+		
+		@Override
+		public void endTree(ITree tree) throws IOException {
+			writer.write(")");
+			level --;
+		}
+		
+		@Override
+		public void stopSerialization() throws IOException {
+			writer.write(")");
+		}
+	}
+	
 	static class DotFormater extends TreeFormaterAdapter {
 		final protected Writer writer;
 
@@ -432,7 +527,7 @@ public final class TreeIoUtils {
 
 		@Override
 		public void close() throws Exception {
-			try { writer.close(); } catch (Exception e) {};
+			writer.close();
 		}
 	}
 }

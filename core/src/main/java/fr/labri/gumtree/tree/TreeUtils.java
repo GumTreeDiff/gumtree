@@ -97,9 +97,7 @@ public final class TreeUtils {
 	}
 
 	public static void preOrderNumbering(ITree tree) {
-		List<ITree> trees = preOrder(tree);
-		for (int i = 0; i < trees.size(); i++)
-			trees.get(i).setId(i);
+		numbering(tree.preOrder());
 	}
 
 	/**
@@ -218,6 +216,72 @@ public final class TreeUtils {
 				return it;
 			}
 
+			@Override
+			public void remove() {
+				throw new RuntimeException("Not yet implemented implemented.");
+			}
+		};
+	}
+
+	public static void visitTree(ITree root, TreeVisitor visitor) {
+		Deque<Pair<ITree, Iterator<ITree>>> stack = new ArrayDeque<>();
+		startTree(root, stack, visitor);
+		while(!stack.isEmpty()) {
+			if (!stopTree(stack, visitor)) {
+				startTree(stack.peek().second.next(), stack, visitor);
+			}
+		}
+	}
+	
+	private static boolean stopTree(Deque<Pair<ITree, Iterator<ITree>>> stack, TreeVisitor visitor) {
+		Pair<ITree, Iterator<ITree>> it = stack.peek();
+		if(it.second.hasNext())
+			return false;
+		visitor.endTree(it.first);
+		stack.pop();
+		return true;
+	}
+	private static void startTree(ITree tree, Deque<Pair<ITree, Iterator<ITree>>> stack, TreeVisitor visitor) {
+		stack.push(new Pair<>(tree, tree.getChildren().iterator()));
+		visitor.startTree(tree);
+	}
+	
+	public interface TreeVisitor {
+		void startTree(ITree tree);
+		void endTree(ITree tree);
+	}
+	
+	public static Iterator<ITree> preOrderIterator(ITree tree) {
+		return new Iterator<ITree>() {
+			Deque<Iterator<ITree>> stack = new ArrayDeque<>();
+			{
+				push(new AbstractTree.FakeTree(tree));
+			}
+			
+			@Override
+			public boolean hasNext() {
+				return stack.size() > 0;
+			}
+
+			@Override
+			public ITree next() {
+				Iterator<ITree> it = stack.peek();
+				if (it == null)
+					throw new NoSuchElementException();
+				ITree t = it.next();
+				while (it != null && !it.hasNext()) {
+					stack.pop();
+					 it = stack.peek();
+				}
+				push(t);
+				return t;
+			}
+			
+			private void push(ITree tree) {
+				if (!tree.isLeaf())
+					stack.push(tree.getChildren().iterator());
+			}
+			
 			@Override
 			public void remove() {
 				throw new RuntimeException("Not yet implemented implemented.");

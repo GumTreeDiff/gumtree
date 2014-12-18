@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -18,7 +17,7 @@ import fr.labri.gumtree.tree.TreeContext;
 public class TestTreeIoUtils {
 
 	@Test
-	public void testSerializeTree() throws IOException {
+	public void testSerializeTree() throws Exception {
 		TreeContext tc = new TreeContext();
 		ITree a = tc.createTree(0, "a", "type0");
 		tc.setRoot(a);
@@ -32,9 +31,11 @@ public class TestTreeIoUtils {
 		ITree e = tc.createTree(2, null, null);
 		e.setParentAndUpdateChildren(a);
 		// Refresh metrics is called because it is automatically called in fromXML
-		a.refresh();
-		TreeIoUtils.toXml(tc, "target/test-classes/test-serialize.xml");
-		ITree ca = TreeIoUtils.fromXmlFile("target/test-classes/test-serialize.xml").getRoot();
+		tc.validate();
+		
+		TreeIoUtils.toXml(tc).writeTo("target/test-classes/test-serialize.xml");
+		TreeContext tca = TreeIoUtils.fromXmlFile("target/test-classes/test-serialize.xml");
+		ITree ca = tca.getRoot();
 		
 		assertTrue(a.isClone(ca));
 		assertTrue(ca.getType() == 0);
