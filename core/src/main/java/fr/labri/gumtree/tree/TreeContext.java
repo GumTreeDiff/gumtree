@@ -3,6 +3,8 @@ package fr.labri.gumtree.tree;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.labri.gumtree.io.TreeIoUtils;
+
 public class TreeContext {
 
 	Map<Integer, String> typeLabels = new HashMap<>();
@@ -11,7 +13,7 @@ public class TreeContext {
 	
 	@Override
 	public String toString() {
-		return root.toPrettyString(this);
+		return TreeIoUtils.toLISP(this).toString();
 	}
 
 	public void setRoot(ITree root) {

@@ -185,9 +185,7 @@ public final class TreeIoUtils {
 		public void writeTo(Writer writer) throws Exception {
 			TreeFormater formater = newFormater(context, writer);
 			try {
-				formater.startSerialization();
 				writeTree(formater, context.getRoot());
-				formater.stopSerialization();
 			} finally {
 				formater.close();
 			}
@@ -219,10 +217,13 @@ public final class TreeIoUtils {
 				w.close();
 			}
 		}
+		
 		private void forwardException(Exception e) {
 			throw new FormatException(e);
 		}
-		private void writeTree(TreeFormater formater, ITree root) throws Exception {
+		
+		protected void writeTree(TreeFormater formater, ITree root) throws Exception {
+			formater.startSerialization();
 			try {
 				TreeUtils.visitTree(root, new TreeVisitor() {
 					
@@ -247,6 +248,7 @@ public final class TreeIoUtils {
 			} catch (FormatException e) {
 				throw e.getCause();
 			}
+			formater.stopSerialization();
 		}
 	}
 
