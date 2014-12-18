@@ -233,7 +233,8 @@ public final class TreeUtils {
 			if (!it.second.hasNext()) {
 				visitor.endTree(it.first);
 				stack.pop();
-				ITree child = stack.peek().second.next();
+			} else {
+				ITree child = it.second.next();
 				stack.push(new Pair<>(child, child.getChildren().iterator()));
 				visitor.startTree(child);
 			}
