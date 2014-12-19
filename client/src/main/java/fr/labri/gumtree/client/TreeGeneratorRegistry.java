@@ -12,6 +12,7 @@ import fr.labri.gumtree.gen.js.RhinoTreeGenerator;
 import fr.labri.gumtree.gen.xml.XMLTreeGenerator;
 import fr.labri.gumtree.io.TreeGenerator;
 import fr.labri.gumtree.tree.TreeContext;
+import gen.sax.SAXTreeGenerator;
 
 public class TreeGeneratorRegistry {
 	
