@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -188,6 +190,15 @@ public final class TreeIoUtils {
 				writeTree(formater, context.getRoot());
 			} finally {
 				formater.close();
+			}
+		}
+		
+		public void writeTo(OutputStream writer) throws Exception {
+			OutputStreamWriter os = new OutputStreamWriter(writer);
+			try {
+				writeTo(os);
+			} finally {
+				os.close();
 			}
 		}
 		
