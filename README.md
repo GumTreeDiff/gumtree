@@ -1,7 +1,5 @@
 # GumTree
 
-***
-
 GumTree is a neat tool to visualize differences between source code files.
 
 ## Description
@@ -37,7 +35,7 @@ tool = gumtree
 cmd = gumtree $LOCAL $REMOTE
 ```
 
-and then use <code>git difftool -d</code>.
+and then use `git difftool -d`.
 
 ### Mercurial integration
 You can also set gumtree as a diff tool by adding this content in <code>~/.hgrc</code> : 
