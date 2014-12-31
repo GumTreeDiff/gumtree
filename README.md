@@ -5,12 +5,12 @@ GumTree is a neat tool to visualize differences between source code files.
 
 ## Description
 
-Compared to the classic diff tools and its numerous implementations (such as Meld, KDiff3, etc...), GumTree has two particularties :
+Compared to the classic diff tools (such as Meld, KDiff3, etc...), GumTree has two particularties :
 
 * it works on a tree structure rather than a text structure,
-* it can detect moved elements in addition of deleted, inserted and updated elements.
+* it can detect moved or renamed elements in addition of deleted and inserted elements.
 
-Thanks to these two features, GumTree is able to compute and show kick-ass diffs that will allows you to understand faster what changed between the two code files. GumTree comes with two GUI (a web based and a Java swing based), and is compatible with several languages: Java, JavaScript, PHP, R and XML. More languages are coming soon, if you want to help contact [me](www.labri.fr/perso/falleri).
+Thanks to these two features, GumTree is able to compute and show kick-ass diffs that will allow you to understand faster what changed between the two code files. GumTree comes with two GUIs (a web based and a Java swing based), and is compatible with several languages: Java, JavaScript, PHP, R and XML. More languages are coming soon, if you want to help contact [me](www.labri.fr/perso/falleri).
 
 ## Installation
 
