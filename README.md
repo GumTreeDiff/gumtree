@@ -14,7 +14,7 @@ Thanks to these two features, GumTree is able to compute and show kick-ass diffs
 
 ## Installation
 
-Download the [gumtree.jar](https://drive.google.com/file/d/0B0S2lIHclUdwN1FvX1kwNFNBQTg/edit?usp=sharing) file and that's it! For a more confortable use, do not hesitate to put it in a directory in the path and to create a shell (or bat) script that will create a shortcurt to the command `java -jar gumtree.jar`.
+Download the [gumtree.jar](https://drive.google.com/file/d/0B0S2lIHclUdwOUVEXzVKUjVWM1U/view?usp=sharing) file and that's it! For a more confortable use, do not hesitate to put it in a directory in the path and to create a shell (or bat) script that will create a shortcurt to the command `java -jar gumtree.jar`.
 
 ## Usage
 
