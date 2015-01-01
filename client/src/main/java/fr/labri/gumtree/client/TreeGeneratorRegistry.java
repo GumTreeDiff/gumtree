@@ -29,7 +29,6 @@ public class TreeGeneratorRegistry {
 		producers.add(new JdtTreeGenerator());
 		producers.add(new CdJdtTreeGenerator());
 		producers.add(new RhinoTreeGenerator());
-		producers.add(new XMLTreeGenerator());
 		producers.add(new CTreeGenerator());
 	}
 	
