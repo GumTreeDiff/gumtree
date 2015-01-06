@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Stack;
 
 import javax.xml.namespace.QName;
@@ -190,10 +191,12 @@ public final class TreeIoUtils {
 			w.writeAttribute("line_after", Integer.toString(t.getLcPosEnd()[0]));
 			w.writeAttribute("col_after", Integer.toString(t.getLcPosEnd()[1]));
 		}
-		Tree o = null;
-		if (isSrc && m.hasSrc(t)) o = m.getDst(t);
-		if (!isSrc && m.hasDst(t)) o = m.getSrc(t);
 		
+		Tree o = null;
+		if (isSrc)
+			o = m.getSrc(t);
+		else
+			o = m.getDst(t);
 		if (o != null) {
 			if (Tree.NO_VALUE != o.getPos()) {
 				w.writeAttribute("other_pos", Integer.toString(o.getPos()));
