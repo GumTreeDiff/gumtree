@@ -44,6 +44,7 @@ public final class ActionsIoUtils {
 		}
 	}
 
+	//FIXME this output format does not work with AST other than C (missing LcPosStart attribute)
 	public static void toXml(List<Action> actions, MappingStore mappings, String file) {
 		try {
 			FileWriter f = new FileWriter(file);
