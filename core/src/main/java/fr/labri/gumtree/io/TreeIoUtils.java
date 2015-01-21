@@ -194,9 +194,9 @@ public final class TreeIoUtils {
 		
 		Tree o = null;
 		if (isSrc)
-			o = m.getSrc(t);
-		else
 			o = m.getDst(t);
+		else
+			o = m.getSrc(t);
 		if (o != null) {
 			if (Tree.NO_VALUE != o.getPos()) {
 				w.writeAttribute("other_pos", Integer.toString(o.getPos()));
