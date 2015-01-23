@@ -36,7 +36,7 @@
 .container {
   margin-right: auto;
   margin-left: auto;
-  max-width: 95%;
+  width: 100%;
 } 
 
 .scrollable {
