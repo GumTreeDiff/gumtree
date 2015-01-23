@@ -20,11 +20,10 @@
 		<module>core</module>
 		<module>gen.jdt</module>
 		<module>gen.js</module>
+		<module>gen.ruby</module>
 		<module>gen.c</module>
 		<module>gen.antlr</module>
 		<module>gen.r</module>
-		<module>gen.php</module>
-		<module>gen.xml</module>
 		<module>gen.antlr-antlr</module>
 		<module>client</module>
 	</modules>

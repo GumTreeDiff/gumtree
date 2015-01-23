@@ -4,6 +4,7 @@ import fr.labri.gumtree.client.DiffClient;
 import fr.labri.gumtree.client.DiffOptions;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.tree.Tree;
 
 public class AnnotatedXmlDiff extends DiffClient {
 
@@ -17,7 +18,8 @@ public class AnnotatedXmlDiff extends DiffClient {
 	@Override
 	public void start() {
 		Matcher m = getMatcher();
-		String xml = TreeIoUtils.toAnnotatedXml((isSrc) ? m.getSrc() : m.getDst(), m.getMappings(), true);
+		Tree t = (isSrc) ? m.getSrc() : m.getDst();
+		String xml = TreeIoUtils.toAnnotatedXml(t, m.getMappings(), isSrc);
 		System.out.println(xml);
 	}
 

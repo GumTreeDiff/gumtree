@@ -42,7 +42,7 @@ public class DiffView implements Renderable {
 		.html(lang("en"))
 			.render(new BootstrapHeader())
 			.body()
-				.div(class_("container"))
+				.div(class_("container-fluid"))
 					.div(class_("row"))
 						.render(new MenuBar())
 					._div()
