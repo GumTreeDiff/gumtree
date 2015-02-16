@@ -8,7 +8,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>gen.r</artifactId>
-	<name>Gumtree R Tree Generator</name>
+	<name>GumTree R Tree Generator</name>
 	<dependencies>
 		<dependency>
 			<groupId>fr.labri.gumtree</groupId>

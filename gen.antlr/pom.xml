@@ -8,7 +8,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>gen.antlr</artifactId>
-	  <name>Gumtree AntLR Tree Generator</name>
+	  <name>GumTree Abstract AntLR Tree Generator</name>
 	<dependencies>
 		<dependency>
 			<groupId>fr.labri.gumtree</groupId>
@@ -21,20 +21,4 @@
 			<version>3.5.2</version>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr3-maven-plugin</artifactId>
-				<version>3.3</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>antlr</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 </project>
