@@ -48,7 +48,7 @@ public class TreeGeneratorRegistry {
 		}
 		
 		if (fallback != null) return fallback;
-		else return null;
+		throw new RuntimeException(String.format("No generator found for: '%s'", file));
 	}
 	
 	public TreeContext getTree(String file) throws IOException {

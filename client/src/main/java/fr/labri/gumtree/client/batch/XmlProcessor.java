@@ -24,7 +24,12 @@ public class XmlProcessor extends AbstractFileProcessor {
 	@Override
 	public void process(String file) throws IOException {
 		TreeContext t = TreeGeneratorRegistry.getInstance().getTree(file);
-		if (t != null) TreeIoUtils.toXml(t, file + ".xml");
+		if (t != null)
+			try {
+				TreeIoUtils.toXml(t).writeTo(file + ".xml");
+			} catch (Exception e) {
+				throw new IOException(e);
+			}
 	}
 
 }

@@ -24,7 +24,12 @@ public class JSONProcessor extends AbstractFileProcessor {
 	@Override
 	public void process(String file) throws IOException {
 		TreeContext t = TreeGeneratorRegistry.getInstance().getTree(file);
-		if (t != null) TreeIoUtils.toJSON(t, file + ".json");
+		if (t != null)
+			try {
+				TreeIoUtils.toJSON(t).writeTo(file + ".json");
+			} catch (Exception e) {
+				throw new IOException(e);
+			}
 	}
 
 }

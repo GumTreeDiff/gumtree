@@ -11,10 +11,11 @@ import fr.labri.gumtree.client.ui.xml.AnnotatedXmlDiff;
 import fr.labri.gumtree.client.ui.xml.XmlDiff;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
-import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeContext;
 
 public abstract class DiffClient {
+	TreeContext src, dst;
+	Matcher matcher;
 	
 	public static void main(String[] args) {
 		DiffOptions diffOptions = new DiffOptions();
@@ -47,37 +48,25 @@ public abstract class DiffClient {
 	
 	public abstract void start();
 	
-	protected Matcher getMatcher() {
-		Matcher m = (diffOptions.getMatcher() == null) ? MatcherFactories.newMatcher(getSrcTree(), getDstTree()) : MatcherFactories.newMatcher(getSrcTree(), getDstTree(), diffOptions.getMatcher());
-		m.match();
-		return m;
+	protected Matcher matchTrees() {
+		if (matcher != null)
+			return matcher;
+		matcher = (diffOptions.getMatcher() == null)
+				? MatcherFactories.newMatcher(getSrcTreeContext().getRoot(), getDstTreeContext().getRoot())
+				: MatcherFactories.newMatcher(getSrcTreeContext().getRoot(), getDstTreeContext().getRoot(), diffOptions.getMatcher());
+		matcher.match();
+		return matcher;
 	}
-	
-	protected ITree getSrcTree() {
-		return getTree(diffOptions.getSrc());
-	}
-	
-	protected ITree getDstTree() {
-		return getTree(diffOptions.getDst());
-	}
-	
+
 	protected TreeContext getSrcTreeContext() {
-		return getTreeContext(diffOptions.getSrc());
+		if (src == null)
+			src = getTreeContext(diffOptions.getSrc());
+		return src;
 	}
-	
 	protected TreeContext getDstTreeContext() {
-		return getTreeContext(diffOptions.getDst());
-	}
-	
-	
-	private ITree getTree(String file) {
-		try {
-			TreeContext t = TreeGeneratorRegistry.getInstance().getTree(file, diffOptions.getGenerators());
-			return t.getRoot();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		if (dst == null)
+			dst = getTreeContext(diffOptions.getDst());
+		return dst;
 	}
 	
 	private TreeContext getTreeContext(String file) {

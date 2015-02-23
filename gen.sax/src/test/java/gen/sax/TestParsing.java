@@ -9,7 +9,9 @@ public class TestParsing {
 	@Test
 	public void testA1() throws Exception {
 		TreeContext tc = new SAXTreeGenerator().generate(getClass().getResourceAsStream("/action_v0.xml"));
+		
 		TreeIoUtils.toLISP(tc).writeTo(System.out);
-//		System.out.println(TreeIoUtils.toLISP(tc).toString());
+//		TreeIoUtils.lispSerializer().toStream(tc, System.out);
+//		TreeIoUtils.lispSerializer(tc).toString(tc);
 	}
 }

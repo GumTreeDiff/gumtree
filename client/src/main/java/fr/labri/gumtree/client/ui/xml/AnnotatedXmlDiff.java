@@ -1,7 +1,5 @@
 package fr.labri.gumtree.client.ui.xml;
 
-import java.io.IOException;
-
 import fr.labri.gumtree.client.DiffClient;
 import fr.labri.gumtree.client.DiffOptions;
 import fr.labri.gumtree.io.TreeIoUtils;
@@ -18,12 +16,10 @@ public class AnnotatedXmlDiff extends DiffClient {
 
 	@Override
 	public void start() {
-		Matcher m = getMatcher();
-		String xml;
+		Matcher m = matchTrees();
 		try {
-			xml = TreeIoUtils.toAnnotatedXML((isSrc) ? getSrcTreeContext() : getDstTreeContext(), true, m.getMappings());
-			System.out.println(xml);
-		} catch (IOException e) {}
+			TreeIoUtils.toAnnotatedXml((isSrc) ? getSrcTreeContext() : getDstTreeContext(), isSrc, m.getMappings()).writeTo(System.out);
+		} catch (Exception e) {}
 	}
 
 }

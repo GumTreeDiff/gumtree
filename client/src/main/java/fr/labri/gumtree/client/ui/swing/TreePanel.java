@@ -15,24 +15,37 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 
 import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class TreePanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private JTree jtree;
-	private ITree tree;
+	private TreeContext tree;
 	private Map<ITree, DefaultMutableTreeNode> trees;
 
-	public TreePanel(ITree tree, TreeCellRenderer renderer) {
+	public TreePanel(TreeContext tree, TreeCellRenderer renderer) {
 		super(new GridLayout(1, 0));
 		trees = new HashMap<>();
 		this.tree = tree;
 
-		DefaultMutableTreeNode top = new DefaultMutableTreeNode(tree);
-		trees.put(tree, top);
-		for (ITree child: tree.getChildren()) createNodes(top, child);
+		ITree root = tree.getRoot();
+		DefaultMutableTreeNode top = new DefaultMutableTreeNode(root);
+		trees.put(root, top);
+		for (ITree child: root.getChildren()) createNodes(top, child);
 		
-		jtree = new JTree(top);
+		jtree = new JTree(top) {
+			private static final long serialVersionUID = 1L;
+		    public String convertValueToText(Object value, boolean selected,
+                    boolean expanded, boolean leaf, int row,
+                    boolean hasFocus) {
+		    	if(value != null) {
+		    		ITree node = ((ITree)((DefaultMutableTreeNode)value).getUserObject());
+		    		return node.toPrettyString(tree);
+		        }
+		    	return "";
+			}
+		};
 		jtree.setCellRenderer(renderer);
 		jtree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
@@ -43,7 +56,7 @@ public class TreePanel extends JPanel {
 		add(treeView);
 	}
 	
-	public TreePanel(ITree tree) {
+	public TreePanel(TreeContext tree) {
 		this(tree, new DefaultTreeCellRenderer());
 	}
 	
@@ -55,7 +68,7 @@ public class TreePanel extends JPanel {
 		return trees;
 	}
 	
-	public ITree getTree() {
+	public TreeContext getTree() {
 		return this.tree;
 	}
 

@@ -24,7 +24,12 @@ public class DotProcessor extends AbstractFileProcessor {
 	@Override
 	public void process(String file) throws IOException {
 		TreeContext t = TreeGeneratorRegistry.getInstance().getTree(file);
-		if (t != null) TreeIoUtils.toDot(t, file + ".dot");
+		if (t != null)
+			try {
+				TreeIoUtils.toDot(t).writeTo(file + ".dot");
+			} catch (Exception e) {
+				throw new IOException(e);
+			}
 	}
 
 }

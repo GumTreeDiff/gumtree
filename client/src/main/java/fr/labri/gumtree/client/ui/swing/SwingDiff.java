@@ -12,18 +12,16 @@ public final class SwingDiff extends DiffClient {
 		super(diffOptions);
 	}
 
-	private static void createAndShowGUI(String src, String dst, Matcher m) {
-		JFrame frame = new JFrame("GumTree");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(new MappingsPanel(src, dst, m.getSrc(), m.getDst(), m));
-		frame.pack();
-		frame.setVisible(true);
-	}
-
 	@Override
 	public void start() {
-		final Matcher matcher = getMatcher();
-		javax.swing.SwingUtilities.invokeLater(new Runnable() { public void run() { createAndShowGUI(diffOptions.getSrc(), diffOptions.getDst(), matcher); } });
+		final Matcher matcher = matchTrees();
+		javax.swing.SwingUtilities.invokeLater(new Runnable() { public void run() { 
+			JFrame frame = new JFrame("GumTree");
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.add(new MappingsPanel(diffOptions.getSrc(), diffOptions.getDst(), getSrcTreeContext(), getDstTreeContext(), matcher));
+			frame.pack();
+			frame.setVisible(true);
+		} });
 	}
 	
 }

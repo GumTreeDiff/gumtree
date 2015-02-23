@@ -25,13 +25,14 @@ import fr.labri.gumtree.actions.TreeClassifier;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class MappingsPanel extends JPanel implements TreeSelectionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private ITree src;
-	private ITree dst;
+	private TreeContext src;
+	private TreeContext dst;
 	private TreeClassifier classifyTrees;
 	private MappingStore mappings;
 
@@ -46,15 +47,15 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 	//private static final Color MIS_COLOR = new Color(0, 0, 128);
 	private static final Color MV_COLOR = new Color(128, 0, 128);
 
-	public MappingsPanel(String srcPath, String dstPath, ITree src, ITree dst, Matcher m)  {
+	public MappingsPanel(String srcPath, String dstPath, TreeContext src, TreeContext dst, Matcher m)  {
 		super(new GridLayout(1, 0));
 		this.src = src;
 		this.dst = dst;
 		this.classifyTrees = new RootsClassifier(src, dst, m);
 		this.mappings = new MappingStore(m.getMappingSet());
-		this.panSrc = new TreePanel(src, new MappingsCellRenderer(true));
+		this.panSrc = new TreePanel(this.src, new MappingsCellRenderer(true));
 		this.panSrc.getJTree().addTreeSelectionListener(this);
-		this.panDst = new TreePanel(dst, new MappingsCellRenderer(false));
+		this.panDst = new TreePanel(this.dst, new MappingsCellRenderer(false));
 		this.panDst.getJTree().addTreeSelectionListener(this);
 		this.txtSrc = new JTextArea();
 		this.txtDst = new JTextArea();
@@ -90,8 +91,8 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 		for (ITree t: classifyTrees.getDstUpdTrees()) openNode(panDst, t);
 		for (ITree t: classifyTrees.getSrcMvTrees()) openNode(panSrc, t);
 		for (ITree t: classifyTrees.getDstMvTrees()) openNode(panDst, t);
-		panSrc.getJTree().scrollPathToVisible(new TreePath(panSrc.getTrees().get(src).getPath()));
-		panDst.getJTree().scrollPathToVisible(new TreePath(panDst.getTrees().get(dst).getPath()));
+		panSrc.getJTree().scrollPathToVisible(new TreePath(panSrc.getTrees().get(src.getRoot()).getPath()));
+		panDst.getJTree().scrollPathToVisible(new TreePath(panDst.getTrees().get(dst.getRoot()).getPath()));
 	}
 
 	private void openNode(TreePanel p, ITree t) {

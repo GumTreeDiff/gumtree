@@ -137,8 +137,7 @@ public class ActionGenerator {
 		}
 		
 		if (!newSrc.toDigestTreeString().equals(origDst.toDigestTreeString())) {
-			LOGGER.severe("Trees not isomorphics!");
-			newSrc.refresh();
+			newSrc.refresh(); // what-s that ?
 //			System.out.println(newSrc.toTreeString());
 //			System.out.println(origDst.toTreeString());
 		}

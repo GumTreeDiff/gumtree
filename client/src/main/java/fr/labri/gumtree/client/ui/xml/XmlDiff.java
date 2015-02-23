@@ -14,7 +14,7 @@ public class XmlDiff extends DiffClient {
 
 	@Override
 	public void start() {
-		Matcher m = getMatcher();
+		Matcher m = matchTrees();
 		ActionGenerator g = new ActionGenerator(m.getSrc(), m.getDst(), m.getMappings());
 		g.generate();
 		String xml = ActionsIoUtils.toXml(getSrcTreeContext(), g.getActions(), m.getMappings());
