@@ -5,15 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import fr.labri.gumtree.gen.c.CTreeGenerator;
-import fr.labri.gumtree.gen.jdt.JdtTreeGenerator;
-import fr.labri.gumtree.gen.jdt.cd.CdJdtTreeGenerator;
-import fr.labri.gumtree.gen.js.RhinoTreeGenerator;
-import fr.labri.gumtree.gen.ruby.RubyTreeGenerator;
-import fr.labri.gumtree.gen.xml.XMLTreeGenerator;
 import fr.labri.gumtree.io.TreeGenerator;
 import fr.labri.gumtree.tree.TreeContext;
-import gen.sax.SAXTreeGenerator;
 
 public class TreeGeneratorRegistry {
 	
@@ -28,13 +21,32 @@ public class TreeGeneratorRegistry {
 	
 	private TreeGeneratorRegistry() {
 		producers = new ArrayList<>();
-		producers.add(new JdtTreeGenerator());
-		producers.add(new CdJdtTreeGenerator());
-		producers.add(new RhinoTreeGenerator());
-		producers.add(new SAXTreeGenerator());
-		producers.add(new XMLTreeGenerator());
-		producers.add(new CTreeGenerator());
-		producers.add(new RubyTreeGenerator());
+		
+		installGenerator("fr.labri.gumtree.gen.jdt.JdtTreeGenerator");
+		installGenerator("fr.labri.gumtree.gen.jdt.cd.CdJdtTreeGenerator");
+		installGenerator("fr.labri.gumtree.gen.js.RhinoTreeGenerator");
+		installGenerator("gen.sax.SAXTreeGenerator");
+		installGenerator("fr.labri.gumtree.gen.xml.XMLTreeGenerator");
+		installGenerator("fr.labri.gumtree.gen.c.CTreeGenerator");
+		installGenerator("fr.labri.gumtree.gen.ruby.RubyTreeGenerator");
+	}
+	
+	private void installGenerator(String name) {
+		TreeGenerator g = loadGenerator(name);
+		if (g != null) {
+			// TODO info message ??? 
+			producers.add(g);
+		}
+	}
+	
+	private TreeGenerator loadGenerator(String name) {
+		try {
+			Class<?> c = Class.forName(name);
+			return c.asSubclass(TreeGenerator.class).newInstance();
+		} catch (ClassCastException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			// TODO else warning ? ... or maybe it's the converse
+		}
+		return null;
 	}
 	
 	private TreeGenerator getGenerator(String file, String[] generators) {
