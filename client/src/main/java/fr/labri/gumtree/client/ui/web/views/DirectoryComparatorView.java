@@ -138,14 +138,12 @@ public class DirectoryComparatorView implements Renderable {
 		private Path root;
 		
 		public UnmodifiedFiles(Set<File> files, Path root) {
-			System.out.println(files);
 			this.files = files;
 			this.root = root;
 		}
 		
 		@Override
 		public void renderOn(HtmlCanvas html) throws IOException {
-			System.out.println("render");
 			HtmlCanvas tbody = html
 					.table(class_("table table-striped table-condensed"))
 						.thead()
@@ -155,7 +153,6 @@ public class DirectoryComparatorView implements Renderable {
 						._thead()
 						.tbody();
 			for (File file : files) {
-				System.out.println("yo");
 				tbody
 					.tr()
 						.td().content(root.relativize(file.toPath()).toString())
