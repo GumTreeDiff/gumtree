@@ -76,7 +76,7 @@ public class DirectoryComparatorView implements Renderable {
 									._div()
 									.div(id("collapse-added-files").class_("panel-collapse collapse in"))
 									 	.div(class_("panel-body"))
-									 		.render_if(new UnmodifiedFiles(comparator.getAddedFiles(), comparator.getDst()), comparator.getDeletedFiles().size() > 0)
+                                            .render_if(new UnmodifiedFiles(comparator.getAddedFiles(), comparator.getDst()), comparator.getAddedFiles().size() > 0)
 									 	._div()
 									._div()
 								._div()
