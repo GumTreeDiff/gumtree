@@ -3,7 +3,6 @@ package fr.labri.gumtree.io;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class LineReader extends Reader {
 	private Reader reader;
@@ -30,7 +29,7 @@ public class LineReader extends Reader {
 		return lines.get(line) + column;
 	}
 
-//	public int[] positionFor(int offset) {
+//	public int[] positionFor(int offset) { // TODO write this method
 //		Arrays.binarySearch(lines., null, null)
 //	}
 	

@@ -20,8 +20,6 @@ package fr.labri.gumtree.gen.ruby;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.jrubyparser.CompatVersion;
 import org.jrubyparser.Parser;
@@ -29,44 +27,45 @@ import org.jrubyparser.ast.Node;
 import org.jrubyparser.parser.ParserConfiguration;
 
 import fr.labri.gumtree.io.TreeGenerator;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class RubyTreeGenerator extends TreeGenerator {
 
-	public Tree generate(String file) {
+	public TreeContext generate(String file) {
+
 		Parser p = new Parser();
 		try {
 			FileReader f = new FileReader(file);
 			CompatVersion version = CompatVersion.RUBY2_0;
 			ParserConfiguration config = new ParserConfiguration(0, version);
 			Node n = p.parse("<code>", f, config);
-			return toTree(n, new HashMap<Node, Tree>());
+			return toTree(new TreeContext(), n, null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private Tree toTree(Node n, Map<Node, Tree> trees) {
+	private TreeContext toTree(TreeContext ctx, Node n, ITree parent) {
 		String label = "";
 		String typeLabel = n.getNodeType().name();
 		int type = n.getNodeType().ordinal() + 1;
-		Tree t = new Tree(type, label, typeLabel);
-		Tree p = null;
-		if (n.getParent() != null)
-			p = trees.get(n.getParent());
-		t.setParentAndUpdateChildren(p);
+		ITree t = ctx.createTree(type, label, typeLabel);
+		if (parent == null)
+			ctx.setRoot(t);
+		else
+			t.setParentAndUpdateChildren(parent);
 		
 		int pos = n.getPosition().getStartOffset();
 		int length = n.getPosition().getEndOffset() - n.getPosition().getStartOffset();
 		t.setPos(pos);
 		t.setLength(length);
 		
-		trees.put(n, t);
 		for(Node c: n.childNodes())
-			toTree(c, trees);
+			toTree(ctx, c, t);
 		
-		return t;
+		return ctx;
 	}
 	
 	@Override

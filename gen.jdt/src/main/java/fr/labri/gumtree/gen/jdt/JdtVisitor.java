@@ -18,12 +18,8 @@
 
 package fr.labri.gumtree.gen.jdt;
 
-import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.*;
-import org.eclipse.jdt.internal.compiler.ast.BinaryExpression;
-
-import fr.labri.gumtree.tree.Tree;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
 	
