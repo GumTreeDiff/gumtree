@@ -20,10 +20,12 @@ public final class MatrixDebugger {
 	}
 	
 	public static void dump(double[][] mat) {
+		System.out.println("---");
 		for (double[] r : mat) {
 			for (double l: r) System.out.print(l + "\t");
 			System.out.println();
 		}
+		System.out.println("---");
 	}
 
 }
