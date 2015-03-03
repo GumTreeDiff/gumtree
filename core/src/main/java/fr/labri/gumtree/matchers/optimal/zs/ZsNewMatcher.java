@@ -98,7 +98,7 @@ public class ZsNewMatcher extends Matcher {
 			rootNodePair = false;
 
 			// compute mapping for current forest distance matrix
-			int firstRow = src.lld(lastRow) - 1; //FIXME check index
+			int firstRow = src.lld(lastRow) - 1;
 			int firstCol = dst.lld(lastCol) - 1;
 
 			int row = lastRow;
@@ -118,7 +118,12 @@ public class ZsNewMatcher extends Matcher {
 					// in ted2
 					if ((src.lld(row) - 1 == src.lld(lastRow) - 1) && (dst.lld(col) - 1 == dst.lld(lastCol) - 1)) {
 						// if both subforests are trees, map nodes
-						addMapping(src.tree(row), dst.tree(col)); //FIXME
+						ITree tSrc = src.tree(row);
+						ITree tDst = dst.tree(col);
+						if (tSrc.getType() == tDst.getType())
+							addMapping(tSrc, tDst);
+						else
+							throw new RuntimeException("Should not map incompatible nodes.");
 						row--;
 						col--;
 					} else {
