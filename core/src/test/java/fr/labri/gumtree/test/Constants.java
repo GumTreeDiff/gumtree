@@ -7,4 +7,7 @@ public class Constants {
 	
 	public static final String ACTION_SRC = "/action_v0.xml";
 	public static final String ACTION_DST = "/action_v1.xml";
+	
+	public static final String ZS_SRC = "/zs_v0.xml";
+	public static final String ZS_DST = "/zs_v1.xml";
 }
