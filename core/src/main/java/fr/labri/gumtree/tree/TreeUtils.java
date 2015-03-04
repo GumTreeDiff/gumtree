@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.tree.hash.HashGenerator;
+import fr.labri.gumtree.tree.hash.RollingHashGenerator;
+import fr.labri.gumtree.tree.hash.StaticHashGenerator;
 
 
 public final class TreeUtils {
@@ -37,12 +40,11 @@ public final class TreeUtils {
 	 * @param tree a Tree
 	 */
 	public static void computeDigest(ITree tree) {
-		DigestGenerator.RollingMd5HashGenerator g = new DigestGenerator.RollingMd5HashGenerator();
-		g.computeDigest(tree);
+		(new RollingHashGenerator.Md5RollingHashGenerator()).hash(tree); 
 	}
 
-	public static void computeDigest(ITree tree, DigestGenerator g) {
-		g.computeDigest(tree);
+	public static void computeDigest(ITree tree, HashGenerator g) {
+		g.hash(tree);
 	}
 
 	/**

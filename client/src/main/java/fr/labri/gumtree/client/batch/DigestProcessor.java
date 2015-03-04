@@ -7,9 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
-import fr.labri.gumtree.tree.DigestGenerator;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
+import fr.labri.gumtree.tree.hash.RollingHashGenerator;
+import fr.labri.gumtree.tree.hash.StaticHashGenerator;
 
 public class DigestProcessor extends AbstractFileProcessor {
 	
@@ -60,27 +61,27 @@ public class DigestProcessor extends AbstractFileProcessor {
 	public void process(String file) throws IOException {
 		ITree tree = TreeGeneratorRegistry.getInstance().getTree(file).getRoot();
 		long tic = tic();
-		TreeUtils.computeDigest(tree, new DigestGenerator.StdHashGenerator());
+		TreeUtils.computeDigest(tree, new StaticHashGenerator.StdHashGenerator());
 		stdTime += tic() - tic;
 		updateDigests(tree, stdDigests);
 		
 		tic = tic();
-		TreeUtils.computeDigest(tree, new DigestGenerator.RollingStdHashGenerator());
+		TreeUtils.computeDigest(tree, new RollingHashGenerator.JavaRollingHashGenerator());
 		rStdTime += tic() - tic;
 		updateDigests(tree, rStdDigests);
 		
 		tic = tic();
-		TreeUtils.computeDigest(tree, new DigestGenerator.Md5HashGenerator());
+		TreeUtils.computeDigest(tree, new StaticHashGenerator.Md5HashGenerator());
 		md5Time += tic() - tic;
 		updateDigests(tree, md5Digests);
 		
 		tic = tic();
-		TreeUtils.computeDigest(tree, new DigestGenerator.RollingMd5HashGenerator());
+		TreeUtils.computeDigest(tree, new RollingHashGenerator.Md5RollingHashGenerator());
 		rMd5Time += tic() - tic;
 		updateDigests(tree, rMd5Digests);
 		
 		tic = tic();
-		TreeUtils.computeDigest(tree, new DigestGenerator.RollingMd5HashGenerator());
+		TreeUtils.computeDigest(tree, new RollingHashGenerator.RandomRollingHashGenerator());
 		rRdmTime += tic() - tic;
 		updateDigests(tree, rRdmDigests);
 	}
