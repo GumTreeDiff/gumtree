@@ -1,10 +1,9 @@
 package fr.labri.gumtree.test;
 
-import static fr.labri.gumtree.test.Constants.*;
-
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
+import static fr.labri.gumtree.test.Constants.*;
 
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.matchers.Matcher;
@@ -13,19 +12,32 @@ import fr.labri.gumtree.tree.ITree;
 
 public class TestZsMatcher {
 	
-	ITree src, dst;
-
-	@Before // FIXME Could it be before class ?
-	public void init() {
-		src = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_SRC)).getRoot();
-		dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_DST)).getRoot();
-	}
-	
 	@Test
-	public void testActions() {
+	public void testZsMatcherWithDistinctTypes() {
+		ITree src = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_SRC)).getRoot();
+		ITree dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_DST)).getRoot();
 		Matcher matcher = new ZsMatcher(src, dst);
 		matcher.match();
-		Assert.assertEquals(5, matcher.getMappingSet().size());
+		assertEquals(5, matcher.getMappingSet().size());
+		assertTrue(matcher.getMappings().has(src, dst.getChild(0)));
+		assertTrue(matcher.getMappings().has(src.getChild(0), dst.getChild(0).getChild(0)));
+		assertTrue(matcher.getMappings().has(src.getChild(1), dst.getChild(0).getChild(1)));
+		assertTrue(matcher.getMappings().has(src.getChild(1).getChild(0), dst.getChild(0).getChild(1).getChild(0)));
+		assertTrue(matcher.getMappings().has(src.getChild(1).getChild(2), dst.getChild(0).getChild(1).getChild(2)));
 	}
 
+	@Test
+	public void testZsMatcher() {
+		ITree src = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_SLIDE_SRC)).getRoot();
+		ITree dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_SLIDE_DST)).getRoot();
+		Matcher matcher = new ZsMatcher(src, dst);
+		matcher.match();
+		assertEquals(5, matcher.getMappingSet().size());
+		assertTrue(matcher.getMappings().has(src, dst));
+		assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
+		assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
+		assertTrue(matcher.getMappings().has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
+		assertTrue(matcher.getMappings().has(src.getChild(0).getChild(2), dst.getChild(2)));
+	}
+	
 }
