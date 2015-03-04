@@ -23,7 +23,7 @@ public class TestZsNewMatcher {
 	
 	@Test
 	public void testActions() {
-		Matcher matcher = new ZsNewMatcher(src, dst);
+		Matcher matcher = new ZsMatcher(src, dst);
 		matcher.match();
 		Assert.assertEquals(5, matcher.getMappingSet().size());
 	}

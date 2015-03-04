@@ -9,7 +9,7 @@ import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
-import fr.labri.gumtree.matchers.optimal.zs.ZsNewMatcher;
+import fr.labri.gumtree.matchers.optimal.zs.ZsMatcher;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeMap;
 import fr.labri.gumtree.tree.TreeUtils;
@@ -94,7 +94,7 @@ public class CompleteBottomUpMatcher extends Matcher {
 		TreeUtils.removeMatched(cDst);
 
 		if (cSrc.getSize() < SIZE_THESHOLD || cDst.getSize() < SIZE_THESHOLD) {
-			Matcher m = new ZsNewMatcher(cSrc, cDst);
+			Matcher m = new ZsMatcher(cSrc, cDst);
 			m.match();
 			for (Mapping candidate: m.getMappings()) {
 				ITree left = srcIds.getTree(candidate.getFirst().getId());
