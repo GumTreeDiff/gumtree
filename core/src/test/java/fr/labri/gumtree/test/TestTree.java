@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.TreeContext;
 import fr.labri.gumtree.tree.TreeUtils;
 
 public class TestTree {
@@ -24,17 +23,6 @@ public class TestTree {
 		assertTrue(nodes.get(2).getLabel().equals("c"));
 		assertTrue(nodes.get(3).getLabel().equals("d"));
 		assertTrue(nodes.get(4).getLabel().equals("e"));
-	}
-
-	@Test
-	public void testHashCode() {
-		TreeContext tc = new TreeContext();
-		ITree t1 = tc.createTree(0, "new1", null);
-		ITree t2 = tc.createTree(0, "new2", null);
-		assertTrue(t1.hashCode() != t2.hashCode());
-		t1.setId(0);
-		t2.setId(0);
-		assertTrue(t1.hashCode() == t2.hashCode());
 	}
 
 	@Test

@@ -49,7 +49,7 @@ public interface ITree {
 	 */
 	public abstract List<ITree> getDescendants();
 
-	public abstract int getDigest();
+	public abstract int getHash();
 
 	public abstract int getEndPos();
 
@@ -91,8 +91,6 @@ public interface ITree {
 	public abstract List<ITree> getTrees();
 
 	public abstract int getType();
-
-	public abstract int hashCode();
 
 	/**
 	 * Indicates if the two trees are isomorphics.
@@ -146,7 +144,7 @@ public interface ITree {
 
 	public abstract void setDepth(int depth);
 
-	public abstract void setDigest(int digest);
+	public abstract void setHash(int hash);
 
 	public abstract void setHeight(int height);
 
@@ -174,9 +172,11 @@ public interface ITree {
 
 	public abstract void setType(int type);
 
-	public abstract String toDigestString();
+	public abstract String toStaticHashString();
 
-	public abstract String toDigestTreeString();
+	public abstract String inSeed();
+	
+	public abstract String outSeed();
 
 	public abstract String toShortString();
 

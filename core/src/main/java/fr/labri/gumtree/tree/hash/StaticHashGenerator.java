@@ -8,7 +8,7 @@ public abstract class StaticHashGenerator implements HashGenerator {
 
 	public void hash(ITree t) {
 		for (ITree n: t.postOrder())
-			n.setDigest(nodeHash(n));
+			n.setHash(nodeHash(n));
 	}
 
 	public abstract int nodeHash(ITree t);
@@ -18,7 +18,7 @@ public abstract class StaticHashGenerator implements HashGenerator {
 		
 		@Override
 		public int nodeHash(ITree t) {
-			return t.toDigestTreeString().hashCode();
+			return t.toStaticHashString().hashCode();
 		}
 		
 	}
@@ -27,7 +27,7 @@ public abstract class StaticHashGenerator implements HashGenerator {
 		
 		@Override
 		public int nodeHash(ITree t) {
-			return md5(t.toDigestTreeString());
+			return md5(t.toStaticHashString());
 		}
 		
 	}

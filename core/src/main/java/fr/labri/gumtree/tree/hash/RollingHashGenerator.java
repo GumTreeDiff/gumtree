@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.labri.gumtree.tree.ITree;
-
 import static fr.labri.gumtree.tree.hash.HashUtils.*;
 
 public abstract class RollingHashGenerator implements HashGenerator {
@@ -12,25 +11,35 @@ public abstract class RollingHashGenerator implements HashGenerator {
 	public void hash(ITree t) {
 		for (ITree n: t.postOrder())
 			if (n.isLeaf())
-				n.setDigest(leafHash(n));
+				n.setHash(leafHash(n));
 			else
-				n.setDigest(innerNodeHash(n));
+				n.setHash(innerNodeHash(n));
+	}
+	
+	public abstract int hashFunction(String s);
+	
+	public int leafHash(ITree t) {
+		return BASE * hashFunction(t.inSeed()) + hashFunction(t.outSeed());
 	}
 
-	public abstract int leafHash(ITree t);
-
 	public int innerNodeHash(ITree t) {
-		int digest = 0;
-		for(ITree c : t.getChildren())
-			digest = BASE * digest + c.getDigest() * (int) fpow(BASE, c.getSize());
-		return BASE * digest + leafHash(t);
+		int size = t.getSize() * 2 - 1;
+		int hash = hashFunction(t.inSeed()) * fpow(BASE, size);
+		
+		for (ITree c: t.getChildren()) {
+			size = size - c.getSize() * 2;
+			hash += c.getHash() * fpow(BASE, size);
+		}
+		
+		hash += hashFunction(t.outSeed());
+		return hash;
 	}
 
 	public static class JavaRollingHashGenerator extends RollingHashGenerator {
 
 		@Override
-		public int leafHash(ITree t) {
-			return t.toDigestString().hashCode();
+		public int hashFunction(String s) {
+			return s.hashCode();
 		}
 		
 	}
@@ -38,8 +47,8 @@ public abstract class RollingHashGenerator implements HashGenerator {
 	public static class Md5RollingHashGenerator extends RollingHashGenerator {
 		
 		@Override
-		public int leafHash(ITree t) {
-			return md5(t.toDigestString());
+		public int hashFunction(String s) {
+			return md5(s);
 		}
 
 	}
@@ -49,11 +58,11 @@ public abstract class RollingHashGenerator implements HashGenerator {
 		private final static Map<String, Integer> digests = new HashMap<>();
 		
 		@Override
-		public int leafHash(ITree t) {
-			return rdmDigest(t.toDigestString());
+		public int hashFunction(String s) {
+			return rdmHash(s);
 		}
 
-		public static int rdmDigest(String s) {
+		public static int rdmHash(String s) {
 			if (!digests.containsKey(s)) {
 				int digest = (int) (Math.random() * (Integer.MAX_VALUE - 1));
 				digests.put(s, digest);

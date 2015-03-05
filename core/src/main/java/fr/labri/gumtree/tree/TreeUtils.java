@@ -9,10 +9,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import fr.labri.gumtree.matchers.Mapping;
-import fr.labri.gumtree.tree.hash.HashGenerator;
-import fr.labri.gumtree.tree.hash.RollingHashGenerator;
-import fr.labri.gumtree.tree.hash.StaticHashGenerator;
-
 
 public final class TreeUtils {
 
@@ -32,19 +28,6 @@ public final class TreeUtils {
 					size += c.getSize();
 			t.setSize(size);
 		}
-	}
-
-	/**
-	 * Compute the digest of every node of the tree. The digest is set 
-	 * directly on the nodes and is then accessible using {@link Tree#getDigest()}.
-	 * @param tree a Tree
-	 */
-	public static void computeDigest(ITree tree) {
-		(new RollingHashGenerator.Md5RollingHashGenerator()).hash(tree); 
-	}
-
-	public static void computeDigest(ITree tree, HashGenerator g) {
-		g.hash(tree);
 	}
 
 	/**

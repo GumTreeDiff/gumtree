@@ -8,11 +8,10 @@ import java.util.Set;
 
 import fr.labri.gumtree.client.TreeGeneratorRegistry;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.TreeUtils;
 import fr.labri.gumtree.tree.hash.RollingHashGenerator;
 import fr.labri.gumtree.tree.hash.StaticHashGenerator;
 
-public class DigestProcessor extends AbstractFileProcessor {
+public class HashProcessor extends AbstractFileProcessor {
 	
 	private int stdTime;
 	
@@ -35,11 +34,11 @@ public class DigestProcessor extends AbstractFileProcessor {
 	private Map<Integer,Set<String>> rRdmDigests;
 	
 	public static void main(String[] args) {
-		DigestProcessor g = new DigestProcessor(args[0],"/home/falleri/Out/");
+		HashProcessor g = new HashProcessor(args[0],"/home/falleri/Out/");
 		g.process();
 	}
 
-	public DigestProcessor(String inFolder, String outFolder) {
+	public HashProcessor(String inFolder, String outFolder) {
 		super(inFolder, outFolder);
 	}
 	
@@ -61,36 +60,36 @@ public class DigestProcessor extends AbstractFileProcessor {
 	public void process(String file) throws IOException {
 		ITree tree = TreeGeneratorRegistry.getInstance().getTree(file).getRoot();
 		long tic = tic();
-		TreeUtils.computeDigest(tree, new StaticHashGenerator.StdHashGenerator());
+		new StaticHashGenerator.StdHashGenerator().hash(tree);
 		stdTime += tic() - tic;
 		updateDigests(tree, stdDigests);
 		
 		tic = tic();
-		TreeUtils.computeDigest(tree, new RollingHashGenerator.JavaRollingHashGenerator());
+		new RollingHashGenerator.JavaRollingHashGenerator().hash(tree);
 		rStdTime += tic() - tic;
 		updateDigests(tree, rStdDigests);
 		
 		tic = tic();
-		TreeUtils.computeDigest(tree, new StaticHashGenerator.Md5HashGenerator());
+		new StaticHashGenerator.Md5HashGenerator().hash(tree);
 		md5Time += tic() - tic;
 		updateDigests(tree, md5Digests);
 		
 		tic = tic();
-		TreeUtils.computeDigest(tree, new RollingHashGenerator.Md5RollingHashGenerator());
+		new RollingHashGenerator.Md5RollingHashGenerator().hash(tree);
 		rMd5Time += tic() - tic;
 		updateDigests(tree, rMd5Digests);
 		
 		tic = tic();
-		TreeUtils.computeDigest(tree, new RollingHashGenerator.RandomRollingHashGenerator());
+		new RollingHashGenerator.RandomRollingHashGenerator().hash(tree);;
 		rRdmTime += tic() - tic;
 		updateDigests(tree, rRdmDigests);
 	}
 	
 	private void updateDigests(ITree tree, Map<Integer,Set<String>> digests) {
 		for (ITree t: tree.getTrees()) {
-			int digest = t.getDigest();
+			int digest = t.getHash();
 			if (!digests.containsKey(digest)) digests.put(digest, new HashSet<String>());
-			digests.get(digest).add(t.toDigestTreeString());
+			digests.get(digest).add(t.toStaticHashString());
 		}
 	}
 	

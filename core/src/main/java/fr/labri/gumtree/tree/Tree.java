@@ -3,6 +3,8 @@ package fr.labri.gumtree.tree;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.labri.gumtree.tree.hash.HashUtils;
+
 public class Tree extends AbstractTree implements ITree {
 	
 	// Type of the token
@@ -29,7 +31,7 @@ public class Tree extends AbstractTree implements ITree {
 		this.label = (label == null) ? NO_LABEL : label.intern();
 		this.id = NO_ID;
 		this.depth = NO_VALUE;
-		this.digest = NO_VALUE;
+		this.hash = NO_VALUE;
 		this.height = NO_VALUE;
 		this.depth = NO_VALUE;
 		this.size = NO_VALUE;
@@ -51,7 +53,7 @@ public class Tree extends AbstractTree implements ITree {
 		this.height = other.getHeight();
 		this.size = other.getSize();
 		this.depth = other.getDepth();
-		this.digest = other.getDigest();
+		this.hash = other.getHash();
 		this.depth = other.getDepth();
 		this.tmpData = other.getTmpData();
 		this.children = new ArrayList<>();
@@ -133,8 +135,7 @@ public class Tree extends AbstractTree implements ITree {
 	
 	@Override
 	public int hashCode() {
-		if (id != NO_ID) return id;
-		else return super.hashCode();
+		return Integer.hashCode(type) + HashUtils.BASE * label.hashCode();
 	}
 
 	@Override

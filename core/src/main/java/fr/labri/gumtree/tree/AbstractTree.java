@@ -5,19 +5,21 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import fr.labri.gumtree.tree.hash.HashUtils;
+
 public abstract class AbstractTree implements ITree {
 
 	private static final String OPEN_SYMBOL = "[(";
 	private static final String CLOSE_SYMBOL = ")]";
 	private static final String SEPARATE_SYMBOL = "@@";
-
+	
 	protected int id;
 	protected ITree parent;
 	protected List<ITree> children;
 	protected int height;
 	protected int size;
 	protected int depth;
-	protected int digest;
+	protected int hash;
 	protected boolean matched;
 
 	@Override
@@ -56,8 +58,8 @@ public abstract class AbstractTree implements ITree {
 	}
 
 	@Override
-	public int getDigest() {
-		return digest;
+	public int getHash() {
+		return hash;
 	}
 
 	@Override
@@ -127,11 +129,10 @@ public abstract class AbstractTree implements ITree {
 
 	@Override
 	public boolean isClone(ITree tree) {
-		if (this.getDigest() != tree.getDigest()) return false;
-		else {
-			boolean res = (this.toDigestTreeString().equals(tree.toDigestTreeString())); 
-			return res;
-		}
+		if (this.getHash() != tree.getHash()) 
+			return false;
+		else
+			return this.toStaticHashString().equals(tree.toStaticHashString());
 	}
 
 	@Override
@@ -210,7 +211,7 @@ public abstract class AbstractTree implements ITree {
 		TreeUtils.computeSize(this);
 		TreeUtils.computeDepth(this);
 		TreeUtils.computeHeight(this);
-		TreeUtils.computeDigest(this);
+		HashUtils.DEFAULT_HASH_GENERATOR.hash(this);
 	}
 
 	@Override
@@ -219,8 +220,8 @@ public abstract class AbstractTree implements ITree {
 	}
 
 	@Override
-	public void setDigest(int digest) {
-		this.digest = digest;
+	public void setHash(int digest) {
+		this.hash = digest;
 	}
 
 	@Override
@@ -242,18 +243,24 @@ public abstract class AbstractTree implements ITree {
 	public void setSize(int size) {
 		this.size = size;
 	}
-
+	
 	@Override
-	public String toDigestString() {
-		return getLabel() + SEPARATE_SYMBOL + getType();
+	public String inSeed() {
+		return OPEN_SYMBOL + getLabel() + SEPARATE_SYMBOL + getType();
+	}
+	
+	@Override
+	public String outSeed() {
+		return getType() + SEPARATE_SYMBOL + getLabel() + CLOSE_SYMBOL; 
 	}
 
 	@Override
-	public String toDigestTreeString() {
+	public String toStaticHashString() {
 		StringBuffer b = new StringBuffer();
 		b.append(OPEN_SYMBOL);
-		b.append(this.toDigestString());
-		for (ITree c: this.getChildren()) b.append(c.toDigestTreeString());
+		b.append(this.toShortString());
+		for (ITree c: this.getChildren())
+			b.append(c.toStaticHashString());
 		b.append(CLOSE_SYMBOL);
 		return b.toString();
 	}
@@ -266,7 +273,7 @@ public abstract class AbstractTree implements ITree {
 
 	@Override
 	public String toShortString() {
-		return String.format("%d:%s", getType(), getLabel());
+		return String.format("%d%s%s", getType(), SEPARATE_SYMBOL, getLabel());
 	}
 
 	@Override
