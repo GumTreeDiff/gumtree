@@ -14,6 +14,14 @@ public abstract class Addition extends Action {
 		this.pos = pos;
 	}
 	
+	public ITree getParent() {
+		return parent;
+	}
+	
+	public int getPosition() {
+		return pos;
+	}
+	
 	@Override
 	public String toString() {
 		return getName() + " " + node.toTreeString() + " to " + parent.toShortString() + " at " + pos;

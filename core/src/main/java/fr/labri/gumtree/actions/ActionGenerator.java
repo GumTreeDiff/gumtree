@@ -136,7 +136,7 @@ public class ActionGenerator {
 			}
 		}
 		
-		if (!newSrc.toDigestTreeString().equals(origDst.toDigestTreeString())) {
+		if (!newSrc.toStaticHashString().equals(origDst.toStaticHashString())) {
 			newSrc.refresh(); // what-s that ?
 //			System.out.println(newSrc.toTreeString());
 //			System.out.println(origDst.toTreeString());
