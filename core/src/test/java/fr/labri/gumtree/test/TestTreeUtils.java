@@ -73,18 +73,6 @@ public class TestTreeUtils {
 	}
 	
 	@Test
-	public void testDigest() {
-		ITree croot = root.deepCopy();
-		TreeUtils.computeDigest(root);
-		TreeUtils.computeDigest(croot);
-		assertTrue(root.getDigest() == croot.getDigest());
-		croot.getChildren().get(0).getChildren().get(0).setLabel("x");
-		TreeUtils.computeDigest(croot);
-		assertFalse(root.getDigest() == croot.getDigest());
-		assertEquals("[(a@@0[(b@@1[(c@@3)][(d@@3)])][(e@@2)])]", root.toDigestTreeString());
-	}
-	
-	@Test
 	public void testRemoveCompletelyMappedDescendants() {
 		dst.getChildren().get(0).setMatched(true);
 		dst.getChildren().get(0).getChildren().get(0).getChildren().get(0).setMatched(true);
