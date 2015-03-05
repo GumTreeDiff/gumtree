@@ -1,11 +1,18 @@
 package fr.labri.gumtree.test;
 
-import static fr.labri.gumtree.test.Constants.*;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import static fr.labri.gumtree.test.Constants.*;
 import fr.labri.gumtree.actions.ActionGenerator;
+import fr.labri.gumtree.actions.model.Action;
+import fr.labri.gumtree.actions.model.Delete;
+import fr.labri.gumtree.actions.model.Insert;
+import fr.labri.gumtree.actions.model.Move;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.tree.ITree;
@@ -31,7 +38,22 @@ public class TestActionGenerator {
 		
 		ActionGenerator ag = new ActionGenerator(src, dst, ms);
 		ag.generate();
-		
-		System.out.println(ag.getActions());
+		List<Action> actions = ag.getActions();
+		assertEquals(3,  actions.size());
+		Action a1 = actions.get(0);
+		assertTrue(a1 instanceof Insert);
+		Insert i = (Insert) a1;
+		assertEquals("1@@h", i.getNode().toShortString());
+		assertEquals("0@@a", i.getParent().toShortString());
+		assertEquals(2, i.getPosition());
+		Action a2 = actions.get(1);
+		assertTrue(a2 instanceof Move);
+		Move m = (Move) a2;
+		assertEquals("0@@e", m.getNode().toShortString());
+		assertEquals("1@@h", m.getParent().toShortString());
+		assertEquals(0, m.getPosition());
+		Action a3 = actions.get(2);
+		assertTrue(a3 instanceof Delete);
+		assertEquals("0@@g", a3.getNode().toShortString());
 	}
 }
