@@ -1,4 +1,4 @@
-package fr.labri;
+package fr.labri.gumtree.tree;
 
 import java.util.Enumeration;
 import java.util.Iterator;
