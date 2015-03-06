@@ -25,7 +25,8 @@ public class MappingStore implements Iterable<Mapping> {
 	
 	public Set<Mapping> asSet() {
 		Set<Mapping> mappings = new HashSet<>();
-		for (ITree src : srcs.keySet()) mappings.add(new Mapping(src, srcs.get(src)));
+		for (ITree src : srcs.keySet()) 
+			mappings.add(new Mapping(src, srcs.get(src)));
 		return mappings;
 	}
 	
@@ -90,6 +91,11 @@ public class MappingStore implements Iterable<Mapping> {
 	@Override
 	public Iterator<Mapping> iterator() {
 		return asSet().iterator();
+	}
+	
+	@Override
+	public String toString() {
+		return asSet().toString();
 	}
 
 }
