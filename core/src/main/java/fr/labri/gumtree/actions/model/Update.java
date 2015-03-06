@@ -15,6 +15,10 @@ public class Update extends Action {
 	protected String getName() {
 		return "UPD";
 	}
+	
+	public String getValue() {
+		return this.value;
+	}
 
 	@Override
 	public String toString() {
