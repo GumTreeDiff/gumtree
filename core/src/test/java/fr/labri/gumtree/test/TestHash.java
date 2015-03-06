@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.hash.HashUtils;
 import fr.labri.gumtree.tree.hash.RollingHashGenerator;
 
 public class TestHash {

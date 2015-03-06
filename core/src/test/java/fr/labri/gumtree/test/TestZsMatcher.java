@@ -1,21 +1,20 @@
 package fr.labri.gumtree.test;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
-
-import static fr.labri.gumtree.test.Constants.*;
-
-import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.optimal.zs.*;
 import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.Pair;
 
 public class TestZsMatcher {
 	
 	@Test
-	public void testZsMatcherWithDistinctTypes() {
-		ITree src = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_SRC)).getRoot();
-		ITree dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_DST)).getRoot();
+	public void testWithCustomExample() {
+		Pair<ITree, ITree> trees = TreeLoader.getZsCustomExample();
+		ITree src = trees.getFirst();
+		ITree dst = trees.getSecond();
 		Matcher matcher = new ZsMatcher(src, dst);
 		matcher.match();
 		assertEquals(5, matcher.getMappingSet().size());
@@ -27,9 +26,10 @@ public class TestZsMatcher {
 	}
 
 	@Test
-	public void testZsMatcher() {
-		ITree src = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_SLIDE_SRC)).getRoot();
-		ITree dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(ZS_SLIDE_DST)).getRoot();
+	public void testWithSlideExample() {
+		Pair<ITree, ITree> trees = TreeLoader.getZsSlideExample();
+		ITree src = trees.getFirst();
+		ITree dst = trees.getSecond();
 		Matcher matcher = new ZsMatcher(src, dst);
 		matcher.match();
 		assertEquals(5, matcher.getMappingSet().size());

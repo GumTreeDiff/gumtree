@@ -4,30 +4,25 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import static fr.labri.gumtree.test.Constants.*;
 import fr.labri.gumtree.actions.ActionGenerator;
 import fr.labri.gumtree.actions.model.Action;
 import fr.labri.gumtree.actions.model.Delete;
 import fr.labri.gumtree.actions.model.Insert;
 import fr.labri.gumtree.actions.model.Move;
-import fr.labri.gumtree.io.TreeIoUtils;
+import fr.labri.gumtree.actions.model.Update;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.Pair;
 
 public class TestActionGenerator {
-	ITree src, dst;
 
-	@Before // FIXME Could it be before class ?
-	public void init() {
-		src = TreeIoUtils.fromXml(getClass().getResourceAsStream(ACTION_SRC)).getRoot();
-		dst = TreeIoUtils.fromXml(getClass().getResourceAsStream(ACTION_DST)).getRoot();
-	}
-	
 	@Test
-	public void testActions() {
+	public void testWithActionExample() {
+		Pair<ITree, ITree> trees = TreeLoader.getActionExample();
+		ITree src = trees.getFirst();
+		ITree dst = trees.getSecond();
 		MappingStore ms = new MappingStore();
 		ms.link(src, dst);
 		ms.link(src.getChild(1), dst.getChild(0));
@@ -39,7 +34,8 @@ public class TestActionGenerator {
 		ActionGenerator ag = new ActionGenerator(src, dst, ms);
 		ag.generate();
 		List<Action> actions = ag.getActions();
-		assertEquals(3,  actions.size());
+			
+		assertEquals(4,  actions.size());
 		Action a1 = actions.get(0);
 		assertTrue(a1 instanceof Insert);
 		Insert i = (Insert) a1;
@@ -53,7 +49,32 @@ public class TestActionGenerator {
 		assertEquals("1@@h", m.getParent().toShortString());
 		assertEquals(0, m.getPosition());
 		Action a3 = actions.get(2);
-		assertTrue(a3 instanceof Delete);
-		assertEquals("0@@g", a3.getNode().toShortString());
+		assertTrue(a3 instanceof Update);
+		Update u = (Update) a3;
+		assertEquals("0@@f", u.getNode().toShortString());
+		assertEquals("y", u.getValue());
+		Action a4 = actions.get(3);
+		assertTrue(a4 instanceof Delete);
+		assertEquals("0@@g", a4.getNode().toShortString());
 	}
+	
+	
+	@Test
+	public void testWithZsCustomExample() {
+		Pair<ITree, ITree> trees = TreeLoader.getZsCustomExample();
+		ITree src = trees.getFirst();
+		ITree dst = trees.getSecond();
+		MappingStore ms = new MappingStore();
+		ms.link(src, dst.getChild(0));
+		ms.link(src.getChild(0), dst.getChild(0).getChild(0));
+		ms.link(src.getChild(1), dst.getChild(0).getChild(1));
+		ms.link(src.getChild(1).getChild(0), dst.getChild(0).getChild(1).getChild(0));
+		ms.link(src.getChild(1).getChild(2), dst.getChild(0).getChild(1).getChild(2));
+		
+		ActionGenerator ag = new ActionGenerator(src, dst, ms);
+		ag.generate();
+		List<Action> actions = ag.getActions();
+		System.out.println(actions);
+	}
+	
 }
