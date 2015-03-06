@@ -8,10 +8,6 @@ import java.util.List;
 import fr.labri.gumtree.tree.hash.HashUtils;
 
 public abstract class AbstractTree implements ITree {
-
-	private static final String OPEN_SYMBOL = "[(";
-	private static final String CLOSE_SYMBOL = ")]";
-	private static final String SEPARATE_SYMBOL = "@@";
 	
 	protected int id;
 	protected ITree parent;
@@ -244,16 +240,6 @@ public abstract class AbstractTree implements ITree {
 		this.size = size;
 	}
 	
-	@Override
-	public String inSeed() {
-		return OPEN_SYMBOL + getLabel() + SEPARATE_SYMBOL + getType();
-	}
-	
-	@Override
-	public String outSeed() {
-		return getType() + SEPARATE_SYMBOL + getLabel() + CLOSE_SYMBOL; 
-	}
-
 	@Override
 	public String toStaticHashString() {
 		StringBuffer b = new StringBuffer();

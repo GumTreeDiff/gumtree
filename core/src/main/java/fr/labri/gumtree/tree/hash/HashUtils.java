@@ -16,6 +16,18 @@ public class HashUtils {
 	public static int byteArrayToInt(byte[] b) {
 		return   b[3] & 0xFF | (b[2] & 0xFF) << 8 | (b[1] & 0xFF) << 16 | (b[0] & 0xFF) << 24;
 	}
+	
+	public static int standardHash(ITree t) {
+		return Integer.hashCode(t.getType()) + HashUtils.BASE * t.getLabel().hashCode();
+	}
+	
+	public static String inSeed(ITree t) {
+		return ITree.OPEN_SYMBOL + t.getLabel() + ITree.SEPARATE_SYMBOL + t.getType();
+	}
+	
+	public static String outSeed(ITree t) {
+		return  t.getType() + ITree.SEPARATE_SYMBOL + t.getLabel() + ITree.CLOSE_SYMBOL;
+	}
 
 	public static int md5(String s) {
 		try {

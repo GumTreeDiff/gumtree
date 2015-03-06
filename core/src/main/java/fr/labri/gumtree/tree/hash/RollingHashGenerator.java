@@ -19,19 +19,19 @@ public abstract class RollingHashGenerator implements HashGenerator {
 	public abstract int hashFunction(String s);
 	
 	public int leafHash(ITree t) {
-		return BASE * hashFunction(t.inSeed()) + hashFunction(t.outSeed());
+		return BASE * hashFunction(HashUtils.inSeed(t)) + hashFunction(HashUtils.outSeed(t));
 	}
 
 	public int innerNodeHash(ITree t) {
 		int size = t.getSize() * 2 - 1;
-		int hash = hashFunction(t.inSeed()) * fpow(BASE, size);
+		int hash = hashFunction(HashUtils.inSeed(t)) * fpow(BASE, size);
 		
 		for (ITree c: t.getChildren()) {
 			size = size - c.getSize() * 2;
 			hash += c.getHash() * fpow(BASE, size);
 		}
 		
-		hash += hashFunction(t.outSeed());
+		hash += hashFunction(HashUtils.outSeed(t));
 		return hash;
 	}
 

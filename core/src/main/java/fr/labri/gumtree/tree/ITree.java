@@ -5,6 +5,9 @@ import java.util.List;
 public interface ITree {
 
 	// Begin constants
+	public static final String OPEN_SYMBOL = "[(";
+	public static final String CLOSE_SYMBOL = ")]";
+	public static final String SEPARATE_SYMBOL = "@@";
 	public static final int NO_ID = Integer.MIN_VALUE;
 	public static final String NO_LABEL = "";
 	public static final int NO_VALUE = -1;
@@ -26,8 +29,6 @@ public interface ITree {
 	 * @return a deep copy of the tree.
 	 */
 	public abstract ITree deepCopy();
-
-	public abstract boolean equals(Object o);
 
 	/**
 	 * Returns the position of the given child in the tree. 
@@ -173,10 +174,6 @@ public interface ITree {
 	public abstract void setType(int type);
 
 	public abstract String toStaticHashString();
-
-	public abstract String inSeed();
-	
-	public abstract String outSeed();
 
 	public abstract String toShortString();
 
