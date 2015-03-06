@@ -1,6 +1,5 @@
 package fr.labri.gumtree.test;
 
-import static fr.labri.gumtree.test.Constants.DUMMY_BIG;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -45,7 +44,7 @@ public class TestTreeIoUtils {
 
 	@Test
 	public void testLoadBigTree() {
-		ITree big = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_BIG)).getRoot();
+		ITree big = TreeLoader.getDummyBig();
 		assertEquals("a", big.getLabel());
 		compareList(big.getChildren(), "b", "e", "f");
 	}

@@ -1,12 +1,10 @@
 package fr.labri.gumtree.test;
 
-import static fr.labri.gumtree.test.Constants.DUMMY_SRC;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.hash.RollingHashGenerator;
 
@@ -16,11 +14,12 @@ public class TestHash {
 
 	@Before // FIXME Could it be before class ?
 	public void init() {
-		root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
+		
 	}
 	
 	@Test
 	public void testRollingJavaHash() {
+		ITree root = TreeLoader.getDummySrc();
 		new RollingHashGenerator.JavaRollingHashGenerator().hash(root);
 		assertEquals(-1381305887, root.getChild(0).getChild(0).getHash()); // for c
 		assertEquals(-1380321823, root.getChild(0).getChild(1).getHash()); // for d

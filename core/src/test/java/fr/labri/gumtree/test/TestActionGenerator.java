@@ -20,7 +20,7 @@ public class TestActionGenerator {
 
 	@Test
 	public void testWithActionExample() {
-		Pair<ITree, ITree> trees = TreeLoader.getActionExample();
+		Pair<ITree, ITree> trees = TreeLoader.getActionPair();
 		ITree src = trees.getFirst();
 		ITree dst = trees.getSecond();
 		MappingStore ms = new MappingStore();
@@ -61,7 +61,7 @@ public class TestActionGenerator {
 	
 	@Test
 	public void testWithZsCustomExample() {
-		Pair<ITree, ITree> trees = TreeLoader.getZsCustomExample();
+		Pair<ITree, ITree> trees = TreeLoader.getZsCustomPair();
 		ITree src = trees.getFirst();
 		ITree dst = trees.getSecond();
 		MappingStore ms = new MappingStore();

@@ -12,7 +12,7 @@ public class TestZsMatcher {
 	
 	@Test
 	public void testWithCustomExample() {
-		Pair<ITree, ITree> trees = TreeLoader.getZsCustomExample();
+		Pair<ITree, ITree> trees = TreeLoader.getZsCustomPair();
 		ITree src = trees.getFirst();
 		ITree dst = trees.getSecond();
 		Matcher matcher = new ZsMatcher(src, dst);
@@ -27,7 +27,7 @@ public class TestZsMatcher {
 
 	@Test
 	public void testWithSlideExample() {
-		Pair<ITree, ITree> trees = TreeLoader.getZsSlideExample();
+		Pair<ITree, ITree> trees = TreeLoader.getZsSlidePair();
 		ITree src = trees.getFirst();
 		ITree dst = trees.getSecond();
 		Matcher matcher = new ZsMatcher(src, dst);

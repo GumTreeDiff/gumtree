@@ -1,6 +1,5 @@
 package fr.labri.gumtree.test;
 
-import static fr.labri.gumtree.test.Constants.DUMMY_SRC;
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
@@ -8,7 +7,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
 
@@ -16,7 +14,7 @@ public class TestTree {
 
 	@Test
 	public void testIdComparator() {
-		ITree root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
+		ITree root = TreeLoader.getDummySrc();
 		List<ITree> nodes = root.getTrees();
 		assertTrue(nodes.get(0).getLabel().equals("a"));
 		assertTrue(nodes.get(1).getLabel().equals("b"));
@@ -27,7 +25,7 @@ public class TestTree {
 
 	@Test
 	public void testGetParents() {
-		ITree tree = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
+		ITree tree = TreeLoader.getDummySrc();
 		List<ITree> trees = new LinkedList<>(tree.getTrees());
 		ITree n = trees.get(2);
 		assertTrue(n.getLabel().equals("c"));
@@ -39,7 +37,7 @@ public class TestTree {
 	
 	@Test
 	public void testDeepCopy() {
-		ITree root = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
+		ITree root = TreeLoader.getDummySrc();
 		TreeUtils.postOrderNumbering(root);
 		ITree croot = root.deepCopy();
 		assertTrue(croot.getSize() == root.getSize());
@@ -56,7 +54,7 @@ public class TestTree {
 	
 	@Test
 	public void testIsClone() {
-		ITree tree = TreeIoUtils.fromXml(getClass().getResourceAsStream(DUMMY_SRC)).getRoot();
+		ITree tree = TreeLoader.getDummySrc();
 		ITree copy = tree.deepCopy();
 		assertTrue(tree.isClone(copy));
 	}
