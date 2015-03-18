@@ -53,11 +53,11 @@ public class RootAndLeavesClassifier extends TreeClassifier {
 		srcDelTrees = fSrcDelTrees;
 		
 		Set<Tree> fSrcMvTrees = new HashSet<>();
-		for (Tree t: srcDelTrees) {
-			if (!srcDelTrees.contains(t.getParent()))
-				fSrcDelTrees.add(t);
+		for (Tree t: srcMvTrees) {
+			if (!srcMvTrees.contains(t.getParent()))
+				fSrcMvTrees.add(t);
 		}
-		srcDelTrees = fSrcDelTrees;
+		srcMvTrees = fSrcMvTrees;
 	}
 	
 }
