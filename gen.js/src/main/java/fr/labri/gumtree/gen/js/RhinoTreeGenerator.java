@@ -34,6 +34,7 @@ public class RhinoTreeGenerator extends TreeGenerator {
 		try {
 			AstRoot root = p.parse(new FileReader(file), file, 1);
 			RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
+			root.visit(visitor);
 			return visitor.getTree(root);
 		} catch (IOException e) {
 			e.printStackTrace();

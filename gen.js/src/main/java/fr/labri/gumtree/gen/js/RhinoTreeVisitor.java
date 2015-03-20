@@ -22,15 +22,15 @@ public class RhinoTreeVisitor implements NodeVisitor {
 	public RhinoTreeVisitor(AstRoot root) {
 		trees = new HashMap<>();
 		context = new TreeContext();
+		ITree tree = buildTree(root);
+		context.setRoot(tree);
 	}
 	
 	public TreeContext getTree(AstNode root) {
-		ITree tree = buildTree(root);
-		context.setRoot(tree);
-		visit(root);
 		return context;
 	}
 	
+	@Override
 	public boolean visit(AstNode node) {
 		if (node instanceof AstRoot)
 			return true;
