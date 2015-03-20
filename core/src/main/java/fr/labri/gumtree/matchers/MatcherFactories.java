@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.labri.gumtree.matchers.heuristic.gt.GumtreeMatchers;
 import fr.labri.gumtree.tree.ITree;
 
 public class MatcherFactories {
@@ -12,7 +13,8 @@ public class MatcherFactories {
 	
 	static {
 		factories = new HashMap<>();
-		addFactory(new CompositeMatchers.GumTreeMatcherFactory());
+		addFactory(new GumtreeMatchers.ClassicGumtreeMatcherFactory());
+		addFactory(new GumtreeMatchers.CompleteGumtreeMatcherFactory());
 		addFactory(new CompositeMatchers.ChangeDistillerMatcherFactory());
 		addFactory(new CompositeMatchers.XyMatcherFactory());
 	}
@@ -40,7 +42,7 @@ public class MatcherFactories {
 	}
 	
 	public static MatcherFactory getDefaultMatcherFactory() {
-		return factories.get(CompositeMatchers.GumTreeMatcherFactory.class);
+		return factories.get(GumtreeMatchers.ClassicGumtreeMatcherFactory.class);
 	}
 	
 	public static Matcher newMatcher(ITree src, ITree dst, Class<? extends MatcherFactory> clazz) {

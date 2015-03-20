@@ -8,7 +8,6 @@ import java.util.Set;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactory;
-import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
 import fr.labri.gumtree.matchers.optimal.zs.ZsMatcher;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeMap;
@@ -22,12 +21,12 @@ import fr.labri.gumtree.tree.TreeUtils;
  */
 public class CompleteBottomUpMatcher extends Matcher {
 
-	private static final double SIM_THRESHOLD = 0.50D;
-	
-	private static final int SIZE_THESHOLD = 100;
+	private static final double SIM_THRESHOLD = 0.3D;
+
+	private static final int SIZE_THESHOLD = 1000;
 
 	private TreeMap srcIds;
-	
+
 	private TreeMap dstIds;
 
 	public CompleteBottomUpMatcher(ITree src, ITree dst) {
@@ -37,28 +36,37 @@ public class CompleteBottomUpMatcher extends Matcher {
 	public void match() {
 		srcIds = new TreeMap(src);
 		dstIds = new TreeMap(dst);
-		
+
 		for (ITree t: src.postOrder())  {
 			if (t.isRoot()) {
 				addMapping(t, this.dst);
 				lastChanceMatch(t, this.dst);
 				break;
 			} else if (!(t.isMatched() || t.isLeaf())) {
-				List<ITree> candidates = getDstCandidates(t);
-				ITree best = null;
+				List<ITree> srcCandidates = new ArrayList<ITree>();
+				for (ITree p: t.getParents())
+					if (p.getType() == t.getType())
+						srcCandidates.add(p);
+
+				List<ITree> dstCandidates = getDstCandidates(t);
+				ITree srcBest = null;
+				ITree dstBest = null;
 				double max = -1D;
-				
-				for (ITree cand: candidates) {
-					double sim = jaccardSimilarity(t, cand);
-					if (sim > max && sim >= SIM_THRESHOLD) {
-						max = sim;
-						best = cand;
+				for (ITree srcCand: srcCandidates) {
+					for (ITree dstCand: dstCandidates) {
+
+						double sim = jaccardSimilarity(srcCand, dstCand);
+						if (sim > max && sim >= 0D) {
+							max = sim;
+							srcBest = srcCand;
+							dstBest = dstCand;
+						}
 					}
 				}
 
-				if (best != null) {
-					lastChanceMatch(t, best);
-					addMapping(t, best);
+				if (srcBest != null) {
+					lastChanceMatch(srcBest, dstBest);
+					addMapping(srcBest, dstBest);
 				}
 			}
 		}
@@ -116,9 +124,8 @@ public class CompleteBottomUpMatcher extends Matcher {
 		for (ITree t : src.getTrees()) t.setMatched(true);
 		for (ITree t : dst.getTrees()) t.setMatched(true);
 	}
-	
-	public static class CompleteBottumUpMatcherFactory implements MatcherFactory {
 
+	public static class CompleteBottomUpMatcherFactory implements MatcherFactory {
 		@Override
 		public Matcher newMatcher(ITree src, ITree dst) {
 			return new CompleteBottomUpMatcher(src, dst);

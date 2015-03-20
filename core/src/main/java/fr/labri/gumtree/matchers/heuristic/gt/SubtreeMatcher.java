@@ -9,7 +9,7 @@ import fr.labri.gumtree.tree.ITree;
 
 public abstract class SubtreeMatcher extends Matcher {
 
-	private static final int MIN_HEIGHT = 1;
+	private static final int MIN_HEIGHT = 2;
 
 	public SubtreeMatcher(ITree src, ITree dst) {
 		super(src, dst);
@@ -26,7 +26,8 @@ public abstract class SubtreeMatcher extends Matcher {
 		PriorityTreeList dsts = new PriorityTreeList(dst);
 		
 		while (srcs.peekHeight() != -1 && dsts.peekHeight() != -1) {
-			while (srcs.peekHeight() != dsts.peekHeight()) popLarger(srcs, dsts);
+			while (srcs.peekHeight() != dsts.peekHeight())
+				popLarger(srcs, dsts);
 			
 			List<ITree> hSrcs = srcs.pop();
 			List<ITree> hDsts = dsts.pop();
@@ -47,8 +48,12 @@ public abstract class SubtreeMatcher extends Matcher {
 				}
 			}
 			
-			for (int i = 0; i < srcMarks.length; i++) if (srcMarks[i] == false) srcs.open(hSrcs.get(i));
-			for (int i = 0; i < dstMarks.length; i++) if (dstMarks[i] == false) dsts.open(hDsts.get(i));
+			for (int i = 0; i < srcMarks.length; i++) 
+				if (srcMarks[i] == false) 
+					srcs.open(hSrcs.get(i));
+			for (int j = 0; j < dstMarks.length; j++) 
+				if (dstMarks[j] == false) 
+					dsts.open(hDsts.get(j));
 			srcs.updateHeight();
 			dsts.updateHeight();
 		}

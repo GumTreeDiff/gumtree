@@ -83,15 +83,20 @@ public abstract class Matcher {
 		
 		for (ITree t: src.getDescendants()) {
 			ITree m = mappings.getDst(t);
-			if (m != null && dstDescs.contains(m)) common++;
+			if (m != null && dstDescs.contains(m)) 
+				common++;
 		}
 
 		return common;
 	}
 	
 	protected void clean() {
-		for (ITree t: src.getTrees()) if (!mappings.hasSrc(t)) t.setMatched(false);
-		for (ITree t: dst.getTrees()) if (!mappings.hasDst(t)) t.setMatched(false);
+		for (ITree t: src.getTrees()) 
+			if (!mappings.hasSrc(t)) 
+				t.setMatched(false);
+		for (ITree t: dst.getTrees()) 
+			if (!mappings.hasDst(t)) 
+				t.setMatched(false);
 	}
 
 }
