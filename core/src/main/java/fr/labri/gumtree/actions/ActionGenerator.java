@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import fr.labri.gumtree.actions.model.Action;
 import fr.labri.gumtree.actions.model.Delete;
@@ -20,8 +19,6 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class ActionGenerator {
-	
-	public final static Logger LOGGER = Logger.getLogger("fr.labri.gumtree.actions");
 	
 	private ITree origSrc;
 	
@@ -68,15 +65,17 @@ public class ActionGenerator {
 	}
 	
 	public void generate() {
-		ITree vsrc = new AbstractTree.FakeTree(newSrc);
-		ITree vdst = new AbstractTree.FakeTree(origDst);
+		ITree srcFakeRoot = new AbstractTree.FakeTree(newSrc);
+		ITree dstFakeRoot = new AbstractTree.FakeTree(origDst);
+		newSrc.setParent(srcFakeRoot);
+		origDst.setParent(dstFakeRoot);
 		
 		actions = new ArrayList<>();
 		dstInOrder = new HashSet<>();
 		srcInOrder = new HashSet<>();
 		
 		lastId = newSrc.getSize() + 1;
-		newMappings.link(vsrc, vdst);
+		newMappings.link(srcFakeRoot, dstFakeRoot);
 		
 		List<ITree> bfsDst = TreeUtils.breadthFirst(origDst); 
 		for (ITree x: bfsDst) {
@@ -97,7 +96,6 @@ public class ActionGenerator {
 				//System.out.println(ins);
 				origSrcTrees.put(w.getId(), x);
 				newMappings.link(w, x);
-//				z = z.asProxy();
 				z.getChildren().add(k, w);
 				w.setParent(z);
 			} else {
@@ -110,8 +108,6 @@ public class ActionGenerator {
 					}
 					if (!z.equals(v)) {
 						int k = findPos(x);
-//						w = w.asProxy();
-//						z = z.asProxy();
 						Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(z.getId()), k);
 						actions.add(mv);
 						//System.out.println(mv);
@@ -136,11 +132,11 @@ public class ActionGenerator {
 			}
 		}
 		
-		if (!newSrc.toStaticHashString().equals(origDst.toStaticHashString())) {
-			newSrc.refresh(); // what-s that ?
-//			System.out.println(newSrc.toTreeString());
-//			System.out.println(origDst.toTreeString());
-		}
+		//FIXME should ensure isomorphism.
+		/*
+		if (!newSrc.toStaticHashString().equals(origDst.toStaticHashString()))
+			throw new RuntimeException("Both trees shold be isomorphic.");
+		*/
 	}
 	
 	private void alignChildren(ITree w, ITree x) {
