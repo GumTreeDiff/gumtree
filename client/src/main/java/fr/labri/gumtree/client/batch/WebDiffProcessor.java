@@ -3,44 +3,55 @@ package fr.labri.gumtree.client.batch;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import org.rendersnake.HtmlCanvas;
 
 import fr.labri.gumtree.client.ui.web.views.DiffView;
 
-public final class WebDiffProcessor extends AbstractFilePairsProcessor {
-	
-	public static void main(String[] args) {
-		WebDiffProcessor g = new WebDiffProcessor(args[0]);
-		g.process();
-	}
+public final class WebDiffProcessor extends BatchProcessor {
 	
 	private static final String[] BOOTSTRAP_RESOURCES = new String[] { 
 		"res/web/list.js", "res/web/diff.js", "res/web/script.js", "res/web/gumtree.css", "res/web/bootstrap.min.js", "res/web/bootstrap.min.css", "res/web/jquery.min.js"
 	};
 	
-	public WebDiffProcessor(String folder) {
-		super(folder);
-		ensureBootstrap();
+	public static void main(String[] args) throws IOException {
+		File in = new File(args[0]);
+		Files.walkFileTree(in.toPath(), new WebDiffProcessor(args[1]));
 	}
 	
+	public WebDiffProcessor(String outputFolder) {
+		super(outputFolder);
+		BatchUtils.ensureFolder(outputFolder + File.separatorChar + "res" + File.separatorChar + "web");
+		for (String res : BOOTSTRAP_RESOURCES) 
+			BatchUtils.copyResource(res, outputFolder + File.separatorChar + res);
+		
+	}
+
 	@Override
-	public void processFilePair(String fsrc, String fdst) throws IOException {
-		DiffView v = new DiffView(new File(fsrc), new File(fdst));
-		HtmlCanvas c = new HtmlCanvas();
-		v.renderOn(c);
-		String f = inFolder + File.separatorChar + "diffs" + File.separatorChar + fileName(fsrc).replace("_v0.", "_diff.") + ".html";
-		LOGGER.info("Generating file: " + f);
-		FileWriter w = new FileWriter(f);
-		w.append(c.toHtml());
-		w.close();
-	}
-	
-	private void ensureBootstrap() {
-		ensureFolder("diffs");
-		ensureFolder("diffs" + File.separatorChar + "res");
-		ensureFolder("diffs" + File.separatorChar + "res" + File.separatorChar + "web");
-		for (String res : BOOTSTRAP_RESOURCES) copyResource(res, "diffs" + File.separatorChar + res);
+	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+		File[] files = dir.toFile().listFiles();
+		if (files.length == 2 && files[1].getName().startsWith("src_") &&
+				files[0].getName().startsWith("dst_")) {
+			File src = files[1];
+			File dst = files[0];
+			
+			LOGGER.info(String.format("Processing %s and %s", src.getAbsolutePath(), dst.getAbsolutePath()));
+			
+			DiffView v = new DiffView(src, dst);
+			HtmlCanvas c = new HtmlCanvas();
+			v.renderOn(c);
+			String out = outputFolder + File.separatorChar + src.getName() + ".html";
+			File f = new File(out);
+			LOGGER.info(String.format("Saving result to %s", f.getAbsolutePath()));
+			FileWriter w = new FileWriter(out);
+			w.append(c.toHtml());
+			w.close();
+		}
+		return FileVisitResult.CONTINUE;
 	}
 
 }
