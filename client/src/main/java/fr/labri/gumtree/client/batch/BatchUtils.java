@@ -48,5 +48,9 @@ public class BatchUtils {
 		}
 	}
 	
+	public static String folderify(String s) {
+		return s.replaceAll("[^A-Za-z0-9-_]", "_");
+	}
+	
 
 }

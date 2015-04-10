@@ -1,6 +1,5 @@
 package fr.labri.gumtree.client.batch;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.util.logging.Logger;
