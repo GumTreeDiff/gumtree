@@ -57,9 +57,11 @@ public class DiffView implements Renderable {
 						._div()
 					._div()
 				._div()
-				.macros().javascript("res/web/jquery.min.js")
-				.macros().javascript("res/web/bootstrap.min.js")
+				.macros().javascript("https://code.jquery.com/jquery-1.11.2.min.js")
+				.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
 				.macros().javascript("res/web/diff.js")
+				.macros().stylesheet("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
+				.macros().stylesheet("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css")
 			._body()
 		._html();
 	}
@@ -73,10 +75,7 @@ public class DiffView implements Renderable {
 				.div(class_("btn-toolbar pull-right"))
 					.div(class_("btn-group"))
 					    .a(class_("btn btn-default btn-xs").id("legend").href("#").add("data-toggle", "popover").add("data-html", "true").add("data-placement", "bottom").add("data-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br><span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br><span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br><span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>", false).add("data-original-title", "Legend").title("Legend").role("button")).content("Legend")
-						.a(class_("btn btn-default btn-xs").id("shortcuts").href("#").add("data-toggle", "popover").add("data-html", "true").add("data-placement", "bottom").add("data-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom", false).add("data-original-title", "Shortcuts").title("Shortcuts").role("button")).content("Shortcuts")
-					._div()
-					.div(class_("btn-group"))
-						.a(class_("btn btn-default btn-xs btn-danger").href("/quit")).content("Quit")
+						.a(class_("btn btn-default btn-xs").id("shortcuts").href("#").add("data-toggle", "popover").add("data-html", "true").add("data-placement", "bottom").add("data-content", "<b>n</b> next<br><b>t</b> top<br><b>b</b> bottom", false).add("data-original-title", "Shortcuts").title("Shortcuts").role("button")).content("Shortcuts")
 					._div()
 				._div()
 			._div();
