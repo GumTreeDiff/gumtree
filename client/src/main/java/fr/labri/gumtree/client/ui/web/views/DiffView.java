@@ -23,6 +23,12 @@ public class DiffView implements Renderable {
 	private File fSrc;
 	
 	private File fDst;
+
+	private String urlFolder = "";
+	
+	public void setURLFolder(String urlFolder) {
+		this.urlFolder = urlFolder;
+	}
 	
 	public DiffView(File fSrc, File fDst) throws IOException {
 		this.fSrc = fSrc;
@@ -59,7 +65,7 @@ public class DiffView implements Renderable {
 				._div()
 				.macros().javascript("https://code.jquery.com/jquery-1.11.2.min.js")
 				.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
-				.macros().javascript("res/web/diff.js")
+				.macros().javascript("/" + urlFolder  + "res/web/diff.js")
 				.macros().stylesheet("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
 				.macros().stylesheet("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css")
 			._body()
