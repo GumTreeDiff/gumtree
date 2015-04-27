@@ -21,8 +21,10 @@ public class DiffView implements Renderable {
 	private HtmlDiffs diffs;
 	
 	private File fSrc;
+	private String srcName;
 	
 	private File fDst;
+	private String dstName;
 
 	private String urlFolder = "";
 	
@@ -31,8 +33,14 @@ public class DiffView implements Renderable {
 	}
 	
 	public DiffView(File fSrc, File fDst) throws IOException {
+		this(fSrc, fDst, fSrc.getName(), fDst.getName());
+	}
+	
+	public DiffView(File fSrc, File fDst, String srcName, String dstName) throws IOException {
 		this.fSrc = fSrc;
 		this.fDst = fDst;
+		this.srcName = srcName;
+		this.dstName = dstName;
 		Tree src = TreeGeneratorRegistry.getInstance().getTree(fSrc.getAbsolutePath());
 		Tree dst = TreeGeneratorRegistry.getInstance().getTree(fDst.getAbsolutePath());
 		Matcher matcher = MatcherFactories.newMatcher(src, dst);
@@ -40,6 +48,7 @@ public class DiffView implements Renderable {
 		diffs = new HtmlDiffs(fSrc, fDst, src, dst, matcher);
 		diffs.produce();
 	}
+	
 
 	@Override
 	public void renderOn(HtmlCanvas html) throws IOException {
@@ -54,11 +63,11 @@ public class DiffView implements Renderable {
 					._div()
 					.div(class_("row"))
 						.div(class_("col-lg-6 max-height"))
-							.h5().content(fSrc.getName())
+							.h5().content(srcName)
 							.pre(class_("pre max-height")).content(diffs.getSrcDiff(), false)
 						._div()
 						.div(class_("col-lg-6 max-height"))
-							.h5().content(fDst.getName())
+							.h5().content(dstName)
 							.pre(class_("pre max-height")).content(diffs.getDstDiff(), false)
 						._div()
 					._div()
