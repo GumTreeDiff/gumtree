@@ -10,16 +10,17 @@ import fr.labri.gumtree.client.ui.web.views.DiffView;
 
 public class StringHtmlDiff {
 	
-	public static void main(String args[]) throws Exception {
+	public String getHtmlOfDiff(String urlFolder, String aContent, String bContent) throws Exception {
 		
-		Path file1 = Files.createTempFile("", ".java");
-		Path file2 = Files.createTempFile("", ".java");
-		Files.write(file1, "public class A{public void m()}".getBytes(), StandardOpenOption.WRITE);
-		Files.write(file2, "public class B{public void m()}".getBytes(), StandardOpenOption.WRITE);
+		Path file1 = Files.createTempFile("A", ".java");
+		Path file2 = Files.createTempFile("B", ".java");
+		Files.write(file1, aContent.getBytes(), StandardOpenOption.WRITE);
+		Files.write(file2, bContent.getBytes(), StandardOpenOption.WRITE);
 		
 		DiffView diffView = new DiffView(file1.toFile(), file2.toFile());
+		diffView.setURLFolder(urlFolder);
 		HtmlCanvas html = new HtmlCanvas();
 		diffView.renderOn(html);
-		System.out.println(html.toHtml());
+		return html.toHtml();
 	}
 }
