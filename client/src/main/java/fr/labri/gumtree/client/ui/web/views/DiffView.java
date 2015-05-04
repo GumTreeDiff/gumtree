@@ -55,7 +55,7 @@ public class DiffView implements Renderable {
 		html
 		.render(DocType.HTML5)
 		.html(lang("en"))
-			.render(new BootstrapHeader())
+			.render(new BootstrapHeader(urlFolder))
 			.body()
 				.div(class_("container-fluid"))
 					.div(class_("row"))
@@ -74,7 +74,7 @@ public class DiffView implements Renderable {
 				._div()
 				.macros().javascript("https://code.jquery.com/jquery-1.11.2.min.js")
 				.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
-				.macros().javascript("/" + urlFolder  + "res/web/diff.js")
+				.macros().javascript("/" + urlFolder + "/res/web/diff.js")
 				.macros().stylesheet("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
 				.macros().stylesheet("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css")
 			._body()
