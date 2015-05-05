@@ -21,6 +21,9 @@ public class StringHtmlDiff {
 		diffView.setURLFolder(urlFolder);
 		HtmlCanvas html = new HtmlCanvas();
 		diffView.renderOn(html);
+		
+		file1.toFile().delete();
+		file2.toFile().delete();
 		return html.toHtml();
 	}
 }
