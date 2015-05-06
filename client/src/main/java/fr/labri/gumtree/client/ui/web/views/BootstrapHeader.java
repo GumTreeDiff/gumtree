@@ -27,7 +27,7 @@ public class BootstrapHeader implements Renderable {
 			.meta(name("viewport").content("width=device-width, initial-scale=1.0"))
 			.title().content("GumTree")
 			.macros().stylesheet("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
-			.macros().stylesheet("/" + urlFolder +  "res/web/gumtree.css")
+			.macros().stylesheet("/" + urlFolder +  "/res/web/gumtree.css")
 		._head();
 	}
 
