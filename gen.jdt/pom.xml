@@ -23,9 +23,19 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.jdt</groupId>
-			<artifactId>jdt</artifactId>
-			<version>3.7.1.v_B76_R37x</version>
+			<groupId>org.eclipse.tycho</groupId>
+  			<artifactId>org.eclipse.jdt.core</artifactId>
+  			<version>3.10.0.v20140604-1726</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.core</groupId>
+		    <artifactId>runtime</artifactId>
+		    <version>3.10.0-v20140318-2214</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.birt.runtime</groupId>
+    		<artifactId>org.eclipse.core.resources</artifactId>
+ 		   	<version>3.9.1.v20140825-1431</version>
 		</dependency>
 	</dependencies>
 </project>
