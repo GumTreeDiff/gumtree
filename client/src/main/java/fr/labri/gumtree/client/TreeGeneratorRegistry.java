@@ -26,6 +26,7 @@ public class TreeGeneratorRegistry {
 		installGenerator("fr.labri.gumtree.gen.jdt.cd.CdJdtTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.js.RhinoTreeGenerator");
 		installGenerator("gen.sax.SAXTreeGenerator");
+		installGenerator("fr.labri.gumtree.gen.antlrjson.AntlrJsonTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.xml.XMLTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.c.CTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.ruby.RubyTreeGenerator");

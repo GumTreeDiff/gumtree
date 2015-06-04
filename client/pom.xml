@@ -59,6 +59,12 @@
 		</dependency>
 		<dependency>
 			<groupId>fr.labri.gumtree</groupId>
+			<artifactId>gen.antlr-json</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>fr.labri.gumtree</groupId>
 			<artifactId>gen.php</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<scope>compile</scope>

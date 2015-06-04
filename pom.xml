@@ -26,6 +26,7 @@
 		<module>gen.antlr</module>
 		<module>gen.r</module>
 		<module>gen.antlr-antlr</module>
+		<module>gen.antlr-json</module>
 		<module>client</module>
 	</modules>
 	<repositories>
