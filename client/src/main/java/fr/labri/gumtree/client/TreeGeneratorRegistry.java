@@ -68,12 +68,12 @@ public class TreeGeneratorRegistry {
 	
 	public TreeContext getTree(String file) throws IOException {
 		TreeGenerator p = getGenerator(file, null);
-		return p.fromFile(file);
+		return p.generateFromFile(file);
 	}
 	
 	public TreeContext getTree(String file, String[] generators) throws IOException {
 		TreeGenerator p = getGenerator(file, generators);
-		return p.fromFile(file);
+		return p.generateFromFile(file);
 	}
 
 }

@@ -24,7 +24,7 @@ public class TreePanel extends JPanel {
 	private TreeContext tree;
 	private Map<ITree, DefaultMutableTreeNode> trees;
 
-	public TreePanel(TreeContext tree, TreeCellRenderer renderer) {
+	public TreePanel(final TreeContext tree, TreeCellRenderer renderer) {
 		super(new GridLayout(1, 0));
 		trees = new HashMap<>();
 		this.tree = tree;

@@ -1,8 +1,9 @@
 package fr.labri.gumtree.gen.antlrjson;
 
 import java.io.IOException;
+import java.io.Reader;
 
-import org.antlr.runtime.ANTLRFileStream;
+import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
@@ -13,8 +14,8 @@ import fr.labri.gumtree.gen.antlr.AbstractAntlrTreeGenerator;
 public class AntlrJsonTreeGenerator extends AbstractAntlrTreeGenerator {
 
 	@Override
-	protected CommonTree getStartSymbol(String file) throws RecognitionException, IOException {
-		ANTLRStringStream stream = new ANTLRFileStream(file);
+	protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
+		ANTLRStringStream stream = new ANTLRReaderStream(r);
 		JSONLexer l = new JSONLexer(stream);
 		tokens = new TokenRewriteStream(l);
 		JSONParser p = new JSONParser(tokens);

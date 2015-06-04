@@ -1,28 +1,25 @@
 package gen.sax;
 
-import java.io.FileReader;
+import static fr.labri.gumtree.tree.ITree.NO_LABEL;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.labri.gumtree.io.TreeGenerator;
-import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.TreeContext;
-
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.InputSource;
-import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
-import static fr.labri.gumtree.tree.ITree.*;
+import fr.labri.gumtree.io.TreeGenerator;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public class SAXTreeGenerator extends TreeGenerator {
 	public static final String DOCUMENT = "Document";
@@ -32,15 +29,6 @@ public class SAXTreeGenerator extends TreeGenerator {
 	public static final String CDATA = "CData";
 	public static final String ELT = "Elt";
 
-	@Override
-	public TreeContext generate(String file) throws IOException {
-		return generate(new FileReader(file));
-	}
-
-	public TreeContext generate(InputStream stream) throws IOException {
-		return generate(new InputStreamReader(stream));
-	}
-	
 	public TreeContext generate(Reader reader) throws IOException {
 		try {
 //			TreeContext tc = new TreeContext();

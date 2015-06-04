@@ -1,8 +1,9 @@
 package fr.labri.gumtree.gen.r;
 
 import java.io.IOException;
+import java.io.Reader;
 
-import org.antlr.runtime.ANTLRFileStream;
+import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
@@ -10,11 +11,11 @@ import org.antlr.runtime.tree.CommonTree;
 
 import fr.labri.gumtree.gen.antlr.AbstractAntlrTreeGenerator;
 
-public class RTreeProducer extends AbstractAntlrTreeGenerator {
+public class RTreeGenerator extends AbstractAntlrTreeGenerator {
 
 	@Override
-	protected CommonTree getStartSymbol(String file) throws RecognitionException, IOException {
-		ANTLRStringStream stream = new ANTLRFileStream(file);
+	protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
+		ANTLRStringStream stream = new ANTLRReaderStream(r);
 		RLexer rl = new RLexer(stream);
 		tokens = new TokenRewriteStream(rl);
 		RParser rp = new RParser(tokens);

@@ -1,6 +1,7 @@
 package fr.labri.gumtree.gen.antlr;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -27,12 +28,12 @@ public abstract class AbstractAntlrTreeGenerator extends TreeGenerator {
 	public AbstractAntlrTreeGenerator() {
 	}
 	
-	protected abstract CommonTree getStartSymbol(String file) throws RecognitionException, IOException;
+	protected abstract CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException;
 	
 	@Override
-	public TreeContext generate(String file) throws IOException {
+	public TreeContext generate(Reader r) throws IOException {
 		try {
-			CommonTree ct = getStartSymbol(file);
+			CommonTree ct = getStartSymbol(r);
 			TreeContext context = new TreeContext();
 			buildTree(context, ct);
 			return context;

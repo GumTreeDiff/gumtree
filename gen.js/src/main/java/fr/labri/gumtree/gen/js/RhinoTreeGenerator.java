@@ -18,8 +18,8 @@
 
 package fr.labri.gumtree.gen.js;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
@@ -29,17 +29,13 @@ import fr.labri.gumtree.tree.TreeContext;
 
 public class RhinoTreeGenerator extends TreeGenerator {
 
-	public TreeContext generate(String file) {
+	public TreeContext generate(Reader r) throws IOException {
 		Parser p = new Parser();
-		try {
-			AstRoot root = p.parse(new FileReader(file), file, 1);
-			RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
-			root.visit(visitor);
-			return visitor.getTree(root);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		AstRoot root = p.parse(r, null, 1);
+		RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
+		root.visit(visitor);
+		return visitor.getTree(root);
+
 	}
 
 	@Override

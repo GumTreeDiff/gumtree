@@ -18,8 +18,8 @@
 
 package fr.labri.gumtree.gen.ruby;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 
 import org.jrubyparser.CompatVersion;
 import org.jrubyparser.Parser;
@@ -32,19 +32,12 @@ import fr.labri.gumtree.tree.TreeContext;
 
 public class RubyTreeGenerator extends TreeGenerator {
 
-	public TreeContext generate(String file) {
-
+	public TreeContext generate(Reader r) throws IOException {
 		Parser p = new Parser();
-		try {
-			FileReader f = new FileReader(file);
-			CompatVersion version = CompatVersion.RUBY2_0;
-			ParserConfiguration config = new ParserConfiguration(0, version);
-			Node n = p.parse("<code>", f, config);
-			return toTree(new TreeContext(), n, null);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+		CompatVersion version = CompatVersion.RUBY2_0;
+		ParserConfiguration config = new ParserConfiguration(0, version);
+		Node n = p.parse("<code>", r, config);
+		return toTree(new TreeContext(), n, null);
 	}
 
 	private TreeContext toTree(TreeContext ctx, Node n, ITree parent) {
@@ -56,18 +49,18 @@ public class RubyTreeGenerator extends TreeGenerator {
 			ctx.setRoot(t);
 		else
 			t.setParentAndUpdateChildren(parent);
-		
+
 		int pos = n.getPosition().getStartOffset();
 		int length = n.getPosition().getEndOffset() - n.getPosition().getStartOffset();
 		t.setPos(pos);
 		t.setLength(length);
-		
+
 		for(Node c: n.childNodes())
 			toTree(ctx, c, t);
-		
+
 		return ctx;
 	}
-	
+
 	@Override
 	public boolean handleFile(String file) {
 		return file.toLowerCase().endsWith(".ruby") ||  file.toLowerCase().endsWith(".rb");
