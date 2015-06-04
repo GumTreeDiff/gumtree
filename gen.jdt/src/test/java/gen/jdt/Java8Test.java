@@ -17,7 +17,7 @@ public class Java8Test {
 	private String input = "public class A{public void m(){new ArrayList<Object>().stream().forEach(a -> {});}}";
 
 	@Test
-	public void testJava8Syntax() throws IOException {
+	public void testJava8SyntaxFromFile() throws IOException {
 		Path path = Files.createTempFile("", ".java");
 		Files.write(path, input.getBytes(), StandardOpenOption.WRITE);
 		Tree tree = new JdtTreeGenerator().fromFile(path.toAbsolutePath().toString());
