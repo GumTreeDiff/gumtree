@@ -2,4 +2,5 @@ target/
 .settings/
 .project
 .classpath
+.recommenders/
 .metadata/
