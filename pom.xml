@@ -13,8 +13,8 @@
 	</organization>
 	<scm>
 		<connection>scm:hg:https://code.google.com/p/labri-se.gumtree/</connection>
-<developerConnection>scm:hg:https://code.google.com/p/labri-se.gumtree/</developerConnection>
-<url>https://code.google.com/p/labri-se.gumtree/</url>
+		<developerConnection>scm:hg:https://code.google.com/p/labri-se.gumtree/</developerConnection>
+		<url>https://code.google.com/p/labri-se.gumtree/</url>
 	</scm>
 	<modules>
 		<module>core</module>
@@ -35,11 +35,11 @@
 			<name>SE repository</name>
 			<url>http://se.labri.fr/maven</url>
 		</repository>
-	<repository>
-	    <id>rendersnake-repo</id>
-		    <name>Repository for rendersnake</name>
-			    <url>http://rendersnake.googlecode.com/svn/repo</url>
-				</repository>
+		<repository>
+			<id>rendersnake-repo</id>
+			<name>Repository for rendersnake</name>
+			<url>http://rendersnake.googlecode.com/svn/repo</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
