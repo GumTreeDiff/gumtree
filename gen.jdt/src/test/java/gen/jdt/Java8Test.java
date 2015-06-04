@@ -24,4 +24,10 @@ public class Java8Test {
 		assertEquals(24, tree.getSize());
 		path.toFile().delete();
 	}
+	
+	@Test
+	public void testJava8SyntaxFromString() throws IOException {
+		Tree tree = new JdtTreeGenerator().fromString(input);
+		assertEquals(24, tree.getSize());
+	}
 }
