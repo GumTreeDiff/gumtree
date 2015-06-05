@@ -7,7 +7,7 @@
 		<version>1.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>gen.r</artifactId>
+	<artifactId>gen.antlr-r</artifactId>
 	<name>GumTree R Tree Generator</name>
 	<dependencies>
 		<dependency>
