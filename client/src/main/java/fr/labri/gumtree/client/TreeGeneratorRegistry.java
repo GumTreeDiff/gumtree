@@ -1,12 +1,12 @@
 package fr.labri.gumtree.client;
 
+import fr.labri.gumtree.io.TreeGenerator;
+import fr.labri.gumtree.tree.TreeContext;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import fr.labri.gumtree.io.TreeGenerator;
-import fr.labri.gumtree.tree.TreeContext;
 
 public class TreeGeneratorRegistry {
 	
@@ -25,7 +25,7 @@ public class TreeGeneratorRegistry {
 		installGenerator("fr.labri.gumtree.gen.jdt.JdtTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.jdt.cd.CdJdtTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.js.RhinoTreeGenerator");
-		installGenerator("gen.sax.SAXTreeGenerator");
+		installGenerator("fr.labri.gumtree.gen.sax.SAXTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.antlrjson.AntlrJsonTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.xml.XMLTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.c.CTreeGenerator");
