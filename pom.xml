@@ -12,9 +12,9 @@
 		<url>http://se.labri.fr</url>
 	</organization>
 	<scm>
-		<connection>scm:hg:https://code.google.com/p/labri-se.gumtree/</connection>
-		<developerConnection>scm:hg:https://code.google.com/p/labri-se.gumtree/</developerConnection>
-		<url>https://code.google.com/p/labri-se.gumtree/</url>
+		<connection>scm:git:https://github.com/GumTreeDiff/gumtree/</connection>
+		<developerConnection>scm:git:https://github.com/GumTreeDiff/gumtree/</developerConnection>
+		<url>https://github.com/GumTreeDiff/gumtree/</url>
 	</scm>
 	<modules>
 		<module>core</module>
