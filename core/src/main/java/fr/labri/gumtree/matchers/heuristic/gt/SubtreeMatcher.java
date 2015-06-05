@@ -89,7 +89,12 @@ public abstract class SubtreeMatcher extends Matcher {
 
 		@SuppressWarnings("unchecked")
 		public PriorityTreeList(ITree tree) {
-			trees = (List<ITree>[]) new ArrayList[tree.getHeight() - MIN_HEIGHT + 1];
+			int listSize = tree.getHeight() - MIN_HEIGHT + 1;
+			if (listSize < 0)
+				listSize = 0;
+			if (listSize == 0)
+				currentIdx = -1;
+			trees = (List<ITree>[]) new ArrayList[listSize];
 			maxHeight = tree.getHeight();
 			addTree(tree);
 		}
