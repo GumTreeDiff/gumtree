@@ -16,9 +16,7 @@ public abstract class TreeGenerator {
 	
 	public TreeContext generateFromReader(Reader r) throws IOException {
 		TreeContext ctx = generate(r);
-		ITree root = ctx.getRoot();
-		root.refresh();
-		TreeUtils.postOrderNumbering(root);
+		ctx.validate();
 		return ctx;
 	}
 	
