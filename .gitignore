@@ -4,3 +4,5 @@ target/
 .classpath
 .recommenders/
 .metadata/
+.idea/
+*.iml
