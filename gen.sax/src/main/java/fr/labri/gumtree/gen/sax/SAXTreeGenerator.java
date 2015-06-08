@@ -30,8 +30,6 @@ public class SAXTreeGenerator extends TreeGenerator {
 	public static final int ELT_ID = 1;
 	public static final int VALUE_ID = 4;
 
-	public int lastPosition = 0;
-
 	public TreeContext generate(Reader reader) throws IOException {
 		try {
 //			TreeContext tc = new TreeContext();
@@ -52,6 +50,8 @@ public class SAXTreeGenerator extends TreeGenerator {
 	}
 
 	class XMLHandlers extends DefaultHandler {
+		public int lastPosition[] = {1, 1};
+
 		Locator locator;
 		Deque<ITree> stack = new ArrayDeque<ITree>();
 		TreeContext tc = new TreeContext();
@@ -69,13 +69,19 @@ public class SAXTreeGenerator extends TreeGenerator {
 		@Override
 		public void startDocument() throws SAXException {
 			ITree t = tc.createTree(DOCUMENT_ID, NO_LABEL, DOCUMENT);
+			t.setPos(0);
+			t.setLcPosStart(new int[] {1 , 1});
 			tc.setRoot(t);
 			stack.push(t);
 		}
 		
 		@Override
 		public void endDocument() throws SAXException {
-			stack.pop();
+			ITree t = stack.pop();
+			int line = locator.getLineNumber();
+			int col = locator.getColumnNumber();
+			t.setLcPosEnd(new int[]{line, col});
+			t.setLength(lineReader.positionFor(line, col));
 			assert stack.isEmpty();
 		}
 			
@@ -90,22 +96,20 @@ public class SAXTreeGenerator extends TreeGenerator {
 		}
 
 		private void setStartPosition(ITree t) {
-			int line = locator.getLineNumber();
-			int col = locator.getColumnNumber();
-			t.setLcPosStart(new int[] {line, col});
-			t.setPos(lineReader.positionFor(line, col));
+			int pos[] = currentPosition();
+			t.setLcPosStart(pos);
+			t.setPos(lineReader.positionFor(pos[0], pos[1]));
 		}
 
 		private void setEndPosition(ITree t) {
-			int line = locator.getLineNumber();
-			int col = locator.getColumnNumber();
-			t.setLcPosEnd(new int[]{line, col});
-			t.setLength(lineReader.positionFor(line, col) - t.getPos());
+			int pos[] = currentPosition();
+			t.setLcPosEnd(new int[]{locator.getLineNumber(), locator.getColumnNumber()}); //FIXME
+			t.setPos(lineReader.positionFor(locator.getLineNumber(), locator.getColumnNumber()) - t.getPos());
 		}
 
-		private int lastPosition(int currentPos) {
-			int lp = lastPosition;
-			lastPosition = currentPos;
+		private int[] currentPosition() {
+			int lp[] = lastPosition;
+			lastPosition = new int[]{locator.getLineNumber(), locator.getColumnNumber()};
 			return lp;
 		}
 

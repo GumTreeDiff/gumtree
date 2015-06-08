@@ -26,8 +26,9 @@ public class LineReader extends Reader {
 		return r;
 	}
 
+	// Line and column starts at 1
 	public int positionFor(int line, int column) {
-		return lines.get(line - 1) + column;
+		return lines.get(line - 1) + column - 1;
 	}
 
 //	public int[] positionFor(int offset) { // TODO write this method
