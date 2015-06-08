@@ -10,10 +10,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static fr.labri.gumtree.tree.ITree.NO_LABEL;
 
@@ -68,15 +65,22 @@ public class SAXTreeGenerator extends TreeGenerator {
 		
 		@Override
 		public void startDocument() throws SAXException {
+			debug("startdoc");
+
 			ITree t = tc.createTree(DOCUMENT_ID, NO_LABEL, DOCUMENT);
 			t.setPos(0);
-			t.setLcPosStart(new int[] {1 , 1});
+			t.setLcPosStart(lastPosition);
 			tc.setRoot(t);
 			stack.push(t);
 		}
-		
+
+		public void processingInstruction (String target, String data) {
+			System.out.println(target + " " +data);
+		}
+
 		@Override
 		public void endDocument() throws SAXException {
+			debug("enddoc");
 			ITree t = stack.pop();
 			int line = locator.getLineNumber();
 			int col = locator.getColumnNumber();
@@ -87,12 +91,21 @@ public class SAXTreeGenerator extends TreeGenerator {
 			
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+			debug("startElt", qName);
 			ITree t = tc.createTree(ELT_ID, qName, ELT);
 			addAttributes(t, attributes);
 			setStartPosition(t);
 			ITree p = stack.peek();
 			p.addChild(t);
 			stack.push(t);
+		}
+
+		void debug(Object... o) {
+			System.out.println("lc: " + locator.getLineNumber()+":" + locator.getColumnNumber());
+			System.out.println("last: " + Arrays.toString(lastPosition));
+			System.out.println("stack: " + stack);
+			if (o.length > 0)
+				System.out.println("=> " + Arrays.toString(o));
 		}
 
 		private void setStartPosition(ITree t) {
@@ -126,12 +139,15 @@ public class SAXTreeGenerator extends TreeGenerator {
 		
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
+			debug("endelt", localName);
+
 			ITree t = stack.pop();
 			setEndPosition(t);
 		}
 		
 		@Override
 		public void characters(char[] ch, int start, int length) throws SAXException {
+			debug("char", start, length);
 			tc.createTree(CDATA_ID, new String(ch, start, length), CDATA);
 		}
 	}
