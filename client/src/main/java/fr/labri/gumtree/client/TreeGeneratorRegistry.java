@@ -30,6 +30,7 @@ public class TreeGeneratorRegistry {
 		installGenerator("fr.labri.gumtree.gen.xml.XMLTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.c.CTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.ruby.RubyTreeGenerator");
+		installGenerator("fr.labri.gumtree.gen.css.CSSGrammarTreeGenerator");
 	}
 	
 	private void installGenerator(String name) {
