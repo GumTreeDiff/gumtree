@@ -1,5 +1,6 @@
 package fr.labri.gumtree.gen.sax;
 
+import fr.labri.gumtree.gen.Register;
 import fr.labri.gumtree.io.LineReader;
 import fr.labri.gumtree.gen.TreeGenerator;
 import fr.labri.gumtree.tree.ITree;
@@ -14,6 +15,7 @@ import java.util.*;
 
 import static fr.labri.gumtree.tree.ITree.NO_LABEL;
 
+@Register(id = "xml-sax", accept = {"\\.xml$", "\\.xsd$", "\\.wadl$"})
 public class SAXTreeGenerator extends TreeGenerator {
 	public static final String DOCUMENT = "Document";
 	public static final String ATTR = "Attr";
@@ -150,16 +152,5 @@ public class SAXTreeGenerator extends TreeGenerator {
 			debug("char", start, length);
 			tc.createTree(CDATA_ID, new String(ch, start, length), CDATA);
 		}
-	}
-	
-	@Override
-	public String getName() {
-		return "sax-xml";
-	}
-
-	@Override
-	public boolean handleFile(String filename) {
-		String f = filename.toLowerCase();
-		return f.endsWith(".xml") || f.endsWith(".xsd");
 	}
 }

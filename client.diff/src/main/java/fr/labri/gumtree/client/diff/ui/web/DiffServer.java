@@ -1,25 +1,23 @@
-package fr.labri.gumtree.client.ui.web;
+package fr.labri.gumtree.client.diff.ui.web;
+
+import fi.iki.elonen.NanoHTTPD;
+import fr.labri.gumtree.client.diff.ui.web.views.DiffView;
+import fr.labri.gumtree.client.diff.ui.web.views.DirectoryComparatorView;
+import fr.labri.gumtree.client.diff.ui.web.views.ScriptView;
+import fr.labri.gumtree.io.DirectoryComparator;
+import fr.labri.gumtree.tree.Pair;
+import org.rendersnake.HtmlCanvas;
+import org.rendersnake.Renderable;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 
-import fi.iki.elonen.NanoHTTPD;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
-
-import fr.labri.gumtree.client.ui.web.views.DirectoryComparatorView;
-import fr.labri.gumtree.client.ui.web.views.DiffView;
-import fr.labri.gumtree.client.ui.web.views.ScriptView;
-import fr.labri.gumtree.io.DirectoryComparator;
-import fr.labri.gumtree.tree.Pair;
-
 public class DiffServer extends NanoHTTPD {
-	
+
 	public DirectoryComparator comparator;
-	
+
 	public DiffServer(String src, String dst, int port) {
 		super(port);
 		comparator = new DirectoryComparator(src, dst);
@@ -34,7 +32,7 @@ public class DiffServer extends NanoHTTPD {
 			if ("/list".equals(uri) || ("/".equals(uri) && comparator.isDirMode())) {
 				DirectoryComparatorView view = new DirectoryComparatorView(comparator);
 				return respond(view);
-			} else if ("/diff".equals(uri) || ("/".equals(uri) && !comparator.isDirMode())) {
+			} else if ("/fr/labri/gumtree/client/diff".equals(uri) || ("/".equals(uri) && !comparator.isDirMode())) {
 				int id = 0;
 				if (parms.containsKey("id"))
 					id = Integer.parseInt(parms.get("id"));
@@ -55,10 +53,9 @@ public class DiffServer extends NanoHTTPD {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return null;
 	}
-	
+
 	private Response respond(Renderable r) {
 		HtmlCanvas c = new HtmlCanvas();
 		try {
@@ -72,7 +69,7 @@ public class DiffServer extends NanoHTTPD {
 	private Response respond(String s) {
 		return new Response(s);
 	}
-	
+
 	private Response respond(String mimeType, String s) {
 		return new Response(Response.Status.OK, mimeType, s);
 	}

@@ -1,39 +1,27 @@
 package fr.labri.gumtree.gen.php;
 
-import java.io.IOException;
-
-import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.TokenRewriteStream;
+import fr.labri.gumtree.gen.Register;
+import fr.labri.gumtree.gen.antlr.AbstractAntlrTreeGenerator;
+import org.antlr.runtime.*;
 import org.antlr.runtime.tree.CommonTree;
 
-import fr.labri.gumtree.gen.antlr.AbstractAntlrTreeGenerator;
+import java.io.IOException;
+import java.io.Reader;
 
+@Register(id = "php-antlr", accept = "\\.php.?$")
 public class PhpTreeGenerator extends AbstractAntlrTreeGenerator {
 
 	@Override
-	protected CommonTree getStartSymbol(String file) throws RecognitionException, IOException {
-		ANTLRStringStream stream = new ANTLRFileStream(file);
+	protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
+		ANTLRStringStream stream = new ANTLRReaderStream(r);
 		PhpLexer l = new PhpLexer(stream);
 		tokens = new TokenRewriteStream(l);
 		PhpParser p = new PhpParser(tokens);
-		return (CommonTree) p.prog().getTree();
+		return p.prog().getTree();
 	}
 
 	@Override
 	final protected String[] getTokenNames() {
 		return PhpParser.tokenNames;
 	}
-	
-	@Override
-	public final boolean handleFile(String file) {
-		return file.toLowerCase().endsWith(".php");
-	}
-
-	@Override
-	public final String getName() {
-		return "php-antlr";
-	}
-
 }

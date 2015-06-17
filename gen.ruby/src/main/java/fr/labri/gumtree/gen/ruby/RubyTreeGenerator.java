@@ -18,18 +18,19 @@
 
 package fr.labri.gumtree.gen.ruby;
 
-import java.io.IOException;
-import java.io.Reader;
-
+import fr.labri.gumtree.gen.Register;
+import fr.labri.gumtree.gen.TreeGenerator;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 import org.jrubyparser.CompatVersion;
 import org.jrubyparser.Parser;
 import org.jrubyparser.ast.Node;
 import org.jrubyparser.parser.ParserConfiguration;
 
-import fr.labri.gumtree.gen.TreeGenerator;
-import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.TreeContext;
+import java.io.IOException;
+import java.io.Reader;
 
+@Register(id = "ruby-jruby", accept = {"\\.ruby$", "\\.rb$"})
 public class RubyTreeGenerator extends TreeGenerator {
 
 	public TreeContext generate(Reader r) throws IOException {
@@ -59,15 +60,5 @@ public class RubyTreeGenerator extends TreeGenerator {
 			toTree(ctx, c, t);
 
 		return ctx;
-	}
-
-	@Override
-	public boolean handleFile(String file) {
-		return file.toLowerCase().endsWith(".ruby") ||  file.toLowerCase().endsWith(".rb");
-	}
-
-	@Override
-	public String getName() {
-		return "ruby-jruby";
 	}
 }

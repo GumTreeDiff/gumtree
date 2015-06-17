@@ -1,4 +1,4 @@
-package fr.labri.gumtree.client.ui.web.views;
+package fr.labri.gumtree.client.diff.ui.web.views;
 
 import static org.rendersnake.HtmlAttributesFactory.*;
 

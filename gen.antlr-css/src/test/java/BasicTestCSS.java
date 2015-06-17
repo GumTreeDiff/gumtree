@@ -5,9 +5,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Created by morandat on 17/06/2015.
- */
 public class BasicTestCSS {
 
     @Test

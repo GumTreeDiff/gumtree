@@ -1,16 +1,15 @@
 package fr.labri.gumtree.gen.jdt;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Map;
-
+import fr.labri.gumtree.gen.TreeGenerator;
+import fr.labri.gumtree.tree.TreeContext;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 
-import fr.labri.gumtree.gen.TreeGenerator;
-import fr.labri.gumtree.tree.TreeContext;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Map;
 
 public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
 	
@@ -47,11 +46,5 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
 		return v.getTreeContext();
 	}
 
-	@Override
-	public boolean handleFile(String file) {
-		return file.endsWith(".java");
-	}
-	
 	protected abstract AbstractJdtVisitor createVisitor();
-
 }

@@ -1,4 +1,9 @@
-package fr.labri.gumtree.client.batch;
+package fr.labri.gumtree.client.diff.batch;
+
+import fr.labri.gumtree.client.batch.BatchProcessor;
+import fr.labri.gumtree.client.batch.BatchUtils;
+import fr.labri.gumtree.client.diff.ui.web.views.DiffView;
+import org.rendersnake.HtmlCanvas;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,27 +13,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import org.rendersnake.HtmlCanvas;
-
-import fr.labri.gumtree.client.ui.web.views.DiffView;
-
 public final class WebDiffProcessor extends BatchProcessor {
-	
-	private static final String[] BOOTSTRAP_RESOURCES = new String[] { 
+
+	private static final String[] BOOTSTRAP_RESOURCES = new String[] {
 		"res/web/list.js", "res/web/diff.js", "res/web/script.js", "res/web/gumtree.css", "res/web/bootstrap.min.js", "res/web/bootstrap.min.css", "res/web/jquery.min.js"
 	};
-	
+
 	public static void main(String[] args) throws IOException {
 		File in = new File(args[0]);
 		Files.walkFileTree(in.toPath(), new WebDiffProcessor(args[1]));
 	}
-	
+
 	public WebDiffProcessor(String outputFolder) {
 		super(outputFolder);
-		BatchUtils.ensureFolder(outputFolder + File.separatorChar + "res" + File.separatorChar + "web");
-		for (String res : BOOTSTRAP_RESOURCES) 
+		BatchUtils.ensureFolder(outputFolder + File.separatorChar + "res" + File.separatorChar + "res/web");
+		for (String res : BOOTSTRAP_RESOURCES)
 			BatchUtils.copyResource(res, outputFolder + File.separatorChar + res);
-		
 	}
 
 	@Override
@@ -38,9 +38,9 @@ public final class WebDiffProcessor extends BatchProcessor {
 				files[0].getName().startsWith("dst_")) {
 			File src = files[1];
 			File dst = files[0];
-			
+
 			LOGGER.info(String.format("Processing %s and %s", src.getAbsolutePath(), dst.getAbsolutePath()));
-			
+
 			DiffView v = new DiffView(src, dst);
 			HtmlCanvas c = new HtmlCanvas();
 			v.renderOn(c);

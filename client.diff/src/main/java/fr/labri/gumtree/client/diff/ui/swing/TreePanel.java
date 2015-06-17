@@ -1,24 +1,20 @@
-package fr.labri.gumtree.client.ui.swing;
+package fr.labri.gumtree.client.diff.ui.swing;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.util.HashMap;
-import java.util.Map;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
-
-import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.TreeContext;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TreePanel extends JPanel {
-	
+
 	private static final long serialVersionUID = 1L;
 	private JTree jtree;
 	private TreeContext tree;
@@ -32,18 +28,19 @@ public class TreePanel extends JPanel {
 		ITree root = tree.getRoot();
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode(root);
 		trees.put(root, top);
-		for (ITree child: root.getChildren()) createNodes(top, child);
-		
+		for (ITree child: root.getChildren())
+			createNodes(top, child);
+
 		jtree = new JTree(top) {
 			private static final long serialVersionUID = 1L;
 		    public String convertValueToText(Object value, boolean selected,
                     boolean expanded, boolean leaf, int row,
                     boolean hasFocus) {
-		    	if(value != null) {
-		    		ITree node = ((ITree)((DefaultMutableTreeNode)value).getUserObject());
-		    		return node.toPrettyString(tree);
-		        }
-		    	return "";
+				if (value != null) {
+					ITree node = ((ITree) ((DefaultMutableTreeNode) value).getUserObject());
+					return node.toPrettyString(tree);
+				}
+				return "";
 			}
 		};
 		jtree.setCellRenderer(renderer);
@@ -55,19 +52,19 @@ public class TreePanel extends JPanel {
 
 		add(treeView);
 	}
-	
+
 	public TreePanel(TreeContext tree) {
 		this(tree, new DefaultTreeCellRenderer());
 	}
-	
+
 	public JTree getJTree() {
 		return jtree;
 	}
-	
+
 	public Map<ITree, DefaultMutableTreeNode> getTrees() {
 		return trees;
 	}
-	
+
 	public TreeContext getTree() {
 		return this.tree;
 	}
@@ -78,12 +75,11 @@ public class TreePanel extends JPanel {
 		Object nodeInfo = node.getUserObject();
 		System.out.println(nodeInfo);
 	}
-	
+
 	private void createNodes(DefaultMutableTreeNode parent, ITree tree) {
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(tree);
 		trees.put(tree, node);
 		parent.add(node);
 		for (ITree child: tree.getChildren()) createNodes(node, child);
 	}
-
 }

@@ -1,15 +1,4 @@
-package fr.labri.gumtree.client.ui.web.views;
-
-import static org.rendersnake.HtmlAttributesFactory.class_;
-import static org.rendersnake.HtmlAttributesFactory.lang;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import org.rendersnake.DocType;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
+package fr.labri.gumtree.client.diff.ui.web.views;
 
 import fr.labri.gumtree.actions.ActionGenerator;
 import fr.labri.gumtree.actions.model.Action;
@@ -18,15 +7,25 @@ import fr.labri.gumtree.io.ActionsIoUtils;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
 import fr.labri.gumtree.tree.TreeContext;
+import org.rendersnake.DocType;
+import org.rendersnake.HtmlCanvas;
+import org.rendersnake.Renderable;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import static org.rendersnake.HtmlAttributesFactory.class_;
+import static org.rendersnake.HtmlAttributesFactory.lang;
 
 public class ScriptView implements Renderable {
-	
+
 	private File fSrc;
-	
+
 	private File fDst;
-	
+
 	private List<Action> script;
-	
+
 	public ScriptView(File fSrc, File fDst) throws IOException {
 		this.fSrc = fSrc;
 		this.fDst = fDst;

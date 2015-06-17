@@ -29,7 +29,10 @@
 		<module>gen.ruby</module>
 		<module>gen.sax</module>
 		<module>gen.c</module>
+		<module>gen.xml</module>
+		<module>gen.php</module>
 		<module>client</module>
+		<module>client.diff</module>
 	</modules>
 
 	<repositories>

@@ -1,29 +1,28 @@
-package fr.labri.gumtree.client.ui.web.views;
+package fr.labri.gumtree.client.diff.ui.web.views;
 
-import static org.rendersnake.HtmlAttributesFactory.class_;
-import static org.rendersnake.HtmlAttributesFactory.lang;
-
-import java.io.File;
-import java.io.IOException;
-
+import fr.labri.gumtree.client.diff.ui.web.HtmlDiffs;
+import fr.labri.gumtree.gen.TreeGeneratorRegistry;
+import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.MatcherFactories;
+import fr.labri.gumtree.tree.TreeContext;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
 
-import fr.labri.gumtree.gen.TreeGeneratorRegistry;
-import fr.labri.gumtree.client.ui.web.HtmlDiffs;
-import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactories;
-import fr.labri.gumtree.tree.TreeContext;
+import java.io.File;
+import java.io.IOException;
+
+import static org.rendersnake.HtmlAttributesFactory.class_;
+import static org.rendersnake.HtmlAttributesFactory.lang;
 
 public class DiffView implements Renderable {
-	
+
 	private HtmlDiffs diffs;
-	
+
 	private File fSrc;
-	
+
 	private File fDst;
-	
+
 	public DiffView(File fSrc, File fDst) throws IOException {
 		this.fSrc = fSrc;
 		this.fDst = fDst;
@@ -63,7 +62,7 @@ public class DiffView implements Renderable {
 			._body()
 		._html();
 	}
-	
+
 	public static class MenuBar implements Renderable {
 
 		@Override
@@ -81,7 +80,5 @@ public class DiffView implements Renderable {
 				._div()
 			._div();
 		}
-		
 	}
-
 }

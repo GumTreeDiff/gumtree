@@ -1,14 +1,8 @@
 package fr.labri.gumtree.gen;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-
-import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeContext;
-import fr.labri.gumtree.tree.TreeUtils;
+
+import java.io.*;
 
 public abstract class TreeGenerator {
 	
@@ -31,9 +25,4 @@ public abstract class TreeGenerator {
 	public TreeContext generateFromString(String content) throws IOException {
 		return generateFromReader(new StringReader(content));
 	}
-	
-	public abstract boolean handleFile(String file);
-	
-	public abstract String getName();
-
 }

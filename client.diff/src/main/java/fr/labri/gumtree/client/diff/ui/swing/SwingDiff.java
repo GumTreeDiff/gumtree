@@ -1,10 +1,10 @@
-package fr.labri.gumtree.client.ui.swing;
+package fr.labri.gumtree.client.diff.ui.swing;
 
-import javax.swing.JFrame;
-
-import fr.labri.gumtree.client.DiffClient;
-import fr.labri.gumtree.client.DiffOptions;
+import fr.labri.gumtree.client.diff.DiffClient;
+import fr.labri.gumtree.client.diff.DiffOptions;
 import fr.labri.gumtree.matchers.Matcher;
+
+import javax.swing.*;
 
 public final class SwingDiff extends DiffClient {
 
@@ -15,7 +15,7 @@ public final class SwingDiff extends DiffClient {
 	@Override
 	public void start() {
 		final Matcher matcher = matchTrees();
-		javax.swing.SwingUtilities.invokeLater(new Runnable() { public void run() { 
+		javax.swing.SwingUtilities.invokeLater(new Runnable() { public void run() {
 			JFrame frame = new JFrame("GumTree");
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.add(new MappingsPanel(diffOptions.getSrc(), diffOptions.getDst(), getSrcTreeContext(), getDstTreeContext(), matcher));
@@ -23,5 +23,4 @@ public final class SwingDiff extends DiffClient {
 			frame.setVisible(true);
 		} });
 	}
-	
 }

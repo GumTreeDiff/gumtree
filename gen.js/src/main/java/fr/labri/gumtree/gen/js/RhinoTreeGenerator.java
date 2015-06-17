@@ -18,15 +18,16 @@
 
 package fr.labri.gumtree.gen.js;
 
-import java.io.IOException;
-import java.io.Reader;
-
+import fr.labri.gumtree.gen.Register;
+import fr.labri.gumtree.gen.TreeGenerator;
+import fr.labri.gumtree.tree.TreeContext;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
 
-import fr.labri.gumtree.gen.TreeGenerator;
-import fr.labri.gumtree.tree.TreeContext;
+import java.io.IOException;
+import java.io.Reader;
 
+@Register(id = "js-rhino", accept = "\\.js$")
 public class RhinoTreeGenerator extends TreeGenerator {
 
 	public TreeContext generate(Reader r) throws IOException {
@@ -36,15 +37,5 @@ public class RhinoTreeGenerator extends TreeGenerator {
 		root.visit(visitor);
 		return visitor.getTree(root);
 
-	}
-
-	@Override
-	public boolean handleFile(String file) {
-		return file.toLowerCase().endsWith(".js");
-	}
-
-	@Override
-	public String getName() {
-		return "js-rhino";
 	}
 }

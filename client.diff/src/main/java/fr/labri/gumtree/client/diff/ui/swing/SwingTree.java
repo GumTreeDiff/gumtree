@@ -1,19 +1,18 @@
-package fr.labri.gumtree.client.ui.swing;
-
-import java.io.IOException;
-
-import javax.swing.JFrame;
+package fr.labri.gumtree.client.diff.ui.swing;
 
 import fr.labri.gumtree.gen.TreeGeneratorRegistry;
 import fr.labri.gumtree.tree.TreeContext;
 
+import javax.swing.*;
+import java.io.IOException;
+
 public final class SwingTree {
-	
+
 	public static void main(String[] args) throws IOException {
 		final TreeContext t = TreeGeneratorRegistry.getInstance().getTree(args[0]);
 		javax.swing.SwingUtilities.invokeLater(new Runnable() { public void run() { createAndShowGUI(t); } });
 	}
-	
+
 	private SwingTree() {
 	}
 

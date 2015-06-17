@@ -1,16 +1,13 @@
 package fr.labri.gumtree.gen.c;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-
+import fr.labri.gumtree.gen.Register;
 import fr.labri.gumtree.gen.TreeGenerator;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.TreeContext;
 
+import java.io.*;
+
+@Register(id = "c-cocci", accept = "\\.[ch]$")
 public class CTreeGenerator extends TreeGenerator {
 
 	private static final String COCCI_CMD = "cgum";
@@ -49,15 +46,5 @@ public class CTreeGenerator extends TreeGenerator {
 		} finally {
 			f.delete();
 		}
-	}
-
-	@Override
-	public boolean handleFile(String file) {
-		return file.toLowerCase().endsWith(".c") || file.toLowerCase().endsWith(".h");
-	}
-
-	@Override
-	public String getName() {
-		return "c-cocci";
 	}
 }

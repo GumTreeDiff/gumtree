@@ -1,4 +1,4 @@
-package fr.labri.gumtree.client.ui.swing;
+package fr.labri.gumtree.client.diff.ui.swing;
 
 import java.awt.Color;
 import java.awt.Component;

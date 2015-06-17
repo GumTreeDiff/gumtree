@@ -1,15 +1,14 @@
-package fr.labri.gumtree.client.ui.xml;
+package fr.labri.gumtree.client.diff.ui.xml;
 
-import fr.labri.gumtree.client.DiffClient;
-import fr.labri.gumtree.client.DiffOptions;
+import fr.labri.gumtree.client.diff.DiffClient;
+import fr.labri.gumtree.client.diff.DiffOptions;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.tree.Tree;
 
 public class AnnotatedXmlDiff extends DiffClient {
 
-	private boolean isSrc; 
-	
+	private boolean isSrc;
+
 	public AnnotatedXmlDiff(DiffOptions diffOptions, boolean isSrc) {
 		super(diffOptions);
 		this.isSrc = isSrc;

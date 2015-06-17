@@ -1,10 +1,8 @@
-package fr.labri.gumtree.client.ui.web;
+package fr.labri.gumtree.client.diff.ui.web;
 
+import fr.labri.gumtree.client.diff.DiffClient;
 import fi.iki.elonen.ServerRunner;
-import fr.labri.gumtree.client.DiffClient;
-import fr.labri.gumtree.client.DiffOptions;
-
-import java.io.IOException;
+import fr.labri.gumtree.client.diff.DiffOptions;
 
 public class WebDiff extends DiffClient {
 

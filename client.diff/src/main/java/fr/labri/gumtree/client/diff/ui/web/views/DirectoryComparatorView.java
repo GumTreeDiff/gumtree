@@ -1,6 +1,10 @@
-package fr.labri.gumtree.client.ui.web.views;
+package fr.labri.gumtree.client.diff.ui.web.views;
 
-import static org.rendersnake.HtmlAttributesFactory.*;
+import fr.labri.gumtree.io.DirectoryComparator;
+import fr.labri.gumtree.tree.Pair;
+import org.rendersnake.DocType;
+import org.rendersnake.HtmlCanvas;
+import org.rendersnake.Renderable;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,17 +12,12 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 
-import org.rendersnake.DocType;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
-
-import fr.labri.gumtree.io.DirectoryComparator;
-import fr.labri.gumtree.tree.Pair;
+import static org.rendersnake.HtmlAttributesFactory.*;
 
 public class DirectoryComparatorView implements Renderable {
-	
+
 	private DirectoryComparator comparator;
-	
+
 	public DirectoryComparatorView(DirectoryComparator comparator) throws IOException {
 		this.comparator = comparator;
 	}
@@ -59,9 +58,9 @@ public class DirectoryComparatorView implements Renderable {
 										._h4()
 									._div()
 									.div(id("collapse-deleted-files").class_("panel-collapse collapse in"))
-									 	.div(class_("panel-body"))
-									 		.render_if(new UnmodifiedFiles(comparator.getDeletedFiles(), comparator.getSrc()), comparator.getDeletedFiles().size() > 0)
-									 	._div()
+										.div(class_("panel-body"))
+											.render_if(new UnmodifiedFiles(comparator.getDeletedFiles(), comparator.getSrc()), comparator.getDeletedFiles().size() > 0)
+										._div()
 									._div()
 								._div()
 							._div()
@@ -75,9 +74,9 @@ public class DirectoryComparatorView implements Renderable {
 										._h4()
 									._div()
 									.div(id("collapse-added-files").class_("panel-collapse collapse in"))
-									 	.div(class_("panel-body"))
-                                            .render_if(new UnmodifiedFiles(comparator.getAddedFiles(), comparator.getDst()), comparator.getAddedFiles().size() > 0)
-									 	._div()
+										.div(class_("panel-body"))
+                                    		.render_if(new UnmodifiedFiles(comparator.getAddedFiles(), comparator.getDst()), comparator.getAddedFiles().size() > 0)
+										._div()
 									._div()
 								._div()
 							._div()
@@ -90,15 +89,15 @@ public class DirectoryComparatorView implements Renderable {
 			._body()
 		._html();
 	}
-	
+
 	public class ModifiedFiles implements Renderable {
-		
+
 		private List<Pair<File, File>> files;
-		
+
 		public ModifiedFiles(List<Pair<File, File>> files) {
 			this.files = files;
 		}
-		
+
 		@Override
 		public void renderOn(HtmlCanvas html) throws IOException {
 			HtmlCanvas tbody = html
@@ -118,7 +117,7 @@ public class DirectoryComparatorView implements Renderable {
 						.td().content(comparator.getSrc().relativize(file.getFirst().toPath()).toString())
 						.td().content(comparator.getDst().relativize(file.getSecond().toPath()).toString())
 						.td()
-							.a(class_("btn btn-primary btn-xs").href("/diff?id=" + id)).content("diff")
+							.a(class_("btn btn-primary btn-xs").href("/fr/labri/gumtree/client/diff" + id)).content("fr/labri/gumtree/client/diff")
 							.write(" ")
 							.a(class_("btn btn-primary btn-xs").href("/script?id=" + id)).content("script")
 						._td()
@@ -130,18 +129,18 @@ public class DirectoryComparatorView implements Renderable {
 				._table();
 		}
 	}
-	
+
 	public class UnmodifiedFiles implements Renderable {
 
 		private Set<File> files;
-		
+
 		private Path root;
-		
+
 		public UnmodifiedFiles(Set<File> files, Path root) {
 			this.files = files;
 			this.root = root;
 		}
-		
+
 		@Override
 		public void renderOn(HtmlCanvas html) throws IOException {
 			HtmlCanvas tbody = html

@@ -1,4 +1,4 @@
-package fr.labri.gumtree.client.ui.web;
+package fr.labri.gumtree.client.diff.ui.web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
