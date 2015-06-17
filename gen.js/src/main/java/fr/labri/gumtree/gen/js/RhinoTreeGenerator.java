@@ -24,7 +24,7 @@ import java.io.Reader;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
 
-import fr.labri.gumtree.io.TreeGenerator;
+import fr.labri.gumtree.gen.TreeGenerator;
 import fr.labri.gumtree.tree.TreeContext;
 
 public class RhinoTreeGenerator extends TreeGenerator {

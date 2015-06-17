@@ -1,6 +1,5 @@
-package fr.labri.gumtree.client;
+package fr.labri.gumtree.gen;
 
-import fr.labri.gumtree.io.TreeGenerator;
 import fr.labri.gumtree.tree.TreeContext;
 
 import java.io.IOException;
@@ -10,17 +9,18 @@ import java.util.List;
 
 public class TreeGeneratorRegistry {
 	
-	private final List<TreeGenerator> producers;
+	private final List<TreeGenerator> generators;
 	
 	private static TreeGeneratorRegistry registry;
 	
 	public final static TreeGeneratorRegistry getInstance() {
-		if (registry == null) registry = new TreeGeneratorRegistry();
+		if (registry == null)
+            registry = new TreeGeneratorRegistry();
 		return registry;
 	}
 	
 	private TreeGeneratorRegistry() {
-		producers = new ArrayList<>();
+		generators = new ArrayList<>();
 		
 		installGenerator("fr.labri.gumtree.gen.jdt.JdtTreeGenerator");
 		installGenerator("fr.labri.gumtree.gen.jdt.cd.CdJdtTreeGenerator");
@@ -37,7 +37,7 @@ public class TreeGeneratorRegistry {
 		TreeGenerator g = loadGenerator(name);
 		if (g != null) {
 			// TODO info message ??? 
-			producers.add(g);
+			generators.add(g);
 		}
 	}
 	
@@ -53,12 +53,15 @@ public class TreeGeneratorRegistry {
 	
 	private TreeGenerator getGenerator(String file, String[] generators) {
 		TreeGenerator fallback = null;
-		for (TreeGenerator p: producers) {			
+		for (TreeGenerator p: this.generators) {
 			if (p.handleFile(file)) {
-				if (generators == null) return p;
+				if (generators == null)
+                    return p;
 				else {
-					if (fallback == null) fallback = p;
-					if (Arrays.binarySearch(generators, p.getName()) != -1) return p;
+					if (fallback == null)
+                        fallback = p;
+					if (Arrays.binarySearch(generators, p.getName()) != -1)
+                        return p;
 				}
 			}
 		}

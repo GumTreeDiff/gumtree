@@ -10,7 +10,7 @@ import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
 
-import fr.labri.gumtree.client.TreeGeneratorRegistry;
+import fr.labri.gumtree.gen.TreeGeneratorRegistry;
 import fr.labri.gumtree.client.ui.web.HtmlDiffs;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;

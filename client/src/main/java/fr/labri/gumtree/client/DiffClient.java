@@ -2,6 +2,7 @@ package fr.labri.gumtree.client;
 
 import java.io.IOException;
 
+import fr.labri.gumtree.gen.TreeGeneratorRegistry;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import fr.labri.gumtree.actions.RootsClassifier;
-import fr.labri.gumtree.client.TreeGeneratorRegistry;
+import fr.labri.gumtree.gen.TreeGeneratorRegistry;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;

@@ -13,7 +13,7 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 
-import fr.labri.gumtree.io.TreeGenerator;
+import fr.labri.gumtree.gen.TreeGenerator;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeContext;
 

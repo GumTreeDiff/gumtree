@@ -13,7 +13,7 @@ import org.rendersnake.Renderable;
 
 import fr.labri.gumtree.actions.ActionGenerator;
 import fr.labri.gumtree.actions.model.Action;
-import fr.labri.gumtree.client.TreeGeneratorRegistry;
+import fr.labri.gumtree.gen.TreeGeneratorRegistry;
 import fr.labri.gumtree.io.ActionsIoUtils;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;

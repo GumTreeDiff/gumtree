@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
-import fr.labri.gumtree.client.TreeGeneratorRegistry;
+import fr.labri.gumtree.gen.TreeGeneratorRegistry;
 import fr.labri.gumtree.tree.TreeContext;
 
 public final class SwingTree {

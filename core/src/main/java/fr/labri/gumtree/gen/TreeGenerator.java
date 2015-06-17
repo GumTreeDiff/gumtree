@@ -1,4 +1,4 @@
-package fr.labri.gumtree.io;
+package fr.labri.gumtree.gen;
 
 import java.io.File;
 import java.io.FileReader;

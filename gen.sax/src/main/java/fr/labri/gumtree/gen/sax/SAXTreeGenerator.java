@@ -1,7 +1,7 @@
 package fr.labri.gumtree.gen.sax;
 
 import fr.labri.gumtree.io.LineReader;
-import fr.labri.gumtree.io.TreeGenerator;
+import fr.labri.gumtree.gen.TreeGenerator;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeContext;
 import org.xml.sax.*;
@@ -75,7 +75,7 @@ public class SAXTreeGenerator extends TreeGenerator {
 		}
 
 		public void processingInstruction (String target, String data) {
-			System.out.println(target + " " +data);
+			System.out.println(target + " " + data);
 		}
 
 		@Override

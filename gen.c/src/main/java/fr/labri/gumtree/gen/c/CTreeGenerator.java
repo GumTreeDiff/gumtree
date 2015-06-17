@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import fr.labri.gumtree.io.TreeGenerator;
+import fr.labri.gumtree.gen.TreeGenerator;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.tree.TreeContext;
 

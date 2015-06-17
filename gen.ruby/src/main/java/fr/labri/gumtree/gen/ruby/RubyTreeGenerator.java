@@ -26,7 +26,7 @@ import org.jrubyparser.Parser;
 import org.jrubyparser.ast.Node;
 import org.jrubyparser.parser.ParserConfiguration;
 
-import fr.labri.gumtree.io.TreeGenerator;
+import fr.labri.gumtree.gen.TreeGenerator;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeContext;
 

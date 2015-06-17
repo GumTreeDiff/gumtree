@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import fr.labri.gumtree.client.TreeGeneratorRegistry;
+import fr.labri.gumtree.gen.TreeGeneratorRegistry;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.hash.RollingHashGenerator;
 import fr.labri.gumtree.tree.hash.StaticHashGenerator;
