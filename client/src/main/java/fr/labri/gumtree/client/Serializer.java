@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 @Register(name = "parse", description = "Parse file and dump result")
 public class Serializer extends Client {
@@ -24,10 +25,10 @@ public class Serializer extends Client {
         @Override
         public Option[] values() {
             return new Option[]{
-                    new Option("-f", "Output format (" + OutputFormat.values() + ")", 1) {
+                    new Option("-f", "Output format " + Arrays.toString(OutputFormat.values()), 1) {
                         @Override
                         protected void process(String name, String[] args) {
-                            OutputFormat o = OutputFormat.DOT.valueOf(args[0]);
+                            OutputFormat o = OutputFormat.DOT.valueOf(args[0].toUpperCase());
                             if (o != null)
                                 format = o;
                             else

@@ -1,11 +1,12 @@
 package fr.labri.gumtree.matchers;
 
+import fr.labri.gumtree.matchers.heuristic.gt.GumtreeMatchers;
+import fr.labri.gumtree.tree.ITree;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-
-import fr.labri.gumtree.matchers.heuristic.gt.GumtreeMatchers;
-import fr.labri.gumtree.tree.ITree;
+import java.util.Set;
 
 public class MatcherFactories {
 	
@@ -59,6 +60,10 @@ public class MatcherFactories {
 
 	private static void addFactory(MatcherFactory factory) {
 		factories.put(factory.getClass(), factory);
+	}
+
+	public static Set<Class<? extends MatcherFactory>> listFactories() {
+		return factories.keySet();
 	}
 	
 }

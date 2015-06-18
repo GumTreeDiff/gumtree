@@ -29,6 +29,10 @@ abstract public class Option {
         public OptionException(String msg) {
             this(msg, null);
         }
+
+        public Context getContext() {
+            return context;
+        }
     }
 
     public Option(String key, String text) {
