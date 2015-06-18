@@ -1,6 +1,8 @@
 GumTree
 =======
 
+![Build status](https://travis-ci.org/GumTreeDiff/gumtree.svg?branch=tree_info)
+
 GumTree is a complete framework to deal with source code as trees and compute differences between them. It includes possibilities such as:
 * converting a source file into a language-agnostic tree format
 * export the produced trees in various formats
