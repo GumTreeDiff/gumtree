@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 public class TreeGeneratorRegistry {
 
+    public static boolean USE_EXPERIMENTAL = Boolean.parseBoolean(System.getProperty("gumtree.generator.experimental", "false"));
+
     static class Entry {
         final String id;
         final Pattern[] accept;
@@ -23,27 +25,27 @@ public class TreeGeneratorRegistry {
         }
 
         boolean handleFile(String file) {
-            for (Pattern pattern: accept)
+            for (Pattern pattern : accept)
                 if (pattern.matcher(file).find())
                     return true;
             return false;
         }
     }
-	
-	private final List<Entry> generators  = new ArrayList<>();
-	
-	private static TreeGeneratorRegistry registry;
-	
-	public final static TreeGeneratorRegistry getInstance() {
-		if (registry == null)
+
+    private final List<Entry> generators = new ArrayList<>();
+
+    private static TreeGeneratorRegistry registry;
+
+    public final static TreeGeneratorRegistry getInstance() {
+        if (registry == null)
             registry = new TreeGeneratorRegistry();
-		return registry;
-	}
-	
-	private TreeGeneratorRegistry() {
-	}
-	
-	public void installGenerator(String name) {
+        return registry;
+    }
+
+    private TreeGeneratorRegistry() {
+    }
+
+    public void installGenerator(String name) {
         try {
             Class<?> c = Class.forName(name);
             installGenerator(c.asSubclass(TreeGenerator.class));
@@ -56,7 +58,7 @@ public class TreeGeneratorRegistry {
         Register annotation = clazz.getAnnotation(Register.class);
         if (annotation == null)
             System.err.println("Missing @Register annotation on generator: " + clazz);
-        else
+        else if ((USE_EXPERIMENTAL || !annotation.experimental()))
             loadGenerator(annotation, clazz);
     }
 
@@ -64,9 +66,8 @@ public class TreeGeneratorRegistry {
         generators.add(new Entry(annotation.id(), annotation.accept(), clazz));
     }
 
-	private TreeGenerator getGenerator(String file) {
-		TreeGenerator fallback = null;
-		for (Entry e: this.generators) {
+    public TreeGenerator getGenerator(String file) {
+        for (Entry e : generators) {
             if (e.handleFile(file)) {
                 try {
                     return e.generator.newInstance();
@@ -76,11 +77,11 @@ public class TreeGeneratorRegistry {
                 }
             }
         }
-		throw new RuntimeException(String.format("No generator found for: '%s'", file));
-	}
-	
-	public TreeContext getTree(String file) throws IOException {
-		TreeGenerator p = getGenerator(file);
-		return p.generateFromFile(file);
-	}
+        throw new RuntimeException(String.format("No generator found for: '%s'", file));
+    }
+
+    public TreeContext getTree(String file) throws IOException {
+        TreeGenerator p = getGenerator(file);
+        return p.generateFromFile(file);
+    }
 }

@@ -11,7 +11,7 @@ import org.antlr.runtime.tree.CommonTree;
 import java.io.IOException;
 import java.io.Reader;
 
-@Register(id = "css-antlr", accept = "\\.[cC][sS][sS]$")
+@Register(id = "css-antlr", accept = "\\.[cC][sS][sS]$", experimental = true)
 public class CSSGrammarTreeGenerator extends AbstractAntlrTreeGenerator {
 
 	@Override
