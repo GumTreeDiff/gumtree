@@ -11,9 +11,6 @@
     <artifactId>client.diff</artifactId>
     <packaging>pom</packaging>
     <name>GumTree Diff Client</name>
-    <modules>
-        <module>../client.batch</module>
-    </modules>
     <dependencies>
         <dependency>
             <groupId>fr.labri.gumtree</groupId>
