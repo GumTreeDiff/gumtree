@@ -21,7 +21,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
  */
 public class XyBottomUpMatcher extends Matcher {
 
-	private static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.xy.sim", "0.001"));
+	private static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.xy.sim", "0.5"));
 
 	private TIntObjectMap<ITree> srcs = new TIntObjectHashMap<>();
 	
