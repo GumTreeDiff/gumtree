@@ -1,16 +1,39 @@
-gumtree
+GumTree
 =======
 
-GumTree is a neat tool to visualize differences between source code files.
+GumTree is a complete framework to deal with source code as trees and compute differences between them. It includes possibilities such as:
+* converting a source file into a language-agnostic tree format
+* export the produced trees in various formats
+* compute the differences between the trees
+* export these differences in various formats
+* visualize these differences graphically
 
-## Description
-
-Compared to the classic diff tools (such as Meld, KDiff3, etc...), GumTree has two particularties :
-
+Compared to classical code differencing tools, it has two important particularities:
 * it works on a tree structure rather than a text structure,
 * it can detect moved or renamed elements in addition of deleted and inserted elements.
 
-Thanks to these two features, GumTree is able to compute and show kick-ass diffs that will allow you to understand faster what changed between the two code files. GumTree comes with two GUIs (a web based and a Java swing based), and is compatible with several languages: Java, JavaScript, Ruby, C and R. More languages are coming soon, if you want to help contact [me](www.labri.fr/perso/falleri).
+We already deal with a wide range of languages: Java, C, JavaScript and Ruby. More languages are coming soon, if you want to help contact [me](www.labri.fr/perso/falleri).
+
+## Citing GumTree
+
+We are researchers, therefore if you use GumTree in an academic work we would be really glad if you cite our seminal paper using the following bibtex:
+
+```
+@inproceedings{DBLP:conf/kbse/FalleriMBMM14,
+  author    = {Jean{-}R{\'{e}}my Falleri and
+               Flor{\'{e}}al Morandat and
+               Xavier Blanc and
+               Matias Martinez and
+               Martin Monperrus},
+  title     = {Fine-grained and accurate source code differencing},
+  booktitle = {{ACM/IEEE} International Conference on Automated Software Engineering,
+               {ASE} '14, Vasteras, Sweden - September 15 - 19, 2014},
+  pages     = {313--324},
+  year      = {2014},
+  url       = {http://doi.acm.org/10.1145/2642937.2642982},
+  doi       = {10.1145/2642937.2642982}
+}
+``
 
 ## Installation
 
