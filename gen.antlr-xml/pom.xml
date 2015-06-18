@@ -7,7 +7,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>gen.anltr-xml</artifactId>
+	<artifactId>gen.antlr-xml</artifactId>
 	  <name>Gumtree ANTLR XML Tree Generator</name>
 	<dependencies>
 		<dependency>

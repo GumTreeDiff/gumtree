@@ -33,6 +33,7 @@
 		<module>gen.c</module>
 		<module>client</module>
 		<module>client.diff</module>
+		<module>gumtree-all</module>
 	</modules>
 
 	<repositories>

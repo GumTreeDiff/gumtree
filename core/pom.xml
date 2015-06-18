@@ -7,7 +7,7 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>core</artifactId>
-	<name>GumTree Core</name>
+	<name>GumTree Core Module</name>
 	<dependencies>
 		<dependency>
 			<groupId>simmetrics</groupId>
