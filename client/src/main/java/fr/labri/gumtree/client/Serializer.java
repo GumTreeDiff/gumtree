@@ -24,7 +24,7 @@ public class Serializer extends Client {
         @Override
         public Option[] values() {
             return new Option[]{
-                    new Option("-f", "Output format (" + OutputFormat.values()+")", 1) {
+                    new Option("-f", "Output format (" + OutputFormat.values() + ")", 1) {
                         @Override
                         protected void process(String name, String[] args) {
                             OutputFormat o = OutputFormat.DOT.valueOf(args[0]);
@@ -99,7 +99,9 @@ public class Serializer extends Client {
         for (String file : opts.files) {
             TreeContext tc = TreeGeneratorRegistry.getInstance().getGenerator(file).generateFromFile(file);
             try {
-                opts.format.getSerializer(tc).writeTo(opts.output == null ? System.out : new FileOutputStream(opts.output));
+                opts.format.getSerializer(tc).writeTo(opts.output == null ?
+                        System.out
+                        : new FileOutputStream(opts.output));
             } catch (Exception e) {
                 System.err.println(e);
             }

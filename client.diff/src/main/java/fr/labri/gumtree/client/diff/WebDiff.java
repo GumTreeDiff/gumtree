@@ -32,7 +32,6 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
 		}
 	}
 
-
 	@Override
 	protected Options newOptions() {
 		return new Options();
@@ -44,5 +43,4 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
 		System.out.println(String.format("Starting server: %s", "http://127.0.0.1:" + opts.defaultPort));
 		ServerRunner.executeInstance(server);
 	}
-
 }
