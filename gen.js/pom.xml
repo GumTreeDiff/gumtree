@@ -17,12 +17,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>fr.labri.utils</groupId>
-			<artifactId>utils</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.mozilla</groupId>
 			<artifactId>rhino</artifactId>
 			<version>1.7R4</version>

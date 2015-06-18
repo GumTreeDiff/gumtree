@@ -15,12 +15,6 @@
 			<artifactId>core</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>fr.labri.utils</groupId>
-			<artifactId>utils</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
         <dependency>
           <groupId>xerces</groupId>
           <artifactId>xerces</artifactId>
