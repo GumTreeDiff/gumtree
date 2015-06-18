@@ -1,4 +1,4 @@
-package fr.labri;
+package fr.labri.gumtree.client;
 
 import java.io.PrintStream;
 import java.util.ArrayList;

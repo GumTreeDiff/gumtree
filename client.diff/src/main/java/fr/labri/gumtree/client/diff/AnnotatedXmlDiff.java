@@ -1,6 +1,6 @@
 package fr.labri.gumtree.client.diff;
 
-import fr.labri.Option;
+import fr.labri.gumtree.client.Option;
 import fr.labri.gumtree.client.Register;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.matchers.Matcher;

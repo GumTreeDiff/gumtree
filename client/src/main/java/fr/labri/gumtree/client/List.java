@@ -1,6 +1,5 @@
 package fr.labri.gumtree.client;
 
-import fr.labri.Option;
 import fr.labri.gumtree.gen.TreeGeneratorRegistry;
 import fr.labri.gumtree.matchers.MatcherFactories;
 

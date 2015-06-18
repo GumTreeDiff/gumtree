@@ -1,7 +1,7 @@
 package fr.labri.gumtree.client.diff;
 
 import fi.iki.elonen.ServerRunner;
-import fr.labri.Option;
+import fr.labri.gumtree.client.Option;
 import fr.labri.gumtree.client.Register;
 import fr.labri.gumtree.client.diff.ui.web.DiffServer;
 
