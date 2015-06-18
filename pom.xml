@@ -36,14 +36,6 @@
 		<module>gumtree-all</module>
 	</modules>
 
-	<repositories>
-		<repository>
-			<id>se</id>
-			<name>SE repository</name>
-			<url>http://se.labri.fr/maven</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -62,7 +54,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.3</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -70,16 +62,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>se</id>
-			<url>dav:https://webdav.labri.fr/vhosts/se.labri.fr/maven/</url>
-		</repository>
-		<snapshotRepository>
-			<id>se</id>
-			<url>dav:https://webdav.labri.fr/vhosts/se.labri.fr/maven/</url>
-		</snapshotRepository>
-	</distributionManagement>
 </project>
 

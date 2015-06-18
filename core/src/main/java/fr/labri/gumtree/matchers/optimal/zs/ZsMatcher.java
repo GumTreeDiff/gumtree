@@ -6,15 +6,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
 import fr.labri.gumtree.io.MatrixDebugger;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.ITree;
+import org.simmetrics.StringMetrics;
+import org.simmetrics.tokenizers.QGram;
 
 public class ZsMatcher extends Matcher {
-
-	private static QGramsDistance qgramDist = new QGramsDistance();
 
 	private ZsTree src, dst;
 
@@ -153,7 +152,7 @@ public class ZsMatcher extends Matcher {
 			if ("".equals(n1.getLabel()) || "".equals(n2.getLabel())) 
 				return 1D;
 			else 
-				return 1D - qgramDist.getSimilarity(n1.getLabel(), n2.getLabel());
+				return 1D - StringMetrics.qGramsDistance().compare(n1.getLabel(), n2.getLabel());
 		else 
 			return Double.MAX_VALUE;
 	}

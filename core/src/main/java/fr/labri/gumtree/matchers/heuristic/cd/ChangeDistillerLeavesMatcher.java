@@ -8,7 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
+import org.simmetrics.StringMetrics;
+
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactory;
@@ -18,8 +19,6 @@ import fr.labri.gumtree.tree.TreeUtils;
 public class ChangeDistillerLeavesMatcher extends Matcher {
 
 	public static final double LABEL_SIM_THRESHOLD = 0.5D;
-
-	private static final QGramsDistance QGRAM = new QGramsDistance();
 
 	public ChangeDistillerLeavesMatcher(ITree src, ITree dst) {
 		super(src, dst);
@@ -36,7 +35,7 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 			for (ITree dstLeaf: dstLeaves) {
 				ITree srcLeaf = srcLeaves.next();
 				if (srcLeaf.isMatchable(dstLeaf)) {
-					double sim = QGRAM.getSimilarity(srcLeaf.getLabel(), dstLeaf.getLabel());
+					double sim = StringMetrics.qGramsDistance().compare(srcLeaf.getLabel(), dstLeaf.getLabel());
 					if (sim > LABEL_SIM_THRESHOLD) leafMappings.add(new Mapping(srcLeaf, dstLeaf));
 				}
 			}
@@ -72,7 +71,8 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 		}
 
 		public double sim(Mapping m) {
-			return QGRAM.getSimilarity(m.getFirst().getLabel(), m.getSecond().getLabel());
+
+			return StringMetrics.qGramsDistance().compare(m.getFirst().getLabel(), m.getSecond().getLabel());
 		}
 
 	}
