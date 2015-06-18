@@ -54,6 +54,9 @@ public class Run {
             inst.run();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             System.err.printf("Can't instantiate client: '%s'\n%s\n", client.getName(), e.getLocalizedMessage());
+        } catch (Exception e) {
+            System.err.println(e);
+            e.printStackTrace();
         }
     }
 
