@@ -21,9 +21,9 @@ import fr.labri.gumtree.tree.TreeUtils;
  */
 public class GreedyBottomUpMatcher extends Matcher {
 
-	private static final double SIM_THRESHOLD = 0.3D;
-	
-	private static final int SIZE_THESHOLD = 1000;
+	private static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.3"));
+
+	private static final int SIZE_THRESHOLD = Integer.parseInt(System.getProperty("gumtree.match.bu.size", "1000"));
 
 	private TreeMap srcIds;
 	
@@ -93,7 +93,7 @@ public class GreedyBottomUpMatcher extends Matcher {
 		TreeUtils.removeMatched(cSrc);
 		TreeUtils.removeMatched(cDst);
 
-		if (cSrc.getSize() < SIZE_THESHOLD || cDst.getSize() < SIZE_THESHOLD) {
+		if (cSrc.getSize() < SIZE_THRESHOLD || cDst.getSize() < SIZE_THRESHOLD) {
 			Matcher m = new ZsMatcher(cSrc, cDst);
 			m.match();
 			for (Mapping candidate: m.getMappings()) {

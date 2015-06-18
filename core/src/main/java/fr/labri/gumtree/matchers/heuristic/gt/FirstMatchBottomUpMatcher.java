@@ -21,10 +21,9 @@ import fr.labri.gumtree.tree.TreeUtils;
  * a exact ZS algorithm is applied to look to possibly forgotten nodes.
  */
 public class FirstMatchBottomUpMatcher extends Matcher {
+	private static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.5"));
 
-	private static final double SIM_THRESHOLD = 0.50D;
-	
-	private static final int SIZE_THESHOLD = 200;
+	private static final int SIZE_THRESHOLD = Integer.parseInt(System.getProperty("gumtree.match.bu.size", "200"));
 
 	private Map<Integer, ITree> srcIds = new HashMap<>();
 	
@@ -65,7 +64,7 @@ public class FirstMatchBottomUpMatcher extends Matcher {
 	private void lastChanceMatch(ITree src, ITree dst) {
 		ITree cSrc = removeMatched(src.deepCopy());
 		ITree cDst = removeMatched(dst.deepCopy());
-		if (cSrc.getSize() < SIZE_THESHOLD && cDst.getSize() < SIZE_THESHOLD) {
+		if (cSrc.getSize() < SIZE_THRESHOLD && cDst.getSize() < SIZE_THRESHOLD) {
 			Matcher m = new RtedMatcher(cSrc, cDst);
 			for (Mapping candidate: m.getMappings()) {
 				ITree left = srcIds.get(candidate.getFirst().getId());

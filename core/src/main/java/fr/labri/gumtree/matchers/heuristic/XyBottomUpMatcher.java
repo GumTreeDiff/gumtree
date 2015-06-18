@@ -21,8 +21,8 @@ import gnu.trove.map.hash.TIntObjectHashMap;
  */
 public class XyBottomUpMatcher extends Matcher {
 
-	private static final double SIM_THRESHOLD = 0.001D;
-	
+	private static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.xy.sim", "0.001"));
+
 	private TIntObjectMap<ITree> srcs = new TIntObjectHashMap<>();
 	
 	private TIntObjectMap<ITree> dsts = new TIntObjectHashMap<>();
@@ -32,10 +32,11 @@ public class XyBottomUpMatcher extends Matcher {
 	}
 
 	public void match() {
-		for (ITree t : src.getTrees()) srcs.put(t.getId(), t);
-		for (ITree t : dst.getTrees()) dsts.put(t.getId(), t);
-		
-		for (ITree src: src.postOrder())  {
+		for (ITree t : src.getTrees())
+			srcs.put(t.getId(), t);
+		for (ITree t : dst.getTrees())
+			dsts.put(t.getId(), t);
+		for (ITree src: this.src.postOrder())  {
 			if (src.isRoot()) {
 				addMapping(src, this.dst);
 				lastChanceMatch(src, this.dst);
