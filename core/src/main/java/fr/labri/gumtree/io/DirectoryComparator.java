@@ -1,21 +1,17 @@
 package fr.labri.gumtree.io;
 
+import fr.labri.gumtree.tree.Pair;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import fr.labri.gumtree.tree.Pair;
 
 public class DirectoryComparator {
 
@@ -49,7 +45,7 @@ public class DirectoryComparator {
 			throw new RuntimeException();
 		else {
 			if (!Files.isDirectory(this.src) && !Files.isDirectory(this.dst)) {
-				this.modifiedFiles.add(new Pair<File, File>(this.src.toFile(), this.dst.toFile()));
+				this.modifiedFiles.add(new Pair<>(this.src.toFile(), this.dst.toFile()));
 				this.src = this.src.getParent();
 				this.dst = this.dst.getParent();
 				this.dirMode = false;
