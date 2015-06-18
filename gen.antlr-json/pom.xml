@@ -8,7 +8,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>gen.antlr-json</artifactId>
-	  <name>Gumtree JSON Grammar Tree Generator</name>
+	  <name>Gumtree ANTLR JSON Tree Generator</name>
 	<dependencies>
 		<dependency>
 			<groupId>fr.labri.gumtree</groupId>

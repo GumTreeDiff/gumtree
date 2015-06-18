@@ -7,8 +7,8 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>gen.xml</artifactId>
-	  <name>Gumtree XML Tree Generator</name>
+	<artifactId>gen.antlr-php</artifactId>
+	  <name>Gumtree ANTLR PHP Tree Generator</name>
 	<dependencies>
 		<dependency>
 			<groupId>fr.labri.gumtree</groupId>

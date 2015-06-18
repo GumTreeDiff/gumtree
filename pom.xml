@@ -24,13 +24,13 @@
 		<module>gen.antlr-antlr</module>
 		<module>gen.antlr-json</module>
 		<module>gen.antlr-css</module>
+		<module>gen.antlr-php</module>
+		<module>gen.antlr-xml</module>
 		<module>gen.jdt</module>
 		<module>gen.js</module>
 		<module>gen.ruby</module>
 		<module>gen.sax</module>
 		<module>gen.c</module>
-		<module>gen.xml</module>
-		<module>gen.php</module>
 		<module>client</module>
 		<module>client.diff</module>
 	</modules>

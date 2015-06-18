@@ -8,7 +8,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>gen.antlr-r</artifactId>
-	<name>GumTree R Tree Generator</name>
+	<name>GumTree ANTLR R Tree Generator</name>
 	<dependencies>
 		<dependency>
 			<groupId>fr.labri.gumtree</groupId>
