@@ -33,7 +33,7 @@ We are researchers, therefore if you use GumTree in an academic work we would be
   url       = {http://doi.acm.org/10.1145/2642937.2642982},
   doi       = {10.1145/2642937.2642982}
 }
-``
+```
 
 ## Installation
 
