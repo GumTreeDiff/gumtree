@@ -1,15 +1,16 @@
 package fr.labri.gumtree.matchers.optimal.rted;
 
-import java.util.List;
-
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
 
+import java.util.List;
+
 public class RtedMatcher extends Matcher {
 
-	public RtedMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public RtedMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 
 	@Override

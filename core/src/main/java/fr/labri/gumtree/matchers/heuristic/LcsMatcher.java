@@ -1,16 +1,19 @@
 package fr.labri.gumtree.matchers.heuristic;
 
-import java.util.List;
-
 import fr.labri.gumtree.algo.StringAlgorithms;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.Register;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
 
+import java.util.List;
+
+@Register(id = "lcs")
 public class LcsMatcher extends Matcher {
 
-	public LcsMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public LcsMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 
 	@Override
@@ -26,5 +29,4 @@ public class LcsMatcher extends Matcher {
 			addMapping(t1, t2);
 		}
 	}
-
 }

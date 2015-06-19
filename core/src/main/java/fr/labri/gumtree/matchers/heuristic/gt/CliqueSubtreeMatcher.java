@@ -1,26 +1,18 @@
 package fr.labri.gumtree.matchers.heuristic.gt;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import fr.labri.gumtree.matchers.Mapping;
-import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.MultiMappingStore;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Pair;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
+import java.util.*;
+
 public class CliqueSubtreeMatcher extends SubtreeMatcher {
 	
-	public CliqueSubtreeMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public CliqueSubtreeMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 
 	@Override
@@ -159,14 +151,4 @@ private class MappingComparator implements Comparator<Mapping> {
 		}
 
 	}
-	
-	public static class CliqueSubtreeMatcherFactory implements MatcherFactory {
-
-		@Override
-		public Matcher newMatcher(ITree src, ITree dst) {
-			return new CliqueSubtreeMatcher(src, dst);
-		}
-		
-	}
-
 }

@@ -1,6 +1,6 @@
 package fr.labri.gumtree.client;
 
-import fr.labri.gumtree.gen.TreeGeneratorRegistry;
+import fr.labri.gumtree.gen.Generators;
 import fr.labri.gumtree.io.TreeIoUtils;
 import fr.labri.gumtree.io.TreeIoUtils.TreeSerializer;
 import fr.labri.gumtree.tree.TreeContext;
@@ -97,8 +97,8 @@ public class Serializer extends Client {
             Files.createDirectories(FileSystems.getDefault().getPath(opts.output));
 
         for (String file : opts.files) {
-            TreeContext tc = TreeGeneratorRegistry.getInstance().getGenerator(file).generateFromFile(file);
             try {
+                TreeContext tc = Generators.getInstance().getTree(file);
                 opts.format.getSerializer(tc).writeTo(opts.output == null ?
                         System.out
                         : new FileOutputStream(opts.output));

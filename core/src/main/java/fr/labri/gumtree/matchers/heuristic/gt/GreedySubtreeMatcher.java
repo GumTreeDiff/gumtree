@@ -1,24 +1,16 @@
 package fr.labri.gumtree.matchers.heuristic.gt;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import fr.labri.gumtree.matchers.Mapping;
-import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.MultiMappingStore;
 import fr.labri.gumtree.tree.ITree;
 
+import java.util.*;
+
 public class GreedySubtreeMatcher extends SubtreeMatcher {
 
-	public GreedySubtreeMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public GreedySubtreeMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 	
 	public void filterMappings(MultiMappingStore multiMappings) {
@@ -107,12 +99,4 @@ public class GreedySubtreeMatcher extends SubtreeMatcher {
 		}
 
 	}
-	
-	public static class GreedySubtreeMatcherFactory implements MatcherFactory {
-		@Override
-		public Matcher newMatcher(ITree src, ITree dst) {
-			return new GreedySubtreeMatcher(src, dst);
-		}
-	}
-
 }

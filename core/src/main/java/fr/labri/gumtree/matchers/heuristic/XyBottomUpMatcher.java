@@ -1,17 +1,12 @@
 package fr.labri.gumtree.matchers.heuristic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.tree.ITree;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+
+import java.util.*;
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source and destination trees
@@ -27,8 +22,8 @@ public class XyBottomUpMatcher extends Matcher {
 	
 	private TIntObjectMap<ITree> dsts = new TIntObjectHashMap<>();
 
-	public XyBottomUpMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public XyBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 
 	public void match() {
@@ -100,14 +95,4 @@ public class XyBottomUpMatcher extends Matcher {
 				addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));
 
 	}
-	
-	public static class XyBottomUpMatcherFactory implements MatcherFactory {
-
-		@Override
-		public Matcher newMatcher(ITree src, ITree dst) {
-			return new XyBottomUpMatcher(src, dst);
-		}
-		
-	}
-
 }

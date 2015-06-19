@@ -1,17 +1,14 @@
 package fr.labri.gumtree.matchers.optimal.zs;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-
-import fr.labri.gumtree.io.MatrixDebugger;
-import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.tree.ITree;
 import org.simmetrics.StringMetrics;
-import org.simmetrics.tokenizers.QGram;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 public class ZsMatcher extends Matcher {
 
@@ -27,8 +24,8 @@ public class ZsMatcher extends Matcher {
 		return current;
 	}
 
-	public ZsMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public ZsMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 		this.src = new ZsTree(src);
 		this.dst = new ZsTree(dst);
 	}
@@ -229,7 +226,5 @@ public class ZsMatcher extends Matcher {
 				}
 			}
 		}
-
 	}
-
 }

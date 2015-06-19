@@ -1,13 +1,9 @@
 package fr.labri.gumtree.client;
 
-import fr.labri.gumtree.gen.TreeGeneratorRegistry;
-import fr.labri.gumtree.matchers.MatcherFactories;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Register(description = "List things (matchers, generators, properties, ...)")
 public class List extends Client {
@@ -36,13 +32,14 @@ public class List extends Client {
         MATCHERS {
             @Override
             Collection<?> list() {
-                return MatcherFactories.listFactories().stream().map(Class::getEnclosingClass).map(Class::getName).collect(Collectors.toList());
+//                return MatcherFactories.listFactories().stream().map(Class::getEnclosingClass).map(Class::getName).collect(Collectors.toList());
+                return null;
             }
         },
         GENERATORS {
             @Override
             Collection<?> list() {
-                return TreeGeneratorRegistry.getInstance().listGenerators();
+                return null; //Generators.getInstance().listGenerators();
             }
         },
         PROPERTIES {
@@ -54,7 +51,7 @@ public class List extends Client {
         CLIENTS {
             @Override
             Collection<?> list() {
-                return Run.clients.keySet();
+                return null; // Run.clients.keySet();
             }
         };
 

@@ -1,18 +1,19 @@
 package fr.labri.gumtree.matchers.heuristic.gt;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MultiMappingStore;
 import fr.labri.gumtree.tree.ITree;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SubtreeMatcher extends Matcher {
 
 	private static int MIN_HEIGHT = Integer.parseInt(System.getProperty("gumtree.match.gt.minh", "2"));
 
-	public SubtreeMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public SubtreeMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 	
 	private void popLarger(PriorityTreeList srcs, PriorityTreeList dsts) {

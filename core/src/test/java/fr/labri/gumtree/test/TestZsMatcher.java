@@ -1,12 +1,14 @@
 package fr.labri.gumtree.test;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.optimal.zs.*;
+import fr.labri.gumtree.matchers.optimal.zs.ZsMatcher;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Pair;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestZsMatcher {
 	
@@ -15,7 +17,7 @@ public class TestZsMatcher {
 		Pair<ITree, ITree> trees = TreeLoader.getZsCustomPair();
 		ITree src = trees.getFirst();
 		ITree dst = trees.getSecond();
-		Matcher matcher = new ZsMatcher(src, dst);
+		Matcher matcher = new ZsMatcher(src, dst, new MappingStore());
 		matcher.match();
 		assertEquals(5, matcher.getMappingSet().size());
 		assertTrue(matcher.getMappings().has(src, dst.getChild(0)));
@@ -30,7 +32,7 @@ public class TestZsMatcher {
 		Pair<ITree, ITree> trees = TreeLoader.getZsSlidePair();
 		ITree src = trees.getFirst();
 		ITree dst = trees.getSecond();
-		Matcher matcher = new ZsMatcher(src, dst);
+		Matcher matcher = new ZsMatcher(src, dst, new MappingStore());
 		matcher.match();
 		assertEquals(5, matcher.getMappingSet().size());
 		assertTrue(matcher.getMappings().has(src, dst));

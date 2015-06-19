@@ -1,4 +1,5 @@
 target/
+samples/
 .settings/
 .project
 .classpath

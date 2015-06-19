@@ -1,17 +1,17 @@
 package fr.labri.gumtree.matchers.heuristic.gt;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.matchers.optimal.zs.ZsMatcher;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeMap;
 import fr.labri.gumtree.tree.TreeUtils;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source and destination trees
@@ -29,8 +29,8 @@ public class GreedyBottomUpMatcher extends Matcher {
 	
 	private TreeMap dstIds;
 
-	public GreedyBottomUpMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public GreedyBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 
 	public void match() {
@@ -94,7 +94,7 @@ public class GreedyBottomUpMatcher extends Matcher {
 		TreeUtils.removeMatched(cDst);
 
 		if (cSrc.getSize() < SIZE_THRESHOLD || cDst.getSize() < SIZE_THRESHOLD) {
-			Matcher m = new ZsMatcher(cSrc, cDst);
+			Matcher m = new ZsMatcher(cSrc, cDst, new MappingStore());
 			m.match();
 			for (Mapping candidate: m.getMappings()) {
 				ITree left = srcIds.getTree(candidate.getFirst().getId());
@@ -117,12 +117,5 @@ public class GreedyBottomUpMatcher extends Matcher {
 			t.setMatched(true);
 		for (ITree t : dst.getTrees()) 
 			t.setMatched(true);
-	}
-	
-	public static class GreedyBottomUpMatcherFactory implements MatcherFactory {
-		@Override
-		public Matcher newMatcher(ITree src, ITree dst) {
-			return new GreedyBottomUpMatcher(src, dst);
-		}
 	}
 }

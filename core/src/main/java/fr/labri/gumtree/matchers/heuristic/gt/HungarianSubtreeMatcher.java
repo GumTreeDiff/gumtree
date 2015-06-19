@@ -1,20 +1,16 @@
 package fr.labri.gumtree.matchers.heuristic.gt;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import fr.labri.gumtree.algo.HungarianAlgorithm;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.MultiMappingStore;
 import fr.labri.gumtree.tree.ITree;
 
+import java.util.*;
+
 public class HungarianSubtreeMatcher extends SubtreeMatcher {
 
-	public HungarianSubtreeMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public HungarianSubtreeMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 	
 	public void filterMappings(MultiMappingStore mmappings) {

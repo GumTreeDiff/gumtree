@@ -1,18 +1,18 @@
 package fr.labri.gumtree.matchers.heuristic.gt;
 
-import static fr.labri.gumtree.tree.TreeUtils.postOrder;
-import static fr.labri.gumtree.tree.TreeUtils.removeMatched;
+import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.MappingStore;
+import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.labri.gumtree.matchers.Mapping;
-import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
-import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
-import fr.labri.gumtree.tree.ITree;
-import fr.labri.gumtree.tree.TreeUtils;
+import static fr.labri.gumtree.tree.TreeUtils.postOrder;
+import static fr.labri.gumtree.tree.TreeUtils.removeMatched;
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source and destination trees
@@ -29,8 +29,8 @@ public class FirstMatchBottomUpMatcher extends Matcher {
 	
 	private Map<Integer, ITree> dstIds = new HashMap<>();
 	
-	public FirstMatchBottomUpMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public FirstMatchBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 	
 	public void match() {
@@ -65,7 +65,7 @@ public class FirstMatchBottomUpMatcher extends Matcher {
 		ITree cSrc = removeMatched(src.deepCopy());
 		ITree cDst = removeMatched(dst.deepCopy());
 		if (cSrc.getSize() < SIZE_THRESHOLD && cDst.getSize() < SIZE_THRESHOLD) {
-			Matcher m = new RtedMatcher(cSrc, cDst);
+			Matcher m = new RtedMatcher(cSrc, cDst, new MappingStore());
 			for (Mapping candidate: m.getMappings()) {
 				ITree left = srcIds.get(candidate.getFirst().getId());
 				ITree right = dstIds.get(candidate.getSecond().getId());
@@ -87,14 +87,4 @@ public class FirstMatchBottomUpMatcher extends Matcher {
 		}
 
 	}
-	
-	public static class FirstMatchBottomUpMatcherFactory implements MatcherFactory {
-
-		@Override
-		public Matcher newMatcher(ITree src, ITree dst) {
-			return new FirstMatchBottomUpMatcher(src, dst);
-		}
-		
-	}
-
 }

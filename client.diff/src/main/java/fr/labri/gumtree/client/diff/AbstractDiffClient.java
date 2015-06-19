@@ -1,10 +1,10 @@
 package fr.labri.gumtree.client.diff;
 
-import fr.labri.gumtree.client.Option;
 import fr.labri.gumtree.client.Client;
-import fr.labri.gumtree.gen.TreeGeneratorRegistry;
+import fr.labri.gumtree.client.Option;
+import fr.labri.gumtree.gen.Generators;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactories;
+import fr.labri.gumtree.matchers.Matchers;
 import fr.labri.gumtree.tree.TreeContext;
 
 import java.io.IOException;
@@ -75,11 +75,12 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
     // TODO after this line it should be rewrote in a better way
     private Matcher matcher;
     protected Matcher matchTrees() {
+        Matchers matchers = Matchers.getInstance();
         if (matcher != null)
             return matcher;
         matcher = (opts.matcher == null)
-                ? MatcherFactories.newMatcher(getSrcTreeContext().getRoot(), getDstTreeContext().getRoot())
-                : MatcherFactories.newMatcher(getSrcTreeContext().getRoot(), getDstTreeContext().getRoot(), opts.matcher);
+                ? matchers.getMatcher(getSrcTreeContext().getRoot(), getDstTreeContext().getRoot())
+                : matchers.getMatcher(opts.matcher, getSrcTreeContext().getRoot(), getDstTreeContext().getRoot());
         matcher.match();
         return matcher;
     }
@@ -98,7 +99,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
 
     private TreeContext getTreeContext(String file) {
         try {
-            TreeContext t = TreeGeneratorRegistry.getInstance().getTree(file);
+            TreeContext t = Generators.getInstance().getTree(file);
             return t;
         } catch (IOException e) {
             e.printStackTrace();

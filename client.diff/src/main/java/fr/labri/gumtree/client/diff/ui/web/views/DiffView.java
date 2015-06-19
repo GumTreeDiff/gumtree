@@ -1,9 +1,9 @@
 package fr.labri.gumtree.client.diff.ui.web.views;
 
 import fr.labri.gumtree.client.diff.ui.web.HtmlDiffs;
-import fr.labri.gumtree.gen.TreeGeneratorRegistry;
+import fr.labri.gumtree.gen.Generators;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactories;
+import fr.labri.gumtree.matchers.Matchers;
 import fr.labri.gumtree.tree.TreeContext;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
@@ -26,9 +26,9 @@ public class DiffView implements Renderable {
 	public DiffView(File fSrc, File fDst) throws IOException {
 		this.fSrc = fSrc;
 		this.fDst = fDst;
-		TreeContext src = TreeGeneratorRegistry.getInstance().getTree(fSrc.getAbsolutePath());
-		TreeContext dst = TreeGeneratorRegistry.getInstance().getTree(fDst.getAbsolutePath());
-		Matcher matcher = MatcherFactories.newMatcher(src.getRoot(), dst.getRoot());
+		TreeContext src = Generators.getInstance().getTree(fSrc.getAbsolutePath());
+		TreeContext dst = Generators.getInstance().getTree(fDst.getAbsolutePath());
+		Matcher matcher = Matchers.getInstance().getMatcher(src.getRoot(), dst.getRoot());
 		matcher.match();
 		diffs = new HtmlDiffs(fSrc, fDst, src, dst, matcher);
 		diffs.produce();

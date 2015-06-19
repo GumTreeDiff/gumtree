@@ -1,26 +1,26 @@
 package fr.labri.gumtree.matchers.heuristic.cd;
 
-import java.util.List;
-
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
 
-public class ChangeDistillerBottumUpMatcher extends Matcher {
+import java.util.List;
+
+public class ChangeDistillerBottomUpMatcher extends Matcher {
 
 	public static final double STRUCT_SIM_THRESHOLD_1 = 0.6D;
 
 	public static final double STRUCT_SIM_THRESHOLD_2 = 0.4D;
 
-	public ChangeDistillerBottumUpMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public ChangeDistillerBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 
 	@Override
 	public void match() {
 		List<ITree> poDst = TreeUtils.postOrder(dst);
-		for (ITree src: src.postOrder()) {
+		for (ITree src: this.src.postOrder()) {
 			int l = numberOfLeafs(src);
 			for (ITree dst: poDst) {
 				if (src.isMatchable(dst) && !(src.isLeaf() || dst.isLeaf())) {
@@ -39,14 +39,4 @@ public class ChangeDistillerBottumUpMatcher extends Matcher {
 		for (ITree t : root.getDescendants()) if (t.isLeaf()) l++;
 		return l;
 	}
-	
-	public static class ChangeDistillerBottomUpMatcherFactory implements MatcherFactory {
-
-		@Override
-		public Matcher newMatcher(ITree src, ITree dst) {
-			return new ChangeDistillerBottumUpMatcher(src, dst);
-		}
-		
-	}
-
 }

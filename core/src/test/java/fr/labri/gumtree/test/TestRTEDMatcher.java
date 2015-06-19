@@ -1,14 +1,14 @@
 package fr.labri.gumtree.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Pair;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestRTEDMatcher {
 	
@@ -17,7 +17,7 @@ public class TestRTEDMatcher {
 		Pair<ITree, ITree> trees = TreeLoader.getZsSlidePair();
 		ITree src = trees.getFirst();
 		ITree dst = trees.getSecond();
-		Matcher matcher = new RtedMatcher(src, dst);
+		Matcher matcher = new RtedMatcher(src, dst, new MappingStore());
 		matcher.match();
 		assertEquals(5, matcher.getMappingSet().size());
 		assertTrue(matcher.getMappings().has(src, dst));

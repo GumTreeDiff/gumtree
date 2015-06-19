@@ -1,27 +1,20 @@
 package fr.labri.gumtree.matchers.heuristic.cd;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import org.simmetrics.StringMetrics;
-
 import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
 import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
+import org.simmetrics.StringMetrics;
+
+import java.util.*;
 
 public class ChangeDistillerLeavesMatcher extends Matcher {
 
 	public static final double LABEL_SIM_THRESHOLD = 0.5D;
 
-	public ChangeDistillerLeavesMatcher(ITree src, ITree dst) {
-		super(src, dst);
+	public ChangeDistillerLeavesMatcher(ITree src, ITree dst, MappingStore store) {
+		super(src, dst, store);
 	}
 
 	@Override
@@ -76,14 +69,4 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 		}
 
 	}
-	
-	public static class ChangeDistillerLeavesMatcherFactory implements MatcherFactory {
-
-		@Override
-		public Matcher newMatcher(ITree src, ITree dst) {
-			return new ChangeDistillerLeavesMatcher(src, dst);
-		}
-		
-	}
-
 }
