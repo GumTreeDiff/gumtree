@@ -3,7 +3,6 @@
 		<artifactId>gumtree</artifactId>
 		<groupId>fr.labri.gumtree</groupId>
 		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>gen.antlr-xml</artifactId>
@@ -12,7 +11,7 @@
 		<dependency>
 			<groupId>fr.labri.gumtree</groupId>
 			<artifactId>gen.antlr</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>2.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
