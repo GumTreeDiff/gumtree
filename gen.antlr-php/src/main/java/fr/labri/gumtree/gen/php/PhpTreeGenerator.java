@@ -11,17 +11,17 @@ import java.io.Reader;
 @Register(id = "php-antlr", accept = "\\.php.?$")
 public class PhpTreeGenerator extends AbstractAntlrTreeGenerator {
 
-	@Override
-	protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
-		ANTLRStringStream stream = new ANTLRReaderStream(r);
-		PhpLexer l = new PhpLexer(stream);
-		tokens = new TokenRewriteStream(l);
-		PhpParser p = new PhpParser(tokens);
-		return p.prog().getTree();
-	}
+    @Override
+    protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
+        ANTLRStringStream stream = new ANTLRReaderStream(r);
+        PhpLexer l = new PhpLexer(stream);
+        tokens = new TokenRewriteStream(l);
+        PhpParser p = new PhpParser(tokens);
+        return p.prog().getTree();
+    }
 
-	@Override
-	final protected String[] getTokenNames() {
-		return PhpParser.tokenNames;
-	}
+    @Override
+    protected final String[] getTokenNames() {
+        return PhpParser.tokenNames;
+    }
 }
