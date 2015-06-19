@@ -15,14 +15,11 @@
  */
 package fr.labri.gumtree.gen.jdt.cd;
 
-
-
 /**
  * All types for source code entities that are used by ChangeDistiller to build up the AST (abstract syntax tree). Most
  * are taken from {@link org.eclipse.jdt.core.dom.ASTNode}.
  * 
  * @author zubi
- * @see SourceCodeEntity
  */
 public enum EntityType {
     ANNOTATION_TYPE_DECLARATION(true),

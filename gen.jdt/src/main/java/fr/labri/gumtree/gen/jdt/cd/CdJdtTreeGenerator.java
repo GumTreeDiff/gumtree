@@ -6,8 +6,8 @@ import fr.labri.gumtree.gen.jdt.AbstractJdtTreeGenerator;
 
 @Register(id = "java-jdt-cd")
 public class CdJdtTreeGenerator extends AbstractJdtTreeGenerator {
-	@Override
-	protected AbstractJdtVisitor createVisitor() {
-		return new CdJdtVisitor();
-	}
+    @Override
+    protected AbstractJdtVisitor createVisitor() {
+        return new CdJdtVisitor();
+    }
 }

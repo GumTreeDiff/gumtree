@@ -24,9 +24,9 @@ import fr.labri.gumtree.gen.Register;
 @Register(id = "java-jdt-gt", accept = "\\.java$" )
 public class JdtTreeGenerator extends AbstractJdtTreeGenerator {
 
-	@Override
-	protected AbstractJdtVisitor createVisitor() {
-		return new JdtVisitor();
-	}
-	
+    @Override
+    protected AbstractJdtVisitor createVisitor() {
+        return new JdtVisitor();
+    }
+
 }
