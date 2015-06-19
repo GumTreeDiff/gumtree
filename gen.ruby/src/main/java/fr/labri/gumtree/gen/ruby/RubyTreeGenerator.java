@@ -33,32 +33,32 @@ import java.io.Reader;
 @Register(id = "ruby-jruby", accept = {"\\.ruby$", "\\.rb$"})
 public class RubyTreeGenerator extends TreeGenerator {
 
-	public TreeContext generate(Reader r) throws IOException {
-		Parser p = new Parser();
-		CompatVersion version = CompatVersion.RUBY2_0;
-		ParserConfiguration config = new ParserConfiguration(0, version);
-		Node n = p.parse("<code>", r, config);
-		return toTree(new TreeContext(), n, null);
-	}
+    public TreeContext generate(Reader r) throws IOException {
+        Parser p = new Parser();
+        CompatVersion version = CompatVersion.RUBY2_0;
+        ParserConfiguration config = new ParserConfiguration(0, version);
+        Node n = p.parse("<code>", r, config);
+        return toTree(new TreeContext(), n, null);
+    }
 
-	private TreeContext toTree(TreeContext ctx, Node n, ITree parent) {
-		String label = "";
-		String typeLabel = n.getNodeType().name();
-		int type = n.getNodeType().ordinal() + 1;
-		ITree t = ctx.createTree(type, label, typeLabel);
-		if (parent == null)
-			ctx.setRoot(t);
-		else
-			t.setParentAndUpdateChildren(parent);
+    private TreeContext toTree(TreeContext ctx, Node n, ITree parent) {
+        String label = "";
+        String typeLabel = n.getNodeType().name();
+        int type = n.getNodeType().ordinal() + 1;
+        ITree t = ctx.createTree(type, label, typeLabel);
+        if (parent == null)
+            ctx.setRoot(t);
+        else
+            t.setParentAndUpdateChildren(parent);
 
-		int pos = n.getPosition().getStartOffset();
-		int length = n.getPosition().getEndOffset() - n.getPosition().getStartOffset();
-		t.setPos(pos);
-		t.setLength(length);
+        int pos = n.getPosition().getStartOffset();
+        int length = n.getPosition().getEndOffset() - n.getPosition().getStartOffset();
+        t.setPos(pos);
+        t.setLength(length);
 
-		for(Node c: n.childNodes())
-			toTree(ctx, c, t);
+        for (Node c: n.childNodes())
+            toTree(ctx, c, t);
 
-		return ctx;
-	}
+        return ctx;
+    }
 }

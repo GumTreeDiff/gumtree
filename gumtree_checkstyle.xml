@@ -58,7 +58,7 @@
         <module name="EmptyLineSeparator">
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
             <property name="allowMultipleEmptyLines" value="false"/>
-            <property name="tokens" value="VARIABLE_DEF, METHOD_DEF, CLASS_DEF, ENUM_DEF, CTOR_DEF, INTERFACE_DEF, INSTANCE_INIT, STATIC_INIT, IMPORT"/>
+            <property name="tokens" value="VARIABLE_DEF, METHOD_DEF, CLASS_DEF, ENUM_DEF, CTOR_DEF, INTERFACE_DEF, INSTANCE_INIT, STATIC_INIT"/>
         </module>
         <module name="SeparatorWrap">
             <property name="tokens" value="DOT"/>
