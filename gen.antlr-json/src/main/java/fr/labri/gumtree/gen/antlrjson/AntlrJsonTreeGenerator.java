@@ -14,17 +14,17 @@ import java.io.Reader;
 @Register(id = "json-antlr", accept =  "\\.json$")
 public class AntlrJsonTreeGenerator extends AbstractAntlrTreeGenerator {
 
-	@Override
-	protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
-		ANTLRStringStream stream = new ANTLRReaderStream(r);
-		JSONLexer l = new JSONLexer(stream);
-		tokens = new TokenRewriteStream(l);
-		JSONParser p = new JSONParser(tokens);
-		return (CommonTree) p.value().getTree();
-	}
+    @Override
+    protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
+        ANTLRStringStream stream = new ANTLRReaderStream(r);
+        JSONLexer l = new JSONLexer(stream);
+        tokens = new TokenRewriteStream(l);
+        JSONParser p = new JSONParser(tokens);
+        return (CommonTree) p.value().getTree();
+    }
 
-	@Override
-	final protected String[] getTokenNames() {
-		return JSONParser.tokenNames;
-	}
+    @Override
+    protected final String[] getTokenNames() {
+        return JSONParser.tokenNames;
+    }
 }
