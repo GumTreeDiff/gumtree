@@ -30,12 +30,11 @@ import java.io.Reader;
 @Register(id = "js-rhino", accept = "\\.js$")
 public class RhinoTreeGenerator extends TreeGenerator {
 
-	public TreeContext generate(Reader r) throws IOException {
-		Parser p = new Parser();
-		AstRoot root = p.parse(r, null, 1);
-		RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
-		root.visit(visitor);
-		return visitor.getTree(root);
-
-	}
+    public TreeContext generate(Reader r) throws IOException {
+        Parser p = new Parser();
+        AstRoot root = p.parse(r, null, 1);
+        RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
+        root.visit(visitor);
+        return visitor.getTree(root);
+    }
 }
