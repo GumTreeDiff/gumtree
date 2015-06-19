@@ -1,15 +1,15 @@
-import fr.labri.gumtree.gen.antlrcss.CSSGrammarTreeGenerator;
+import fr.labri.gumtree.gen.antlrcss.CssGrammarTreeGenerator;
 import fr.labri.gumtree.tree.TreeContext;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class BasicTestCSS {
+public class BasicTestCss {
 
     @Test
     public void testParse() throws IOException {
-        CSSGrammarTreeGenerator gen = new CSSGrammarTreeGenerator();
+        CssGrammarTreeGenerator gen = new CssGrammarTreeGenerator();
         TreeContext res = gen.generate(new InputStreamReader(getClass().getResourceAsStream("trivial.css")));
         System.out.println(res);
     }
