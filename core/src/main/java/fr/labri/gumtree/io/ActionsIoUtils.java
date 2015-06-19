@@ -46,14 +46,17 @@ public final class ActionsIoUtils {
         }
     }
 
-    public static void toXml(TreeContext sctx, List<Action> actions, MappingStore mappings, String file) throws IOException {
+    public static void toXml(TreeContext sctx, List<Action> actions,
+                             MappingStore mappings, String file) throws IOException {
         FileWriter f = new FileWriter(file);
         try {
             toXml(sctx, f, actions, mappings);
         } finally {
             try {
                 f.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -65,7 +68,9 @@ public final class ActionsIoUtils {
         } finally {
             try {
                 s.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -84,7 +89,8 @@ public final class ActionsIoUtils {
         }
     }
 
-    private static void writeActions(TreeContext sctx, List<Action> actions, MappingStore mappings, XMLStreamWriter w) throws XMLStreamException {
+    private static void writeActions(TreeContext sctx, List<Action> actions,
+                                     MappingStore mappings, XMLStreamWriter w) throws XMLStreamException {
         for (Action a : actions) {
             w.writeStartElement("action");
             w.writeAttribute("type", a.getClass().getSimpleName());
@@ -102,7 +108,7 @@ public final class ActionsIoUtils {
                     int idx = dst.getParent().getChildPosition(dst);
 
                     if (idx == 0) pos = dst.getParent().getLcPosStart();
-                    else pos = dst.getParent().getChildren().get(idx -1).getLcPosEnd();
+                    else pos = dst.getParent().getChildren().get(idx - 1).getLcPosEnd();
 
                     writeInsertPos(w, true,pos);
                 }
@@ -116,7 +122,10 @@ public final class ActionsIoUtils {
     }
 
     private static void writeTreePos(XMLStreamWriter w, boolean isBefore, ITree tree) throws XMLStreamException {
-        if (isBefore) w.writeEmptyElement("before"); else w.writeEmptyElement("after");
+        if (isBefore)
+            w.writeEmptyElement("before");
+        else
+            w.writeEmptyElement("after");
         if (tree.getLcPosStart() != null) {
             w.writeAttribute("begin_line", Integer.toString(tree.getLcPosStart()[0]));
             w.writeAttribute("begin_col", Integer.toString(tree.getLcPosStart()[1]));
@@ -126,7 +135,10 @@ public final class ActionsIoUtils {
     }
 
     private static void writeInsertPos(XMLStreamWriter w, boolean isBefore, int[] pos) throws XMLStreamException {
-        if (isBefore) w.writeEmptyElement("before"); else w.writeEmptyElement("after");
+        if (isBefore)
+            w.writeEmptyElement("before");
+        else
+            w.writeEmptyElement("after");
         w.writeAttribute("begin_line", Integer.toString(pos[0]));
         w.writeAttribute("begin_col", Integer.toString(pos[1]));
         w.writeAttribute("end_line", Integer.toString(pos[0]));

@@ -8,7 +8,7 @@ public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> 
     private static Matchers registry;
     private Factory<? extends Matcher> defaultMatcherFactory;
 
-    public final static Matchers getInstance() {
+    public static final Matchers getInstance() {
         if (registry == null)
             registry = new Matchers();
         return registry;
@@ -30,7 +30,7 @@ public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> 
     }
 
     public Matcher getMatcher(ITree src, ITree dst) {
-         return defaultMatcherFactory.instantiate(new Object[]{src, dst, new MappingStore()});
+        return defaultMatcherFactory.instantiate(new Object[]{src, dst, new MappingStore()});
     }
 
     @Override

@@ -48,13 +48,13 @@ public class Serializer extends Client {
         JSON {
             @Override
             TreeSerializer getSerializer(TreeContext ctx) {
-                return TreeIoUtils.toJSON(ctx);
+                return TreeIoUtils.toJson(ctx);
             }
         },
         XML {
             @Override
             TreeSerializer getSerializer(TreeContext ctx) {
-                return TreeIoUtils.toCompactXML(ctx);
+                return TreeIoUtils.toCompactXml(ctx);
             }
         },
         FULLXML {
@@ -72,7 +72,7 @@ public class Serializer extends Client {
         LISP {
             @Override
             TreeSerializer getSerializer(TreeContext ctx) {
-                return TreeIoUtils.toLISP(ctx);
+                return TreeIoUtils.toLisp(ctx);
             }
         };
 

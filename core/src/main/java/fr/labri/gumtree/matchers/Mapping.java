@@ -5,8 +5,8 @@ import fr.labri.gumtree.tree.Pair;
 
 public class Mapping extends Pair<ITree, ITree> {
 
-	public Mapping(ITree a, ITree b) {
-		super(a, b);
-	}
+    public Mapping(ITree a, ITree b) {
+        super(a, b);
+    }
 
 }

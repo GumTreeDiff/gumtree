@@ -9,7 +9,8 @@ import java.util.Map;
 
 public abstract class Registry<K, C, A> {
 
-    private boolean useExperimental = Boolean.parseBoolean(System.getProperty(String.format("gumtree.%s.experimental", getClass().getSimpleName()), "false"));
+    private boolean useExperimental = Boolean.parseBoolean(
+            System.getProperty(String.format("gumtree.%s.experimental", getClass().getSimpleName()), "false"));
 
     public C get(K key, Object... args) {
         Factory<? extends C> factory = getFactory(key);
@@ -38,7 +39,7 @@ public abstract class Registry<K, C, A> {
         return useExperimental;
     }
 
-    abstract public void install(Class<? extends C> clazz, A annotation);
+    public abstract void install(Class<? extends C> clazz, A annotation);
 
     protected abstract Entry newEntry(Class<? extends C> clazz, A annotation);
 
@@ -74,7 +75,8 @@ public abstract class Registry<K, C, A> {
             return (args) -> ctor.newInstance(args);
         } catch (NoSuchMethodException e) {
             System.out.println(Arrays.toString(clazz.getConstructors()));
-            throw new RuntimeException(String.format("This is a static bug. Constructor %s(%s) not found", clazz.getName(), Arrays.toString(signature)), e);
+            throw new RuntimeException(String.format("This is a static bug. Constructor %s(%s) not found",
+                    clazz.getName(), Arrays.toString(signature)), e);
         }
     }
 
@@ -90,7 +92,7 @@ public abstract class Registry<K, C, A> {
         }
     }
 
-    public static abstract class NamedRegistry<K, C, A> extends Registry<K, C, A> {
+    public abstract static class NamedRegistry<K, C, A> extends Registry<K, C, A> {
         Map<K, NamedEntry> entries = new LinkedHashMap<>();
 
         protected abstract K getName(A annotation, Class<? extends C> clazz);

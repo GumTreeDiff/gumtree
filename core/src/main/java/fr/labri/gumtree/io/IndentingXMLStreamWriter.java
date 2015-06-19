@@ -59,6 +59,7 @@ import javax.xml.stream.XMLStreamWriter;
  * either data or nested elements but not both. It can work badly with other
  * styles of XML. For example, the data in a 'mixed content' document are apt to
  * be polluted with indentation characters.
+ *
  * <p>
  * Indentation can be adjusted by setting the newLine and indent properties. But
  * set them to whitespace only, for best results. Non-whitespace is apt to cause
@@ -116,6 +117,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
         try {
             return System.getProperty("line.separator");
         } catch (SecurityException ignored) {
+            ignored.printStackTrace();
         }
         return NORMAL_END_OF_LINE;
     }
@@ -236,6 +238,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
                 writeEndElement(); // indented
             }
         } catch (Exception ignored) {
+            ignored.printStackTrace();
         }
         out.writeEndDocument();
         afterEndDocument();
@@ -245,14 +248,14 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
     protected void beforeMarkup() {
         int soFar = stack[depth];
         if ((soFar & WROTE_DATA) == 0 // no data in this scope
-                && (depth > 0 || soFar != 0)) // not the first line
-        {
+                && (depth > 0 || soFar != 0)) {
             try {
                 writeNewLine(depth);
                 if (depth > 0 && getIndent().length() > 0) {
                     afterMarkup(); // indentation was written
                 }
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -291,6 +294,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
             try {
                 writeNewLine(depth - 1);
             } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
         }
     }
@@ -308,6 +312,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
             try {
                 writeNewLine(0);
             } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
         }
         stack[depth] = 0; // start fresh

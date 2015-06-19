@@ -4,174 +4,174 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tree extends AbstractTree implements ITree {
-	
-	// Type of the token
-	int type;
 
-	// Label of the token
-	String label;
-	
-	// Begin position of the tree in terms of absolute character index 
-	int pos;
-	int length;
-	// End position
-	
-	// Begin position in terms of line and column start and end
-	private int[] lcPosStart;
-	private int[] lcPosEnd;
-	// End position
-	
-	// Needed for RTED :(
-	private Object tmpData;
-	
-	Tree(int type, String label) {
-		this.type = type;
-		this.label = (label == null) ? NO_LABEL : label.intern();
-		this.id = NO_ID;
-		this.depth = NO_VALUE;
-		this.hash = NO_VALUE;
-		this.height = NO_VALUE;
-		this.depth = NO_VALUE;
-		this.size = NO_VALUE;
-		this.pos = NO_VALUE;
-		this.length = NO_VALUE;
-		this.matched = false;
-		this.children = new ArrayList<>();
-	}
-	
-	// Only used for cloning ...
-	private Tree(Tree other) {
-		this.type = other.type;
-		this.label = other.getLabel();
-		
-		this.id = other.getId();
-		this.matched = other.isMatched();
-		this.pos = other.getPos();
-		this.length = other.getLength();
-		this.height = other.getHeight();
-		this.size = other.getSize();
-		this.depth = other.getDepth();
-		this.hash = other.getHash();
-		this.depth = other.getDepth();
-		this.tmpData = other.getTmpData();
-		this.children = new ArrayList<>();
-	}
-	
-	@Override
-	public void addChild(ITree t) {
-		children.add(t);
-		t.setParent(this);
-	}
+    // Type of the token
+    int type;
 
-	@Override
-	public Tree deepCopy() {
-		Tree copy = new Tree(this);
-		for (ITree child: getChildren())
-			copy.addChild(child.deepCopy());
-		return copy;
-	}
+    // Label of the token
+    String label;
 
-	@Override
-	public List<ITree> getChildren() {
-		return children;
-	}
+    // Begin position of the tree in terms of absolute character index
+    int pos;
+    int length;
+    // End position
 
-	@Override
-	public int getEndPos() {
-		return pos + length;
-	}
+    // Begin position in terms of line and column start and end
+    private int[] lcPosStart;
+    private int[] lcPosEnd;
+    // End position
 
-	@Override
-	public String getLabel() {
-		return label;
-	}
+    // Needed for RTED :(
+    private Object tmpData;
 
-	@Override
-	public int[] getLcPosEnd() {
-		return lcPosEnd;
-	}
+    Tree(int type, String label) {
+        this.type = type;
+        this.label = (label == null) ? NO_LABEL : label.intern();
+        this.id = NO_ID;
+        this.depth = NO_VALUE;
+        this.hash = NO_VALUE;
+        this.height = NO_VALUE;
+        this.depth = NO_VALUE;
+        this.size = NO_VALUE;
+        this.pos = NO_VALUE;
+        this.length = NO_VALUE;
+        this.matched = false;
+        this.children = new ArrayList<>();
+    }
 
-	@Override
-	public int[] getLcPosStart() {
-		return lcPosStart;
-	}
+    // Only used for cloning ...
+    private Tree(Tree other) {
+        this.type = other.type;
+        this.label = other.getLabel();
 
-	@Override
-	public int getLength() {
-		return length;
-	}
+        this.id = other.getId();
+        this.matched = other.isMatched();
+        this.pos = other.getPos();
+        this.length = other.getLength();
+        this.height = other.getHeight();
+        this.size = other.getSize();
+        this.depth = other.getDepth();
+        this.hash = other.getHash();
+        this.depth = other.getDepth();
+        this.tmpData = other.getTmpData();
+        this.children = new ArrayList<>();
+    }
 
-	@Override
-	public ITree getParent() {
-		return parent;
-	}
+    @Override
+    public void addChild(ITree t) {
+        children.add(t);
+        t.setParent(this);
+    }
 
-	@Override
-	public int getPos() {
-		return pos;
-	}
+    @Override
+    public Tree deepCopy() {
+        Tree copy = new Tree(this);
+        for (ITree child: getChildren())
+            copy.addChild(child.deepCopy());
+        return copy;
+    }
 
-	@Override
-	public Object getTmpData() {
-		return tmpData;
-	}
+    @Override
+    public List<ITree> getChildren() {
+        return children;
+    }
 
-	@Override
-	public int getType() {
-		return type;
-	}
+    @Override
+    public int getEndPos() {
+        return pos + length;
+    }
 
-	@Override
-	public void setChildren(List<ITree> children) {
-		this.children = children;
-		for (ITree c: children)
-			c.setParent(this);
-	}
+    @Override
+    public String getLabel() {
+        return label;
+    }
 
-	@Override
-	public void setLabel(String label) {
-		this.label = label;
-	}
+    @Override
+    public int[] getLcPosEnd() {
+        return lcPosEnd;
+    }
 
-	@Override
-	public void setLcPosEnd(int[] lcPosEnd) {
-		this.lcPosEnd = lcPosEnd;
-	}
+    @Override
+    public int[] getLcPosStart() {
+        return lcPosStart;
+    }
 
-	@Override
-	public void setLcPosStart(int[] lcPosStart) {
-		this.lcPosStart = lcPosStart;
-	}
+    @Override
+    public int getLength() {
+        return length;
+    }
 
-	@Override
-	public void setLength(int length) {
-		this.length = length;
-	}
+    @Override
+    public ITree getParent() {
+        return parent;
+    }
 
-	@Override
-	public void setParent(ITree parent) {
-		this.parent = parent;
-	}
+    @Override
+    public int getPos() {
+        return pos;
+    }
 
-	@Override
-	public void setParentAndUpdateChildren(ITree parent) {
-		if (this.parent != null) this.parent.getChildren().remove(this);
-		this.parent = parent;
-		if (this.parent != null) parent.getChildren().add(this);
-	}
+    @Override
+    public Object getTmpData() {
+        return tmpData;
+    }
 
-	@Override
-	public void setPos(int pos) {
-		this.pos = pos;
-	}
+    @Override
+    public int getType() {
+        return type;
+    }
 
-	@Override
-	public void setTmpData(Object tmpData) {
-		this.tmpData = tmpData;
-	}
+    @Override
+    public void setChildren(List<ITree> children) {
+        this.children = children;
+        for (ITree c: children)
+            c.setParent(this);
+    }
 
-	@Override
-	public void setType(int type) {
-		this.type = type;
-	}
+    @Override
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public void setLcPosEnd(int[] lcPosEnd) {
+        this.lcPosEnd = lcPosEnd;
+    }
+
+    @Override
+    public void setLcPosStart(int[] lcPosStart) {
+        this.lcPosStart = lcPosStart;
+    }
+
+    @Override
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    @Override
+    public void setParent(ITree parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public void setParentAndUpdateChildren(ITree parent) {
+        if (this.parent != null) this.parent.getChildren().remove(this);
+        this.parent = parent;
+        if (this.parent != null) parent.getChildren().add(this);
+    }
+
+    @Override
+    public void setPos(int pos) {
+        this.pos = pos;
+    }
+
+    @Override
+    public void setTmpData(Object tmpData) {
+        this.tmpData = tmpData;
+    }
+
+    @Override
+    public void setType(int type) {
+        this.type = type;
+    }
 }

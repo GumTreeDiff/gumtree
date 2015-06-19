@@ -6,30 +6,29 @@ import static fr.labri.gumtree.tree.hash.HashUtils.*;
 
 public abstract class StaticHashGenerator implements HashGenerator {
 
-	public void hash(ITree t) {
-		for (ITree n: t.postOrder())
-			n.setHash(nodeHash(n));
-	}
+    public void hash(ITree t) {
+        for (ITree n: t.postOrder())
+            n.setHash(nodeHash(n));
+    }
 
-	public abstract int nodeHash(ITree t);
+    public abstract int nodeHash(ITree t);
 
+    public static class StdHashGenerator extends StaticHashGenerator {
 
-	public static class StdHashGenerator extends StaticHashGenerator {
-		
-		@Override
-		public int nodeHash(ITree t) {
-			return t.toStaticHashString().hashCode();
-		}
-		
-	}
+        @Override
+        public int nodeHash(ITree t) {
+            return t.toStaticHashString().hashCode();
+        }
 
-	public static class Md5HashGenerator extends StaticHashGenerator {
-		
-		@Override
-		public int nodeHash(ITree t) {
-			return md5(t.toStaticHashString());
-		}
-		
-	}
+    }
+
+    public static class Md5HashGenerator extends StaticHashGenerator {
+
+        @Override
+        public int nodeHash(ITree t) {
+            return md5(t.toStaticHashString());
+        }
+
+    }
 
 }

@@ -11,7 +11,7 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
 
     private static Generators registry;
 
-    public final static Generators getInstance() {
+    public static final Generators getInstance() {
         if (registry == null)
             registry = new Generators();
         return registry;
@@ -47,7 +47,8 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
     class TreeGeneratorEntry extends Entry {
         final Pattern[] accept;
 
-        public TreeGeneratorEntry(String id, String[] accept, Class<? extends TreeGenerator> clazz, boolean experimental) {
+        public TreeGeneratorEntry(String id, String[] accept,
+                                  Class<? extends TreeGenerator> clazz, boolean experimental) {
             super(id, clazz, defaultFactory(clazz), experimental);
 
             this.accept = new Pattern[accept.length];

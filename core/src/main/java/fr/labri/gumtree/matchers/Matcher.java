@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public abstract class Matcher {
 
-    public final static Logger LOGGER = Logger.getLogger("fr.labri.gumtree.matchers");
+    public static final Logger LOGGER = Logger.getLogger("fr.labri.gumtree.matchers");
 
     protected final ITree src;
 

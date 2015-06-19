@@ -17,16 +17,16 @@ import java.io.*;
 import java.util.Stack;
 
 public final class TreeIoUtils {
-    
-    private final static QName TYPE = new QName("type");
-    private final static QName LABEL = new QName("label");
-    private final static QName TYPE_LABEL = new QName("typeLabel");
-    private final static QName POS = new QName("pos");
-    private final static QName LENGTH = new QName("length");
-    private final static QName LINE_BEFORE = new QName("line_before");
-    private final static QName LINE_AFTER = new QName("line_after");
-    private final static QName COL_BEFORE = new QName("col_before");
-    private final static QName COL_AFTER = new QName("col_after");
+
+    private static final QName TYPE = new QName("type");
+    private static final QName LABEL = new QName("label");
+    private static final QName TYPE_LABEL = new QName("typeLabel");
+    private static final QName POS = new QName("pos");
+    private static final QName LENGTH = new QName("length");
+    private static final QName LINE_BEFORE = new QName("line_before");
+    private static final QName LINE_AFTER = new QName("line_after");
+    private static final QName COL_BEFORE = new QName("col_before");
+    private static final QName COL_AFTER = new QName("col_after");
 
     private TreeIoUtils() {} // Forbids instantiation of TreeIOUtils
     
@@ -107,7 +107,7 @@ public final class TreeIoUtils {
         return new TreeSerializer(ctx) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws XMLStreamException {
-                return new XMLFormatter(writer, ctx);
+                return new XmlFormatter(writer, ctx);
             }
         };
     }
@@ -116,30 +116,30 @@ public final class TreeIoUtils {
         return new TreeSerializer(ctx) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws XMLStreamException {
-                return new XMLAnnotatedFormatter(writer, ctx, isSrc, m);
+                return new XmlAnnotatedFormatter(writer, ctx, isSrc, m);
             }
         };
     }
     
-    public static TreeSerializer toCompactXML(TreeContext ctx) {
+    public static TreeSerializer toCompactXml(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
-                return new XMLCompactFormatter(writer, ctx);
+                return new XmlCompactFormatter(writer, ctx);
             }
         };
     }
     
-    public static TreeSerializer toJSON(TreeContext ctx) {
+    public static TreeSerializer toJson(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
-                return new JSONFormatter(writer, ctx);
+                return new JsonFormatter(writer, ctx);
             }
         };
     }
     
-    public static TreeSerializer toLISP(TreeContext ctx) {
+    public static TreeSerializer toLisp(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
@@ -157,7 +157,7 @@ public final class TreeIoUtils {
         };
     }
 
-    static public abstract class TreeSerializer {
+    public abstract static class TreeSerializer {
         TreeContext context;
         
         public TreeSerializer(TreeContext ctx) {
@@ -188,8 +188,9 @@ public final class TreeIoUtils {
             StringWriter s = new StringWriter();
             try {
                 writeTo(s);
-                s.close(); // FIXME this is useless (do nothing) but throws an exception, thus I dont' put it in the finally block where it belongs
-            } catch(Exception e) {
+                s.close(); // FIXME this is useless (do nothing) but
+                // throws an exception, thus I dont' put it in the finally block where it belongs
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             return s.toString();
@@ -251,9 +252,11 @@ public final class TreeIoUtils {
 
     interface TreeFormatter {
         void startSerialization() throws Exception;
+
         void stopSerialization() throws Exception;
         
         void startTree(ITree tree) throws Exception;
+
         void endTree(ITree tree) throws Exception;
         
         void close() throws Exception;
@@ -262,10 +265,12 @@ public final class TreeIoUtils {
     static class FormatException extends RuntimeException {
         private static final long serialVersionUID = 593766540545763066L;
         Exception cause;
+
         public FormatException(Exception cause) {
             super(cause);
             this.cause = cause;
         }
+
         @Override
         public Exception getCause() {
             return cause;
@@ -273,7 +278,8 @@ public final class TreeIoUtils {
     }
     
     static class TreeFormatterAdapter implements TreeFormatter {
-        final protected TreeContext context;
+        protected final TreeContext context;
+
         protected TreeFormatterAdapter(TreeContext ctx) {
             context = ctx;
         }
@@ -293,11 +299,11 @@ public final class TreeIoUtils {
         @Override
         public void close() throws Exception { }
     }
-    
-    static abstract class AbsXMLFormatter extends TreeFormatterAdapter {
-        final protected XMLStreamWriter writer;
 
-        protected AbsXMLFormatter(Writer w, TreeContext ctx) throws XMLStreamException {
+    abstract static class AbsXmlFormatter extends TreeFormatterAdapter {
+        protected final XMLStreamWriter writer;
+
+        protected AbsXmlFormatter(Writer w, TreeContext ctx) throws XMLStreamException {
             super(ctx);
             XMLOutputFactory f = XMLOutputFactory.newInstance();
             writer = new IndentingXMLStreamWriter(f.createXMLStreamWriter(w));
@@ -319,8 +325,8 @@ public final class TreeIoUtils {
         }
     }
     
-    static class XMLFormatter extends AbsXMLFormatter {
-        public XMLFormatter(Writer w, TreeContext ctx) throws XMLStreamException {
+    static class XmlFormatter extends AbsXmlFormatter {
+        public XmlFormatter(Writer w, TreeContext ctx) throws XMLStreamException {
             super(w, ctx);
         }
 
@@ -329,7 +335,8 @@ public final class TreeIoUtils {
             writer.writeStartElement("tree");
             writer.writeAttribute("type", Integer.toString(tree.getType()));
             if (tree.hasLabel()) writer.writeAttribute("label", tree.getLabel());
-            if (context.hasLabelFor(tree.getType())) writer.writeAttribute("typeLabel", context.getTypeLabel(tree.getType()));
+            if (context.hasLabelFor(tree.getType()))
+                writer.writeAttribute("typeLabel", context.getTypeLabel(tree.getType()));
             if (ITree.NO_VALUE != tree.getPos()) {
                 writer.writeAttribute("pos", Integer.toString(tree.getPos()));
                 writer.writeAttribute("length", Integer.toString(tree.getLength()));
@@ -348,9 +355,11 @@ public final class TreeIoUtils {
         }
     }
     
-    static class XMLAnnotatedFormatter extends XMLFormatter {
+    static class XmlAnnotatedFormatter extends XmlFormatter {
         final SearchOther searchOther;
-        public XMLAnnotatedFormatter(Writer w, TreeContext ctx, boolean isSrc, MappingStore m) throws XMLStreamException {
+
+        public XmlAnnotatedFormatter(Writer w, TreeContext ctx, boolean isSrc,
+                                     MappingStore m) throws XMLStreamException {
             super(w, ctx);
             
             if (isSrc)
@@ -387,8 +396,8 @@ public final class TreeIoUtils {
         }
     }
     
-    static class XMLCompactFormatter extends AbsXMLFormatter {
-        public XMLCompactFormatter(Writer w, TreeContext ctx) throws XMLStreamException {
+    static class XmlCompactFormatter extends AbsXmlFormatter {
+        public XmlCompactFormatter(Writer w, TreeContext ctx) throws XMLStreamException {
             super(w, ctx);
         }
 
@@ -405,7 +414,7 @@ public final class TreeIoUtils {
     }
     
     static class LispFormatter extends TreeFormatterAdapter {
-        final protected Writer writer;
+        protected final Writer writer;
         int level = 0;
 
         protected LispFormatter(Writer w, TreeContext ctx) {
@@ -420,8 +429,9 @@ public final class TreeIoUtils {
         
         @Override
         public void startTree(ITree tree) throws IOException {
-            if (!tree.isRoot()) writer.write("\n");
-            for(int i = 0; i < level; i ++)
+            if (!tree.isRoot())
+                writer.write("\n");
+            for (int i = 0; i < level; i ++)
                 writer.write("    ");
             level ++;
             
@@ -431,7 +441,9 @@ public final class TreeIoUtils {
                     tree.getLcPosStart()[0], tree.getLcPosStart()[1], tree.getLcPosEnd()[0], tree.getLcPosEnd()[1]));
             String matched = tree.isMatched() ? ":matched " : "";
             
-            writer.write(String.format("(%d \"%s\" \"%s\" %s(%s%s%s) (", tree.getType(), context.getTypeLabel(tree), tree.getLabel(), matched, pos, (pos != "" && lcpos != "") ? " " : "" ,lcpos));
+            writer.write(String.format("(%d \"%s\" \"%s\" %s(%s%s%s) (",
+                            tree.getType(), context.getTypeLabel(tree), tree.getLabel(),
+                            matched, pos, (pos != "" && lcpos != "") ? " " : "" ,lcpos));
         }
         
         @Override
@@ -447,7 +459,7 @@ public final class TreeIoUtils {
     }
     
     static class DotFormatter extends TreeFormatterAdapter {
-        final protected Writer writer;
+        protected final Writer writer;
 
         protected DotFormatter(Writer w, TreeContext ctx) {
             super(ctx);
@@ -474,16 +486,17 @@ public final class TreeIoUtils {
             if (tree.getParent() != null)
                 writer.write(tree.getParent().getId() + " -> " + tree.getId() + ";\n");
         }
+
         @Override
         public void stopSerialization() throws Exception {
             writer.write("}");
         }
     }
     
-    static class JSONFormatter extends TreeFormatterAdapter {
-        final private JsonWriter writer;
+    static class JsonFormatter extends TreeFormatterAdapter {
+        private final JsonWriter writer;
 
-        public JSONFormatter(Writer w, TreeContext ctx) {
+        public JsonFormatter(Writer w, TreeContext ctx) {
             super(ctx);
             writer = new JsonWriter(w);
         }
