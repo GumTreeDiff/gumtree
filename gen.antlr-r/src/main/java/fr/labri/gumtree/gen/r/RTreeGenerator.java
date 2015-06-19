@@ -14,17 +14,17 @@ import java.io.Reader;
 @Register(id = "r-antlr", accept = "\\.[rR]$")
 public class RTreeGenerator extends AbstractAntlrTreeGenerator {
 
-	@Override
-	protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
-		ANTLRStringStream stream = new ANTLRReaderStream(r);
-		RLexer rl = new RLexer(stream);
-		tokens = new TokenRewriteStream(rl);
-		RParser rp = new RParser(tokens);
-		return rp.script().getTree();
-	}
-	
-	@Override
-	final protected String[] getTokenNames() {
-		return RParser.tokenNames;
-	}
+    @Override
+    protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
+        ANTLRStringStream stream = new ANTLRReaderStream(r);
+        RLexer rl = new RLexer(stream);
+        tokens = new TokenRewriteStream(rl);
+        RParser rp = new RParser(tokens);
+        return rp.script().getTree();
+    }
+
+    @Override
+    protected final String[] getTokenNames() {
+        return RParser.tokenNames;
+    }
 }
