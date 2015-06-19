@@ -15,12 +15,14 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
 
     protected final O opts;
     public static final String SYNTAX = "Syntax: diff [options] fileSrc fileDst";
-    private TreeContext src, dst;
+    private TreeContext src;
+    private TreeContext dst;
 
     public static class Options implements Option.Context {
         protected String matcher;
         protected ArrayList<String> generators = new ArrayList<>();
-        protected String src, dst;
+        protected String src;
+        protected String dst;
 
         @Override
         public Option[] values() {
@@ -53,9 +55,9 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
         }
     }
 
-    abstract protected O newOptions();
+    protected abstract O newOptions();
 
-    public AbstractDiffClient(String[] args){
+    public AbstractDiffClient(String[] args) {
         super(args);
         opts = newOptions();
         args = Option.processCommandLine(args, opts);
@@ -74,6 +76,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
     ///////////////////
     // TODO after this line it should be rewrote in a better way
     private Matcher matcher;
+
     protected Matcher matchTrees() {
         Matchers matchers = Matchers.getInstance();
         if (matcher != null)

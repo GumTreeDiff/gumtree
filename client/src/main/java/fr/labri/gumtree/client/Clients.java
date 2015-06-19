@@ -14,7 +14,7 @@ public class Clients extends Registry.NamedRegistry<String, Client, Register> {
     @Override
     protected String getName(Register annotation, Class<? extends Client> clazz) {
         String name = annotation.name();
-        if (Register.NO_VALUE.equals(name))
+        if (Register.no_value.equals(name))
             name = clazz.getSimpleName().toLowerCase();
         return name;
     }

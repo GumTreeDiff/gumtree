@@ -8,13 +8,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Register {
-    String name() default NO_VALUE;
+    String name() default no_value;
     String description() default "";
     boolean experimental() default false;
     // FIXME currently unused, will be useful only for help purpose
     Class<? extends Option.Context> options() default NoOption.class;
 
-    String NO_VALUE = "";
+    String no_value = "";
     class NoOption implements Option.Context {
         @Override
         public Option[] values() {
