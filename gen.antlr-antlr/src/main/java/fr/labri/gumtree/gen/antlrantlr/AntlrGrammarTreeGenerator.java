@@ -14,17 +14,17 @@ import java.io.Reader;
 @Register(id = "antlr-antlr", accept = "\\.[gG]$")
 public class AntlrGrammarTreeGenerator extends AbstractAntlrTreeGenerator {
 
-	@Override
-	protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
-		ANTLRStringStream stream = new ANTLRReaderStream(r);
-		ANTLRv3Lexer l = new ANTLRv3Lexer(stream);
-		tokens = new TokenRewriteStream(l);
-		ANTLRv3Parser p = new ANTLRv3Parser(tokens);
-		return (CommonTree) p.grammarDef().getTree();
-	}
+    @Override
+    protected CommonTree getStartSymbol(Reader r) throws RecognitionException, IOException {
+        ANTLRStringStream stream = new ANTLRReaderStream(r);
+        ANTLRv3Lexer l = new ANTLRv3Lexer(stream);
+        tokens = new TokenRewriteStream(l);
+        ANTLRv3Parser p = new ANTLRv3Parser(tokens);
+        return (CommonTree) p.grammarDef().getTree();
+    }
 
-	@Override
-	final protected String[] getTokenNames() {
-		return ANTLRv3Parser.tokenNames;
-	}
+    @Override
+    protected final String[] getTokenNames() {
+        return ANTLRv3Parser.tokenNames;
+    }
 }
