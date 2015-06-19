@@ -10,7 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Run {
 
-//    public static boolean USE_EXPERIMENTAL() { // This is a method not a constant otherwise, there won't be any way to set it (due to class loading order)
+//    public static boolean USE_EXPERIMENTAL() {
+// This is a method not a constant otherwise, there won't be any way to set it (due to class loading order)
 //        return Boolean.parseBoolean(System.getProperty("gumtree.client.experimental", "false"));
 //    }
 
@@ -18,7 +19,8 @@ public class Run {
         @Override
         public Option[] values() {
             return new Option[]{
-                    new Option("-c", "Set global property (-c property value). Properties do not need to be prefixed by gumtree.", 2){
+                    new Option("-c", "Set global property (-c property value). "
+                            + "Properties do not need to be prefixed by gumtree.", 2){
 
                         @Override
                         protected void process(String name, String[] args) {
@@ -35,22 +37,21 @@ public class Run {
     static void initGenerators() {
         Reflections reflections = new Reflections("fr.labri.gumtree.gen");
 
-        reflections.getSubTypesOf(TreeGenerator.class).forEach(gen -> {
-            fr.labri.gumtree.gen.Register a = gen.getAnnotation(fr.labri.gumtree.gen.Register.class);
-            if (a != null)
-                Generators.getInstance().install(gen, a);
-        });
+        reflections.getSubTypesOf(TreeGenerator.class).forEach(
+                gen -> { fr.labri.gumtree.gen.Register a = gen.getAnnotation(fr.labri.gumtree.gen.Register.class);
+                if (a != null)
+                        Generators.getInstance().install(gen, a);
+            });
     }
 
     static void initClients() {
         Reflections reflections = new Reflections("fr.labri.gumtree.client");
 
-        reflections.getSubTypesOf(Client.class).forEach(cli -> {
-            fr.labri.gumtree.client.Register a = cli.getAnnotation(fr.labri.gumtree.client.Register.class);
-            if (a != null) {
-                Clients.getInstance().install(cli, a);
-            }
-        });
+        reflections.getSubTypesOf(Client.class).forEach(
+                cli -> { fr.labri.gumtree.client.Register a = cli.getAnnotation(fr.labri.gumtree.client.Register.class);
+                if (a != null)
+                    Clients.getInstance().install(cli, a);
+            });
     }
 
     static {
@@ -73,7 +74,7 @@ public class Run {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         initClients();
 
         Options opts = new Options();

@@ -6,5 +6,5 @@ public abstract class Client {
     @SuppressWarnings("unused")
     public Client(String[] args) {}
 
-    abstract public void run() throws IOException;
+    public abstract void run() throws IOException;
 }

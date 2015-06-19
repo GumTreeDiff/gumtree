@@ -3,8 +3,9 @@ package fr.labri.gumtree.client;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-abstract public class Option {
-    final String description, key;
+public abstract class Option {
+    final String description;
+    final String key;
     final int paramCount;
 
     public interface Context {
@@ -18,7 +19,7 @@ abstract public class Option {
         }
     }
 
-    static public class OptionException extends RuntimeException {
+    public static class OptionException extends RuntimeException {
         final Context context;
 
         public OptionException(String msg, Context ctx) {
@@ -64,7 +65,8 @@ abstract public class Option {
                         try {
                             opts[currentParam++] = args[++i];
                         } catch (ArrayIndexOutOfBoundsException e) {
-                            throw new OptionException(String.format("Option '%s' expects more parameters, using null", arg), ctx);
+                            throw new OptionException(String.format(
+                                    "Option '%s' expects more parameters, using null", arg), ctx);
                         }
                     }
                     availableOptions[j].process(arg, opts);
@@ -84,7 +86,7 @@ abstract public class Option {
         return key.equals(arg);
     }
 
-    abstract protected void process(String name, String[] args);
+    protected abstract  void process(String name, String[] args);
 
     public String formatHelpText() {
         return String.format("%s%s\t%s", key, (paramCount > 0 ? " <" + paramCount + ">" : ""), description);
@@ -101,7 +103,8 @@ abstract public class Option {
     }
 
     public static class Help extends Option {
-        final protected Context context;
+        protected final Context context;
+
         public Help(final Context ctx) {
             super("--help", "Display help (this screen)");
             context = ctx;

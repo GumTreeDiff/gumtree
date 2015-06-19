@@ -99,8 +99,8 @@ public class Serializer extends Client {
         for (String file : opts.files) {
             try {
                 TreeContext tc = Generators.getInstance().getTree(file);
-                opts.format.getSerializer(tc).writeTo(opts.output == null ?
-                        System.out
+                opts.format.getSerializer(tc).writeTo(opts.output == null
+                        ? System.out
                         : new FileOutputStream(opts.output));
             } catch (Exception e) {
                 System.err.println(e);

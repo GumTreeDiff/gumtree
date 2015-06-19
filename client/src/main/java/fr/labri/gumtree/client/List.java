@@ -32,7 +32,8 @@ public class List extends Client {
         MATCHERS {
             @Override
             Collection<?> list() {
-//                return MatcherFactories.listFactories().stream().map(Class::getEnclosingClass).map(Class::getName).collect(Collectors.toList());
+//                return MatcherFactories.listFactories().stream().map(
+// Class::getEnclosingClass).map(Class::getName).collect(Collectors.toList());
                 return null;
             }
         },
@@ -58,6 +59,7 @@ public class List extends Client {
         void print(PrintStream out) {
             this.list().forEach(item -> out.println(item));
         }
+
         abstract Collection<?> list();
     }
 

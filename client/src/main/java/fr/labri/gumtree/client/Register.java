@@ -11,7 +11,8 @@ public @interface Register {
     String name() default NO_VALUE;
     String description() default "";
     boolean experimental() default false;
-    Class<? extends Option.Context> options() default NoOption.class; // FIXME currently unused, will be useful only for help purpose
+    // FIXME currently unused, will be useful only for help purpose
+    Class<? extends Option.Context> options() default NoOption.class;
 
     String NO_VALUE = "";
     class NoOption implements Option.Context {

@@ -5,7 +5,7 @@ import fr.labri.gumtree.gen.Registry;
 public class Clients extends Registry.NamedRegistry<String, Client, Register> {
     private static Clients registry;
 
-    public final static Clients getInstance() {
+    public static final Clients getInstance() {
         if (registry == null)
             registry = new Clients();
         return registry;
