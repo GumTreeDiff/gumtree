@@ -34,19 +34,7 @@ We are researchers, therefore if you use GumTree in an academic work we would be
 }
 ```
 
-## Installation
+## Documentation
 
-### From source
-
-Note that you need Maven to compile GumTree. You can clone GumTree with the following command: `git clone https://github.com/GumTreeDiff/gumtree.git`.
-
-### From maven
-
-Coming soon.
-
-## Usage
-
-The class to run any command line in GumTree is `fr.labri.gumtree.client.Run`. You can check out the help of this class to discover the main commands.
-
-For instance `java fr.labri.gumtree.client.Run webdiff file1.java file2.java` will compute the diff between file1.java and file2.java, and launch a local web server that will show you the output of the diff. This server is accessible via the URL [http://localhost:4754/](http://localhost:4754/).
+Please consult our [wiki](https://github.com/GumTreeDiff/gumtree/wiki)
 
