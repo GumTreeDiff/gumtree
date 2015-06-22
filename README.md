@@ -41,7 +41,7 @@ We are researchers, therefore if you use GumTree in an academic work we would be
 
 ### From source
 
-Note that you need Maven to compile GumTree. You can clone GumTree with the following command: `git clone https://github.com/GumTreeDiff/gumtree.git`. Then go into the cloned folder and run the command `mvn install`. The `gumtree.jar` is generated in the `client/target` folder.
+Note that you need Maven to compile GumTree. You can clone GumTree with the following command: `git clone https://github.com/GumTreeDiff/gumtree.git`.
 
 ### From maven
 
