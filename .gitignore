@@ -1,6 +1,9 @@
 target/
+samples/
 .settings/
 .project
 .classpath
-.metadata/
 .recommenders/
+.metadata/
+.idea/
+*.iml

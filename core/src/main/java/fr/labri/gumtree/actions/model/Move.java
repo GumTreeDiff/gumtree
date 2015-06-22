@@ -1,16 +1,16 @@
 package fr.labri.gumtree.actions.model;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class Move extends Addition {
 
-	public Move(Tree node, Tree parent, int pos) {
-		super(node, parent, pos);
-	}
+    public Move(ITree node, ITree parent, int pos) {
+        super(node, parent, pos);
+    }
 
-	@Override
-	protected String getName() {
-		return "MOV";
-	}
+    @Override
+    protected String getName() {
+        return "MOV";
+    }
 
 }

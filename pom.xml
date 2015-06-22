@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.labri.gumtree</groupId>
 	<artifactId>gumtree</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<url>http://harmony.googlecode.com</url>
 	<name>GumTree</name>
 	<organization>
@@ -12,66 +11,55 @@
 		<url>http://se.labri.fr</url>
 	</organization>
 	<scm>
-		<connection>scm:hg:https://code.google.com/p/labri-se.gumtree/</connection>
-<developerConnection>scm:hg:https://code.google.com/p/labri-se.gumtree/</developerConnection>
-<url>https://code.google.com/p/labri-se.gumtree/</url>
+		<connection>scm:git:https://github.com/GumTreeDiff/gumtree/</connection>
+		<developerConnection>scm:git:https://github.com/GumTreeDiff/gumtree/</developerConnection>
+		<url>https://github.com/GumTreeDiff/gumtree/</url>
 	</scm>
+
 	<modules>
 		<module>core</module>
+		<module>gen.antlr</module>
+		<module>gen.antlr-r</module>
+		<module>gen.antlr-antlr</module>
+		<module>gen.antlr-json</module>
+		<module>gen.antlr-css</module>
+		<module>gen.antlr-php</module>
+		<module>gen.antlr-xml</module>
 		<module>gen.jdt</module>
 		<module>gen.js</module>
 		<module>gen.ruby</module>
+		<module>gen.sax</module>
 		<module>gen.c</module>
-		<module>gen.antlr</module>
-		<module>gen.r</module>
-		<module>gen.antlr-antlr</module>
 		<module>client</module>
+		<module>client.diff</module>
+		<module>gumtree-all</module>
 	</modules>
-	<repositories>
-		<repository>
-			<id>se</id>
-			<name>SE repository</name>
-			<url>http://se.labri.fr/maven</url>
-		</repository>
-	<repository>
-	    <id>rendersnake-repo</id>
-		    <name>Repository for rendersnake</name>
-			    <url>http://rendersnake.googlecode.com/svn/repo</url>
-				</repository>
-	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.0</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.3</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	<distributionManagement>
-		<repository>
-			<id>se</id>
-			<url>dav:https://webdav.labri.fr/vhosts/se.labri.fr/maven/</url>
-		</repository>
-		<snapshotRepository>
-			<id>se</id>
-			<url>dav:https://webdav.labri.fr/vhosts/se.labri.fr/maven/</url>
-		</snapshotRepository>
-	</distributionManagement>
 </project>
 

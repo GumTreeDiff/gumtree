@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 
 /**
@@ -32,7 +32,7 @@ import fr.labri.gumtree.tree.Tree;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class InfoTree {
 
-    private Tree inputTree;
+    private ITree inputTree;
 
     private static final byte LEFT = 0;
     private static final byte RIGHT = 1;
@@ -100,7 +100,7 @@ public class InfoTree {
      * @param aInputTree an LblTree object
      * @param aLd  a LabelDictionary object
      */
-    public InfoTree(Tree aInputTree, LabelDictionary aLd) {
+    public InfoTree(ITree aInputTree, LabelDictionary aLd) {
         this.inputTree = aInputTree;
         treeSize = inputTree.getSize();
         this.info = new int[16][treeSize];
@@ -207,7 +207,7 @@ public class InfoTree {
      * @param postorder
      * @return 
      */
-	private int gatherInfo(Tree aT, int postorder) {
+	private int gatherInfo(ITree aT, int postorder) {
         int currentSize = 0;
         int childrenCount = 0;
         int descSizes = 0;
@@ -235,7 +235,7 @@ public class InfoTree {
         for (Enumeration<?> e = Collections.enumeration(aT.getChildren()); e.hasMoreElements();) {
             childrenCount++;
 
-            postorder = gatherInfo((Tree) e.nextElement(), postorder);
+            postorder = gatherInfo((ITree) e.nextElement(), postorder);
 
             childrenPostorders.add(postorder);
             

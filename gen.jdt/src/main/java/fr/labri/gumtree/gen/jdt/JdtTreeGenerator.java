@@ -19,21 +19,14 @@
 package fr.labri.gumtree.gen.jdt;
 
 
+import fr.labri.gumtree.gen.Register;
+
+@Register(id = "java-jdt-gt", accept = "\\.java$" )
 public class JdtTreeGenerator extends AbstractJdtTreeGenerator {
 
-	@Override
-	public boolean handleFile(String file) {
-		return file.endsWith(".java");
-	}
+    @Override
+    protected AbstractJdtVisitor createVisitor() {
+        return new JdtVisitor();
+    }
 
-	@Override
-	public String getName() {
-		return "java-jdt-gt";
-	}
-
-	@Override
-	protected AbstractJdtVisitor createVisitor() {
-		return new JdtVisitor();
-	}
-	
 }

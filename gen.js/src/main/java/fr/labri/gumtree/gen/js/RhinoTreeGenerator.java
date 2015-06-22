@@ -18,37 +18,23 @@
 
 package fr.labri.gumtree.gen.js;
 
-import java.io.FileReader;
-import java.io.IOException;
-
+import fr.labri.gumtree.gen.Register;
+import fr.labri.gumtree.gen.TreeGenerator;
+import fr.labri.gumtree.tree.TreeContext;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
 
-import fr.labri.gumtree.io.TreeGenerator;
-import fr.labri.gumtree.tree.Tree;
+import java.io.IOException;
+import java.io.Reader;
 
+@Register(id = "js-rhino", accept = "\\.js$")
 public class RhinoTreeGenerator extends TreeGenerator {
 
-	public Tree generate(String file) {
-		Parser p = new Parser();
-		try {
-			AstRoot root = p.parse(new FileReader(file), file, 1);
-			RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
-			root.visit(visitor);
-			return visitor.getTree();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
-	public boolean handleFile(String file) {
-		return file.toLowerCase().endsWith(".js");
-	}
-
-	@Override
-	public String getName() {
-		return "js-rhino";
-	}
+    public TreeContext generate(Reader r) throws IOException {
+        Parser p = new Parser();
+        AstRoot root = p.parse(r, null, 1);
+        RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
+        root.visit(visitor);
+        return visitor.getTree(root);
+    }
 }

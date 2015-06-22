@@ -1,80 +1,27 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>fr.labri.gumtree</groupId>
 		<artifactId>gumtree</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>client</artifactId>
 	<packaging>jar</packaging>
-	<name>GumTree Client</name>
+	<name>GumTree Client Module</name>
 	<dependencies>
 		<dependency>
-			<groupId>org.rendersnake</groupId>
-			<artifactId>rendersnake</artifactId>
-			<version>1.7.3</version>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.9-RC1</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.labri.gumtree</groupId>
 			<artifactId>core</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>2.0.0-SNAPSHOT</version>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>fr.labri.gumtree</groupId>
-			<artifactId>gen.jdt</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>fr.labri.gumtree</groupId>
-			<artifactId>gen.js</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>fr.labri.gumtree</groupId>
-			<artifactId>gen.ruby</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>fr.labri.gumtree</groupId>
-			<artifactId>gen.c</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>fr.labri.gumtree</groupId>
-			<artifactId>gen.r</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>fr.labri.gumtree</groupId>
-			<artifactId>gen.php</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>fr.labri.gumtree</groupId>
-			<artifactId>gen.antlr-antlr</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>args4j</groupId>
-			<artifactId>args4j</artifactId>
-			<version>2.0.23</version>
-		</dependency>
-
-		<dependency>
-			<groupId>fr.labri.gumtree</groupId>
-			<artifactId>gen.xml</artifactId>
-			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<resources>
 			<resource>
@@ -93,7 +40,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>fr.labri.gumtree.client.DiffClient</mainClass>
+							<mainClass>fr.labri.gumtree.client.diff.DiffClient</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

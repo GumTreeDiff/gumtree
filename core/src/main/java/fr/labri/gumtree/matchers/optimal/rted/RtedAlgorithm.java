@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 
 /**
@@ -117,7 +117,7 @@ public class RtedAlgorithm {
 	 * @param t2
 	 * @return tree edit distance between trees t1 and t2
 	 */
-	public double nonNormalizedTreeDist(Tree t1, Tree t2) {
+	public double nonNormalizedTreeDist(ITree t1, ITree t2) {
 		init(t1, t2);
 		str = new int[size1][size2];
 		computeOptimalStrategy();
@@ -140,7 +140,7 @@ public class RtedAlgorithm {
 	 * @param t1
 	 * @param t2
 	 */
-	public void init(Tree t1, Tree t2) {
+	public void init(ITree t1, ITree t2) {
 		ld = new LabelDictionary();
 		it1 = new InfoTree(t1, ld);
 		it2 = new InfoTree(t2, ld);

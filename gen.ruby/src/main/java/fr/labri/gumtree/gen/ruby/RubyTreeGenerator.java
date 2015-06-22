@@ -18,64 +18,47 @@
 
 package fr.labri.gumtree.gen.ruby;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.HashMap;
-import java.util.Map;
-
+import fr.labri.gumtree.gen.Register;
+import fr.labri.gumtree.gen.TreeGenerator;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 import org.jrubyparser.CompatVersion;
 import org.jrubyparser.Parser;
 import org.jrubyparser.ast.Node;
 import org.jrubyparser.parser.ParserConfiguration;
 
-import fr.labri.gumtree.io.TreeGenerator;
-import fr.labri.gumtree.tree.Tree;
+import java.io.IOException;
+import java.io.Reader;
 
+@Register(id = "ruby-jruby", accept = {"\\.ruby$", "\\.rb$"})
 public class RubyTreeGenerator extends TreeGenerator {
 
-	public Tree generate(String file) {
-		Parser p = new Parser();
-		try {
-			FileReader f = new FileReader(file);
-			CompatVersion version = CompatVersion.RUBY2_0;
-			ParserConfiguration config = new ParserConfiguration(0, version);
-			Node n = p.parse("<code>", f, config);
-			return toTree(n, new HashMap<Node, Tree>());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    public TreeContext generate(Reader r) throws IOException {
+        Parser p = new Parser();
+        CompatVersion version = CompatVersion.RUBY2_0;
+        ParserConfiguration config = new ParserConfiguration(0, version);
+        Node n = p.parse("<code>", r, config);
+        return toTree(new TreeContext(), n, null);
+    }
 
-	private Tree toTree(Node n, Map<Node, Tree> trees) {
-		String label = "";
-		String typeLabel = n.getNodeType().name();
-		int type = n.getNodeType().ordinal() + 1;
-		Tree t = new Tree(type, label, typeLabel);
-		Tree p = null;
-		if (n.getParent() != null)
-			p = trees.get(n.getParent());
-		t.setParentAndUpdateChildren(p);
-		
-		int pos = n.getPosition().getStartOffset();
-		int length = n.getPosition().getEndOffset() - n.getPosition().getStartOffset();
-		t.setPos(pos);
-		t.setLength(length);
-		
-		trees.put(n, t);
-		for(Node c: n.childNodes())
-			toTree(c, trees);
-		
-		return t;
-	}
-	
-	@Override
-	public boolean handleFile(String file) {
-		return file.toLowerCase().endsWith(".ruby") ||  file.toLowerCase().endsWith(".rb");
-	}
+    private TreeContext toTree(TreeContext ctx, Node n, ITree parent) {
+        String label = "";
+        String typeLabel = n.getNodeType().name();
+        int type = n.getNodeType().ordinal() + 1;
+        ITree t = ctx.createTree(type, label, typeLabel);
+        if (parent == null)
+            ctx.setRoot(t);
+        else
+            t.setParentAndUpdateChildren(parent);
 
-	@Override
-	public String getName() {
-		return "ruby-jruby";
-	}
+        int pos = n.getPosition().getStartOffset();
+        int length = n.getPosition().getEndOffset() - n.getPosition().getStartOffset();
+        t.setPos(pos);
+        t.setLength(length);
+
+        for (Node c: n.childNodes())
+            toTree(ctx, c, t);
+
+        return ctx;
+    }
 }

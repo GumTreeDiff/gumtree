@@ -1,17 +1,17 @@
 package fr.labri.gumtree.matchers.heuristic.gt;
 
+import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.MappingStore;
+import fr.labri.gumtree.matchers.Matcher;
+import fr.labri.gumtree.matchers.optimal.zs.ZsMatcher;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeMap;
+import fr.labri.gumtree.tree.TreeUtils;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import fr.labri.gumtree.matchers.Mapping;
-import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
-import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
-import fr.labri.gumtree.tree.Tree;
-import fr.labri.gumtree.tree.TreeMap;
-import fr.labri.gumtree.tree.TreeUtils;
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source and destination trees
@@ -21,108 +21,109 @@ import fr.labri.gumtree.tree.TreeUtils;
  */
 public class CompleteBottomUpMatcher extends Matcher {
 
-	private static final double SIM_THRESHOLD = 0.50D;
-	
-	private static final int SIZE_THESHOLD = 100;
+    private static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.3"));
 
-	private TreeMap srcIds;
-	
-	private TreeMap dstIds;
+    private static final int SIZE_THRESHOLD = Integer.parseInt(System.getProperty("gumtree.match.bu.size", "1000"));
 
-	public CompleteBottomUpMatcher(Tree src, Tree dst) {
-		super(src, dst);
-	}
+    private TreeMap srcIds;
 
-	public void match() {
-		srcIds = new TreeMap(src);
-		dstIds = new TreeMap(dst);
-		
-		for (Tree t: TreeUtils.postOrder(this.src))  {
-			if (t.isRoot()) {
-				addMapping(t, this.dst);
-				lastChanceMatch(t, this.dst);
-				break;
-			} else if (!(t.isMatched() || t.isLeaf())) {
-				List<Tree> candidates = getDstCandidates(t);
-				Tree best = null;
-				double max = -1D;
-				
-				for (Tree cand: candidates ) {
-					double sim = jaccardSimilarity(t, cand);
-					if (sim > max && sim >= SIM_THRESHOLD) {
-						max = sim;
-						best = cand;
-					}
-				}
+    private TreeMap dstIds;
 
-				if (best != null) {
-					lastChanceMatch(t, best);
-					addMapping(t, best);
-				}
-			}
-		}
-		clean();
-	}
+    public CompleteBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
+        super(src, dst, store);
+    }
 
-	private List<Tree> getDstCandidates(Tree src) {
-		List<Tree> seeds = new ArrayList<>();
-		for (Tree c: src.getDescendants()) {
-			Tree m = mappings.getDst(c);
-			if (m != null) seeds.add(m);
-		}
-		List<Tree> candidates = new ArrayList<>();
-		Set<Tree> visited = new HashSet<>();
-		for(Tree seed: seeds) {
-			while (seed.getParent() != null) {
-				Tree parent = seed.getParent();
-				if (visited.contains(parent)) break;
-				visited.add(parent);
-				if (parent.getType() == src.getType() && !parent.isMatched() && !parent.isRoot()) candidates.add(parent);
-				seed = parent;
-			}
-		}
+    public void match() {
+        srcIds = new TreeMap(src);
+        dstIds = new TreeMap(dst);
 
-		return candidates;
-	}
+        for (ITree t: src.postOrder())  {
+            if (t.isRoot()) {
+                addMapping(t, this.dst);
+                lastChanceMatch(t, this.dst);
+                break;
+            } else if (!(t.isMatched() || t.isLeaf())) {
+                List<ITree> srcCandidates = new ArrayList<ITree>();
+                for (ITree p: t.getParents())
+                    if (p.getType() == t.getType())
+                        srcCandidates.add(p);
 
-	//FIXME checks if it is better or not to remove the already found mappings.
-	private void lastChanceMatch(Tree src, Tree dst) {
-		Tree cSrc = src.deepCopy();
-		Tree cDst = dst.deepCopy();
-		TreeUtils.removeMatched(cSrc);
-		TreeUtils.removeMatched(cDst);
+                List<ITree> dstCandidates = getDstCandidates(t);
+                ITree srcBest = null;
+                ITree dstBest = null;
+                double max = -1D;
+                for (ITree srcCand: srcCandidates) {
+                    for (ITree dstCand: dstCandidates) {
 
-		if (cSrc.getSize() < SIZE_THESHOLD || cDst.getSize() < SIZE_THESHOLD) {
-			Matcher m = new RtedMatcher(cSrc, cDst);
-			m.match();
-			for (Mapping candidate: m.getMappings()) {
-				Tree left = srcIds.getTree(candidate.getFirst().getId());
-				Tree right = dstIds.getTree(candidate.getSecond().getId());
+                        double sim = jaccardSimilarity(srcCand, dstCand);
+                        if (sim > max && sim >= 0D) {
+                            max = sim;
+                            srcBest = srcCand;
+                            dstBest = dstCand;
+                        }
+                    }
+                }
 
-				if (left.getId() == src.getId() || right.getId() == dst.getId()) {
-					//System.err.println("Trying to map already mapped source node.");
-					continue;
-				} else if (!left.isMatchable(right)) {
-					//System.err.println("Trying to map not compatible nodes.");
-					continue;
-				} else if (left.getParent().getType() != right.getParent().getType()) {
-					//System.err.println("Trying to map nodes with incompatible parents");
-					continue;
-				} else addMapping(left, right);
-			}
-		}
-		
-		for (Tree t : src.getTrees()) t.setMatched(true);
-		for (Tree t : dst.getTrees()) t.setMatched(true);
-	}
-	
-	public static class CompleteBottumUpMatcherFactory implements MatcherFactory {
+                if (srcBest != null) {
+                    lastChanceMatch(srcBest, dstBest);
+                    addMapping(srcBest, dstBest);
+                }
+            }
+        }
+        clean();
+    }
 
-		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
-			return new CompleteBottomUpMatcher(src, dst);
-		}
-		
-	}
+    private List<ITree> getDstCandidates(ITree src) {
+        List<ITree> seeds = new ArrayList<>();
+        for (ITree c: src.getDescendants()) {
+            ITree m = mappings.getDst(c);
+            if (m != null) seeds.add(m);
+        }
+        List<ITree> candidates = new ArrayList<>();
+        Set<ITree> visited = new HashSet<>();
+        for (ITree seed: seeds) {
+            while (seed.getParent() != null) {
+                ITree parent = seed.getParent();
+                if (visited.contains(parent))
+                    break;
+                visited.add(parent);
+                if (parent.getType() == src.getType() && !parent.isMatched() && !parent.isRoot())
+                    candidates.add(parent);
+                seed = parent;
+            }
+        }
 
+        return candidates;
+    }
+
+    //FIXME checks if it is better or not to remove the already found mappings.
+    private void lastChanceMatch(ITree src, ITree dst) {
+        ITree cSrc = src.deepCopy();
+        ITree cDst = dst.deepCopy();
+        TreeUtils.removeMatched(cSrc);
+        TreeUtils.removeMatched(cDst);
+
+        if (cSrc.getSize() < SIZE_THRESHOLD || cDst.getSize() < SIZE_THRESHOLD) {
+            Matcher m = new ZsMatcher(cSrc, cDst, new MappingStore());
+            m.match();
+            for (Mapping candidate: m.getMappings()) {
+                ITree left = srcIds.getTree(candidate.getFirst().getId());
+                ITree right = dstIds.getTree(candidate.getSecond().getId());
+
+                if (left.getId() == src.getId() || right.getId() == dst.getId()) {
+                    //System.err.println("Trying to map already mapped source node.");
+                    continue;
+                } else if (!left.isMatchable(right)) {
+                    //System.err.println("Trying to map not compatible nodes.");
+                    continue;
+                } else if (left.getParent().getType() != right.getParent().getType()) {
+                    //System.err.println("Trying to map nodes with incompatible parents");
+                    continue;
+                } else addMapping(left, right);
+            }
+        }
+
+        for (ITree t : src.getTrees()) t.setMatched(true);
+        for (ITree t : dst.getTrees()) t.setMatched(true);
+    }
 }

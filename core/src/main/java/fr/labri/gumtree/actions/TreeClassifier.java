@@ -8,80 +8,81 @@ import fr.labri.gumtree.actions.model.Action;
 import fr.labri.gumtree.matchers.Mapping;
 import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeContext;
 
 public abstract class TreeClassifier {
-	
-	protected Set<Tree> srcUpdTrees;
 
-	protected Set<Tree> dstUpdTrees;
+    protected Set<ITree> srcUpdTrees;
 
-	protected Set<Tree> srcMvTrees;
+    protected Set<ITree> dstUpdTrees;
 
-	protected Set<Tree> dstMvTrees;
+    protected Set<ITree> srcMvTrees;
 
-	protected Set<Tree> srcDelTrees;
+    protected Set<ITree> dstMvTrees;
 
-	protected Set<Tree> dstAddTrees;
-	
-	protected Tree src;
-	
-	protected Tree dst;
-	
-	protected MappingStore mappings;
-	
-	protected List<Action> actions;
-	
-	public TreeClassifier(Tree src, Tree dst, Set<Mapping> rawMappings, List<Action> actions) {
-		this(src, dst, rawMappings);
-		this.actions = actions;
-		classify();
-	}
-	
-	public TreeClassifier(Tree src, Tree dst, Matcher m) {
-		this(src, dst, m.getMappingSet());
-		ActionGenerator g = new ActionGenerator(src, dst, m.getMappings());
-		g.generate();
-		this.actions = g.getActions();
-		classify();
-	}
-	
-	private TreeClassifier(Tree src, Tree dst, Set<Mapping> rawMappings) {
-		this.src = src;
-		this.dst = dst;
-		this.mappings = new MappingStore(rawMappings);
-		this.srcDelTrees = new HashSet<>();
-		this.srcMvTrees = new HashSet<>();
-		this.srcUpdTrees = new HashSet<>();
-		this.dstMvTrees = new HashSet<>();
-		this.dstAddTrees = new HashSet<>();
-		this.dstUpdTrees = new HashSet<>();
-	}
-	
-	public abstract void classify();
+    protected Set<ITree> srcDelTrees;
 
-	public Set<Tree> getSrcUpdTrees() {
-		return srcUpdTrees;
-	}
+    protected Set<ITree> dstAddTrees;
 
-	public Set<Tree> getDstUpdTrees() {
-		return dstUpdTrees;
-	}
+    protected TreeContext src;
 
-	public Set<Tree> getSrcMvTrees() {
-		return srcMvTrees;
-	}
+    protected TreeContext dst;
 
-	public Set<Tree> getDstMvTrees() {
-		return dstMvTrees;
-	}
+    protected MappingStore mappings;
 
-	public Set<Tree> getSrcDelTrees() {
-		return srcDelTrees;
-	}
+    protected List<Action> actions;
 
-	public Set<Tree> getDstAddTrees() {
-		return dstAddTrees;
-	}
+    public TreeClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> actions) {
+        this(src, dst, rawMappings);
+        this.actions = actions;
+        classify();
+    }
+
+    public TreeClassifier(TreeContext src, TreeContext dst, Matcher m) {
+        this(src, dst, m.getMappingSet());
+        ActionGenerator g = new ActionGenerator(src.getRoot(), dst.getRoot(), m.getMappings());
+        g.generate();
+        this.actions = g.getActions();
+        classify();
+    }
+
+    private TreeClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings) {
+        this.src = src;
+        this.dst = dst;
+        this.mappings = new MappingStore(rawMappings);
+        this.srcDelTrees = new HashSet<>();
+        this.srcMvTrees = new HashSet<>();
+        this.srcUpdTrees = new HashSet<>();
+        this.dstMvTrees = new HashSet<>();
+        this.dstAddTrees = new HashSet<>();
+        this.dstUpdTrees = new HashSet<>();
+    }
+
+    public abstract void classify();
+
+    public Set<ITree> getSrcUpdTrees() {
+        return srcUpdTrees;
+    }
+
+    public Set<ITree> getDstUpdTrees() {
+        return dstUpdTrees;
+    }
+
+    public Set<ITree> getSrcMvTrees() {
+        return srcMvTrees;
+    }
+
+    public Set<ITree> getDstMvTrees() {
+        return dstMvTrees;
+    }
+
+    public Set<ITree> getSrcDelTrees() {
+        return srcDelTrees;
+    }
+
+    public Set<ITree> getDstAddTrees() {
+        return dstAddTrees;
+    }
 
 }

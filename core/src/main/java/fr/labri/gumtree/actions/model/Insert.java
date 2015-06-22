@@ -1,17 +1,17 @@
 package fr.labri.gumtree.actions.model;
 
-import fr.labri.gumtree.tree.Tree;
+        import fr.labri.gumtree.tree.ITree;
 
 public class Insert extends Addition {
 
-	public Insert(Tree node, Tree parent, int pos) {
-		super(node, parent, pos);
-	}
+    public Insert(ITree node, ITree parent, int pos) {
+        super(node, parent, pos);
+    }
 
-	@Override
-	protected String getName() {
-		return "INS";
-	}
+    @Override
+    protected String getName() {
+        return "INS";
+    }
 
-	
+
 }

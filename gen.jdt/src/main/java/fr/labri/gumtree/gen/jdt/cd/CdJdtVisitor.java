@@ -6,115 +6,75 @@ import java.util.Stack;
 import org.eclipse.jdt.core.dom.*;
 
 import fr.labri.gumtree.gen.jdt.AbstractJdtVisitor;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.Tree;
 
 /**
- * Combination of two ChangeDistiller's AST visitors: JavaASTBodyTransformer and JavaASTChangeDistillerVisitor.
+ * Combination of two ChangeDistiller's AST visitors:
+ *  JavaASTBodyTransformer and JavaASTChangeDistillerVisitor.
  * Modifications are labeled as "@Inria"
+ *
+ * @Inria removed fNodeStack since it's inherited with the new
  */
 @SuppressWarnings("unused")
 public class CdJdtVisitor extends AbstractJdtVisitor {
-
     private static final String COLON_SPACE = ": ";
     private boolean fEmptyJavaDoc;
-    private Stack<Tree> fNodeStack = new Stack<Tree>();
     private boolean fInMethodDeclaration;
- 
-    /**
-     * Creates a new declaration transformer.
-     * 
-     * @param root
-     *            the root node of the tree to generate
-     * @param source
-     *            the document in which the AST to parse resides
-     * @param astHelper
-     *            the helper that helps with conversions for the change history meta model
-     */
-    public CdJdtVisitor(Tree root) {
-        fNodeStack.clear();
-        fNodeStack.push(root);
-    }
 
-    public CdJdtVisitor() { 
-        fNodeStack.clear();
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(Block node) {
         // skip block as it is not interesting
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(Block node) {
-    // do nothing pop is not needed (see visit(Block))
+        // do nothing pop is not needed (see visit(Block))
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean visit(FieldDeclaration node) {
         if (node.getJavadoc() != null) {
             node.getJavadoc().accept(this);
         }
-        
-        //@Inria
-        push(node,node.toString());
+
+        // @Inria
+        pushNode(node, node.toString());
         //
-        visitList(EntityType.MODIFIERS, node.modifiers());
+        visitListAsNode(EntityType.MODIFIERS, node.modifiers());
         node.getType().accept(this);
-        visitList(EntityType.FRAGMENTS, node.fragments());
-        
-        
+        visitListAsNode(EntityType.FRAGMENTS, node.fragments());
+
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(FieldDeclaration node) {
-       //@Inria
-    	pop();
+        // @Inria
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(Javadoc node) {
         String string = "";
-        //@Inria:  exclude doc
-        /*  try {
-            string = fSource.get(node.getStartPosition(), node.getLength());
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }*/
+        // @Inria: exclude doc
         if (checkEmptyJavaDoc(string)) {
-            pushValuedNode(node, string);
+            pushNode(node, string);
         } else {
+            // @TODO not really robust, hopefully there is no nested javadoc comments.
             fEmptyJavaDoc = true;
         }
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(Javadoc node) {
-        if (!fEmptyJavaDoc) {
-            pop();
-        }
-        fEmptyJavaDoc = false;
+        if (!fEmptyJavaDoc)
+            popNode();
+        else
+            fEmptyJavaDoc = false;
     }
 
     private boolean checkEmptyJavaDoc(String doc) {
@@ -133,9 +93,6 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
         return !result.equals("");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean visit(MethodDeclaration node) {
@@ -143,305 +100,218 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
             node.getJavadoc().accept(this);
         }
         fInMethodDeclaration = true;
-       
-        //@Inria
-        push(node, node.getName().toString());
+
+        // @Inria
+        pushNode(node, node.getName().toString());
         //
-        
-        visitList(EntityType.MODIFIERS, node.modifiers());
+
+        visitListAsNode(EntityType.MODIFIERS, node.modifiers());
         if (node.getReturnType2() != null) {
             node.getReturnType2().accept(this);
         }
-        visitList(EntityType.TYPE_ARGUMENTS, node.typeParameters());
-        visitList(EntityType.PARAMETERS, node.parameters());
-        visitList(EntityType.THROW, node.thrownExceptions());
-       
-        //@Inria
-        //The body can be null when the method declaration is from a interface
-        if(node.getBody()!= null){
-        	node.getBody().accept(this);
+        visitListAsNode(EntityType.TYPE_ARGUMENTS, node.typeParameters());
+        visitListAsNode(EntityType.PARAMETERS, node.parameters());
+        visitListAsNode(EntityType.THROW, node.thrownExceptions());
+
+        // @Inria
+        // The body can be null when the method declaration is from a interface
+        if (node.getBody() != null) {
+            node.getBody().accept(this);
         }
         return false;
-     
+
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(MethodDeclaration node) {
         fInMethodDeclaration = false;
-       pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(Modifier node) {
-        pushValuedNode(node, node.getKeyword().toString());
+        pushNode(node, node.getKeyword().toString());
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(Modifier node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean visit(ParameterizedType node) {
-        pushEmptyNode(node);
+        pushNode(node, "");
         node.getType().accept(this);
-        visitList(EntityType.TYPE_ARGUMENTS, node.typeArguments());
+        visitListAsNode(EntityType.TYPE_ARGUMENTS, node.typeArguments());
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(ParameterizedType node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(PrimitiveType node) {
         String vName = "";
         if (fInMethodDeclaration) {
-            vName += getCurrentParent().getLabel()/*getCurrentParent().getValue()*/ + COLON_SPACE;
+            vName += getCurrentParent().getLabel() + COLON_SPACE;
         }
-        pushValuedNode(node, vName + node.getPrimitiveTypeCode().toString());
+        pushNode(node, vName + node.getPrimitiveTypeCode().toString());
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(PrimitiveType node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(QualifiedType node) {
-        pushEmptyNode(node);
+        pushNode(node, "");
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(QualifiedType node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(SimpleType node) {
         String vName = "";
         if (fInMethodDeclaration) {
-            vName += getCurrentParent().getLabel() /*getCurrentParent().getValue()*/ + COLON_SPACE;
+            vName += getCurrentParent().getLabel() + COLON_SPACE;
         }
-        pushValuedNode(node, vName + node.getName().getFullyQualifiedName());
+        pushNode(node, vName + node.getName().getFullyQualifiedName());
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(SimpleType node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    
     @Override
     public boolean visit(SingleVariableDeclaration node) {
-        boolean isNotParam = getCurrentParent().getLabel() != EntityType.PARAMETERS.toString();//@inria
-        pushValuedNode(node, node.getName().getIdentifier());
-        if (isNotParam) {
-       //     visitList(EntityType.MODIFIERS, node.modifiers());
-        }
+        boolean isNotParam = getCurrentParent().getLabel() != EntityType.PARAMETERS.toString();// @inria
+        pushNode(node, node.getName().getIdentifier());
         node.getType().accept(this);
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(SingleVariableDeclaration node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean visit(TypeDeclaration node) {
         if (node.getJavadoc() != null) {
             node.getJavadoc().accept(this);
         }
-        //@Inria
-        push(node, node.getName().toString());
-        //
-        visitList(EntityType.MODIFIERS, node.modifiers());
-        visitList(EntityType.TYPE_ARGUMENTS, node.typeParameters());
+        // @Inria
+        pushNode(node, node.getName().toString());
+        visitListAsNode(EntityType.MODIFIERS, node.modifiers());
+        visitListAsNode(EntityType.TYPE_ARGUMENTS, node.typeParameters());
         if (node.getSuperclassType() != null) {
             node.getSuperclassType().accept(this);
         }
-       
-        visitList(EntityType.SUPER_INTERFACE_TYPES, node.superInterfaceTypes());
-       
-        //@Inria
-        //Change Distiller does not check the changes at Class Field declaration
-       for (FieldDeclaration fd: node.getFields()){
-    	   fd.accept(this);
-       }
-       //@Inria
-       //Visit Declaration and Body (inside MD visiting)
-       for(MethodDeclaration md: node.getMethods()){
-    	   md.accept(this);
-       }
-       return false;
+
+        visitListAsNode(EntityType.SUPER_INTERFACE_TYPES, node.superInterfaceTypes());
+
+        // @Inria
+        // Change Distiller does not check the changes at Class Field declaration
+        for (FieldDeclaration fd : node.getFields()) {
+            fd.accept(this);
+        }
+        // @Inria
+        // Visit Declaration and Body (inside MD visiting)
+        for (MethodDeclaration md : node.getMethods()) {
+            md.accept(this);
+        }
+        return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(TypeDeclaration node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(TypeDeclarationStatement node) {
         // skip, only type declaration is interesting
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(TypeDeclarationStatement node) {
-    // do nothing
+        // do nothing
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(TypeLiteral node) {
-        pushEmptyNode(node);
+        pushNode(node, "");
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(TypeLiteral node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean visit(TypeParameter node) {
-        pushValuedNode(node, node.getName().getFullyQualifiedName());
+        pushNode(node, node.getName().getFullyQualifiedName());
         visitList(node.typeBounds());
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(TypeParameter node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean visit(VariableDeclarationExpression node) {
-        pushEmptyNode(node);
-        visitList(EntityType.MODIFIERS, node.modifiers());
+        pushNode(node, "");
+        visitListAsNode(EntityType.MODIFIERS, node.modifiers());
         node.getType().accept(this);
-        visitList(EntityType.FRAGMENTS, node.fragments());
+        visitListAsNode(EntityType.FRAGMENTS, node.fragments());
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(VariableDeclarationExpression node) {
-        pop();
+        popNode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(VariableDeclarationFragment node) {
-        pushValuedNode(node, node.getName().getFullyQualifiedName());
+        pushNode(node, node.getName().getFullyQualifiedName());
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(VariableDeclarationFragment node) {
-        pop();
+        popNode();
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean visit(WildcardType node) {
         String bound = node.isUpperBound() ? "extends" : "super";
-        pushValuedNode(node, bound);
+        pushNode(node, bound);
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void endVisit(WildcardType node) {
-        pop();
+        popNode();
     }
 
     private void visitList(List<ASTNode> list) {
@@ -450,509 +320,307 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
         }
     }
 
-    private void visitList(EntityType parentLabel, List<ASTNode> list) {
-        int[] position = extractPosition(list);
-        push(-parentLabel.ordinal(),parentLabel.name(), "", position[0], position[1]);
+    private void visitListAsNode(EntityType fakeType, List<ASTNode> list) {
+        int start = startPosition(list);
+        pushFakeNode(fakeType, start, endPosition(list) - start);
         if (!list.isEmpty()) {
-        	//@Inria
-        	//As ChangeDistiller has empty nodes e.g. Type Argument, Parameter, Thown,  the push and pop are before the empty condition check	
-        	//push(-parentLabel.ordinal(),parentLabel.name(), "", position[0], position[1]);
-        	visitList(list);
-        	//pop();
+            // @Inria
+            // As ChangeDistiller has empty nodes e.g.
+            //  Type Argument, Parameter, Thown,
+            //  the push and pop are before the empty condition check
+            visitList(list);
         }
-       pop();
+        popNode();
     }
 
-    private void pushEmptyNode(ASTNode node) {
-    	//@Inria
-    	//push(fASTHelper.convertNode(node), "", node.getStartPosition(), node.getLength());
-    	push(node, "");
+    private int startPosition(List<ASTNode> list) {
+        if (list.isEmpty())
+            return -1;
+        return list.get(0).getStartPosition();
     }
 
-    private void pushValuedNode(ASTNode node, String value) {
-    	//@Inria
-    	// push(fASTHelper.convertNode(node), value, node.getStartPosition(), node.getLength());
-    	push(node, value);
+    private int endPosition(List<ASTNode> list) {
+        if (list.isEmpty())
+            return 0;
+        ASTNode n = list.get(list.size() - 1);
+        return n.getStartPosition() + n.getLength();
     }
-    
-    
-    private Tree root;
-    
-    public Tree getRoot(){
-    	return root;
-    };
-    
-    private void push(ASTNode node, String label) {
-    	
-    	int type = node.getNodeType();
-    	Tree t = new Tree(type, label, node.getClass().getSimpleName());
-		
-		t.setPos(node.getStartPosition());
-		t.setLength(node.getLength());
+    // /***************BODY VISITOR*************************
+    private static final String COLON = ":";
 
-		if (root == null) root = t;
-		else {
-			//@Inria
-			if(fNodeStack.isEmpty()){
-				System.err.println("Stack is empty");
-			}
-			else{
-			Tree parent = fNodeStack.peek();
-			t.setParentAndUpdateChildren(parent);
-			}
-		}
-        fNodeStack.push(t);
-    }
-  
- private void push(int nType, String type, String label, int startPosition, int length) {
-    	
-    	
-    	Tree t = new Tree(nType, label,type);
-		
-		t.setPos(startPosition);
-		t.setLength(length);
-		//@Inria
-		if (root == null) root = t;
-		else {
-			if(fNodeStack.isEmpty()){
-				System.err.println("Stack is empty");
-			}
-			else{
-			Tree parent = fNodeStack.peek();
-			t.setParentAndUpdateChildren(parent);
-			}
-		}
-	    fNodeStack.push(t);
-    }
-    
-    
-    private void pop() {
-        fNodeStack.pop();
-    }
-
-	private ASTNode fLastVisitedNode;
-	private Tree fLastAddedNode;
-
-    
-	private void pop(ASTNode node) {
-		fLastVisitedNode = node;
-		fLastAddedNode = fNodeStack.pop();
-	}
-    
-    private Tree getCurrentParent() {
-        return fNodeStack.peek();
-    }
-
-    private int[] extractPosition(List<ASTNode> list) {
-        int offset = -1;
-        int length = -1;
-        if (!list.isEmpty()) {
-            ASTNode first = list.get(0);
-            ASTNode last = list.get(list.size() - 1);
-            offset = first.getStartPosition();
-            length = last.getStartPosition() + last.getLength() - offset;
+    @Override
+    public boolean visit(AssertStatement node) {
+        String value = node.getExpression().toString();
+        if (node.getMessage() != null) {
+            value += COLON + node.getMessage().toString();
         }
-        return new int[]{offset, length};
+        pushNode(node, value);
+        return false;
     }
-    
-  ///***************BODY VISITOR*************************
-	private static final String COLON = ":";
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(AssertStatement node) {
-		String value = node.getExpression().toString();
-		if (node.getMessage() != null) {
-			value += COLON + node.getMessage().toString();
-		}
-		pushValuedNode(node, value);
-		return false;
-	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(AssertStatement node) {
-		pop(node);
-	}
+    @Override
+    public void endVisit(AssertStatement node) {
+        popNode();
+    }
 
+    @Override
+    public boolean visit(BreakStatement node) {
+        pushNode(node, node.getLabel() != null ? node.getLabel().toString() : "");
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(BreakStatement node) {
-		pushValuedNode(node, node.getLabel() != null ? node.getLabel().toString() : "");
-		return false;
-	}
+    @Override
+    public void endVisit(BreakStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(BreakStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(CatchClause node) {
+        pushNode(node, ((SimpleType) node.getException().getType()).getName().getFullyQualifiedName());
+        // since exception type is used as value, visit children by hand
+        node.getBody().accept(this);
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(CatchClause node) {
-		pushValuedNode(node, ((SimpleType) node.getException().getType()).getName().getFullyQualifiedName());
-		// since exception type is used as value, visit children by hand
-		node.getBody().accept(this);
-		return false;
-	}
+    @Override
+    public void endVisit(CatchClause node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(CatchClause node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(ConstructorInvocation node) {
+        pushNode(node, node.toString());
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(ConstructorInvocation node) {
-		pushValuedNode(node, node.toString());
-		return false;
-	}
+    @Override
+    public void endVisit(ConstructorInvocation node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(ConstructorInvocation node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(ContinueStatement node) {
+        pushNode(node, node.getLabel() != null ? node.getLabel().toString() : "");
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(ContinueStatement node) {
-		pushValuedNode(node, node.getLabel() != null ? node.getLabel().toString() : "");
-		return false;
-	}
+    @Override
+    public void endVisit(ContinueStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(ContinueStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(DoStatement node) {
+        pushNode(node, node.getExpression().toString());
+        return true;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(DoStatement node) {
-		pushValuedNode(node, node.getExpression().toString());
-		return true;
-	}
+    @Override
+    public void endVisit(DoStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(DoStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(EmptyStatement node) {
+        pushNode(node, "");
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(EmptyStatement node) {
-		pushEmptyNode(node);
-		return false;
-	}
+    @Override
+    public void endVisit(EmptyStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(EmptyStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(EnhancedForStatement node) {
+        pushNode(node, node.getParameter().toString() + COLON + node.getExpression().toString());
+        return true;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(EnhancedForStatement node) {
-		pushValuedNode(node, node.getParameter().toString() + COLON + node.getExpression().toString());
-		return true;
-	}
+    @Override
+    public void endVisit(EnhancedForStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(EnhancedForStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(ExpressionStatement node) {
+        pushNode(node.getExpression(), node.toString());
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(ExpressionStatement node) {
-		pushValuedNode(node.getExpression(), node.toString());
-		return false;
-	}
+    @Override
+    public void endVisit(ExpressionStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(ExpressionStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(ForStatement node) {
+        String value = "";
+        if (node.getExpression() != null) {
+            value = node.getExpression().toString();
+        }
+        pushNode(node, value);
+        return true;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(ForStatement node) {
-		String value = "";
-		if (node.getExpression() != null) {
-			value = node.getExpression().toString();
-		}
-		pushValuedNode(node, value);
-		return true;
-	}
+    @Override
+    public void endVisit(ForStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(ForStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(IfStatement node) {
+        String expression = node.getExpression().toString();
+        pushNode(node, expression/* , node.getStartPosition(), node.getLength() */);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(IfStatement node) {
-		String expression = node.getExpression().toString();
-		push(node, expression/*, node.getStartPosition(), node.getLength()*/);
-		if (node.getThenStatement() != null) {
-			 push(EntityType.THEN_STATEMENT.ordinal(),EntityType.THEN_STATEMENT.name(), expression,
-			 node.getThenStatement().getStartPosition(), node
-			 .getThenStatement().getLength());
-			node.getThenStatement().accept(this);
-			 pop(node.getThenStatement());
-		}
-		if (node.getElseStatement() != null) {
-			push(EntityType.ELSE_STATEMENT.ordinal(),EntityType.ELSE_STATEMENT.name(), expression, node.getElseStatement().getStartPosition(), node
-					.getElseStatement().getLength());
-			node.getElseStatement().accept(this);
-			pop(node.getElseStatement());
-		}
-		return false;
-	}
+        Statement stmt = node.getThenStatement();
+        if (stmt != null) {
+            pushNode(stmt, expression);
+            stmt.accept(this);
+            popNode();
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(IfStatement node) {
-		pop(node);
-	}
+        stmt = node.getElseStatement();
+        if (stmt != null) {
+            pushNode(stmt, expression);
+            node.getElseStatement().accept(this);
+            popNode();
+        }
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(LabeledStatement node) {
-		pushValuedNode(node, node.getLabel().getFullyQualifiedName());
-		node.getBody().accept(this);
-		return false;
-	}
+    @Override
+    public void endVisit(IfStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(LabeledStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(LabeledStatement node) {
+        pushNode(node, node.getLabel().getFullyQualifiedName());
+        node.getBody().accept(this);
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(ReturnStatement node) {
-		pushValuedNode(node, node.getExpression() != null ? node.getExpression().toString() : "");
-		return false;
-	}
+    @Override
+    public void endVisit(LabeledStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(ReturnStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(ReturnStatement node) {
+        pushNode(node, node.getExpression() != null ? node.getExpression().toString() : "");
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(SuperConstructorInvocation node) {
-		pushValuedNode(node, node.toString());
-		return false;
-	}
+    @Override
+    public void endVisit(ReturnStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(SuperConstructorInvocation node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(SuperConstructorInvocation node) {
+        pushNode(node, node.toString());
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(SwitchCase node) {
-		pushValuedNode(node, node.getExpression() != null ? node.getExpression().toString() : "default");
-		return false;
-	}
+    @Override
+    public void endVisit(SuperConstructorInvocation node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(SwitchCase node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(SwitchCase node) {
+        pushNode(node, node.getExpression() != null ? node.getExpression().toString() : "default");
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean visit(SwitchStatement node) {
-		pushValuedNode(node, node.getExpression().toString());
-		visitList(node.statements());
-		return false;
-	}
+    @Override
+    public void endVisit(SwitchCase node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(SwitchStatement node) {
-		pop(node);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean visit(SwitchStatement node) {
+        pushNode(node, node.getExpression().toString());
+        visitList(node.statements());
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(SynchronizedStatement node) {
-		pushValuedNode(node, node.getExpression().toString());
-		return true;
-	}
+    @Override
+    public void endVisit(SwitchStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(SynchronizedStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(SynchronizedStatement node) {
+        pushNode(node, node.getExpression().toString());
+        return true;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(ThrowStatement node) {
-		pushValuedNode(node, node.getExpression().toString());
-		return false;
-	}
+    @Override
+    public void endVisit(SynchronizedStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(ThrowStatement node) {
-		pop(node);
-	}
+    @Override
+    public boolean visit(ThrowStatement node) {
+        pushNode(node, node.getExpression().toString());
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean visit(TryStatement node) {
-		pushEmptyNode(node);
-		 push(EntityType.BODY.ordinal(), EntityType.BODY.name(), "", node.getBody().getStartPosition(),
-		 node.getBody().getLength());
-		node.getBody().accept(this);
-		 pop(node.getBody());
-		visitList(EntityType.CATCH_CLAUSES, node.catchClauses());
-		if (node.getFinally() != null) {
-			//@Inria
-			push(EntityType.FINALLY.ordinal(), EntityType.FINALLY.name() ,"", node.getFinally().getStartPosition(), node.getFinally().getLength());
-			node.getFinally().accept(this);
-			pop(node.getFinally());
-		}
-		return false;
-	}
+    @Override
+    public void endVisit(ThrowStatement node) {
+        popNode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(TryStatement node) {
-		pop(node);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean visit(TryStatement node) {
+        pushNode(node, "");
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(VariableDeclarationStatement node) {
-		pushValuedNode(node, node.toString());
-		return false;
-	}
+        Statement stmt = node.getBody();
+        pushNode(stmt, "");
+        stmt.accept(this);
+        popNode();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(VariableDeclarationStatement node) {
-		pop(node);
-	}
+        visitListAsNode(EntityType.CATCH_CLAUSES, node.catchClauses());
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean visit(WhileStatement node) {
-		push(node, node.getExpression().toString()/*, node.getStartPosition(), node.getLength()*/);
-		return true;
-	}
+        stmt = node.getFinally();
+        if (stmt != null) {
+            // @Inria
+            pushNode(stmt, "");
+            stmt.accept(this);
+            popNode();
+        }
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void endVisit(WhileStatement node) {
-		pop(node);
-	}
-    
-    
+    @Override
+    public void endVisit(TryStatement node) {
+        popNode();
+    }
+
+    @Override
+    public boolean visit(VariableDeclarationStatement node) {
+        pushNode(node, node.toString());
+        return false;
+    }
+
+    @Override
+    public void endVisit(VariableDeclarationStatement node) {
+        popNode();
+    }
+
+    @Override
+    public boolean visit(WhileStatement node) {
+        pushNode(node, node.getExpression().toString());
+        return true;
+    }
+
+    @Override
+    public void endVisit(WhileStatement node) {
+        popNode();
+    }
+
 }

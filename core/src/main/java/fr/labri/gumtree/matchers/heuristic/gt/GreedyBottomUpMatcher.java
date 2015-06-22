@@ -1,18 +1,17 @@
 package fr.labri.gumtree.matchers.heuristic.gt;
 
-import static fr.labri.gumtree.tree.TreeUtils.postOrder;
-import static fr.labri.gumtree.tree.TreeUtils.removeMatched;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
-import fr.labri.gumtree.matchers.optimal.rted.RtedMatcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.matchers.optimal.zs.ZsMatcher;
+import fr.labri.gumtree.tree.ITree;
+import fr.labri.gumtree.tree.TreeMap;
 import fr.labri.gumtree.tree.TreeUtils;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source and destination trees
@@ -22,75 +21,102 @@ import fr.labri.gumtree.tree.TreeUtils;
  */
 public class GreedyBottomUpMatcher extends Matcher {
 
-	private static final double SIM_THRESHOLD = 0.50D;
-	
-	private static final int SIZE_THESHOLD = 200;
+    private static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.3"));
 
-	private Map<Integer, Tree> srcIds = new HashMap<Integer, Tree>();
-	
-	private Map<Integer, Tree> dstIds = new HashMap<Integer, Tree>();
-	
-	public GreedyBottomUpMatcher(Tree src, Tree dst) {
-		super(src, dst);
-	}
-	
-	public void match() {
-		List<Tree> srcs = postOrder(src);
-		List<Tree> dsts = postOrder(dst);
-		for (Tree t : srcs) srcIds.put(t.getId(), t);
-		for (Tree t : dsts) dstIds.put(t.getId(), t);
-		match(TreeUtils.removeMapped(srcs), TreeUtils.removeMapped(dsts));
-		clean();
-	}
+    private static final int SIZE_THRESHOLD = Integer.parseInt(System.getProperty("gumtree.match.bu.size", "1000"));
 
-	private void match(List<Tree> poSrc, List<Tree> poDst) {
-		for (Tree src: poSrc)  {
-			for (Tree dst: poDst) {
-				if (src.isMatchable(dst) && !(src.isLeaf() || dst.isLeaf())) {
-					double sim = jaccardSimilarity(src, dst);
-					if (sim >= SIM_THRESHOLD || (src.isRoot() && dst.isRoot()) ) {
-						if (!(src.areDescendantsMatched() || dst.areDescendantsMatched())) lastChanceMatch(src, dst);
-						addMapping(src, dst);
-						break;
-					}
-				}
-			}
-		}
-	}
+    private TreeMap srcIds;
 
-	//FIXME checks if it is better or not to remove the already found mappings.
-	private void lastChanceMatch(Tree src, Tree dst) {
-		Tree cSrc = removeMatched(src.deepCopy());
-		Tree cDst = removeMatched(dst.deepCopy());
-		if (cSrc.getSize() < SIZE_THESHOLD && cDst.getSize() < SIZE_THESHOLD) {
-			Matcher m = new RtedMatcher(cSrc, cDst);
-			for (Mapping candidate: m.getMappings()) {
-				Tree left = srcIds.get(candidate.getFirst().getId());
-				Tree right = dstIds.get(candidate.getSecond().getId());
-				if (left.getId() == src.getId() || right.getId() == dst.getId()) {
-					continue;
-				} else if (left.isMatched() && right.isMatched()) {
-					continue;
-				} else if (!left.isMatchable(right)) {
-					continue;
-				} else if (left.getParent().getType() != right.getParent().getType()) {
-					continue;
-				} else addMapping(left, right);
-			}
-			
-			for(Tree t : cSrc.getTrees()) srcIds.get(t.getId()).setMatched(true);
-			for(Tree t : cDst.getTrees()) dstIds.get(t.getId()).setMatched(true);
-		}
+    private TreeMap dstIds;
 
-	}
-	
-	public static class GreedyBottumUpMatcherFactory implements MatcherFactory {
+    public GreedyBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
+        super(src, dst, store);
+    }
 
-		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
-			return new GreedyBottomUpMatcher(src, dst);
-		}
-		
-	}
+    public void match() {
+        srcIds = new TreeMap(src);
+        dstIds = new TreeMap(dst);
 
+        for (ITree t: src.postOrder())  {
+            if (t.isRoot()) {
+                addMapping(t, this.dst);
+                lastChanceMatch(t, this.dst);
+                break;
+            } else if (!(t.isMatched() || t.isLeaf())) {
+                List<ITree> candidates = getDstCandidates(t);
+                ITree best = null;
+                double max = -1D;
+
+                for (ITree cand: candidates) {
+                    double sim = jaccardSimilarity(t, cand);
+                    if (sim > max && sim >= SIM_THRESHOLD) {
+                        max = sim;
+                        best = cand;
+                    }
+                }
+
+                if (best != null) {
+                    lastChanceMatch(t, best);
+                    addMapping(t, best);
+                }
+            }
+        }
+        clean();
+    }
+
+    private List<ITree> getDstCandidates(ITree src) {
+        List<ITree> seeds = new ArrayList<>();
+        for (ITree c: src.getDescendants()) {
+            ITree m = mappings.getDst(c);
+            if (m != null) seeds.add(m);
+        }
+        List<ITree> candidates = new ArrayList<>();
+        Set<ITree> visited = new HashSet<>();
+        for (ITree seed: seeds) {
+            while (seed.getParent() != null) {
+                ITree parent = seed.getParent();
+                if (visited.contains(parent))
+                    break;
+                visited.add(parent);
+                if (parent.getType() == src.getType() && !parent.isMatched() && !parent.isRoot())
+                    candidates.add(parent);
+                seed = parent;
+            }
+        }
+
+        return candidates;
+    }
+
+    //FIXME checks if it is better or not to remove the already found mappings.
+    private void lastChanceMatch(ITree src, ITree dst) {
+        ITree cSrc = src.deepCopy();
+        ITree cDst = dst.deepCopy();
+        TreeUtils.removeMatched(cSrc);
+        TreeUtils.removeMatched(cDst);
+
+        if (cSrc.getSize() < SIZE_THRESHOLD || cDst.getSize() < SIZE_THRESHOLD) {
+            Matcher m = new ZsMatcher(cSrc, cDst, new MappingStore());
+            m.match();
+            for (Mapping candidate: m.getMappings()) {
+                ITree left = srcIds.getTree(candidate.getFirst().getId());
+                ITree right = dstIds.getTree(candidate.getSecond().getId());
+
+                if (left.getId() == src.getId() || right.getId() == dst.getId()) {
+                    //System.err.println("Trying to map already mapped source node.");
+                    continue;
+                } else if (!left.isMatchable(right)) {
+                    //System.err.println("Trying to map not compatible nodes.");
+                    continue;
+                } else if (left.getParent().getType() != right.getParent().getType()) {
+                    //System.err.println("Trying to map nodes with incompatible parents");
+                    continue;
+                } else addMapping(left, right);
+            }
+        }
+
+        for (ITree t : src.getTrees())
+            t.setMatched(true);
+        for (ITree t : dst.getTrees())
+            t.setMatched(true);
+    }
 }

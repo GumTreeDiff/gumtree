@@ -18,64 +18,43 @@
 
 package fr.labri.gumtree.gen.jdt;
 
-import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.*;
-import org.eclipse.jdt.internal.compiler.ast.BinaryExpression;
-
-import fr.labri.gumtree.tree.Tree;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
-	
-	private Stack<Tree> trees;
 
-	public JdtVisitor() {
-		super();
-		this.root = null;
-		this.trees = new Stack<Tree>();
-	}
+    public JdtVisitor() {
+        super();
+    }
 
-	public Tree getRoot() {
-		return this.root;
-	}
+    @Override
+    public void preVisit(ASTNode n) {
+        pushNode(n, getLabel(n));
+    }
 
-	@Override
-	public void preVisit(ASTNode n) {
-		int type = n.getNodeType();
+    protected String getLabel(ASTNode n) {
+        if (n instanceof Name) return ((Name) n).getFullyQualifiedName();
+        if (n instanceof Type) return n.toString();
+        if (n instanceof Modifier) return n.toString();
+        if (n instanceof StringLiteral) return ((StringLiteral) n).getEscapedValue();
+        if (n instanceof NumberLiteral) return ((NumberLiteral) n).getToken();
+        if (n instanceof CharacterLiteral) return ((CharacterLiteral) n).getEscapedValue();
+        if (n instanceof BooleanLiteral) return ((BooleanLiteral) n).toString();
+        if (n instanceof InfixExpression) return ((InfixExpression) n).getOperator().toString();
+        if (n instanceof PrefixExpression) return ((PrefixExpression) n).getOperator().toString();
+        if (n instanceof PostfixExpression) return ((PostfixExpression) n).getOperator().toString();
+        if (n instanceof Assignment) return ((Assignment) n).getOperator().toString();
 
-		String label = "";
-		if (n instanceof Name) label = ((Name) n).getFullyQualifiedName();
-		else if (n instanceof Type) label = n.toString();
-		else if (n instanceof Modifier) label = n.toString();
-		else if (n instanceof StringLiteral) label = ((StringLiteral) n).getEscapedValue();
-		else if (n instanceof NumberLiteral) label = ((NumberLiteral) n).getToken();
-		else if (n instanceof CharacterLiteral) label = ((CharacterLiteral) n).getEscapedValue();
-		else if (n instanceof BooleanLiteral) label = ((BooleanLiteral) n).toString(); 
-		else if (n instanceof InfixExpression) label = ((InfixExpression) n).getOperator().toString();
-		else if (n instanceof PrefixExpression) label = ((PrefixExpression) n).getOperator().toString();
-		else if (n instanceof PostfixExpression) label = ((PostfixExpression) n).getOperator().toString();
-		else if (n instanceof Assignment) label = ((Assignment) n).getOperator().toString();
+        return "";
+    }
 
-		Tree t = new Tree(type, label, n.getClass().getSimpleName());
-		t.setPos(n.getStartPosition());
-		t.setLength(n.getLength());
+    @Override
+    public boolean visit(QualifiedName name) {
+        return false;
+    }
 
-		if (root == null) root = t;
-		else {
-			Tree parent = trees.peek();
-			t.setParentAndUpdateChildren(parent);
-		}
-
-		trees.push(t);
-	}
-	
-	@Override
-	public boolean visit(QualifiedName name) {
-		return false;
-	}
-
-	@Override
-	public void postVisit(ASTNode n) {
-		trees.pop();
-	}
+    @Override
+    public void postVisit(ASTNode n) {
+        popNode();
+    }
 }

@@ -1,88 +1,72 @@
 package fr.labri.gumtree.matchers.heuristic.cd;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
 import fr.labri.gumtree.matchers.Mapping;
+import fr.labri.gumtree.matchers.MappingStore;
 import fr.labri.gumtree.matchers.Matcher;
-import fr.labri.gumtree.matchers.MatcherFactory;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 import fr.labri.gumtree.tree.TreeUtils;
+import org.simmetrics.StringMetrics;
+
+import java.util.*;
 
 public class ChangeDistillerLeavesMatcher extends Matcher {
 
-	public static final double LABEL_SIM_THRESHOLD = 0.5D;
+    public static final double LABEL_SIM_THRESHOLD = 0.5D;
 
-	private static final QGramsDistance QGRAM = new QGramsDistance();
+    public ChangeDistillerLeavesMatcher(ITree src, ITree dst, MappingStore store) {
+        super(src, dst, store);
+    }
 
-	public ChangeDistillerLeavesMatcher(Tree src, Tree dst) {
-		super(src, dst);
-	}
+    @Override
+    public void match() {
+        List<ITree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
 
-	@Override
-	public void match() {
-		List<Tree> srcLeaves = retainLeaves(TreeUtils.postOrder(src));
-		List<Tree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
+        List<Mapping> leafMappings = new LinkedList<>();
 
-		List<Mapping> leafMappings = new LinkedList<Mapping>();
+        for (Iterator<ITree> srcLeaves = TreeUtils.leafIterator(
+                TreeUtils.postOrderIterator(src)); srcLeaves.hasNext();) {
+            for (ITree dstLeaf: dstLeaves) {
+                ITree srcLeaf = srcLeaves.next();
+                if (srcLeaf.isMatchable(dstLeaf)) {
+                    double sim = StringMetrics.qGramsDistance().compare(srcLeaf.getLabel(), dstLeaf.getLabel());
+                    if (sim > LABEL_SIM_THRESHOLD) leafMappings.add(new Mapping(srcLeaf, dstLeaf));
+                }
+            }
+        }
 
-		for (Tree srcLeaf: srcLeaves) {
-			for (Tree dstLeaf: dstLeaves) {
-				if (srcLeaf.isMatchable(dstLeaf)) {
-					double sim = QGRAM.getSimilarity(srcLeaf.getLabel(), dstLeaf.getLabel());
-					if (sim > LABEL_SIM_THRESHOLD) leafMappings.add(new Mapping(srcLeaf, dstLeaf));
-				}
-			}
-		}
+        Set<ITree> srcIgnored = new HashSet<>();
+        Set<ITree> dstIgnored = new HashSet<>();
+        Collections.sort(leafMappings, new LeafMappingComparator());
+        while (leafMappings.size() > 0) {
+            Mapping best = leafMappings.remove(0);
+            if (!(srcIgnored.contains(best.getFirst()) || dstIgnored.contains(best.getSecond()))) {
+                addMapping(best.getFirst(),best.getSecond());
+                srcIgnored.add(best.getFirst());
+                dstIgnored.add(best.getSecond());
+            }
+        }
+    }
 
-		Set<Tree> srcIgnored = new HashSet<>();
-		Set<Tree> dstIgnored = new HashSet<>();
-		Collections.sort(leafMappings, new LeafMappingComparator());
-		while (leafMappings.size() > 0) {
-			Mapping best = leafMappings.remove(0);
-			if (!(srcIgnored.contains(best.getFirst()) || dstIgnored.contains(best.getSecond()))) {
-				addMapping(best.getFirst(),best.getSecond());
-				srcIgnored.add(best.getFirst());
-				dstIgnored.add(best.getSecond());
-			}
-		}
-	}
+    public List<ITree> retainLeaves(List<ITree> trees) {
+        Iterator<ITree> tIt = trees.iterator();
+        while (tIt.hasNext()) {
+            ITree t = tIt.next();
+            if (!t.isLeaf()) tIt.remove();
+        }
+        return trees;
+    }
 
-	public List<Tree> retainLeaves(List<Tree> trees) {
-		Iterator<Tree> tIt = trees.iterator();
-		while (tIt.hasNext()) {
-			Tree t = tIt.next();
-			if (!t.isLeaf()) tIt.remove();
-		}
-		return trees;
-	}
+    private class LeafMappingComparator implements Comparator<Mapping> {
 
-	private class LeafMappingComparator implements Comparator<Mapping> {
+        @Override
+        public int compare(Mapping m1, Mapping m2) {
+            return Double.compare(sim(m1), sim(m2));
+        }
 
-		@Override
-		public int compare(Mapping m1, Mapping m2) {
-			return Double.compare(sim(m1), sim(m2));
-		}
+        public double sim(Mapping m) {
 
-		public double sim(Mapping m) {
-			return QGRAM.getSimilarity(m.getFirst().getLabel(), m.getSecond().getLabel());
-		}
+            return StringMetrics.qGramsDistance().compare(m.getFirst().getLabel(), m.getSecond().getLabel());
+        }
 
-	}
-	
-	public static class ChangeDistillerLeavesMatcherFactory implements MatcherFactory {
-
-		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
-			return new ChangeDistillerLeavesMatcher(src, dst);
-		}
-		
-	}
-
+    }
 }

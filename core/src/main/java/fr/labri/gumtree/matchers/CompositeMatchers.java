@@ -1,45 +1,56 @@
 package fr.labri.gumtree.matchers;
 
 import fr.labri.gumtree.matchers.heuristic.XyBottomUpMatcher;
-import fr.labri.gumtree.matchers.heuristic.cd.ChangeDistillerBottumUpMatcher;
+import fr.labri.gumtree.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import fr.labri.gumtree.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
+import fr.labri.gumtree.matchers.heuristic.gt.CliqueSubtreeMatcher;
 import fr.labri.gumtree.matchers.heuristic.gt.CompleteBottomUpMatcher;
+import fr.labri.gumtree.matchers.heuristic.gt.GreedyBottomUpMatcher;
 import fr.labri.gumtree.matchers.heuristic.gt.GreedySubtreeMatcher;
-import fr.labri.gumtree.tree.Tree;
+import fr.labri.gumtree.tree.ITree;
 
 public class CompositeMatchers {
+    @Register(id = "gumtree", defaultMatcher = true)
+    public static class ClassicGumtree extends CompositeMatcher {
 
-	public static class ChangeDistillerMatcherFactory implements MatcherFactory {
+        public ClassicGumtree(ITree src, ITree dst, MappingStore store) {
+            super(src, dst, store, new Matcher[]{
+                    new GreedySubtreeMatcher(src, dst, store),
+                    new GreedyBottomUpMatcher(src, dst, store)
+            });
+        }
+    }
 
-		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
-			return new CompositeMatcher(src, dst, new MatcherFactory[] {
-					MatcherFactories.getFactory(ChangeDistillerLeavesMatcher.ChangeDistillerLeavesMatcherFactory.class),
-					MatcherFactories.getFactory(ChangeDistillerBottumUpMatcher.ChangeDistillerBottomUpMatcherFactory.class)});
-		}
+    @Register(id = "gumtree-complete")
+    public static class CompleteGumtreeMatche extends CompositeMatcher {
 
-	}
-	
-	public static class GumTreeMatcherFactory implements MatcherFactory {
+        public CompleteGumtreeMatche(ITree src, ITree dst, MappingStore store) {
+            super(src, dst, store, new Matcher[]{
+                    new CliqueSubtreeMatcher(src, dst, store),
+                    new CompleteBottomUpMatcher(src, dst, store)
+            });
+        }
+    }
 
-		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
-			return new CompositeMatcher(src, dst, new MatcherFactory[] {
-					MatcherFactories.getFactory(GreedySubtreeMatcher.GreedySubtreeMatcherFactory.class),
-					MatcherFactories.getFactory(CompleteBottomUpMatcher.CompleteBottumUpMatcherFactory.class)});
-		}
+    @Register(id = "change-distiller", defaultMatcher = true)
+    public class ChangeDistiller extends CompositeMatcher {
 
-	}
-	
-	public static class XyMatcherFactory implements MatcherFactory {
+        public ChangeDistiller(ITree src, ITree dst, MappingStore store) {
+            super(src, dst, store, new Matcher[]{
+                    new ChangeDistillerLeavesMatcher(src, dst, store),
+                    new ChangeDistillerBottomUpMatcher(src, dst, store)
+            });
+        }
+    }
 
-		@Override
-		public Matcher newMatcher(Tree src, Tree dst) {
-			return new CompositeMatcher(src, dst, new MatcherFactory[] {
-					MatcherFactories.getFactory(GreedySubtreeMatcher.GreedySubtreeMatcherFactory.class),
-					MatcherFactories.getFactory(XyBottomUpMatcher.XyBottomUpMatcherFactory.class)});
-		}
+    @Register(id = "xy", defaultMatcher = true)
+    public static class XyMatcher extends CompositeMatcher {
 
-	}
-	
+        public XyMatcher(ITree src, ITree dst, MappingStore store) {
+            super(src, dst, store, new Matcher[]{
+                    new GreedySubtreeMatcher(src, dst, store),
+                    new XyBottomUpMatcher(src, dst, store)
+            });
+        }
+    }
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+<suppressions>
+    <suppress files=".*generated-sources.*" checks=".*"/>
+    <suppress files=".*IndentingXMLStreamWriter.java" checks=".*"/>
+    <suppress files=".*InfoTree.java" checks=".*"/>
+    <suppress files=".*LabelDictionary.java" checks=".*"/>
+    <suppress files=".*RtedAlgorithm.java" checks=".*"/>
+    <suppress files=".*StreamWriterDelegate.java" checks=".*"/>
+</suppressions>

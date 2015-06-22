@@ -1,0 +1,14 @@
+[
+	{
+		"an_object": {
+			"a": 1,
+			"b": 1,
+			"c": "foo",
+			"d": true
+		},
+		"an_array": [true, true, true]
+	},
+	[[{}]],
+	[1, 2, 3],
+	true
+]
