@@ -34,7 +34,7 @@ public class Run {
         }
     }
 
-    static void initGenerators() {
+    public static void initGenerators() {
         Reflections reflections = new Reflections("fr.labri.gumtree.gen");
 
         reflections.getSubTypesOf(TreeGenerator.class).forEach(
@@ -44,7 +44,7 @@ public class Run {
             });
     }
 
-    static void initClients() {
+    public static void initClients() {
         Reflections reflections = new Reflections("fr.labri.gumtree.client");
 
         reflections.getSubTypesOf(Client.class).forEach(
