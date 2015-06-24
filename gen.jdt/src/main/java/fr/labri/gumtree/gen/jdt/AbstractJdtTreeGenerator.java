@@ -20,7 +20,6 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         char[] buf = new char[10];
         int numRead = 0;
         while ((numRead = br.read(buf)) != -1) {
-            System.out.println(numRead);
             String readData = String.valueOf(buf, 0, numRead);
             fileData.append(readData);
             buf = new char[1024];
