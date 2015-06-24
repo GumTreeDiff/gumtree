@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>fr.labri.gumtree</groupId>
+		<groupId>com.github.gumtreediff</groupId>
 		<artifactId>gumtree</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
@@ -15,51 +15,11 @@
 			<version>0.9.9-RC1</version>
 		</dependency>
 		<dependency>
-			<groupId>fr.labri.gumtree</groupId>
+			<groupId>com.github.gumtreediff</groupId>
 			<artifactId>core</artifactId>
 			<version>2.0.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>src/main/java</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>fr.labri.gumtree.client.diff.DiffClient</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorId>jar-with-dependencies</descriptorId>
-					</descriptorRefs>
-					<appendAssemblyId>false</appendAssemblyId>
-					<finalName>gumtree</finalName>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 </project>
 

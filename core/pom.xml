@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>gumtree</artifactId>
-		<groupId>fr.labri.gumtree</groupId>
+		<groupId>com.github.gumtreediff</groupId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>core</artifactId>

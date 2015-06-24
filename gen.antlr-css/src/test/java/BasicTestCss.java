@@ -1,5 +1,5 @@
-import fr.labri.gumtree.gen.antlrcss.CssGrammarTreeGenerator;
-import fr.labri.gumtree.tree.TreeContext;
+import com.github.gumtreediff.gen.antlrcss.CssGrammarTreeGenerator;
+import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
 import java.io.IOException;
