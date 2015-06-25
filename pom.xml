@@ -99,22 +99,10 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.3</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <!-- CODE COVERAGE -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.4.201502262128 </version>
+                <version>0.7.5.201505241946</version>
                 <executions>
                     <!-- Prepare execution with Surefire -->
                     <execution>
@@ -160,7 +148,6 @@
                         <goals>
                             <goal>test</goal>
                         </goals>
-
                     </execution>
                 </executions>
             </plugin>
