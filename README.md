@@ -1,4 +1,4 @@
-# GumTree ![Build status](https://travis-ci.org/GumTreeDiff/gumtree.svg?branch=master)
+# GumTree ![Build Status](https://travis-ci.org/GumTreeDiff/gumtree.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/GumTreeDiff/gumtree/badge.svg?branch=master)](https://coveralls.io/r/GumTreeDiff/gumtree?branch=master)
 
 GumTree is a complete framework to deal with source code as trees and compute differences between them. It includes possibilities such as:
 * converting a source file into a language-agnostic tree format
