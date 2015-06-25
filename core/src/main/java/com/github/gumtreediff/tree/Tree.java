@@ -24,6 +24,8 @@ public class Tree extends AbstractTree implements ITree {
     // Needed for RTED :(
     private Object tmpData;
 
+    private AssociationMap metadata;
+
     Tree(int type, String label) {
         this.type = type;
         this.label = (label == null) ? NO_LABEL : label.intern();
@@ -55,6 +57,7 @@ public class Tree extends AbstractTree implements ITree {
         this.depth = other.getDepth();
         this.tmpData = other.getTmpData();
         this.children = new ArrayList<>();
+        this.metadata = other.getMetadatas();
     }
 
     @Override
@@ -66,7 +69,7 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public Tree deepCopy() {
         Tree copy = new Tree(this);
-        for (ITree child: getChildren())
+        for (ITree child : getChildren())
             copy.addChild(child.deepCopy());
         return copy;
     }
@@ -124,7 +127,7 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public void setChildren(List<ITree> children) {
         this.children = children;
-        for (ITree c: children)
+        for (ITree c : children)
             c.setParent(this);
     }
 
@@ -173,5 +176,27 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public void setType(int type) {
         this.type = type;
+    }
+
+    // TODO should we nest association Map to TreeContext ? My gut feeling is yes
+    private AssociationMap getMetadatas() {
+        if (metadata == null)
+            metadata = new AssociationMap();
+        return metadata;
+    }
+
+    @Override
+    public <M> M getMetadata(String key, M defaultValue) {
+        if (metadata == null)
+            return defaultValue;
+        return getMetadatas().fetch(key, defaultValue);
+    }
+
+    @Override
+    public <M> boolean setMetadata(String key, M value, boolean replace) {
+        if (replace)
+            return getMetadatas().replace(key, value);
+        getMetadatas().put(key, value);
+        return false;
     }
 }

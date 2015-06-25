@@ -24,6 +24,7 @@ public interface ITree {
 
     /**
      * Make a deep copy of the tree.
+     * Deep copy of node however shares Metadata
      * @return a deep copy of the tree.
      */
     public abstract ITree deepCopy();
@@ -169,6 +170,17 @@ public interface ITree {
     public String toTreeString();
 
     public abstract String toPrettyString(TreeContext ctx);
+
+    <M> M getMetadata(String key, M defaultValue);
+    <M> boolean setMetadata(String key, M value, boolean replace);
+
+    default Object getMetadata(String key) {
+        return getMetadata(key, null);
+    }
+
+    default <M> boolean setMetadata(String key, M value) {
+        return setMetadata(key, value, true);
+    }
 
     interface TreeInfo {
     }

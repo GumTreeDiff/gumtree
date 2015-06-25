@@ -1,11 +1,11 @@
 package com.github.gumtreediff.tree;
 
+import fr.labri.gumtree.tree.hash.HashUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import com.github.gumtreediff.tree.hash.HashUtils;
 
 public abstract class AbstractTree implements ITree {
 
@@ -397,6 +397,16 @@ public abstract class AbstractTree implements ITree {
         @Override
         public String toPrettyString(TreeContext ctx) {
             return "FakeTree";
+        }
+
+        @Override
+        public <M> M getMetadata(String key, M defaultValue) {
+            return defaultValue; // FIXME is it a sane behavior
+        }
+
+        @Override
+        public <M> boolean setMetadata(String key, M defaultValue, boolean replace) {
+            return false;
         }
     }
 }
