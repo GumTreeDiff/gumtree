@@ -1,6 +1,8 @@
 package com.github.gumtreediff.tree;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 public interface ITree {
 
@@ -171,17 +173,7 @@ public interface ITree {
 
     public abstract String toPrettyString(TreeContext ctx);
 
-    <M> M getMetadata(String key, M defaultValue);
-    <M> boolean setMetadata(String key, M value, boolean replace);
-
-    default Object getMetadata(String key) {
-        return getMetadata(key, null);
-    }
-
-    default <M> boolean setMetadata(String key, M value) {
-        return setMetadata(key, value, true);
-    }
-
-    interface TreeInfo {
-    }
+    Object getMetadata(String key);
+    Object setMetadata(String key, Object value);
+    Iterator<Entry<String, Object>> getMetadata();
 }

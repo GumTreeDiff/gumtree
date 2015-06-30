@@ -1,11 +1,13 @@
 package com.github.gumtreediff.tree;
 
-import fr.labri.gumtree.tree.hash.HashUtils;
+import com.github.gumtreediff.tree.hash.HashUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 public abstract class AbstractTree implements ITree {
 
@@ -399,14 +401,40 @@ public abstract class AbstractTree implements ITree {
             return "FakeTree";
         }
 
+        /**
+         * fake nodes have no metadata
+         */
         @Override
-        public <M> M getMetadata(String key, M defaultValue) {
-            return defaultValue; // FIXME is it a sane behavior
+        public Object getMetadata(String key) {
+            return null;
+        }
+
+        /**
+         * fake node store no metadata
+         */
+        @Override
+        public Object setMetadata(String key, Object value) {
+            return null;
+        }
+
+        /**
+         * Since they have no metadata they do not iterate on nothing
+         */
+        @Override
+        public Iterator<Map.Entry<String, Object>> getMetadata() {
+            return new EmptyEntryIterator();
+        }
+    }
+
+    protected static class EmptyEntryIterator implements Iterator<Map.Entry<String, Object>> {
+        @Override
+        public boolean hasNext() {
+            return false;
         }
 
         @Override
-        public <M> boolean setMetadata(String key, M defaultValue, boolean replace) {
-            return false;
+        public Map.Entry<String, Object> next() {
+            throw new NoSuchElementException();
         }
     }
 }

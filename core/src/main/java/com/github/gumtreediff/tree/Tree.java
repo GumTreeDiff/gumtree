@@ -1,7 +1,9 @@
 package com.github.gumtreediff.tree;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class Tree extends AbstractTree implements ITree {
 
@@ -57,7 +59,7 @@ public class Tree extends AbstractTree implements ITree {
         this.depth = other.getDepth();
         this.tmpData = other.getTmpData();
         this.children = new ArrayList<>();
-        this.metadata = other.getMetadatas();
+        this.metadata = other.metadata;
     }
 
     @Override
@@ -178,25 +180,30 @@ public class Tree extends AbstractTree implements ITree {
         this.type = type;
     }
 
-    // TODO should we nest association Map to TreeContext ? My gut feeling is yes
-    private AssociationMap getMetadatas() {
+    @Override
+    public Object getMetadata(String key) {
+        if (metadata == null)
+            return null;
+        return metadata.get(key);
+    }
+
+    @Override
+    public Object setMetadata(String key, Object value) {
+        if (value == null) {
+            if (metadata == null)
+                return null;
+            else
+                return metadata.remove(key);
+        }
         if (metadata == null)
             metadata = new AssociationMap();
-        return metadata;
+        return metadata.set(key, value);
     }
 
     @Override
-    public <M> M getMetadata(String key, M defaultValue) {
+    public Iterator<Entry<String, Object>> getMetadata() {
         if (metadata == null)
-            return defaultValue;
-        return getMetadatas().fetch(key, defaultValue);
-    }
-
-    @Override
-    public <M> boolean setMetadata(String key, M value, boolean replace) {
-        if (replace)
-            return getMetadatas().replace(key, value);
-        getMetadatas().put(key, value);
-        return false;
+            return new EmptyEntryIterator();
+        return metadata.iterator();
     }
 }
