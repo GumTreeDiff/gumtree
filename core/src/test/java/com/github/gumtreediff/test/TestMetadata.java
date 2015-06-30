@@ -1,5 +1,6 @@
 package com.github.gumtreediff.test;
 
+import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Before;
@@ -26,6 +27,7 @@ public class TestMetadata {
     public void setUp() throws Exception {
         tc = new TreeContext();
         someNode = tc.createTree(0, "", "");
+        tc.setRoot(someNode);
     }
 
     @Test
@@ -98,4 +100,45 @@ public class TestMetadata {
         for(int i = 0; i < size; i ++)
             someNode.setMetadata(keys[i], values[i]);
     }
+
+    @Test
+    public void testExportCustom() throws Exception {
+        final String pos = "pos";
+        someNode.setMetadata(key, v1);
+        someNode.setMetadata(pos, new int[]{1,2,3,4});
+        tc.setMetadata(v2, v3);
+
+        assertEquals("Export JSON", valJSON, TreeIoUtils.toJson(tc).export(key, v2).export(pos, x -> Arrays.toString((int[]) x)).toString());
+        assertEquals("Export LISP", valLISP, TreeIoUtils.toLisp(tc).export(key, v2).export(pos, x -> Arrays.toString((int[]) x)).toString());
+        assertEquals("Export XML", valXML, TreeIoUtils.toXml(tc).export(key, v2).export(pos, x -> Arrays.toString((int[]) x)).toString());
+        assertEquals("Export Compact XML", valXMLCompact, TreeIoUtils.toCompactXml(tc).export(key, v2).export(pos, x -> Arrays.toString((int[]) x)).toString());
+    }
+
+    final String valJSON = "{\n" +
+            "\t\"other\": \"more\",\n" +
+            "\t\"root\": {\n" +
+            "\t\t\"type\": \"0\",\n" +
+            "\t\t\"key\": \"test\",\n" +
+            "\t\t\"pos\": \"[1, 2, 3, 4]\",\n" +
+            "\t\t\"children\": []\n" +
+            "\t}\n" +
+            "}";
+
+    final String valLISP = "(((:other \"more\") ) (0 \"0\" \"\" ((:key \"test\") (:pos \"[1, 2, 3, 4]\") ) ())";
+
+    final String valXML = "<?xml version=\"1.0\" ?>\n" +
+            "<root>\n" +
+            "  <context>\n" +
+            "    <other>more</other>\n" +
+            "  </context>\n" +
+            "  <tree type=\"0\">\n" +
+            "    <key>test</key>\n" +
+            "    <pos>[1, 2, 3, 4]</pos>\n" +
+            "  </tree>\n" +
+            "</root>\n";
+
+    final String valXMLCompact = "<?xml version=\"1.0\" ?>\n" +
+            "<root other=\"more\">\n" +
+            "  <0 key=\"test\" pos=\"[1, 2, 3, 4]\"></0>\n" +
+            "</root>\n";
 }

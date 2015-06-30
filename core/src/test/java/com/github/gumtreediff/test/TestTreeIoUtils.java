@@ -1,18 +1,14 @@
 package com.github.gumtreediff.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.github.gumtreediff.io.TreeIoUtils;
+import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.ListIterator;
 
-import com.github.gumtreediff.io.TreeIoUtils;
-import org.junit.Test;
-
-import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
+import static org.junit.Assert.*;
 
 public class TestTreeIoUtils {
 
