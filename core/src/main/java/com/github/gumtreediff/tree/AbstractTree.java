@@ -322,27 +322,12 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public int[] getLcPosEnd() {
-            throw unsupportedOperation();
-        }
-
-        @Override
-        public int[] getLcPosStart() {
-            throw unsupportedOperation();
-        }
-
-        @Override
         public int getLength() {
             throw unsupportedOperation();
         }
 
         @Override
         public int getPos() {
-            throw unsupportedOperation();
-        }
-
-        @Override
-        public Object getTmpData() {
             throw unsupportedOperation();
         }
 
@@ -362,16 +347,6 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public void setLcPosEnd(int[] lcPosEnd) {
-            throw unsupportedOperation();
-        }
-
-        @Override
-        public void setLcPosStart(int[] lcPosStart) {
-            throw unsupportedOperation();
-        }
-
-        @Override
         public void setLength(int length) {
             throw unsupportedOperation();
         }
@@ -383,11 +358,6 @@ public abstract class AbstractTree implements ITree {
 
         @Override
         public void setPos(int pos) {
-            throw unsupportedOperation();
-        }
-
-        @Override
-        public void setTmpData(Object tmpData) {
             throw unsupportedOperation();
         }
 

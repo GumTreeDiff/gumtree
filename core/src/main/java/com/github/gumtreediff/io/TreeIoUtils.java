@@ -75,15 +75,6 @@ public final class TreeIoUtils {
                         t.setLength(length);
                     }
 
-                    if (s.getAttributeByName(LINE_BEFORE) != null) {
-                        int l0 = numberForAttribute(s, LINE_BEFORE);
-                        int c0 = numberForAttribute(s, COL_BEFORE);
-                        int l1 = numberForAttribute(s, LINE_AFTER);
-                        int c1 = numberForAttribute(s, COL_AFTER);
-                        t.setLcPosStart(new int[] {l0, c0});
-                        t.setLcPosEnd(new int[] {l1, c1});
-                    }
-
                     if (trees.isEmpty())
                         context.setRoot(t);
                     else
@@ -433,12 +424,6 @@ public final class TreeIoUtils {
                 writer.writeAttribute("pos", Integer.toString(tree.getPos()));
                 writer.writeAttribute("length", Integer.toString(tree.getLength()));
             }
-            if (tree.getLcPosStart() != null) {
-                writer.writeAttribute("line_before", Integer.toString(tree.getLcPosStart()[0]));
-                writer.writeAttribute("col_before", Integer.toString(tree.getLcPosStart()[1]));
-                writer.writeAttribute("line_after", Integer.toString(tree.getLcPosEnd()[0]));
-                writer.writeAttribute("col_after", Integer.toString(tree.getLcPosEnd()[1]));
-            }
         }
 
         @Override
@@ -477,12 +462,6 @@ public final class TreeIoUtils {
                 if (ITree.NO_VALUE != o.getPos()) {
                     writer.writeAttribute("other_pos", Integer.toString(o.getPos()));
                     writer.writeAttribute("other_length", Integer.toString(o.getLength()));
-                }
-                if (o.getLcPosStart() != null) {
-                    writer.writeAttribute("other_line_before", Integer.toString(o.getLcPosStart()[0]));
-                    writer.writeAttribute("other_col_before", Integer.toString(o.getLcPosStart()[1]));
-                    writer.writeAttribute("other_line_after", Integer.toString(o.getLcPosEnd()[0]));
-                    writer.writeAttribute("other_col_after", Integer.toString(o.getLcPosEnd()[1]));
                 }
             }
         }
@@ -548,8 +527,7 @@ public final class TreeIoUtils {
 
             String pos = (ITree.NO_VALUE == tree.getPos() ? "" : String.format("(%d %d)",
                     tree.getPos(), tree.getLength()));
-            String lcpos = (tree.getLcPosStart() == null ? "" : String.format("%d %d %d %d",
-                    tree.getLcPosStart()[0], tree.getLcPosStart()[1], tree.getLcPosEnd()[0], tree.getLcPosEnd()[1]));
+
             String matched = tree.isMatched() ? ":matched " : "";
 
             writer.write(String.format("(%d %s %s %s(%s",
@@ -642,12 +620,6 @@ public final class TreeIoUtils {
             if (ITree.NO_VALUE != t.getPos()) {
                 writer.name("pos").value(Integer.toString(t.getPos()));
                 writer.name("length").value(Integer.toString(t.getLength()));
-            }
-            if (t.getLcPosStart() != null) {
-                writer.name("line_before").value(Integer.toString(t.getLcPosStart()[0]));
-                writer.name("col_before").value(Integer.toString(t.getLcPosStart()[1]));
-                writer.name("line_after").value(Integer.toString(t.getLcPosEnd()[0]));
-                writer.name("col_after").value(Integer.toString(t.getLcPosEnd()[1]));
             }
         }
 

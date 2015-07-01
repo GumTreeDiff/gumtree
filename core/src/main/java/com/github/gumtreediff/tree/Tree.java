@@ -18,14 +18,6 @@ public class Tree extends AbstractTree implements ITree {
     int length;
     // End position
 
-    // Begin position in terms of line and column start and end
-    private int[] lcPosStart;
-    private int[] lcPosEnd;
-    // End position
-
-    // Needed for RTED :(
-    private Object tmpData;
-
     private AssociationMap metadata;
 
     Tree(int type, String label) {
@@ -57,7 +49,6 @@ public class Tree extends AbstractTree implements ITree {
         this.depth = other.getDepth();
         this.hash = other.getHash();
         this.depth = other.getDepth();
-        this.tmpData = other.getTmpData();
         this.children = new ArrayList<>();
         this.metadata = other.metadata;
     }
@@ -92,16 +83,6 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public int[] getLcPosEnd() {
-        return lcPosEnd;
-    }
-
-    @Override
-    public int[] getLcPosStart() {
-        return lcPosStart;
-    }
-
-    @Override
     public int getLength() {
         return length;
     }
@@ -114,11 +95,6 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public int getPos() {
         return pos;
-    }
-
-    @Override
-    public Object getTmpData() {
-        return tmpData;
     }
 
     @Override
@@ -136,16 +112,6 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    @Override
-    public void setLcPosEnd(int[] lcPosEnd) {
-        this.lcPosEnd = lcPosEnd;
-    }
-
-    @Override
-    public void setLcPosStart(int[] lcPosStart) {
-        this.lcPosStart = lcPosStart;
     }
 
     @Override
@@ -168,11 +134,6 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public void setPos(int pos) {
         this.pos = pos;
-    }
-
-    @Override
-    public void setTmpData(Object tmpData) {
-        this.tmpData = tmpData;
     }
 
     @Override
