@@ -72,7 +72,7 @@ public class SaxTreeGenerator extends TreeGenerator {
 
             ITree t = tc.createTree(DOCUMENT_ID, NO_LABEL, DOCUMENT);
             t.setPos(0);
-            t.setLcPosStart(lastPosition);
+//            t.setLcPosStart(lastPosition);
             tc.setRoot(t);
             stack.push(t);
         }
@@ -87,7 +87,7 @@ public class SaxTreeGenerator extends TreeGenerator {
             ITree t = stack.pop();
             int line = locator.getLineNumber();
             int col = locator.getColumnNumber();
-            t.setLcPosEnd(new int[]{line, col});
+//            t.setLcPosEnd(new int[]{line, col});
             t.setLength(lineReader.positionFor(line, col));
             assert stack.isEmpty();
         }
@@ -114,13 +114,13 @@ public class SaxTreeGenerator extends TreeGenerator {
 
         private void setStartPosition(ITree t) {
             int[] pos = currentPosition();
-            t.setLcPosStart(pos);
+//            t.setLcPosStart(pos);
             t.setPos(lineReader.positionFor(pos[0], pos[1]));
         }
 
         private void setEndPosition(ITree t) {
             int[] pos = currentPosition();
-            t.setLcPosEnd(new int[]{locator.getLineNumber(), locator.getColumnNumber()}); //FIXME
+//            t.setLcPosEnd(new int[]{locator.getLineNumber(), locator.getColumnNumber()}); //FIXME
             t.setPos(lineReader.positionFor(locator.getLineNumber(), locator.getColumnNumber()) - t.getPos());
         }
 
