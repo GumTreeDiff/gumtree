@@ -1,18 +1,18 @@
 package com.github.gumtreediff.tree;
 
 import com.github.gumtreediff.io.TreeIoUtils;
+import com.github.gumtreediff.io.TreeIoUtils.MetadataSerializer;
+import com.github.gumtreediff.io.TreeIoUtils.TreeFormatter;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.regex.Pattern;
 
 public class TreeContext {
 
     Map<Integer, String> typeLabels = new HashMap<>();
-    Map<String, Object> metadata = new HashMap<>();
+    final Map<String, Object> metadata = new HashMap<>();
+    final MetadataSerializers serializers = new MetadataSerializers();
 
     ITree root;
 
@@ -128,6 +128,25 @@ public class TreeContext {
     }
 
     /**
+     * Get serializers for this tree context
+     * @return
+     */
+    public MetadataSerializers getSerializers() {
+        return serializers;
+    }
+
+    public TreeContext export(String name, MetadataSerializer serializer) {
+        serializers.add(name, serializer);
+        return this;
+    }
+
+    public TreeContext export(String... name) {
+        for (String n: name)
+            serializers.add(n, x -> x.toString());
+        return this;
+    }
+
+    /**
      * Get an iterator on local and global metadata.
      * To only get local metadata, simply use : `node.getMetadata()`
      * @return
@@ -176,5 +195,39 @@ public class TreeContext {
                 return n;
             }
         };
+    }
+
+    public static class MetadataSerializers {
+        Map<String, MetadataSerializer> serializers = new HashMap<>();
+
+        public static final Pattern valid_id = Pattern.compile("[a-zA-Z0-9_]*");
+
+        public void addAll(MetadataSerializers other) {
+            addAll(other.serializers);
+        }
+
+        public void addAll(Map<String, MetadataSerializer> serializers) {
+            serializers.forEach((k, s)-> add(k, s));
+        }
+
+        public void add(String name, MetadataSerializer serializer) {
+            if (!valid_id.matcher(name).matches())
+                throw new RuntimeException("Invalid key for serialization");
+            serializers.put(name, serializer);
+        }
+
+        public void remove(String key) {
+            serializers.remove(key);
+        }
+
+        public Set<String> exports() {
+            return serializers.keySet();
+        }
+
+        public void serialize(TreeFormatter formatter, String key, Object value) throws Exception {
+            MetadataSerializer s = serializers.get(key);
+            if (s != null)
+                formatter.serializeAttribute(key, s.toString(value));
+        }
     }
 }

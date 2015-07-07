@@ -107,15 +107,20 @@ public class TestMetadata {
         someNode.setMetadata(key, v1);
         someNode.setMetadata(pos, new int[]{1,2,3,4});
         tc.setMetadata(v2, v3);
+        tc.setMetadata(v3, v3);
 
-        assertEquals("Export JSON", valJSON, TreeIoUtils.toJson(tc).export(key, v2).export(pos, x -> Arrays.toString((int[]) x)).toString());
-        assertEquals("Export LISP", valLISP, TreeIoUtils.toLisp(tc).export(key, v2).export(pos, x -> Arrays.toString((int[]) x)).toString());
-        assertEquals("Export XML", valXML, TreeIoUtils.toXml(tc).export(key, v2).export(pos, x -> Arrays.toString((int[]) x)).toString());
-        assertEquals("Export Compact XML", valXMLCompact, TreeIoUtils.toCompactXml(tc).export(key, v2).export(pos, x -> Arrays.toString((int[]) x)).toString());
+        tc.export(key, v2);
+        tc.export(pos, x -> Arrays.toString((int[]) x));
+
+        assertEquals("Export JSON", valJSON, TreeIoUtils.toJson(tc).export(v3).toString());
+        assertEquals("Export LISP", valLISP, TreeIoUtils.toLisp(tc).toString());
+        assertEquals("Export XML", valXML, TreeIoUtils.toXml(tc).toString());
+        assertEquals("Export Compact XML", valXMLCompact, TreeIoUtils.toCompactXml(tc).toString());
     }
 
     final String valJSON = "{\n" +
             "\t\"other\": \"more\",\n" +
+            "\t\"more\": \"more\",\n" +
             "\t\"root\": {\n" +
             "\t\t\"type\": \"0\",\n" +
             "\t\t\"key\": \"test\",\n" +

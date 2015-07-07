@@ -3,6 +3,7 @@ package com.github.gumtreediff.io;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.TreeContext.MetadataSerializers;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.google.gson.stream.JsonWriter;
 
@@ -13,9 +14,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Stack;
 import java.util.regex.Pattern;
@@ -106,7 +105,7 @@ public final class TreeIoUtils {
     public static TreeSerializer toXml(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws XMLStreamException {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws XMLStreamException {
                 return new XmlFormatter(writer, ctx);
             }
         };
@@ -115,7 +114,7 @@ public final class TreeIoUtils {
     public static TreeSerializer toAnnotatedXml(TreeContext ctx, boolean isSrc, MappingStore m) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws XMLStreamException {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws XMLStreamException {
                 return new XmlAnnotatedFormatter(writer, ctx, isSrc, m);
             }
         };
@@ -124,7 +123,7 @@ public final class TreeIoUtils {
     public static TreeSerializer toCompactXml(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception {
                 return new XmlCompactFormatter(writer, ctx);
             }
         };
@@ -133,8 +132,8 @@ public final class TreeIoUtils {
     public static TreeSerializer toJson(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
-                return new JsonFormatter(writer, ctx, serializers);
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception {
+                return new JsonFormatter(writer, ctx);
             }
         };
     }
@@ -142,7 +141,7 @@ public final class TreeIoUtils {
     public static TreeSerializer toLisp(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception {
                 return new LispFormatter(writer, ctx);
             }
         };
@@ -151,26 +150,25 @@ public final class TreeIoUtils {
     public static TreeSerializer toDot(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) throws Exception {
                 return new DotFormatter(writer, ctx);
             }
         };
     }
 
-    public static final Pattern valid_id = Pattern.compile("[a-zA-Z0-9_]*");
-
     public abstract static class TreeSerializer {
         final TreeContext context;
-        final Map<String, MetadataSerializer> serializers = new HashMap<>();
+        final MetadataSerializers serializers = new MetadataSerializers();
 
         public TreeSerializer(TreeContext ctx) {
             context = ctx;
+            serializers.addAll(ctx.getSerializers());
         }
 
-        protected abstract TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception;
+        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception;
 
         public void writeTo(Writer writer) throws Exception {
-            TreeFormatter formatter = newFormatter(context, writer);
+            TreeFormatter formatter = newFormatter(context, serializers, writer);
             try {
                 writeTree(formatter, context.getRoot());
             } finally {
@@ -256,38 +254,27 @@ public final class TreeIoUtils {
             formatter.stopSerialization();
         }
 
-        public TreeSerializer export(Map<String, MetadataSerializer> serializers) {
-            this.serializers.putAll(serializers); // FIXME
+        public TreeSerializer export(String name, MetadataSerializer serializer) {
+            serializers.add(name, serializer);
             return this;
         }
 
-        public TreeSerializer export(String name, MetadataSerializer serializer) {
-            if (!valid_id.matcher(name).matches()) // FIXME this is stupid !
-                throw new RuntimeException("Invalid key for serialization");
-            serializers.put(name, serializer);
-            return this;
-        }
         public TreeSerializer export(String... name) {
             for (String n: name)
-                export(n, x -> x.toString());
+                serializers.add(n, x -> x.toString());
             return this;
-        }
-
-        public Map<String, MetadataSerializer> getSerializers() {
-            return serializers;
         }
 
         protected void writeAttributes(TreeFormatter formatter, Iterator<Entry<String, Object>> it) throws Exception {
             while (it.hasNext()) {
                 Entry<String, Object> entry = it.next();
                 String k = entry.getKey();
-                if (serializers.containsKey(k))
-                    formatter.serializeAttribute(k, serializers.get(k).toString(entry.getValue()));
+                serializers.serialize(formatter, entry.getKey(), entry.getValue());
             }
         }
     }
 
-    interface TreeFormatter {
+    public interface TreeFormatter {
         void startSerialization() throws Exception;
 
         void endProlog() throws Exception;
@@ -603,11 +590,9 @@ public final class TreeIoUtils {
 
     static class JsonFormatter extends TreeFormatterAdapter {
         private final JsonWriter writer;
-        private final Map<String, MetadataSerializer> serializers;
 
-        public JsonFormatter(Writer w, TreeContext ctx, Map<String, MetadataSerializer> serializers) {
+        public JsonFormatter(Writer w, TreeContext ctx) {
             super(ctx);
-            this.serializers = serializers;
             writer = new JsonWriter(w);
         }
 
