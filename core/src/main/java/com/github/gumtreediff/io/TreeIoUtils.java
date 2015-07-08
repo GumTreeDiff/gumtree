@@ -1,20 +1,25 @@
 package com.github.gumtreediff.io;
 
+import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerator;
-import com.github.gumtreediff.gen.XMLInternalGenerator;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeContext.MetadataSerializers;
+import com.github.gumtreediff.tree.TreeContext.MetadataUnserializers;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.google.gson.stream.JsonWriter;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.namespace.QName;
+import javax.xml.stream.*;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import java.io.*;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Stack;
 import java.util.regex.Pattern;
 
 public final class TreeIoUtils {
@@ -22,7 +27,13 @@ public final class TreeIoUtils {
     private TreeIoUtils() {} // Forbids instantiation of TreeIOUtils
 
     public static TreeGenerator fromXml() {
-        return new XMLInternalGenerator(); // TODO should or not call the registry ?
+        return new XMLInternalGenerator();
+    }
+
+    public static TreeGenerator fromXml(MetadataUnserializers unserializers) {
+        XMLInternalGenerator generator = new XMLInternalGenerator();
+        generator.getUnserializers().addAll(unserializers);
+        return generator;
     }
 
     public static TreeSerializer toXml(TreeContext ctx) {
@@ -218,6 +229,11 @@ public final class TreeIoUtils {
     @FunctionalInterface
     public interface MetadataSerializer {
         String toString(Object object);
+    }
+
+    @FunctionalInterface
+    public interface MetadataUnserializer {
+        Object fromString(String value);
     }
 
     static class FormatException extends RuntimeException {
@@ -568,6 +584,82 @@ public final class TreeIoUtils {
         @Override
         public void close() throws IOException {
             writer.close();
+        }
+    }
+
+    @Register(id = "xml", accept = "\\.gxml$")
+    // TODO Since it is not in the right package, I'm not even sure it is visible in the registry
+    // TODO should we move this class elsewhere (another package)
+    public static class XMLInternalGenerator extends TreeGenerator {
+
+        static MetadataUnserializers defaultUnserializers = new MetadataUnserializers();
+        final MetadataUnserializers unserializers = new MetadataUnserializers(); // FIXME should it be pushed up or not ?
+
+        private static final QName TYPE = new QName("type");
+
+        private static final QName LABEL = new QName("label");
+        private static final QName TYPE_LABEL = new QName("typeLabel");
+        private static final String POS = "pos";
+        private static final String LENGTH = "length";
+
+        static {
+            defaultUnserializers.add(POS, x -> Integer.parseInt(x));
+            defaultUnserializers.add(LENGTH, x -> Integer.parseInt(x));
+        }
+
+        public XMLInternalGenerator() {
+            unserializers.addAll(defaultUnserializers);
+        }
+
+        @Override
+        protected TreeContext generate(Reader source) throws IOException {
+            XMLInputFactory fact = XMLInputFactory.newInstance();
+            TreeContext context = new TreeContext();
+            try {
+                Stack<ITree> trees = new Stack<>();
+                XMLEventReader r = fact.createXMLEventReader(source);
+                while (r.hasNext()) {
+                    XMLEvent e = r.nextEvent();
+                    if (e instanceof StartElement) {
+                        StartElement s = (StartElement) e;
+                        if (!s.getName().getLocalPart().equals("tree")) // FIXME need to deal with options
+                            continue;
+                        int type = Integer.parseInt(s.getAttributeByName(TYPE).getValue());
+
+                        ITree t = context.createTree(type, labelForAttribute(s, LABEL), labelForAttribute(s, TYPE_LABEL));
+
+                        Iterator<Attribute> it = s.getAttributes();
+                        while (it.hasNext()) {
+                            Attribute a = it.next();
+                            unserializers.load(t, a.getName().getLocalPart(), a.getValue());
+                        }
+
+                        if (trees.isEmpty())
+                            context.setRoot(t);
+                        else
+                            t.setParentAndUpdateChildren(trees.peek());
+                        trees.push(t);
+                    } else if (e instanceof EndElement) {
+                        if (!((EndElement)e).getName().getLocalPart().equals("tree")) // FIXME need to deal with options
+                            continue;
+                        trees.pop();
+                    }
+                }
+                context.validate();
+                return context;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private static String labelForAttribute(StartElement s, QName attrName) {
+            Attribute attr = s.getAttributeByName(attrName);
+            return attr == null ? ITree.NO_LABEL : attr.getValue();
+        }
+
+        public MetadataUnserializers getUnserializers() {
+            return unserializers;
         }
     }
 }
