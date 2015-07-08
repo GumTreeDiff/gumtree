@@ -3,6 +3,7 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
+import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,6 +51,7 @@ public class TestMetadata {
 
         assertEquals(v1, tc.setMetadata(key, v2));
         assertEquals(v2, tc.getMetadata(key));
+        assertEquals(v2, tc.getMetadata(null, key));
         assertEquals(v2, tc.setMetadata(someNode, key, v1));
         assertEquals(v1, tc.getMetadata(someNode, key));
         assertEquals(v2, tc.getMetadata(key));
@@ -58,6 +60,11 @@ public class TestMetadata {
         assertEquals(v2, tc.setMetadata(someNode, key, v1));
         assertEquals(v1, someNode.setMetadata(key, null));
         assertEquals(v2, tc.getMetadata(someNode, key));
+        assertEquals(v2, tc.setMetadata(null, key, v1));
+        assertEquals(v1, tc.setMetadata(someNode, key, v2));
+        assertEquals(v2, tc.getMetadata(someNode, key));
+        assertEquals(v1, tc.getMetadata(null, key));
+        assertEquals(v1, tc.getMetadata(key));
     }
 
     @Test
@@ -116,6 +123,20 @@ public class TestMetadata {
         assertEquals("Export LISP", valLISP, TreeIoUtils.toLisp(tc).toString());
         assertEquals("Export XML", valXML, TreeIoUtils.toXml(tc).toString());
         assertEquals("Export Compact XML", valXMLCompact, TreeIoUtils.toCompactXml(tc).toString());
+
+        assertEquals(Sets.newHashSet(key, v2, pos), tc.getSerializers().exports());
+        tc.getSerializers().remove(pos);
+        assertEquals(Sets.newHashSet(key, v2), tc.getSerializers().exports());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testExportInvalid1() {
+        tc.export("Test key");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testExportInvalid2() {
+        TreeIoUtils.toJson(tc).export("Test key");
     }
 
     final String valJSON = "{\n" +

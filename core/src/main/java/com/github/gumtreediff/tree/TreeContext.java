@@ -86,8 +86,8 @@ public class TreeContext {
      * @return the metadata or null if not found
      */
     public Object getMetadata(ITree node, String key) {
-        Object metadata = node.getMetadata(key);
-        if (metadata == null)
+        Object metadata ;
+        if (node ==null || (metadata = node.getMetadata(key))== null)
             return getMetadata(key);
         return metadata;
     }
@@ -216,7 +216,7 @@ public class TreeContext {
         }
 
         public void add(String name, MetadataSerializer serializer) {
-            if (!valid_id.matcher(name).matches())
+            if (!valid_id.matcher(name).matches()) // TODO I definitely don't like this rule, we should think twice
                 throw new RuntimeException("Invalid key for serialization");
             serializers.put(name, serializer);
         }
