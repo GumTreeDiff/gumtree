@@ -3,9 +3,8 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Pair;
-import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Pair;
+
+import java.io.IOException;
 
 public class TreeLoader {
 
@@ -40,6 +39,10 @@ public class TreeLoader {
     }
 
     public static ITree load(String name) {
-        return TreeIoUtils.fromXml(System.class.getResourceAsStream(name)).getRoot();
+        try {
+            return TreeIoUtils.fromXml().generateFromStream(System.class.getResourceAsStream(name)).getRoot();
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Unable to load test ressorce: %s", name), e);
+        }
     }
 }

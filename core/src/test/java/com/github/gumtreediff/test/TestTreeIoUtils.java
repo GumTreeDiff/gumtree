@@ -30,7 +30,7 @@ public class TestTreeIoUtils {
         tc.validate();
 
         TreeIoUtils.toXml(tc).writeTo("target/test-classes/test-serialize.xml");
-        TreeContext tca = TreeIoUtils.fromXmlFile("target/test-classes/test-serialize.xml");
+        TreeContext tca = TreeIoUtils.fromXml().generateFromFile("target/test-classes/test-serialize.xml");
         ITree ca = tca.getRoot();
 
         assertTrue(a.isClone(ca));
