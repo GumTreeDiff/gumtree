@@ -135,8 +135,13 @@ public class TreeContext {
         return serializers;
     }
 
-    public TreeContext export(String name, MetadataSerializer serializer) {
-        serializers.add(name, serializer);
+    public TreeContext export(MetadataSerializers s) {
+        serializers.addAll(s);
+        return this;
+    }
+
+    public TreeContext export(String key, MetadataSerializer s) {
+        serializers.add(key, s);
         return this;
     }
 

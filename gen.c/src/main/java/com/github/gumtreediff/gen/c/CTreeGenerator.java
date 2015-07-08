@@ -4,17 +4,19 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.TreeContext;
-import com.github.gumtreediff.gen.Register;
-import com.github.gumtreediff.gen.TreeGenerator;
-import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.*;
+import java.util.Arrays;
 
 @Register(id = "c-cocci", accept = "\\.[ch]$")
 public class CTreeGenerator extends TreeGenerator {
 
     private static final String COCCI_CMD = "cgum";
+
+    private static final TreeContext.MetadataSerializers serializers = new TreeContext.MetadataSerializers();
+    static {
+        serializers.add("LINES", x -> Arrays.toString((int[]) x));
+    }
 
     @Override
     public TreeContext generate(Reader r) throws IOException {
@@ -44,7 +46,7 @@ public class CTreeGenerator extends TreeGenerator {
             if (p.exitValue() != 0)  throw new RuntimeException();
             r.close();
             String xml = buf.toString();
-            return TreeIoUtils.fromXmlString(xml);
+            return TreeIoUtils.fromXmlString(xml).export();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
