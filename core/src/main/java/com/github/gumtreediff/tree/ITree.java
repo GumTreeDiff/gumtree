@@ -20,7 +20,9 @@
 
 package com.github.gumtreediff.tree;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 public interface ITree {
 
@@ -44,6 +46,7 @@ public interface ITree {
 
     /**
      * Make a deep copy of the tree.
+     * Deep copy of node however shares Metadata
      * @return a deep copy of the tree.
      */
     public abstract ITree deepCopy();
@@ -79,10 +82,6 @@ public interface ITree {
 
     public abstract String getLabel();
 
-    public abstract int[] getLcPosEnd();
-
-    public abstract int[] getLcPosStart();
-
     public abstract List<ITree> getLeaves();
 
     public abstract int getLength();
@@ -99,8 +98,6 @@ public interface ITree {
     public abstract String getShortLabel();
 
     public abstract int getSize();
-
-    public abstract Object getTmpData();
 
     /**
      * Return all the nodes contains in the tree, using a pre-order.
@@ -162,10 +159,6 @@ public interface ITree {
 
     public abstract void setLabel(String label);
 
-    public abstract void setLcPosEnd(int[] lcPosEnd);
-
-    public abstract void setLcPosStart(int[] lcPosStart);
-
     public abstract void setLength(int length);
 
     public abstract void setMatched(boolean matched);
@@ -178,8 +171,6 @@ public interface ITree {
 
     public abstract void setSize(int size);
 
-    public abstract void setTmpData(Object tmpData);
-
     public abstract void setType(int type);
 
     public abstract String toStaticHashString();
@@ -190,6 +181,7 @@ public interface ITree {
 
     public abstract String toPrettyString(TreeContext ctx);
 
-    interface TreeInfo {
-    }
+    Object getMetadata(String key);
+    Object setMetadata(String key, Object value);
+    Iterator<Entry<String, Object>> getMetadata();
 }

@@ -21,7 +21,9 @@
 package com.github.gumtreediff.tree;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class Tree extends AbstractTree implements ITree {
 
@@ -36,13 +38,7 @@ public class Tree extends AbstractTree implements ITree {
     int length;
     // End position
 
-    // Begin position in terms of line and column start and end
-    private int[] lcPosStart;
-    private int[] lcPosEnd;
-    // End position
-
-    // Needed for RTED :(
-    private Object tmpData;
+    private AssociationMap metadata;
 
     Tree(int type, String label) {
         this.type = type;
@@ -73,8 +69,8 @@ public class Tree extends AbstractTree implements ITree {
         this.depth = other.getDepth();
         this.hash = other.getHash();
         this.depth = other.getDepth();
-        this.tmpData = other.getTmpData();
         this.children = new ArrayList<>();
+        this.metadata = other.metadata;
     }
 
     @Override
@@ -86,7 +82,7 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public Tree deepCopy() {
         Tree copy = new Tree(this);
-        for (ITree child: getChildren())
+        for (ITree child : getChildren())
             copy.addChild(child.deepCopy());
         return copy;
     }
@@ -107,16 +103,6 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public int[] getLcPosEnd() {
-        return lcPosEnd;
-    }
-
-    @Override
-    public int[] getLcPosStart() {
-        return lcPosStart;
-    }
-
-    @Override
     public int getLength() {
         return length;
     }
@@ -132,11 +118,6 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public Object getTmpData() {
-        return tmpData;
-    }
-
-    @Override
     public int getType() {
         return type;
     }
@@ -144,23 +125,13 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public void setChildren(List<ITree> children) {
         this.children = children;
-        for (ITree c: children)
+        for (ITree c : children)
             c.setParent(this);
     }
 
     @Override
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    @Override
-    public void setLcPosEnd(int[] lcPosEnd) {
-        this.lcPosEnd = lcPosEnd;
-    }
-
-    @Override
-    public void setLcPosStart(int[] lcPosStart) {
-        this.lcPosStart = lcPosStart;
     }
 
     @Override
@@ -186,12 +157,34 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public void setTmpData(Object tmpData) {
-        this.tmpData = tmpData;
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
+    public Object getMetadata(String key) {
+        if (metadata == null)
+            return null;
+        return metadata.get(key);
+    }
+
+    @Override
+    public Object setMetadata(String key, Object value) {
+        if (value == null) {
+            if (metadata == null)
+                return null;
+            else
+                return metadata.remove(key);
+        }
+        if (metadata == null)
+            metadata = new AssociationMap();
+        return metadata.set(key, value);
+    }
+
+    @Override
+    public Iterator<Entry<String, Object>> getMetadata() {
+        if (metadata == null)
+            return new EmptyEntryIterator();
+        return metadata.iterator();
     }
 }

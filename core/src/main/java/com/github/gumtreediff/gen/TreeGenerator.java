@@ -42,6 +42,10 @@ public abstract class TreeGenerator {
         return generateFromReader(new FileReader(file));
     }
 
+    public TreeContext generateFromStream(InputStream stream) throws IOException {
+        return generateFromReader(new InputStreamReader(stream));
+    }
+
     public TreeContext generateFromString(String content) throws IOException {
         return generateFromReader(new StringReader(content));
     }
