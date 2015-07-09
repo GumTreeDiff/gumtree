@@ -15,13 +15,9 @@
 
 package com.github.gumtreediff.matchers.optimal.rted;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-
 import com.github.gumtreediff.tree.ITree;
+
+import java.util.*;
 
 
 /**
@@ -281,9 +277,6 @@ public class InfoTree {
         }
 
         postorder++;
-
-        // postorder
-        aT.setTmpData(postorder);
 
         int currentDescSizes = descSizes + currentSize + 1;
         info[POST2_DESC_SUM][postorder] = (currentSize + 1) * (currentSize + 1 + 3) / 2 - currentDescSizes;

@@ -1,8 +1,13 @@
 package com.github.gumtreediff.io;
 
+import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.*;
-
+import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.TreeContext.MetadataSerializers;
+import com.github.gumtreediff.tree.TreeContext.MetadataUnserializers;
+import com.github.gumtreediff.tree.TreeUtils;
 import com.google.gson.stream.JsonWriter;
 
 import javax.xml.namespace.QName;
@@ -12,99 +17,29 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 public final class TreeIoUtils {
 
-    private static final QName TYPE = new QName("type");
-    private static final QName LABEL = new QName("label");
-    private static final QName TYPE_LABEL = new QName("typeLabel");
-    private static final QName POS = new QName("pos");
-    private static final QName LENGTH = new QName("length");
-    private static final QName LINE_BEFORE = new QName("line_before");
-    private static final QName LINE_AFTER = new QName("line_after");
-    private static final QName COL_BEFORE = new QName("col_before");
-    private static final QName COL_AFTER = new QName("col_after");
-
     private TreeIoUtils() {} // Forbids instantiation of TreeIOUtils
-    
-    public static TreeContext fromXml(InputStream iStream) {
-        return fromXml(new InputStreamReader(iStream));
-    }
-    
-    public static TreeContext fromXmlString(String xml) {
-        return fromXml(new StringReader(xml));
-    }
-    
-    public static TreeContext fromXmlFile(String path) {
-        try {
-            return fromXml(new FileReader(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
-    public static TreeContext fromXml(Reader source) {
-        XMLInputFactory fact = XMLInputFactory.newInstance();
-        TreeContext context = new TreeContext();
-        try {
-            Stack<ITree> trees = new Stack<>();
-            XMLEventReader r = fact.createXMLEventReader(source);
-            while (r.hasNext()) {
-                XMLEvent e = r.nextEvent();
-                if (e instanceof StartElement) {
-                    StartElement s = (StartElement) e;
-                    int type = Integer.parseInt(s.getAttributeByName(TYPE).getValue());
-                    
-                    ITree t = context.createTree(type, labelForAttribute(s, LABEL), labelForAttribute(s, TYPE_LABEL));
-                    
-                    
-                    if (s.getAttributeByName(POS) != null) {
-                        int pos = numberForAttribute(s, POS);
-                        int length = numberForAttribute(s, LENGTH);
-                        t.setPos(pos);
-                        t.setLength(length);
-                    }
-                    
-                    if (s.getAttributeByName(LINE_BEFORE) != null) {
-                        int l0 = numberForAttribute(s, LINE_BEFORE);
-                        int c0 = numberForAttribute(s, COL_BEFORE);
-                        int l1 = numberForAttribute(s, LINE_AFTER);
-                        int c1 = numberForAttribute(s, COL_AFTER);
-                        t.setLcPosStart(new int[] {l0, c0});
-                        t.setLcPosEnd(new int[] {l1, c1});
-                    }
-                    
-                    if (trees.isEmpty())
-                        context.setRoot(t);
-                    else
-                        t.setParentAndUpdateChildren(trees.peek());
-                    trees.push(t);
-                } else if (e instanceof EndElement)
-                    trees.pop();
-            }
-            context.validate();
-            return context;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
-    private static String labelForAttribute(StartElement s, QName attrName) {
-        Attribute attr = s.getAttributeByName(attrName);
-        return attr == null ? ITree.NO_LABEL : attr.getValue();
+
+    public static TreeGenerator fromXml() {
+        return new XMLInternalGenerator();
     }
 
-    private static int numberForAttribute(StartElement s, QName attrName) {
-        return Integer.parseInt(s.getAttributeByName(attrName).getValue());
+    public static TreeGenerator fromXml(MetadataUnserializers unserializers) {
+        XMLInternalGenerator generator = new XMLInternalGenerator();
+        generator.getUnserializers().addAll(unserializers);
+        return generator;
     }
-    
+
     public static TreeSerializer toXml(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws XMLStreamException {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws XMLStreamException {
                 return new XmlFormatter(writer, ctx);
             }
         };
@@ -113,66 +48,68 @@ public final class TreeIoUtils {
     public static TreeSerializer toAnnotatedXml(TreeContext ctx, boolean isSrc, MappingStore m) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws XMLStreamException {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws XMLStreamException {
                 return new XmlAnnotatedFormatter(writer, ctx, isSrc, m);
             }
         };
     }
-    
+
     public static TreeSerializer toCompactXml(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception {
                 return new XmlCompactFormatter(writer, ctx);
             }
         };
     }
-    
+
     public static TreeSerializer toJson(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception {
                 return new JsonFormatter(writer, ctx);
             }
         };
     }
-    
+
     public static TreeSerializer toLisp(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception {
                 return new LispFormatter(writer, ctx);
             }
         };
     }
-    
+
     public static TreeSerializer toDot(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) throws Exception {
                 return new DotFormatter(writer, ctx);
             }
         };
     }
 
     public abstract static class TreeSerializer {
-        TreeContext context;
-        
+        final TreeContext context;
+        final MetadataSerializers serializers = new MetadataSerializers();
+
         public TreeSerializer(TreeContext ctx) {
             context = ctx;
+            serializers.addAll(ctx.getSerializers());
         }
-        
-        protected abstract TreeFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception;
-        
+
+        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception;
+
         public void writeTo(Writer writer) throws Exception {
-            TreeFormatter formatter = newFormatter(context, writer);
+            TreeFormatter formatter = newFormatter(context, serializers, writer);
             try {
                 writeTree(formatter, context.getRoot());
             } finally {
                 formatter.close();
             }
         }
-        
+
         public void writeTo(OutputStream writer) throws Exception {
             OutputStreamWriter os = new OutputStreamWriter(writer);
             try {
@@ -181,7 +118,7 @@ public final class TreeIoUtils {
                 os.close();
             }
         }
-        
+
         public String toString() {
             StringWriter s = new StringWriter();
             try {
@@ -193,7 +130,7 @@ public final class TreeIoUtils {
             }
             return s.toString();
         }
-        
+
         public void writeTo(String file) throws Exception {
             FileWriter w = new FileWriter(file);
             try {
@@ -202,7 +139,7 @@ public final class TreeIoUtils {
                 w.close();
             }
         }
-        
+
         public void writeTo(File file) throws Exception {
             FileWriter w = new FileWriter(file);
             try {
@@ -211,27 +148,31 @@ public final class TreeIoUtils {
                 w.close();
             }
         }
-        
+
         private void forwardException(Exception e) {
             throw new FormatException(e);
         }
-        
+
         protected void writeTree(TreeFormatter formatter, ITree root) throws Exception {
             formatter.startSerialization();
+            writeAttributes(formatter, context.getMetadata());
+            formatter.endProlog();
             try {
                 TreeUtils.visitTree(root, new TreeUtils.TreeVisitor() {
-                    
+
                     @Override
                     public void startTree(ITree tree) {
                         try {
                             assert formatter != null;
                             assert tree != null;
                             formatter.startTree(tree);
+                            writeAttributes(formatter, tree.getMetadata());
+                            formatter.endTreeProlog(tree);
                         } catch (Exception e) {
                             forwardException(e);
                         }
                     }
-                    
+
                     @Override
                     public void endTree(ITree tree) {
                         try {
@@ -246,20 +187,55 @@ public final class TreeIoUtils {
             }
             formatter.stopSerialization();
         }
+
+        public TreeSerializer export(String name, MetadataSerializer serializer) {
+            serializers.add(name, serializer);
+            return this;
+        }
+
+        public TreeSerializer export(String... name) {
+            for (String n: name)
+                serializers.add(n, x -> x.toString());
+            return this;
+        }
+
+        protected void writeAttributes(TreeFormatter formatter, Iterator<Entry<String, Object>> it) throws Exception {
+            while (it.hasNext()) {
+                Entry<String, Object> entry = it.next();
+                String k = entry.getKey();
+                serializers.serialize(formatter, entry.getKey(), entry.getValue());
+            }
+        }
     }
 
-    interface TreeFormatter {
+    public interface TreeFormatter {
         void startSerialization() throws Exception;
 
+        void endProlog() throws Exception;
+
         void stopSerialization() throws Exception;
-        
+
         void startTree(ITree tree) throws Exception;
 
+        void endTreeProlog(ITree tree) throws Exception;
+
         void endTree(ITree tree) throws Exception;
-        
+
         void close() throws Exception;
+
+        void serializeAttribute(String name, String value) throws Exception;
     }
-    
+
+    @FunctionalInterface
+    public interface MetadataSerializer {
+        String toString(Object object);
+    }
+
+    @FunctionalInterface
+    public interface MetadataUnserializer {
+        Object fromString(String value);
+    }
+
     static class FormatException extends RuntimeException {
         private static final long serialVersionUID = 593766540545763066L;
         Exception cause;
@@ -274,7 +250,7 @@ public final class TreeIoUtils {
             return cause;
         }
     }
-    
+
     static class TreeFormatterAdapter implements TreeFormatter {
         protected final TreeContext context;
 
@@ -286,7 +262,13 @@ public final class TreeIoUtils {
         public void startSerialization() throws Exception { }
 
         @Override
+        public void endProlog() throws Exception { }
+
+        @Override
         public void startTree(ITree tree) throws Exception { }
+
+        @Override
+        public void endTreeProlog(ITree tree) throws Exception { }
 
         @Override
         public void endTree(ITree tree) throws Exception { }
@@ -296,6 +278,9 @@ public final class TreeIoUtils {
 
         @Override
         public void close() throws Exception { }
+
+        @Override
+        public void serializeAttribute(String name, String value) throws Exception { }
     }
 
     abstract static class AbsXmlFormatter extends TreeFormatterAdapter {
@@ -316,16 +301,42 @@ public final class TreeIoUtils {
         public void stopSerialization() throws XMLStreamException {
             writer.writeEndDocument();
         }
-        
+
         @Override
         public void close() throws XMLStreamException {
             writer.close();
         }
     }
-    
+
     static class XmlFormatter extends AbsXmlFormatter {
         public XmlFormatter(Writer w, TreeContext ctx) throws XMLStreamException {
             super(w, ctx);
+        }
+
+
+        @Override
+        public void startSerialization() throws XMLStreamException {
+            super.startSerialization();
+            writer.writeStartElement("root");
+            writer.writeStartElement("context");
+        }
+
+        @Override
+        public void endProlog() throws XMLStreamException {
+            writer.writeEndElement();
+        }
+
+        @Override
+        public void stopSerialization() throws XMLStreamException {
+            writer.writeEndElement();
+            super.stopSerialization();
+        }
+
+        @Override
+        public void serializeAttribute(String name, String value) throws XMLStreamException {
+            writer.writeStartElement(name);
+            writer.writeCharacters(value);
+            writer.writeEndElement();
         }
 
         @Override
@@ -339,12 +350,6 @@ public final class TreeIoUtils {
                 writer.writeAttribute("pos", Integer.toString(tree.getPos()));
                 writer.writeAttribute("length", Integer.toString(tree.getLength()));
             }
-            if (tree.getLcPosStart() != null) {
-                writer.writeAttribute("line_before", Integer.toString(tree.getLcPosStart()[0]));
-                writer.writeAttribute("col_before", Integer.toString(tree.getLcPosStart()[1]));
-                writer.writeAttribute("line_after", Integer.toString(tree.getLcPosEnd()[0]));
-                writer.writeAttribute("col_after", Integer.toString(tree.getLcPosEnd()[1]));
-            }
         }
 
         @Override
@@ -352,51 +357,63 @@ public final class TreeIoUtils {
             writer.writeEndElement();
         }
     }
-    
+
     static class XmlAnnotatedFormatter extends XmlFormatter {
         final SearchOther searchOther;
 
         public XmlAnnotatedFormatter(Writer w, TreeContext ctx, boolean isSrc,
                                      MappingStore m) throws XMLStreamException {
             super(w, ctx);
-            
+
             if (isSrc)
                 searchOther = (tree) -> {
-                    return m.hasSrc(tree) ? m.getDst(tree) : null; 
+                    return m.hasSrc(tree) ? m.getDst(tree) : null;
                 };
             else
                 searchOther = (tree) -> {
                     return m.hasDst(tree) ? m.getSrc(tree) : null;
                 };
         }
-        
+
         interface SearchOther {
             ITree lookup(ITree tree);
         }
-        
+
         @Override
         public void startTree(ITree tree) throws XMLStreamException {
             super.startTree(tree);
             ITree o = searchOther.lookup(tree);
-            
+
             if (o != null) {
                 if (ITree.NO_VALUE != o.getPos()) {
                     writer.writeAttribute("other_pos", Integer.toString(o.getPos()));
                     writer.writeAttribute("other_length", Integer.toString(o.getLength()));
                 }
-                if (o.getLcPosStart() != null) {
-                    writer.writeAttribute("other_line_before", Integer.toString(o.getLcPosStart()[0]));
-                    writer.writeAttribute("other_col_before", Integer.toString(o.getLcPosStart()[1]));
-                    writer.writeAttribute("other_line_after", Integer.toString(o.getLcPosEnd()[0]));
-                    writer.writeAttribute("other_col_after", Integer.toString(o.getLcPosEnd()[1]));
-                }
             }
         }
     }
-    
+
     static class XmlCompactFormatter extends AbsXmlFormatter {
         public XmlCompactFormatter(Writer w, TreeContext ctx) throws XMLStreamException {
             super(w, ctx);
+        }
+
+
+        @Override
+        public void startSerialization() throws XMLStreamException {
+            super.startSerialization();
+            writer.writeStartElement("root");
+        }
+
+        @Override
+        public void stopSerialization() throws XMLStreamException {
+            writer.writeEndElement();
+            super.stopSerialization();
+        }
+
+        @Override
+        public void serializeAttribute(String name, String value) throws XMLStreamException {
+            writer.writeAttribute(name, value);
         }
 
         @Override
@@ -410,21 +427,22 @@ public final class TreeIoUtils {
             writer.writeEndElement();
         }
     }
-    
+
     static class LispFormatter extends TreeFormatterAdapter {
         protected final Writer writer;
+        protected final Pattern replacer = Pattern.compile("[\\\\\"]");
         int level = 0;
 
         protected LispFormatter(Writer w, TreeContext ctx) {
             super(ctx);
             writer = w;
         }
-        
+
         @Override
         public void startSerialization() throws IOException {
-            writer.write("(");
+            writer.write("((");
         }
-        
+
         @Override
         public void startTree(ITree tree) throws IOException {
             if (!tree.isRoot())
@@ -432,30 +450,48 @@ public final class TreeIoUtils {
             for (int i = 0; i < level; i ++)
                 writer.write("    ");
             level ++;
-            
-            String pos = (ITree.NO_VALUE == tree.getPos() ? "" : String.format("(%d %d)", 
+
+            String pos = (ITree.NO_VALUE == tree.getPos() ? "" : String.format("(%d %d)",
                     tree.getPos(), tree.getLength()));
-            String lcpos = (tree.getLcPosStart() == null ? "" : String.format("%d %d %d %d",
-                    tree.getLcPosStart()[0], tree.getLcPosStart()[1], tree.getLcPosEnd()[0], tree.getLcPosEnd()[1]));
+
             String matched = tree.isMatched() ? ":matched " : "";
-            
-            writer.write(String.format("(%d \"%s\" \"%s\" %s(%s%s%s) (",
-                            tree.getType(), context.getTypeLabel(tree), tree.getLabel(),
-                            matched, pos, (pos != "" && lcpos != "") ? " " : "" ,lcpos));
+
+            writer.write(String.format("(%d %s %s %s(%s",
+                            tree.getType(), _(context.getTypeLabel(tree)), _(tree.getLabel()),
+                            matched, pos));
         }
-        
+
+        @Override
+        public void endProlog() throws Exception {
+            writer.append(") ");
+        }
+
+        @Override
+        public void endTreeProlog(ITree tree) throws Exception {
+            writer.append(") (");
+        }
+
+        @Override
+        public void serializeAttribute(String name, String value) throws Exception {
+            writer.append(String.format("(:%s %s) ", name, _(value)));
+        }
+
+        protected String _(String val) {
+            return String.format("\"%s\"", replacer.matcher(val).replaceAll("\\\\$0"));
+        }
+
         @Override
         public void endTree(ITree tree) throws IOException {
             writer.write(")");
             level --;
         }
-        
+
         @Override
         public void stopSerialization() throws IOException {
             writer.write(")");
         }
     }
-    
+
     static class DotFormatter extends TreeFormatterAdapter {
         protected final Writer writer;
 
@@ -480,7 +516,7 @@ public final class TreeIoUtils {
             if (tree.isMatched())
                 writer.write(",style=filled,fillcolor=cadetblue1");
             writer.write("];\n");
-            
+
             if (tree.getParent() != null)
                 writer.write(tree.getParent().getId() + " -> " + tree.getId() + ";\n");
         }
@@ -490,7 +526,7 @@ public final class TreeIoUtils {
             writer.write("}");
         }
     }
-    
+
     static class JsonFormatter extends TreeFormatterAdapter {
         private final JsonWriter writer;
 
@@ -509,12 +545,11 @@ public final class TreeIoUtils {
                 writer.name("pos").value(Integer.toString(t.getPos()));
                 writer.name("length").value(Integer.toString(t.getLength()));
             }
-            if (t.getLcPosStart() != null) {
-                writer.name("line_before").value(Integer.toString(t.getLcPosStart()[0]));
-                writer.name("col_before").value(Integer.toString(t.getLcPosStart()[1]));
-                writer.name("line_after").value(Integer.toString(t.getLcPosEnd()[0]));
-                writer.name("col_after").value(Integer.toString(t.getLcPosEnd()[1]));
-            }
+        }
+
+
+        @Override
+        public void endTreeProlog(ITree tree) throws IOException {
             writer.name("children");
             writer.beginArray();
         }
@@ -526,13 +561,105 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void startSerialization() throws Exception {
-            writer.setIndent("\t");                 
+        public void startSerialization() throws IOException {
+            writer.beginObject();
+            writer.setIndent("\t");
         }
 
         @Override
-        public void close() throws Exception {
+        public void endProlog() throws IOException {
+            writer.name("root");
+        }
+
+        @Override
+        public void serializeAttribute(String key, String value) throws IOException {
+            writer.name(key).value(value);
+        }
+
+        @Override
+        public void stopSerialization() throws IOException {
+            writer.endObject();
+        }
+
+        @Override
+        public void close() throws IOException {
             writer.close();
+        }
+    }
+
+    @Register(id = "xml", accept = "\\.gxml$")
+    // TODO Since it is not in the right package, I'm not even sure it is visible in the registry
+    // TODO should we move this class elsewhere (another package)
+    public static class XMLInternalGenerator extends TreeGenerator {
+
+        static MetadataUnserializers defaultUnserializers = new MetadataUnserializers();
+        final MetadataUnserializers unserializers = new MetadataUnserializers(); // FIXME should it be pushed up or not ?
+
+        private static final QName TYPE = new QName("type");
+
+        private static final QName LABEL = new QName("label");
+        private static final QName TYPE_LABEL = new QName("typeLabel");
+        private static final String POS = "pos";
+        private static final String LENGTH = "length";
+
+        static {
+            defaultUnserializers.add(POS, x -> Integer.parseInt(x));
+            defaultUnserializers.add(LENGTH, x -> Integer.parseInt(x));
+        }
+
+        public XMLInternalGenerator() {
+            unserializers.addAll(defaultUnserializers);
+        }
+
+        @Override
+        protected TreeContext generate(Reader source) throws IOException {
+            XMLInputFactory fact = XMLInputFactory.newInstance();
+            TreeContext context = new TreeContext();
+            try {
+                Stack<ITree> trees = new Stack<>();
+                XMLEventReader r = fact.createXMLEventReader(source);
+                while (r.hasNext()) {
+                    XMLEvent e = r.nextEvent();
+                    if (e instanceof StartElement) {
+                        StartElement s = (StartElement) e;
+                        if (!s.getName().getLocalPart().equals("tree")) // FIXME need to deal with options
+                            continue;
+                        int type = Integer.parseInt(s.getAttributeByName(TYPE).getValue());
+
+                        ITree t = context.createTree(type, labelForAttribute(s, LABEL), labelForAttribute(s, TYPE_LABEL));
+
+                        Iterator<Attribute> it = s.getAttributes();
+                        while (it.hasNext()) {
+                            Attribute a = it.next();
+                            unserializers.load(t, a.getName().getLocalPart(), a.getValue());
+                        }
+
+                        if (trees.isEmpty())
+                            context.setRoot(t);
+                        else
+                            t.setParentAndUpdateChildren(trees.peek());
+                        trees.push(t);
+                    } else if (e instanceof EndElement) {
+                        if (!((EndElement)e).getName().getLocalPart().equals("tree")) // FIXME need to deal with options
+                            continue;
+                        trees.pop();
+                    }
+                }
+                context.validate();
+                return context;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private static String labelForAttribute(StartElement s, QName attrName) {
+            Attribute attr = s.getAttributeByName(attrName);
+            return attr == null ? ITree.NO_LABEL : attr.getValue();
+        }
+
+        public MetadataUnserializers getUnserializers() {
+            return unserializers;
         }
     }
 }

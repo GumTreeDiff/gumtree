@@ -1,11 +1,13 @@
 package com.github.gumtreediff.tree;
 
+import com.github.gumtreediff.tree.hash.HashUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import com.github.gumtreediff.tree.hash.HashUtils;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 public abstract class AbstractTree implements ITree {
 
@@ -320,27 +322,12 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public int[] getLcPosEnd() {
-            throw unsupportedOperation();
-        }
-
-        @Override
-        public int[] getLcPosStart() {
-            throw unsupportedOperation();
-        }
-
-        @Override
         public int getLength() {
             throw unsupportedOperation();
         }
 
         @Override
         public int getPos() {
-            throw unsupportedOperation();
-        }
-
-        @Override
-        public Object getTmpData() {
             throw unsupportedOperation();
         }
 
@@ -360,16 +347,6 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public void setLcPosEnd(int[] lcPosEnd) {
-            throw unsupportedOperation();
-        }
-
-        @Override
-        public void setLcPosStart(int[] lcPosStart) {
-            throw unsupportedOperation();
-        }
-
-        @Override
         public void setLength(int length) {
             throw unsupportedOperation();
         }
@@ -385,11 +362,6 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public void setTmpData(Object tmpData) {
-            throw unsupportedOperation();
-        }
-
-        @Override
         public void setType(int type) {
             throw unsupportedOperation();
         }
@@ -397,6 +369,42 @@ public abstract class AbstractTree implements ITree {
         @Override
         public String toPrettyString(TreeContext ctx) {
             return "FakeTree";
+        }
+
+        /**
+         * fake nodes have no metadata
+         */
+        @Override
+        public Object getMetadata(String key) {
+            return null;
+        }
+
+        /**
+         * fake node store no metadata
+         */
+        @Override
+        public Object setMetadata(String key, Object value) {
+            return null;
+        }
+
+        /**
+         * Since they have no metadata they do not iterate on nothing
+         */
+        @Override
+        public Iterator<Map.Entry<String, Object>> getMetadata() {
+            return new EmptyEntryIterator();
+        }
+    }
+
+    protected static class EmptyEntryIterator implements Iterator<Map.Entry<String, Object>> {
+        @Override
+        public boolean hasNext() {
+            return false;
+        }
+
+        @Override
+        public Map.Entry<String, Object> next() {
+            throw new NoSuchElementException();
         }
     }
 }
