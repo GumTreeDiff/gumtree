@@ -110,25 +110,9 @@ public final class TreeIoUtils {
         };
     }
 
-    public abstract static class TreeSerializer {
-        final TreeContext context;
-        final MetadataSerializers serializers = new MetadataSerializers();
-
-        public TreeSerializer(TreeContext ctx) {
-            context = ctx;
-            serializers.addAll(ctx.getSerializers());
-        }
-
-        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception;
-
-        public void writeTo(Writer writer) throws Exception {
-            TreeFormatter formatter = newFormatter(context, serializers, writer);
-            try {
-                writeTree(formatter, context.getRoot());
-            } finally {
-                formatter.close();
-            }
-        }
+    public abstract static class AbstractSerializer {
+        // This has to be a class a not an interface/mixin because of the toString method
+        public abstract void writeTo(Writer writer) throws Exception;
 
         public void writeTo(OutputStream writer) throws Exception {
             OutputStreamWriter os = new OutputStreamWriter(writer);
@@ -166,6 +150,27 @@ public final class TreeIoUtils {
                 writeTo(w);
             } finally {
                 w.close();
+            }
+        }
+    }
+
+    public abstract static class TreeSerializer extends AbstractSerializer {
+        final TreeContext context;
+        final MetadataSerializers serializers = new MetadataSerializers();
+
+        public TreeSerializer(TreeContext ctx) {
+            context = ctx;
+            serializers.addAll(ctx.getSerializers());
+        }
+
+        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception;
+
+        public void writeTo(Writer writer) throws Exception {
+            TreeFormatter formatter = newFormatter(context, serializers, writer);
+            try {
+                writeTree(formatter, context.getRoot());
+            } finally {
+                formatter.close();
             }
         }
 
@@ -208,6 +213,14 @@ public final class TreeIoUtils {
             formatter.stopSerialization();
         }
 
+        protected void writeAttributes(TreeFormatter formatter, Iterator<Entry<String, Object>> it) throws Exception {
+            while (it.hasNext()) {
+                Entry<String, Object> entry = it.next();
+                String k = entry.getKey();
+                serializers.serialize(formatter, entry.getKey(), entry.getValue());
+            }
+        }
+
         public TreeSerializer export(String name, MetadataSerializer serializer) {
             serializers.add(name, serializer);
             return this;
@@ -217,14 +230,6 @@ public final class TreeIoUtils {
             for (String n: name)
                 serializers.add(n, x -> x.toString());
             return this;
-        }
-
-        protected void writeAttributes(TreeFormatter formatter, Iterator<Entry<String, Object>> it) throws Exception {
-            while (it.hasNext()) {
-                Entry<String, Object> entry = it.next();
-                String k = entry.getKey();
-                serializers.serialize(formatter, entry.getKey(), entry.getValue());
-            }
         }
     }
 
