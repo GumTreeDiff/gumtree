@@ -182,6 +182,8 @@ public interface ITree {
     public abstract String toPrettyString(TreeContext ctx);
 
     Object getMetadata(String key);
+
     Object setMetadata(String key, Object value);
+
     Iterator<Entry<String, Object>> getMetadata();
 }

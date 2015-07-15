@@ -47,11 +47,11 @@ public final class TreeIoUtils {
     private TreeIoUtils() {} // Forbids instantiation of TreeIOUtils
 
     public static TreeGenerator fromXml() {
-        return new XMLInternalGenerator();
+        return new XmlInternalGenerator();
     }
 
     public static TreeGenerator fromXml(MetadataUnserializers unserializers) {
-        XMLInternalGenerator generator = new XMLInternalGenerator();
+        XmlInternalGenerator generator = new XmlInternalGenerator();
         generator.getUnserializers().addAll(unserializers);
         return generator;
     }
@@ -59,7 +59,8 @@ public final class TreeIoUtils {
     public static TreeSerializer toXml(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws XMLStreamException {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
+                    throws XMLStreamException {
                 return new XmlFormatter(writer, ctx);
             }
         };
@@ -68,7 +69,8 @@ public final class TreeIoUtils {
     public static TreeSerializer toAnnotatedXml(TreeContext ctx, boolean isSrc, MappingStore m) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws XMLStreamException {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
+                    throws XMLStreamException {
                 return new XmlAnnotatedFormatter(writer, ctx, isSrc, m);
             }
         };
@@ -77,7 +79,8 @@ public final class TreeIoUtils {
     public static TreeSerializer toCompactXml(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
+                    throws Exception {
                 return new XmlCompactFormatter(writer, ctx);
             }
         };
@@ -86,7 +89,8 @@ public final class TreeIoUtils {
     public static TreeSerializer toJson(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
+                    throws Exception {
                 return new JsonFormatter(writer, ctx);
             }
         };
@@ -95,7 +99,8 @@ public final class TreeIoUtils {
     public static TreeSerializer toLisp(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
+                    throws Exception {
                 return new LispFormatter(writer, ctx);
             }
         };
@@ -104,7 +109,8 @@ public final class TreeIoUtils {
     public static TreeSerializer toDot(TreeContext ctx) {
         return new TreeSerializer(ctx) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer)
+                    throws Exception {
                 return new DotFormatter(writer, ctx);
             }
         };
@@ -119,7 +125,8 @@ public final class TreeIoUtils {
             serializers.addAll(ctx.getSerializers());
         }
 
-        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception;
+        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
+                throws Exception;
 
         public void writeTo(Writer writer) throws Exception {
             TreeFormatter formatter = newFormatter(context, serializers, writer);
@@ -333,7 +340,6 @@ public final class TreeIoUtils {
             super(w, ctx);
         }
 
-
         @Override
         public void startSerialization() throws XMLStreamException {
             super.startSerialization();
@@ -417,7 +423,6 @@ public final class TreeIoUtils {
         public XmlCompactFormatter(Writer w, TreeContext ctx) throws XMLStreamException {
             super(w, ctx);
         }
-
 
         @Override
         public void startSerialization() throws XMLStreamException {
@@ -567,7 +572,6 @@ public final class TreeIoUtils {
             }
         }
 
-
         @Override
         public void endTreeProlog(ITree tree) throws IOException {
             writer.name("children");
@@ -610,10 +614,10 @@ public final class TreeIoUtils {
     @Register(id = "xml", accept = "\\.gxml$")
     // TODO Since it is not in the right package, I'm not even sure it is visible in the registry
     // TODO should we move this class elsewhere (another package)
-    public static class XMLInternalGenerator extends TreeGenerator {
+    public static class XmlInternalGenerator extends TreeGenerator {
 
         static MetadataUnserializers defaultUnserializers = new MetadataUnserializers();
-        final MetadataUnserializers unserializers = new MetadataUnserializers(); // FIXME should it be pushed up or not ?
+        final MetadataUnserializers unserializers = new MetadataUnserializers(); // FIXME should it be pushed up or not?
 
         private static final QName TYPE = new QName("type");
 
@@ -627,7 +631,7 @@ public final class TreeIoUtils {
             defaultUnserializers.add(LENGTH, x -> Integer.parseInt(x));
         }
 
-        public XMLInternalGenerator() {
+        public XmlInternalGenerator() {
             unserializers.addAll(defaultUnserializers);
         }
 
@@ -646,7 +650,8 @@ public final class TreeIoUtils {
                             continue;
                         int type = Integer.parseInt(s.getAttributeByName(TYPE).getValue());
 
-                        ITree t = context.createTree(type, labelForAttribute(s, LABEL), labelForAttribute(s, TYPE_LABEL));
+                        ITree t = context.createTree(type,
+                                labelForAttribute(s, LABEL), labelForAttribute(s, TYPE_LABEL));
 
                         Iterator<Attribute> it = s.getAttributes();
                         while (it.hasNext()) {

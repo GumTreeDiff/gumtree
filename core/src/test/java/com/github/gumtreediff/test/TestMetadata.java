@@ -1,3 +1,23 @@
+/*
+ * This file is part of GumTree.
+ *
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ */
+
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
@@ -104,7 +124,7 @@ public class TestMetadata {
     }
 
     private void populate(String[] keys, Integer[] values, int size) {
-        for(int i = 0; i < size; i ++)
+        for (int i = 0; i < size; i ++)
             someNode.setMetadata(keys[i], values[i]);
     }
 
@@ -119,10 +139,10 @@ public class TestMetadata {
         tc.export(key, v2);
         tc.export(pos, x -> Arrays.toString((int[]) x));
 
-        assertEquals("Export JSON", valJSON, TreeIoUtils.toJson(tc).export(v3).toString());
-        assertEquals("Export LISP", valLISP, TreeIoUtils.toLisp(tc).toString());
-        assertEquals("Export XML", valXML, TreeIoUtils.toXml(tc).toString());
-        assertEquals("Export Compact XML", valXMLCompact, TreeIoUtils.toCompactXml(tc).toString());
+        assertEquals("Export JSON", valJson, TreeIoUtils.toJson(tc).export(v3).toString());
+        assertEquals("Export LISP", valLisp, TreeIoUtils.toLisp(tc).toString());
+        assertEquals("Export XML", valXml, TreeIoUtils.toXml(tc).toString());
+        assertEquals("Export Compact XML", valXmlCompact, TreeIoUtils.toCompactXml(tc).toString());
 
         assertEquals(Sets.newHashSet(key, v2, pos), tc.getSerializers().exports());
         tc.getSerializers().remove(pos);
@@ -139,32 +159,32 @@ public class TestMetadata {
         TreeIoUtils.toJson(tc).export("Test key");
     }
 
-    final String valJSON = "{\n" +
-            "\t\"other\": \"more\",\n" +
-            "\t\"more\": \"more\",\n" +
-            "\t\"root\": {\n" +
-            "\t\t\"type\": \"0\",\n" +
-            "\t\t\"key\": \"test\",\n" +
-            "\t\t\"pos\": \"[1, 2, 3, 4]\",\n" +
-            "\t\t\"children\": []\n" +
-            "\t}\n" +
-            "}";
+    final String valJson = "{\n"
+            + "\t\"other\": \"more\",\n"
+            + "\t\"more\": \"more\",\n"
+            + "\t\"root\": {\n"
+            + "\t\t\"type\": \"0\",\n"
+            + "\t\t\"key\": \"test\",\n"
+            + "\t\t\"pos\": \"[1, 2, 3, 4]\",\n"
+            + "\t\t\"children\": []\n"
+            + "\t}\n"
+            + "}";
 
-    final String valLISP = "(((:other \"more\") ) (0 \"0\" \"\" ((:key \"test\") (:pos \"[1, 2, 3, 4]\") ) ())";
+    final String valLisp = "(((:other \"more\") ) (0 \"0\" \"\" ((:key \"test\") (:pos \"[1, 2, 3, 4]\") ) ())";
 
-    final String valXML = "<?xml version=\"1.0\" ?>\n" +
-            "<root>\n" +
-            "  <context>\n" +
-            "    <other>more</other>\n" +
-            "  </context>\n" +
-            "  <tree type=\"0\">\n" +
-            "    <key>test</key>\n" +
-            "    <pos>[1, 2, 3, 4]</pos>\n" +
-            "  </tree>\n" +
-            "</root>\n";
+    final String valXml = "<?xml version=\"1.0\" ?>\n"
+            + "<root>\n"
+            + "  <context>\n"
+            + "    <other>more</other>\n"
+            + "  </context>\n"
+            + "  <tree type=\"0\">\n"
+            + "    <key>test</key>\n"
+            + "    <pos>[1, 2, 3, 4]</pos>\n"
+            + "  </tree>\n"
+            + "</root>\n";
 
-    final String valXMLCompact = "<?xml version=\"1.0\" ?>\n" +
-            "<root other=\"more\">\n" +
-            "  <0 key=\"test\" pos=\"[1, 2, 3, 4]\"></0>\n" +
-            "</root>\n";
+    final String valXmlCompact = "<?xml version=\"1.0\" ?>\n"
+            + "<root other=\"more\">\n"
+            + "  <0 key=\"test\" pos=\"[1, 2, 3, 4]\"></0>\n"
+            + "</root>\n";
 }

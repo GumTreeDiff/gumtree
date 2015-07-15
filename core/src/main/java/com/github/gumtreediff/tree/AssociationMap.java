@@ -1,5 +1,24 @@
-package com.github.gumtreediff.tree;
+/*
+ * This file is part of GumTree.
+ *
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ */
 
+package com.github.gumtreediff.tree;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -7,8 +26,9 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class AssociationMap {
-    ArrayList<String> keys = new ArrayList<>(); // FIXME or not, should we inline this class ? or use Entry to only have one list ? ... or both
+    // FIXME or not, should we inline this class ? or use Entry to only have one list ? ... or both
     ArrayList<Object> values = new ArrayList<>();
+    ArrayList<String> keys = new ArrayList<>();
 
     public Object get(String key) {
         int idx = keys.indexOf(key);
@@ -18,7 +38,8 @@ public class AssociationMap {
     }
 
     /**
-     This method won't remove if value == null
+     * set metadata `key` with `value` and returns the previous value
+     * This method won't remove if value == null
      */
     public Object set(String key, Object value) {
         int idx = keys.indexOf(key);

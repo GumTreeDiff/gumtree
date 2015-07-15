@@ -146,8 +146,6 @@ public class TreeContext {
 
     /**
      * Get an iterator on global metadata only
-     *
-     * @return
      */
     public Iterator<Entry<String, Object>> getMetadata() {
         return metadata.entrySet().iterator();
@@ -155,8 +153,6 @@ public class TreeContext {
 
     /**
      * Get serializers for this tree context
-     *
-     * @return
      */
     public MetadataSerializers getSerializers() {
         return serializers;
@@ -181,8 +177,6 @@ public class TreeContext {
     /**
      * Get an iterator on local and global metadata.
      * To only get local metadata, simply use : `node.getMetadata()`
-     *
-     * @return
      */
     public Iterator<Entry<String, Object>> getMetadata(ITree node) {
         if (node == null)

@@ -9,4 +9,9 @@
     <suppress files=".*LabelDictionary.java" checks=".*"/>
     <suppress files=".*RtedAlgorithm.java" checks=".*"/>
     <suppress files=".*StreamWriterDelegate.java" checks=".*"/>
+    <suppress files=".*HungarianAlgorithm.java" checks=".*"/>
+    <suppress files=".*Indentation.java" checks=".*"/>
+    <suppress files=".*EntityType.java" checks=".*"/>
+    <suppress files=".*CTreeGenerator.java" checks="Indentation"/>
+    <suppress files=".*Run.java" checks="Indentation"/>
 </suppressions>

@@ -24,6 +24,8 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.TreeContext.MetadataSerializers;
+import com.github.gumtreediff.tree.TreeContext.MetadataUnserializers;
 
 import java.io.*;
 import java.util.Arrays;
@@ -34,8 +36,9 @@ public class CTreeGenerator extends TreeGenerator {
 
     private static final String COCCI_CMD = "cgum";
 
-    private static final TreeContext.MetadataSerializers defaultSerializers = new TreeContext.MetadataSerializers();
-    private static final TreeContext.MetadataUnserializers defaultUnserializers = new TreeContext.MetadataUnserializers();
+    private static final MetadataSerializers defaultSerializers = new MetadataSerializers();
+    private static final MetadataUnserializers defaultUnserializers = new MetadataUnserializers();
+
     static {
         defaultSerializers.add("lines", x -> Arrays.toString((int[]) x));
         Pattern comma = Pattern.compile(", ");

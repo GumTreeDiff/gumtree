@@ -58,8 +58,10 @@ public class Run {
         Reflections reflections = new Reflections("com.github.gumtreediff.gen");
 
         reflections.getSubTypesOf(TreeGenerator.class).forEach(
-                gen -> { com.github.gumtreediff.gen.Register a = gen.getAnnotation(com.github.gumtreediff.gen.Register.class);
-                if (a != null)
+                gen -> {
+                    com.github.gumtreediff.gen.Register a =
+                            gen.getAnnotation(com.github.gumtreediff.gen.Register.class);
+                    if (a != null)
                         Generators.getInstance().install(gen, a);
             });
     }
@@ -68,7 +70,9 @@ public class Run {
         Reflections reflections = new Reflections("com.github.gumtreediff.client");
 
         reflections.getSubTypesOf(Client.class).forEach(
-                cli -> { com.github.gumtreediff.client.Register a = cli.getAnnotation(com.github.gumtreediff.client.Register.class);
+                cli -> {
+                    com.github.gumtreediff.client.Register a =
+                            cli.getAnnotation(com.github.gumtreediff.client.Register.class);
                 if (a != null)
                     Clients.getInstance().install(cli, a);
             });
