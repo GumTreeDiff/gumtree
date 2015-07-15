@@ -72,7 +72,9 @@ public interface ITree {
 
     public abstract int getHash();
 
-    public abstract int getEndPos();
+    default int getEndPos()  {
+        return getPos() + getLength();
+    }
 
     public abstract int getHeight();
 

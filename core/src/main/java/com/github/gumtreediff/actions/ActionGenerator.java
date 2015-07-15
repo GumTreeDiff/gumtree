@@ -20,19 +20,7 @@
 
 package com.github.gumtreediff.actions;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Update;
-import com.github.gumtreediff.tree.AbstractTree;
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
-import com.github.gumtreediff.actions.model.Update;
+import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.AbstractTree;
@@ -40,6 +28,11 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ActionGenerator {
 
@@ -87,7 +80,7 @@ public class ActionGenerator {
         return actions;
     }
 
-    public void generate() {
+    public List<Action> generate() {
         ITree srcFakeRoot = new AbstractTree.FakeTree(newSrc);
         ITree dstFakeRoot = new AbstractTree.FakeTree(origDst);
         newSrc.setParent(srcFakeRoot);
@@ -156,8 +149,8 @@ public class ActionGenerator {
             }
         }
 
-
         //FIXME should ensure isomorphism.
+        return actions;
     }
 
     private void alignChildren(ITree w, ITree x) {

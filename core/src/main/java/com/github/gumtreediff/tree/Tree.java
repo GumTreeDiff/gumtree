@@ -93,11 +93,6 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public int getEndPos() {
-        return pos + length;
-    }
-
-    @Override
     public String getLabel() {
         return label;
     }

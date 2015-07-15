@@ -23,6 +23,7 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
 
@@ -30,37 +31,37 @@ public class TreeLoader {
 
     private TreeLoader() {}
 
-    public static Pair<ITree, ITree> getActionPair() {
+    public static Pair<TreeContext, TreeContext> getActionPair() {
         return new Pair<>(load("/action_v0.xml"), load("/action_v1.xml"));
     }
 
-    public static Pair<ITree, ITree> getZsCustomPair() {
+    public static Pair<TreeContext, TreeContext> getZsCustomPair() {
         return new Pair<>(load("/zs_v0.xml"), load("/zs_v1.xml"));
     }
 
-    public static Pair<ITree, ITree> getZsSlidePair() {
+    public static Pair<TreeContext, TreeContext> getZsSlidePair() {
         return new Pair<>(load("/zs_slide_v0.xml"), load("/zs_slide_v1.xml"));
     }
 
-    public static Pair<ITree, ITree> getDummyPair() {
+    public static Pair<TreeContext, TreeContext> getDummyPair() {
         return new Pair<>(load("/Dummy_v0.xml"), load("/Dummy_v1.xml"));
     }
 
     public static ITree getDummySrc() {
-        return load("/Dummy_v0.xml");
+        return load("/Dummy_v0.xml").getRoot();
     }
 
     public static ITree getDummyDst() {
-        return load("/Dummy_v1.xml");
+        return load("/Dummy_v1.xml").getRoot();
     }
 
     public static ITree getDummyBig() {
-        return load("/Dummy_big.xml");
+        return load("/Dummy_big.xml").getRoot();
     }
 
-    public static ITree load(String name) {
+    public static TreeContext load(String name) {
         try {
-            return TreeIoUtils.fromXml().generateFromStream(System.class.getResourceAsStream(name)).getRoot();
+            return TreeIoUtils.fromXml().generateFromStream(System.class.getResourceAsStream(name));
         } catch (IOException e) {
             throw new RuntimeException(String.format("Unable to load test ressorce: %s", name), e);
         }

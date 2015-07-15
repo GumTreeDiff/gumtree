@@ -20,35 +20,26 @@
 
 package com.github.gumtreediff.test;
 
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 import com.github.gumtreediff.actions.ActionGenerator;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Move;
-import com.github.gumtreediff.actions.model.Update;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.Pair;
-import org.junit.Test;
-
-import com.github.gumtreediff.actions.ActionGenerator;
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
-import com.github.gumtreediff.actions.model.Update;
+import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.tree.TreeContext;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestActionGenerator {
 
     @Test
     public void testWithActionExample() {
-        Pair<ITree, ITree> trees = TreeLoader.getActionPair();
-        ITree src = trees.getFirst();
-        ITree dst = trees.getSecond();
+        Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
+        ITree src = trees.getFirst().getRoot();
+        ITree dst = trees.getSecond().getRoot();
         MappingStore ms = new MappingStore();
         ms.link(src, dst);
         ms.link(src.getChild(1), dst.getChild(0));
@@ -86,9 +77,9 @@ public class TestActionGenerator {
 
     @Test
     public void testWithZsCustomExample() {
-        Pair<ITree, ITree> trees = TreeLoader.getZsCustomPair();
-        ITree src = trees.getFirst();
-        ITree dst = trees.getSecond();
+        Pair<TreeContext, TreeContext> trees = TreeLoader.getZsCustomPair();
+        ITree src = trees.getFirst().getRoot();
+        ITree dst = trees.getSecond().getRoot();
         MappingStore ms = new MappingStore();
         ms.link(src, dst.getChild(0));
         ms.link(src.getChild(0), dst.getChild(0).getChild(0));

@@ -20,144 +20,211 @@
 
 package com.github.gumtreediff.io;
 
-import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.*;
+import com.github.gumtreediff.io.TreeIoUtils.AbstractSerializer;
 import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
 public final class ActionsIoUtils {
 
-    private ActionsIoUtils() {
-    }
+    private ActionsIoUtils() { }
 
-    public static String toText(List<Action> script) {
-        StringWriter w = new StringWriter();
-        for (Action a: script) w.append(a.toString() + "\n");
-        String result = w.toString();
-        try {
-            w.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
+    public static ActionSerializer toText(TreeContext sctx, List<Action> actions,
+                                         MappingStore mappings) throws IOException {
+        return new ActionSerializer(sctx, mappings, actions) {
 
-    public static void toText(List<Action> script, String file) {
-        try {
-            FileWriter w = new FileWriter(file);
-            for (Action a : script) w.append(a.toString() + "\n");
-            w.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void toXml(TreeContext sctx, List<Action> actions,
-                             MappingStore mappings, String file) throws IOException {
-        FileWriter f = new FileWriter(file);
-        try {
-            toXml(sctx, f, actions, mappings);
-        } finally {
-            try {
-                f.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            @Override
+            protected ActionFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
+                return new TextFormatter(ctx, writer);
             }
-        }
+        };
     }
 
-    public static String toXml(TreeContext sctx, List<Action> actions, MappingStore mappings) {
-        StringWriter s = new StringWriter();
-        try {
-            toXml(sctx, s, actions, mappings);
-            return s.toString();
-        } finally {
-            try {
-                s.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+    public static ActionSerializer toXml(TreeContext sctx, List<Action> actions,
+                             MappingStore mappings) throws IOException {
+        return new ActionSerializer(sctx, mappings, actions) {
+
+            @Override
+            protected ActionFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
+                return new XMLFormatter(ctx, writer);
             }
+        };
+    }
+
+    public abstract static class ActionSerializer extends AbstractSerializer {
+        final TreeContext context;
+        final MappingStore mappings;
+        final List<Action> actions;
+
+        ActionSerializer(TreeContext context, MappingStore mappings, List<Action> actions) {
+            this.context = context;
+            this.mappings = mappings;
+            this.actions = actions;
+        }
+
+        protected abstract ActionFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception;
+
+        @Override
+        public void writeTo(Writer writer) throws Exception {
+            ActionFormatter fmt = newFormatter(context, writer);
+            fmt.startActions();
+            for (Action a : actions) {
+                ITree src = a.getNode();
+                if (a instanceof Move) {
+                    ITree dst = mappings.getDst(src);
+                    fmt.moveAction(src, dst);
+                    break;
+                } else if (a instanceof Update) {
+                    ITree dst = mappings.getDst(src);
+                    fmt.updateAction(src, dst);
+                    break;
+                } else if (a instanceof Insert) {
+                    ITree dst = a.getNode();
+                    if (dst.isRoot())
+                        fmt.insertRoot(src);
+                    else
+                        fmt.insertAction(src, dst.getParent(), dst.getParent().getChildPosition(dst));
+                } else if (a instanceof Delete) {
+                    fmt.deleteAction(src);
+                }
+            }
+            fmt.endActions();
         }
     }
 
-    public static void toXml(TreeContext sctx, Writer writer, List<Action> actions, MappingStore mappings) {
-        XMLOutputFactory f = XMLOutputFactory.newInstance();
-        try {
-            XMLStreamWriter w = new IndentingXMLStreamWriter(f.createXMLStreamWriter(writer));
-            w.writeStartDocument();
-            w.writeStartElement("actions");
-//            writeActions(sctx, actions, mappings, w);
-            // TODO rewrite ActionsIO like TreeIO and handle metadata
-            w.writeEndElement();
-            w.writeEndDocument();
-            w.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+    interface ActionFormatter {
+        void startActions() throws Exception;
+        void insertRoot(ITree node) throws Exception;
+        void insertAction(ITree node, ITree parent, int index) throws Exception;
+        void moveAction(ITree src, ITree dst) throws Exception;
+        void updateAction(ITree src, ITree dst) throws Exception;
+        void deleteAction(ITree node) throws Exception;
+        void endActions() throws Exception;
+    }
+
+    static class XMLFormatter implements ActionFormatter {
+        final TreeContext context;
+        final XMLStreamWriter writer;
+
+        XMLFormatter(TreeContext context, Writer w) throws XMLStreamException {
+            XMLOutputFactory f = XMLOutputFactory.newInstance();
+            writer = new IndentingXMLStreamWriter(f.createXMLStreamWriter(w));
+            this.context = context;
+        }
+
+
+        @Override
+        public void startActions() throws XMLStreamException {
+            writer.writeStartDocument();
+            writer.writeStartElement("actions");
+        }
+
+        @Override
+        public void insertRoot(ITree node) throws Exception {
+            start(Insert.class, node);
+            end(node);
+        }
+
+        @Override
+        public void insertAction(ITree node, ITree parent, int index) throws Exception {
+            start(Insert.class, node);
+            writer.writeAttribute("parent", Integer.toString(parent.getId()));
+            writer.writeAttribute("at", Integer.toString(index));
+            end(node);
+        }
+
+        @Override
+        public void moveAction(ITree src, ITree dst) throws XMLStreamException {
+            start(Move.class, src);
+            writer.writeAttribute("to", Integer.toString(dst.getId()));
+            end(src);
+        }
+
+        @Override
+        public void updateAction(ITree src, ITree dst) throws XMLStreamException {
+            start(Update.class, src);
+            writer.writeAttribute("to", Integer.toString(dst.getId()));
+            end(src);
+        }
+
+        @Override
+        public void deleteAction(ITree node) throws Exception {
+            start(Delete.class, node);
+            end(node);
+        }
+
+
+        @Override
+        public void endActions() throws XMLStreamException {
+            writer.writeEndElement();
+            writer.writeEndDocument();
+        }
+
+        private void start(Class<? extends Action> name, ITree src) throws XMLStreamException {
+            writer.writeEmptyElement(name.getSimpleName().toLowerCase());
+            writer.writeAttribute("tree", Integer.toString(src.getId()));
+        }
+
+        private void end(ITree node) throws XMLStreamException {
+//            writer.writeEndElement();
         }
     }
 
-//    private static void writeActions(TreeContext sctx, List<Action> actions,
-//                                     MappingStore mappings, XMLStreamWriter w) throws XMLStreamException {
-//        for (Action a : actions) {
-//            w.writeStartElement("action");
-//            w.writeAttribute("type", a.getClass().getSimpleName());
-//            w.writeAttribute("tree", sctx.getTypeLabel(a.getNode()));
-//            if (a instanceof Move || a instanceof Update) {
-//                ITree src = a.getNode();
-//                ITree dst = mappings.getDst(src);
-//                writeTreePos(w, true, src);
-//                writeTreePos(w, false, dst);
-//            } else if (a instanceof Insert) {
-//                ITree dst = a.getNode();
-//                if (dst.isRoot()) writeInsertPos(w, true, new int[] {0, 0});
-//                else {
-//                    int[] pos;
-//                    int idx = dst.getParent().getChildPosition(dst);
-//
-//                    if (idx == 0) pos = dst.getParent().getLcPosStart();
-//                    else pos = dst.getParent().getChildren().get(idx - 1).getLcPosEnd();
-//
-//                    writeInsertPos(w, true,pos);
-//                }
-//                writeTreePos(w, false, dst);
-//            } else if (a instanceof Delete) {
-//                ITree src = a.getNode();
-//                writeTreePos(w, true, src);
-//            }
-//            w.writeEndElement();
-//        }
-//    }
+    static class TextFormatter implements ActionFormatter {
+        final Writer writer;
+        final TreeContext context;
+        public TextFormatter(TreeContext ctx, Writer writer) {
+            this.context = ctx;
+            this.writer = writer;
+        }
 
-//    private static void writeTreePos(XMLStreamWriter w, boolean isBefore, ITree tree) throws XMLStreamException {
-//        if (isBefore)
-//            w.writeEmptyElement("before");
-//        else
-//            w.writeEmptyElement("after");
-//        if (tree.getLcPosStart() != null) {
-//            w.writeAttribute("begin_line", Integer.toString(tree.getLcPosStart()[0]));
-//            w.writeAttribute("begin_col", Integer.toString(tree.getLcPosStart()[1]));
-//            w.writeAttribute("end_line", Integer.toString(tree.getLcPosEnd()[0]));
-//            w.writeAttribute("end_col", Integer.toString(tree.getLcPosEnd()[1]));
-//        }
-//    }
 
-    private static void writeInsertPos(XMLStreamWriter w, boolean isBefore, int[] pos) throws XMLStreamException {
-        if (isBefore)
-            w.writeEmptyElement("before");
-        else
-            w.writeEmptyElement("after");
-        w.writeAttribute("begin_line", Integer.toString(pos[0]));
-        w.writeAttribute("begin_col", Integer.toString(pos[1]));
-        w.writeAttribute("end_line", Integer.toString(pos[0]));
-        w.writeAttribute("end_col", Integer.toString(pos[1]));
+        @Override
+        public void startActions() throws Exception { }
+
+        @Override
+        public void insertRoot(ITree node) throws Exception {
+            write("Insert root %s", _(node));
+        }
+
+        @Override
+        public void insertAction(ITree node, ITree parent, int index) throws Exception {
+            write("Insert %s -> %d %s",  _(node), index,  _(parent));
+        }
+
+        @Override
+        public void moveAction(ITree src, ITree dst) throws Exception {
+            write("Move %s -> %s", _(src), _(dst));
+        }
+
+        @Override
+        public void updateAction(ITree src, ITree dst) throws Exception {
+            write("Move %s -> %s",  _(src),  _(dst));
+        }
+
+        @Override
+        public void deleteAction(ITree node) throws Exception {
+            write("Delete %s", _(node));
+        }
+
+        @Override
+        public void endActions() throws Exception { }
+
+        private void write(String fmt, Object... objs) throws IOException {
+            writer.append(String.format(fmt, objs));
+            writer.append("\n");
+        }
+
+        private String _(ITree node) {
+            return String.format("%s(%d)", node.toPrettyString(context), node.getId());
+        }
     }
-
 }

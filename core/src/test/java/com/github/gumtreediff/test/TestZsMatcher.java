@@ -21,12 +21,11 @@
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.Pair;
-import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.optimal.zs.ZsMatcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -36,9 +35,9 @@ public class TestZsMatcher {
 
     @Test
     public void testWithCustomExample() {
-        Pair<ITree, ITree> trees = TreeLoader.getZsCustomPair();
-        ITree src = trees.getFirst();
-        ITree dst = trees.getSecond();
+        Pair<TreeContext, TreeContext> trees = TreeLoader.getZsCustomPair();
+        ITree src = trees.getFirst().getRoot();
+        ITree dst = trees.getSecond().getRoot();
         Matcher matcher = new ZsMatcher(src, dst, new MappingStore());
         matcher.match();
         assertEquals(5, matcher.getMappingSet().size());
@@ -51,9 +50,9 @@ public class TestZsMatcher {
 
     @Test
     public void testWithSlideExample() {
-        Pair<ITree, ITree> trees = TreeLoader.getZsSlidePair();
-        ITree src = trees.getFirst();
-        ITree dst = trees.getSecond();
+        Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
+        ITree src = trees.getFirst().getRoot();
+        ITree dst = trees.getSecond().getRoot();
         Matcher matcher = new ZsMatcher(src, dst, new MappingStore());
         matcher.match();
         assertEquals(5, matcher.getMappingSet().size());
