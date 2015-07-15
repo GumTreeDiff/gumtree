@@ -1,13 +1,28 @@
+/*
+ * This file is part of GumTree.
+ *
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ */
+
 package com.github.gumtreediff.tree;
 
 import com.github.gumtreediff.tree.hash.HashUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public abstract class AbstractTree implements ITree {
 
@@ -288,7 +303,7 @@ public abstract class AbstractTree implements ITree {
 
     public static class FakeTree extends AbstractTree {
         public FakeTree(ITree... trees) {
-            children = new ArrayList<ITree>(trees.length);
+            children = new ArrayList<>(trees.length);
             children.addAll(Arrays.asList(trees));
         }
 
@@ -312,23 +327,21 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public int getEndPos() {
-            throw unsupportedOperation();
-        }
-
-        @Override
         public String getLabel() {
             return NO_LABEL;
         }
 
         @Override
-        public int getLength() {
-            throw unsupportedOperation();
-        }
+        public int getLength() { return getEndPos() - getPos(); }
 
         @Override
         public int getPos() {
-            throw unsupportedOperation();
+            return Collections.min(children, (t1, t2) -> t2.getPos() - t1.getPos()).getPos();
+        }
+
+        @Override
+        public int getEndPos() {
+            return Collections.max(children, (t1, t2) -> t2.getPos() - t1.getPos()).getEndPos();
         }
 
         @Override

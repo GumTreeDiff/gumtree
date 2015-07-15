@@ -1,3 +1,23 @@
+/*
+ * This file is part of GumTree.
+ *
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ */
+
 package com.github.gumtreediff.io;
 
 import com.github.gumtreediff.gen.Register;
@@ -90,25 +110,9 @@ public final class TreeIoUtils {
         };
     }
 
-    public abstract static class TreeSerializer {
-        final TreeContext context;
-        final MetadataSerializers serializers = new MetadataSerializers();
-
-        public TreeSerializer(TreeContext ctx) {
-            context = ctx;
-            serializers.addAll(ctx.getSerializers());
-        }
-
-        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception;
-
-        public void writeTo(Writer writer) throws Exception {
-            TreeFormatter formatter = newFormatter(context, serializers, writer);
-            try {
-                writeTree(formatter, context.getRoot());
-            } finally {
-                formatter.close();
-            }
-        }
+    public abstract static class AbstractSerializer {
+        // This has to be a class a not an interface/mixin because of the toString method
+        public abstract void writeTo(Writer writer) throws Exception;
 
         public void writeTo(OutputStream writer) throws Exception {
             OutputStreamWriter os = new OutputStreamWriter(writer);
@@ -146,6 +150,27 @@ public final class TreeIoUtils {
                 writeTo(w);
             } finally {
                 w.close();
+            }
+        }
+    }
+
+    public abstract static class TreeSerializer extends AbstractSerializer {
+        final TreeContext context;
+        final MetadataSerializers serializers = new MetadataSerializers();
+
+        public TreeSerializer(TreeContext ctx) {
+            context = ctx;
+            serializers.addAll(ctx.getSerializers());
+        }
+
+        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception;
+
+        public void writeTo(Writer writer) throws Exception {
+            TreeFormatter formatter = newFormatter(context, serializers, writer);
+            try {
+                writeTree(formatter, context.getRoot());
+            } finally {
+                formatter.close();
             }
         }
 
@@ -188,6 +213,14 @@ public final class TreeIoUtils {
             formatter.stopSerialization();
         }
 
+        protected void writeAttributes(TreeFormatter formatter, Iterator<Entry<String, Object>> it) throws Exception {
+            while (it.hasNext()) {
+                Entry<String, Object> entry = it.next();
+                String k = entry.getKey();
+                serializers.serialize(formatter, entry.getKey(), entry.getValue());
+            }
+        }
+
         public TreeSerializer export(String name, MetadataSerializer serializer) {
             serializers.add(name, serializer);
             return this;
@@ -197,14 +230,6 @@ public final class TreeIoUtils {
             for (String n: name)
                 serializers.add(n, x -> x.toString());
             return this;
-        }
-
-        protected void writeAttributes(TreeFormatter formatter, Iterator<Entry<String, Object>> it) throws Exception {
-            while (it.hasNext()) {
-                Entry<String, Object> entry = it.next();
-                String k = entry.getKey();
-                serializers.serialize(formatter, entry.getKey(), entry.getValue());
-            }
         }
     }
 

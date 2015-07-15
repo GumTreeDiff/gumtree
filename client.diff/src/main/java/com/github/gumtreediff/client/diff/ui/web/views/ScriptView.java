@@ -1,9 +1,30 @@
+/*
+ * This file is part of GumTree.
+ *
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ */
+
 package com.github.gumtreediff.client.diff.ui.web.views;
 
 import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.io.ActionsIoUtils;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.TreeContext;
@@ -20,6 +41,12 @@ import static org.rendersnake.HtmlAttributesFactory.lang;
 
 public class ScriptView implements Renderable {
 
+    private final MappingStore mappings;
+
+    private final TreeContext src;
+
+    private final TreeContext dst;
+
     private File fSrc;
 
     private File fDst;
@@ -29,11 +56,12 @@ public class ScriptView implements Renderable {
     public ScriptView(File fSrc, File fDst) throws IOException {
         this.fSrc = fSrc;
         this.fDst = fDst;
-        TreeContext src = Generators.getInstance().getTree(fSrc.getAbsolutePath());
-        TreeContext dst = Generators.getInstance().getTree(fDst.getAbsolutePath());
+        src = Generators.getInstance().getTree(fSrc.getAbsolutePath());
+        dst = Generators.getInstance().getTree(fDst.getAbsolutePath());
         Matcher matcher = Matchers.getInstance().getMatcher(src.getRoot(), dst.getRoot());
         matcher.match();
-        ActionGenerator g = new ActionGenerator(src.getRoot(), dst.getRoot(), matcher.getMappings());
+        mappings = matcher.getMappings();
+        ActionGenerator g = new ActionGenerator(src.getRoot(), dst.getRoot(), mappings);
         g.generate();
         this.script = g.getActions();
     }
@@ -52,7 +80,7 @@ public class ScriptView implements Renderable {
                 .write("Script ")
                 .small().content(String.format("%s -> %s", fSrc.getName(), fDst.getName()))
                 ._h3()
-                .pre().content(ActionsIoUtils.toText(this.script))
+                .pre().content(ActionsIoUtils.toText(src, this.script, mappings).toString())
                 ._div()
                 ._div()
                 ._div()
