@@ -45,4 +45,9 @@ public class TestActionIO {
     public void testBasicTextActions() throws IOException {
         System.out.println(ActionsIoUtils.toText(src, actions, mappings));
     }
+
+    @Test
+    public void testBasicJsonActions() throws IOException {
+        System.out.println(ActionsIoUtils.toJson(src, actions, mappings));
+    }
 }

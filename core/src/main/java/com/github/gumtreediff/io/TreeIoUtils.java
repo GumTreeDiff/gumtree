@@ -116,26 +116,9 @@ public final class TreeIoUtils {
         };
     }
 
-    public abstract static class TreeSerializer {
-        final TreeContext context;
-        final MetadataSerializers serializers = new MetadataSerializers();
+    public abstract static class AbstractSerializer {
 
-        public TreeSerializer(TreeContext ctx) {
-            context = ctx;
-            serializers.addAll(ctx.getSerializers());
-        }
-
-        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
-                throws Exception;
-
-        public void writeTo(Writer writer) throws Exception {
-            TreeFormatter formatter = newFormatter(context, serializers, writer);
-            try {
-                writeTree(formatter, context.getRoot());
-            } finally {
-                formatter.close();
-            }
-        }
+        public abstract void writeTo(Writer writer) throws Exception;
 
         public void writeTo(OutputStream writer) throws Exception {
             OutputStreamWriter os = new OutputStreamWriter(writer);
