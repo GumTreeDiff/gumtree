@@ -59,7 +59,7 @@ public final class ActionsIoUtils {
         };
     }
 
-    abstract static class ActionSerializer extends AbstractSerializer {
+    public abstract static class ActionSerializer extends AbstractSerializer {
         final TreeContext context;
         final MappingStore mappings;
         final List<Action> actions;
