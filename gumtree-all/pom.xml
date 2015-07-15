@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>gumtree-all</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>GumTree Distribution</name>
     <dependencies>
         <dependency>

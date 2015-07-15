@@ -33,8 +33,6 @@ public class LabelDictionary {
 
 	/**
 	 * Creates a new blank dictionary.
-	 *  
-	 * @throws Exception
 	 */
 	public LabelDictionary() {
 		count = 0;

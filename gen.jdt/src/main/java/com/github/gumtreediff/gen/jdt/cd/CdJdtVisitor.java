@@ -35,7 +35,7 @@ import com.github.gumtreediff.tree.Tree;
  *  JavaASTBodyTransformer and JavaASTChangeDistillerVisitor.
  * Modifications are labeled as "@Inria"
  *
- * @Inria removed fNodeStack since it's inherited with the new
+ * INRIA removed fNodeStack since it's inherited with the new
  */
 @SuppressWarnings("unused")
 public class CdJdtVisitor extends AbstractJdtVisitor {
