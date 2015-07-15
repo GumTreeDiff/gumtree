@@ -56,7 +56,7 @@ public final class ActionsIoUtils {
 
             @Override
             protected ActionFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception {
-                return new XMLFormatter(ctx, writer);
+                return new XmlFormatter(ctx, writer);
             }
         };
     }
@@ -129,16 +129,15 @@ public final class ActionsIoUtils {
         void endActions() throws Exception;
     }
 
-    static class XMLFormatter implements ActionFormatter {
+    static class XmlFormatter implements ActionFormatter {
         final TreeContext context;
         final XMLStreamWriter writer;
 
-        XMLFormatter(TreeContext context, Writer w) throws XMLStreamException {
+        XmlFormatter(TreeContext context, Writer w) throws XMLStreamException {
             XMLOutputFactory f = XMLOutputFactory.newInstance();
             writer = new IndentingXMLStreamWriter(f.createXMLStreamWriter(w));
             this.context = context;
         }
-
 
         @Override
         public void startActions() throws XMLStreamException {
@@ -181,7 +180,6 @@ public final class ActionsIoUtils {
             end(node);
         }
 
-
         @Override
         public void endActions() throws XMLStreamException {
             writer.writeEndElement();
@@ -207,34 +205,33 @@ public final class ActionsIoUtils {
             this.writer = writer;
         }
 
-
         @Override
         public void startActions() throws Exception {
         }
 
         @Override
         public void insertRoot(ITree node) throws Exception {
-            write("Insert root %s", _(node));
+            write("Insert root %s", toS(node));
         }
 
         @Override
         public void insertAction(ITree node, ITree parent, int index) throws Exception {
-            write("Insert %s -> %d %s", _(node), index, _(parent));
+            write("Insert %s -> %d %s", toS(node), index, toS(parent));
         }
 
         @Override
         public void moveAction(ITree src, ITree dst, int position) throws Exception {
-            write("Move %s -> %s", _(src), _(dst));
+            write("Move %s -> %s", toS(src), toS(dst));
         }
 
         @Override
         public void updateAction(ITree src, ITree dst) throws Exception {
-            write("Move %s -> %s", _(src), _(dst));
+            write("Move %s -> %s", toS(src), toS(dst));
         }
 
         @Override
         public void deleteAction(ITree node) throws Exception {
-            write("Delete %s", _(node));
+            write("Delete %s", toS(node));
         }
 
         @Override
@@ -246,7 +243,7 @@ public final class ActionsIoUtils {
             writer.append("\n");
         }
 
-        private String _(ITree node) {
+        private String toS(ITree node) {
             return String.format("%s(%d)", node.toPrettyString(context), node.getId());
         }
     }

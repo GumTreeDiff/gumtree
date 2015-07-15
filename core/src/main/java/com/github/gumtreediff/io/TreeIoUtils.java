@@ -169,7 +169,8 @@ public final class TreeIoUtils {
             serializers.addAll(ctx.getSerializers());
         }
 
-        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) throws Exception;
+        protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
+                throws Exception;
 
         public void writeTo(Writer writer) throws Exception {
             TreeFormatter formatter = newFormatter(context, serializers, writer);
@@ -486,7 +487,7 @@ public final class TreeIoUtils {
             String matched = tree.isMatched() ? ":matched " : "";
 
             writer.write(String.format("(%d %s %s %s(%s",
-                            tree.getType(), _(context.getTypeLabel(tree)), _(tree.getLabel()),
+                            tree.getType(), protect(context.getTypeLabel(tree)), protect(tree.getLabel()),
                             matched, pos));
         }
 
@@ -502,10 +503,10 @@ public final class TreeIoUtils {
 
         @Override
         public void serializeAttribute(String name, String value) throws Exception {
-            writer.append(String.format("(:%s %s) ", name, _(value)));
+            writer.append(String.format("(:%s %s) ", name, protect(value)));
         }
 
-        protected String _(String val) {
+        protected String protect(String val) {
             return String.format("\"%s\"", replacer.matcher(val).replaceAll("\\\\$0"));
         }
 

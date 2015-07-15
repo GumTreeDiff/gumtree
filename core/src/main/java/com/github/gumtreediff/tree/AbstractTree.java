@@ -332,7 +332,9 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public int getLength() { return getEndPos() - getPos(); }
+        public int getLength() {
+            return getEndPos() - getPos();
+        }
 
         @Override
         public int getPos() {

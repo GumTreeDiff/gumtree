@@ -10,6 +10,27 @@
         <name>LaBRI</name>
         <url>http://se.labri.fr</url>
     </organization>
+    <description>
+        GumTree is a complete framework to deal with source code as trees and compute differences between them.
+    </description>
+    <developers>
+        <developer>
+            <id>jre</id>
+            <name>Jean-Rémy Falleri</name>
+            <email>jr.falleri@gmail.com</email>
+        </developer>
+        <developer>
+            <id>flop</id>
+            <name>Floréal Morandat</name>
+            <email>florealm@gmail.com</email>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v3.0</name>
+            <url>https://www.gnu.org/copyleft/lesser.html</url>
+        </license>
+    </licenses>
     <scm>
         <connection>scm:git:https://github.com/GumTreeDiff/gumtree/</connection>
         <developerConnection>scm:git:https://github.com/GumTreeDiff/gumtree/</developerConnection>
@@ -83,6 +104,19 @@
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
