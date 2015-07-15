@@ -21,7 +21,7 @@
 	<parent>
 		<artifactId>gumtree</artifactId>
 		<groupId>com.github.gumtreediff</groupId>
-		<version>2.0.0</version>
+		<version>2.0.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>gen.antlr-antlr</artifactId>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>com.github.gumtreediff</groupId>
 			<artifactId>gen.antlr</artifactId>
-			<version>2.0.0</version>
+			<version>2.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
