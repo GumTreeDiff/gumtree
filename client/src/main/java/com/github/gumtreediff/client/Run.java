@@ -127,6 +127,8 @@ public class Run {
 
     public static void listCommand(PrintStream out) {
         out.println("Available Commands:");
+        for (String cmd: Clients.getInstance().getEntries())
+            out.println("* " + cmd);
     }
 
     static class Help extends Option.Help {
