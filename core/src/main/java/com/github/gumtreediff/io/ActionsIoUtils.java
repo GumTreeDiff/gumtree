@@ -93,12 +93,10 @@ public final class ActionsIoUtils {
                 ITree src = a.getNode();
                 if (a instanceof Move) {
                     ITree dst = mappings.getDst(src);
-                    fmt.moveAction(src, dst, ((Move) a).getPosition());
-                    break;
+                    fmt.moveAction(src, dst.getParent(), ((Move) a).getPosition());
                 } else if (a instanceof Update) {
                     ITree dst = mappings.getDst(src);
                     fmt.updateAction(src, dst);
-                    break;
                 } else if (a instanceof Insert) {
                     ITree dst = a.getNode();
                     if (dst.isRoot())
@@ -216,17 +214,17 @@ public final class ActionsIoUtils {
 
         @Override
         public void insertAction(ITree node, ITree parent, int index) throws Exception {
-            write("Insert %s -> %d %s", toS(node), index, toS(parent));
+            write("Insert %s into %s at %d", toS(node), toS(parent), index);
         }
 
         @Override
         public void moveAction(ITree src, ITree dst, int position) throws Exception {
-            write("Move %s -> %s", toS(src), toS(dst));
+            write("Move %s into %s at %d", toS(src), toS(dst), position);
         }
 
         @Override
         public void updateAction(ITree src, ITree dst) throws Exception {
-            write("Move %s -> %s", toS(src), toS(dst));
+            write("Update %s to %s", toS(src), dst.getLabel());
         }
 
         @Override
