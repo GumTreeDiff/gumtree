@@ -53,7 +53,7 @@ public class DiffServer extends NanoHTTPD {
             if ("/list".equals(uri) || ("/".equals(uri) && comparator.isDirMode())) {
                 DirectoryComparatorView view = new DirectoryComparatorView(comparator);
                 return respond(view);
-            } else if ("/fr/labri/gumtree/client/diff".equals(uri) || ("/".equals(uri) && !comparator.isDirMode())) {
+            } else if ("/diff".equals(uri) || ("/".equals(uri) && !comparator.isDirMode())) {
                 int id = 0;
                 if (parms.containsKey("id"))
                     id = Integer.parseInt(parms.get("id"));

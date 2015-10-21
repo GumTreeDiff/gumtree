@@ -142,7 +142,7 @@ public class DirectoryComparatorView implements Renderable {
                         .td().content(comparator.getSrc().relativize(file.getFirst().toPath()).toString())
                         .td().content(comparator.getDst().relativize(file.getSecond().toPath()).toString())
                         .td()
-                        .a(class_("btn btn-primary btn-xs").href("/fr/labri/gumtree/client/diff" + id)).content("fr/labri/gumtree/client/diff")
+                        .a(class_("btn btn-primary btn-xs").href("/diff?id=" + id)).content("diff")
                         .write(" ")
                         .a(class_("btn btn-primary btn-xs").href("/script?id=" + id)).content("script")
                         ._td()
