@@ -33,11 +33,15 @@ import com.github.gumtreediff.gen.jdt.cd.EntityType;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-public abstract class AbstractJdtVisitor  extends ASTVisitor {
+public abstract class AbstractJdtVisitor extends ASTVisitor {
 
     protected TreeContext context = new TreeContext();
 
     private Deque<ITree> trees = new ArrayDeque<>();
+
+    public AbstractJdtVisitor() {
+        super(true);
+    }
 
     public TreeContext getTreeContext() {
         return context;

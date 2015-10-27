@@ -47,8 +47,16 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         if (n instanceof PrefixExpression) return ((PrefixExpression) n).getOperator().toString();
         if (n instanceof PostfixExpression) return ((PostfixExpression) n).getOperator().toString();
         if (n instanceof Assignment) return ((Assignment) n).getOperator().toString();
+        if (n instanceof TextElement) return n.toString();
+        if (n instanceof TagElement) return ((TagElement) n).getTagName();
 
         return "";
+    }
+
+    @Override
+    public boolean visit(TagElement e) {
+        e.toString();
+        return true;
     }
 
     @Override

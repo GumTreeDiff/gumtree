@@ -60,6 +60,7 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         pOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
         pOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
         pOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
+        pOptions.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
         parser.setCompilerOptions(pOptions);
         parser.setSource(readerToCharArray(r));
         AbstractJdtVisitor v = createVisitor();
