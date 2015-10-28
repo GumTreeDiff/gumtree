@@ -29,7 +29,7 @@ import com.github.gumtreediff.matchers.Matcher;
 
 @Register(name = "axmldiff", description = "Dump annotated xml tree",
         experimental = true, options = AbstractDiffClient.Options.class)
-public abstract class AnnotatedXmlDiff extends AbstractDiffClient<AnnotatedXmlDiff.Options> {
+public class AnnotatedXmlDiff extends AbstractDiffClient<AnnotatedXmlDiff.Options> {
 
     public AnnotatedXmlDiff(String[] args) {
         super(args);

@@ -250,7 +250,9 @@ public final class ActionsIoUtils {
         private final JsonWriter writer;
 
         JsonFormatter(TreeContext ctx, Writer writer) {
+
             this.writer = new JsonWriter(writer);
+            this.writer.setIndent("  ");
         }
 
         @Override

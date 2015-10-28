@@ -563,6 +563,7 @@ public final class TreeIoUtils {
         public JsonFormatter(Writer w, TreeContext ctx) {
             super(ctx);
             writer = new JsonWriter(w);
+            writer.setIndent("  ");
         }
 
         @Override
