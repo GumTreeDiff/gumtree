@@ -29,7 +29,7 @@ public class Move extends Addition {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "MOV";
     }
 

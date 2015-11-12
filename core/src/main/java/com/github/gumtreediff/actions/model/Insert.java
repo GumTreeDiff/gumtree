@@ -30,7 +30,7 @@ public class Insert extends Addition {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "INS";
     }
 
