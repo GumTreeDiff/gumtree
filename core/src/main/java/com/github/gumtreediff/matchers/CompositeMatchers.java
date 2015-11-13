@@ -56,7 +56,7 @@ public class CompositeMatchers {
     }
 
     @Register(id = "change-distiller", defaultMatcher = true)
-    public class ChangeDistiller extends CompositeMatcher {
+    public static class ChangeDistiller extends CompositeMatcher {
 
         public ChangeDistiller(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store, new Matcher[]{
