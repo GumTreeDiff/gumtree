@@ -39,8 +39,9 @@ public abstract class Action {
         this.node = node;
     }
 
-    protected abstract String getName();
+    public abstract String getName();
 
+    @Override
     public abstract String toString();
 
 }

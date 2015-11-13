@@ -40,7 +40,8 @@ public class Tree extends AbstractTree implements ITree {
 
     private AssociationMap metadata;
 
-    Tree(int type, String label) {
+    /** Constructs a new node. If you need type labels corresponding to the integer, see class TreeContext.createTree */
+    public Tree(int type, String label) {
         this.type = type;
         this.label = (label == null) ? NO_LABEL : label.intern();
         this.id = NO_ID;
