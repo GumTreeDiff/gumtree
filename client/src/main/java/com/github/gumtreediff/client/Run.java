@@ -40,7 +40,7 @@ public class Run {
         public Option[] values() {
             return new Option[]{
                     new Option("-c", "Set global property (-c property value). "
-                            + "Properties do not need to be prefixed by gumtree.", 2){
+                            + "Properties do not need to be prefixed by gumtree.", 2) {
 
                         @Override
                         protected void process(String name, String[] args) {

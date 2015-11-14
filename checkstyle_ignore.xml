@@ -3,7 +3,7 @@
         "-//Puppy Crawl//DTD Suppressions 1.1//EN"
         "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 <suppressions>
-    <suppress files=".*generated-sources.*" checks=".*"/>
+    <suppress files=".*generated-src.*" checks=".*"/>
     <suppress files=".*IndentingXMLStreamWriter.java" checks=".*"/>
     <suppress files=".*InfoTree.java" checks=".*"/>
     <suppress files=".*LabelDictionary.java" checks=".*"/>
@@ -13,5 +13,6 @@
     <suppress files=".*Indentation.java" checks=".*"/>
     <suppress files=".*EntityType.java" checks=".*"/>
     <suppress files=".*CTreeGenerator.java" checks="Indentation"/>
+    <suppress files=".*CdJdtVisitor.java" checks=".*"/>
     <suppress files=".*Run.java" checks="Indentation"/>
 </suppressions>

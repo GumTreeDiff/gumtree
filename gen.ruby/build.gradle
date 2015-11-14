@@ -1,0 +1,5 @@
+description = 'GumTree tree generator for Ruby code (JRuby based).'
+
+dependencies {
+	compile 'org.jruby:jrubyparser:0.5.3'
+}

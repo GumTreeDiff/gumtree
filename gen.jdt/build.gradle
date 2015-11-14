@@ -1,0 +1,7 @@
+description = 'GumTree tree generator for Java code (Eclipse JDT based).'
+
+dependencies {
+	compile 'org.eclipse.tycho:org.eclipse.jdt.core:3.11.0.v20150602-1242'
+	compile 'org.eclipse.core:runtime:3.10.0-v20140318-2214'
+	compile 'org.eclipse.birt.runtime:org.eclipse.core.resources:3.10.0.v20150423-0755'
+}

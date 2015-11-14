@@ -28,6 +28,8 @@ import org.junit.Test;
 import java.util.List;
 import java.util.ListIterator;
 
+import java.io.ByteArrayOutputStream;
+
 import static org.junit.Assert.*;
 
 public class TestTreeIoUtils {
@@ -49,8 +51,10 @@ public class TestTreeIoUtils {
         // Refresh metrics is called because it is automatically called in fromXML
         tc.validate();
 
-        TreeIoUtils.toXml(tc).writeTo("target/test-classes/test-serialize.xml");
-        TreeContext tca = TreeIoUtils.fromXml().generateFromFile("target/test-classes/test-serialize.xml");
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        TreeIoUtils.toXml(tc).writeTo(bos);
+        TreeContext tca = TreeIoUtils.fromXml().generateFromString(bos.toString());
         ITree ca = tca.getRoot();
 
         assertTrue(a.isClone(ca));

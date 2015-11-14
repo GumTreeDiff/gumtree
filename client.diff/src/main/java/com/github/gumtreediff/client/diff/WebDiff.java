@@ -35,7 +35,7 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         super(args);
     }
 
-    static class Options extends AbstractDiffClient.Options{
+    static class Options extends AbstractDiffClient.Options {
         protected int defaultPort = Integer.parseInt(System.getProperty("gumtree.client.web.port", "4754"));
 
         @Override

@@ -35,7 +35,7 @@ public class AnnotatedXmlDiff extends AbstractDiffClient<AnnotatedXmlDiff.Option
         super(args);
     }
 
-    static class Options extends AbstractDiffClient.Options{
+    static class Options extends AbstractDiffClient.Options {
         protected boolean isSrc = true;
 
         @Override

@@ -1,0 +1,7 @@
+description = 'GumTree core module.'
+
+dependencies {
+	compile 'com.github.mpkorstanje:simmetrics-core:3.2.3'
+	compile 'net.sf.trove4j:trove4j:3.0.3'
+	compile 'com.google.code.gson:gson:2.4'
+}
