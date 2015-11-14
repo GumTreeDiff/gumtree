@@ -1,15 +1,6 @@
 apply plugin: 'application'
 mainClassName = 'com.github.gumtreediff.client.Run'
 
-distributions {
-	main {
-		contents {
-			from(subprojects.jar.outputs.files)
-			from(subprojects.configurations.compile)
-		}
-	}
-}
-
 dependencies {
 	compile project(':core')
 	compile project(':client')
