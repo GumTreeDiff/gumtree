@@ -62,7 +62,8 @@ configure(subprojects.findAll {it.name.startsWith('gen.antlr-')}) {
 	}
 }
 
-configure(subprojects.findAll {!it.name.equals('gumtree-all')}) { subproject ->
+if (project.hasProperty('mvn')) {
+configure(subprojects.findAll {!it.name.equals('gumtree-all')}){ subproject ->
 	apply plugin: 'maven'
 	apply plugin: 'signing'
 	task javadocJar(type: Jar) {
@@ -122,6 +123,7 @@ configure(subprojects.findAll {!it.name.equals('gumtree-all')}) { subproject ->
 			}
 		}
 	}
+}
 }
 
 task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
