@@ -1,1 +1,1 @@
-include 'core', 'client', 'client.diff', 'dist', 'gen.c', 'gen.jdt', 'gen.js', 'gen.ruby', 'gen.antlr', 'gen.antlr-antlr', 'gen.antlr-css', 'gen.antlr-json', 'gen.antlr-php', 'gen.antlr-r', 'gen.antlr-xml'
+include 'core', 'client', 'client.diff', 'dist', 'gen.c', 'gen.jdt', 'gen.js', 'gen.jsontree', 'gen.ruby', 'gen.antlr', 'gen.antlr-antlr', 'gen.antlr-css', 'gen.antlr-json', 'gen.antlr-php', 'gen.antlr-r', 'gen.antlr-xml'
