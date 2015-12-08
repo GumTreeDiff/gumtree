@@ -13,6 +13,7 @@ dependencies {
 	compile project(':gen.antlr-r')
 	compile project(':gen.antlr-xml')
 	compile project(':gen.c')
+	compile project(':gen.jsontree')
 	compile project(':gen.jdt')
 	compile project(':gen.js')
 	compile project(':gen.ruby')
