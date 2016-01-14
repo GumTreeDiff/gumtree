@@ -42,107 +42,100 @@ subprojects {
 	}
 }
 
-evaluationDependsOnChildren();
-
 configure(subprojects.findAll {it.name != 'core'}) {
 	dependencies {
 		compile project(':core')
 	}
 }
-configure(subprojects.findAll {it.name.startsWith('gen.antlr')}) {
+
+configure(subprojects.findAll { it.name.startsWith('gen.antlr') }) {
 	apply plugin: 'antlr'
 
 	dependencies {
 		antlr 'org.antlr:antlr:3.5.2'
 	}
-}
-configure(subprojects.findAll {it.name.startsWith('gen.antlr-')}) {
-	dependencies {
-		compile project(':gen.antlr')
+
+	if (it.name.startsWith('gen.antlr-')) {
+		dependencies {
+			compile project(':gen.antlr')
+		}
 	}
 }
 
+evaluationDependsOnChildren();
+
 if (project.hasProperty('mvn')) {
-configure(subprojects.findAll {!it.name.equals('gumtree-all')}){ subproject ->
-	apply plugin: 'maven'
-	apply plugin: 'signing'
-	task javadocJar(type: Jar) {
-		classifier = 'javadoc'
-		from javadoc
-	}
-	task sourcesJar(type: Jar) {
-		classifier = 'sources'
-		from sourceSets.main.allSource
-	}
-	artifacts {
-		archives javadocJar, sourcesJar
-	}
-	signing {
-		required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
-		sign configurations.archives
-	}
-	uploadArchives {
-		repositories {
-			mavenDeployer {
-				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-					authentication(userName: ossrhUsername, password: ossrhPassword)
-				}
-				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-					authentication(userName: ossrhUsername, password: ossrhPassword)
-				}
-				pom.project {
-					name "GumTree ${subproject.name}"
-					description subproject.description
-					url 'https://github.com/GumTreeDiff/gumtree/'
-					packaging 'jar'
-					scm {
-						connection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
-						developerConnection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+	configure(subprojects.findAll {!it.name.equals('dist')}) { subproject ->
+		apply plugin: 'maven'
+		apply plugin: 'signing'
+
+		task javadocJar(type: Jar) {
+			classifier = 'javadoc'
+			from javadoc
+		}
+
+		task sourcesJar(type: Jar) {
+			classifier = 'sources'
+			from sourceSets.main.allSource
+		}
+
+		artifacts {
+			archives javadocJar, sourcesJar
+		}
+
+		signing {
+			required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+			sign configurations.archives
+		}
+
+		uploadArchives {
+			repositories {
+				mavenDeployer {
+					beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+					repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+						authentication(userName: ossrhUsername, password: ossrhPassword)
+					}
+
+					snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+						authentication(userName: ossrhUsername, password: ossrhPassword)
+					}
+
+					pom.project {
+						name "GumTree ${subproject.name}"
+						description subproject.description
 						url 'https://github.com/GumTreeDiff/gumtree/'
-					}
-					licenses {
-						license {
-							name 'GNU Lesser General Public License v3.0'
-							url 'https://www.gnu.org/copyleft/lesser.html'
+						packaging 'jar'
+
+						scm {
+							connection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+							developerConnection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+							url 'https://github.com/GumTreeDiff/gumtree/'
 						}
-					}
-					developers {
-						developer {
-							id 'jre'
-							name 'Jean-Rémy Falleri'
-							email 'jr.falleri@gmail.com'
+
+						licenses {
+							license {
+								name 'GNU Lesser General Public License v3.0'
+								url 'https://www.gnu.org/copyleft/lesser.html'
+							}
 						}
-						developer {
-							id 'flop'
-							name 'Floréal Morandat'
-							email 'florealm@gmail.com'
+
+						developers {
+							developer {
+								id 'jre'
+								name 'Jean-Rémy Falleri'
+								email 'jr.falleri@gmail.com'
+							}
+
+							developer {
+								id 'flop'
+								name 'Floréal Morandat'
+								email 'florealm@gmail.com'
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-}
-}
-
-task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-	dependsOn = subprojects.test
-	additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
-	sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-	classDirectories = files(subprojects.sourceSets.main.output)
-	executionData = files(subprojects.jacocoTestReport.executionData)
-	reports {
-		html.enabled = true
-		xml.enabled = false
-		csv.enabled = false
-	}
-	onlyIf = {
-		true
-	}
-	doFirst {
-		executionData = files(executionData.findAll {
-				it.exists()
-		})
 	}
 }

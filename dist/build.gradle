@@ -1,8 +1,9 @@
 apply plugin: 'application'
 mainClassName = 'com.github.gumtreediff.client.Run'
+applicationName = 'gumtree'
+jar.enabled = false
 
 dependencies {
-	compile project(':core')
 	compile project(':client')
 	compile project(':client.diff')
 	compile project(':gen.antlr')
