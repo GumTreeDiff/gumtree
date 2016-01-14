@@ -448,13 +448,18 @@ public final class TreeIoUtils {
 
         @Override
         public void startTree(ITree tree) throws XMLStreamException {
-            writer.writeStartElement(context.getTypeLabel(tree.getType()));
-            if (tree.hasLabel()) writer.writeAttribute("label", tree.getLabel());
+            if (tree.getChildren().size() == 0)
+                writer.writeEmptyElement(context.getTypeLabel(tree.getType()));
+            else
+                writer.writeStartElement(context.getTypeLabel(tree.getType()));
+            if (tree.hasLabel())
+                writer.writeAttribute("label", tree.getLabel());
         }
 
         @Override
         public void endTree(ITree tree) throws XMLStreamException {
-            writer.writeEndElement();
+            if (tree.getChildren().size() > 0)
+                writer.writeEndElement();
         }
     }
 

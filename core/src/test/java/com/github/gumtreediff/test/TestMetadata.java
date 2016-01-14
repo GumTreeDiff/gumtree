@@ -185,6 +185,6 @@ public class TestMetadata {
 
     final String valXmlCompact = "<?xml version=\"1.0\" ?>\n"
             + "<root other=\"more\">\n"
-            + "  <0 key=\"test\" pos=\"[1, 2, 3, 4]\"></0>\n"
+            + "  <0 key=\"test\" pos=\"[1, 2, 3, 4]\"/>\n"
             + "</root>\n";
 }
