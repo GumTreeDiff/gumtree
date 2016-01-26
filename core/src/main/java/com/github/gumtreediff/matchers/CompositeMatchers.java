@@ -45,9 +45,9 @@ public class CompositeMatchers {
     }
 
     @Register(id = "gumtree-complete")
-    public static class CompleteGumtreeMatche extends CompositeMatcher {
+    public static class CompleteGumtreeMatcher extends CompositeMatcher {
 
-        public CompleteGumtreeMatche(ITree src, ITree dst, MappingStore store) {
+        public CompleteGumtreeMatcher(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store, new Matcher[]{
                     new CliqueSubtreeMatcher(src, dst, store),
                     new CompleteBottomUpMatcher(src, dst, store)
