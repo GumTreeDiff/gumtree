@@ -1,0 +1,130 @@
+<?xml version="1.0" ?>
+<root>
+  <context></context>
+  <tree type="15" typeLabel="CompilationUnit" pos="0" length="560">
+    <tree type="26" typeLabel="ImportDeclaration" pos="0" length="24">
+      <tree type="40" label="java.util.Random" typeLabel="QualifiedName" pos="7" length="16"></tree>
+    </tree>
+    <tree type="55" typeLabel="TypeDeclaration" pos="26" length="533">
+      <tree type="83" label="public" typeLabel="Modifier" pos="26" length="6"></tree>
+      <tree type="42" label="Example" typeLabel="SimpleName" pos="39" length="7"></tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="51" length="393">
+        <tree type="83" label="public" typeLabel="Modifier" pos="51" length="6"></tree>
+        <tree type="39" label="void" typeLabel="PrimitiveType" pos="58" length="4"></tree>
+        <tree type="42" label="hello" typeLabel="SimpleName" pos="63" length="5"></tree>
+        <tree type="8" typeLabel="Block" pos="71" length="373">
+          <tree type="21" typeLabel="ExpressionStatement" pos="75" length="39">
+            <tree type="32" typeLabel="MethodInvocation" pos="75" length="38">
+              <tree type="40" label="System.out" typeLabel="QualifiedName" pos="75" length="10"></tree>
+              <tree type="42" label="println" typeLabel="SimpleName" pos="86" length="7"></tree>
+              <tree type="45" label="&quot;Hello everybody!&quot;" typeLabel="StringLiteral" pos="94" length="18"></tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="117" length="57">
+            <tree type="32" typeLabel="MethodInvocation" pos="117" length="56">
+              <tree type="40" label="System.out" typeLabel="QualifiedName" pos="117" length="10"></tree>
+              <tree type="42" label="println" typeLabel="SimpleName" pos="128" length="7"></tree>
+              <tree type="45" label="&quot;This code is a magnificent example&quot;" typeLabel="StringLiteral" pos="136" length="36"></tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="177" length="50">
+            <tree type="32" typeLabel="MethodInvocation" pos="177" length="49">
+              <tree type="40" label="System.out" typeLabel="QualifiedName" pos="177" length="10"></tree>
+              <tree type="42" label="println" typeLabel="SimpleName" pos="188" length="7"></tree>
+              <tree type="45" label="&quot;For the ASE 2014 conference&quot;" typeLabel="StringLiteral" pos="196" length="29"></tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="230" length="50">
+            <tree type="32" typeLabel="MethodInvocation" pos="230" length="49">
+              <tree type="40" label="System.out" typeLabel="QualifiedName" pos="230" length="10"></tree>
+              <tree type="42" label="println" typeLabel="SimpleName" pos="241" length="7"></tree>
+              <tree type="45" label="&quot;It draws a number at random&quot;" typeLabel="StringLiteral" pos="249" length="29"></tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="283" length="30">
+            <tree type="32" typeLabel="MethodInvocation" pos="283" length="29">
+              <tree type="40" label="System.out" typeLabel="QualifiedName" pos="283" length="10"></tree>
+              <tree type="42" label="println" typeLabel="SimpleName" pos="294" length="7"></tree>
+              <tree type="45" label="&quot;Adds 10&quot;" typeLabel="StringLiteral" pos="302" length="9"></tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="316" length="39">
+            <tree type="32" typeLabel="MethodInvocation" pos="316" length="38">
+              <tree type="40" label="System.out" typeLabel="QualifiedName" pos="316" length="10"></tree>
+              <tree type="42" label="println" typeLabel="SimpleName" pos="327" length="7"></tree>
+              <tree type="45" label="&quot;Multiplies by 10&quot;" typeLabel="StringLiteral" pos="335" length="18"></tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="358" length="38">
+            <tree type="32" typeLabel="MethodInvocation" pos="358" length="37">
+              <tree type="40" label="System.out" typeLabel="QualifiedName" pos="358" length="10"></tree>
+              <tree type="42" label="println" typeLabel="SimpleName" pos="369" length="7"></tree>
+              <tree type="45" label="&quot;And displays it&quot;" typeLabel="StringLiteral" pos="377" length="17"></tree>
+            </tree>
+          </tree>
+          <tree type="60" typeLabel="VariableDeclarationStatement" pos="399" length="17">
+            <tree type="39" label="int" typeLabel="PrimitiveType" pos="399" length="3"></tree>
+            <tree type="59" typeLabel="VariableDeclarationFragment" pos="403" length="12">
+              <tree type="42" label="i" typeLabel="SimpleName" pos="403" length="1"></tree>
+              <tree type="32" typeLabel="MethodInvocation" pos="407" length="8">
+                <tree type="42" label="random" typeLabel="SimpleName" pos="407" length="6"></tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="419" length="22">
+            <tree type="32" typeLabel="MethodInvocation" pos="419" length="21">
+              <tree type="40" label="System.out" typeLabel="QualifiedName" pos="419" length="10"></tree>
+              <tree type="42" label="println" typeLabel="SimpleName" pos="430" length="7"></tree>
+              <tree type="42" label="i" typeLabel="SimpleName" pos="438" length="1"></tree>
+            </tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="448" length="108">
+        <tree type="83" label="public" typeLabel="Modifier" pos="448" length="6"></tree>
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="455" length="3"></tree>
+        <tree type="42" label="random" typeLabel="SimpleName" pos="459" length="6"></tree>
+        <tree type="8" typeLabel="Block" pos="468" length="88">
+          <tree type="60" typeLabel="VariableDeclarationStatement" pos="472" length="24">
+            <tree type="43" label="Random" typeLabel="SimpleType" pos="472" length="6">
+              <tree type="42" label="Random" typeLabel="SimpleName" pos="472" length="6"></tree>
+            </tree>
+            <tree type="59" typeLabel="VariableDeclarationFragment" pos="479" length="16">
+              <tree type="42" label="r" typeLabel="SimpleName" pos="479" length="1"></tree>
+              <tree type="14" typeLabel="ClassInstanceCreation" pos="483" length="12">
+                <tree type="43" label="Random" typeLabel="SimpleType" pos="487" length="6">
+                  <tree type="42" label="Random" typeLabel="SimpleName" pos="487" length="6"></tree>
+                </tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="60" typeLabel="VariableDeclarationStatement" pos="499" length="20">
+            <tree type="39" label="int" typeLabel="PrimitiveType" pos="499" length="3"></tree>
+            <tree type="59" typeLabel="VariableDeclarationFragment" pos="503" length="15">
+              <tree type="42" label="i" typeLabel="SimpleName" pos="503" length="1"></tree>
+              <tree type="32" typeLabel="MethodInvocation" pos="507" length="11">
+                <tree type="42" label="r" typeLabel="SimpleName" pos="507" length="1"></tree>
+                <tree type="42" label="nextInt" typeLabel="SimpleName" pos="509" length="7"></tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="522" length="8">
+            <tree type="7" label="+=" typeLabel="Assignment" pos="522" length="7">
+              <tree type="42" label="i" typeLabel="SimpleName" pos="522" length="1"></tree>
+              <tree type="34" label="10" typeLabel="NumberLiteral" pos="527" length="2"></tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="533" length="8">
+            <tree type="7" label="*=" typeLabel="Assignment" pos="533" length="7">
+              <tree type="42" label="i" typeLabel="SimpleName" pos="533" length="1"></tree>
+              <tree type="34" label="10" typeLabel="NumberLiteral" pos="538" length="2"></tree>
+            </tree>
+          </tree>
+          <tree type="41" typeLabel="ReturnStatement" pos="544" length="9">
+            <tree type="42" label="i" typeLabel="SimpleName" pos="551" length="1"></tree>
+          </tree>
+        </tree>
+      </tree>
+    </tree>
+  </tree>
+</root>

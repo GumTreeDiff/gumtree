@@ -1,0 +1,191 @@
+<?xml version="1.0" ?>
+<root>
+  <context></context>
+  <tree type="15" typeLabel="CompilationUnit" pos="0" length="2766">
+    <tree type="35" typeLabel="PackageDeclaration" pos="0" length="1112">
+      <tree type="29" typeLabel="Javadoc" pos="0" length="1073">
+        <tree type="65" typeLabel="TagElement" pos="7" length="1062">
+          <tree type="66" label="JOnAS: Java(TM) Open Application Server" typeLabel="TextElement" pos="7" length="39"></tree>
+          <tree type="66" label="Copyright (C) 2004 Bull S.A." typeLabel="TextElement" pos="50" length="28"></tree>
+          <tree type="66" label="Contact: jonas-team@objectweb.org" typeLabel="TextElement" pos="82" length="33"></tree>
+          <tree type="66" label="This library is free software; you can redistribute it and/or" typeLabel="TextElement" pos="122" length="61"></tree>
+          <tree type="66" label="modify it under the terms of the GNU Lesser General Public" typeLabel="TextElement" pos="187" length="58"></tree>
+          <tree type="66" label="License as published by the Free Software Foundation; either" typeLabel="TextElement" pos="249" length="60"></tree>
+          <tree type="66" label="version 2.1 of the License, or any later version." typeLabel="TextElement" pos="313" length="49"></tree>
+          <tree type="66" label="This library is distributed in the hope that it will be useful," typeLabel="TextElement" pos="369" length="63"></tree>
+          <tree type="66" label="but WITHOUT ANY WARRANTY; without even the implied warranty of" typeLabel="TextElement" pos="436" length="62"></tree>
+          <tree type="66" label="MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU" typeLabel="TextElement" pos="502" length="65"></tree>
+          <tree type="66" label="Lesser General Public License for more details." typeLabel="TextElement" pos="571" length="47"></tree>
+          <tree type="66" label="You should have received a copy of the GNU Lesser General Public" typeLabel="TextElement" pos="625" length="64"></tree>
+          <tree type="66" label="License along with this library; if not, write to the Free Software" typeLabel="TextElement" pos="693" length="67"></tree>
+          <tree type="66" label="Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307" typeLabel="TextElement" pos="764" length="68"></tree>
+          <tree type="66" label="USA" typeLabel="TextElement" pos="836" length="3"></tree>
+          <tree type="66" label="--------------------------------------------------------------------------" typeLabel="TextElement" pos="846" length="74"></tree>
+          <tree type="66" label="$Id: JacORBPRODelegate.java,v 1.1 2004-12-13 16:24:13 benoitf Exp $" typeLabel="TextElement" pos="924" length="67"></tree>
+          <tree type="66" label="--------------------------------------------------------------------------" typeLabel="TextElement" pos="995" length="74"></tree>
+        </tree>
+      </tree>
+      <tree type="40" label="org.objectweb.carol.rmi.multi" typeLabel="QualifiedName" pos="1082" length="29"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="1114" length="23">
+      <tree type="40" label="java.rmi.Remote" typeLabel="QualifiedName" pos="1121" length="15"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="1138" length="32">
+      <tree type="40" label="java.rmi.RemoteException" typeLabel="QualifiedName" pos="1145" length="24"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="1172" length="27">
+      <tree type="40" label="javax.rmi.CORBA.Tie" typeLabel="QualifiedName" pos="1179" length="19"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="1200" length="28">
+      <tree type="40" label="javax.rmi.CORBA.Util" typeLabel="QualifiedName" pos="1207" length="20"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="1230" length="54">
+      <tree type="40" label="org.objectweb.carol.jndi.spi.JacORBIIOPContext" typeLabel="QualifiedName" pos="1237" length="46"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="1285" length="57">
+      <tree type="40" label="org.objectweb.carol.util.configuration.TraceCarol" typeLabel="QualifiedName" pos="1292" length="49"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="1344" length="64">
+      <tree type="40" label="com.sun.corba.se.internal.javax.rmi.PortableRemoteObject" typeLabel="QualifiedName" pos="1351" length="56"></tree>
+    </tree>
+    <tree type="55" typeLabel="TypeDeclaration" pos="1410" length="1355">
+      <tree type="29" typeLabel="Javadoc" pos="1410" length="238">
+        <tree type="65" typeLabel="TagElement" pos="1417" length="201">
+          <tree type="66" label="TODO : should extends non com.sun classes." typeLabel="TextElement" pos="1417" length="42"></tree>
+          <tree type="66" label="For example an OpenOrb class or implements our own Class, or use Classpath project" typeLabel="TextElement" pos="1463" length="82"></tree>
+          <tree type="66" label="It seems to be javax.rmi.CORBA.PortableRemoteObjectDelegateImpl class" typeLabel="TextElement" pos="1549" length="69"></tree>
+        </tree>
+        <tree type="65" label="@author" typeLabel="TagElement" pos="1622" length="22">
+          <tree type="66" label=" Florent Benoit" typeLabel="TextElement" pos="1629" length="15"></tree>
+        </tree>
+      </tree>
+      <tree type="83" label="public" typeLabel="Modifier" pos="1649" length="6"></tree>
+      <tree type="42" label="JacORBPRODelegate" typeLabel="SimpleName" pos="1662" length="17"></tree>
+      <tree type="43" label="PortableRemoteObject" typeLabel="SimpleType" pos="1688" length="20">
+        <tree type="42" label="PortableRemoteObject" typeLabel="SimpleName" pos="1688" length="20"></tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="1716" length="1047">
+        <tree type="29" typeLabel="Javadoc" pos="1716" length="297">
+          <tree type="65" typeLabel="TagElement" pos="1727" length="180">
+            <tree type="66" label="Makes a server object ready to receive remote calls. Note that subclasses" typeLabel="TextElement" pos="1727" length="73"></tree>
+            <tree type="66" label="of PortableRemoteObject do not need to call this method, as it is called" typeLabel="TextElement" pos="1808" length="72"></tree>
+            <tree type="66" label="by the constructor." typeLabel="TextElement" pos="1888" length="19"></tree>
+          </tree>
+          <tree type="65" label="@param" typeLabel="TagElement" pos="1915" length="39">
+            <tree type="42" label="obj" typeLabel="SimpleName" pos="1922" length="3"></tree>
+            <tree type="66" label=" the server object to export." typeLabel="TextElement" pos="1925" length="29"></tree>
+          </tree>
+          <tree type="65" label="@exception" typeLabel="TagElement" pos="1962" length="43">
+            <tree type="42" label="RemoteException" typeLabel="SimpleName" pos="1973" length="15"></tree>
+            <tree type="66" label=" if export fails." typeLabel="TextElement" pos="1988" length="17"></tree>
+          </tree>
+        </tree>
+        <tree type="83" label="public" typeLabel="Modifier" pos="2018" length="6"></tree>
+        <tree type="39" label="void" typeLabel="PrimitiveType" pos="2025" length="4"></tree>
+        <tree type="42" label="exportObject" typeLabel="SimpleName" pos="2030" length="12"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="2043" length="10">
+          <tree type="43" label="Remote" typeLabel="SimpleType" pos="2043" length="6">
+            <tree type="42" label="Remote" typeLabel="SimpleName" pos="2043" length="6"></tree>
+          </tree>
+          <tree type="42" label="obj" typeLabel="SimpleName" pos="2050" length="3"></tree>
+        </tree>
+        <tree type="43" label="RemoteException" typeLabel="SimpleType" pos="2062" length="15">
+          <tree type="42" label="RemoteException" typeLabel="SimpleName" pos="2062" length="15"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="2078" length="685">
+          <tree type="54" typeLabel="TryStatement" pos="2190" length="178">
+            <tree type="8" typeLabel="Block" pos="2194" length="44">
+              <tree type="21" typeLabel="ExpressionStatement" pos="2208" length="20">
+                <tree type="32" typeLabel="MethodInvocation" pos="2208" length="19">
+                  <tree type="42" label="unexportObject" typeLabel="SimpleName" pos="2208" length="14"></tree>
+                  <tree type="42" label="obj" typeLabel="SimpleName" pos="2223" length="3"></tree>
+                </tree>
+              </tree>
+            </tree>
+            <tree type="12" typeLabel="CatchClause" pos="2239" length="129">
+              <tree type="44" typeLabel="SingleVariableDeclaration" pos="2246" length="13">
+                <tree type="43" label="Exception" typeLabel="SimpleType" pos="2246" length="9">
+                  <tree type="42" label="Exception" typeLabel="SimpleName" pos="2246" length="9"></tree>
+                </tree>
+                <tree type="42" label="eee" typeLabel="SimpleName" pos="2256" length="3"></tree>
+              </tree>
+              <tree type="8" typeLabel="Block" pos="2261" length="107">
+                <tree type="21" typeLabel="ExpressionStatement" pos="2275" length="83">
+                  <tree type="32" typeLabel="MethodInvocation" pos="2275" length="82">
+                    <tree type="42" label="TraceCarol" typeLabel="SimpleName" pos="2275" length="10"></tree>
+                    <tree type="42" label="debugExportCarol" typeLabel="SimpleName" pos="2286" length="16"></tree>
+                    <tree type="27" label="+" typeLabel="InfixExpression" pos="2303" length="53">
+                      <tree type="45" label="&quot;JacORBPRODelegate :exportObject() unexport = &quot;" typeLabel="StringLiteral" pos="2303" length="47"></tree>
+                      <tree type="42" label="eee" typeLabel="SimpleName" pos="2353" length="3"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="54" typeLabel="TryStatement" pos="2406" length="177">
+            <tree type="8" typeLabel="Block" pos="2410" length="48">
+              <tree type="21" typeLabel="ExpressionStatement" pos="2424" length="24">
+                <tree type="48" typeLabel="SuperMethodInvocation" pos="2424" length="23">
+                  <tree type="42" label="exportObject" typeLabel="SimpleName" pos="2430" length="12"></tree>
+                  <tree type="42" label="obj" typeLabel="SimpleName" pos="2443" length="3"></tree>
+                </tree>
+              </tree>
+            </tree>
+            <tree type="12" typeLabel="CatchClause" pos="2459" length="124">
+              <tree type="44" typeLabel="SingleVariableDeclaration" pos="2466" length="12">
+                <tree type="43" label="Exception" typeLabel="SimpleType" pos="2466" length="9">
+                  <tree type="42" label="Exception" typeLabel="SimpleName" pos="2466" length="9"></tree>
+                </tree>
+                <tree type="42" label="ee" typeLabel="SimpleName" pos="2476" length="2"></tree>
+              </tree>
+              <tree type="8" typeLabel="Block" pos="2480" length="103">
+                <tree type="21" typeLabel="ExpressionStatement" pos="2494" length="79">
+                  <tree type="32" typeLabel="MethodInvocation" pos="2494" length="78">
+                    <tree type="42" label="TraceCarol" typeLabel="SimpleName" pos="2494" length="10"></tree>
+                    <tree type="42" label="debugExportCarol" typeLabel="SimpleName" pos="2505" length="16"></tree>
+                    <tree type="27" label="+" typeLabel="InfixExpression" pos="2522" length="49">
+                      <tree type="45" label="&quot;JacORBPRODelegate: exportObject()  export:&quot;" typeLabel="StringLiteral" pos="2522" length="44"></tree>
+                      <tree type="42" label="ee" typeLabel="SimpleName" pos="2569" length="2"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="60" typeLabel="VariableDeclarationStatement" pos="2593" length="30">
+            <tree type="43" label="Tie" typeLabel="SimpleType" pos="2593" length="3">
+              <tree type="42" label="Tie" typeLabel="SimpleName" pos="2593" length="3"></tree>
+            </tree>
+            <tree type="59" typeLabel="VariableDeclarationFragment" pos="2597" length="25">
+              <tree type="42" label="theTie" typeLabel="SimpleName" pos="2597" length="6"></tree>
+              <tree type="32" typeLabel="MethodInvocation" pos="2606" length="16">
+                <tree type="42" label="Util" typeLabel="SimpleName" pos="2606" length="4"></tree>
+                <tree type="42" label="getTie" typeLabel="SimpleName" pos="2611" length="6"></tree>
+                <tree type="42" label="obj" typeLabel="SimpleName" pos="2618" length="3"></tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="25" typeLabel="IfStatement" pos="2671" length="83">
+            <tree type="27" label="!=" typeLabel="InfixExpression" pos="2675" length="14">
+              <tree type="42" label="theTie" typeLabel="SimpleName" pos="2675" length="6"></tree>
+              <tree type="33" typeLabel="NullLiteral" pos="2685" length="4"></tree>
+            </tree>
+            <tree type="8" typeLabel="Block" pos="2691" length="63">
+              <tree type="21" typeLabel="ExpressionStatement" pos="2705" length="39">
+                <tree type="32" typeLabel="MethodInvocation" pos="2705" length="38">
+                  <tree type="42" label="theTie" typeLabel="SimpleName" pos="2705" length="6"></tree>
+                  <tree type="42" label="orb" typeLabel="SimpleName" pos="2712" length="3"></tree>
+                  <tree type="32" typeLabel="MethodInvocation" pos="2716" length="26">
+                    <tree type="42" label="JacORBIIOPContext" typeLabel="SimpleName" pos="2716" length="17"></tree>
+                    <tree type="42" label="getOrb" typeLabel="SimpleName" pos="2734" length="6"></tree>
+                  </tree>
+                </tree>
+              </tree>
+            </tree>
+          </tree>
+        </tree>
+      </tree>
+    </tree>
+  </tree>
+</root>

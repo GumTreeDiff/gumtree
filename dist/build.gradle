@@ -1,7 +1,11 @@
 apply plugin: 'application'
+
 mainClassName = 'com.github.gumtreediff.client.Run'
 applicationName = 'gumtree'
 jar.enabled = false
+uploadArchives.enabled = false
+
+description = 'GumTree whole distribution.'
 
 dependencies {
 	compile project(':client')

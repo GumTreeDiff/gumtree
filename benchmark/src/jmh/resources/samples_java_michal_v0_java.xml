@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<root>
+  <context></context>
+  <tree type="15" typeLabel="CompilationUnit" pos="0" length="1103">
+    <tree type="26" typeLabel="ImportDeclaration" pos="771" length="20">
+      <tree type="40" label="java.io.File" typeLabel="QualifiedName" pos="778" length="12"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="792" length="27">
+      <tree type="40" label="java.util.Hashtable" typeLabel="QualifiedName" pos="799" length="19"></tree>
+    </tree>
+    <tree type="55" typeLabel="TypeDeclaration" pos="821" length="280">
+      <tree type="83" label="public" typeLabel="Modifier" pos="821" length="6"></tree>
+      <tree type="42" label="Cmd_open" typeLabel="SimpleName" pos="834" length="8"></tree>
+      <tree type="43" label="Command" typeLabel="SimpleType" pos="854" length="7">
+        <tree type="42" label="Command" typeLabel="SimpleName" pos="854" length="7"></tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="865" length="63">
+        <tree type="83" label="public" typeLabel="Modifier" pos="865" length="6"></tree>
+        <tree type="43" label="Object" typeLabel="SimpleType" pos="872" length="6">
+          <tree type="42" label="Object" typeLabel="SimpleName" pos="872" length="6"></tree>
+        </tree>
+        <tree type="42" label="init" typeLabel="SimpleName" pos="879" length="4"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="884" length="14">
+          <tree type="43" label="Hashtable" typeLabel="SimpleType" pos="884" length="9">
+            <tree type="42" label="Hashtable" typeLabel="SimpleName" pos="884" length="9"></tree>
+          </tree>
+          <tree type="42" label="args" typeLabel="SimpleName" pos="894" length="4"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="901" length="27">
+          <tree type="41" typeLabel="ReturnStatement" pos="905" length="20">
+            <tree type="40" label="Boolean.TRUE" typeLabel="QualifiedName" pos="912" length="12"></tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="931" length="168">
+        <tree type="83" label="public" typeLabel="Modifier" pos="931" length="6"></tree>
+        <tree type="43" label="Object" typeLabel="SimpleType" pos="938" length="6">
+          <tree type="42" label="Object" typeLabel="SimpleName" pos="938" length="6"></tree>
+        </tree>
+        <tree type="42" label="exec" typeLabel="SimpleName" pos="945" length="4"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="950" length="14">
+          <tree type="43" label="Hashtable" typeLabel="SimpleType" pos="950" length="9">
+            <tree type="42" label="Hashtable" typeLabel="SimpleName" pos="950" length="9"></tree>
+          </tree>
+          <tree type="42" label="args" typeLabel="SimpleName" pos="960" length="4"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="967" length="132">
+          <tree type="41" typeLabel="ReturnStatement" pos="971" length="125">
+            <tree type="16" typeLabel="ConditionalExpression" pos="978" length="117">
+              <tree type="36" typeLabel="ParenthesizedExpression" pos="978" length="82">
+                <tree type="27" label="==" typeLabel="InfixExpression" pos="979" length="80">
+                  <tree type="32" typeLabel="MethodInvocation" pos="979" length="72">
+                    <tree type="40" label="jEdit.buffers" typeLabel="QualifiedName" pos="979" length="13"></tree>
+                    <tree type="42" label="openBuffer" typeLabel="SimpleName" pos="993" length="10"></tree>
+                    <tree type="11" typeLabel="CastExpression" pos="1004" length="20">
+                      <tree type="43" label="View" typeLabel="SimpleType" pos="1005" length="4">
+                        <tree type="42" label="View" typeLabel="SimpleName" pos="1005" length="4"></tree>
+                      </tree>
+                      <tree type="32" typeLabel="MethodInvocation" pos="1010" length="14">
+                        <tree type="42" label="args" typeLabel="SimpleName" pos="1010" length="4"></tree>
+                        <tree type="42" label="get" typeLabel="SimpleName" pos="1015" length="3"></tree>
+                        <tree type="42" label="VIEW" typeLabel="SimpleName" pos="1019" length="4"></tree>
+                      </tree>
+                    </tree>
+                    <tree type="11" typeLabel="CastExpression" pos="1029" length="21">
+                      <tree type="43" label="String" typeLabel="SimpleType" pos="1030" length="6">
+                        <tree type="42" label="String" typeLabel="SimpleName" pos="1030" length="6"></tree>
+                      </tree>
+                      <tree type="32" typeLabel="MethodInvocation" pos="1037" length="13">
+                        <tree type="42" label="args" typeLabel="SimpleName" pos="1037" length="4"></tree>
+                        <tree type="42" label="get" typeLabel="SimpleName" pos="1042" length="3"></tree>
+                        <tree type="42" label="ARG" typeLabel="SimpleName" pos="1046" length="3"></tree>
+                      </tree>
+                    </tree>
+                  </tree>
+                  <tree type="33" typeLabel="NullLiteral" pos="1055" length="4"></tree>
+                </tree>
+              </tree>
+              <tree type="40" label="Boolean.FALSE" typeLabel="QualifiedName" pos="1063" length="13"></tree>
+              <tree type="40" label="Boolean.TRUE" typeLabel="QualifiedName" pos="1083" length="12"></tree>
+            </tree>
+          </tree>
+        </tree>
+      </tree>
+    </tree>
+  </tree>
+</root>

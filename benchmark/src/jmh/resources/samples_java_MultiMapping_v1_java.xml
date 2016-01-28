@@ -1,0 +1,140 @@
+<?xml version="1.0" ?>
+<root>
+  <context></context>
+  <tree type="15" typeLabel="CompilationUnit" pos="0" length="855">
+    <tree type="55" typeLabel="TypeDeclaration" pos="0" length="855">
+      <tree type="83" label="public" typeLabel="Modifier" pos="0" length="6"></tree>
+      <tree type="42" label="Test" typeLabel="SimpleName" pos="13" length="4"></tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="22" length="404">
+        <tree type="29" typeLabel="Javadoc" pos="22" length="242">
+          <tree type="65" typeLabel="TagElement" pos="31" length="68">
+            <tree type="66" label="Gets the first inventory item matching with any of the provided ids." typeLabel="TextElement" pos="31" length="68"></tree>
+          </tree>
+          <tree type="65" label="@param" typeLabel="TagElement" pos="110" length="30">
+            <tree type="42" label="ids" typeLabel="SimpleName" pos="117" length="3"></tree>
+            <tree type="66" label=" the ids to look for" typeLabel="TextElement" pos="120" length="20"></tree>
+          </tree>
+          <tree type="65" label="@return" typeLabel="TagElement" pos="146" length="112">
+            <tree type="66" label=" the first inventory item matching with any of the provided ids;" typeLabel="TextElement" pos="153" length="64"></tree>
+            <tree type="66" label="otherwise &lt;code&gt;null&lt;/code&gt;" typeLabel="TextElement" pos="231" length="27"></tree>
+          </tree>
+        </tree>
+        <tree type="83" label="public" typeLabel="Modifier" pos="267" length="6"></tree>
+        <tree type="83" label="static" typeLabel="Modifier" pos="274" length="6"></tree>
+        <tree type="43" label="Item" typeLabel="SimpleType" pos="281" length="4">
+          <tree type="42" label="Item" typeLabel="SimpleName" pos="281" length="4"></tree>
+        </tree>
+        <tree type="42" label="getItem" typeLabel="SimpleName" pos="286" length="7"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="294" length="10">
+          <tree type="39" label="int" typeLabel="PrimitiveType" pos="294" length="3"></tree>
+          <tree type="42" label="ids" typeLabel="SimpleName" pos="301" length="3"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="306" length="120">
+          <tree type="60" typeLabel="VariableDeclarationStatement" pos="311" length="29">
+            <tree type="5" label="Item[]" typeLabel="ArrayType" pos="311" length="6">
+              <tree type="43" label="Item" typeLabel="SimpleType" pos="311" length="4">
+                <tree type="42" label="Item" typeLabel="SimpleName" pos="311" length="4"></tree>
+              </tree>
+              <tree type="85" typeLabel="Dimension" pos="315" length="2"></tree>
+            </tree>
+            <tree type="59" typeLabel="VariableDeclarationFragment" pos="318" length="21">
+              <tree type="42" label="items" typeLabel="SimpleName" pos="318" length="5"></tree>
+              <tree type="32" typeLabel="MethodInvocation" pos="326" length="13">
+                <tree type="42" label="getItems" typeLabel="SimpleName" pos="326" length="8"></tree>
+                <tree type="42" label="ids" typeLabel="SimpleName" pos="335" length="3"></tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="25" typeLabel="IfStatement" pos="344" length="78">
+            <tree type="27" label="&gt;" typeLabel="InfixExpression" pos="348" length="16">
+              <tree type="40" label="items.length" typeLabel="QualifiedName" pos="348" length="12"></tree>
+              <tree type="34" label="0" typeLabel="NumberLiteral" pos="363" length="1"></tree>
+            </tree>
+            <tree type="8" typeLabel="Block" pos="366" length="27">
+              <tree type="41" typeLabel="ReturnStatement" pos="372" length="16">
+                <tree type="2" typeLabel="ArrayAccess" pos="379" length="8">
+                  <tree type="42" label="items" typeLabel="SimpleName" pos="379" length="5"></tree>
+                  <tree type="34" label="0" typeLabel="NumberLiteral" pos="385" length="1"></tree>
+                </tree>
+              </tree>
+            </tree>
+            <tree type="8" typeLabel="Block" pos="399" length="23">
+              <tree type="41" typeLabel="ReturnStatement" pos="405" length="12">
+                <tree type="33" typeLabel="NullLiteral" pos="412" length="4"></tree>
+              </tree>
+            </tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="430" length="423">
+        <tree type="29" typeLabel="Javadoc" pos="430" length="243">
+          <tree type="65" typeLabel="TagElement" pos="439" length="68">
+            <tree type="66" label="Gets the first inventory item matching with any of the provided ids." typeLabel="TextElement" pos="439" length="68"></tree>
+          </tree>
+          <tree type="65" label="@param" typeLabel="TagElement" pos="518" length="31">
+            <tree type="42" label="filter" typeLabel="SimpleName" pos="525" length="6"></tree>
+            <tree type="66" label=" the filter to use" typeLabel="TextElement" pos="531" length="18"></tree>
+          </tree>
+          <tree type="65" label="@return" typeLabel="TagElement" pos="555" length="112">
+            <tree type="66" label=" the first inventory item matching with any of the provided ids;" typeLabel="TextElement" pos="562" length="64"></tree>
+            <tree type="66" label="otherwise &lt;code&gt;null&lt;/code&gt;" typeLabel="TextElement" pos="640" length="27"></tree>
+          </tree>
+        </tree>
+        <tree type="83" label="public" typeLabel="Modifier" pos="676" length="6"></tree>
+        <tree type="83" label="static" typeLabel="Modifier" pos="683" length="6"></tree>
+        <tree type="43" label="Item" typeLabel="SimpleType" pos="690" length="4">
+          <tree type="42" label="Item" typeLabel="SimpleName" pos="690" length="4"></tree>
+        </tree>
+        <tree type="42" label="getItem" typeLabel="SimpleName" pos="695" length="7"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="703" length="25">
+          <tree type="83" label="final" typeLabel="Modifier" pos="703" length="5"></tree>
+          <tree type="74" label="Filter&lt;Item&gt;" typeLabel="ParameterizedType" pos="709" length="12">
+            <tree type="43" label="Filter" typeLabel="SimpleType" pos="709" length="6">
+              <tree type="42" label="Filter" typeLabel="SimpleName" pos="709" length="6"></tree>
+            </tree>
+            <tree type="43" label="Item" typeLabel="SimpleType" pos="716" length="4">
+              <tree type="42" label="Item" typeLabel="SimpleName" pos="716" length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="42" label="filter" typeLabel="SimpleName" pos="722" length="6"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="730" length="123">
+          <tree type="60" typeLabel="VariableDeclarationStatement" pos="735" length="32">
+            <tree type="5" label="Item[]" typeLabel="ArrayType" pos="735" length="6">
+              <tree type="43" label="Item" typeLabel="SimpleType" pos="735" length="4">
+                <tree type="42" label="Item" typeLabel="SimpleName" pos="735" length="4"></tree>
+              </tree>
+              <tree type="85" typeLabel="Dimension" pos="739" length="2"></tree>
+            </tree>
+            <tree type="59" typeLabel="VariableDeclarationFragment" pos="742" length="24">
+              <tree type="42" label="items" typeLabel="SimpleName" pos="742" length="5"></tree>
+              <tree type="32" typeLabel="MethodInvocation" pos="750" length="16">
+                <tree type="42" label="getItems" typeLabel="SimpleName" pos="750" length="8"></tree>
+                <tree type="42" label="filter" typeLabel="SimpleName" pos="759" length="6"></tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="25" typeLabel="IfStatement" pos="771" length="78">
+            <tree type="27" label="&gt;" typeLabel="InfixExpression" pos="775" length="16">
+              <tree type="40" label="items.length" typeLabel="QualifiedName" pos="775" length="12"></tree>
+              <tree type="34" label="0" typeLabel="NumberLiteral" pos="790" length="1"></tree>
+            </tree>
+            <tree type="8" typeLabel="Block" pos="793" length="27">
+              <tree type="41" typeLabel="ReturnStatement" pos="799" length="16">
+                <tree type="2" typeLabel="ArrayAccess" pos="806" length="8">
+                  <tree type="42" label="items" typeLabel="SimpleName" pos="806" length="5"></tree>
+                  <tree type="34" label="0" typeLabel="NumberLiteral" pos="812" length="1"></tree>
+                </tree>
+              </tree>
+            </tree>
+            <tree type="8" typeLabel="Block" pos="826" length="23">
+              <tree type="41" typeLabel="ReturnStatement" pos="832" length="12">
+                <tree type="33" typeLabel="NullLiteral" pos="839" length="4"></tree>
+              </tree>
+            </tree>
+          </tree>
+        </tree>
+      </tree>
+    </tree>
+  </tree>
+</root>

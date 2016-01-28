@@ -1,0 +1,906 @@
+<?xml version="1.0" ?>
+<root>
+  <context></context>
+  <tree type="15" typeLabel="CompilationUnit" pos="0" length="7409">
+    <tree type="35" typeLabel="PackageDeclaration" pos="0" length="32">
+      <tree type="40" label="org.apache.lucene.index" typeLabel="QualifiedName" pos="8" length="23"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="2705" length="27">
+      <tree type="40" label="java.io.IOException" typeLabel="QualifiedName" pos="2712" length="19"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="2733" length="40">
+      <tree type="40" label="org.apache.lucene.util.BitVector" typeLabel="QualifiedName" pos="2740" length="32"></tree>
+    </tree>
+    <tree type="26" typeLabel="ImportDeclaration" pos="2774" length="43">
+      <tree type="40" label="org.apache.lucene.store.InputStream" typeLabel="QualifiedName" pos="2781" length="35"></tree>
+    </tree>
+    <tree type="55" typeLabel="TypeDeclaration" pos="2819" length="4589">
+      <tree type="42" label="SegmentTermDocs" typeLabel="SimpleName" pos="2825" length="15"></tree>
+      <tree type="43" label="TermDocs" typeLabel="SimpleType" pos="2852" length="8">
+        <tree type="42" label="TermDocs" typeLabel="SimpleName" pos="2852" length="8"></tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="2865" length="31">
+        <tree type="83" label="protected" typeLabel="Modifier" pos="2865" length="9"></tree>
+        <tree type="43" label="SegmentReader" typeLabel="SimpleType" pos="2875" length="13">
+          <tree type="42" label="SegmentReader" typeLabel="SimpleName" pos="2875" length="13"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="2889" length="6">
+          <tree type="42" label="parent" typeLabel="SimpleName" pos="2889" length="6"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="2899" length="31">
+        <tree type="83" label="private" typeLabel="Modifier" pos="2899" length="7"></tree>
+        <tree type="43" label="InputStream" typeLabel="SimpleType" pos="2907" length="11">
+          <tree type="42" label="InputStream" typeLabel="SimpleName" pos="2907" length="11"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="2919" length="10">
+          <tree type="42" label="freqStream" typeLabel="SimpleName" pos="2919" length="10"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="2933" length="18">
+        <tree type="83" label="private" typeLabel="Modifier" pos="2933" length="7"></tree>
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="2941" length="3"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="2945" length="5">
+          <tree type="42" label="count" typeLabel="SimpleName" pos="2945" length="5"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="2954" length="15">
+        <tree type="83" label="private" typeLabel="Modifier" pos="2954" length="7"></tree>
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="2962" length="3"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="2966" length="2">
+          <tree type="42" label="df" typeLabel="SimpleName" pos="2966" length="2"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="2972" length="30">
+        <tree type="83" label="private" typeLabel="Modifier" pos="2972" length="7"></tree>
+        <tree type="43" label="BitVector" typeLabel="SimpleType" pos="2980" length="9">
+          <tree type="42" label="BitVector" typeLabel="SimpleName" pos="2980" length="9"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="2990" length="11">
+          <tree type="42" label="deletedDocs" typeLabel="SimpleName" pos="2990" length="11"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3005" length="12">
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="3005" length="3"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3009" length="7">
+          <tree type="42" label="doc" typeLabel="SimpleName" pos="3009" length="3"></tree>
+          <tree type="34" label="0" typeLabel="NumberLiteral" pos="3015" length="1"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3020" length="9">
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="3020" length="3"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3024" length="4">
+          <tree type="42" label="freq" typeLabel="SimpleName" pos="3024" length="4"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3033" length="25">
+        <tree type="83" label="private" typeLabel="Modifier" pos="3033" length="7"></tree>
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="3041" length="3"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3045" length="12">
+          <tree type="42" label="skipInterval" typeLabel="SimpleName" pos="3045" length="12"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3061" length="22">
+        <tree type="83" label="private" typeLabel="Modifier" pos="3061" length="7"></tree>
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="3069" length="3"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3073" length="9">
+          <tree type="42" label="skipCount" typeLabel="SimpleName" pos="3073" length="9"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3086" length="31">
+        <tree type="83" label="private" typeLabel="Modifier" pos="3086" length="7"></tree>
+        <tree type="43" label="InputStream" typeLabel="SimpleType" pos="3094" length="11">
+          <tree type="42" label="InputStream" typeLabel="SimpleName" pos="3094" length="11"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3106" length="10">
+          <tree type="42" label="skipStream" typeLabel="SimpleName" pos="3106" length="10"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3120" length="20">
+        <tree type="83" label="private" typeLabel="Modifier" pos="3120" length="7"></tree>
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="3128" length="3"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3132" length="7">
+          <tree type="42" label="skipDoc" typeLabel="SimpleName" pos="3132" length="7"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3143" length="25">
+        <tree type="83" label="private" typeLabel="Modifier" pos="3143" length="7"></tree>
+        <tree type="39" label="long" typeLabel="PrimitiveType" pos="3151" length="4"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3156" length="11">
+          <tree type="42" label="freqPointer" typeLabel="SimpleName" pos="3156" length="11"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3171" length="25">
+        <tree type="83" label="private" typeLabel="Modifier" pos="3171" length="7"></tree>
+        <tree type="39" label="long" typeLabel="PrimitiveType" pos="3179" length="4"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3184" length="11">
+          <tree type="42" label="proxPointer" typeLabel="SimpleName" pos="3184" length="11"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3199" length="25">
+        <tree type="83" label="private" typeLabel="Modifier" pos="3199" length="7"></tree>
+        <tree type="39" label="long" typeLabel="PrimitiveType" pos="3207" length="4"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3212" length="11">
+          <tree type="42" label="skipPointer" typeLabel="SimpleName" pos="3212" length="11"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="3227" length="28">
+        <tree type="83" label="private" typeLabel="Modifier" pos="3227" length="7"></tree>
+        <tree type="39" label="boolean" typeLabel="PrimitiveType" pos="3235" length="7"></tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="3243" length="11">
+          <tree type="42" label="haveSkipped" typeLabel="SimpleName" pos="3243" length="11"></tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="3259" length="258">
+        <tree type="42" label="SegmentTermDocs" typeLabel="SimpleName" pos="3259" length="15"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="3275" length="20">
+          <tree type="43" label="SegmentReader" typeLabel="SimpleType" pos="3275" length="13">
+            <tree type="42" label="SegmentReader" typeLabel="SimpleName" pos="3275" length="13"></tree>
+          </tree>
+          <tree type="42" label="parent" typeLabel="SimpleName" pos="3289" length="6"></tree>
+        </tree>
+        <tree type="43" label="IOException" typeLabel="SimpleType" pos="3314" length="11">
+          <tree type="42" label="IOException" typeLabel="SimpleName" pos="3314" length="11"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="3326" length="191">
+          <tree type="21" typeLabel="ExpressionStatement" pos="3332" length="21">
+            <tree type="7" label="=" typeLabel="Assignment" pos="3332" length="20">
+              <tree type="22" typeLabel="FieldAccess" pos="3332" length="11">
+                <tree type="52" typeLabel="ThisExpression" pos="3332" length="4"></tree>
+                <tree type="42" label="parent" typeLabel="SimpleName" pos="3337" length="6"></tree>
+              </tree>
+              <tree type="42" label="parent" typeLabel="SimpleName" pos="3346" length="6"></tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="3358" length="58">
+            <tree type="7" label="=" typeLabel="Assignment" pos="3358" length="57">
+              <tree type="22" typeLabel="FieldAccess" pos="3358" length="15">
+                <tree type="52" typeLabel="ThisExpression" pos="3358" length="4"></tree>
+                <tree type="42" label="freqStream" typeLabel="SimpleName" pos="3363" length="10"></tree>
+              </tree>
+              <tree type="11" typeLabel="CastExpression" pos="3376" length="39">
+                <tree type="43" label="InputStream" typeLabel="SimpleType" pos="3377" length="11">
+                  <tree type="42" label="InputStream" typeLabel="SimpleName" pos="3377" length="11"></tree>
+                </tree>
+                <tree type="32" typeLabel="MethodInvocation" pos="3390" length="25">
+                  <tree type="40" label="parent.freqStream" typeLabel="QualifiedName" pos="3390" length="17"></tree>
+                  <tree type="42" label="clone" typeLabel="SimpleName" pos="3408" length="5"></tree>
+                </tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="3421" length="38">
+            <tree type="7" label="=" typeLabel="Assignment" pos="3421" length="37">
+              <tree type="22" typeLabel="FieldAccess" pos="3421" length="16">
+                <tree type="52" typeLabel="ThisExpression" pos="3421" length="4"></tree>
+                <tree type="42" label="deletedDocs" typeLabel="SimpleName" pos="3426" length="11"></tree>
+              </tree>
+              <tree type="40" label="parent.deletedDocs" typeLabel="QualifiedName" pos="3440" length="18"></tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="3464" length="49">
+            <tree type="7" label="=" typeLabel="Assignment" pos="3464" length="48">
+              <tree type="22" typeLabel="FieldAccess" pos="3464" length="17">
+                <tree type="52" typeLabel="ThisExpression" pos="3464" length="4"></tree>
+                <tree type="42" label="skipInterval" typeLabel="SimpleName" pos="3469" length="12"></tree>
+              </tree>
+              <tree type="32" typeLabel="MethodInvocation" pos="3484" length="28">
+                <tree type="40" label="parent.tis" typeLabel="QualifiedName" pos="3484" length="10"></tree>
+                <tree type="42" label="getSkipInterval" typeLabel="SimpleName" pos="3495" length="15"></tree>
+              </tree>
+            </tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="3521" length="106">
+        <tree type="83" label="public" typeLabel="Modifier" pos="3521" length="6"></tree>
+        <tree type="39" label="void" typeLabel="PrimitiveType" pos="3528" length="4"></tree>
+        <tree type="42" label="seek" typeLabel="SimpleName" pos="3533" length="4"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="3538" length="9">
+          <tree type="43" label="Term" typeLabel="SimpleType" pos="3538" length="4">
+            <tree type="42" label="Term" typeLabel="SimpleName" pos="3538" length="4"></tree>
+          </tree>
+          <tree type="42" label="term" typeLabel="SimpleName" pos="3543" length="4"></tree>
+        </tree>
+        <tree type="43" label="IOException" typeLabel="SimpleType" pos="3556" length="11">
+          <tree type="42" label="IOException" typeLabel="SimpleName" pos="3556" length="11"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="3568" length="59">
+          <tree type="60" typeLabel="VariableDeclarationStatement" pos="3574" length="35">
+            <tree type="43" label="TermInfo" typeLabel="SimpleType" pos="3574" length="8">
+              <tree type="42" label="TermInfo" typeLabel="SimpleName" pos="3574" length="8"></tree>
+            </tree>
+            <tree type="59" typeLabel="VariableDeclarationFragment" pos="3583" length="25">
+              <tree type="42" label="ti" typeLabel="SimpleName" pos="3583" length="2"></tree>
+              <tree type="32" typeLabel="MethodInvocation" pos="3588" length="20">
+                <tree type="40" label="parent.tis" typeLabel="QualifiedName" pos="3588" length="10"></tree>
+                <tree type="42" label="get" typeLabel="SimpleName" pos="3599" length="3"></tree>
+                <tree type="42" label="term" typeLabel="SimpleName" pos="3603" length="4"></tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="21" typeLabel="ExpressionStatement" pos="3614" length="9">
+            <tree type="32" typeLabel="MethodInvocation" pos="3614" length="8">
+              <tree type="42" label="seek" typeLabel="SimpleName" pos="3614" length="4"></tree>
+              <tree type="42" label="ti" typeLabel="SimpleName" pos="3619" length="2"></tree>
+            </tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="3631" length="306">
+        <tree type="83" label="public" typeLabel="Modifier" pos="3631" length="6"></tree>
+        <tree type="39" label="void" typeLabel="PrimitiveType" pos="3638" length="4"></tree>
+        <tree type="42" label="seek" typeLabel="SimpleName" pos="3643" length="4"></tree>
+        <tree type="8" typeLabel="Block" pos="3682" length="255"></tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="3941" length="379">
+        <tree type="39" label="void" typeLabel="PrimitiveType" pos="3941" length="4"></tree>
+        <tree type="42" label="seek" typeLabel="SimpleName" pos="3946" length="4"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="3951" length="11">
+          <tree type="43" label="TermInfo" typeLabel="SimpleType" pos="3951" length="8">
+            <tree type="42" label="TermInfo" typeLabel="SimpleName" pos="3951" length="8"></tree>
+          </tree>
+          <tree type="42" label="ti" typeLabel="SimpleName" pos="3960" length="2"></tree>
+        </tree>
+        <tree type="43" label="IOException" typeLabel="SimpleType" pos="3971" length="11">
+          <tree type="42" label="IOException" typeLabel="SimpleName" pos="3971" length="11"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="3983" length="337">
+          <tree type="21" typeLabel="ExpressionStatement" pos="3989" length="10">
+            <tree type="7" label="=" typeLabel="Assignment" pos="3989" length="9">
+              <tree type="42" label="count" typeLabel="SimpleName" pos="3989" length="5"></tree>
+              <tree type="34" label="0" typeLabel="NumberLiteral" pos="3997" length="1"></tree>
+            </tree>
+          </tree>
+          <tree type="25" typeLabel="IfStatement" pos="4004" length="312">
+            <tree type="27" label="==" typeLabel="InfixExpression" pos="4008" length="10">
+              <tree type="42" label="ti" typeLabel="SimpleName" pos="4008" length="2"></tree>
+              <tree type="33" typeLabel="NullLiteral" pos="4014" length="4"></tree>
+            </tree>
+            <tree type="8" typeLabel="Block" pos="4020" length="21">
+              <tree type="21" typeLabel="ExpressionStatement" pos="4028" length="7">
+                <tree type="7" label="=" typeLabel="Assignment" pos="4028" length="6">
+                  <tree type="42" label="df" typeLabel="SimpleName" pos="4028" length="2"></tree>
+                  <tree type="34" label="0" typeLabel="NumberLiteral" pos="4033" length="1"></tree>
+                </tree>
+              </tree>
+            </tree>
+            <tree type="8" typeLabel="Block" pos="4047" length="269">
+              <tree type="21" typeLabel="ExpressionStatement" pos="4055" length="16">
+                <tree type="7" label="=" typeLabel="Assignment" pos="4055" length="15">
+                  <tree type="42" label="df" typeLabel="SimpleName" pos="4055" length="2"></tree>
+                  <tree type="40" label="ti.docFreq" typeLabel="QualifiedName" pos="4060" length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4078" length="8">
+                <tree type="7" label="=" typeLabel="Assignment" pos="4078" length="7">
+                  <tree type="42" label="doc" typeLabel="SimpleName" pos="4078" length="3"></tree>
+                  <tree type="34" label="0" typeLabel="NumberLiteral" pos="4084" length="1"></tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4093" length="12">
+                <tree type="7" label="=" typeLabel="Assignment" pos="4093" length="11">
+                  <tree type="42" label="skipDoc" typeLabel="SimpleName" pos="4093" length="7"></tree>
+                  <tree type="34" label="0" typeLabel="NumberLiteral" pos="4103" length="1"></tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4112" length="14">
+                <tree type="7" label="=" typeLabel="Assignment" pos="4112" length="13">
+                  <tree type="42" label="skipCount" typeLabel="SimpleName" pos="4112" length="9"></tree>
+                  <tree type="34" label="0" typeLabel="NumberLiteral" pos="4124" length="1"></tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4133" length="29">
+                <tree type="7" label="=" typeLabel="Assignment" pos="4133" length="28">
+                  <tree type="42" label="freqPointer" typeLabel="SimpleName" pos="4133" length="11"></tree>
+                  <tree type="40" label="ti.freqPointer" typeLabel="QualifiedName" pos="4147" length="14"></tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4169" length="29">
+                <tree type="7" label="=" typeLabel="Assignment" pos="4169" length="28">
+                  <tree type="42" label="proxPointer" typeLabel="SimpleName" pos="4169" length="11"></tree>
+                  <tree type="40" label="ti.proxPointer" typeLabel="QualifiedName" pos="4183" length="14"></tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4205" length="42">
+                <tree type="7" label="=" typeLabel="Assignment" pos="4205" length="41">
+                  <tree type="42" label="skipPointer" typeLabel="SimpleName" pos="4205" length="11"></tree>
+                  <tree type="27" label="+" typeLabel="InfixExpression" pos="4219" length="27">
+                    <tree type="42" label="freqPointer" typeLabel="SimpleName" pos="4219" length="11"></tree>
+                    <tree type="40" label="ti.skipOffset" typeLabel="QualifiedName" pos="4233" length="13"></tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4254" length="29">
+                <tree type="32" typeLabel="MethodInvocation" pos="4254" length="28">
+                  <tree type="42" label="freqStream" typeLabel="SimpleName" pos="4254" length="10"></tree>
+                  <tree type="42" label="seek" typeLabel="SimpleName" pos="4265" length="4"></tree>
+                  <tree type="42" label="freqPointer" typeLabel="SimpleName" pos="4270" length="11"></tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4290" length="20">
+                <tree type="7" label="=" typeLabel="Assignment" pos="4290" length="19">
+                  <tree type="42" label="haveSkipped" typeLabel="SimpleName" pos="4290" length="11"></tree>
+                  <tree type="9" label="false" typeLabel="BooleanLiteral" pos="4304" length="5"></tree>
+                </tree>
+              </tree>
+            </tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="4324" length="68">
+        <tree type="83" label="public" typeLabel="Modifier" pos="4324" length="6"></tree>
+        <tree type="39" label="void" typeLabel="PrimitiveType" pos="4331" length="4"></tree>
+        <tree type="42" label="close" typeLabel="SimpleName" pos="4336" length="5"></tree>
+        <tree type="43" label="IOException" typeLabel="SimpleType" pos="4351" length="11">
+          <tree type="42" label="IOException" typeLabel="SimpleName" pos="4351" length="11"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="4363" length="29">
+          <tree type="21" typeLabel="ExpressionStatement" pos="4369" length="19">
+            <tree type="32" typeLabel="MethodInvocation" pos="4369" length="18">
+              <tree type="42" label="freqStream" typeLabel="SimpleName" pos="4369" length="10"></tree>
+              <tree type="42" label="close" typeLabel="SimpleName" pos="4380" length="5"></tree>
+            </tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="4396" length="38">
+        <tree type="83" label="public" typeLabel="Modifier" pos="4396" length="6"></tree>
+        <tree type="83" label="final" typeLabel="Modifier" pos="4403" length="5"></tree>
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="4409" length="3"></tree>
+        <tree type="42" label="doc" typeLabel="SimpleName" pos="4413" length="3"></tree>
+        <tree type="8" typeLabel="Block" pos="4419" length="15">
+          <tree type="41" typeLabel="ReturnStatement" pos="4421" length="11">
+            <tree type="42" label="doc" typeLabel="SimpleName" pos="4428" length="3"></tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="4437" length="40">
+        <tree type="83" label="public" typeLabel="Modifier" pos="4437" length="6"></tree>
+        <tree type="83" label="final" typeLabel="Modifier" pos="4444" length="5"></tree>
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="4450" length="3"></tree>
+        <tree type="42" label="freq" typeLabel="SimpleName" pos="4454" length="4"></tree>
+        <tree type="8" typeLabel="Block" pos="4461" length="16">
+          <tree type="41" typeLabel="ReturnStatement" pos="4463" length="12">
+            <tree type="42" label="freq" typeLabel="SimpleName" pos="4470" length="4"></tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="4481" length="53">
+        <tree type="83" label="protected" typeLabel="Modifier" pos="4481" length="9"></tree>
+        <tree type="39" label="void" typeLabel="PrimitiveType" pos="4491" length="4"></tree>
+        <tree type="42" label="skippingDoc" typeLabel="SimpleName" pos="4496" length="11"></tree>
+        <tree type="43" label="IOException" typeLabel="SimpleType" pos="4517" length="11">
+          <tree type="42" label="IOException" typeLabel="SimpleName" pos="4517" length="11"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="4529" length="5"></tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="4538" length="502">
+        <tree type="83" label="public" typeLabel="Modifier" pos="4538" length="6"></tree>
+        <tree type="39" label="boolean" typeLabel="PrimitiveType" pos="4545" length="7"></tree>
+        <tree type="42" label="next" typeLabel="SimpleName" pos="4553" length="4"></tree>
+        <tree type="43" label="IOException" typeLabel="SimpleType" pos="4567" length="11">
+          <tree type="42" label="IOException" typeLabel="SimpleName" pos="4567" length="11"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="4579" length="461">
+          <tree type="61" typeLabel="WhileStatement" pos="4585" length="434">
+            <tree type="9" label="true" typeLabel="BooleanLiteral" pos="4592" length="4"></tree>
+            <tree type="8" typeLabel="Block" pos="4598" length="421">
+              <tree type="25" typeLabel="IfStatement" pos="4606" length="38">
+                <tree type="27" label="==" typeLabel="InfixExpression" pos="4610" length="11">
+                  <tree type="42" label="count" typeLabel="SimpleName" pos="4610" length="5"></tree>
+                  <tree type="42" label="df" typeLabel="SimpleName" pos="4619" length="2"></tree>
+                </tree>
+                <tree type="41" typeLabel="ReturnStatement" pos="4631" length="13">
+                  <tree type="9" label="false" typeLabel="BooleanLiteral" pos="4638" length="5"></tree>
+                </tree>
+              </tree>
+              <tree type="60" typeLabel="VariableDeclarationStatement" pos="4652" length="36">
+                <tree type="39" label="int" typeLabel="PrimitiveType" pos="4652" length="3"></tree>
+                <tree type="59" typeLabel="VariableDeclarationFragment" pos="4656" length="31">
+                  <tree type="42" label="docCode" typeLabel="SimpleName" pos="4656" length="7"></tree>
+                  <tree type="32" typeLabel="MethodInvocation" pos="4666" length="21">
+                    <tree type="42" label="freqStream" typeLabel="SimpleName" pos="4666" length="10"></tree>
+                    <tree type="42" label="readVInt" typeLabel="SimpleName" pos="4677" length="8"></tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4695" length="21">
+                <tree type="7" label="+=" typeLabel="Assignment" pos="4695" length="20">
+                  <tree type="42" label="doc" typeLabel="SimpleName" pos="4695" length="3"></tree>
+                  <tree type="27" label="&gt;&gt;&gt;" typeLabel="InfixExpression" pos="4702" length="13">
+                    <tree type="42" label="docCode" typeLabel="SimpleName" pos="4702" length="7"></tree>
+                    <tree type="34" label="1" typeLabel="NumberLiteral" pos="4714" length="1"></tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="25" typeLabel="IfStatement" pos="4748" length="135">
+                <tree type="27" label="!=" typeLabel="InfixExpression" pos="4752" length="18">
+                  <tree type="36" typeLabel="ParenthesizedExpression" pos="4752" length="13">
+                    <tree type="27" label="&amp;" typeLabel="InfixExpression" pos="4753" length="11">
+                      <tree type="42" label="docCode" typeLabel="SimpleName" pos="4753" length="7"></tree>
+                      <tree type="34" label="1" typeLabel="NumberLiteral" pos="4763" length="1"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="34" label="0" typeLabel="NumberLiteral" pos="4769" length="1"></tree>
+                </tree>
+                <tree type="21" typeLabel="ExpressionStatement" pos="4805" length="9">
+                  <tree type="7" label="=" typeLabel="Assignment" pos="4805" length="8">
+                    <tree type="42" label="freq" typeLabel="SimpleName" pos="4805" length="4"></tree>
+                    <tree type="34" label="1" typeLabel="NumberLiteral" pos="4812" length="1"></tree>
+                  </tree>
+                </tree>
+                <tree type="21" typeLabel="ExpressionStatement" pos="4854" length="29">
+                  <tree type="7" label="=" typeLabel="Assignment" pos="4854" length="28">
+                    <tree type="42" label="freq" typeLabel="SimpleName" pos="4854" length="4"></tree>
+                    <tree type="32" typeLabel="MethodInvocation" pos="4861" length="21">
+                      <tree type="42" label="freqStream" typeLabel="SimpleName" pos="4861" length="10"></tree>
+                      <tree type="42" label="readVInt" typeLabel="SimpleName" pos="4872" length="8"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4912" length="8">
+                <tree type="37" label="++" typeLabel="PostfixExpression" pos="4912" length="7">
+                  <tree type="42" label="count" typeLabel="SimpleName" pos="4912" length="5"></tree>
+                </tree>
+              </tree>
+              <tree type="25" typeLabel="IfStatement" pos="4928" length="64">
+                <tree type="27" label="||" typeLabel="InfixExpression" pos="4932" length="44">
+                  <tree type="27" label="==" typeLabel="InfixExpression" pos="4932" length="19">
+                    <tree type="42" label="deletedDocs" typeLabel="SimpleName" pos="4932" length="11"></tree>
+                    <tree type="33" typeLabel="NullLiteral" pos="4947" length="4"></tree>
+                  </tree>
+                  <tree type="38" label="!" typeLabel="PrefixExpression" pos="4955" length="21">
+                    <tree type="32" typeLabel="MethodInvocation" pos="4956" length="20">
+                      <tree type="42" label="deletedDocs" typeLabel="SimpleName" pos="4956" length="11"></tree>
+                      <tree type="42" label="get" typeLabel="SimpleName" pos="4968" length="3"></tree>
+                      <tree type="42" label="doc" typeLabel="SimpleName" pos="4972" length="3"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+                <tree type="10" typeLabel="BreakStatement" pos="4986" length="6"></tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="4999" length="14">
+                <tree type="32" typeLabel="MethodInvocation" pos="4999" length="13">
+                  <tree type="42" label="skippingDoc" typeLabel="SimpleName" pos="4999" length="11"></tree>
+                </tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="41" typeLabel="ReturnStatement" pos="5024" length="12">
+            <tree type="9" label="true" typeLabel="BooleanLiteral" pos="5031" length="4"></tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="5044" length="692">
+        <tree type="29" typeLabel="Javadoc" pos="5044" length="32">
+          <tree type="65" typeLabel="TagElement" pos="5048" length="26">
+            <tree type="66" label="Optimized implementation. " typeLabel="TextElement" pos="5048" length="26"></tree>
+          </tree>
+        </tree>
+        <tree type="83" label="public" typeLabel="Modifier" pos="5079" length="6"></tree>
+        <tree type="39" label="int" typeLabel="PrimitiveType" pos="5086" length="3"></tree>
+        <tree type="42" label="read" typeLabel="SimpleName" pos="5090" length="4"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="5095" length="16">
+          <tree type="83" label="final" typeLabel="Modifier" pos="5095" length="5"></tree>
+          <tree type="5" label="int[]" typeLabel="ArrayType" pos="5101" length="5">
+            <tree type="39" label="int" typeLabel="PrimitiveType" pos="5101" length="3"></tree>
+            <tree type="85" typeLabel="Dimension" pos="5104" length="2"></tree>
+          </tree>
+          <tree type="42" label="docs" typeLabel="SimpleName" pos="5107" length="4"></tree>
+        </tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="5113" length="17">
+          <tree type="83" label="final" typeLabel="Modifier" pos="5113" length="5"></tree>
+          <tree type="5" label="int[]" typeLabel="ArrayType" pos="5119" length="5">
+            <tree type="39" label="int" typeLabel="PrimitiveType" pos="5119" length="3"></tree>
+            <tree type="85" typeLabel="Dimension" pos="5122" length="2"></tree>
+          </tree>
+          <tree type="42" label="freqs" typeLabel="SimpleName" pos="5125" length="5"></tree>
+        </tree>
+        <tree type="43" label="IOException" typeLabel="SimpleType" pos="5149" length="11">
+          <tree type="42" label="IOException" typeLabel="SimpleName" pos="5149" length="11"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="5161" length="575">
+          <tree type="60" typeLabel="VariableDeclarationStatement" pos="5167" length="31">
+            <tree type="83" label="final" typeLabel="Modifier" pos="5167" length="5"></tree>
+            <tree type="39" label="int" typeLabel="PrimitiveType" pos="5173" length="3"></tree>
+            <tree type="59" typeLabel="VariableDeclarationFragment" pos="5177" length="20">
+              <tree type="42" label="length" typeLabel="SimpleName" pos="5177" length="6"></tree>
+              <tree type="40" label="docs.length" typeLabel="QualifiedName" pos="5186" length="11"></tree>
+            </tree>
+          </tree>
+          <tree type="60" typeLabel="VariableDeclarationStatement" pos="5203" length="10">
+            <tree type="39" label="int" typeLabel="PrimitiveType" pos="5203" length="3"></tree>
+            <tree type="59" typeLabel="VariableDeclarationFragment" pos="5207" length="5">
+              <tree type="42" label="i" typeLabel="SimpleName" pos="5207" length="1"></tree>
+              <tree type="34" label="0" typeLabel="NumberLiteral" pos="5211" length="1"></tree>
+            </tree>
+          </tree>
+          <tree type="61" typeLabel="WhileStatement" pos="5218" length="500">
+            <tree type="27" label="&amp;&amp;" typeLabel="InfixExpression" pos="5225" length="24">
+              <tree type="27" label="&lt;" typeLabel="InfixExpression" pos="5225" length="10">
+                <tree type="42" label="i" typeLabel="SimpleName" pos="5225" length="1"></tree>
+                <tree type="42" label="length" typeLabel="SimpleName" pos="5229" length="6"></tree>
+              </tree>
+              <tree type="27" label="&lt;" typeLabel="InfixExpression" pos="5239" length="10">
+                <tree type="42" label="count" typeLabel="SimpleName" pos="5239" length="5"></tree>
+                <tree type="42" label="df" typeLabel="SimpleName" pos="5247" length="2"></tree>
+              </tree>
+            </tree>
+            <tree type="8" typeLabel="Block" pos="5251" length="467">
+              <tree type="60" typeLabel="VariableDeclarationStatement" pos="5311" length="42">
+                <tree type="83" label="final" typeLabel="Modifier" pos="5311" length="5"></tree>
+                <tree type="39" label="int" typeLabel="PrimitiveType" pos="5317" length="3"></tree>
+                <tree type="59" typeLabel="VariableDeclarationFragment" pos="5321" length="31">
+                  <tree type="42" label="docCode" typeLabel="SimpleName" pos="5321" length="7"></tree>
+                  <tree type="32" typeLabel="MethodInvocation" pos="5331" length="21">
+                    <tree type="42" label="freqStream" typeLabel="SimpleName" pos="5331" length="10"></tree>
+                    <tree type="42" label="readVInt" typeLabel="SimpleName" pos="5342" length="8"></tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="5360" length="21">
+                <tree type="7" label="+=" typeLabel="Assignment" pos="5360" length="20">
+                  <tree type="42" label="doc" typeLabel="SimpleName" pos="5360" length="3"></tree>
+                  <tree type="27" label="&gt;&gt;&gt;" typeLabel="InfixExpression" pos="5367" length="13">
+                    <tree type="42" label="docCode" typeLabel="SimpleName" pos="5367" length="7"></tree>
+                    <tree type="34" label="1" typeLabel="NumberLiteral" pos="5379" length="1"></tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="25" typeLabel="IfStatement" pos="5413" length="135">
+                <tree type="27" label="!=" typeLabel="InfixExpression" pos="5417" length="18">
+                  <tree type="36" typeLabel="ParenthesizedExpression" pos="5417" length="13">
+                    <tree type="27" label="&amp;" typeLabel="InfixExpression" pos="5418" length="11">
+                      <tree type="42" label="docCode" typeLabel="SimpleName" pos="5418" length="7"></tree>
+                      <tree type="34" label="1" typeLabel="NumberLiteral" pos="5428" length="1"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="34" label="0" typeLabel="NumberLiteral" pos="5434" length="1"></tree>
+                </tree>
+                <tree type="21" typeLabel="ExpressionStatement" pos="5470" length="9">
+                  <tree type="7" label="=" typeLabel="Assignment" pos="5470" length="8">
+                    <tree type="42" label="freq" typeLabel="SimpleName" pos="5470" length="4"></tree>
+                    <tree type="34" label="1" typeLabel="NumberLiteral" pos="5477" length="1"></tree>
+                  </tree>
+                </tree>
+                <tree type="21" typeLabel="ExpressionStatement" pos="5519" length="29">
+                  <tree type="7" label="=" typeLabel="Assignment" pos="5519" length="28">
+                    <tree type="42" label="freq" typeLabel="SimpleName" pos="5519" length="4"></tree>
+                    <tree type="32" typeLabel="MethodInvocation" pos="5526" length="21">
+                      <tree type="42" label="freqStream" typeLabel="SimpleName" pos="5526" length="10"></tree>
+                      <tree type="42" label="readVInt" typeLabel="SimpleName" pos="5537" length="8"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="21" typeLabel="ExpressionStatement" pos="5576" length="8">
+                <tree type="37" label="++" typeLabel="PostfixExpression" pos="5576" length="7">
+                  <tree type="42" label="count" typeLabel="SimpleName" pos="5576" length="5"></tree>
+                </tree>
+              </tree>
+              <tree type="25" typeLabel="IfStatement" pos="5592" length="120">
+                <tree type="27" label="||" typeLabel="InfixExpression" pos="5596" length="44">
+                  <tree type="27" label="==" typeLabel="InfixExpression" pos="5596" length="19">
+                    <tree type="42" label="deletedDocs" typeLabel="SimpleName" pos="5596" length="11"></tree>
+                    <tree type="33" typeLabel="NullLiteral" pos="5611" length="4"></tree>
+                  </tree>
+                  <tree type="38" label="!" typeLabel="PrefixExpression" pos="5619" length="21">
+                    <tree type="32" typeLabel="MethodInvocation" pos="5620" length="20">
+                      <tree type="42" label="deletedDocs" typeLabel="SimpleName" pos="5620" length="11"></tree>
+                      <tree type="42" label="get" typeLabel="SimpleName" pos="5632" length="3"></tree>
+                      <tree type="42" label="doc" typeLabel="SimpleName" pos="5636" length="3"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+                <tree type="8" typeLabel="Block" pos="5642" length="70">
+                  <tree type="21" typeLabel="ExpressionStatement" pos="5652" length="14">
+                    <tree type="7" label="=" typeLabel="Assignment" pos="5652" length="13">
+                      <tree type="2" typeLabel="ArrayAccess" pos="5652" length="7">
+                        <tree type="42" label="docs" typeLabel="SimpleName" pos="5652" length="4"></tree>
+                        <tree type="42" label="i" typeLabel="SimpleName" pos="5657" length="1"></tree>
+                      </tree>
+                      <tree type="42" label="doc" typeLabel="SimpleName" pos="5662" length="3"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="5675" length="16">
+                    <tree type="7" label="=" typeLabel="Assignment" pos="5675" length="15">
+                      <tree type="2" typeLabel="ArrayAccess" pos="5675" length="8">
+                        <tree type="42" label="freqs" typeLabel="SimpleName" pos="5675" length="5"></tree>
+                        <tree type="42" label="i" typeLabel="SimpleName" pos="5681" length="1"></tree>
+                      </tree>
+                      <tree type="42" label="freq" typeLabel="SimpleName" pos="5686" length="4"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="5700" length="4">
+                    <tree type="38" label="++" typeLabel="PrefixExpression" pos="5700" length="3">
+                      <tree type="42" label="i" typeLabel="SimpleName" pos="5702" length="1"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="41" typeLabel="ReturnStatement" pos="5723" length="9">
+            <tree type="42" label="i" typeLabel="SimpleName" pos="5730" length="1"></tree>
+          </tree>
+        </tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="5740" length="131">
+        <tree type="29" typeLabel="Javadoc" pos="5740" length="65">
+          <tree type="65" typeLabel="TagElement" pos="5744" length="59">
+            <tree type="66" label="Overridden by SegmentTermPositions to skip in prox stream. " typeLabel="TextElement" pos="5744" length="59"></tree>
+          </tree>
+        </tree>
+        <tree type="83" label="protected" typeLabel="Modifier" pos="5808" length="9"></tree>
+        <tree type="39" label="void" typeLabel="PrimitiveType" pos="5818" length="4"></tree>
+        <tree type="42" label="skipProx" typeLabel="SimpleName" pos="5823" length="8"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="5832" length="16">
+          <tree type="39" label="long" typeLabel="PrimitiveType" pos="5832" length="4"></tree>
+          <tree type="42" label="proxPointer" typeLabel="SimpleName" pos="5837" length="11"></tree>
+        </tree>
+        <tree type="43" label="IOException" typeLabel="SimpleType" pos="5857" length="11">
+          <tree type="42" label="IOException" typeLabel="SimpleName" pos="5857" length="11"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="5869" length="2"></tree>
+      </tree>
+      <tree type="31" typeLabel="MethodDeclaration" pos="5875" length="1530">
+        <tree type="29" typeLabel="Javadoc" pos="5875" length="32">
+          <tree type="65" typeLabel="TagElement" pos="5879" length="26">
+            <tree type="66" label="Optimized implementation. " typeLabel="TextElement" pos="5879" length="26"></tree>
+          </tree>
+        </tree>
+        <tree type="83" label="public" typeLabel="Modifier" pos="5910" length="6"></tree>
+        <tree type="39" label="boolean" typeLabel="PrimitiveType" pos="5917" length="7"></tree>
+        <tree type="42" label="skipTo" typeLabel="SimpleName" pos="5925" length="6"></tree>
+        <tree type="44" typeLabel="SingleVariableDeclaration" pos="5932" length="10">
+          <tree type="39" label="int" typeLabel="PrimitiveType" pos="5932" length="3"></tree>
+          <tree type="42" label="target" typeLabel="SimpleName" pos="5936" length="6"></tree>
+        </tree>
+        <tree type="43" label="IOException" typeLabel="SimpleType" pos="5951" length="11">
+          <tree type="42" label="IOException" typeLabel="SimpleName" pos="5951" length="11"></tree>
+        </tree>
+        <tree type="8" typeLabel="Block" pos="5963" length="1442">
+          <tree type="25" typeLabel="IfStatement" pos="5969" length="1300">
+            <tree type="27" label="&gt;" typeLabel="InfixExpression" pos="5973" length="17">
+              <tree type="42" label="df" typeLabel="SimpleName" pos="5973" length="2"></tree>
+              <tree type="42" label="skipInterval" typeLabel="SimpleName" pos="5978" length="12"></tree>
+            </tree>
+            <tree type="8" typeLabel="Block" pos="5992" length="1277">
+              <tree type="25" typeLabel="IfStatement" pos="6040" length="78">
+                <tree type="27" label="==" typeLabel="InfixExpression" pos="6044" length="18">
+                  <tree type="42" label="skipStream" typeLabel="SimpleName" pos="6044" length="10"></tree>
+                  <tree type="33" typeLabel="NullLiteral" pos="6058" length="4"></tree>
+                </tree>
+                <tree type="21" typeLabel="ExpressionStatement" pos="6072" length="46">
+                  <tree type="7" label="=" typeLabel="Assignment" pos="6072" length="45">
+                    <tree type="42" label="skipStream" typeLabel="SimpleName" pos="6072" length="10"></tree>
+                    <tree type="11" typeLabel="CastExpression" pos="6085" length="32">
+                      <tree type="43" label="InputStream" typeLabel="SimpleType" pos="6086" length="11">
+                        <tree type="42" label="InputStream" typeLabel="SimpleName" pos="6086" length="11"></tree>
+                      </tree>
+                      <tree type="32" typeLabel="MethodInvocation" pos="6099" length="18">
+                        <tree type="42" label="freqStream" typeLabel="SimpleName" pos="6099" length="10"></tree>
+                        <tree type="42" label="clone" typeLabel="SimpleName" pos="6110" length="5"></tree>
+                      </tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="25" typeLabel="IfStatement" pos="6142" length="145">
+                <tree type="38" label="!" typeLabel="PrefixExpression" pos="6146" length="12">
+                  <tree type="42" label="haveSkipped" typeLabel="SimpleName" pos="6147" length="11"></tree>
+                </tree>
+                <tree type="8" typeLabel="Block" pos="6160" length="127">
+                  <tree type="21" typeLabel="ExpressionStatement" pos="6222" length="29">
+                    <tree type="32" typeLabel="MethodInvocation" pos="6222" length="28">
+                      <tree type="42" label="skipStream" typeLabel="SimpleName" pos="6222" length="10"></tree>
+                      <tree type="42" label="seek" typeLabel="SimpleName" pos="6233" length="4"></tree>
+                      <tree type="42" label="skipPointer" typeLabel="SimpleName" pos="6238" length="11"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="6260" length="19">
+                    <tree type="7" label="=" typeLabel="Assignment" pos="6260" length="18">
+                      <tree type="42" label="haveSkipped" typeLabel="SimpleName" pos="6260" length="11"></tree>
+                      <tree type="9" label="true" typeLabel="BooleanLiteral" pos="6274" length="4"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="60" typeLabel="VariableDeclarationStatement" pos="6319" length="26">
+                <tree type="39" label="int" typeLabel="PrimitiveType" pos="6319" length="3"></tree>
+                <tree type="59" typeLabel="VariableDeclarationFragment" pos="6323" length="21">
+                  <tree type="42" label="lastSkipDoc" typeLabel="SimpleName" pos="6323" length="11"></tree>
+                  <tree type="42" label="skipDoc" typeLabel="SimpleName" pos="6337" length="7"></tree>
+                </tree>
+              </tree>
+              <tree type="60" typeLabel="VariableDeclarationStatement" pos="6352" length="51">
+                <tree type="39" label="long" typeLabel="PrimitiveType" pos="6352" length="4"></tree>
+                <tree type="59" typeLabel="VariableDeclarationFragment" pos="6357" length="45">
+                  <tree type="42" label="lastFreqPointer" typeLabel="SimpleName" pos="6357" length="15"></tree>
+                  <tree type="32" typeLabel="MethodInvocation" pos="6375" length="27">
+                    <tree type="42" label="freqStream" typeLabel="SimpleName" pos="6375" length="10"></tree>
+                    <tree type="42" label="getFilePointer" typeLabel="SimpleName" pos="6386" length="14"></tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="60" typeLabel="VariableDeclarationStatement" pos="6410" length="26">
+                <tree type="39" label="long" typeLabel="PrimitiveType" pos="6410" length="4"></tree>
+                <tree type="59" typeLabel="VariableDeclarationFragment" pos="6415" length="20">
+                  <tree type="42" label="lastProxPointer" typeLabel="SimpleName" pos="6415" length="15"></tree>
+                  <tree type="38" label="-" typeLabel="PrefixExpression" pos="6433" length="2">
+                    <tree type="34" label="1" typeLabel="NumberLiteral" pos="6434" length="1"></tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="60" typeLabel="VariableDeclarationStatement" pos="6443" length="45">
+                <tree type="39" label="int" typeLabel="PrimitiveType" pos="6443" length="3"></tree>
+                <tree type="59" typeLabel="VariableDeclarationFragment" pos="6447" length="40">
+                  <tree type="42" label="numSkipped" typeLabel="SimpleName" pos="6447" length="10"></tree>
+                  <tree type="27" label="-" typeLabel="InfixExpression" pos="6460" length="27">
+                    <tree type="38" label="-" typeLabel="PrefixExpression" pos="6460" length="2">
+                      <tree type="34" label="1" typeLabel="NumberLiteral" pos="6461" length="1"></tree>
+                    </tree>
+                    <tree type="36" typeLabel="ParenthesizedExpression" pos="6465" length="22">
+                      <tree type="27" label="%" typeLabel="InfixExpression" pos="6466" length="20">
+                        <tree type="42" label="count" typeLabel="SimpleName" pos="6466" length="5"></tree>
+                        <tree type="42" label="skipInterval" typeLabel="SimpleName" pos="6474" length="12"></tree>
+                      </tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="61" typeLabel="WhileStatement" pos="6496" length="505">
+                <tree type="27" label="&gt;" typeLabel="InfixExpression" pos="6503" length="16">
+                  <tree type="42" label="target" typeLabel="SimpleName" pos="6503" length="6"></tree>
+                  <tree type="42" label="skipDoc" typeLabel="SimpleName" pos="6512" length="7"></tree>
+                </tree>
+                <tree type="8" typeLabel="Block" pos="6521" length="480">
+                  <tree type="21" typeLabel="ExpressionStatement" pos="6531" length="22">
+                    <tree type="7" label="=" typeLabel="Assignment" pos="6531" length="21">
+                      <tree type="42" label="lastSkipDoc" typeLabel="SimpleName" pos="6531" length="11"></tree>
+                      <tree type="42" label="skipDoc" typeLabel="SimpleName" pos="6545" length="7"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="6562" length="30">
+                    <tree type="7" label="=" typeLabel="Assignment" pos="6562" length="29">
+                      <tree type="42" label="lastFreqPointer" typeLabel="SimpleName" pos="6562" length="15"></tree>
+                      <tree type="42" label="freqPointer" typeLabel="SimpleName" pos="6580" length="11"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="6601" length="30">
+                    <tree type="7" label="=" typeLabel="Assignment" pos="6601" length="29">
+                      <tree type="42" label="lastProxPointer" typeLabel="SimpleName" pos="6601" length="15"></tree>
+                      <tree type="42" label="proxPointer" typeLabel="SimpleName" pos="6619" length="11"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="25" typeLabel="IfStatement" pos="6640" length="73">
+                    <tree type="27" label="&amp;&amp;" typeLabel="InfixExpression" pos="6644" length="30">
+                      <tree type="27" label="!=" typeLabel="InfixExpression" pos="6644" length="12">
+                        <tree type="42" label="skipDoc" typeLabel="SimpleName" pos="6644" length="7"></tree>
+                        <tree type="34" label="0" typeLabel="NumberLiteral" pos="6655" length="1"></tree>
+                      </tree>
+                      <tree type="27" label="&gt;=" typeLabel="InfixExpression" pos="6660" length="14">
+                        <tree type="42" label="skipDoc" typeLabel="SimpleName" pos="6660" length="7"></tree>
+                        <tree type="42" label="doc" typeLabel="SimpleName" pos="6671" length="3"></tree>
+                      </tree>
+                    </tree>
+                    <tree type="21" typeLabel="ExpressionStatement" pos="6686" length="27">
+                      <tree type="7" label="+=" typeLabel="Assignment" pos="6686" length="26">
+                        <tree type="42" label="numSkipped" typeLabel="SimpleName" pos="6686" length="10"></tree>
+                        <tree type="42" label="skipInterval" typeLabel="SimpleName" pos="6700" length="12"></tree>
+                      </tree>
+                    </tree>
+                  </tree>
+                  <tree type="25" typeLabel="IfStatement" pos="6723" length="63">
+                    <tree type="27" label="&gt;=" typeLabel="InfixExpression" pos="6727" length="41">
+                      <tree type="36" typeLabel="ParenthesizedExpression" pos="6727" length="35">
+                        <tree type="27" label="+" typeLabel="InfixExpression" pos="6728" length="33">
+                          <tree type="42" label="count" typeLabel="SimpleName" pos="6728" length="5"></tree>
+                          <tree type="42" label="numSkipped" typeLabel="SimpleName" pos="6736" length="10"></tree>
+                          <tree type="42" label="skipInterval" typeLabel="SimpleName" pos="6749" length="12"></tree>
+                        </tree>
+                      </tree>
+                      <tree type="42" label="df" typeLabel="SimpleName" pos="6766" length="2"></tree>
+                    </tree>
+                    <tree type="10" typeLabel="BreakStatement" pos="6780" length="6"></tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="6846" length="33">
+                    <tree type="7" label="+=" typeLabel="Assignment" pos="6846" length="32">
+                      <tree type="42" label="skipDoc" typeLabel="SimpleName" pos="6846" length="7"></tree>
+                      <tree type="32" typeLabel="MethodInvocation" pos="6857" length="21">
+                        <tree type="42" label="skipStream" typeLabel="SimpleName" pos="6857" length="10"></tree>
+                        <tree type="42" label="readVInt" typeLabel="SimpleName" pos="6868" length="8"></tree>
+                      </tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="6888" length="37">
+                    <tree type="7" label="+=" typeLabel="Assignment" pos="6888" length="36">
+                      <tree type="42" label="freqPointer" typeLabel="SimpleName" pos="6888" length="11"></tree>
+                      <tree type="32" typeLabel="MethodInvocation" pos="6903" length="21">
+                        <tree type="42" label="skipStream" typeLabel="SimpleName" pos="6903" length="10"></tree>
+                        <tree type="42" label="readVInt" typeLabel="SimpleName" pos="6914" length="8"></tree>
+                      </tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="6934" length="37">
+                    <tree type="7" label="+=" typeLabel="Assignment" pos="6934" length="36">
+                      <tree type="42" label="proxPointer" typeLabel="SimpleName" pos="6934" length="11"></tree>
+                      <tree type="32" typeLabel="MethodInvocation" pos="6949" length="21">
+                        <tree type="42" label="skipStream" typeLabel="SimpleName" pos="6949" length="10"></tree>
+                        <tree type="42" label="readVInt" typeLabel="SimpleName" pos="6960" length="8"></tree>
+                      </tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="6981" length="12">
+                    <tree type="37" label="++" typeLabel="PostfixExpression" pos="6981" length="11">
+                      <tree type="42" label="skipCount" typeLabel="SimpleName" pos="6981" length="9"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+              <tree type="25" typeLabel="IfStatement" pos="7068" length="194">
+                <tree type="27" label="&gt;" typeLabel="InfixExpression" pos="7072" length="45">
+                  <tree type="42" label="lastFreqPointer" typeLabel="SimpleName" pos="7072" length="15"></tree>
+                  <tree type="32" typeLabel="MethodInvocation" pos="7090" length="27">
+                    <tree type="42" label="freqStream" typeLabel="SimpleName" pos="7090" length="10"></tree>
+                    <tree type="42" label="getFilePointer" typeLabel="SimpleName" pos="7101" length="14"></tree>
+                  </tree>
+                </tree>
+                <tree type="8" typeLabel="Block" pos="7119" length="143">
+                  <tree type="21" typeLabel="ExpressionStatement" pos="7129" length="33">
+                    <tree type="32" typeLabel="MethodInvocation" pos="7129" length="32">
+                      <tree type="42" label="freqStream" typeLabel="SimpleName" pos="7129" length="10"></tree>
+                      <tree type="42" label="seek" typeLabel="SimpleName" pos="7140" length="4"></tree>
+                      <tree type="42" label="lastFreqPointer" typeLabel="SimpleName" pos="7145" length="15"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="7171" length="26">
+                    <tree type="32" typeLabel="MethodInvocation" pos="7171" length="25">
+                      <tree type="42" label="skipProx" typeLabel="SimpleName" pos="7171" length="8"></tree>
+                      <tree type="42" label="lastProxPointer" typeLabel="SimpleName" pos="7180" length="15"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="7207" length="18">
+                    <tree type="7" label="=" typeLabel="Assignment" pos="7207" length="17">
+                      <tree type="42" label="doc" typeLabel="SimpleName" pos="7207" length="3"></tree>
+                      <tree type="42" label="lastSkipDoc" typeLabel="SimpleName" pos="7213" length="11"></tree>
+                    </tree>
+                  </tree>
+                  <tree type="21" typeLabel="ExpressionStatement" pos="7234" length="20">
+                    <tree type="7" label="+=" typeLabel="Assignment" pos="7234" length="19">
+                      <tree type="42" label="count" typeLabel="SimpleName" pos="7234" length="5"></tree>
+                      <tree type="42" label="numSkipped" typeLabel="SimpleName" pos="7243" length="10"></tree>
+                    </tree>
+                  </tree>
+                </tree>
+              </tree>
+            </tree>
+          </tree>
+          <tree type="19" typeLabel="DoStatement" pos="7311" length="73">
+            <tree type="8" typeLabel="Block" pos="7314" length="48">
+              <tree type="25" typeLabel="IfStatement" pos="7322" length="34">
+                <tree type="38" label="!" typeLabel="PrefixExpression" pos="7326" length="7">
+                  <tree type="32" typeLabel="MethodInvocation" pos="7327" length="6">
+                    <tree type="42" label="next" typeLabel="SimpleName" pos="7327" length="4"></tree>
+                  </tree>
+                </tree>
+                <tree type="41" typeLabel="ReturnStatement" pos="7343" length="13">
+                  <tree type="9" label="false" typeLabel="BooleanLiteral" pos="7350" length="5"></tree>
+                </tree>
+              </tree>
+            </tree>
+            <tree type="27" label="&gt;" typeLabel="InfixExpression" pos="7370" length="12">
+              <tree type="42" label="target" typeLabel="SimpleName" pos="7370" length="6"></tree>
+              <tree type="42" label="doc" typeLabel="SimpleName" pos="7379" length="3"></tree>
+            </tree>
+          </tree>
+          <tree type="41" typeLabel="ReturnStatement" pos="7389" length="12">
+            <tree type="9" label="true" typeLabel="BooleanLiteral" pos="7396" length="4"></tree>
+          </tree>
+        </tree>
+      </tree>
+    </tree>
+  </tree>
+</root>

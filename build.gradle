@@ -1,13 +1,16 @@
 allprojects {
+	apply plugin: 'idea'
+
 	group = 'com.github.gumtreediff'
 	version = '2.1.0-SNAPSHOT'
-	ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 	repositories {
 		mavenCentral()
 		jcenter()
 	}
 }
+
+ext.isRelease = !project.version.endsWith("SNAPSHOT")
 
 subprojects {
 	apply plugin: 'java'
@@ -65,7 +68,7 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr') }) {
 evaluationDependsOnChildren();
 
 if (project.hasProperty('mvn')) {
-	configure(subprojects.findAll {!it.name.equals('dist')}) { subproject ->
+	configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
 		apply plugin: 'maven'
 		apply plugin: 'signing'
 
@@ -83,10 +86,11 @@ if (project.hasProperty('mvn')) {
 			archives javadocJar, sourcesJar
 		}
 
-		signing {
-			required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
-			sign configurations.archives
-		}
+        if (project.isRelease && gradle.taskGraph.hasTask("uploadArchives")) {
+            signing {
+                sign configurations.archives
+            }
+        }
 
 		uploadArchives {
 			repositories {

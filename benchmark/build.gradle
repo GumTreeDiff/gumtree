@@ -1,0 +1,43 @@
+plugins {
+    id 'me.champeau.gradle.jmh' version '0.2.0'
+}
+
+apply plugin: 'me.champeau.gradle.jmh'
+
+uploadArchives.enabled = false
+jar.enabled = false
+
+jmh {
+    fork = 0
+    warmupIterations = 3
+    iterations = 3
+    benchmarkMode = 'avgt'
+    benchmarkParameters = [ 'refPath' : new File("${project.projectDir}/src/jmh/resources/").listFiles()
+            .collect { it.getAbsolutePath() }
+            .findAll { it.matches(".*_v0_.*") }
+            .join(",")
+    ]
+    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human_${new Date().getTime()}.txt")
+    resultsFile = project.file("${project.buildDir}/reports/jmh/results_${new Date().getTime()}.csv")
+    resultFormat = 'CSV'
+}
+
+task jmhPlot(type: Exec, dependsOn: 'jmh') {
+    commandLine "R", "-f", "${project.projectDir}/src/main/r/plotBenchmark.R", "${project.buildDir}/reports/jmh/"
+}
+
+dependencies {
+    compile project(':client')
+    compile project(':client.diff')
+    compile project(':gen.antlr')
+    compile project(':gen.antlr-antlr')
+    compile project(':gen.antlr-css')
+    compile project(':gen.antlr-json')
+    compile project(':gen.antlr-php')
+    compile project(':gen.antlr-r')
+    compile project(':gen.antlr-xml')
+    compile project(':gen.c')
+    compile project(':gen.jdt')
+    compile project(':gen.js')
+    compile project(':gen.ruby')
+}

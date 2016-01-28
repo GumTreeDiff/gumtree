@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<root>
+  <context></context>
+  <tree type="15" typeLabel="CompilationUnit" pos="0" length="201">
+    <tree type="55" typeLabel="TypeDeclaration" pos="0" length="201">
+      <tree type="42" label="Test" typeLabel="SimpleName" pos="6" length="4"></tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="18" length="24">
+        <tree type="83" label="public" typeLabel="Modifier" pos="18" length="6"></tree>
+        <tree type="83" label="static" typeLabel="Modifier" pos="25" length="6"></tree>
+        <tree type="43" label="String" typeLabel="SimpleType" pos="32" length="6">
+          <tree type="42" label="String" typeLabel="SimpleName" pos="32" length="6"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="39" length="2">
+          <tree type="42" label="f1" typeLabel="SimpleName" pos="39" length="2"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="48" length="24">
+        <tree type="83" label="public" typeLabel="Modifier" pos="48" length="6"></tree>
+        <tree type="83" label="static" typeLabel="Modifier" pos="55" length="6"></tree>
+        <tree type="43" label="String" typeLabel="SimpleType" pos="62" length="6">
+          <tree type="42" label="String" typeLabel="SimpleName" pos="62" length="6"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="69" length="2">
+          <tree type="42" label="f2" typeLabel="SimpleName" pos="69" length="2"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="78" length="24">
+        <tree type="83" label="public" typeLabel="Modifier" pos="78" length="6"></tree>
+        <tree type="83" label="static" typeLabel="Modifier" pos="85" length="6"></tree>
+        <tree type="43" label="String" typeLabel="SimpleType" pos="92" length="6">
+          <tree type="42" label="String" typeLabel="SimpleName" pos="92" length="6"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="99" length="2">
+          <tree type="42" label="f3" typeLabel="SimpleName" pos="99" length="2"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="108" length="24">
+        <tree type="83" label="public" typeLabel="Modifier" pos="108" length="6"></tree>
+        <tree type="83" label="static" typeLabel="Modifier" pos="115" length="6"></tree>
+        <tree type="43" label="String" typeLabel="SimpleType" pos="122" length="6">
+          <tree type="42" label="String" typeLabel="SimpleName" pos="122" length="6"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="129" length="2">
+          <tree type="42" label="f4" typeLabel="SimpleName" pos="129" length="2"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="139" length="24">
+        <tree type="83" label="public" typeLabel="Modifier" pos="139" length="6"></tree>
+        <tree type="83" label="static" typeLabel="Modifier" pos="146" length="6"></tree>
+        <tree type="43" label="String" typeLabel="SimpleType" pos="153" length="6">
+          <tree type="42" label="String" typeLabel="SimpleName" pos="153" length="6"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="160" length="2">
+          <tree type="42" label="f5" typeLabel="SimpleName" pos="160" length="2"></tree>
+        </tree>
+      </tree>
+      <tree type="23" typeLabel="FieldDeclaration" pos="171" length="24">
+        <tree type="83" label="public" typeLabel="Modifier" pos="171" length="6"></tree>
+        <tree type="83" label="static" typeLabel="Modifier" pos="178" length="6"></tree>
+        <tree type="43" label="String" typeLabel="SimpleType" pos="185" length="6">
+          <tree type="42" label="String" typeLabel="SimpleName" pos="185" length="6"></tree>
+        </tree>
+        <tree type="59" typeLabel="VariableDeclarationFragment" pos="192" length="2">
+          <tree type="42" label="f6" typeLabel="SimpleName" pos="192" length="2"></tree>
+        </tree>
+      </tree>
+    </tree>
+  </tree>
+</root>
