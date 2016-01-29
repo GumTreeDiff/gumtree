@@ -33,15 +33,6 @@ public abstract class AbstractTree implements ITree {
     protected int size;
     protected int depth;
     protected int hash;
-    protected boolean matched;
-
-    @Override
-    public boolean areDescendantsMatched() {
-        for (ITree c: getDescendants())
-            if (!c.isMatched())
-                return false;
-        return true;
-    }
 
     @Override
     public int getChildPosition(ITree child) {
@@ -165,16 +156,6 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public boolean isMatchable(ITree t) {
-        return isCompatible(t) && !(isMatched()  || t.isMatched());
-    }
-
-    @Override
-    public boolean isMatched() {
-        return matched;
-    }
-
-    @Override
     public boolean isRoot() {
         return getParent() == null;
     }
@@ -254,11 +235,6 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public void setMatched(boolean matched) {
-        this.matched = matched;
-    }
-
-    @Override
     public void setSize(int size) {
         this.size = size;
     }
@@ -315,6 +291,12 @@ public abstract class AbstractTree implements ITree {
         public void addChild(ITree t) {
             throw unsupportedOperation();
         }
+
+        @Override
+        public void insertChild(ITree t, int position) {
+            throw unsupportedOperation();
+        }
+
 
         @Override
         public ITree deepCopy() {

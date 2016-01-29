@@ -21,7 +21,6 @@
 package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.ITree;
 
 import java.util.HashSet;
 import java.util.List;
@@ -63,8 +62,6 @@ public abstract class Matcher {
     }
 
     protected void addMapping(ITree src, ITree dst) {
-        src.setMatched(true);
-        dst.setMatched(true);
         mappings.link(src, dst);
     }
 
@@ -107,12 +104,7 @@ public abstract class Matcher {
         return common;
     }
 
-    protected void clean() {
-        for (ITree t : src.getTrees())
-            if (!mappings.hasSrc(t))
-                t.setMatched(false);
-        for (ITree t : dst.getTrees())
-            if (!mappings.hasDst(t))
-                t.setMatched(false);
+    public boolean isMatchable(ITree src, ITree dst) {
+        return src.isCompatible(dst) && !(mappings.hasSrc(src) || mappings.hasDst(dst));
     }
 }

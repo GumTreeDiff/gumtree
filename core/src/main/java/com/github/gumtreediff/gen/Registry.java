@@ -23,10 +23,7 @@ package com.github.gumtreediff.gen;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public abstract class Registry<K, C, A> {
 

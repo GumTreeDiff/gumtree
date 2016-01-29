@@ -87,18 +87,6 @@ public class TestTreeUtils {
     }
 
     @Test
-    public void testRemoveCompletelyMappedDescendants() {
-        ITree dst = TreeLoader.getDummyDst();
-        dst.getChildren().get(0).setMatched(true);
-        dst.getChildren().get(0).getChildren().get(0).getChildren().get(0).setMatched(true);
-        dst.getChildren().get(1).setMatched(true);
-        dst.getChildren().get(1).getChildren().get(0).setMatched(true);
-        dst = TreeUtils.removeCompletelyMapped(dst);
-        TreeUtils.computeSize(dst);
-        assertTrue(dst.getSize() == 5);
-    }
-
-    @Test
     public void testPostOrder() {
         ITree src = TreeLoader.getDummySrc();
         List<ITree> lst = TreeUtils.postOrder(src);

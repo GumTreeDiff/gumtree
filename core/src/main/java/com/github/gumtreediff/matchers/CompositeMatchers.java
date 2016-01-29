@@ -33,6 +33,7 @@ import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
 import com.github.gumtreediff.tree.ITree;
 
 public class CompositeMatchers {
+
     @Register(id = "gumtree", defaultMatcher = true)
     public static class ClassicGumtree extends CompositeMatcher {
 

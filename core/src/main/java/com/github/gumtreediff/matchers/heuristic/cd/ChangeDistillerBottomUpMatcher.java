@@ -43,7 +43,7 @@ public class ChangeDistillerBottomUpMatcher extends Matcher {
         for (ITree src: this.src.postOrder()) {
             int l = numberOfLeafs(src);
             for (ITree dst: poDst) {
-                if (src.isMatchable(dst) && !(src.isLeaf() || dst.isLeaf())) {
+                if (isMatchable(src, dst) && !(src.isLeaf() || dst.isLeaf())) {
                     double sim = chawatheSimilarity(src, dst);
                     if ((l > 4 && sim >= STRUCT_SIM_THRESHOLD_1) || (l <= 4 && sim >= STRUCT_SIM_THRESHOLD_2)) {
                         addMapping(src, dst);

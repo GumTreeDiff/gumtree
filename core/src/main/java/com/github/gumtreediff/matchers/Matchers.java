@@ -21,7 +21,6 @@
 package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.gen.Registry;
-import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.tree.ITree;
 
 public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> {
@@ -29,7 +28,7 @@ public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> 
     private static Matchers registry;
     private Factory<? extends Matcher> defaultMatcherFactory;
 
-    public static final Matchers getInstance() {
+    public static Matchers getInstance() {
         if (registry == null)
             registry = new Matchers();
         return registry;
@@ -60,7 +59,7 @@ public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> 
     }
 
     @Override
-    protected NamedEntry newEntry(Class<? extends Matcher> clazz, Register annotation) {
+    protected Registry.NamedRegistry<String, Matcher, Register>.NamedEntry newEntry(Class<? extends Matcher> clazz, Register annotation) {
         Factory<? extends Matcher> factory = defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class);
         if (annotation.defaultMatcher())
             defaultMatcherFactory = factory;

@@ -20,6 +20,8 @@
 
 package com.github.gumtreediff.client;
 
+import com.github.gumtreediff.gen.Generators;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -60,7 +62,7 @@ public class List extends Client {
         GENERATORS {
             @Override
             Collection<?> list() {
-                return null; //Generators.getInstance().listGenerators();
+                return Generators.getInstance().getEntries();
             }
         },
         PROPERTIES {
@@ -72,7 +74,7 @@ public class List extends Client {
         CLIENTS {
             @Override
             Collection<?> list() {
-                return null; // Run.clients.keySet();
+                return Clients.getInstance().getEntries();
             }
         };
 

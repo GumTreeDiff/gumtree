@@ -8,6 +8,7 @@ allprojects {
 		mavenCentral()
 		jcenter()
 	}
+	apply plugin: 'idea'
 }
 
 ext.isRelease = !project.version.endsWith("SNAPSHOT")

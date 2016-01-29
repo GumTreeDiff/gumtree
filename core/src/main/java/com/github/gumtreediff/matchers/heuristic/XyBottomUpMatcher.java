@@ -23,13 +23,10 @@ package com.github.gumtreediff.matchers.heuristic;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import com.github.gumtreediff.tree.TreeMap;
 
 import java.util.*;
+
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source and destination trees
@@ -41,24 +38,16 @@ public class XyBottomUpMatcher extends Matcher {
 
     private static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.xy.sim", "0.5"));
 
-    private TIntObjectMap<ITree> srcs = new TIntObjectHashMap<>();
-
-    private TIntObjectMap<ITree> dsts = new TIntObjectHashMap<>();
-
     public XyBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
     }
 
     public void match() {
-        for (ITree t : src.getTrees())
-            srcs.put(t.getId(), t);
-        for (ITree t : dst.getTrees())
-            dsts.put(t.getId(), t);
         for (ITree src: this.src.postOrder())  {
             if (src.isRoot()) {
                 addMapping(src, this.dst);
                 lastChanceMatch(src, this.dst);
-            } else if (!(src.isMatched() || src.isLeaf())) {
+            } else if (!(mappings.hasSrc(src) || src.isLeaf())) {
                 Set<ITree> candidates = getDstCandidates(src);
                 ITree best = null;
                 double max = -1D;
@@ -77,7 +66,6 @@ public class XyBottomUpMatcher extends Matcher {
                 }
             }
         }
-        clean();
     }
 
     private Set<ITree> getDstCandidates(ITree src) {
@@ -94,7 +82,7 @@ public class XyBottomUpMatcher extends Matcher {
                 if (visited.contains(parent))
                     break;
                 visited.add(parent);
-                if (parent.getType() == src.getType() && !parent.isMatched())
+                if (parent.getType() == src.getType() && !mappings.hasDst(parent))
                     candidates.add(parent);
                 seed = parent;
             }
@@ -107,17 +95,16 @@ public class XyBottomUpMatcher extends Matcher {
         Map<Integer,List<ITree>> srcKinds = new HashMap<>();
         Map<Integer,List<ITree>> dstKinds = new HashMap<>();
         for (ITree c: src.getChildren()) {
-            if (!srcKinds.containsKey(c.getType())) srcKinds.put(c.getType(), new ArrayList<ITree>());
+            if (!srcKinds.containsKey(c.getType())) srcKinds.put(c.getType(), new ArrayList<>());
             srcKinds.get(c.getType()).add(c);
         }
         for (ITree c: dst.getChildren()) {
-            if (!dstKinds.containsKey(c.getType())) dstKinds.put(c.getType(), new ArrayList<ITree>());
+            if (!dstKinds.containsKey(c.getType())) dstKinds.put(c.getType(), new ArrayList<>());
             dstKinds.get(c.getType()).add(c);
         }
 
         for (int t: srcKinds.keySet())
             if (srcKinds.get(t).size() == dstKinds.get(t).size() && srcKinds.get(t).size() == 1)
                 addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));
-
     }
 }

@@ -132,7 +132,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
         }
         visitListAsNode(EntityType.TYPE_ARGUMENTS, node.typeParameters());
         visitListAsNode(EntityType.PARAMETERS, node.parameters());
-        visitListAsNode(EntityType.THROW, node.thrownExceptions());
+        visitListAsNode(EntityType.THROW, node.thrownExceptionTypes());
 
         // @Inria
         // The body can be null when the method declaration is from a interface

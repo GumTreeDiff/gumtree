@@ -108,6 +108,14 @@ public class MappingStore implements Iterable<Mapping> {
         return srcs.get(src) == dst;
     }
 
+    /**
+     * Indicate whether or not a tree is mappable to another given tree.
+     * @return true if both trees are not mapped and if the trees have the same type, false either.
+     */
+    public boolean isMatchable(ITree src, ITree dst) {
+        return src.isCompatible(dst) && !(srcs.containsKey(src)  || dsts.containsKey(dst));
+    }
+
     @Override
     public Iterator<Mapping> iterator() {
         return asSet().iterator();

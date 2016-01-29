@@ -25,10 +25,6 @@ import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Pair;
 import com.github.gumtreediff.matchers.Mapping;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.MultiMappingStore;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Pair;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.util.*;
@@ -45,7 +41,7 @@ public class CliqueSubtreeMatcher extends SubtreeMatcher {
         for (Mapping m : mmappings) {
             int hash = m.getFirst().getHash();
             if (!cliques.containsKey(hash))
-                cliques.put(hash, new Pair(new ArrayList<ITree>(), new ArrayList<ITree>()));
+                cliques.put(hash, new Pair<>(new ArrayList<>(), new ArrayList<>()));
             cliques.get(hash).getFirst().add(m.getFirst());
             cliques.get(hash).getSecond().add(m.getSecond());
         }
@@ -68,14 +64,7 @@ public class CliqueSubtreeMatcher extends SubtreeMatcher {
             Collections.sort(cliqueAsMappings, new MappingComparator(cliqueAsMappings));
             Set<ITree> srcIgnored = new HashSet<>();
             Set<ITree> dstIgnored = new HashSet<>();
-            while (cliqueAsMappings.size() > 0) {
-                Mapping mapping = cliqueAsMappings.remove(0);
-                if (!(srcIgnored.contains(mapping.getFirst()) || dstIgnored.contains(mapping.getSecond()))) {
-                    addFullMapping(mapping.getFirst(), mapping.getSecond());
-                    srcIgnored.add(mapping.getFirst());
-                    dstIgnored.add(mapping.getSecond());
-                }
-            }
+            retainBestMapping(cliqueAsMappings, srcIgnored, dstIgnored);
         }
     }
 

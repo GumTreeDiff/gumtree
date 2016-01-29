@@ -174,6 +174,15 @@ public class TreeContext {
         return this;
     }
 
+    public TreeContext deriveTree() { // FIXME Should we refactor TreeContext class to allow shared metadata etc ...
+        TreeContext newContext = new TreeContext();
+        newContext.setRoot(getRoot().deepCopy());
+        newContext.typeLabels = typeLabels;
+        newContext.metadata.putAll(metadata);
+        newContext.serializers.addAll(serializers);
+        return newContext;
+    }
+
     /**
      * Get an iterator on local and global metadata.
      * To only get local metadata, simply use : `node.getMetadata()`

@@ -46,10 +46,9 @@ public class RtedMatcher extends Matcher {
             if (m[0] != 0 && m[1] != 0) {
                 ITree src = srcs.get(m[0] - 1);
                 ITree dst = dsts.get(m[1] - 1);
-                if (src.isMatchable(dst))
+                if (isMatchable(src, dst))
                     addMapping(src, dst);
             }
         }
     }
-
 }

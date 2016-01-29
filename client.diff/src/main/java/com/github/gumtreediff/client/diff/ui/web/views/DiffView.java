@@ -21,7 +21,6 @@
 package com.github.gumtreediff.client.diff.ui.web.views;
 
 import com.github.gumtreediff.client.diff.ui.web.HtmlDiffs;
-import com.github.gumtreediff.client.diff.ui.web.HtmlDiffs;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;

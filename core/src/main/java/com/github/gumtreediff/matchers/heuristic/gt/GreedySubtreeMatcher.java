@@ -24,10 +24,6 @@ import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.matchers.Mapping;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.MultiMappingStore;
-import com.github.gumtreediff.tree.ITree;
 
 import java.util.*;
 
@@ -60,14 +56,7 @@ public class GreedySubtreeMatcher extends SubtreeMatcher {
         Collections.sort(ambiguousList, new MappingComparator(ambiguousList));
 
         // Select the best ambiguous mappings
-        while (ambiguousList.size() > 0) {
-            Mapping ambiguous = ambiguousList.remove(0);
-            if (!(srcIgnored.contains(ambiguous.getFirst()) || dstIgnored.contains(ambiguous.getSecond()))) {
-                addFullMapping(ambiguous.getFirst(), ambiguous.getSecond());
-                srcIgnored.add(ambiguous.getFirst());
-                dstIgnored.add(ambiguous.getSecond());
-            }
-        }
+        retainBestMapping(ambiguousList, srcIgnored, dstIgnored);
     }
 
     private class MappingComparator implements Comparator<Mapping> {

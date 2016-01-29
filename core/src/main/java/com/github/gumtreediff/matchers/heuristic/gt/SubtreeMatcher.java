@@ -20,15 +20,14 @@
 
 package com.github.gumtreediff.matchers.heuristic.gt;
 
+import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.MultiMappingStore;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.ITree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class SubtreeMatcher extends Matcher {
 
@@ -103,6 +102,17 @@ public abstract class SubtreeMatcher extends Matcher {
 
     protected int getMaxTreeSize() {
         return Math.max(src.getSize(), dst.getSize());
+    }
+
+    protected void retainBestMapping(List<Mapping> mappings, Set<ITree> srcIgnored, Set<ITree> dstIgnored) {
+        while (mappings.size() > 0) {
+            Mapping mapping = mappings.remove(0);
+            if (!(srcIgnored.contains(mapping.getFirst()) || dstIgnored.contains(mapping.getSecond()))) {
+                addFullMapping(mapping.getFirst(), mapping.getSecond());
+                srcIgnored.add(mapping.getFirst());
+                dstIgnored.add(mapping.getSecond());
+            }
+        }
     }
 
     private static class PriorityTreeList {
@@ -181,7 +191,5 @@ public abstract class SubtreeMatcher extends Matcher {
                 }
             }
         }
-
     }
-
 }

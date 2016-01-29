@@ -24,6 +24,8 @@ import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -37,7 +39,7 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
         return registry;
     }
 
-    private final List<Entry> entries = new ArrayList<>();
+    private final List<TreeGeneratorEntry> entries = new ArrayList<>();
 
     public TreeContext getTree(String file) throws UnsupportedOperationException, IOException {
         TreeGenerator p = get(file);
@@ -52,7 +54,7 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
     }
 
     @Override
-    protected Entry newEntry(Class<? extends TreeGenerator> clazz, Register annotation) {
+    protected TreeGeneratorEntry newEntry(Class<? extends TreeGenerator> clazz, Register annotation) {
         return new TreeGeneratorEntry(annotation.id(), annotation.accept(), clazz, annotation.experimental());
     }
 
@@ -62,6 +64,10 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
             if (e.handle(key))
                 return e;
         return null;
+    }
+
+    public Collection<? extends Entry> getEntries() { // FIXME should copy or transform the list
+        return entries;
     }
 
     class TreeGeneratorEntry extends Entry {
@@ -82,6 +88,11 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
                 if (pattern.matcher(key).find())
                     return true;
             return false;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s: %s", Arrays.toString(accept), clazz);
         }
     }
 }

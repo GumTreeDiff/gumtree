@@ -225,19 +225,19 @@ public class RtedAlgorithm {
 			Arrays.fill(costW[2], 0);
 			for (int w = 0; w < size2; w++) {
 				if (post2size2[w] == 1) {
-					// put zeros into arrays
+					// putTree zeros into arrays
 					costW[LEFT][w] = 0;
 					costW[RIGHT][w] = 0;
 					costW[HEAVY][w] = 0;
 				}
 				if (post2size1[v] == 1) {
-					// put zeros into arrays
+					// putTree zeros into arrays
 					costV[LEFT][v][w] = 0;
 					costV[RIGHT][v][w] = 0;
 					costV[HEAVY][v][w] = 0;
 				}
 
-				// TODO: some things below may be put to outer loop
+				// TODO: some things below may be putTree to outer loop
 
 				// count the minimum + get the strategy
 				heavyMin = (long) post2size1[v] * (long) post2descSum2[w]

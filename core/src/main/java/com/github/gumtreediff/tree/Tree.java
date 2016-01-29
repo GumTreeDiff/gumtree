@@ -52,7 +52,6 @@ public class Tree extends AbstractTree implements ITree {
         this.size = NO_VALUE;
         this.pos = NO_VALUE;
         this.length = NO_VALUE;
-        this.matched = false;
         this.children = new ArrayList<>();
     }
 
@@ -62,7 +61,6 @@ public class Tree extends AbstractTree implements ITree {
         this.label = other.getLabel();
 
         this.id = other.getId();
-        this.matched = other.isMatched();
         this.pos = other.getPos();
         this.length = other.getLength();
         this.height = other.getHeight();
@@ -77,6 +75,12 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public void addChild(ITree t) {
         children.add(t);
+        t.setParent(this);
+    }
+
+    @Override
+    public void insertChild(ITree t, int position) {
+        children.add(position, t);
         t.setParent(this);
     }
 

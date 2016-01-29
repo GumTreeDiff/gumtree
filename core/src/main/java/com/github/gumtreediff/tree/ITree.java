@@ -40,9 +40,9 @@ public interface ITree {
     public abstract void addChild(ITree t);
 
     /**
-     * Indicate whether or not all the descendants of the trees are already mapped.
+     * Insert the given tree as the n-th child, and update its parent.
      */
-    public abstract boolean areDescendantsMatched();
+    public abstract void insertChild(ITree t, int position);
 
     /**
      * Make a deep copy of the tree.
@@ -123,14 +123,6 @@ public interface ITree {
      */
     public abstract boolean isLeaf();
 
-    /**
-     * Indicate whether or not the tree is mappable to the given tree.
-     * @return true if both trees are not mapped and if the trees have the same type, false either.
-     */
-    public abstract boolean isMatchable(ITree t);
-
-    public abstract boolean isMatched();
-
     public abstract boolean isRoot();
 
     /**
@@ -162,8 +154,6 @@ public interface ITree {
     public abstract void setLabel(String label);
 
     public abstract void setLength(int length);
-
-    public abstract void setMatched(boolean matched);
 
     public abstract void setParent(ITree parent);
 
