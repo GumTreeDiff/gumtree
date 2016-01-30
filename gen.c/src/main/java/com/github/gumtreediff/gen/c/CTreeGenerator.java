@@ -56,7 +56,6 @@ public class CTreeGenerator extends TreeGenerator {
     public TreeContext generate(Reader r) throws IOException {
         //FIXME this is not efficient but I am not sure how to speed up things here.
         File f = File.createTempFile("gumtree", ".c");
-        System.out.println(f.getAbsolutePath());
         FileWriter w = new FileWriter(f);
         BufferedReader br = new BufferedReader(r);
         String line = br.readLine();
