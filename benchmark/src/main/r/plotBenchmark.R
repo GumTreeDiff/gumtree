@@ -11,4 +11,4 @@ for (f in files) {
     d <- tmp
   }
 }
-ggplot(d, aes(timestamp, Score)) + geom_boxplot()
+ggplot(d, aes(timestamp, Score)) + geom_jitter(position=position_jitter(0.2))

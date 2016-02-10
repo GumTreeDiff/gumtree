@@ -36,9 +36,9 @@ public class MatcherAnalyzer {
         m.match();
     }
 
-    @Benchmark
+    /* @Benchmark
     public void testCompleteGumtree(TreeData d) {
         Matcher m = new CompositeMatchers.CompleteGumtreeMatcher(d.src, d.dst, new MappingStore());
         m.match();
-    }
+    } */
 }

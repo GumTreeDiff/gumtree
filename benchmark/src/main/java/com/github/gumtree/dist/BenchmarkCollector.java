@@ -14,22 +14,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BenchmarkCollector {
+
+    private final static String OUTPUT_DIR = "benchmark/build/tmp/stresstest/";
+
     public static void main(String[] args) throws Exception {
-        gatherData();
+        gatherData(args[0]);
     }
 
-    public static void gatherData() throws Exception {
+    public static void gatherData(String dir) throws Exception {
         Run.initGenerators();
-        List<Path> paths = Files.walk(Paths.get("samples")).filter(p -> p.getFileName().toString().matches(".*_v0\\.(java|js|rb)")).collect(Collectors.toList());
-        Files.createDirectories(Paths.get("dist/build/tmp/gt_perfs/"));
+        List<Path> paths = Files.walk(Paths.get(dir)).filter(p -> p.getFileName().toString().matches(".*_v0\\.(java|js|rb|c)")).collect(Collectors.toList());
+        Files.createDirectories(Paths.get(OUTPUT_DIR));
         for (Path path : paths) {
             Path otherPath = Paths.get(path.toString().replace("_v0.","_v1."));
-            String name0 = path.toString().replaceAll("[^a-zA-Z0-9_]", "_");
-            String name1 = otherPath.toString().replaceAll("[^a-zA-Z0-9_]", "_");
+            String oldName = path.toString().replaceAll("[^a-zA-Z0-9_]", "_");
+            String newName = otherPath.toString().replaceAll("[^a-zA-Z0-9_]", "_");
             TreeContext ctx = getTreeContext(path.toAbsolutePath().toString());
-            TreeIoUtils.toXml(ctx).writeTo(new File("dist/build/tmp/gt_perfs/" + name0 + ".xml"));
+            TreeIoUtils.toXml(ctx).writeTo(new File(OUTPUT_DIR + oldName + ".xml"));
             ctx = getTreeContext(otherPath.toAbsolutePath().toString());
-            TreeIoUtils.toXml(ctx).writeTo(new File("dist/build/tmp/gt_perfs/" + name1 + ".xml"));
+            TreeIoUtils.toXml(ctx).writeTo(new File(OUTPUT_DIR + newName + ".xml"));
         }
     }
 
