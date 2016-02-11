@@ -32,7 +32,7 @@ import java.util.List;
 
 public abstract class SubtreeMatcher extends Matcher {
 
-    private static int MIN_HEIGHT = Integer.parseInt(System.getProperty("gumtree.match.gt.minh", "2"));
+    public static int MIN_HEIGHT = Integer.parseInt(System.getProperty("gumtree.match.gt.minh", "2"));
 
     public SubtreeMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);

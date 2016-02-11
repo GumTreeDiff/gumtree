@@ -35,6 +35,10 @@ public class TreeLoader {
         return new Pair<>(load("/action_v0.xml"), load("/action_v1.xml"));
     }
 
+    public static Pair<TreeContext, TreeContext> getGumtreePair() {
+        return new Pair<>(load("/gumtree_v0.xml"), load("/gumtree_v1.xml"));
+    }
+
     public static Pair<TreeContext, TreeContext> getZsCustomPair() {
         return new Pair<>(load("/zs_v0.xml"), load("/zs_v1.xml"));
     }

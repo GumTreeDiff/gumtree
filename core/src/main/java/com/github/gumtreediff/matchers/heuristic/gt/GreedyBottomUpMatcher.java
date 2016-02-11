@@ -42,9 +42,9 @@ import java.util.Set;
  */
 public class GreedyBottomUpMatcher extends Matcher {
 
-    private static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.3"));
+    public static double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.3"));
 
-    private static final int SIZE_THRESHOLD = Integer.parseInt(System.getProperty("gumtree.match.bu.size", "1000"));
+    public static int SIZE_THRESHOLD = Integer.parseInt(System.getProperty("gumtree.match.bu.size", "1000"));
 
     private TreeMap srcIds;
 
