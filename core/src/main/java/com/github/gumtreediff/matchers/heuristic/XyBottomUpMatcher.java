@@ -104,7 +104,7 @@ public class XyBottomUpMatcher extends Matcher {
         }
 
         for (int t: srcKinds.keySet())
-            if (srcKinds.get(t).size() == dstKinds.get(t).size() && srcKinds.get(t).size() == 1)
+            if (dstKinds.get(t) != null && srcKinds.get(t).size() == dstKinds.get(t).size() && srcKinds.get(t).size() == 1)
                 addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));
     }
 }
