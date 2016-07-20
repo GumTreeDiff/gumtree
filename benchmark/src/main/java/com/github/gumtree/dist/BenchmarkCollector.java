@@ -15,13 +15,17 @@ import java.util.stream.Collectors;
 
 public class BenchmarkCollector {
 
-    private final static String OUTPUT_DIR = "benchmark/build/tmp/stresstest/";
+    private final static String OUTPUT_DIR = "build/tmp/trees/";
 
     public static void main(String[] args) throws Exception {
-        gatherData(args[0]);
+        if (args.length != 1) {
+            System.err.println("Wrong number of arguments");
+            System.exit(-1);
+        }
+        collectTrees(args[0]);
     }
 
-    public static void gatherData(String dir) throws Exception {
+    public static void collectTrees(String dir) throws Exception {
         Run.initGenerators();
         List<Path> paths = Files.walk(Paths.get(dir)).filter(p -> p.getFileName().toString().matches(".*_v0\\.(java|js|rb|c)")).collect(Collectors.toList());
         Files.createDirectories(Paths.get(OUTPUT_DIR));

@@ -4,3 +4,4 @@
 * Fixed actions text formatter
 * Added command list in Run client
 * Fixed bug to view a diff in the web client
+* Added benchmark module to check output and performance of algorithms

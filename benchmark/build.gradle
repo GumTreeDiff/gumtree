@@ -7,6 +7,24 @@ apply plugin: 'me.champeau.gradle.jmh'
 uploadArchives.enabled = false
 jar.enabled = false
 
+task checkActions(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.github.gumtree.dist.ActionsCollector'
+    args 'check'
+}
+
+task collectActions(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.github.gumtree.dist.ActionsCollector'
+    args 'collect'
+}
+
+task collectTrees(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.github.gumtree.dist.BenchmarkCollector'
+    args src
+}
+
 jmh {
     fork = 0
     warmupIterations = 3
