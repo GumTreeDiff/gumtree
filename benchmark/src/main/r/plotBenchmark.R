@@ -37,4 +37,6 @@ d$name <- gsub('^.*perfs_(.*)_v0_(.*).xml$', '\\1_\\2', d$Param..refPath)
 ggplot(d, aes(timestamp, Score, group=d$name, colour=name)) +
   geom_point() +
   geom_line() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  ylab('Time (s)') +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.title.x=element_blank())
