@@ -20,11 +20,7 @@
 
 package com.github.gumtreediff.matchers;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.github.gumtreediff.tree.ITree;
 
@@ -44,10 +40,31 @@ public class MappingStore implements Iterable<Mapping> {
     }
 
     public Set<Mapping> asSet() {
-        Set<Mapping> mappings = new HashSet<>();
-        for (ITree src : srcs.keySet())
-            mappings.add(new Mapping(src, srcs.get(src)));
-        return mappings;
+        return new AbstractSet<Mapping>() {
+
+            @Override
+            public Iterator<Mapping> iterator() {
+                Iterator<ITree> it = srcs.keySet().iterator();
+                return new Iterator<Mapping>() {
+                    @Override
+                    public boolean hasNext() {
+                        return it.hasNext();
+                    }
+
+                    @Override
+                    public Mapping next() {
+                        ITree src = it.next();
+                        if (src == null) return null;
+                        return new Mapping(src, srcs.get(src));
+                    }
+                };
+            }
+
+            @Override
+            public int size() {
+                return srcs.keySet().size();
+            }
+        };
     }
 
     public MappingStore copy() {
