@@ -28,4 +28,4 @@ for (f in files) {
     d <- tmp
   }
 }
-ggplot(d, aes(timestamp, Score)) + geom_jitter(position=position_jitter(0.2))
+ggplot(d, aes(timestamp, Score)) + geom_jitter(position=position_jitter(0.2)) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
