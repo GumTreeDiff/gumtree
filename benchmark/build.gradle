@@ -27,18 +27,32 @@ if (project.hasProperty('trees')) {
     }
 }
 
+def getGitHash = { ->
+  try {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+      commandLine 'git', 'describe', '--dirty=+', '--tags'
+      standardOutput = stdout
+    }
+    return stdout.toString().trim()
+  } catch (all) {
+    return '0000000'
+  }
+}
+
 jmh {
     fork = 0
     warmupIterations = 3
     iterations = 3
     benchmarkMode = 'avgt'
-    benchmarkParameters = [ 'refPath' : new File("${project.projectDir}/src/jmh/resources/").listFiles()
-            .collect { it.getAbsolutePath() }
-            .findAll { it.matches(".*_v0_.*") }
-            .join(",")
+    benchmarkParameters = [
+      'refPath' : new File("${project.projectDir}/src/jmh/resources/").listFiles()
+        .collect { it.getAbsolutePath() }
+        .findAll { it.matches(".*_v0_.*") }
+        .join(",")
     ]
-    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human_${new Date().getTime()}.txt")
-    resultsFile = project.file("${project.buildDir}/reports/jmh/results_${new Date().getTime()}.csv")
+    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human_${new Date().getTime()}_${getGitHash()}.txt")
+    resultsFile = project.file("${project.buildDir}/reports/jmh/results_${new Date().getTime()}_${getGitHash()}.csv")
     resultFormat = 'CSV'
 }
 

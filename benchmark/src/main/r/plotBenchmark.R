@@ -23,9 +23,13 @@ pdf(file = file.path(folder, "all_results.pdf"))
 files <- list.files(path = folder, pattern = "*.csv", full.names = T)
 
 
-d <- ldply(files, function (filename)
-           cbind(read.csv(filename), timestamp =
-                 paste(as.POSIXct(as.numeric(gsub("^.*results_(\\d*).csv", "\\1", filename))/1000, origin="1970-01-01"))))
+d <- ldply(files, function (filename) {
+   fname = strsplit(gsub("^.*results_(\\d*)(_([^_]*))?.csv", "\\1 \\3 ???????", filename), " ")[[1]]
+   cbind(read.csv(filename), timestamp =
+       paste(as.POSIXct(as.numeric(fname[[1]])/1000, origin="1970-01-01"),
+             fname[[2]], sep='\n'))
+})
+
 d$name <- gsub('^.*perfs_(.*)_v0_(.*).xml$', '\\1_\\2', d$Param..refPath)
 
 # according to my office mate we should change the size of each line from 0.5 to 0.1
