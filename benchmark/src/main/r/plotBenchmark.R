@@ -19,13 +19,13 @@ library(ggplot2)
 folder <- commandArgs()[length(commandArgs())]
 pdf(file = file.path(folder, "all_results.pdf"))
 files <- list.files(path = folder, pattern = "*.csv", full.names = T)
+d <- list()
 for (f in files) {
   tmp <- read.csv(f)
   tmp$timestamp <- basename(f)
-  if (exists("d")) {
-    d <- rbind(d, tmp)
-  } else {
-    d <- tmp
-  }
+  d <- rbind(d, tmp)
 }
-ggplot(d, aes(timestamp, Score)) + geom_jitter(position=position_jitter(0.2)) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggplot(d, aes(timestamp, Score)) +
+  geom_jitter(position=position_jitter(0.2),
+              color=rep(rainbow(5), length(files))) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
