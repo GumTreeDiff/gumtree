@@ -45,7 +45,7 @@ public final class TreeMap {
     }
 
     public boolean contains(int id) {
-       return trees.containsKey(id);
+        return trees.containsKey(id);
     }
 
     public void putTrees(ITree tree) {

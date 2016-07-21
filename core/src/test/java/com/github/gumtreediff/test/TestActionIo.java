@@ -34,7 +34,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-public class TestActionIO {
+public class TestActionIo {
     private TreeContext src;
     private TreeContext dst;
     private MappingStore mappings;
@@ -52,11 +52,13 @@ public class TestActionIO {
 
     @Test
     public void testPos() throws Exception {
-        src.getRoot().breadthFirst().forEach(x -> System.out.printf("%d) %s [%d:%d]:%d\n", x.getType(), x.getLabel(), x.getPos(), x.getEndPos(), x.getLength()));
+        src.getRoot().breadthFirst().forEach(
+                x -> System.out.printf("%d) %s [%d:%d]:%d\n",
+                        x.getType(), x.getLabel(), x.getPos(), x.getEndPos(), x.getLength()));
     }
 
     @Test
-    public void testBasicXMLActions() throws IOException {
+    public void testBasicXmlActions() throws IOException {
         System.out.println(ActionsIoUtils.toXml(src, actions, mappings));
     }
 

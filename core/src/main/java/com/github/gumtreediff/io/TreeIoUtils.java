@@ -121,7 +121,9 @@ public final class TreeIoUtils {
         public abstract void writeTo(Writer writer) throws Exception;
 
         public void writeTo(OutputStream writer) throws Exception {
-            try (OutputStreamWriter os = new OutputStreamWriter(writer)) { // FIXME Since the stream is already open, we should not close it, however due to semantic issue it should stay like this
+            // FIXME Since the stream is already open, we should not close it, however due to semantic issue
+            // it should stay like this
+            try (OutputStreamWriter os = new OutputStreamWriter(writer)) {
                 writeTo(os);
             }
         }
@@ -645,8 +647,8 @@ public final class TreeIoUtils {
 
                         ITree t = context.createTree(type,
                                 labelForAttribute(s, LABEL), labelForAttribute(s, TYPE_LABEL));
-
-                        Iterator<?> it = s.getAttributes(); // FIXME this iterator has no type, due to the API. We have to cast it later
+                        // FIXME this iterator has no type, due to the API. We have to cast it later
+                        Iterator<?> it = s.getAttributes();
                         while (it.hasNext()) {
                             Attribute a = (Attribute) it.next();
                             unserializers.load(t, a.getName().getLocalPart(), a.getValue());

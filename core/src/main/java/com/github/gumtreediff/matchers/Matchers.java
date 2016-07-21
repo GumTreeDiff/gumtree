@@ -59,7 +59,8 @@ public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> 
     }
 
     @Override
-    protected Registry.NamedRegistry<String, Matcher, Register>.NamedEntry newEntry(Class<? extends Matcher> clazz, Register annotation) {
+    protected Registry.NamedRegistry<String, Matcher, Register>.NamedEntry newEntry(
+            Class<? extends Matcher> clazz, Register annotation) {
         Factory<? extends Matcher> factory = defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class);
         if (annotation.defaultMatcher())
             defaultMatcherFactory = factory;

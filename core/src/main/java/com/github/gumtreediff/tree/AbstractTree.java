@@ -297,7 +297,6 @@ public abstract class AbstractTree implements ITree {
             throw unsupportedOperation();
         }
 
-
         @Override
         public ITree deepCopy() {
             throw unsupportedOperation();

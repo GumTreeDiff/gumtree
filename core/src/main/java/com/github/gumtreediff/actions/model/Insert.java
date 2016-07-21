@@ -20,8 +20,7 @@
 
 package com.github.gumtreediff.actions.model;
 
-        import com.github.gumtreediff.tree.ITree;
-        import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.ITree;
 
 public class Insert extends Addition {
 
@@ -33,6 +32,5 @@ public class Insert extends Addition {
     public String getName() {
         return "INS";
     }
-
 
 }

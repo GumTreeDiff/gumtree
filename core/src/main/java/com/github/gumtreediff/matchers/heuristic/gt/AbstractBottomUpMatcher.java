@@ -1,3 +1,23 @@
+/*
+ * This file is part of GumTree.
+ *
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2011-2016 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2011-2016 Floréal Morandat <florealm@gmail.com>
+ */
+
 package com.github.gumtreediff.matchers.heuristic.gt;
 
 import com.github.gumtreediff.matchers.Mapping;
@@ -66,7 +86,8 @@ public abstract class AbstractBottomUpMatcher extends Matcher {
         removeMatched(cSrc, true);
         removeMatched(cDst, false);
 
-        if (cSrc.getSize() < AbstractBottomUpMatcher.SIZE_THRESHOLD || cDst.getSize() < AbstractBottomUpMatcher.SIZE_THRESHOLD) {
+        if (cSrc.getSize() < AbstractBottomUpMatcher.SIZE_THRESHOLD
+                || cDst.getSize() < AbstractBottomUpMatcher.SIZE_THRESHOLD) {
             Matcher m = new ZsMatcher(cSrc, cDst, new MappingStore());
             m.match();
             for (Mapping candidate: m.getMappings()) {
@@ -112,8 +133,8 @@ public abstract class AbstractBottomUpMatcher extends Matcher {
 
     @Override
     public boolean isMatchable(ITree src, ITree dst) {
-        return src.isCompatible(dst) &&
-                !(isSrcMatched(src) || isDstMatched(dst));
+        return src.isCompatible(dst)
+                && !(isSrcMatched(src) || isDstMatched(dst));
     }
 
     protected void addMapping(ITree src, ITree dst) {
