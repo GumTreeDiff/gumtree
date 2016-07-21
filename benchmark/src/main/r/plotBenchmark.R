@@ -14,6 +14,7 @@
 # along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright 2016 Jean-Rémy Falleri <jr.falleri@gmail.com>
+# Copyright 2016 Floréal Morandat <florealm@gmail.com>
 
 library(ggplot2)
 folder <- commandArgs()[length(commandArgs())]
