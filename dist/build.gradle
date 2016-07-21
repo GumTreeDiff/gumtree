@@ -22,3 +22,9 @@ dependencies {
 	compile project(':gen.js')
 	compile project(':gen.ruby')
 }
+
+run {
+	if ( project.hasProperty("params") ) {
+		args Eval.me(params)
+	}
+}
