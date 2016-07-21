@@ -19,10 +19,12 @@ task collectActions(type: JavaExec) {
     args 'collect'
 }
 
-task collectTrees(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.github.gumtree.dist.BenchmarkCollector'
-    args src
+if (project.hasProperty('trees')) {
+    task collectTrees(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'com.github.gumtree.dist.BenchmarkCollector'
+        args trees
+    }
 }
 
 jmh {
