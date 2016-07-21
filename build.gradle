@@ -19,7 +19,7 @@ subprojects {
 
 	apply plugin: 'checkstyle'
 	checkstyle {
-		toolVersion = '6.12.1'
+		toolVersion = '7.0'
 		configFile = rootProject.file('gumtree_checkstyle.xml')
 		configProperties = [suppressionFile: "${rootProject.file('checkstyle_ignore.xml')}"]
 	}

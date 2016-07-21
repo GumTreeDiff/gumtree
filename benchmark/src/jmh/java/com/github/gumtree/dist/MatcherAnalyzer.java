@@ -36,7 +36,7 @@ public class MatcherAnalyzer {
                 String otherPath = refPath.replace("_v0_", "_v1_");
                 src = TreeIoUtils.fromXml().generateFromFile(refPath).getRoot();
                 dst = TreeIoUtils.fromXml().generateFromFile(otherPath).getRoot();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
