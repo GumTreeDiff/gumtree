@@ -136,6 +136,13 @@ public abstract class Registry<K, C, A> {
             return null;
         }
 
+        public String findName(Class<? extends C> aClass) {
+            for (NamedEntry e: entries.values())
+                if (e.getClass().equals(aClass))
+                    return e.id;
+            return null;
+        }
+
         protected class NamedEntry extends Entry {
             public NamedEntry(String id, Class<? extends C> clazz, Factory<? extends C> factory, boolean experimental) {
                 super(id, clazz, factory, experimental);

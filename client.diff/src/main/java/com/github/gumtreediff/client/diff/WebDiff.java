@@ -23,10 +23,13 @@ package com.github.gumtreediff.client.diff;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.ui.web.DiffServer;
+import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.ServerRunner;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.ui.web.DiffServer;
+
+import java.io.IOException;
 
 @Register(description = "a web diff client", options = WebDiff.Options.class)
 public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
@@ -37,6 +40,7 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
 
     static class Options extends AbstractDiffClient.Options {
         protected int defaultPort = Integer.parseInt(System.getProperty("gumtree.client.web.port", "4754"));
+        boolean stdin = true;
 
         @Override
         public Option[] values() {
@@ -49,6 +53,12 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
                                 defaultPort = p;
                             else
                                 System.err.printf("Invalid port number (%s), using %d\n", args[0], defaultPort);
+                        }
+                    },
+                    new Option("--no-stdin", String.format("Do not listen to stdin"), 0) {
+                        @Override
+                        protected void process(String name, String[] args) {
+                            stdin = false;
                         }
                     }
             );
@@ -63,7 +73,34 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
     @Override
     public void run() {
         DiffServer server = new DiffServer(opts.src, opts.dst, opts.defaultPort);
-        System.out.println(String.format("Starting server: %s", "http://127.0.0.1:" + opts.defaultPort));
-        ServerRunner.executeInstance(server);
+        System.out.println(String.format("Starting server: %s:%d", "http://127.0.0.1", opts.defaultPort));
+
+        if (opts.stdin) {
+            ServerRunner.executeInstance(server);
+        } else {
+            runServer(server);
+        }
     }
+
+    public void runServer(NanoHTTPD server) {
+        try {
+            server.start();
+        } catch (IOException e) {
+            System.err.println("Couldn't start server:\n" + e);
+            return;
+        }
+
+        System.out.println("Server started, Ctrl-C to stop.\n");
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            // FIXME to be called you should send SIGTERM ... I have no clue if this signal is mapped to some keys
+            System.out.println("Server stopped.\n");
+            server.stop();
+        }));
+        try {
+            while(!Thread.currentThread().isInterrupted())
+                Thread.sleep(5000);
+        } catch (Throwable ignored) {
+        }
+    }
+
 }

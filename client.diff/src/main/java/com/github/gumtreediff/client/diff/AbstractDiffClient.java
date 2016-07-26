@@ -34,7 +34,7 @@ import java.util.ArrayList;
 public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> extends Client {
 
     protected final O opts;
-    public static final String SYNTAX = "Syntax: diff [options] fileSrc fileDst";
+    public static final String SYNTAX = "Syntax: diff [options] baseFile destFile";
     private TreeContext src;
     private TreeContext dst;
 
