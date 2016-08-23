@@ -36,5 +36,7 @@ We are researchers, therefore if you use GumTree in an academic work we would be
 
 ## Documentation
 
-Please consult our [wiki](https://github.com/GumTreeDiff/gumtree/wiki)
+How to compile: See [Getting Started](https://github.com/GumTreeDiff/gumtree/wiki/Getting-Started)
+
+See also the [Gumtree wiki](https://github.com/GumTreeDiff/gumtree/wiki).
 
