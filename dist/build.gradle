@@ -1,9 +1,14 @@
+plugins {
+  id "com.palantir.git-version" version "0.5.2"
+}
+
 apply plugin: 'application'
 
 mainClassName = 'com.github.gumtreediff.client.Run'
-applicationName = 'gumtree'
+applicationName = 'gumtree-' + versionDetails().gitHash
 jar.enabled = false
 uploadArchives.enabled = false
+distTar.enabled = false
 
 description = 'GumTree whole distribution.'
 
