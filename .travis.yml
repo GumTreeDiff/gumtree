@@ -3,8 +3,9 @@ jdk:
 - oraclejdk8
 deploy:
   provider: bintray
-  on: develop
+  on:
+    branch: develop
   file: deploy.json
   user: jrfaller
   key:
-    secure: JI0JNa4j/2+lBl8owaG5VBtov0GTvzn/0jCyjkh9nAEjxM1sR1HBqy9SvLtDM3dokFOEGQyVgKZWtYxDpWGIdZ8xr7NbDxPYW5RqFFI9zFhAv/De3R9kWuXyw0yfHz9mOMc8GkgMV+2U4ZkqOdaLWP1vwUsLvNNSehBRF9FeHzA=
+    secure: "g4lMBFh1hlu1bj3PDEle+p5XMyr9X0L+d5SNVGXe0p/wrC3PQmWx/yx2/kHwph9j4yJHfTEtCyLv2rFsBJMaEDmfRBMXVu+0QSWJSRZzucYjeXlSiau+mkPH2JnsgRnZUIs+TAo6Kq/GDIPHbzi1z2fLKbHYVWI+v62RWyauC5c="

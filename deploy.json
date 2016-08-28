@@ -1,9 +1,9 @@
 {
     "package": {
-        "name": "nightly",
+        "name": "nightlies",
         "repo": "GumTree",
         "subject": "jrfaller",
-        "desc": "Nightly versions.",
+        "desc": "Nightlies of the GumTree project.",
         "website_url": "https://github.com/GumTreeDiff/gumtree",
         "issue_tracker_url": "https://github.com/GumTreeDiff/gumtree/issues",
         "vcs_url": "https://github.com/GumTreeDiff/gumtree",
@@ -15,9 +15,8 @@
     },
 
     "version": {
-        "name": "nightly",
-        "desc": "This is the nightly version",
-        "gpgSign": false
+        "name": "99.99.99",
+				"desc": "Nightly version."
     },
 
     "files":
