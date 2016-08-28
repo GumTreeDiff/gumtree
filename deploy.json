@@ -11,7 +11,7 @@
         "github_release_notes_file": "CHANGELOG",
         "licenses": ["LGPL3"],
         "public_download_numbers": true,
-        "public_stats": true,
+        "public_stats": true
     },
 
     "version": {
