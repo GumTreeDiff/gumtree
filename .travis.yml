@@ -1,3 +1,10 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
+deploy:
+  provider: bintray
+  on: develop
+  file: deploy.json
+  user: jrfaller
+  key:
+    secure: JI0JNa4j/2+lBl8owaG5VBtov0GTvzn/0jCyjkh9nAEjxM1sR1HBqy9SvLtDM3dokFOEGQyVgKZWtYxDpWGIdZ8xr7NbDxPYW5RqFFI9zFhAv/De3R9kWuXyw0yfHz9mOMc8GkgMV+2U4ZkqOdaLWP1vwUsLvNNSehBRF9FeHzA=
