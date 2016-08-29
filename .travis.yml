@@ -8,4 +8,4 @@ deploy:
   file: deploy.json
   user: jrfaller
   key:
-    secure: "g4lMBFh1hlu1bj3PDEle+p5XMyr9X0L+d5SNVGXe0p/wrC3PQmWx/yx2/kHwph9j4yJHfTEtCyLv2rFsBJMaEDmfRBMXVu+0QSWJSRZzucYjeXlSiau+mkPH2JnsgRnZUIs+TAo6Kq/GDIPHbzi1z2fLKbHYVWI+v62RWyauC5c="
+    secure: g2h46zuZoa9GJ/lGrAePdmI7P/KhH9zImSmdERl/qlYZ2aKD9a3GuBd94v5xsTtgOoftZK4KoRfp4Wvb5IEPQPPYEjQb1ubOT/xGxyySj3wcniTAWBa2U3FLDlhU3AyPO3xn1h8HUikm7zODDXGDZxDjDvI5hxRgBiz0j/P5j7A=
