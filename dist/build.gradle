@@ -34,7 +34,7 @@ run {
 }
 
 def buildTime() {
-	def df = new SimpleDateFormat("yy-MM-dd")
+	def df = new SimpleDateFormat("yyyyMMdd")
 	df.setTimeZone(TimeZone.getTimeZone("UTC"))
 	return df.format(new Date())
 }
