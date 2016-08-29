@@ -1,11 +1,10 @@
-plugins {
-  id "com.palantir.git-version" version "0.5.2"
-}
+import java.text.SimpleDateFormat
+import java.util.Date
 
 apply plugin: 'application'
 
 mainClassName = 'com.github.gumtreediff.client.Run'
-applicationName = 'gumtree-' + versionDetails().gitHash
+applicationName = 'gumtree-' + buildTime()
 jar.enabled = false
 uploadArchives.enabled = false
 distTar.enabled = false
@@ -32,4 +31,10 @@ run {
 	if ( project.hasProperty("params") ) {
 		args Eval.me(params)
 	}
+}
+
+def buildTime() {
+	def df = new SimpleDateFormat("yy-MM-dd")
+	df.setTimeZone(TimeZone.getTimeZone("UTC"))
+	return df.format(new Date())
 }
