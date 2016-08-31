@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 @Register(id = "c-cocci", accept = "\\.[ch]$")
 public class CTreeGenerator extends TreeGenerator {
 
-    private static final String COCCI_CMD = "cgum";
+    private static final String COCCI_CMD = System.getProperty("gumtree.cgum.path", "cgum");
 
     private static final MetadataSerializers defaultSerializers = new MetadataSerializers();
     private static final MetadataUnserializers defaultUnserializers = new MetadataUnserializers();
