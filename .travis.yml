@@ -1,8 +1,8 @@
 sudo: required
 dist: trusty
 before_install:
-  - wget http://131.123.42.38/lmcrs/beta/srcML-Ubuntu14.04.deb
-  - sudo dpkg -i srcML-Ubuntu14.04.deb
+  - wget http://131.123.42.38/lmcrs/beta/srcML-Ubuntu14.04-64.deb
+  - sudo dpkg -i srcML-Ubuntu14.04-64.deb
 language: java
 jdk:
 - oraclejdk8
