@@ -21,7 +21,13 @@
 
     "files":
         [
-        {"includePattern": "dist/build/distributions/(.*)", "uploadPattern": "$1"}
+            {
+                "includePattern": "dist/build/distributions/(.*)",
+                "uploadPattern": "$1",
+                "matrixParams": {
+                    "override": 1
+                }
+            }
         ],
     "publish": true
 }
