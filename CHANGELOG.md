@@ -8,3 +8,5 @@
 * Added regression test to check the output of the matching algorithms
 * Changed infrastructure on the Tree class
 * Added feature to automatically produce nightlies
+* Included srcML tree generator that can deal with C++, C, C# and Java files
+* Added custom options to furnish srcml and cgum paths
