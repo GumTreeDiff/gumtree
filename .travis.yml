@@ -7,7 +7,7 @@ before_script:
   - wget https://dl.bintray.com/jrfaller/cgum/cgum_latest_ubuntu_x86-64.tar.gz -O /tmp/cgum_latest_ubuntu_x86-64.tar.gz
   - tar -xvf /tmp/cgum_latest_ubuntu_x86-64.tar.gz
   - export PATH=$PATH:$PWD/cgum/
-script: ./gradlew -Dgumtree.cgum.path=./cgum/cgum check --info
+script: ./gradlew -Dgumtree.cgum.path=./cgum/cgum check
 language: java
 jdk:
 - oraclejdk8

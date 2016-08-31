@@ -27,7 +27,7 @@ import java.io.*;
 
 public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
 
-    private static final String SRCML_CMD = "srcml";
+    private static final String SRCML_CMD = System.getProperty("gumtree.srcml.path", "srcml");
 
     @Override
     public TreeContext generate(Reader r) throws IOException {
