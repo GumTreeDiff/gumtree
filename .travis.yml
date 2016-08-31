@@ -3,6 +3,10 @@ dist: trusty
 before_install:
   - wget http://131.123.42.38/lmcrs/beta/srcML-Ubuntu14.04-64.deb
   - sudo dpkg -i srcML-Ubuntu14.04-64.deb
+before_script:
+  - wget https://dl.bintray.com/jrfaller/cgum/cgum_latest_ubuntu_x86-64.tar.gz -O /tmp/cgum_latest_ubuntu_x86-64.tar.gz
+  - tar -xvf /tmp/cgum_latest_ubuntu_x86-64.tar.gz
+  - export PATH=$PATH:$PWD/cgum/
 language: java
 jdk:
 - oraclejdk8
