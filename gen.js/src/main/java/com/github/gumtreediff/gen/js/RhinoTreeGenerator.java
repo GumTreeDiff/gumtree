@@ -22,6 +22,7 @@ package com.github.gumtreediff.gen.js;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
+import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
 
@@ -32,10 +33,14 @@ import java.io.Reader;
 public class RhinoTreeGenerator extends TreeGenerator {
 
     public TreeContext generate(Reader r) throws IOException {
-        Parser p = new Parser();
+        CompilerEnvirons env = new CompilerEnvirons();
+        env.setRecordingLocalJsDocComments(true);
+        env.setAllowSharpComments(true);
+        env.setRecordingComments(true);
+        Parser p = new Parser(env);
         AstRoot root = p.parse(r, null, 1);
         RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
-        root.visit(visitor);
+        root.visitAll(visitor);
         return visitor.getTree(root);
     }
 }

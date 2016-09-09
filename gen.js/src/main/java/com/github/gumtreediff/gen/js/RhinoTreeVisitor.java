@@ -24,12 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.mozilla.javascript.Token;
-import org.mozilla.javascript.ast.AstNode;
-import org.mozilla.javascript.ast.AstRoot;
-import org.mozilla.javascript.ast.Name;
-import org.mozilla.javascript.ast.NodeVisitor;
-import org.mozilla.javascript.ast.NumberLiteral;
-import org.mozilla.javascript.ast.StringLiteral;
+import org.mozilla.javascript.ast.*;
 
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
@@ -68,6 +63,9 @@ public class RhinoTreeVisitor implements NodeVisitor {
             } else if ( node instanceof NumberLiteral) {
                 NumberLiteral l = (NumberLiteral) node;
                 t.setLabel(l.getValue());
+            } else if ( node instanceof Comment) {
+               Comment c = (Comment) node;
+                t.setLabel(c.getValue());
             }
 
             return true;

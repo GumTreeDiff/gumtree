@@ -48,4 +48,11 @@ public class TestJsGenerator {
         assertEquals(7, tree.getSize());
     }
 
+    @Test
+    public void testComments() throws IOException {
+        String input = "console.log(\"Hello world!\"); /* with comment */";
+        ITree tree = new RhinoTreeGenerator().generateFromString(input).getRoot();
+        assertEquals(8, tree.getSize());
+    }
+
 }
