@@ -1,0 +1,6 @@
+description = 'GumTree tree generator for CSS code based on ph-css.'
+
+dependencies {
+	compile 'org.jruby:jrubyparser:0.5.3'
+	compile 'com.helger:ph-css:5.0.1'
+}
