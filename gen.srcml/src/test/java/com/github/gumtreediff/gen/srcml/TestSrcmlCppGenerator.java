@@ -28,7 +28,7 @@ import java.io.IOException;
 public class TestSrcmlCppGenerator {
 
     @Test
-    public void testSimpleSyntax() throws IOException {
+    public void testSimple() throws IOException {
         String input = "\n" +
                 "namespace R {\n" +
                 "template <typename T>\n" +
@@ -45,9 +45,8 @@ public class TestSrcmlCppGenerator {
                 "   fprintf(stdout, \" %x\", GET(__recv, idx));\n" +
                 "}\n" +
                 "}";
-        // @TODO find a way to not depend on cgum binary.
         ITree t = new SrcmlCppTreeGenerator().generateFromString(input).getRoot();
-        Assert.assertEquals(165, t.getSize());
+        Assert.assertEquals(148, t.getSize());
     }
 
 }

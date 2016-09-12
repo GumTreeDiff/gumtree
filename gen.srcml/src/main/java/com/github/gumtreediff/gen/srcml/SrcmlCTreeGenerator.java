@@ -30,7 +30,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-@Register(id = "srcml-c", accept = "\\.[ch]$")
+@Register(id = "c-srcml", accept = "\\.[ch]$")
 public class SrcmlCTreeGenerator extends AbstractSrcmlTreeGenerator {
 
     @Override

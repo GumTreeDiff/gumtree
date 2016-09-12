@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-@Register(id = "srcml-cs", accept = "\\.cs$")
+@Register(id = "cs-srcml", accept = "\\.cs$")
 public class SrcmlCsTreeGenerator extends AbstractSrcmlTreeGenerator {
 
     @Override

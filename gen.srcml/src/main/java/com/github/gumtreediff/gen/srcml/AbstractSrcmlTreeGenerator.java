@@ -19,20 +19,118 @@
 
 package com.github.gumtreediff.gen.srcml;
 
-import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerator;
+import com.github.gumtreediff.io.LineReader;
+import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.events.*;
 import java.io.*;
+import java.util.*;
 
 public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
 
     private static final String SRCML_CMD = System.getProperty("gumtree.srcml.path", "srcml");
 
+    private static final QName LINE = new  QName("http://www.srcML.org/srcML/position", "line", "pos");
+
+    private static final QName COLUMN = new  QName("http://www.srcML.org/srcML/position", "column", "pos");
+
+    private LineReader lr;
+
+    private Set<String> labeled = new HashSet<String>(
+            Arrays.asList("specifier", "name", "comment", "literal", "operator"));
+
     @Override
     public TreeContext generate(Reader r) throws IOException {
-        SrcmlVisitor v = new SrcmlVisitor(new StringReader(getXml(r)));
-        return v.getTreeContext();
+        lr = new LineReader(r);
+        String xml = getXml(lr);
+        return getTreeContext(xml);
+    }
+
+    public TreeContext getTreeContext(String xml) {
+        XMLInputFactory fact = XMLInputFactory.newInstance();
+        TreeContext context = new TreeContext();
+        try {
+            Stack<ITree> trees = new Stack<>();
+            XMLEventReader r = fact.createXMLEventReader(new StringReader(xml));
+            while (r.hasNext()) {
+                XMLEvent ev = r.nextEvent();
+                if (ev.isStartElement()) {
+                    StartElement s = ev.asStartElement();
+                    String typeLabel = s.getName().getLocalPart();
+                    if (typeLabel.equals("position"))
+                        setLength(trees.peek(), s);
+                    else {
+                        int type = typeLabel.hashCode();
+                        ITree t = context.createTree(type, "", typeLabel);
+
+                        if (trees.isEmpty()) {
+                            context.setRoot(t);
+                            t.setPos(0);
+                        } else {
+                            t.setParentAndUpdateChildren(trees.peek());
+                            setPos(t, s);
+                        }
+                        trees.push(t);
+                    }
+                } else if (ev.isEndElement()) {
+                    EndElement end = ev.asEndElement();
+                    if (!end.getName().getLocalPart().equals("position"))
+                        trees.pop();
+                } else if (ev.isCharacters()) {
+                    Characters chars = ev.asCharacters();
+                    if (!chars.isWhiteSpace()
+                            && trees.peek().getLabel().equals("")
+                            && labeled.contains(context.getTypeLabel(trees.peek().getType())))
+                        trees.peek().setLabel(chars.getData().trim());
+                }
+            }
+            fixPos(context);
+            context.validate();
+            return context;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void fixPos(TreeContext ctx) {
+        for (ITree t : ctx.getRoot().postOrder()) {
+            if (!t.isLeaf()) {
+                if (t.getPos() == ITree.NO_VALUE || t.getLength() == ITree.NO_VALUE) {
+                    ITree firstChild = t.getChild(0);
+                    t.setPos(firstChild.getPos());
+                    if (t.getChildren().size() == 1)
+                        t.setLength(firstChild.getLength());
+                    else {
+                        ITree lastChild = t.getChild(t.getChildren().size() - 1);
+                        t.setLength(lastChild.getEndPos() - firstChild.getPos());
+                    }
+                }
+            }
+        }
+    }
+
+    private void setPos(ITree t, StartElement e) {
+        if (e.getAttributeByName(LINE) != null) {
+            int line = Integer.parseInt(e.getAttributeByName(LINE).getValue());
+            int column = Integer.parseInt(e.getAttributeByName(COLUMN).getValue());
+            t.setPos(lr.positionFor(line, column));
+        }
+    }
+
+    private void setLength(ITree t, StartElement e) {
+        if (t.getPos() == -1)
+            return;
+        if (e.getAttributeByName(LINE) != null) {
+            int line = Integer.parseInt(e.getAttributeByName(LINE).getValue());
+            int column = Integer.parseInt(e.getAttributeByName(COLUMN).getValue());
+            t.setLength(lr.positionFor(line, column) - t.getPos() + 1);
+        }
     }
 
     public String getXml(Reader r) throws IOException {
@@ -54,12 +152,12 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
             Process p = b.start();
             StringBuffer buf = new StringBuffer();
             br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            // TODO Why do we need to read and bufferize eveything, when we could/should only use generateFromStream
+            // TODO Why do we need to read and bufferize everything, when we could/should only use generateFromStream
             line = null;
             while ((line = br.readLine()) != null)
                 buf.append(line + "\n");
             p.waitFor();
-            if (p.exitValue() != 0)  throw new RuntimeException();
+            if (p.exitValue() != 0) throw new RuntimeException();
             r.close();
             String xml = buf.toString();
             return xml;
@@ -73,6 +171,6 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
     public abstract String getLanguage();
 
     public String[] getArguments(String file) {
-        return new String[] {SRCML_CMD, "-l", getLanguage(), "--position", file};
+        return new String[]{SRCML_CMD, "-l", getLanguage(), "--position", file};
     }
 }

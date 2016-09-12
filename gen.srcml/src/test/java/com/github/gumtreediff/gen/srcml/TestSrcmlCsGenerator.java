@@ -28,7 +28,7 @@ import java.io.IOException;
 public class TestSrcmlCsGenerator {
 
     @Test
-    public void testSimpleSyntax() throws IOException {
+    public void testSimple() throws IOException {
         String input = "using System;\n" +
                 "public class HelloWorld\n" +
                 "{\n" +
@@ -39,7 +39,7 @@ public class TestSrcmlCsGenerator {
                 "    }\n" +
                 "}";
         ITree t = new SrcmlCsTreeGenerator().generateFromString(input).getRoot();
-        Assert.assertEquals(42, t.getSize());
+        Assert.assertEquals(34, t.getSize());
     }
 
 }

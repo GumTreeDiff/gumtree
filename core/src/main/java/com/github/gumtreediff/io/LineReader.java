@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.io;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -27,9 +28,10 @@ import java.util.Arrays;
 
 public class LineReader extends Reader {
     private Reader reader;
-    int currentPos = 0;
 
-    ArrayList<Integer> lines = new ArrayList<>(Arrays.asList(0));
+    private int currentPos = 0;
+
+    private ArrayList<Integer> lines = new ArrayList<>(Arrays.asList(0));
 
     public LineReader(Reader parent) {
         reader = parent;
@@ -41,7 +43,6 @@ public class LineReader extends Reader {
         for (int i = 0; i < len; i ++)
             if (cbuf[off + i] == '\n')
                 lines.add(currentPos + i);
-
         currentPos += len;
         return r;
     }
@@ -58,6 +59,5 @@ public class LineReader extends Reader {
     @Override
     public void close() throws IOException {
         reader.close();
-        lines = new ArrayList<>();
     }
 }

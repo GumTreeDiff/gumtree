@@ -19,7 +19,9 @@
 
 package com.github.gumtreediff.gen.srcml;
 
+import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,14 +30,15 @@ import java.io.IOException;
 public class TestSrcmlJavaGenerator {
 
     @Test
-    public void testSimpleSyntax() throws IOException {
+    public void testSimple() throws IOException {
         String input = "public class HelloWorld {\n" +
                 "    public static void main(String[] args) {\n" +
                 "        System.out.println(\"Hello, World\");\n" +
                 "    }\n" +
                 "}";
-        ITree t = new SrcmlJavaTreeGenerator().generateFromString(input).getRoot();
-        Assert.assertEquals(39, t.getSize());
+        TreeContext ctx = new SrcmlJavaTreeGenerator().generateFromString(input);
+        ITree t = ctx.getRoot();
+        Assert.assertEquals(33, t.getSize());
     }
 
 }
