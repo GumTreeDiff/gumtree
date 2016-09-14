@@ -11,3 +11,4 @@
 * Included srcML tree generator that can deal with C++, C, C# and Java files
 * Included css tree generator based on ph-css
 * Added custom options to furnish srcml and cgum paths
+* Now the build script can exclude tests requiring an external tool

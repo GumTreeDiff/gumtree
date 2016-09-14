@@ -68,6 +68,11 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr') }) {
 
 evaluationDependsOnChildren();
 
+configure(subprojects) {
+    if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
+	    it.test.enabled = false
+}
+
 if (project.hasProperty('mvn')) {
 	configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
 		apply plugin: 'maven'

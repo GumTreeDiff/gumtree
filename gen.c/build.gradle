@@ -1,1 +1,2 @@
 description = 'GumTree tree generator for C code. Requires cgum.'
+ext.isNative = true
