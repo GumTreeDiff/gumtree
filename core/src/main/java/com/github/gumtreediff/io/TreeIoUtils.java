@@ -129,15 +129,12 @@ public final class TreeIoUtils {
         }
 
         public String toString() {
-            StringWriter s = new StringWriter();
-            try {
+            try (StringWriter s = new StringWriter()) {
                 writeTo(s);
-                s.close(); // FIXME this is useless (do nothing) but
-                // throws an exception, thus I dont' putTree it in the finally block where it belongs
+                return s.toString();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            return s.toString();
         }
 
         public void writeTo(String file) throws Exception {
@@ -147,11 +144,8 @@ public final class TreeIoUtils {
         }
 
         public void writeTo(File file) throws Exception {
-            FileWriter w = new FileWriter(file);
-            try {
+            try (FileWriter w = new FileWriter(file)) {
                 writeTo(w);
-            } finally {
-                w.close();
             }
         }
     }
