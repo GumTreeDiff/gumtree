@@ -85,6 +85,8 @@ public class ActionsCollector {
         Run.initGenerators();
         List<Path> paths = Files.walk(Paths.get(RES_DIR)).filter(
                 p -> p.getFileName().toString().matches(".*_v0_.*\\.xml")).collect(Collectors.toList());
+        boolean dirty = false;
+        StringBuffer b = new StringBuffer();
         for (Path path : paths) {
             Path otherPath = Paths.get(path.toString().replace("_v0_","_v1_"));
             TreeContext src = TreeIoUtils.fromXml().generateFromFile(path.toString());
@@ -98,28 +100,55 @@ public class ActionsCollector {
             ActionsIoUtils.toText(src, actions, matcher.getMappings()).writeTo(w);
             Path refPath = Paths.get(path.toString().replace("_v0_","_actions_"));
             String ref = Paths.get(REF_DIR, refPath.getFileName().toString()).toString();
-            StringReader r = new StringReader(w.toString());
-            if (!contentEquals(r, new FileReader(ref))) {
-                System.err.println("Content not equals for : " + ref);
-                System.exit(-1);
+            if (!contentEquals(new StringReader(w.toString()), new FileReader(ref))) {
+                dirty = true;
+                b.append("Content not equals for: " + ref + ". Now " + countLines(new StringReader(w.toString())) +
+                        "Was " + countLines(new FileReader(ref)) + "\n");
             }
+        }
+        if (dirty) {
+            System.err.println(b.toString());
+            System.exit(-1);
         }
     }
 
     public static boolean contentEquals(Reader input1, Reader input2) throws IOException  {
-        if (!(input1 instanceof BufferedReader))
-            input1 = new BufferedReader(input1);
-        if (!(input2 instanceof BufferedReader))
-            input2 = new BufferedReader(input2);
-        int ch = input1.read();
-        while (-1 != ch) {
+        try {
+            if (!(input1 instanceof BufferedReader))
+                input1 = new BufferedReader(input1);
+            if (!(input2 instanceof BufferedReader))
+                input2 = new BufferedReader(input2);
+            int ch = input1.read();
+            while (-1 != ch) {
+                int ch2 = input2.read();
+                if (ch != ch2)
+                    return false;
+                ch = input1.read();
+            }
             int ch2 = input2.read();
-            if (ch != ch2)
-                return false;
-            ch = input1.read();
+            return (ch2 == -1);
+        } finally {
+            input1.close();
+            input2.close();
         }
-        int ch2 = input2.read();
-        return (ch2 == -1);
+    }
+
+    public static int countLines(Reader r) throws IOException {
+        try {
+            char[] c = new char[1024];
+            int count = 0;
+            int readChars = 0;
+            boolean empty = true;
+            while ((readChars = r.read(c)) != -1) {
+                empty = false;
+                for (int i = 0; i < readChars; ++i)
+                    if (c[i] == '\n')
+                        ++count;
+            }
+            return (count == 0 && !empty) ? 1 : count;
+        } finally {
+            r.close();
+        }
     }
 
 }
