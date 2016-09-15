@@ -138,25 +138,16 @@ public class DirectoryComparator {
         long l2 = Files.size(f2.toPath());
         if (l1 != l2) return true;
         else {
-            FileInputStream fis1 = new FileInputStream(f1);
-            DataInputStream dis1 = new DataInputStream(fis1);
-            FileInputStream fis2 = new FileInputStream(f2);
-            DataInputStream dis2 = new DataInputStream(fis2);
-
-            int c1, c2;
-            while ((c1 = dis1.read()) != -1) {
-                c2 = dis2.read();
-                if (c1 != c2) {
-                    dis1.close();
-                    dis2.close();
-                    return true;
+            try (DataInputStream dis1 = new DataInputStream(new FileInputStream(f1));
+                 DataInputStream dis2 = new DataInputStream(new FileInputStream(f2))) {
+                int c1, c2;
+                while ((c1 = dis1.read()) != -1) {
+                    c2 = dis2.read();
+                    if (c1 != c2)
+                        return true;
                 }
+                return false;
             }
-
-            dis1.close();
-            dis2.close();
-
-            return false;
         }
     }
 

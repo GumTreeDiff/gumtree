@@ -112,42 +112,33 @@ public class ActionsCollector {
         }
     }
 
-    public static boolean contentEquals(Reader input1, Reader input2) throws IOException  {
-        try {
-            if (!(input1 instanceof BufferedReader))
-                input1 = new BufferedReader(input1);
-            if (!(input2 instanceof BufferedReader))
-                input2 = new BufferedReader(input2);
-            int ch = input1.read();
+    public static boolean contentEquals(Reader cur, Reader ref) throws IOException  {
+        try(Reader _cur = cur; Reader _ref = ref) {
+            int ch = _cur.read();
             while (-1 != ch) {
-                int ch2 = input2.read();
+                int ch2 = _ref.read();
                 if (ch != ch2)
                     return false;
-                ch = input1.read();
+                ch = _cur.read();
             }
-            int ch2 = input2.read();
+            int ch2 = _ref.read();
             return (ch2 == -1);
-        } finally {
-            input1.close();
-            input2.close();
         }
     }
 
     public static int countLines(Reader r) throws IOException {
-        try {
+        try (Reader _r = r) {
             char[] c = new char[1024];
             int count = 0;
             int readChars = 0;
             boolean empty = true;
-            while ((readChars = r.read(c)) != -1) {
+            while ((readChars = _r.read(c)) != -1) {
                 empty = false;
                 for (int i = 0; i < readChars; ++i)
                     if (c[i] == '\n')
                         ++count;
             }
             return (count == 0 && !empty) ? 1 : count;
-        } finally {
-            r.close();
         }
     }
 
