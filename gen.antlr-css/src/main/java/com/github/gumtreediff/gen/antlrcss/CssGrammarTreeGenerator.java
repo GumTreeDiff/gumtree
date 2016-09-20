@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.gen.antlrcss;
 
+import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.antlr.AbstractAntlrTreeGenerator;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.antlr.AbstractAntlrTreeGenerator;
@@ -32,7 +33,7 @@ import org.antlr.runtime.tree.CommonTree;
 import java.io.IOException;
 import java.io.Reader;
 
-@Register(id = "css-antlr", accept = "\\.[cC][sS][sS]$", experimental = true)
+@Register(id = "css-antlr", accept = "\\.[cC][sS][sS]$", priority = Registry.Priority.LOW)
 public class CssGrammarTreeGenerator extends AbstractAntlrTreeGenerator {
 
     @Override

@@ -127,7 +127,7 @@ public class Run {
 
     public static void listCommand(PrintStream out) {
         out.println("Available Commands:");
-        for (String cmd: Clients.getInstance().getEntries())
+        for (Registry.Entry cmd: Clients.getInstance().getEntries())
             out.println("* " + cmd);
     }
 

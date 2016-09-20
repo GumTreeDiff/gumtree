@@ -23,6 +23,7 @@ package com.github.gumtreediff.client.diff;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.ui.web.DiffServer;
+import com.github.gumtreediff.gen.Registry;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.ServerRunner;
 import com.github.gumtreediff.client.Option;
@@ -31,7 +32,7 @@ import com.github.gumtreediff.client.diff.ui.web.DiffServer;
 
 import java.io.IOException;
 
-@Register(description = "a web diff client", options = WebDiff.Options.class)
+@Register(description = "a web diff client", options = WebDiff.Options.class, priority = Registry.Priority.HIGH)
 public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
 
     public WebDiff(String[] args) {
@@ -97,10 +98,9 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
             server.stop();
         }));
         try {
-            while(!Thread.currentThread().isInterrupted())
+            while (!Thread.currentThread().isInterrupted())
                 Thread.sleep(5000);
-        } catch (Throwable ignored) {
-        }
+        } catch (Throwable ignored) { }
     }
 
 }

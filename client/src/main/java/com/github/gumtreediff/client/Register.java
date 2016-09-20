@@ -20,6 +20,8 @@
 
 package com.github.gumtreediff.client;
 
+import com.github.gumtreediff.gen.Registry;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -30,7 +32,8 @@ import java.lang.annotation.Target;
 public @interface Register {
     String name() default no_value;
     String description() default "";
-    boolean experimental() default false;
+    int priority() default Registry.Priority.MEDIUM;
+
     // FIXME currently unused, will be useful only for help purpose
     Class<? extends Option.Context> options() default NoOption.class;
 

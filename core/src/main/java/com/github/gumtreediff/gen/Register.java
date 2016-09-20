@@ -30,5 +30,5 @@ import java.lang.annotation.Target;
 public @interface Register {
     String id();
     String[] accept() default { };
-    boolean experimental() default false;
+    int priority() default Registry.Priority.MEDIUM;
 }

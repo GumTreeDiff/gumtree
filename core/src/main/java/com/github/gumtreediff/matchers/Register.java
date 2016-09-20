@@ -20,6 +20,8 @@
 
 package com.github.gumtreediff.matchers;
 
+import com.github.gumtreediff.gen.Registry;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -30,6 +32,7 @@ import java.lang.annotation.Target;
 public @interface Register {
     String id();
 
-    boolean experimental() default false;
+    int priority() default Registry.Priority.MEDIUM;
+
     boolean defaultMatcher() default false;
 }

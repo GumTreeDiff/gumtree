@@ -22,7 +22,7 @@ package com.github.gumtreediff.client;
 
 import com.github.gumtreediff.gen.Registry;
 
-public class Clients extends Registry.NamedRegistry<String, Client, Register> {
+public class Clients extends Registry<String, Client, Register> {
     private static Clients registry;
 
     public static Clients getInstance() {
@@ -31,7 +31,6 @@ public class Clients extends Registry.NamedRegistry<String, Client, Register> {
         return registry;
     }
 
-    @Override
     protected String getName(Register annotation, Class<? extends Client> clazz) {
         String name = annotation.name();
         if (Register.no_value.equals(name))
@@ -40,16 +39,24 @@ public class Clients extends Registry.NamedRegistry<String, Client, Register> {
     }
 
     @Override
-    protected ClientEntry newEntry(Class<? extends Client> clazz, Register annotation) {
-        return new ClientEntry(clazz, annotation.name(), annotation.description(), annotation.experimental());
-    }
+    protected Entry newEntry(Class<? extends Client> clazz, Register annotation) {
+        String name = annotation.name().equals(Register.no_value)
+                ? clazz.getSimpleName() : annotation.name();
+        return new Entry(name.toLowerCase(), clazz, defaultFactory(clazz, String[].class),  annotation.priority()) {
+            @Override
+            protected boolean handle(String key) {
+                return id.equalsIgnoreCase(key);
+            }
 
-    class ClientEntry extends NamedRegistry<String, Client, Register>.NamedEntry {
-        final String description;
+            final String description;
+            {
+                description = annotation.description();
+            }
 
-        public ClientEntry(Class<? extends Client> clazz, String id, String description, boolean experimental) {
-            super(id, clazz, defaultFactory(clazz, String[].class), experimental);
-            this.description = description;
-        }
+            @Override
+            public String toString() {
+                return String.format("%s: %s", id, description);
+            }
+        };
     }
 }

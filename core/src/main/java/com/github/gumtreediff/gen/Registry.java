@@ -27,8 +27,20 @@ import java.util.*;
 
 public abstract class Registry<K, C, A> {
 
-    private boolean useExperimental = Boolean.parseBoolean(
-            System.getProperty(String.format("gumtree.%s.experimental", getClass().getSimpleName()), "false"));
+    Set<Entry> entries = new TreeSet<>((o1, o2) -> {
+        int cmp = o1.priority - o2.priority;
+        if (cmp == 0)
+            cmp = o1.id.compareToIgnoreCase(o2.id); // FIXME or not ... is id a good unique stuff
+        return cmp;
+    });
+
+    public class Priority {
+        public static final int MAXIMUM = 0;
+        public static final int HIGH = 25;
+        public static final int MEDIUM = 50;
+        public static final int LOW = 75;
+        public static final int MINIMUM = 100;
+    }
 
     public C get(K key, Object... args) {
         Factory<? extends C> factory = getFactory(key);
@@ -48,32 +60,52 @@ public abstract class Registry<K, C, A> {
         Entry entry = findEntry(key);
         if (entry == null)
             return null;
-        if (useExperimental() || !entry.experimental)
-            return entry;
+        return entry;
+    }
+
+    protected Entry findById(String id) {
+        for (Entry e: entries)
+            if (e.id.equals(id))
+                return e;
         return null;
     }
 
-    private boolean useExperimental() {
-        return useExperimental;
+    public void install(Class<? extends C> clazz, A annotation) {
+        Entry entry = newEntry(clazz, annotation);
+        entries.add(entry);
     }
-
-    public abstract void install(Class<? extends C> clazz, A annotation);
 
     protected abstract Entry newEntry(Class<? extends C> clazz, A annotation);
 
-    protected abstract Entry findEntry(K key);
+    protected Entry findEntry(K key) {
+        for (Entry e: entries)
+            if (e.handle(key))
+                return e;
+        return null;
+    }
 
-    protected abstract class Entry {
-        final String id;
+    public Entry findByClass(Class<? extends C> aClass) {
+        for (Entry e: entries)
+            if (e.clazz.equals(aClass))
+                return e;
+        return null;
+    }
+
+    public Set<Entry> getEntries() {
+        return Collections.unmodifiableSet(entries);
+    }
+
+    public abstract class Entry {
+        public final String id;
+        public final int priority;
         final Class<? extends C> clazz;
         final Factory<? extends C> factory;
-        final boolean experimental;
 
-        protected Entry(String id, Class<? extends C> clazz, Factory<? extends C> factory, boolean experimental) {
+        protected Entry(String id, Class<? extends C> clazz, Factory<? extends C> factory, int priority) {
             this.id = id;
             this.clazz = clazz;
             this.factory = factory;
-            this.experimental = experimental;
+            this.priority = priority;
         }
 
         public C instantiate(Object[] args) {
@@ -85,6 +117,11 @@ public abstract class Registry<K, C, A> {
         }
 
         protected abstract boolean handle(K key);
+
+        @Override
+        public String toString() {
+            return id;
+        }
     }
 
     protected Factory<? extends C> defaultFactory(Class<? extends C> clazz, Class... signature) {
@@ -106,51 +143,6 @@ public abstract class Registry<K, C, A> {
                 return newInstance(args);
             } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 return null;
-            }
-        }
-    }
-
-    public abstract static class NamedRegistry<K, C, A> extends Registry<K, C, A> {
-        Map<K, NamedEntry> entries = new LinkedHashMap<>();
-
-        protected abstract K getName(A annotation, Class<? extends C> clazz);
-
-        @Override
-        public void install(Class<? extends C> clazz, A annotation) {
-            K name = getName(annotation, clazz);
-            NamedEntry entry = newEntry(clazz, annotation);
-            entries.put(name, entry);
-        }
-
-        public Set<K> getEntries() {
-            return entries.keySet();
-        }
-
-        protected abstract NamedEntry newEntry(Class<? extends C> clazz, A annotation);
-
-        @Override
-        protected NamedEntry findEntry(K key) {
-            NamedEntry e = entries.get(key);
-            if (e != null && e.handle(key))
-                return e;
-            return null;
-        }
-
-        public String findName(Class<? extends C> aClass) {
-            for (NamedEntry e: entries.values())
-                if (e.getClass().equals(aClass))
-                    return e.id;
-            return null;
-        }
-
-        protected class NamedEntry extends Entry {
-            public NamedEntry(String id, Class<? extends C> clazz, Factory<? extends C> factory, boolean experimental) {
-                super(id, clazz, factory, experimental);
-            }
-
-            @Override
-            protected boolean handle(K key) {
-                return true;
             }
         }
     }

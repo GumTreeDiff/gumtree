@@ -137,5 +137,5 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
 
         abstract ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, List<Action> actions,
                                                                MappingStore mappings) throws IOException;
-    };
+    }
 }

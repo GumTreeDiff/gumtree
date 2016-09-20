@@ -21,6 +21,7 @@
 package com.github.gumtreediff.client;
 
 import com.github.gumtreediff.gen.Generators;
+import com.github.gumtreediff.matchers.Matchers;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -39,10 +40,12 @@ public class List extends Client {
         if (args.length == 0)
             throw new Option.OptionException(SYNTAX);
 
-        Listable listable = Listable.valueOf(args[0].toUpperCase());
-        if (listable == null)
+        try {
+            Listable listable = Listable.valueOf(args[0].toUpperCase());
+            item = listable;
+        } catch (Exception e) {
             throw new Option.OptionException(SYNTAX);
-        item = listable;
+        }
     }
 
     @Override
@@ -54,9 +57,7 @@ public class List extends Client {
         MATCHERS {
             @Override
             Collection<?> list() {
-//                return MatcherFactories.listFactories().stream().map(
-// Class::getEnclosingClass).map(Class::getName).collect(Collectors.toList());
-                return null;
+                return Matchers.getInstance().getEntries();
             }
         },
         GENERATORS {

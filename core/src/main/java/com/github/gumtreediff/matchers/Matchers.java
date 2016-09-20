@@ -23,10 +23,10 @@ package com.github.gumtreediff.matchers;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.tree.ITree;
 
-public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> {
+public class Matchers extends Registry<String, Matcher, Register> {
 
     private static Matchers registry;
-    private Factory<? extends Matcher> defaultMatcherFactory;
+    private Factory<? extends Matcher> defaultMatcherFactory; // FIXME shouln't be removed and use priority instead ?
 
     public static Matchers getInstance() {
         if (registry == null)
@@ -36,12 +36,16 @@ public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> 
 
     private Matchers() {
         install(CompositeMatchers.ClassicGumtree.class);
+        install(CompositeMatchers.ChangeDistiller.class);
+        install(CompositeMatchers.XyMatcher.class);
     }
 
     private void install(Class<? extends Matcher> clazz) {
         Register a = clazz.getAnnotation(Register.class);
         if (a == null)
             throw new RuntimeException("Expecting @Register annotation on " + clazz.getName());
+        if (defaultMatcherFactory == null && a.defaultMatcher())
+            defaultMatcherFactory = defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class);
         install(clazz, a);
     }
 
@@ -53,17 +57,19 @@ public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> 
         return defaultMatcherFactory.instantiate(new Object[]{src, dst, new MappingStore()});
     }
 
-    @Override
     protected String getName(Register annotation, Class<? extends Matcher> clazz) {
         return annotation.id();
     }
 
     @Override
-    protected Registry.NamedRegistry<String, Matcher, Register>.NamedEntry newEntry(
-            Class<? extends Matcher> clazz, Register annotation) {
-        Factory<? extends Matcher> factory = defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class);
-        if (annotation.defaultMatcher())
-            defaultMatcherFactory = factory;
-        return new NamedEntry(annotation.id(), clazz, factory, annotation.experimental());
+    protected Entry newEntry(Class<? extends Matcher> clazz, Register annotation) {
+        return new Entry(annotation.id(), clazz,
+                defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class), annotation.priority()) {
+
+            @Override
+            protected boolean handle(String key) {
+                return annotation.id().equals(key); // Fixme remove
+            }
+        };
     }
 }

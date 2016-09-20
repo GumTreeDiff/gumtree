@@ -21,6 +21,7 @@
 package com.github.gumtreediff.client.diff;
 
 import com.github.gumtreediff.client.Option;
+import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
@@ -28,7 +29,7 @@ import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.matchers.Matcher;
 
 @Register(name = "axmldiff", description = "Dump annotated xml tree",
-        experimental = true, options = AbstractDiffClient.Options.class)
+        priority = Registry.Priority.LOW, options = AbstractDiffClient.Options.class)
 public class AnnotatedXmlDiff extends AbstractDiffClient<AnnotatedXmlDiff.Options> {
 
     public AnnotatedXmlDiff(String[] args) {
