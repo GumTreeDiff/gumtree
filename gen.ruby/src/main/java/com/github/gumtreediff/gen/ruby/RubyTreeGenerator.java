@@ -21,6 +21,7 @@
 package com.github.gumtreediff.gen.ruby;
 
 import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
@@ -32,7 +33,7 @@ import org.jrubyparser.parser.ParserConfiguration;
 import java.io.IOException;
 import java.io.Reader;
 
-@Register(id = "ruby-jruby", accept = {"\\.ruby$", "\\.rb$"})
+@Register(id = "ruby-jruby", accept = {"\\.ruby$", "\\.rb$"}, priority = Registry.Priority.MAXIMUM)
 public class RubyTreeGenerator extends TreeGenerator {
 
     public TreeContext generate(Reader r) throws IOException {

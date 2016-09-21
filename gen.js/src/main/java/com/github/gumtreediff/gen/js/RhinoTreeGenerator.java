@@ -20,6 +20,7 @@
 package com.github.gumtreediff.gen.js;
 
 import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
 import org.mozilla.javascript.CompilerEnvirons;
@@ -29,7 +30,7 @@ import org.mozilla.javascript.ast.AstRoot;
 import java.io.IOException;
 import java.io.Reader;
 
-@Register(id = "js-rhino", accept = "\\.js$")
+@Register(id = "js-rhino", accept = "\\.js$", priority = Registry.Priority.MAXIMUM)
 public class RhinoTreeGenerator extends TreeGenerator {
 
     public TreeContext generate(Reader r) throws IOException {

@@ -1,6 +1,7 @@
 package com.github.gumtreediff.gen.css;
 
 import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.TreeContext;
@@ -19,7 +20,7 @@ import com.helger.css.reader.CSSReaderSettings;
 import javax.annotation.Nullable;
 import java.io.*;
 
-@Register(id = "css-phcss", accept = {"\\.css"})
+@Register(id = "css-phcss", accept = {"\\.css$"}, priority = Registry.Priority.MAXIMUM)
 public class CssTreeGenerator extends TreeGenerator {
 
     public TreeContext generate(Reader r) throws IOException {
