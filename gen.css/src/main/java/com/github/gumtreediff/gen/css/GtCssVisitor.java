@@ -9,6 +9,8 @@ import com.helger.css.ICSSWriterSettings;
 import com.helger.css.decl.*;
 import com.helger.css.decl.visit.ICSSVisitor;
 import com.helger.css.writer.CSSWriterSettings;
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -32,7 +34,7 @@ public class GtCssVisitor implements ICSSVisitor {
         this.sheet = sheet;
         this.ctx = new TreeContext();
         this.trees = new Stack<>();
-        ITree root = this.ctx.createTree(1, "", "CascadingStyleSheet");
+        ITree root = this.ctx.createTree(hashCode(sheet), "", "CascadingStyleSheet");
         setLocation(root, sheet);
         this.ctx.setRoot(root);
         this.trees.push(root);
@@ -51,6 +53,10 @@ public class GtCssVisitor implements ICSSVisitor {
         t.setLength(length);
     }
 
+    private int hashCode(ICSSSourceLocationAware a) {
+        return a.getClass().getName().hashCode();
+    }
+
     @Override
     public void begin() {
     }
@@ -58,7 +64,7 @@ public class GtCssVisitor implements ICSSVisitor {
     @Override
     public void onImport(@Nonnull CSSImportRule i) {
         //TODO add media nodes
-        ITree t = ctx.createTree(8, i.getAsCSSString(settings, 0), "CSSImportRule");
+        ITree t = ctx.createTree(hashCode(i), i.getAsCSSString(settings, 0), "CSSImportRule");
         t.setParentAndUpdateChildren(trees.peek());
         setLocation(t, i);
     }
@@ -70,11 +76,11 @@ public class GtCssVisitor implements ICSSVisitor {
 
     @Override
     public void onDeclaration(@Nonnull CSSDeclaration d) {
-        ITree t = ctx.createTree(3, d.getProperty(), "CSSDeclaration");
+        ITree t = ctx.createTree(hashCode(d), d.getProperty(), "CSSDeclaration");
         t.setParentAndUpdateChildren(trees.peek());
         setLocation(t, d);
         CSSExpression e = d.getExpression();
-        ITree c = ctx.createTree(4, e.getAsCSSString(settings, 0), "CSSExpression");
+        ITree c = ctx.createTree(hashCode(e), e.getAsCSSString(settings, 0), "CSSExpression");
         c.setParentAndUpdateChildren(t);
         setLocation(c, e);
         //TODO handle expression members.
@@ -89,7 +95,7 @@ public class GtCssVisitor implements ICSSVisitor {
 
     @Override
     public void onBeginStyleRule(@Nonnull CSSStyleRule s) {
-        ITree t = ctx.createTree(2, "", "CSSStyleRule");
+        ITree t = ctx.createTree(hashCode(s), "", "CSSStyleRule");
         setLocation(t, s);
         t.setParentAndUpdateChildren(trees.peek());
         trees.push(t);
@@ -97,7 +103,7 @@ public class GtCssVisitor implements ICSSVisitor {
 
     @Override
     public void onStyleRuleSelector(@Nonnull CSSSelector s) {
-        ITree t = ctx.createTree(5, s.getAsCSSString(settings, 0), "CSSSelector");
+        ITree t = ctx.createTree(hashCode(s), s.getAsCSSString(settings, 0), "CSSSelector");
         t.setParentAndUpdateChildren(trees.peek());
         setLocation(t, s);
     }
