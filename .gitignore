@@ -9,3 +9,4 @@ samples/
 *.iml
 .gradle/
 build/
+.vagrant/
