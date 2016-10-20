@@ -1,12 +1,8 @@
 package com.github.gumtreediff.tree.merge;
 
-import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Pair;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class Pcs {
@@ -59,53 +55,6 @@ public class Pcs {
         return result;
     }
 
-    public static Set<Pcs> star(Set<Pcs> pcses, Map<ITree, ITree> references) {
-        Set<Pcs> result = new HashSet<>();
-        for (Pcs pcs : pcses) {
-            result.add(new Pcs(
-                    references.get(pcs.getRoot()),
-                    references.get(pcs.getPredecessor()),
-                    references.get(pcs.getSuccessor())
-            ));
-        }
-        return result;
-    }
-
-    public static Set<Pair<Pcs, Pcs>> getInconsistencies(Set<Pcs> base, Set<Pcs> left, Set<Pcs> right) {
-        Set<Pcs> all = new HashSet<>();
-        all.addAll(base);
-        all.addAll(left);
-        all.addAll(right);
-        Set<Pair<Pcs, Pcs>> inconsistent = new HashSet<>();
-        Set<Pcs> ignored = new HashSet<>();
-        for (Pcs pcs : all) {
-            if (!ignored.contains(pcs)) {
-                Pcs other = getOther(pcs, all);
-                if (other == null)
-                    continue;
-                if (base.contains(other))
-                    ignored.add(other);
-                else if (base.contains(pcs))
-                    ignored.add(pcs);
-                else
-                    inconsistent.add(new Pair<>(pcs, other));
-            }
-        }
-        return inconsistent;
-    }
-
-    private static Pcs getOther(Pcs orig, Set<Pcs> all) {
-        for (Pcs pcs : all) {
-            if (orig.root == pcs.root && orig.predecessor == pcs.predecessor && orig.successor != pcs.successor)
-                return pcs;
-            if (orig.root == pcs.root && orig.predecessor != pcs.predecessor && orig.successor == pcs.successor)
-                return pcs;
-            if (orig.root != pcs.root && orig.predecessor == pcs.predecessor && orig.successor == pcs.successor)
-                return pcs;
-        }
-        return null;
-    }
-
     public static Set<Pcs> fromTree(ITree tree) {
         Set<Pcs> result = new HashSet<>();
         for (ITree t: tree.preOrder()) {
@@ -124,21 +73,15 @@ public class Pcs {
         return result;
     }
 
-    public static Map<ITree, ITree> referenceTrees(ITree base, ITree left, ITree right,
-                                                   MappingStore leftMappings, MappingStore rightMappings) {
-        Map<ITree, ITree> result = new HashMap<>();
-        for (ITree t: base.preOrder())
-            result.put(t, t);
-        referenceTrees(left, leftMappings, result);
-        referenceTrees(right, rightMappings, result);
-        return result;
-    }
-
-    private static void referenceTrees(ITree tree, MappingStore mappings, Map<ITree, ITree> result) {
-        for (ITree t: tree.preOrder())
-            if (mappings.hasDst(t))
-                result.put(t, mappings.getSrc(t));
-            else
-                result.put(t, t);
+    public Pcs getOther(Set<Pcs> all) {
+        for (Pcs pcs : all) {
+            if (root == pcs.root && predecessor == pcs.predecessor && successor != pcs.successor)
+                return pcs;
+            if (root == pcs.root && predecessor != pcs.predecessor && successor == pcs.successor)
+                return pcs;
+            if (root != pcs.root && predecessor == pcs.predecessor && successor == pcs.successor)
+                return pcs;
+        }
+        return null;
     }
 }

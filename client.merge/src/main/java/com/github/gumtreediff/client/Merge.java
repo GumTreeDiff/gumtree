@@ -4,10 +4,10 @@ package com.github.gumtreediff.client;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.merge.Pcs;
+import com.github.gumtreediff.tree.merge.PcsMerge;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -21,9 +21,6 @@ public class Merge extends Client {
     private TreeContext base;
     private TreeContext left;
     private TreeContext right;
-
-    private Matcher leftMatcher;
-    private Matcher rightMatcher;
 
     public static class Options implements Option.Context {
         protected String matcher;
@@ -89,18 +86,9 @@ public class Merge extends Client {
         final Matcher matchLeft = matchTrees(base, left);
         final Matcher matchRight = matchTrees(base, right);
 
-        Set<Pcs> t0 = Pcs.fromTree(base.getRoot());
-        Set<Pcs> t1 = Pcs.fromTree(left.getRoot());
-        Set<Pcs> t2 = Pcs.fromTree(right.getRoot());
+        PcsMerge merge = new PcsMerge(base, left, right, matchLeft, matchRight);
 
-        Map<ITree, ITree> references = Pcs.referenceTrees(
-                base.getRoot(), left.getRoot(), right.getRoot(),
-                matchLeft.getMappings(), matchRight.getMappings());
-
-        Set<Pair<Pcs, Pcs>> inconsistencies = Pcs.getInconsistencies(
-                Pcs.star(t0, references), Pcs.star(t1, references), Pcs.star(t2, references));
-
-        for (Pair<Pcs, Pcs> inconsistency : inconsistencies) {
+        for (Pair<Pcs, Pcs> inconsistency : merge.computeMerge()) {
             System.out.println(inconsistency);
         }
     }
