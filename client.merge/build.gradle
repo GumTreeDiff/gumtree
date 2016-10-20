@@ -1,0 +1,5 @@
+description = 'GumTree merge client'
+
+dependencies {
+    compile project(':client')
+}

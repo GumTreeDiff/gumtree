@@ -3,7 +3,6 @@ package com.github.gumtreediff.tree.merge;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Pair;
-import com.github.gumtreediff.tree.Tree;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,9 +59,9 @@ public class Pcs {
         return result;
     }
 
-    public static Set<Pcs> star(Set<Pcs> pcses, Map<Tree, Tree> references) {
+    public static Set<Pcs> star(Set<Pcs> pcses, Map<ITree, ITree> references) {
         Set<Pcs> result = new HashSet<>();
-        for(Pcs pcs : pcses) {
+        for (Pcs pcs : pcses) {
             result.add(new Pcs(
                     references.get(pcs.getRoot()),
                     references.get(pcs.getPredecessor()),
@@ -79,7 +78,7 @@ public class Pcs {
         all.addAll(right);
         Set<Pair<Pcs, Pcs>> inconsistent = new HashSet<>();
         Set<Pcs> ignored = new HashSet<>();
-        for(Pcs pcs : all) {
+        for (Pcs pcs : all) {
             if (!ignored.contains(pcs)) {
                 Pcs other = getOther(pcs, all);
                 if (other == null)
@@ -96,7 +95,7 @@ public class Pcs {
     }
 
     private static Pcs getOther(Pcs orig, Set<Pcs> all) {
-        for(Pcs pcs : all) {
+        for (Pcs pcs : all) {
             if (orig.root == pcs.root && orig.predecessor == pcs.predecessor && orig.successor != pcs.successor)
                 return pcs;
             if (orig.root == pcs.root && orig.predecessor != pcs.predecessor && orig.successor == pcs.successor)
@@ -109,7 +108,7 @@ public class Pcs {
 
     public static Set<Pcs> fromTree(ITree tree) {
         Set<Pcs> result = new HashSet<>();
-        for(ITree t: tree.preOrder()) {
+        for (ITree t: tree.preOrder()) {
             int size = t.getChildren().size();
             for (int i = 0; i < size; i++) {
                 ITree c = t.getChild(i);
@@ -125,9 +124,10 @@ public class Pcs {
         return result;
     }
 
-    public static Map<ITree, ITree> referenceTrees(ITree base, ITree left, ITree right, MappingStore leftMappings, MappingStore rightMappings) {
+    public static Map<ITree, ITree> referenceTrees(ITree base, ITree left, ITree right,
+                                                   MappingStore leftMappings, MappingStore rightMappings) {
         Map<ITree, ITree> result = new HashMap<>();
-        for(ITree t: base.preOrder())
+        for (ITree t: base.preOrder())
             result.put(t, t);
         referenceTrees(left, leftMappings, result);
         referenceTrees(right, rightMappings, result);
@@ -135,7 +135,7 @@ public class Pcs {
     }
 
     private static void referenceTrees(ITree tree, MappingStore mappings, Map<ITree, ITree> result) {
-        for(ITree t: tree.preOrder())
+        for (ITree t: tree.preOrder())
             if (mappings.hasDst(t))
                 result.put(t, mappings.getSrc(t));
             else

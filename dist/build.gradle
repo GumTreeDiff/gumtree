@@ -15,6 +15,7 @@ description = 'GumTree whole distribution.'
 dependencies {
 	compile project(':client')
 	compile project(':client.diff')
+	compile project(':client.merge')
 	compile project(':gen.antlr')
 	compile project(':gen.antlr-antlr')
 	compile project(':gen.antlr-json')
