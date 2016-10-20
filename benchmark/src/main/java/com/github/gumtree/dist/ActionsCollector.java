@@ -102,8 +102,8 @@ public class ActionsCollector {
             String ref = Paths.get(REF_DIR, refPath.getFileName().toString()).toString();
             if (!contentEquals(new StringReader(w.toString()), new FileReader(ref))) {
                 dirty = true;
-                b.append("Content not equals for: " + ref + ". Now " + countLines(new StringReader(w.toString())) +
-                        "Was " + countLines(new FileReader(ref)) + "\n");
+                b.append(String.format("Content not equals for: %s. Now: %d Was: %d\n",
+                        ref, countLines(new StringReader(w.toString())), countLines(new FileReader(ref))));
             }
         }
         if (dirty) {
@@ -113,7 +113,7 @@ public class ActionsCollector {
     }
 
     public static boolean contentEquals(Reader cur, Reader ref) throws IOException  {
-        try(Reader _cur = cur; Reader _ref = ref) {
+        try (Reader _cur = cur; Reader _ref = ref) {
             int ch = _cur.read();
             while (-1 != ch) {
                 int ch2 = _ref.read();

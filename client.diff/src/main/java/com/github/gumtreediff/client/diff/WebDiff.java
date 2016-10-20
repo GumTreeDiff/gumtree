@@ -100,7 +100,7 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         try {
             while (!Thread.currentThread().isInterrupted())
                 Thread.sleep(5000);
-        } catch (Throwable ignored) { }
+        } catch (Throwable ignored) { /* This is expected */ }
     }
 
 }
