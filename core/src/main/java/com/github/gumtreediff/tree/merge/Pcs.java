@@ -1,9 +1,12 @@
 package com.github.gumtreediff.tree.merge;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.tree.TreeContext;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Pcs {
     private ITree root;
@@ -47,6 +50,10 @@ public class Pcs {
         return "(" + root + "," + predecessor + "," + successor + ")";
     }
 
+    public String toPrettyString(TreeContext ctx) {
+        return "(" + ctx.toPrettyString(root) + "," + ctx.toPrettyString(predecessor) + "," + ctx.toPrettyString(successor) + ")";
+    }
+
     @Override
     public int hashCode() {
         int result = root != null ? root.hashCode() : 0;
@@ -83,5 +90,12 @@ public class Pcs {
                 return pcs;
         }
         return null;
+    }
+
+    public static final String inspect(Set<Pcs> set, TreeContext context) {
+        return set.stream().map(p -> p.toPrettyString(context)).collect(Collectors.joining(", "));
+    }
+    public static final String inspect(Pair<Pcs, Pcs> pair, TreeContext context) {
+        return pair.inspect(p -> p.toPrettyString(context), p -> p.toPrettyString(context));
     }
 }

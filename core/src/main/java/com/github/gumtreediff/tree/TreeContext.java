@@ -61,6 +61,12 @@ public class TreeContext {
         return tl;
     }
 
+    public String toPrettyString(ITree tree) {
+        if (null == tree)
+            return "null";
+        return tree.toPrettyString(this);
+    }
+
     protected void registerTypeLabel(int type, String name) {
         if (name == null || name.equals(ITree.NO_LABEL))
             return;
@@ -181,6 +187,13 @@ public class TreeContext {
         newContext.metadata.putAll(metadata);
         newContext.serializers.addAll(serializers);
         return newContext;
+    }
+
+    public TreeContext merge(TreeContext other) { // FIXME or not, what if context are not compatible
+        typeLabels.putAll(other.typeLabels);
+        metadata.putAll(other.metadata);
+        serializers.addAll(other.serializers);
+        return this;
     }
 
     /**

@@ -20,6 +20,8 @@
 
 package com.github.gumtreediff.tree;
 
+import java.util.function.Function;
+
 public class Pair<T1, T2> {
 
     public final T1 first;
@@ -54,7 +56,11 @@ public class Pair<T1, T2> {
 
     @Override
     public String toString() {
-        return "(" + getFirst().toString() + "," + getSecond().toString() + ")";
+        return "(" + getFirst().toString() + ", " + getSecond().toString() + ")";
+    }
+
+    public final String inspect(Function<T1, String> f1, Function<T2, String> f2) {
+       return "(" + f1.apply(first) + ", "+ f2.apply(second) + ")";
     }
 
 }

@@ -9,6 +9,7 @@ import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.merge.Pcs;
 import com.github.gumtreediff.tree.merge.PcsMerge;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
@@ -28,6 +29,13 @@ public class Merge extends Client {
         protected String base;
         protected String left;
         protected String right;
+        protected String root;
+
+        public String fileName(String name) {
+            if (new File(name).isAbsolute())
+                return name;
+            return root + File.separator + name;
+        }
 
         @Override
         public Option[] values() {
@@ -42,6 +50,12 @@ public class Merge extends Client {
                         @Override
                         protected void process(String name, String[] args) {
                             generators.add(args[0]);
+                        }
+                    },
+                    new Option("-r", "Preprent root to all (non absolute) file names", 1)  {
+                        @Override
+                        protected void process(String name, String[] args) {
+                            root = args[0];
                         }
                     },
                     new Option.Help(this) {
@@ -83,13 +97,17 @@ public class Merge extends Client {
         left = getTreeContext(opts.left);
         right = getTreeContext(opts.right);
 
+        TreeContext fakeContext = new TreeContext().merge(base).merge(left).merge(right);
+
         final Matcher matchLeft = matchTrees(base, left);
         final Matcher matchRight = matchTrees(base, right);
 
         PcsMerge merge = new PcsMerge(base, left, right, matchLeft, matchRight);
 
-        for (Pair<Pcs, Pcs> inconsistency : merge.computeMerge()) {
-            System.out.println(inconsistency);
+        Set<Pair<Pcs, Pcs>> inconsistencies = merge.computeMerge();
+        System.err.printf("Inconsistencies count: %d\n", inconsistencies.size());
+        for (Pair<Pcs, Pcs> inconsistency : inconsistencies) {
+            System.err.println(Pcs.inspect(inconsistency, fakeContext));
         }
     }
 
@@ -104,7 +122,7 @@ public class Merge extends Client {
 
     private TreeContext getTreeContext(String file) {
         try {
-            TreeContext t = Generators.getInstance().getTree(file);
+            TreeContext t = Generators.getInstance().getTree(opts.fileName(file));
             return t;
         } catch (IOException e) {
             e.printStackTrace();
