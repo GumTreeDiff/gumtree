@@ -6,10 +6,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PcsMerge {
 
@@ -44,19 +41,11 @@ public class PcsMerge {
         delta.addAll(t0_star);
         delta.addAll(t1_star);
         delta.addAll(t2_star);
-
-        System.out.println("T0: " + Pcs.inspect(t0_star, fakeContext));
-        System.out.println("T1: " + Pcs.inspect(t1_star, fakeContext));
-        System.out.println("T2: " + Pcs.inspect(t2_star, fakeContext));
-        System.out.println("Delta: " + Pcs.inspect(delta, fakeContext));
         HashSet<Pcs> deltaT1 = new HashSet<>(t1_star);
         deltaT1.removeAll(t0_star);
         HashSet<Pcs> deltaT2 = new HashSet<>(t2_star);
         deltaT2.removeAll(t0_star);
-        System.out.println("DT1: " + Pcs.inspect(deltaT1, fakeContext));
-        System.out.println("DT2: " + Pcs.inspect(deltaT2, fakeContext));
-
-        return getInconsistencies(t0, delta);
+        return getInconsistencies(t0_star, delta);
     }
 
     Set<Pcs> star(Set<Pcs> pcses, Map<ITree, ITree> references) {
@@ -75,17 +64,22 @@ public class PcsMerge {
         Set<Pair<Pcs, Pcs>> inconsistent = new HashSet<>();
         Set<Pcs> ignored = new HashSet<>();
         for (Pcs pcs: all) {
-            if (!ignored.contains(pcs)) {
-                Pcs other = pcs.getOther(all);
+                if (ignored.contains(pcs))
+                    continue;
+                Pcs other = null;
+                other = pcs.getOtherRoot(all, ignored);
+                if (other == null)
+                    other = pcs.getOtherPredecessor(all, ignored);
+                if (other == null )
+                    other = pcs.getOtherSuccessor(all, ignored);
                 if (other == null)
                     continue;
-                if (base.contains(other))
-                    ignored.add(other);
-                else if (base.contains(pcs))
+                if (base.contains(pcs))
                     ignored.add(pcs);
+                else if (base.contains(other))
+                    ignored.add(other);
                 else
                     inconsistent.add(new Pair<>(pcs, other));
-            }
         }
         return inconsistent;
     }

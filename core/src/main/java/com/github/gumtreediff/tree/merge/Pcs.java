@@ -94,6 +94,37 @@ public class Pcs {
         return null;
     }
 
+    public Pcs getOtherSuccessor(Set<Pcs> all, Set<Pcs> ignored) {
+        for (Pcs pcs : all) {
+            if (ignored.contains(pcs))
+                continue;
+            if (root == pcs.root && predecessor == pcs.predecessor && successor != pcs.successor)
+                return pcs;
+        }
+        return null;
+    }
+
+    public Pcs getOtherPredecessor(Set<Pcs> all, Set<Pcs> ignored) {
+        for (Pcs pcs : all) {
+            if (ignored.contains(pcs))
+                continue;
+            if (root == pcs.root && predecessor != pcs.predecessor && successor == pcs.successor)
+                return pcs;
+        }
+        return null;
+    }
+
+    public Pcs getOtherRoot(Set<Pcs> all, Set<Pcs> ignored) {
+        for (Pcs pcs : all) {
+            if (ignored.contains(pcs))
+                continue;
+            if (root != pcs.root && predecessor == pcs.predecessor && successor == pcs.successor)
+                if (predecessor != null && successor != null)
+                    return pcs;
+        }
+        return null;
+    }
+
     public static final String inspect(Set<Pcs> set, TreeContext context) {
         return set.stream().map(p -> p.toPrettyString(context)).collect(Collectors.joining(", "));
     }
