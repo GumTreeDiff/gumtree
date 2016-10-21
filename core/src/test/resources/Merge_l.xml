@@ -1,0 +1,11 @@
+<tree type="0" label="R">
+    <tree type="0" label="b">
+        <tree type="0" label="g"/>
+    </tree>
+    <tree type="0" label="a">
+        <tree type="0" label="d"/>
+        <tree type="0" label="e"/>
+        <tree type="0" label="f"/>
+    </tree>
+    <tree type="0" label="i"/>
+</tree>

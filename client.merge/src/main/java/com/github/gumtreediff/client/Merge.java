@@ -32,9 +32,13 @@ public class Merge extends Client {
         protected String root;
 
         public String fileName(String name) {
+            // FIXME: this code needs to be removed.
+            /*
             if (new File(name).isAbsolute())
                 return name;
             return root + File.separator + name;
+            */
+            return name;
         }
 
         @Override

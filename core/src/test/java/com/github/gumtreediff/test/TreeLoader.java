@@ -21,9 +21,7 @@
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Pair;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.*;
 
 import java.io.IOException;
 
@@ -49,6 +47,10 @@ public class TreeLoader {
 
     public static Pair<TreeContext, TreeContext> getDummyPair() {
         return new Pair<>(load("/Dummy_v0.xml"), load("/Dummy_v1.xml"));
+    }
+
+    public static Triple<TreeContext, TreeContext, TreeContext> getMergeTriple() {
+        return new Triple<>(load("/Merge_b.xml"), load("/Merge_l.xml"), load("/Merge_r.xml"));
     }
 
     public static ITree getDummySrc() {

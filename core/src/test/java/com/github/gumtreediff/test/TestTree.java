@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
@@ -41,6 +42,16 @@ public class TestTree {
         assertTrue(nodes.get(2).getLabel().equals("c"));
         assertTrue(nodes.get(3).getLabel().equals("d"));
         assertTrue(nodes.get(4).getLabel().equals("e"));
+    }
+
+    @Test
+    public void testTreeAt() {
+        ITree root = TreeLoader.getDummySrc();
+        assertEquals("a", root.treeAt(new int []{}).getLabel());
+        assertEquals("b", root.treeAt(new int []{0}).getLabel());
+        assertEquals("c", root.treeAt(new int []{0, 0}).getLabel());
+        assertEquals("d", root.treeAt(new int []{0, 1}).getLabel());
+        assertEquals("e", root.treeAt(new int []{1}).getLabel());
     }
 
     @Test

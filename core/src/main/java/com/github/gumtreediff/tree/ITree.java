@@ -57,6 +57,8 @@ public interface ITree {
      */
     public abstract int getChildPosition(ITree child);
 
+    ITree treeAt(int[] path);
+
     public abstract List<ITree> getChildren();
 
     public abstract ITree getChild(int position);

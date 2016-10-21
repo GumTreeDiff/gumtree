@@ -94,6 +94,13 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
+    public ITree treeAt(int[] path) {
+        if (path.length == 0)
+                return this;
+        return this.getChild(path[0]).treeAt(Arrays.copyOfRange(path, 1, path.length));
+    }
+
+    @Override
     public ITree getParent() {
         return parent;
     }
