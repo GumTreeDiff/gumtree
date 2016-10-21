@@ -53,6 +53,10 @@ public class TreeLoader {
         return new Triple<>(load("/Merge_b.xml"), load("/Merge_l.xml"), load("/Merge_r.xml"));
     }
 
+    public static Triple<TreeContext, TreeContext, TreeContext> getConflictTriple() {
+        return new Triple<>(load("/Conflict_b.xml"), load("/Conflict_l.xml"), load("/Conflict_r.xml"));
+    }
+
     public static ITree getDummySrc() {
         return load("/Dummy_v0.xml").getRoot();
     }

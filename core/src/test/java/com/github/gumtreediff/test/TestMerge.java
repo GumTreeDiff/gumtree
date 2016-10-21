@@ -11,6 +11,7 @@ import com.github.gumtreediff.tree.merge.PcsMerge;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.util.Set;
@@ -57,7 +58,34 @@ public class TestMerge {
         Matcher mtr = new FixedMatcher(mr);
         PcsMerge m = new PcsMerge(trees.getFirst(), trees.getSecond(), trees.getThird(), mtl, mtr);
         Set<Pair<Pcs, Pcs>> inconsistencies = m.computeMerge();
-        System.out.println(inconsistencies);
+        assertEquals(0, inconsistencies.size());
+    }
+
+    @Test
+    public void testMergeWithConflict() {
+        Triple<TreeContext, TreeContext, TreeContext> trees = TreeLoader.getConflictTriple();
+        ITree base = trees.getFirst().getRoot();
+        ITree left = trees.getSecond().getRoot();
+        ITree right = trees.getThird().getRoot();
+        MappingStore ml = new MappingStore();
+        ml.link(base, left);
+        Matcher mtl = new FixedMatcher(ml);
+        MappingStore mr = new MappingStore();
+        mr.link(base, right);
+        Matcher mtr = new FixedMatcher(mr);
+        PcsMerge m = new PcsMerge(trees.getFirst(), trees.getSecond(), trees.getThird(), mtl, mtr);
+        Set<Pair<Pcs, Pcs>> inconsistencies = m.computeMerge();
+        assertEquals(3, inconsistencies.size());
+    }
+
+    static class FixedMatcher extends Matcher {
+
+        public FixedMatcher(MappingStore m) {
+            super(null, null, m);
+        }
+
+        @Override
+        public void match() {}
     }
 
 }
