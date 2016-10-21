@@ -60,7 +60,7 @@ public class Pair<T1, T2> {
     }
 
     public final String inspect(Function<T1, String> f1, Function<T2, String> f2) {
-       return "(" + f1.apply(first) + ", "+ f2.apply(second) + ")";
+        return "(" + f1.apply(first) + ", " + f2.apply(second) + ")";
     }
 
 }

@@ -51,7 +51,9 @@ public class Pcs {
     }
 
     public String toPrettyString(TreeContext ctx) {
-        return "(" + ctx.toPrettyString(root) + "," + ctx.toPrettyString(predecessor) + "," + ctx.toPrettyString(successor) + ")";
+        return "(" + ctx.toPrettyString(root) + ","
+                + ctx.toPrettyString(predecessor) + ","
+                + ctx.toPrettyString(successor) + ")";
     }
 
     @Override
@@ -95,6 +97,7 @@ public class Pcs {
     public static final String inspect(Set<Pcs> set, TreeContext context) {
         return set.stream().map(p -> p.toPrettyString(context)).collect(Collectors.joining(", "));
     }
+
     public static final String inspect(Pair<Pcs, Pcs> pair, TreeContext context) {
         return pair.inspect(p -> p.toPrettyString(context), p -> p.toPrettyString(context));
     }

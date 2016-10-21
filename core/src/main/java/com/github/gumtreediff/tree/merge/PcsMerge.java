@@ -29,7 +29,7 @@ public class PcsMerge {
     }
 
     public Set<Pair<Pcs, Pcs>> computeMerge() {
-        TreeContext fakeContext = new TreeContext().merge(baseTree).merge(leftTree).merge(rightTree);
+        final TreeContext fakeContext = new TreeContext().merge(baseTree).merge(leftTree).merge(rightTree);
 
         Set<Pcs> t0 = Pcs.fromTree(baseTree.getRoot());
         Set<Pcs> t1 = Pcs.fromTree(leftTree.getRoot());
@@ -53,8 +53,8 @@ public class PcsMerge {
         deltaT1.removeAll(t0_star);
         HashSet<Pcs> deltaT2 = new HashSet<>(t2_star);
         deltaT2.removeAll(t0_star);
-        System.out.println("DT1: "+ Pcs.inspect(deltaT1, fakeContext));
-        System.out.println("DT2: "+ Pcs.inspect(deltaT2, fakeContext));
+        System.out.println("DT1: " + Pcs.inspect(deltaT1, fakeContext));
+        System.out.println("DT2: " + Pcs.inspect(deltaT2, fakeContext));
 
         return getInconsistencies(t0, delta);
     }
