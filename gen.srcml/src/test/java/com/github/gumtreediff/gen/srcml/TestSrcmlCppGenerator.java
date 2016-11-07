@@ -29,22 +29,22 @@ public class TestSrcmlCppGenerator {
 
     @Test
     public void testSimple() throws IOException {
-        String input = "\n" +
-                "namespace R {\n" +
-                "template <typename T>\n" +
-                "static inline void print_array(T *__recv){\n" +
-                "   int len = LEN(__recv);\n" +
-                "   fprintf(stdout, \"%d:%d [\", TYPE(__recv), len);\n" +
-                "   for(int i = 0; i < len; i++)\n" +
-                "       print_item(__recv, i);\n" +
-                "   fprintf(stdout, \" ]\\n\");\n" +
-                "}\n" +
-                "\n" +
-                "template <typename T>\n" +
-                "static inline void print_item(T *__recv, int idx){\n" +
-                "   fprintf(stdout, \" %x\", GET(__recv, idx));\n" +
-                "}\n" +
-                "}";
+        String input = "\n"
+                + "namespace R {\n"
+                + "template <typename T>\n"
+                + "static inline void print_array(T *__recv){\n"
+                + "   int len = LEN(__recv);\n"
+                + "   fprintf(stdout, \"%d:%d [\", TYPE(__recv), len);\n"
+                + "   for(int i = 0; i < len; i++)\n"
+                + "       print_item(__recv, i);\n"
+                + "   fprintf(stdout, \" ]\\n\");\n"
+                + "}\n"
+                + "\n"
+                + "template <typename T>\n"
+                + "static inline void print_item(T *__recv, int idx){\n"
+                + "   fprintf(stdout, \" %x\", GET(__recv, idx));\n"
+                + "}\n"
+                + "}";
         ITree t = new SrcmlCppTreeGenerator().generateFromString(input).getRoot();
         Assert.assertEquals(148, t.getSize());
     }

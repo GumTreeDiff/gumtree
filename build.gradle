@@ -23,6 +23,8 @@ subprojects {
 		toolVersion = '7.0'
 		configFile = rootProject.file('gumtree_checkstyle.xml')
 		configProperties = [suppressionFile: "${rootProject.file('checkstyle_ignore.xml')}"]
+		ignoreFailures = false
+		showViolations = true
 	}
 
 	dependencies {

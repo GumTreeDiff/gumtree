@@ -29,15 +29,15 @@ public class TestSrcmlCsGenerator {
 
     @Test
     public void testSimple() throws IOException {
-        String input = "using System;\n" +
-                "public class HelloWorld\n" +
-                "{\n" +
-                "    public static void Main()\n" +
-                "    {\n" +
-                "        Console.WriteLine(\"Hello world !\");\n" +
-                "        Console.ReadLine();\n" +
-                "    }\n" +
-                "}";
+        String input = "using System;\n"
+                + "public class HelloWorld\n"
+                + "{\n"
+                + "public static void Main()\n"
+                + "{\n"
+                + "Console.WriteLine(\"Hello world !\");\n"
+                + "Console.ReadLine();\n"
+                + "}\n"
+                + "}";
         ITree t = new SrcmlCsTreeGenerator().generateFromString(input).getRoot();
         Assert.assertEquals(34, t.getSize());
     }
