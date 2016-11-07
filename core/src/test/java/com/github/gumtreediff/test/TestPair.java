@@ -14,19 +14,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
- * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2016 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.matchers;
+package com.github.gumtreediff.test;
 
-import com.github.gumtreediff.tree.ITree;
+
 import com.github.gumtreediff.utils.Pair;
+import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
-public class Mapping extends Pair<ITree, ITree> {
+public class TestPair {
 
-    public Mapping(ITree a, ITree b) {
-        super(a, b);
+    @Test
+    public void testEquals() {
+        Pair<String, String> p1 = new Pair<>(new String("a"), new String("b"));
+        Pair<String, String> p2 = new Pair<>(new String("a"), new String("b"));
+        Pair<String, String> p3 = new Pair<>(new String("b"), new String("a"));
+        assertTrue(p1.equals(p2));
+        assertTrue(!p1.equals(p3));
     }
 
 }

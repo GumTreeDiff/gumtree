@@ -22,14 +22,12 @@ package com.github.gumtreediff.tree;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.github.gumtreediff.matchers.Mapping;
-import com.github.gumtreediff.matchers.Mapping;
+import com.github.gumtreediff.utils.Pair;
 
 public final class TreeUtils {
 

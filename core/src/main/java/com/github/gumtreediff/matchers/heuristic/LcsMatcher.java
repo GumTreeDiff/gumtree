@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.matchers.heuristic;
 
-import com.github.gumtreediff.algo.StringAlgorithms;
+import com.github.gumtreediff.utils.StringAlgorithms;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Register;
