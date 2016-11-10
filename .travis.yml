@@ -8,9 +8,11 @@ before_script:
   - tar -xvf /tmp/cgum_latest_ubuntu_x86-64.tar.gz
   - export PATH=$PATH:$PWD/cgum/
 script: ./gradlew -Dgumtree.cgum.path=./cgum/cgum check
+after_success:
+  - ./gradlew coveralls uploadArchives
 language: java
 jdk:
-- oraclejdk8
+  - oraclejdk8
 deploy:
   provider: bintray
   on:
