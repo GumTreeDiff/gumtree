@@ -1,5 +1,3 @@
-
-
 buildscript {
 	repositories {
 		mavenCentral()
@@ -47,21 +45,6 @@ subprojects {
 	}
 }
 
-configure(subprojects.findAll { !(it.name in ['dist', 'benchmark', 'client', 'client.diff']) }) {
-	apply plugin: 'jacoco'
-	jacoco {
-		toolVersion = '0.7.7.201606060606'
-	}
-
-	jacocoTestReport {
-		reports {
-			html.enabled = true
-			xml.enabled = true
-			csv.enabled = false
-		}
-	}
-}
-
 configure(subprojects.findAll {it.name != 'core'}) {
 	dependencies {
 		compile project(':core')
@@ -84,40 +67,54 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr') }) {
 
 def jacocoProjectsNames = ['core', 'gen.jdt', 'gen.c', 'gen.ruby', 'gen.js', 'gen.srcml', 'gen.css']
 def jacocoProjects = subprojects.findAll { it.name in jacocoProjectsNames}
+configure(jacocoProjects) {
+	apply plugin: 'jacoco'
+	jacoco {
+		toolVersion = '0.7.7.201606060606'
+	}
+
+	jacocoTestReport {
+		reports {
+			html.enabled = true
+			xml.enabled = true
+			csv.enabled = false
+		}
+	}
+}
 
 task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
-  description = 'Generates an aggregate report from all subprojects'
-  dependsOn(jacocoProjects.test)
+	description = 'Generates an aggregate report from all subprojects'
+	dependsOn(jacocoProjects.test)
 
-  additionalSourceDirs = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-  sourceDirectories = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-  classDirectories = files(jacocoProjects.sourceSets.main.output)
-  executionData = files(jacocoProjects.jacocoTestReport.executionData)
+	additionalSourceDirs = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+	sourceDirectories = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+	classDirectories = files(jacocoProjects.sourceSets.main.output)
+	executionData = files(jacocoProjects.jacocoTestReport.executionData)
 
-  reports {
-    html.enabled = true // human readable
-    xml.enabled = true // required by coveralls
-  }
+	reports {
+		html.enabled = true
+		xml.enabled = true
+	}
 }
 
 coveralls {
-  sourceDirs = jacocoProjects.sourceSets.main.allSource.srcDirs.flatten()
-  jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+	sourceDirs = jacocoProjects.sourceSets.main.allSource.srcDirs.flatten()
+	jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
 tasks.coveralls {
-  group = 'Coverage reports'
-  description = 'Uploads the aggregated coverage report to Coveralls'
+	group = 'Coverage reports'
+	description = 'Uploads the aggregated coverage report to Coveralls'
 
-  dependsOn jacocoRootReport
-  onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
+	dependsOn jacocoRootReport
+	onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
 }
 
 evaluationDependsOnChildren();
 
 configure(subprojects) {
-    if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
-	    it.test.enabled = false
+		if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
+			it.test.enabled = false
 }
 
 if (project.hasProperty('mvn')) {
@@ -139,11 +136,11 @@ if (project.hasProperty('mvn')) {
 			archives javadocJar, sourcesJar
 		}
 
-        if (project.isRelease && gradle.taskGraph.hasTask("uploadArchives")) {
-            signing {
-                sign configurations.archives
-            }
-        }
+				if (project.isRelease && gradle.taskGraph.hasTask("uploadArchives")) {
+						signing {
+								sign configurations.archives
+						}
+				}
 
 		uploadArchives {
 			repositories {
