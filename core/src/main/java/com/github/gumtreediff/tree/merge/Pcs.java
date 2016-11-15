@@ -21,6 +21,7 @@
 package com.github.gumtreediff.tree.merge;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.utils.Couple;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -151,5 +152,9 @@ public class Pcs {
 
     public static final String inspect(Pair<Pcs, Pcs> pair, TreeContext context) {
         return pair.inspect(p -> p.toPrettyString(context), p -> p.toPrettyString(context));
+    }
+
+    public static final String inspect(Couple<Pcs, Pcs> couple, TreeContext context) {
+        return couple.inspect(p -> p.toPrettyString(context), p -> p.toPrettyString(context));
     }
 }

@@ -23,6 +23,7 @@ package com.github.gumtreediff.client;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
+import com.github.gumtreediff.utils.Couple;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.merge.Pcs;
@@ -127,10 +128,10 @@ public class Merge extends Client {
 
         PcsMerge merge = new PcsMerge(base, left, right, matchLeft, matchRight);
 
-        Set<Pair<Pcs, Pcs>> inconsistencies = merge.computeMerge();
-        System.err.printf("Inconsistencies count: %d\n", inconsistencies.size());
-        for (Pair<Pcs, Pcs> inconsistency : inconsistencies) {
-            System.err.println(Pcs.inspect(inconsistency, fakeContext));
+        Set<Couple<Pcs, Pcs>> inconsistencies = merge.computeMerge();
+        System.out.printf("Inconsistencies count: %d\n", inconsistencies.size());
+        for (Couple<Pcs, Pcs> inconsistency : inconsistencies) {
+            System.out.println(Pcs.inspect(inconsistency, fakeContext));
         }
     }
 
