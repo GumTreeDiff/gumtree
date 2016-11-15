@@ -31,11 +31,11 @@ public class TestSrcmlJavaGenerator {
 
     @Test
     public void testSimple() throws IOException {
-        String input = "public class HelloWorld {\n" +
-                "    public static void main(String[] args) {\n" +
-                "        System.out.println(\"Hello, World\");\n" +
-                "    }\n" +
-                "}";
+        String input = "public class HelloWorld {\n"
+                + "public static void main(String[] args) {\n"
+                + "System.out.println(\"Hello, World\");\n"
+                + "}\n"
+                + "}";
         TreeContext ctx = new SrcmlJavaTreeGenerator().generateFromString(input);
         ITree t = ctx.getRoot();
         Assert.assertEquals(33, t.getSize());

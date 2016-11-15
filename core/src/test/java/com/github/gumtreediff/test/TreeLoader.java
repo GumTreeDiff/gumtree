@@ -22,6 +22,8 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.*;
+import com.github.gumtreediff.utils.Pair;
+import com.github.gumtreediff.utils.Triple;
 
 import java.io.IOException;
 

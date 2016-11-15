@@ -22,9 +22,7 @@ package com.github.gumtreediff.client.diff.ui.web;
 
 import com.github.gumtreediff.actions.RootAndLeavesClassifier;
 import com.github.gumtreediff.actions.TreeClassifier;
-import com.github.gumtreediff.actions.RootAndLeavesClassifier;
-import com.github.gumtreediff.actions.TreeClassifier;
-import com.github.gumtreediff.algo.StringAlgorithms;
+import com.github.gumtreediff.utils.StringAlgorithms;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;

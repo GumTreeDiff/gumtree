@@ -20,9 +20,8 @@
 
 package com.github.gumtreediff.client.diff.ui.web.views;
 
-import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.io.DirectoryComparator;
-import com.github.gumtreediff.tree.Pair;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;

@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.tree;
+package com.github.gumtreediff.utils;
 
 import java.util.function.Function;
 
@@ -41,17 +41,23 @@ public class Pair<T1, T2> {
         return second;
     }
 
-    public int hashCode() {
-        return first.hashCode() + second.hashCode();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Pair<?, ?> pair = (Pair<?, ?>) o;
+
+        if (!first.equals(pair.first)) return false;
+        return second.equals(pair.second);
+
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof Pair) {
-            Pair<?, ?> p = (Pair<?, ?>) o;
-            return p.getFirst().equals(this.getFirst()) && p.getSecond().equals(this.getSecond());
-        } else
-            return false;
+    public int hashCode() {
+        int result = first.hashCode();
+        result = 31 * result + second.hashCode();
+        return result;
     }
 
     @Override

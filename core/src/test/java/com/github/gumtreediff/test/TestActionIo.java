@@ -26,7 +26,7 @@ import com.github.gumtreediff.io.ActionsIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
-import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Before;
 import org.junit.Test;

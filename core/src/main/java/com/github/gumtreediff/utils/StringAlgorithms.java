@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.algo;
+package com.github.gumtreediff.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;

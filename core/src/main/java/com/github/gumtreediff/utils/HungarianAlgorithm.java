@@ -1,7 +1,3 @@
-package com.github.gumtreediff.algo;
-
-import java.util.Arrays;
-
 /* Copyright (c) 2012 Kevin L. Stern
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,6 +18,10 @@ import java.util.Arrays;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+package com.github.gumtreediff.utils;
+
+import java.util.Arrays;
 
 /**
  * An implementation of the Hungarian algorithm for solving the assignment

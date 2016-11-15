@@ -24,7 +24,7 @@ import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 

@@ -37,7 +37,7 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
 
     private static char[] readerToCharArray(Reader r) throws IOException {
         StringBuilder fileData = new StringBuilder();
-        try(BufferedReader br = new BufferedReader(r)) {
+        try (BufferedReader br = new BufferedReader(r)) {
             char[] buf = new char[10];
             int numRead = 0;
             while ((numRead = br.read(buf)) != -1) {

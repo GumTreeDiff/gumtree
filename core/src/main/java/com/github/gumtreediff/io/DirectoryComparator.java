@@ -20,8 +20,7 @@
 
 package com.github.gumtreediff.io;
 
-import com.github.gumtreediff.tree.Pair;
-import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.utils.Pair;
 
 import java.io.DataInputStream;
 import java.io.File;

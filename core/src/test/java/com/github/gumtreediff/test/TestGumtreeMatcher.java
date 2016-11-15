@@ -25,7 +25,7 @@ import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
-import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 import static org.junit.Assert.*;

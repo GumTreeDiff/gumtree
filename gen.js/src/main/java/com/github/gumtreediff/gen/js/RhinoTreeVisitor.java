@@ -64,7 +64,7 @@ public class RhinoTreeVisitor implements NodeVisitor {
                 NumberLiteral l = (NumberLiteral) node;
                 t.setLabel(l.getValue());
             } else if ( node instanceof Comment) {
-               Comment c = (Comment) node;
+                Comment c = (Comment) node;
                 t.setLabel(c.getValue());
             }
 

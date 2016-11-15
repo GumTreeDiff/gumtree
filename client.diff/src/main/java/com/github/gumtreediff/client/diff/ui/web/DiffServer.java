@@ -20,13 +20,12 @@
 
 package com.github.gumtreediff.client.diff.ui.web;
 
-import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.utils.Pair;
 import fi.iki.elonen.NanoHTTPD;
 import com.github.gumtreediff.client.diff.ui.web.views.DiffView;
 import com.github.gumtreediff.client.diff.ui.web.views.DirectoryComparatorView;
 import com.github.gumtreediff.client.diff.ui.web.views.ScriptView;
 import com.github.gumtreediff.io.DirectoryComparator;
-import com.github.gumtreediff.tree.Pair;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
 

@@ -1,9 +1,29 @@
+/*
+ * This file is part of GumTree.
+ *
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2016 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2016 Floréal Morandat <florealm@gmail.com>
+ */
+
 package com.github.gumtreediff.tree.merge;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.util.*;
@@ -35,17 +55,17 @@ public class PcsMerge {
         Map<ITree, ITree> references = buildReferenceTree();
 
         Set<Pcs> delta = new HashSet<>();
-        Set<Pcs> t0_star = star(t0, references);
-        Set<Pcs> t1_star = star(t1, references);
-        Set<Pcs> t2_star = star(t2, references);
-        delta.addAll(t0_star);
-        delta.addAll(t1_star);
-        delta.addAll(t2_star);
-        HashSet<Pcs> deltaT1 = new HashSet<>(t1_star);
-        deltaT1.removeAll(t0_star);
-        HashSet<Pcs> deltaT2 = new HashSet<>(t2_star);
-        deltaT2.removeAll(t0_star);
-        return getInconsistencies(t0_star, delta);
+        Set<Pcs> t0Star = star(t0, references);
+        Set<Pcs> t1Star = star(t1, references);
+        Set<Pcs> t2Star = star(t2, references);
+        delta.addAll(t0Star);
+        delta.addAll(t1Star);
+        delta.addAll(t2Star);
+        HashSet<Pcs> deltaT1 = new HashSet<>(t1Star);
+        deltaT1.removeAll(t0Star);
+        HashSet<Pcs> deltaT2 = new HashSet<>(t2Star);
+        deltaT2.removeAll(t0Star);
+        return getInconsistencies(t0Star, delta);
     }
 
     Set<Pcs> star(Set<Pcs> pcses, Map<ITree, ITree> references) {
@@ -64,22 +84,22 @@ public class PcsMerge {
         Set<Pair<Pcs, Pcs>> inconsistent = new HashSet<>();
         Set<Pcs> ignored = new HashSet<>();
         for (Pcs pcs: all) {
-                if (ignored.contains(pcs))
-                    continue;
-                Pcs other = null;
-                other = pcs.getOtherRoot(all, ignored);
-                if (other == null)
-                    other = pcs.getOtherPredecessor(all, ignored);
-                if (other == null )
-                    other = pcs.getOtherSuccessor(all, ignored);
-                if (other == null)
-                    continue;
-                if (base.contains(pcs))
-                    ignored.add(pcs);
-                else if (base.contains(other))
-                    ignored.add(other);
-                else
-                    inconsistent.add(new Pair<>(pcs, other));
+            if (ignored.contains(pcs))
+                continue;
+            Pcs other = null;
+            other = pcs.getOtherRoot(all, ignored);
+            if (other == null)
+                other = pcs.getOtherPredecessor(all, ignored);
+            if (other == null )
+                other = pcs.getOtherSuccessor(all, ignored);
+            if (other == null)
+                continue;
+            if (base.contains(pcs))
+                ignored.add(pcs);
+            else if (base.contains(other))
+                ignored.add(other);
+            else
+                inconsistent.add(new Pair<>(pcs, other));
         }
         return inconsistent;
     }
