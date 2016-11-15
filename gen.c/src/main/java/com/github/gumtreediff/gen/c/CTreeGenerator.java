@@ -77,7 +77,10 @@ public class CTreeGenerator extends TreeGenerator {
             while ((line = br.readLine()) != null)
                 buf.append(line + "\n");
             p.waitFor();
-            if (p.exitValue() != 0)  throw new RuntimeException(String.format("cgum Error [%d] %s\n", p.exitValue(), buf.toString()));
+            if (p.exitValue() != 0)
+                throw new RuntimeException(
+                    String.format("cgum Error [%d] %s\n", p.exitValue(), buf.toString())
+                );
             r.close();
             String xml = buf.toString();
             return TreeIoUtils.fromXml(CTreeGenerator.defaultUnserializers).generateFromString(xml);
