@@ -23,6 +23,7 @@ package com.github.gumtreediff.tree.merge;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.utils.Couple;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -45,7 +46,7 @@ public class PcsMerge {
         this.rightMatch = matchRight;
     }
 
-    public Set<Pair<Pcs, Pcs>> computeMerge() {
+    public Set<Couple<Pcs, Pcs>> computeMerge() {
         final TreeContext fakeContext = new TreeContext().merge(baseTree).merge(leftTree).merge(rightTree);
 
         Set<Pcs> t0 = Pcs.fromTree(baseTree.getRoot());
@@ -80,8 +81,8 @@ public class PcsMerge {
         return result;
     }
 
-    Set<Pair<Pcs, Pcs>> getInconsistencies(Set<Pcs> base, Set<Pcs> all) {
-        Set<Pair<Pcs, Pcs>> inconsistent = new HashSet<>();
+    Set<Couple<Pcs, Pcs>> getInconsistencies(Set<Pcs> base, Set<Pcs> all) {
+        Set<Couple<Pcs, Pcs>> inconsistent = new HashSet<>();
         Set<Pcs> ignored = new HashSet<>();
         for (Pcs pcs: all) {
             if (ignored.contains(pcs))
@@ -99,7 +100,7 @@ public class PcsMerge {
             else if (base.contains(other))
                 ignored.add(other);
             else
-                inconsistent.add(new Pair<>(pcs, other));
+                inconsistent.add(new Couple<>(pcs, other));
         }
         return inconsistent;
     }

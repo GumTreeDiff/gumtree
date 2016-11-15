@@ -23,6 +23,7 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.utils.Couple;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Triple;
@@ -77,7 +78,7 @@ public class TestMerge {
         mr.link(base.treeAt(new int[] {1}), right.treeAt(new int[] {1}));
         Matcher mtr = new FixedMatcher(mr);
         PcsMerge m = new PcsMerge(trees.getFirst(), trees.getSecond(), trees.getThird(), mtl, mtr);
-        Set<Pair<Pcs, Pcs>> inconsistencies = m.computeMerge();
+        Set<Couple<Pcs, Pcs>> inconsistencies = m.computeMerge();
         assertEquals(0, inconsistencies.size());
     }
 
@@ -94,8 +95,9 @@ public class TestMerge {
         mr.link(base, right);
         Matcher mtr = new FixedMatcher(mr);
         PcsMerge m = new PcsMerge(trees.getFirst(), trees.getSecond(), trees.getThird(), mtl, mtr);
-        Set<Pair<Pcs, Pcs>> inconsistencies = m.computeMerge();
-        assertEquals(3, inconsistencies.size());
+        Set<Couple<Pcs, Pcs>> inconsistencies = m.computeMerge();
+        System.out.println(inconsistencies);
+        assertEquals(2, inconsistencies.size());
     }
 
     static class FixedMatcher extends Matcher {
