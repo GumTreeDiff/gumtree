@@ -30,22 +30,22 @@
 
 .mv {
 	border: 1px solid black;
-	background-color: lightblue;
+	background-color: Lavender;
 }
 
 .upd {
 	border: 1px solid black;
-	background-color: gold;
-	font-weight: Wheat;
+	background-color: RosyBrown;
+	font-weight: bold;
 }
 
 .cupd {
 	font-weight: normal;
-	color: grey;
+	color: DimGray;
 }
 
 .selected {
-	background-color: silver;	
+	background-color: Gold;
 }
 
 .marker {
