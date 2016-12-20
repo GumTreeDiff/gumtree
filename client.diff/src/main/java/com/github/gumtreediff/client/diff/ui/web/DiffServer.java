@@ -67,8 +67,10 @@ public class DiffServer extends NanoHTTPD {
             else if (uri.startsWith("/res/")) {
                 String res = uri.substring(1);
                 InputStream data = ClassLoader.getSystemClassLoader().getResourceAsStream(res);
-                if (uri.endsWith(".css")) return new Response(Response.Status.OK, "text/css", data);
-                else if (uri.endsWith(".js")) return new Response(Response.Status.OK, "text/javascript", data);
+                if (uri.endsWith(".css"))
+                    return new Response(Response.Status.OK, "text/css", data);
+                else if (uri.endsWith(".js"))
+                    return new Response(Response.Status.OK, "text/javascript", data);
             }
         } catch (Exception e) {
             e.printStackTrace();
