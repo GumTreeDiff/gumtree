@@ -20,12 +20,12 @@
 
 .add {
 	border: 1px solid black;
-	background-color: greenyellow;
+	background-color: MediumSeaGreen;
 }
 
 .del {
 	border: 1px solid black;
-	background-color: tomato;
+	background-color: DarkSalmon;
 }
 
 .mv {
@@ -36,7 +36,7 @@
 .upd {
 	border: 1px solid black;
 	background-color: gold;
-	font-weight: bold;
+	font-weight: Wheat;
 }
 
 .cupd {
@@ -87,5 +87,5 @@ div {
 	padding: 0px;
 	font-size: 10pt;
 	color: black;
-	font-family: monospace;
+	font-family: "Inconsolata", "Consolas", "Liberation Sans Regular", "DejaVu Sans Mono", monospace;
 }
