@@ -34,8 +34,8 @@ import java.util.Set;
 
 public abstract class AbstractBottomUpMatcher extends Matcher {
     public static int SIZE_THRESHOLD = Integer.parseInt(System.getProperty("gumtree.match.bu.size", "1000"));
-
-    protected static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.0"));
+    public static final double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.5"));
+    public static final boolean DETECT_RENAME = Boolean.parseBoolean(System.getProperty("gumtree.match.bu.rename", "true"));
 
     protected TreeMap srcIds;
     protected TreeMap dstIds;
@@ -106,8 +106,10 @@ public abstract class AbstractBottomUpMatcher extends Matcher {
 //                    System.err.printf("Trying to map nodes with incompatible parents (%s, %s)\n",
 //                            left.getParent().toShortString(), right.getParent().toShortString());
                     continue;
-                } else
-                    addMapping(left, right);
+                } else {
+                    if (left.getLabel().equals(right.getLabel()) || DETECT_RENAME == true)
+                        addMapping(left, right);
+                }
             }
         }
 
