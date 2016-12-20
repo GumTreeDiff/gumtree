@@ -87,5 +87,7 @@ div {
 	padding: 0px;
 	font-size: 10pt;
 	color: black;
+	background-color: white;
+	border-color: black;
 	font-family: "Inconsolata", "Consolas", "Liberation Sans Regular", "DejaVu Sans Mono", monospace;
 }
