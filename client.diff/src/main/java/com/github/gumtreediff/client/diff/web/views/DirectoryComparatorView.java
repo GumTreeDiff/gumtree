@@ -108,7 +108,7 @@ public class DirectoryComparatorView implements Renderable {
                 ._div()
                 ._div()
                 .render(new BootstrapFooter())
-                .macros().javascript("res/web/list.js")
+                .macros().javascript("/dist/list.js")
                 ._body()
                 ._html();
     }
