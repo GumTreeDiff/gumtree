@@ -97,10 +97,10 @@ public class Run {
     }
 
     public static void main(String[] args) {
-        initClients();
-
         Options opts = new Options();
         args = Option.processCommandLine(args, opts);
+
+        initClients();
 
         Registry.Factory<? extends Client> client;
         if (args.length == 0) {
