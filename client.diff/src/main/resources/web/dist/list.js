@@ -18,16 +18,14 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-if (typeof String.prototype.startsWith != 'function') {
-  String.prototype.startsWith = function (str){
-    return this.slice(0, str.length) == str;
-  };
-}
+$(function() {
+    // shortcut
+    $("body").keypress(function (event) {
+        switch (event.which) {
+            case 113:
+                window.location = "/quit";
+                break;
+        }
+    });
+});
 
-$("body").keypress(
-	function (event) {
-		if (event.which == 113) {
-			window.location = "/quit";
-		}
-	}	
-)

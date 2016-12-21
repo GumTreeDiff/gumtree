@@ -55,60 +55,66 @@ function isSrc(eltId) {
 	return eltId.startsWith("move-src");
 }
 
-$("body").keypress(
-	function (event) {
-		if (event.which == 110) {
-			var mapping = nextMapping();
-			$('html, body').animate({scrollTop: $(mapping).offset().top - 200}, 100);
-		} else if (event.which == 116) {
-			$('html, body').animate({scrollTop: 0}, 100);
-		} else if (event.which == 98) {
-			$("html, body").animate({ scrollTop: $(document).height() }, 100);
-		} else if (event.which == 113) {
-			window.location = "/quit";
-		} else if (event.which == 108) {
-			window.location = "/list";
-		}
-	}	
-)
+$(function() {
+    $("#legend").popover();
 
-$("#legend").popover()
-$("#shortcuts").popover()
+    $("#shortcuts").popover();
 
-$("span.mv.token, span.token.upd").click(
-	function(event) {
-		if ($(this).hasClass("selected")) {
-			$("span.mv.token, span.token.upd").removeClass("selected");
-		} else {
-		$("span.mv.token, span.token.upd").removeClass("selected");
-		var eltId = $(this).attr("id");
-		var refEltId = getMappedElement(eltId);
-		$("#" + refEltId).addClass("selected");
-		$(this).addClass("selected");
-		var sel = "#dst";
-		if (isSrc(refEltId)) var sel = "#src";
-		
-		$div = $(sel);
-		$span = $("#" + refEltId);     		
-		}
-		event.stopPropagation();
-	}
-)
+    // shortcuts
+    $("body").keypress(function (event) {
+        switch(event.which) {
+            case 110:
+                var mapping = nextMapping();
+                $('html, body').animate({scrollTop: $(mapping).offset().top - 200}, 100);
+                break;
+            case 116:
+                $('html, body').animate({scrollTop: 0}, 100);
+                break;
+            case 98:
+                $("html, body").animate({ scrollTop: $(document).height() }, 100);
+                break;
+            case 113:
+                window.location = "/quit";
+                break;
+            case 108:
+                window.location = "/list";
+                break;
+        }
+    });
 
-$("span.add.token, span.token.del").click(
-	function(event) {
-		$("span.mv.token, span.token.upd").removeClass("selected");
-		event.stopPropagation();
-	}
-)
+    // highlight
+    $("span.mv.token, span.token.upd").click(function(event) {
+        if ($(this).hasClass("selected")) {
+            $("span.mv.token, span.token.upd").removeClass("selected");
+        } else {
+            $("span.mv.token, span.token.upd").removeClass("selected");
+            var eltId = $(this).attr("id");
+            var refEltId = getMappedElement(eltId);
+            $("#" + refEltId).addClass("selected");
+            $(this).addClass("selected");
+            var sel = "#dst";
+            if (isSrc(refEltId))
+                var sel = "#src";
+            $div = $(sel);
+            $span = $("#" + refEltId);
+        }
+        event.stopPropagation();
+    });
 
-$("span.token").hover(
-	function (event) {
-		$(this).tooltip('show');
-		event.stopPropagation();
-	}, 
-	function (event) {
-		$(this).tooltip('hide');
-		event.stopPropagation();
-	}
-);
+    $("span.add.token, span.token.del").click(function(event) {
+        $("span.mv.token, span.token.upd").removeClass("selected");
+        event.stopPropagation();
+    });
+
+    // tooltip
+    $("span.token").hover(
+    	function (event) {
+    		$(this).tooltip('show');
+    		event.stopPropagation();
+    	},
+    	function (event) {
+    		$(this).tooltip('hide');
+    		event.stopPropagation();
+    	}
+    );
+});
