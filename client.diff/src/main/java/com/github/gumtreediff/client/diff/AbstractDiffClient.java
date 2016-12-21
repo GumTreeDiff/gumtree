@@ -39,10 +39,10 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
     private TreeContext dst;
 
     public static class Options implements Option.Context {
-        protected String matcher;
-        protected ArrayList<String> generators = new ArrayList<>();
-        protected String src;
-        protected String dst;
+        public String matcher;
+        public ArrayList<String> generators = new ArrayList<>();
+        public String src;
+        public String dst;
 
         @Override
         public Option[] values() {

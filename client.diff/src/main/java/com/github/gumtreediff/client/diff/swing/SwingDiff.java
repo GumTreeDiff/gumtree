@@ -18,10 +18,11 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff;
+package com.github.gumtreediff.client.diff.swing;
 
 import com.github.gumtreediff.client.Register;
-import com.github.gumtreediff.client.diff.ui.swing.MappingsPanel;
+import com.github.gumtreediff.client.diff.AbstractDiffClient;
+import com.github.gumtreediff.client.diff.swing.MappingsPanel;
 import com.github.gumtreediff.matchers.Matcher;
 
 import javax.swing.*;

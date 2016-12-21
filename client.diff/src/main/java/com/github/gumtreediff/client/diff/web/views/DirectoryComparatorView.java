@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.ui.web.views;
+package com.github.gumtreediff.client.diff.web.views;
 
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.io.DirectoryComparator;
@@ -107,8 +107,7 @@ public class DirectoryComparatorView implements Renderable {
                 ._div()
                 ._div()
                 ._div()
-                .macros().javascript("res/web/jquery.min.js")
-                .macros().javascript("res/web/bootstrap.min.js")
+                .render(new BootstrapFooter())
                 .macros().javascript("res/web/list.js")
                 ._body()
                 ._html();
@@ -128,8 +127,7 @@ public class DirectoryComparatorView implements Renderable {
                     .table(class_("table table-striped table-condensed"))
                     .thead()
                     .tr()
-                    .th().content("Source file")
-                    .th().content("Destination file")
+                    .th().content("File")
                     .th().content("Action")
                     ._tr()
                     ._thead()
@@ -139,11 +137,10 @@ public class DirectoryComparatorView implements Renderable {
                 tbody
                         .tr()
                         .td().content(comparator.getSrc().relativize(file.getFirst().toPath()).toString())
-                        .td().content(comparator.getDst().relativize(file.getSecond().toPath()).toString())
                         .td()
-                        .a(class_("btn btn-primary btn-xs").href("/diff?id=" + id)).content("diff")
+                        .a(class_("btn btn-primary btn-xs").href("/diff/" + id)).content("diff")
                         .write(" ")
-                        .a(class_("btn btn-primary btn-xs").href("/script?id=" + id)).content("script")
+                        .a(class_("btn btn-primary btn-xs").href("/script/" + id)).content("script")
                         ._td()
                         ._tr();
                 id++;

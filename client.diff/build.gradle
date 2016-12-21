@@ -2,6 +2,9 @@ description = 'GumTree diff client'
 
 dependencies {
 	compile project(':client')
-	compile 'com.nanohttpd:nanohttpd-webserver:2.1.1'
-	compile 'org.rendersnake:rendersnake:1.9.0'
+	compile 'com.sparkjava:spark-core:2.5.2'
+	// exclude servlet-api 2.0 because it causes a bug with spark-core
+	compile('org.rendersnake:rendersnake:1.9.0') {
+		exclude group: 'javax.servlet', module: 'servlet-api'
+	}
 }

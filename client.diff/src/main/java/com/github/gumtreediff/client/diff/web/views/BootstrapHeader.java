@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.ui.web.views;
+package com.github.gumtreediff.client.diff.web.views;
 
 import static org.rendersnake.HtmlAttributesFactory.*;
 
@@ -36,8 +36,11 @@ public class BootstrapHeader implements Renderable {
                 .meta(charset("utf8"))
                 .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
                 .title().content("GumTree")
-                .macros().stylesheet("res/web/bootstrap.min.css")
-                .macros().stylesheet("res/web/gumtree.css")
+                .macros().stylesheet("/dist/bootstrap.min.css")
+                .macros().stylesheet("/dist/gumtree.css")
+                .macros().javascript("/dist/jquery.min.js")
+                .macros().javascript("/dist/bootstrap.min.js")
+                .macros().javascript("/dist/script.js")
                 ._head();
     }
 

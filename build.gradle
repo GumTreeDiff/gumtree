@@ -43,6 +43,8 @@ subprojects {
 	dependencies {
 		testCompile 'junit:junit:4.+'
 	}
+
+	task allDeps(type: DependencyReportTask) {}
 }
 
 configure(subprojects.findAll {it.name != 'core'}) {

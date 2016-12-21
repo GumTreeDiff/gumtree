@@ -27,13 +27,11 @@ import org.reflections.Reflections;
 
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Run {
-
-//    public static boolean USE_EXPERIMENTAL() {
-// This is a method not a constant otherwise, there won't be any way to set it (due to class loading order)
-//        return Boolean.parseBoolean(System.getProperty("gumtree.client.experimental", "false"));
-//    }
 
     public static class Options implements Option.Context {
         @Override

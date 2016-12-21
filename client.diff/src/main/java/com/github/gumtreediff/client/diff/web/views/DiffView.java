@@ -18,9 +18,9 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.ui.web.views;
+package com.github.gumtreediff.client.diff.web.views;
 
-import com.github.gumtreediff.client.diff.ui.web.HtmlDiffs;
+import com.github.gumtreediff.client.diff.web.HtmlDiffs;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
@@ -76,9 +76,8 @@ public class DiffView implements Renderable {
                 ._div()
                 ._div()
                 ._div()
-                .macros().javascript("res/web/jquery.min.js")
-                .macros().javascript("res/web/bootstrap.min.js")
-                .macros().javascript("res/web/diff.js")
+                .render(new BootstrapFooter())
+                .macros().javascript("/dist/diff.js")
                 ._body()
                 ._html();
     }

@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.ui.swing;
+package com.github.gumtreediff.client.diff.swing;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -43,8 +43,6 @@ import javax.swing.tree.TreePath;
 import com.github.gumtreediff.actions.TreeClassifier;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.actions.RootsClassifier;
-import com.github.gumtreediff.actions.TreeClassifier;
-import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;

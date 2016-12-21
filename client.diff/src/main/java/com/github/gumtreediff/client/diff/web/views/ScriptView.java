@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.ui.web.views;
+package com.github.gumtreediff.client.diff.web.views;
 
 import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.Action;
@@ -84,9 +84,8 @@ public class ScriptView implements Renderable {
                 ._div()
                 ._div()
                 ._div()
-                .macros().javascript("res/web/jquery.min.js")
-                .macros().javascript("res/web/bootstrap.min.js")
-                .macros().javascript("res/web/script.js")
+                .render(new BootstrapFooter())
+                .macros().javascript("/dist/script.js")
                 ._body()
                 ._html();
     }
