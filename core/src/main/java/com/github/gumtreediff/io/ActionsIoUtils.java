@@ -22,9 +22,11 @@ package com.github.gumtreediff.io;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.io.TreeIoUtils.AbstractSerializer;
+import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
+import com.google.gson.internal.Excluder;
 import com.google.gson.stream.JsonWriter;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -88,6 +90,17 @@ public final class ActionsIoUtils {
         @Override
         public void writeTo(Writer writer) throws Exception {
             ActionFormatter fmt = newFormatter(context, writer);
+            // Start the output
+            fmt.startOutput();
+
+            // Write the matches
+            fmt.startMatches();
+            for (Mapping m: mappings) {
+                fmt.match(m.getFirst(), m.getSecond());
+            }
+            fmt.endMatches();
+
+            // Write the actions
             fmt.startActions();
             for (Action a : actions) {
                 ITree src = a.getNode();
@@ -108,10 +121,20 @@ public final class ActionsIoUtils {
                 }
             }
             fmt.endActions();
+
+            // Finish up
+            fmt.endOutput();
         }
     }
 
     interface ActionFormatter {
+        void startOutput() throws Exception;
+        void endOutput() throws Exception;
+
+        void startMatches() throws Exception;
+        void match(ITree srcNode, ITree destNode) throws Exception;
+        void endMatches() throws Exception;
+
         void startActions() throws Exception;
 
         void insertRoot(ITree node) throws Exception;
@@ -138,8 +161,34 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void startActions() throws XMLStreamException {
+        public void startOutput() throws XMLStreamException {
             writer.writeStartDocument();
+        }
+
+        @Override
+        public void endOutput() throws XMLStreamException {
+            writer.writeEndDocument();
+        }
+
+        @Override
+        public void startMatches() throws XMLStreamException {
+            writer.writeStartElement("matches");
+        }
+
+        @Override
+        public void match(ITree srcNode, ITree destNode) throws XMLStreamException {
+            writer.writeEmptyElement("match");
+            writer.writeAttribute("src", Integer.toString(srcNode.getId()));
+            writer.writeAttribute("dest", Integer.toString(destNode.getId()));
+        }
+
+        @Override
+        public void endMatches() throws XMLStreamException {
+            writer.writeEndElement();
+        }
+
+        @Override
+        public void startActions() throws XMLStreamException {
             writer.writeStartElement("actions");
         }
 
@@ -181,7 +230,6 @@ public final class ActionsIoUtils {
         @Override
         public void endActions() throws XMLStreamException {
             writer.writeEndElement();
-            writer.writeEndDocument();
         }
 
         private void start(Class<? extends Action> name, ITree src) throws XMLStreamException {
@@ -201,6 +249,27 @@ public final class ActionsIoUtils {
         public TextFormatter(TreeContext ctx, Writer writer) {
             this.context = ctx;
             this.writer = writer;
+        }
+
+        @Override
+        public void startOutput() throws Exception {
+        }
+
+        @Override
+        public void endOutput() throws Exception {
+        }
+
+        @Override
+        public void startMatches() throws Exception {
+        }
+
+        @Override
+        public void match(ITree srcNode, ITree destNode) throws Exception {
+            write("Match %s to %s", toS(srcNode), toS(destNode));
+        }
+
+        @Override
+        public void endMatches() throws Exception {
         }
 
         @Override
@@ -256,8 +325,36 @@ public final class ActionsIoUtils {
         }
 
         @Override
+        public void startOutput() throws IOException {
+            writer.beginObject();
+        }
+
+        @Override
+        public void endOutput() throws IOException {
+            writer.endObject();
+        }
+
+        @Override
+        public void startMatches() throws Exception {
+            writer.name("matches").beginArray();
+        }
+
+        @Override
+        public void match(ITree srcNode, ITree destNode) throws Exception {
+            writer.beginObject();
+            writer.name("src").value(srcNode.getId());
+            writer.name("dest").value(destNode.getId());
+            writer.endObject();
+        }
+
+        @Override
+        public void endMatches() throws Exception {
+            writer.endArray();
+        }
+
+        @Override
         public void startActions() throws IOException {
-            writer.beginArray();
+            writer.name("actions").beginArray();
         }
 
         @Override
