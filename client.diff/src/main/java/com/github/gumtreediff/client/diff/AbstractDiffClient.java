@@ -127,7 +127,6 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
                 t = Generators.getInstance().getTree(file);
             else
                 t = Generators.getInstance().getTree(opts.generators.get(0), file);
-
             return t;
         } catch (IOException e) {
             e.printStackTrace();
