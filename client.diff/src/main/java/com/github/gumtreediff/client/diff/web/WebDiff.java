@@ -32,6 +32,9 @@ import spark.Spark;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static spark.Spark.*;
 
@@ -103,6 +106,21 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
             Renderable view = new DiffView(pair.getFirst(), pair.getSecond());
             return render(view);
         });
+        get("/mergely/:id", (request, response) -> {
+            int id = Integer.parseInt(request.params(":id"));
+            Renderable view = new MergelyView(id);
+            return render(view);
+        });
+        get("/left/:id", (request, response) -> {
+            int id = Integer.parseInt(request.params(":id"));
+            Pair<File, File> pair = comparator.getModifiedFiles().get(id);
+            return readFile(pair.getFirst().getAbsolutePath(), Charset.defaultCharset());
+        });
+        get("/right/:id", (request, response) -> {
+            int id = Integer.parseInt(request.params(":id"));
+            Pair<File, File> pair = comparator.getModifiedFiles().get(id);
+            return readFile(pair.getSecond().getAbsolutePath(), Charset.defaultCharset());
+        });
         get("/script/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
@@ -123,5 +141,10 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
             e.printStackTrace();
         }
         return c.toHtml();
+    }
+
+    private static String readFile(String path, Charset encoding)  throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 }

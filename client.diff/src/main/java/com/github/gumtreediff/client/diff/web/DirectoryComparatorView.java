@@ -127,6 +127,8 @@ public class DirectoryComparatorView implements Renderable {
                     .td(class_("col-md-2"))
                         .a(class_("btn btn-primary btn-xs").href("/diff/" + id)).content("diff")
                         .write(" ")
+                        .a(class_("btn btn-primary btn-xs").href("/mergely/" + id)).content("mergely")
+                        .write(" ")
                         .a(class_("btn btn-primary btn-xs").href("/script/" + id)).content("script")
                     ._td()
                 ._tr();
