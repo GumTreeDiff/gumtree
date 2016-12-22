@@ -18,23 +18,27 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.web.views;
+package com.github.gumtreediff.client.diff.web;
+
+import static org.rendersnake.HtmlAttributesFactory.*;
+
+import java.io.IOException;
 
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
 
-import java.io.IOException;
-
-import static org.rendersnake.HtmlAttributesFactory.charset;
-import static org.rendersnake.HtmlAttributesFactory.name;
-
-public class BootstrapFooter implements Renderable {
+public class BootstrapHeaderView implements Renderable {
 
     @Override
     public void renderOn(HtmlCanvas html) throws IOException {
         html
-                .macros().javascript("/dist/jquery.min.js")
-                .macros().javascript("/dist/bootstrap.min.js");
+        .head()
+            .meta(charset("utf8"))
+            .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
+            .title().content("GumTree")
+            .macros().stylesheet("/dist/bootstrap.min.css")
+            .macros().stylesheet("/dist/gumtree.css")
+        ._head();
     }
 
 }

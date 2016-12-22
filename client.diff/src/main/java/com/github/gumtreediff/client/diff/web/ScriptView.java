@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.web.views;
+package com.github.gumtreediff.client.diff.web;
 
 import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.Action;
@@ -69,25 +69,25 @@ public class ScriptView implements Renderable {
     @Override
     public void renderOn(HtmlCanvas html) throws IOException {
         html
-                .render(DocType.HTML5)
-                .html(lang("en"))
-                .render(new BootstrapHeader())
+            .render(DocType.HTML5)
+            .html(lang("en"))
+                .render(new BootstrapHeaderView())
                 .body()
-                .div(class_("container"))
-                .div(class_("row"))
-                .div(class_("col-lg-12"))
-                .h3()
-                .write("Script ")
-                .small().content(String.format("%s -> %s", fSrc.getName(), fDst.getName()))
-                ._h3()
-                .pre().content(ActionsIoUtils.toText(src, this.script, mappings).toString())
-                ._div()
-                ._div()
-                ._div()
-                .render(new BootstrapFooter())
-                .macros().javascript("/dist/script.js")
+                    .div(class_("container"))
+                        .div(class_("row"))
+                            .div(class_("col-lg-12"))
+                                .h3()
+                                    .write("Script ")
+                                    .small().content(String.format("%s -> %s", fSrc.getName(), fDst.getName()))
+                                ._h3()
+                                .pre().content(ActionsIoUtils.toText(src, this.script, mappings).toString())
+                            ._div()
+                        ._div()
+                    ._div()
+                    .render(new BootstrapFooterView())
+                    .macros().javascript("/dist/script.js")
                 ._body()
-                ._html();
+            ._html();
     }
 
 }

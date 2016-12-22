@@ -13,6 +13,8 @@
     <suppress files=".*Indentation.java" checks=".*"/>
     <suppress files=".*EntityType.java" checks=".*"/>
     <suppress files=".*CTreeGenerator.java" checks="Indentation"/>
+    <suppress files=".*View.java" checks="Indentation"/>
+    <suppress files=".*View.java" checks="LineLength"/>
     <suppress files=".*CdJdtVisitor.java" checks=".*"/>
     <suppress files=".*Run.java" checks="Indentation"/>
 </suppressions>
