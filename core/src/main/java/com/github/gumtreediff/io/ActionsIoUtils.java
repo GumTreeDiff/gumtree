@@ -129,10 +129,13 @@ public final class ActionsIoUtils {
 
     interface ActionFormatter {
         void startOutput() throws Exception;
+
         void endOutput() throws Exception;
 
         void startMatches() throws Exception;
+
         void match(ITree srcNode, ITree destNode) throws Exception;
+
         void endMatches() throws Exception;
 
         void startActions() throws Exception;
