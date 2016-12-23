@@ -28,7 +28,6 @@ import org.rendersnake.Renderable;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
@@ -109,7 +108,7 @@ public class DirectoryComparatorView implements Renderable {
 
         private List<Pair<File, File>> files;
 
-        public ModifiedFiles(List<Pair<File, File>> files) {
+        private ModifiedFiles(List<Pair<File, File>> files) {
             this.files = files;
         }
 
@@ -149,7 +148,7 @@ public class DirectoryComparatorView implements Renderable {
 
         private String tdClass;
 
-        public AddedOrDeletedFiles(Set<File> files, Path root, String tdClass) {
+        private AddedOrDeletedFiles(Set<File> files, Path root, String tdClass) {
             this.files = files;
             this.root = root;
             this.tdClass = tdClass;
