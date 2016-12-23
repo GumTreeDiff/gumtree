@@ -31,11 +31,13 @@ import java.util.regex.Pattern;
 
 public class TreeContext {
 
-    Map<Integer, String> typeLabels = new HashMap<>();
-    final Map<String, Object> metadata = new HashMap<>();
-    final MetadataSerializers serializers = new MetadataSerializers();
+    private Map<Integer, String> typeLabels = new HashMap<>();
 
-    ITree root;
+    private final Map<String, Object> metadata = new HashMap<>();
+
+    private final MetadataSerializers serializers = new MetadataSerializers();
+
+    private ITree root;
 
     @Override
     public String toString() {
@@ -65,15 +67,14 @@ public class TreeContext {
         if (name == null || name.equals(ITree.NO_LABEL))
             return;
         String typeLabel = typeLabels.get(type);
-        if (typeLabel == null) {
+        if (typeLabel == null)
             typeLabels.put(type, name);
-        } else if (!typeLabel.equals(name))
+        else if (!typeLabel.equals(name))
             throw new RuntimeException(String.format("Redefining type %d: '%s' with '%s'", type, typeLabel, name));
     }
 
     public ITree createTree(int type, String label, String typeLabel) {
         registerTypeLabel(type, typeLabel);
-
         return new Tree(type, label);
     }
 
@@ -215,9 +216,9 @@ public class TreeContext {
                         nextEntry = localIterator.next();
                         seenKeys.add(nextEntry.getKey());
                         return n;
-                    } else {
-                        currentIterator = globalIterator;
                     }
+                    else
+                        currentIterator = globalIterator;
                 }
                 nextEntry = null;
                 while (globalIterator.hasNext()) {
