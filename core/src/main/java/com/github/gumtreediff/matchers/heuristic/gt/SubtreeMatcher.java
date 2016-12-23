@@ -65,7 +65,7 @@ public abstract class SubtreeMatcher extends Matcher {
                     ITree src = hSrcs.get(i);
                     ITree dst = hDsts.get(j);
 
-                    if (src.isClone(dst)) {
+                    if (src.isIsomorphicTo(dst)) {
                         multiMappings.link(src, dst);
                         srcMarks[i] = true;
                         dstMarks[j] = true;

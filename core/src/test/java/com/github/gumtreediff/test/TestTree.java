@@ -76,7 +76,7 @@ public class TestTree {
     public void testIsClone() {
         ITree tree = TreeLoader.getDummySrc();
         ITree copy = tree.deepCopy();
-        assertTrue(tree.isClone(copy));
+        assertTrue(tree.isIsomorphicTo(copy));
     }
 
 }

@@ -27,20 +27,21 @@ import java.util.Map.Entry;
 
 public class Tree extends AbstractTree implements ITree {
 
-    // Type of the token
-    int type;
+    private int type;
 
-    // Label of the token
-    String label;
+    private String label;
 
-    // Begin position of the tree in terms of absolute character index
-    int pos;
-    int length;
+    // Begin position of the tree in terms of absolute character index and length
+    private int pos;
+    private int length;
     // End position
 
     private AssociationMap metadata;
 
-    /** Constructs a new node. If you need type labels corresponding to the integer, see class TreeContext.createTree */
+    /**
+     * Constructs a new node. If you need type labels corresponding to the integer
+     * @see TreeContext#createTree(int, String, String)
+     */
     public Tree(int type, String label) {
         this.type = type;
         this.label = (label == null) ? NO_LABEL : label.intern();
@@ -59,7 +60,6 @@ public class Tree extends AbstractTree implements ITree {
     private Tree(Tree other) {
         this.type = other.type;
         this.label = other.getLabel();
-
         this.id = other.getId();
         this.pos = other.getPos();
         this.length = other.getLength();
@@ -146,9 +146,11 @@ public class Tree extends AbstractTree implements ITree {
 
     @Override
     public void setParentAndUpdateChildren(ITree parent) {
-        if (this.parent != null) this.parent.getChildren().remove(this);
+        if (this.parent != null)
+            this.parent.getChildren().remove(this);
         this.parent = parent;
-        if (this.parent != null) parent.getChildren().add(this);
+        if (this.parent != null)
+            parent.getChildren().add(this);
     }
 
     @Override

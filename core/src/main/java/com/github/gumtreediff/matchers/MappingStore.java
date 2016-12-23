@@ -130,7 +130,7 @@ public class MappingStore implements Iterable<Mapping> {
      * @return true if both trees are not mapped and if the trees have the same type, false either.
      */
     public boolean isMatchable(ITree src, ITree dst) {
-        return src.isCompatible(dst) && !(srcs.containsKey(src)  || dsts.containsKey(dst));
+        return src.hasSameType(dst) && !(srcs.containsKey(src)  || dsts.containsKey(dst));
     }
 
     @Override

@@ -103,7 +103,7 @@ public final class StringAlgorithms {
         int[][] lengths = new int[s0.size() + 1][s1.size() + 1];
         for (int i = 0; i < s0.size(); i++)
             for (int j = 0; j < s1.size(); j++)
-                if (s0.get(i).isSimilar(s1.get(j)))
+                if (s0.get(i).hasSameTypeAndLabel(s1.get(j)))
                     lengths[i + 1][j + 1] = lengths[i][j] + 1;
                 else
                     lengths[i + 1][j + 1] = Math.max(lengths[i + 1][j], lengths[i][j + 1]);

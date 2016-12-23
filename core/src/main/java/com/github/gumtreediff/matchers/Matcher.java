@@ -105,6 +105,6 @@ public abstract class Matcher {
     }
 
     public boolean isMatchable(ITree src, ITree dst) {
-        return src.isCompatible(dst) && !(mappings.hasSrc(src) || mappings.hasDst(dst));
+        return src.hasSameType(dst) && !(mappings.hasSrc(src) || mappings.hasDst(dst));
     }
 }

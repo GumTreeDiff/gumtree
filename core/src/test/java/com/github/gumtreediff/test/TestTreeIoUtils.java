@@ -57,7 +57,7 @@ public class TestTreeIoUtils {
         TreeContext tca = TreeIoUtils.fromXml().generateFromString(bos.toString());
         ITree ca = tca.getRoot();
 
-        assertTrue(a.isClone(ca));
+        assertTrue(a.isIsomorphicTo(ca));
         assertTrue(ca.getType() == 0);
         assertTrue(tc.getTypeLabel(ca).equals("type0"));
         assertTrue(ca.getLabel().equals("a"));
