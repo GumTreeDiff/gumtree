@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -52,6 +53,13 @@ public class TestRubyGenerator {
         String input = "{ foo: true }";
         ITree t = new RubyTreeGenerator().generateFromString(input).getRoot();
         assertEquals(102, t.getType());
+    }
+
+    @Test
+    public void testPosition() throws IOException {
+        String input = "module Baz\nclass Foo\n\tdef foo(bar)\n\t\tputs bar\n\tend\nend\nend";
+        TreeContext ctx = new RubyTreeGenerator().generateFromString(input);
+        ITree root = ctx.getRoot();
     }
 
 }

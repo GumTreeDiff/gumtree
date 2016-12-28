@@ -27,7 +27,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import org.jrubyparser.CompatVersion;
 import org.jrubyparser.Parser;
-import org.jrubyparser.ast.Node;
+import org.jrubyparser.ast.*;
 import org.jrubyparser.parser.ParserConfiguration;
 
 import java.io.IOException;
@@ -41,27 +41,33 @@ public class RubyTreeGenerator extends TreeGenerator {
         CompatVersion version = CompatVersion.RUBY2_0;
         ParserConfiguration config = new ParserConfiguration(0, version);
         Node n = p.parse("<code>", r, config);
-        return toTree(new TreeContext(), n, null);
+        return extractTreeContext(new TreeContext(), n, null);
     }
 
-    private TreeContext toTree(TreeContext ctx, Node n, ITree parent) {
-        String label = "";
-        String typeLabel = n.getNodeType().name();
-        int type = n.getNodeType().ordinal() + 1;
-        ITree t = ctx.createTree(type, label, typeLabel);
+    private TreeContext extractTreeContext(TreeContext treeContext, Node node, ITree parent) {
+        String typeLabel = node.getNodeType().name();
+        int type = node.getNodeType().ordinal() + 1;
+        String label = extractLabel(node);
+        ITree tree = treeContext.createTree(type, label, typeLabel);
         if (parent == null)
-            ctx.setRoot(t);
+            treeContext.setRoot(tree);
         else
-            t.setParentAndUpdateChildren(parent);
+            tree.setParentAndUpdateChildren(parent);
 
-        int pos = n.getPosition().getStartOffset();
-        int length = n.getPosition().getEndOffset() - n.getPosition().getStartOffset();
-        t.setPos(pos);
-        t.setLength(length);
+        int pos = node.getPosition().getStartOffset();
+        int length = node.getPosition().getEndOffset() - node.getPosition().getStartOffset();
+        tree.setPos(pos);
+        tree.setLength(length);
 
-        for (Node c: n.childNodes())
-            toTree(ctx, c, t);
+        for (Node childNode: node.childNodes())
+            extractTreeContext(treeContext, childNode, tree);
 
-        return ctx;
+        return treeContext;
+    }
+
+    private static String extractLabel(Node node) {
+        if (node instanceof INameNode)
+            return ((INameNode) node).getName();
+        return "";
     }
 }
