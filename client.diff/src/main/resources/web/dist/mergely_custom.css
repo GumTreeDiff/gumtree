@@ -1,0 +1,8 @@
+html, body, #compare, .CodeMirror {
+    height: 100%;
+}
+
+.CodeMirror pre {
+    font-family: "Inconsolata", "Consolas", "Liberation Sans Regular", "DejaVu Sans Mono", monospace;
+    font-size: 10pt;
+}

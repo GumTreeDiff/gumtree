@@ -56,6 +56,7 @@ public class MergelyView implements Renderable {
                 .macros().javascript("/dist/mergely.min.js")
                 .macros().javascript("/dist/mergely_shortcuts.js")
                 .macros().stylesheet("/dist/mergely.css")
+                .macros().stylesheet("/dist/mergely_custom.css")
             ._head()
             .body()
                 .div(id("compare"))

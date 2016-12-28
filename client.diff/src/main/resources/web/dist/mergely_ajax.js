@@ -1,10 +1,13 @@
 $(document).ready(function () {
     $('#compare').mergely({
-        width: 'auto',
-        cmsettings: { readOnly: true, lineNumbers: true },
+        editor_width: 'calc(50% - 25px)',
+        editor_height: 'calc(100% - 25px)',
+        cmsettings: {
+            readOnly: true,
+            lineNumbers: true,
+            lineWrapping: true
+        }
     });
-    //var lhs_url = 'lhs.txt';
-    //var rhs_url = 'rhs.txt'
 
     $.get(lhs_url, function(data) {
         $('#compare').mergely('lhs', data);
