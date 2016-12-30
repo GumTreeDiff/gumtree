@@ -40,13 +40,13 @@ public class TestGumtreeMatcher {
         Matcher m = new CompositeMatchers.ClassicGumtree(
                 trees.getFirst().getRoot(), trees.getSecond().getRoot(), new MappingStore());
         m.match();
-        assertEquals(5, m.getMappingSet().size());
+        assertEquals(5, m.getMappingsAsSet().size());
         GreedySubtreeMatcher.MIN_HEIGHT = 1;
         AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
         m = new CompositeMatchers.ClassicGumtree(
                 trees.getFirst().getRoot(), trees.getSecond().getRoot(), new MappingStore());
         m.match();
-        assertEquals(4, m.getMappingSet().size());
+        assertEquals(4, m.getMappingsAsSet().size());
     }
 
     @Test
@@ -57,13 +57,13 @@ public class TestGumtreeMatcher {
         Matcher m = new CompositeMatchers.ClassicGumtree(
                 trees.getFirst().getRoot(), trees.getSecond().getRoot(), new MappingStore());
         m.match();
-        assertEquals(5, m.getMappingSet().size());
+        assertEquals(5, m.getMappingsAsSet().size());
         GreedySubtreeMatcher.MIN_HEIGHT = 0;
         AbstractBottomUpMatcher.SIZE_THRESHOLD = 5;
         m = new CompositeMatchers.ClassicGumtree(
                 trees.getFirst().getRoot(), trees.getSecond().getRoot(), new MappingStore());
         m.match();
-        assertEquals(6, m.getMappingSet().size());
+        assertEquals(6, m.getMappingsAsSet().size());
     }
 
 }

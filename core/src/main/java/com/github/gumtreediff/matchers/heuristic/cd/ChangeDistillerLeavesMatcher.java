@@ -39,44 +39,44 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 
     @Override
     public void match() {
+        List<Mapping> leavesMappings = new LinkedList<>();
         List<ITree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
-
-        List<Mapping> leafMappings = new LinkedList<>();
-
         for (Iterator<ITree> srcLeaves = TreeUtils.leafIterator(
                 TreeUtils.postOrderIterator(src)); srcLeaves.hasNext();) {
             for (ITree dstLeaf: dstLeaves) {
                 ITree srcLeaf = srcLeaves.next();
                 if (isMappingAllowed(srcLeaf, dstLeaf)) {
                     double sim = StringMetrics.qGramsDistance().compare(srcLeaf.getLabel(), dstLeaf.getLabel());
-                    if (sim > LABEL_SIM_THRESHOLD) leafMappings.add(new Mapping(srcLeaf, dstLeaf));
+                    if (sim > LABEL_SIM_THRESHOLD)
+                        leavesMappings.add(new Mapping(srcLeaf, dstLeaf));
                 }
             }
         }
 
-        Set<ITree> srcIgnored = new HashSet<>();
-        Set<ITree> dstIgnored = new HashSet<>();
-        Collections.sort(leafMappings, new LeafMappingComparator());
-        while (leafMappings.size() > 0) {
-            Mapping best = leafMappings.remove(0);
-            if (!(srcIgnored.contains(best.getFirst()) || dstIgnored.contains(best.getSecond()))) {
-                addMapping(best.getFirst(),best.getSecond());
-                srcIgnored.add(best.getFirst());
-                dstIgnored.add(best.getSecond());
+        Set<ITree> ignoredSrcTrees = new HashSet<>();
+        Set<ITree> ignoredDstTrees = new HashSet<>();
+        Collections.sort(leavesMappings, new LeafMappingComparator());
+        while (leavesMappings.size() > 0) {
+            Mapping bestMapping = leavesMappings.remove(0);
+            if (!(ignoredSrcTrees.contains(bestMapping.getFirst()) || ignoredDstTrees.contains(bestMapping.getSecond()))) {
+                addMapping(bestMapping.getFirst(),bestMapping.getSecond());
+                ignoredSrcTrees.add(bestMapping.getFirst());
+                ignoredDstTrees.add(bestMapping.getSecond());
             }
         }
     }
 
     public List<ITree> retainLeaves(List<ITree> trees) {
-        Iterator<ITree> tIt = trees.iterator();
-        while (tIt.hasNext()) {
-            ITree t = tIt.next();
-            if (!t.isLeaf()) tIt.remove();
+        Iterator<ITree> treeIterator = trees.iterator();
+        while (treeIterator.hasNext()) {
+            ITree tree = treeIterator.next();
+            if (!tree.isLeaf())
+                treeIterator.remove();
         }
         return trees;
     }
 
-    private class LeafMappingComparator implements Comparator<Mapping> {
+    private static class LeafMappingComparator implements Comparator<Mapping> {
 
         @Override
         public int compare(Mapping m1, Mapping m2) {
@@ -84,7 +84,6 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
         }
 
         public double sim(Mapping m) {
-
             return StringMetrics.qGramsDistance().compare(m.getFirst().getLabel(), m.getSecond().getLabel());
         }
 

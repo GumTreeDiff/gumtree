@@ -49,7 +49,7 @@ public abstract class Matcher {
         return mappings;
     }
 
-    public Set<Mapping> getMappingSet() {
+    public Set<Mapping> getMappingsAsSet() {
         return mappings.asSet();
     }
 
@@ -92,12 +92,12 @@ public abstract class Matcher {
     }
 
     protected int numberOfCommonDescendants(ITree src, ITree dst) {
-        Set<ITree> dstDescandants = new HashSet<>(dst.getDescendants());
+        Set<ITree> dstDescendants = new HashSet<>(dst.getDescendants());
         int common = 0;
 
         for (ITree t : src.getDescendants()) {
             ITree m = mappings.getDst(t);
-            if (m != null && dstDescandants.contains(m))
+            if (m != null && dstDescendants.contains(m))
                 common++;
         }
 
