@@ -42,7 +42,7 @@ public class FirstMatchBottomUpMatcher extends AbstractBottomUpMatcher {
     private void match(ITree src, ITree dst) {
         for (ITree s: src.postOrder())  {
             for (ITree d: dst.postOrder()) {
-                if (isMatchable(s, d) && !(s.isLeaf() || d.isLeaf())) {
+                if (isMappingAllowed(s, d) && !(s.isLeaf() || d.isLeaf())) {
                     double sim = jaccardSimilarity(s, d);
                     if (sim >= SIM_THRESHOLD || (s.isRoot() && d.isRoot()) ) {
                         if (!(areDescendantsMatched(s, true) || areDescendantsMatched(d, false)))

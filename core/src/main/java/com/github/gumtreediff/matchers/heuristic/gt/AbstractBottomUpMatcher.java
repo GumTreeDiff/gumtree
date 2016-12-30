@@ -99,7 +99,7 @@ public abstract class AbstractBottomUpMatcher extends Matcher {
 //                    System.err.printf("Trying to map already mapped source node (%d == %d || %d == %d)\n",
 //                            left.getId(), src.getId(), right.getId(), dst.getId());
                     continue;
-                } else if (!isMatchable(left, right)) {
+                } else if (!isMappingAllowed(left, right)) {
 //                    System.err.printf("Trying to map incompatible nodes (%s, %s)\n",
 //                            left.toShortString(), right.toShortString());
                     continue;
@@ -133,7 +133,7 @@ public abstract class AbstractBottomUpMatcher extends Matcher {
     }
 
     @Override
-    public boolean isMatchable(ITree src, ITree dst) {
+    public boolean isMappingAllowed(ITree src, ITree dst) {
         return src.hasSameType(dst)
                 && !(isSrcMatched(src) || isDstMatched(dst));
     }

@@ -108,7 +108,7 @@ public abstract class AbstractSubtreeMatcher extends Matcher {
         while (mappings.size() > 0) {
             Mapping mapping = mappings.remove(0);
             if (!(srcIgnored.contains(mapping.getFirst()) || dstIgnored.contains(mapping.getSecond()))) {
-                addFullMapping(mapping.getFirst(), mapping.getSecond());
+                addMappingRecursively(mapping.getFirst(), mapping.getSecond());
                 srcIgnored.add(mapping.getFirst());
                 dstIgnored.add(mapping.getSecond());
             }

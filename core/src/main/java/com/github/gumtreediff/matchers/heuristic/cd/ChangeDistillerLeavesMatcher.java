@@ -47,7 +47,7 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
                 TreeUtils.postOrderIterator(src)); srcLeaves.hasNext();) {
             for (ITree dstLeaf: dstLeaves) {
                 ITree srcLeaf = srcLeaves.next();
-                if (isMatchable(srcLeaf, dstLeaf)) {
+                if (isMappingAllowed(srcLeaf, dstLeaf)) {
                     double sim = StringMetrics.qGramsDistance().compare(srcLeaf.getLabel(), dstLeaf.getLabel());
                     if (sim > LABEL_SIM_THRESHOLD) leafMappings.add(new Mapping(srcLeaf, dstLeaf));
                 }

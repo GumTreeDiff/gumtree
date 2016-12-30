@@ -51,7 +51,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
         for (int hash : cliques.keys()) {
             Pair<List<ITree>, List<ITree>> clique = cliques.get(hash);
             if (clique.getFirst().size() == 1 && clique.getSecond().size() == 1) {
-                addFullMapping(clique.getFirst().get(0), clique.getSecond().get(0));
+                addMappingRecursively(clique.getFirst().get(0), clique.getSecond().get(0));
                 cliques.remove(hash);
             } else
                 ccliques.add(clique);

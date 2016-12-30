@@ -37,10 +37,10 @@ public abstract class Matcher {
 
     protected final MappingStore mappings;
 
-    public Matcher(ITree src, ITree dst, MappingStore store) {
+    public Matcher(ITree src, ITree dst, MappingStore mappings) {
         this.src = src;
         this.dst = dst;
-        this.mappings = store;
+        this.mappings = mappings;
     }
 
     public abstract void match();
@@ -65,13 +65,13 @@ public abstract class Matcher {
         mappings.link(src, dst);
     }
 
-    protected void addFullMapping(ITree src, ITree dst) {
-        List<ITree> csrcs = src.getTrees();
-        List<ITree> cdsts = dst.getTrees();
-        for (int i = 0; i < csrcs.size(); i++) {
-            ITree csrc = csrcs.get(i);
-            ITree cdst = cdsts.get(i);
-            addMapping(csrc, cdst);
+    protected void addMappingRecursively(ITree src, ITree dst) {
+        List<ITree> srcTrees = src.getTrees();
+        List<ITree> dstTrees = dst.getTrees();
+        for (int i = 0; i < srcTrees.size(); i++) {
+            ITree currentSrcTree = srcTrees.get(i);
+            ITree currentDstTree = dstTrees.get(i);
+            addMapping(currentSrcTree, currentDstTree);
         }
     }
 
@@ -92,19 +92,19 @@ public abstract class Matcher {
     }
 
     protected int numberOfCommonDescendants(ITree src, ITree dst) {
-        Set<ITree> dstDescs = new HashSet<>(dst.getDescendants());
+        Set<ITree> dstDescandants = new HashSet<>(dst.getDescendants());
         int common = 0;
 
         for (ITree t : src.getDescendants()) {
             ITree m = mappings.getDst(t);
-            if (m != null && dstDescs.contains(m))
+            if (m != null && dstDescandants.contains(m))
                 common++;
         }
 
         return common;
     }
 
-    public boolean isMatchable(ITree src, ITree dst) {
+    public boolean isMappingAllowed(ITree src, ITree dst) {
         return src.hasSameType(dst) && !(mappings.hasSrc(src) || mappings.hasDst(dst));
     }
 }

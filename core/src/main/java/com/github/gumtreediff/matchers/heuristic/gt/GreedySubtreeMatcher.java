@@ -39,7 +39,7 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
         Set<ITree> ignored = new HashSet<>();
         for (ITree src: multiMappings.getSrcs()) {
             if (multiMappings.isSrcUnique(src))
-                addFullMapping(src, multiMappings.getDst(src).iterator().next());
+                addMappingRecursively(src, multiMappings.getDst(src).iterator().next());
             else if (!ignored.contains(src)) {
                 Set<ITree> adsts = multiMappings.getDst(src);
                 Set<ITree> asrcs = multiMappings.getSrc(multiMappings.getDst(src).iterator().next());
