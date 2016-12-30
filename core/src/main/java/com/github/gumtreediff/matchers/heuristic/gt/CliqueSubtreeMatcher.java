@@ -29,16 +29,16 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.util.*;
 
-public class CliqueSubtreeMatcher extends SubtreeMatcher {
+public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
     public CliqueSubtreeMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
     }
 
     @Override
-    public void filterMappings(MultiMappingStore mmappings) {
+    public void filterMappings(MultiMappingStore multiMappings) {
         TIntObjectHashMap<Pair<List<ITree>, List<ITree>>> cliques = new TIntObjectHashMap<>();
-        for (Mapping m : mmappings) {
+        for (Mapping m : multiMappings) {
             int hash = m.getFirst().getHash();
             if (!cliques.containsKey(hash))
                 cliques.put(hash, new Pair<>(new ArrayList<>(), new ArrayList<>()));

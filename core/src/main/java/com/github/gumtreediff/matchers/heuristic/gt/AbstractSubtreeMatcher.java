@@ -29,64 +29,64 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public abstract class SubtreeMatcher extends Matcher {
+public abstract class AbstractSubtreeMatcher extends Matcher {
 
-    public static int MIN_HEIGHT = Integer.parseInt(System.getProperty("gumtree.match.gt.minh", "2"));
+    public static int MIN_HEIGHT = Integer.parseInt(System.getProperty("gt.stm.mh", "2"));
 
-    public SubtreeMatcher(ITree src, ITree dst, MappingStore store) {
+    public AbstractSubtreeMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
     }
 
-    private void popLarger(PriorityTreeList srcs, PriorityTreeList dsts) {
-        if (srcs.peekHeight() > dsts.peekHeight())
-            srcs.open();
+    private void popLarger(PriorityTreeList srcTrees, PriorityTreeList dstTrees) {
+        if (srcTrees.peekHeight() > dstTrees.peekHeight())
+            srcTrees.open();
         else
-            dsts.open();
+            dstTrees.open();
     }
 
     public void match() {
         MultiMappingStore multiMappings = new MultiMappingStore();
 
-        PriorityTreeList srcs = new PriorityTreeList(src);
-        PriorityTreeList dsts = new PriorityTreeList(dst);
+        PriorityTreeList srcTrees = new PriorityTreeList(src);
+        PriorityTreeList dstTrees = new PriorityTreeList(dst);
 
-        while (srcs.peekHeight() != -1 && dsts.peekHeight() != -1) {
-            while (srcs.peekHeight() != dsts.peekHeight())
-                popLarger(srcs, dsts);
+        while (srcTrees.peekHeight() != -1 && dstTrees.peekHeight() != -1) {
+            while (srcTrees.peekHeight() != dstTrees.peekHeight())
+                popLarger(srcTrees, dstTrees);
 
-            List<ITree> hSrcs = srcs.pop();
-            List<ITree> hDsts = dsts.pop();
+            List<ITree> currentHeightSrcTrees = srcTrees.pop();
+            List<ITree> currentHeightDstTrees = dstTrees.pop();
 
-            boolean[] srcMarks = new boolean[hSrcs.size()];
-            boolean[] dstMarks = new boolean[hDsts.size()];
+            boolean[] marksForSrcTrees = new boolean[currentHeightSrcTrees.size()];
+            boolean[] marksForDstTrees = new boolean[currentHeightDstTrees.size()];
 
-            for (int i = 0; i < hSrcs.size(); i++) {
-                for (int j = 0; j < hDsts.size(); j++) {
-                    ITree src = hSrcs.get(i);
-                    ITree dst = hDsts.get(j);
+            for (int i = 0; i < currentHeightSrcTrees.size(); i++) {
+                for (int j = 0; j < currentHeightDstTrees.size(); j++) {
+                    ITree src = currentHeightSrcTrees.get(i);
+                    ITree dst = currentHeightDstTrees.get(j);
 
                     if (src.isIsomorphicTo(dst)) {
                         multiMappings.link(src, dst);
-                        srcMarks[i] = true;
-                        dstMarks[j] = true;
+                        marksForSrcTrees[i] = true;
+                        marksForDstTrees[j] = true;
                     }
                 }
             }
 
-            for (int i = 0; i < srcMarks.length; i++)
-                if (srcMarks[i] == false)
-                    srcs.open(hSrcs.get(i));
-            for (int j = 0; j < dstMarks.length; j++)
-                if (dstMarks[j] == false)
-                    dsts.open(hDsts.get(j));
-            srcs.updateHeight();
-            dsts.updateHeight();
+            for (int i = 0; i < marksForSrcTrees.length; i++)
+                if (marksForSrcTrees[i] == false)
+                    srcTrees.open(currentHeightSrcTrees.get(i));
+            for (int j = 0; j < marksForDstTrees.length; j++)
+                if (marksForDstTrees[j] == false)
+                    dstTrees.open(currentHeightDstTrees.get(j));
+            srcTrees.updateHeight();
+            dstTrees.updateHeight();
         }
 
         filterMappings(multiMappings);
     }
 
-    public abstract void filterMappings(MultiMappingStore mmappings);
+    public abstract void filterMappings(MultiMappingStore multiMappings);
 
     protected double sim(ITree src, ITree dst) {
         double jaccard = jaccardSimilarity(src.getParent(), dst.getParent());

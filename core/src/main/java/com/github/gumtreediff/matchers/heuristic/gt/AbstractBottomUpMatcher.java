@@ -34,9 +34,9 @@ import java.util.Set;
 
 public abstract class AbstractBottomUpMatcher extends Matcher {
     public static int SIZE_THRESHOLD =
-            Integer.parseInt(System.getProperty("gt.bum.size", "1000"));
+            Integer.parseInt(System.getProperty("gt.bum.szt", "1000"));
     public static final double SIM_THRESHOLD =
-            Double.parseDouble(System.getProperty("gt.bum.sim", "0.5"));
+            Double.parseDouble(System.getProperty("gt.bum.smt", "0.5"));
 
     protected TreeMap srcIds;
     protected TreeMap dstIds;

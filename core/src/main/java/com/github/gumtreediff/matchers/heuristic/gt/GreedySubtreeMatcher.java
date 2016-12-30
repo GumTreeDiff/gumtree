@@ -27,7 +27,7 @@ import com.github.gumtreediff.tree.ITree;
 
 import java.util.*;
 
-public class GreedySubtreeMatcher extends SubtreeMatcher {
+public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
 
     public GreedySubtreeMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
