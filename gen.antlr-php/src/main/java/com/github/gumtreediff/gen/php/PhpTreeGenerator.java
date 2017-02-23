@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.gen.php;
 
+import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.antlr.AbstractAntlrTreeGenerator;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.antlr.AbstractAntlrTreeGenerator;
@@ -29,7 +30,7 @@ import org.antlr.runtime.tree.CommonTree;
 import java.io.IOException;
 import java.io.Reader;
 
-@Register(id = "php-antlr", accept = "\\.php.?$")
+@Register(id = "php-antlr", accept = "\\.php.?$", priority = Registry.Priority.LOW)
 public class PhpTreeGenerator extends AbstractAntlrTreeGenerator {
 
     @Override
