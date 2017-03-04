@@ -56,17 +56,16 @@ public class PcsMerge {
         Map<ITree, ITree> references = buildReferenceTree();
 
         Set<Pcs> delta = new HashSet<>();
-        Set<Pcs> t0Star = star(t0, references);
         Set<Pcs> t1Star = star(t1, references);
         Set<Pcs> t2Star = star(t2, references);
-        delta.addAll(t0Star);
+        delta.addAll(t0);
         delta.addAll(t1Star);
         delta.addAll(t2Star);
         HashSet<Pcs> deltaT1 = new HashSet<>(t1Star);
-        deltaT1.removeAll(t0Star);
+        deltaT1.removeAll(t0);
         HashSet<Pcs> deltaT2 = new HashSet<>(t2Star);
-        deltaT2.removeAll(t0Star);
-        return getInconsistencies(t0Star, delta);
+        deltaT2.removeAll(t0);
+        return getInconsistencies(t0, delta);
     }
 
     Set<Pcs> star(Set<Pcs> pcses, Map<ITree, ITree> references) {
