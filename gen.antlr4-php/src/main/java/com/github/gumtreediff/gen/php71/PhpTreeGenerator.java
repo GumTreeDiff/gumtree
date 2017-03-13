@@ -90,7 +90,8 @@ public class PhpTreeGenerator extends AbstractAntlr4TreeGenerator {
         tree.setParentAndUpdateChildren(root);
 
         Token firstToken = tokens.get(ct.getSourceInterval().a);
-        Token lastToken = tokens.get(ct.getSourceInterval().b);
+        Token lastToken = tokens.get(ct.getSourceInterval().b == -1
+                ? ct.getSourceInterval().a : ct.getSourceInterval().b);
 
         tree.setPos(firstToken.getStartIndex());
         tree.setLength(lastToken.getStopIndex() - tree.getPos() + 1); // count last char
