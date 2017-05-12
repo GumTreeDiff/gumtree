@@ -21,6 +21,8 @@ dependencies {
 	compile project(':gen.antlr-php')
 	compile project(':gen.antlr-r')
 	compile project(':gen.antlr-xml')
+	compile project(':gen.antlr4')
+	compile project(':gen.antlr4-php')
 	compile project(':gen.c')
 	compile project(':gen.css')
 	compile project(':gen.jdt')
