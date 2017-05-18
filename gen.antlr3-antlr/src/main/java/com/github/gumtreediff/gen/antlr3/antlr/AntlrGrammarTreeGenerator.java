@@ -30,7 +30,7 @@ public class AntlrGrammarTreeGenerator extends AbstractAntlr3TreeGenerator<ANTLR
 
     @Override
     protected ANTLRv3Lexer getLexer(ANTLRStringStream stream) {
-        return new ANTLRv3Lexer();
+        return new ANTLRv3Lexer(stream);
     }
 
     @Override

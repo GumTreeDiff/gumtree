@@ -29,7 +29,7 @@ public class PhpTreeGenerator extends AbstractAntlr3TreeGenerator<PhpLexer, PhpP
 
     @Override
     protected PhpLexer getLexer(ANTLRStringStream stream) {
-        return new PhpLexer();
+        return new PhpLexer(stream);
     }
 
     @Override

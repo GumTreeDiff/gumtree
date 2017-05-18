@@ -30,7 +30,7 @@ public class AntlrJsonTreeGenerator extends AbstractAntlr3TreeGenerator<JSONLexe
 
     @Override
     protected JSONLexer getLexer(ANTLRStringStream stream) {
-        return new JSONLexer();
+        return new JSONLexer(stream);
     }
 
     @Override

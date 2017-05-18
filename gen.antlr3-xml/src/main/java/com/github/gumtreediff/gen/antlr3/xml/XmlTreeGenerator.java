@@ -47,7 +47,7 @@ public class XmlTreeGenerator extends AbstractAntlr3TreeGenerator<XMLLexer, XMLP
 
     @Override
     protected XMLLexer getLexer(ANTLRStringStream stream) {
-        return new XMLLexer();
+        return new XMLLexer(stream);
     }
 
     @Override
