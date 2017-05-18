@@ -216,9 +216,9 @@ public class TreeContext {
                         nextEntry = localIterator.next();
                         seenKeys.add(nextEntry.getKey());
                         return n;
-                    }
-                    else
+                    } else {
                         currentIterator = globalIterator;
+                    }
                 }
                 nextEntry = null;
                 while (globalIterator.hasNext()) {
