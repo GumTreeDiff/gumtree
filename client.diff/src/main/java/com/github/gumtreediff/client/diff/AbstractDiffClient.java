@@ -105,6 +105,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
                 ? matchers.getMatcher(getSrcTreeContext().getRoot(), getDstTreeContext().getRoot())
                 : matchers.getMatcher(opts.matcher, getSrcTreeContext().getRoot(), getDstTreeContext().getRoot());
         matcher.match();
+        getSrcTreeContext().importTypeLabels(getDstTreeContext());
         return matcher;
     }
 

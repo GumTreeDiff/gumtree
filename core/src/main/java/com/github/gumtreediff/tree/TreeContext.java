@@ -73,6 +73,14 @@ public class TreeContext {
             throw new RuntimeException(String.format("Redefining type %d: '%s' with '%s'", type, typeLabel, name));
     }
 
+    public void importTypeLabels(TreeContext ctx) {
+        for (Map.Entry<Integer, String> label : ctx.typeLabels.entrySet()) {
+            if (!typeLabels.containsValue(label.getValue())) {
+                typeLabels.put(label.getKey(), label.getValue());
+            }
+        }
+    }
+
     public ITree createTree(int type, String label, String typeLabel) {
         registerTypeLabel(type, typeLabel);
         return new Tree(type, label);
