@@ -171,6 +171,6 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
     public abstract String getLanguage();
 
     public String[] getArguments(String file) {
-        return new String[]{SRCML_CMD, "-l", getLanguage(), "--position", file};
+        return new String[]{SRCML_CMD, "-l", getLanguage(), "--position", file, "--tabs=1"};
     }
 }
