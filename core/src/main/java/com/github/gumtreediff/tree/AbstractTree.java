@@ -252,7 +252,7 @@ public abstract class AbstractTree implements ITree {
         StringBuilder b = new StringBuilder();
         for (ITree t : TreeUtils.preOrder(this))
             b.append(indent(t) + t.toShortString() + "\n");
-        return b.toString();
+        return b.toShortString();
     }
 
     @Override
