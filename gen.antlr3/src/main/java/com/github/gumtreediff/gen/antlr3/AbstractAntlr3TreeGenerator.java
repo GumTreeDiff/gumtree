@@ -34,7 +34,8 @@ import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Parser> extends TreeGenerator {
+// public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Parser> extends TreeGenerator {
+public abstract class AbstractAntlr3TreeGenerator<L extends TokenSource, P extends Parser> extends TreeGenerator {
 
     private Deque<ITree> trees = new ArrayDeque<>();
 

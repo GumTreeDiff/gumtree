@@ -54,7 +54,6 @@ public class Run {
 
     public static void initGenerators() {
         Reflections reflections = new Reflections("com.github.gumtreediff.gen");
-
         reflections.getSubTypesOf(TreeGenerator.class).forEach(
                 gen -> {
                     com.github.gumtreediff.gen.Register a =
