@@ -1,1 +1,5 @@
 description = 'GumTree abstract AntLR module.'
+dependencies {
+    compile files('lib/protobuf-java-3.3.1.jar')
+    runtime files('lib/protobuf-java-3.3.1.jar')
+}

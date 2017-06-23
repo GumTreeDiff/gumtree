@@ -20,8 +20,14 @@
 
 package com.github.gumtreediff.gen.antlr3;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.lang.Exception;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -34,7 +40,8 @@ import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-// public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Parser> extends TreeGenerator {
+import fast.antlr.FastAntlr;
+
 public abstract class AbstractAntlr3TreeGenerator<L extends TokenSource, P extends Parser> extends TreeGenerator {
 
     private Deque<ITree> trees = new ArrayDeque<>();
@@ -95,13 +102,29 @@ public abstract class AbstractAntlr3TreeGenerator<L extends TokenSource, P exten
         return names[tokenType];
     }
 
+
     @SuppressWarnings("unchecked")
-    protected void buildTree(TreeContext context, CommonTree ct) {
+    protected void buildTree(TreeContext context, CommonTree ct) throws FileNotFoundException {
         int type = ct.getType();
         String tokenName = getTokenName(type);
         String label = ct.getText();
         if (tokenName.equals(label))
             label = ITree.NO_LABEL;
+
+	PrintStream protocol = new PrintStream("/tmp/tokens.proto");
+        String[] names = getTokenNames();
+       	protocol.println("syntax=\"proto3\";");
+       	protocol.println("package fast.antlr;");
+       	protocol.println("enum Kind {");
+       	protocol.println("\tINVALID=0;");
+       	protocol.println("\tEOR=1;");
+       	protocol.println("\tDOWN=2;");
+       	protocol.println("\tUP=3;");
+	for (int i=4; i < names.length; i++) {
+        	protocol.println("\t" + names[i] + "=" + i + ";");
+	}
+       	protocol.println("}");
+	protocol.close();
 
         ITree t = context.createTree(type, label, tokenName);
 

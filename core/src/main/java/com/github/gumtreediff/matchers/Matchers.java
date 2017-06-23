@@ -63,6 +63,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
 
     @Override
     protected Entry newEntry(Class<? extends Matcher> clazz, Register annotation) {
+	    System.out.println("annotation id = " + annotation.id());
         return new Entry(annotation.id(), clazz,
                 defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class), annotation.priority()) {
 
