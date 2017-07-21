@@ -1,0 +1,11 @@
+description = 'GumTree tree generator for XML code (AntLR4 based).'
+
+generateGrammarSource {
+  arguments = ['com/github/gumtreediff/gen/antlr4/xml/XMLLexer.g4', 'com/github/gumtreediff/gen/antlr4/xml/XMLParser.g4']
+}
+
+dependencies {
+    testCompile project(':client')
+    testCompile project(':client.diff')
+    testCompile 'junit:junit:4.+'
+}
