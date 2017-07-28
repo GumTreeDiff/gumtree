@@ -1,0 +1,1642 @@
+<?xml version="1.0" ?>
+<root>
+  <0 label="document">
+    <-1 label="prolog">
+      <XMLDeclOpen label="&lt;?xml "/>
+      <-5 label="attribute">
+        <Name label="version"/>
+        <EQUALS label="="/>
+        <STRING label="&quot;1.0&quot;"/>
+      </-5>
+      <SPECIAL_CLOSE label="?&gt;"/>
+    </-1>
+    <-7 label="misc">
+      <SEA_WS label="
+"/>
+    </-7>
+    <-3 label="element">
+      <OPEN label="&lt;"/>
+      <Name label="catalog"/>
+      <CLOSE label="&gt;"/>
+      <-2 label="content">
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk101&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Gambardella, Matthew"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="XML Developer's Guide"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Computer"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="44.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2000-10-01"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="An in-depth look at creating applications 
+      with XML."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk102&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Ralls, Kim"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Midnight Rain"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Fantasy"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="5.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2000-12-16"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="A former architect battles corporate zombies, 
+      an evil sorceress, and her own childhood to become queen 
+      of the world."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk103&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Corets, Eva"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Maeve Ascendant"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Fantasy"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="5.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2000-11-17"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="After the collapse of a nanotechnology 
+      society in England, the young survivors lay the 
+      foundation for a new society."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk104&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Corets, Eva"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Oberon's Legacy"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Fantasy"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="5.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2001-03-10"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="In post-apocalypse England, the mysterious 
+      agent known only as Oberon helps to create a new life 
+      for the inhabitants of London. Sequel to Maeve 
+      Ascendant."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk105&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Corets, Svante"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="The Sundered Grail"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Fantasy"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="5.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2001-09-10"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="The two daughters of Maeve, half-sisters, 
+      battle one another for control of England. Sequel to 
+      Oberon's Legacy."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk106&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Randall, Cynthia"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Lover Birds"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Romance"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="4.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2000-09-02"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="When Carla meets Paul at an ornithology 
+      conference, tempers fly as feathers get ruffled."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk107&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Thurman, Paula"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Splish Splash"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Romance"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="4.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2000-11-02"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="A deep sea diver finds true love twenty 
+      thousand leagues beneath the sea."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk108&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Knorr, Stefan"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Creepy Crawlies"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Horror"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="4.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2000-12-06"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="An anthology of horror stories about roaches,
+      centipedes, scorpions  and other insects."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk109&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Kress, Peter"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Paradox Lost"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Science Fiction"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="6.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2000-11-02"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="After an inadvertant trip through a Heisenberg
+      Uncertainty Device, James Salway discovers the problems 
+      of being quantum."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk110&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="O'Brien, Tim"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Microsoft .NET: The Programming Bible"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Computer"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="36.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2000-12-09"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Microsoft's .NET initiative is explored in 
+      detail in this deep programmer's reference."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk111&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="O'Brien, Tim"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="MSXML3: A Comprehensive Guide"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Computer"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="36.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2000-12-01"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="The Microsoft MSXML3 parser is covered in 
+      detail, with attention to XML DOM interfaces, XSLT processing, 
+      SAX and more."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+   "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="book"/>
+          <-5 label="attribute">
+            <Name label="id"/>
+            <EQUALS label="="/>
+            <STRING label="&quot;bk112&quot;"/>
+          </-5>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Galos, Mike"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="author"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Visual Studio 7: A Comprehensive Guide"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="title"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Computer"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="genre"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="49.95"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="price"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="2001-04-16"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="publish_date"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+      "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="Microsoft Visual Studio 7 is explored in depth,
+      looking at how Visual Basic, Visual C++, C#, and ASP+ are 
+      integrated into a comprehensive development 
+      environment."/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="description"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+   "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="book"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+"/>
+        </-6>
+      </-2>
+      <OPEN label="&lt;"/>
+      <SLASH label="/"/>
+      <Name label="catalog"/>
+      <CLOSE label="&gt;"/>
+    </-3>
+    <-7 label="misc">
+      <SEA_WS label="
+"/>
+    </-7>
+  </0>
+</root>

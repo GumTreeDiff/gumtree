@@ -1,0 +1,1643 @@
+<?xml version="1.0" ?>
+<root>
+  <context></context>
+  <tree type="0" label="document">
+    <tree type="-1" label="prolog">
+      <tree type="8" label="&lt;?xml " typeLabel="XMLDeclOpen" pos="0" length="6" other_pos="0" other_length="6"></tree>
+      <tree type="-5" label="attribute">
+        <tree type="16" label="version" typeLabel="Name" pos="6" length="7" other_pos="6" other_length="7"></tree>
+        <tree type="14" label="=" typeLabel="EQUALS" pos="13" length="1" other_pos="13" other_length="1"></tree>
+        <tree type="15" label="&quot;1.0&quot;" typeLabel="STRING" pos="14" length="5" other_pos="14" other_length="5"></tree>
+      </tree>
+      <tree type="11" label="?&gt;" typeLabel="SPECIAL_CLOSE" pos="19" length="2" other_pos="19" other_length="2"></tree>
+    </tree>
+    <tree type="-7" label="misc">
+      <tree type="6" label="
+" typeLabel="SEA_WS" pos="21" length="1" other_pos="21" other_length="1"></tree>
+    </tree>
+    <tree type="-3" label="element">
+      <tree type="7" label="&lt;" typeLabel="OPEN" pos="22" length="1" other_pos="22" other_length="1"></tree>
+      <tree type="16" label="catalog" typeLabel="Name" pos="23" length="7" other_pos="23" other_length="7"></tree>
+      <tree type="10" label="&gt;" typeLabel="CLOSE" pos="30" length="1" other_pos="30" other_length="1"></tree>
+      <tree type="-2" label="content">
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="31" length="4" other_pos="31" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="35" length="1" other_pos="35" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="36" length="4" other_pos="36" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="41" length="2" other_pos="41" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="43" length="1" other_pos="43" other_length="1"></tree>
+            <tree type="15" label="&quot;bk101&quot;" typeLabel="STRING" pos="44" length="7" other_pos="44" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="51" length="1" other_pos="51" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="52" length="7" other_pos="52" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="59" length="1" other_pos="59" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="60" length="6" other_pos="60" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="66" length="1" other_pos="66" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Gambardella, Matthew" typeLabel="TEXT" pos="67" length="20" other_pos="67" other_length="20"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="87" length="1" other_pos="87" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="88" length="1" other_pos="88" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="89" length="6" other_pos="89" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="95" length="1" other_pos="95" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="96" length="7" other_pos="96" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="103" length="1" other_pos="103" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="104" length="5" other_pos="104" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="109" length="1" other_pos="109" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="XML Developer's Guide" typeLabel="TEXT" pos="110" length="21" other_pos="110" other_length="21"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="131" length="1" other_pos="131" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="132" length="1" other_pos="132" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="133" length="5" other_pos="133" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="138" length="1" other_pos="138" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="139" length="7" other_pos="139" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="146" length="1" other_pos="146" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="147" length="5" other_pos="147" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="152" length="1" other_pos="152" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Computer" typeLabel="TEXT" pos="153" length="8" other_pos="153" other_length="8"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="161" length="1" other_pos="161" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="162" length="1" other_pos="162" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="163" length="5" other_pos="163" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="168" length="1" other_pos="168" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="169" length="7" other_pos="169" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="176" length="1" other_pos="176" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="177" length="5" other_pos="177" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="182" length="1" other_pos="182" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="44.95" typeLabel="TEXT" pos="183" length="5" other_pos="183" other_length="5"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="188" length="1" other_pos="188" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="189" length="1" other_pos="189" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="190" length="5" other_pos="190" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="195" length="1" other_pos="195" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="196" length="7" other_pos="196" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="203" length="1" other_pos="203" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="204" length="12" other_pos="204" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="216" length="1" other_pos="216" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2000-10-01" typeLabel="TEXT" pos="217" length="10" other_pos="217" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="227" length="1" other_pos="227" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="228" length="1" other_pos="228" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="229" length="12" other_pos="229" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="241" length="1" other_pos="241" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="242" length="7" other_pos="242" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="249" length="1" other_pos="249" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="250" length="11" other_pos="250" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="261" length="1" other_pos="261" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="An in-depth look at creating applications 
+      with XML." typeLabel="TEXT" pos="262" length="58" other_pos="262" other_length="58"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="320" length="1" other_pos="320" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="321" length="1" other_pos="321" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="322" length="11" other_pos="322" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="333" length="1" other_pos="333" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="334" length="4" other_pos="334" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="338" length="1" other_pos="338" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="339" length="1" other_pos="339" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="340" length="4" other_pos="340" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="344" length="1" other_pos="344" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="345" length="4" other_pos="345" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="349" length="1" other_pos="349" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="350" length="4" other_pos="350" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="355" length="2" other_pos="355" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="357" length="1" other_pos="357" other_length="1"></tree>
+            <tree type="15" label="&quot;bk102&quot;" typeLabel="STRING" pos="358" length="7" other_pos="358" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="365" length="1" other_pos="365" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="366" length="7" other_pos="366" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="373" length="1" other_pos="373" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="374" length="6" other_pos="374" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="380" length="1" other_pos="380" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Ralls, Kim" typeLabel="TEXT" pos="381" length="10" other_pos="381" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="391" length="1" other_pos="391" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="392" length="1" other_pos="392" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="393" length="6" other_pos="393" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="399" length="1" other_pos="399" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="400" length="7" other_pos="400" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="407" length="1" other_pos="407" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="408" length="5" other_pos="408" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="413" length="1" other_pos="413" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Midnight Rain" typeLabel="TEXT" pos="414" length="13" other_pos="414" other_length="13"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="427" length="1" other_pos="427" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="428" length="1" other_pos="428" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="429" length="5" other_pos="429" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="434" length="1" other_pos="434" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="435" length="7" other_pos="435" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="442" length="1" other_pos="442" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="443" length="5" other_pos="443" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="448" length="1" other_pos="448" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Fantasy" typeLabel="TEXT" pos="449" length="7" other_pos="449" other_length="7"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="456" length="1" other_pos="456" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="457" length="1" other_pos="457" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="458" length="5" other_pos="458" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="463" length="1" other_pos="463" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="464" length="7" other_pos="464" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="471" length="1" other_pos="471" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="472" length="5" other_pos="472" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="477" length="1" other_pos="477" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="5.95" typeLabel="TEXT" pos="478" length="4" other_pos="478" other_length="4"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="482" length="1" other_pos="482" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="483" length="1" other_pos="483" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="484" length="5" other_pos="484" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="489" length="1" other_pos="489" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="490" length="7" other_pos="490" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="497" length="1" other_pos="497" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="498" length="12" other_pos="498" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="510" length="1" other_pos="510" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2000-12-16" typeLabel="TEXT" pos="511" length="10" other_pos="511" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="521" length="1" other_pos="521" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="522" length="1" other_pos="522" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="523" length="12" other_pos="523" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="535" length="1" other_pos="535" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="536" length="7" other_pos="536" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="543" length="1" other_pos="543" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="544" length="11" other_pos="544" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="555" length="1" other_pos="555" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="A former architect battles corporate zombies, 
+      an evil sorceress, and her own childhood to become queen 
+      of the world." typeLabel="TEXT" pos="556" length="130" other_pos="556" other_length="130"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="686" length="1" other_pos="686" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="687" length="1" other_pos="687" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="688" length="11" other_pos="688" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="699" length="1" other_pos="699" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="700" length="4" other_pos="700" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="704" length="1" other_pos="704" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="705" length="1" other_pos="705" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="706" length="4" other_pos="706" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="710" length="1" other_pos="710" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="711" length="4" other_pos="711" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="715" length="1" other_pos="715" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="716" length="4" other_pos="716" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="721" length="2" other_pos="721" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="723" length="1" other_pos="723" other_length="1"></tree>
+            <tree type="15" label="&quot;bk103&quot;" typeLabel="STRING" pos="724" length="7" other_pos="724" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="731" length="1" other_pos="731" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="732" length="7" other_pos="732" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="739" length="1" other_pos="739" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="740" length="6" other_pos="740" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="746" length="1" other_pos="746" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Corets, Eva" typeLabel="TEXT" pos="747" length="11" other_pos="747" other_length="11"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="758" length="1" other_pos="758" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="759" length="1" other_pos="759" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="760" length="6" other_pos="760" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="766" length="1" other_pos="766" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="767" length="7" other_pos="767" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="774" length="1" other_pos="774" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="775" length="5" other_pos="775" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="780" length="1" other_pos="780" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Maeve Ascendant" typeLabel="TEXT" pos="781" length="15" other_pos="781" other_length="15"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="796" length="1" other_pos="796" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="797" length="1" other_pos="797" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="798" length="5" other_pos="798" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="803" length="1" other_pos="803" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="804" length="7" other_pos="804" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="811" length="1" other_pos="811" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="812" length="5" other_pos="812" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="817" length="1" other_pos="817" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Fantasy" typeLabel="TEXT" pos="818" length="7" other_pos="818" other_length="7"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="825" length="1" other_pos="825" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="826" length="1" other_pos="826" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="827" length="5" other_pos="827" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="832" length="1" other_pos="832" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="833" length="7" other_pos="833" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="840" length="1" other_pos="840" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="841" length="5" other_pos="841" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="846" length="1" other_pos="846" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="5.95" typeLabel="TEXT" pos="847" length="4" other_pos="847" other_length="4"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="851" length="1" other_pos="851" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="852" length="1" other_pos="852" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="853" length="5" other_pos="853" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="858" length="1" other_pos="858" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="859" length="7" other_pos="859" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="866" length="1" other_pos="866" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="867" length="12" other_pos="867" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="879" length="1" other_pos="879" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2000-11-17" typeLabel="TEXT" pos="880" length="10" other_pos="880" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="890" length="1" other_pos="890" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="891" length="1" other_pos="891" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="892" length="12" other_pos="892" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="904" length="1" other_pos="904" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="905" length="7" other_pos="905" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="912" length="1" other_pos="912" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="913" length="11" other_pos="913" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="924" length="1" other_pos="924" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="After the collapse of a nanotechnology 
+      society in England, the young survivors lay the 
+      foundation for a new society." typeLabel="TEXT" pos="925" length="130" other_pos="925" other_length="130"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1055" length="1" other_pos="1055" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1056" length="1" other_pos="1056" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="1057" length="11" other_pos="1057" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1068" length="1" other_pos="1068" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="1069" length="4" other_pos="1069" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="1073" length="1" other_pos="1073" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="1074" length="1" other_pos="1074" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="1075" length="4" other_pos="1075" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1079" length="1" other_pos="1079" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="1080" length="4" other_pos="1080" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="1084" length="1" other_pos="1084" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="1085" length="4" other_pos="1085" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="1090" length="2" other_pos="1090" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="1092" length="1" other_pos="1092" other_length="1"></tree>
+            <tree type="15" label="&quot;bk104&quot;" typeLabel="STRING" pos="1093" length="7" other_pos="1093" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1100" length="1" other_pos="1100" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1101" length="7" other_pos="1101" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1108" length="1" other_pos="1108" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="1109" length="6" other_pos="1109" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1115" length="1" other_pos="1115" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Corets, Eva" typeLabel="TEXT" pos="1116" length="11" other_pos="1116" other_length="11"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1127" length="1" other_pos="1127" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1128" length="1" other_pos="1128" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="1129" length="6" other_pos="1129" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1135" length="1" other_pos="1135" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1136" length="7" other_pos="1136" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1143" length="1" other_pos="1143" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="1144" length="5" other_pos="1144" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1149" length="1" other_pos="1149" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Oberon's Legacy" typeLabel="TEXT" pos="1150" length="15" other_pos="1150" other_length="15"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1165" length="1" other_pos="1165" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1166" length="1" other_pos="1166" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="1167" length="5" other_pos="1167" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1172" length="1" other_pos="1172" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1173" length="7" other_pos="1173" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1180" length="1" other_pos="1180" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="1181" length="5" other_pos="1181" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1186" length="1" other_pos="1186" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Fantasy" typeLabel="TEXT" pos="1187" length="7" other_pos="1187" other_length="7"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1194" length="1" other_pos="1194" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1195" length="1" other_pos="1195" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="1196" length="5" other_pos="1196" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1201" length="1" other_pos="1201" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1202" length="7" other_pos="1202" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1209" length="1" other_pos="1209" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="1210" length="5" other_pos="1210" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1215" length="1" other_pos="1215" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="5.95" typeLabel="TEXT" pos="1216" length="4" other_pos="1216" other_length="4"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1220" length="1" other_pos="1220" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1221" length="1" other_pos="1221" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="1222" length="5" other_pos="1222" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1227" length="1" other_pos="1227" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1228" length="7" other_pos="1228" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1235" length="1" other_pos="1235" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="1236" length="12" other_pos="1236" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1248" length="1" other_pos="1248" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2001-03-10" typeLabel="TEXT" pos="1249" length="10" other_pos="1249" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1259" length="1" other_pos="1259" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1260" length="1" other_pos="1260" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="1261" length="12" other_pos="1261" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1273" length="1" other_pos="1273" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1274" length="7" other_pos="1274" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1281" length="1" other_pos="1281" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="1282" length="11" other_pos="1282" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1293" length="1" other_pos="1293" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="In post-apocalypse England, the mysterious 
+      agent known only as Oberon helps to create a new life 
+      for the inhabitants of London. Sequel to Maeve 
+      Ascendant." typeLabel="TEXT" pos="1294" length="175" other_pos="1294" other_length="175"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1469" length="1" other_pos="1469" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1470" length="1" other_pos="1470" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="1471" length="11" other_pos="1471" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1482" length="1" other_pos="1482" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="1483" length="4" other_pos="1483" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="1487" length="1" other_pos="1487" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="1488" length="1" other_pos="1488" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="1489" length="4" other_pos="1489" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1493" length="1" other_pos="1493" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="1494" length="4" other_pos="1494" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="1498" length="1" other_pos="1498" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="1499" length="4" other_pos="1499" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="1504" length="2" other_pos="1504" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="1506" length="1" other_pos="1506" other_length="1"></tree>
+            <tree type="15" label="&quot;bk105&quot;" typeLabel="STRING" pos="1507" length="7" other_pos="1507" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1514" length="1" other_pos="1514" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1515" length="7" other_pos="1515" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1522" length="1" other_pos="1522" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="1523" length="6" other_pos="1523" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1529" length="1" other_pos="1529" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Corets, Eva" typeLabel="TEXT" pos="1530" length="11" other_pos="1530" other_length="14"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1541" length="1" other_pos="1544" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1542" length="1" other_pos="1545" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="1543" length="6" other_pos="1546" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1549" length="1" other_pos="1552" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1550" length="7" other_pos="1553" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1557" length="1" other_pos="1560" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="1558" length="5" other_pos="1561" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1563" length="1" other_pos="1566" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="The Sundered Grail" typeLabel="TEXT" pos="1564" length="18" other_pos="1567" other_length="18"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1582" length="1" other_pos="1585" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1583" length="1" other_pos="1586" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="1584" length="5" other_pos="1587" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1589" length="1" other_pos="1592" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1590" length="7" other_pos="1593" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1597" length="1" other_pos="1600" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="1598" length="5" other_pos="1601" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1603" length="1" other_pos="1606" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Fantasy" typeLabel="TEXT" pos="1604" length="7" other_pos="1607" other_length="7"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1611" length="1" other_pos="1614" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1612" length="1" other_pos="1615" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="1613" length="5" other_pos="1616" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1618" length="1" other_pos="1621" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1619" length="7" other_pos="1622" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1626" length="1" other_pos="1629" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="1627" length="5" other_pos="1630" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1632" length="1" other_pos="1635" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="5.95" typeLabel="TEXT" pos="1633" length="4" other_pos="1636" other_length="4"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1637" length="1" other_pos="1640" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1638" length="1" other_pos="1641" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="1639" length="5" other_pos="1642" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1644" length="1" other_pos="1647" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1645" length="7" other_pos="1648" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1652" length="1" other_pos="1655" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="1653" length="12" other_pos="1656" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1665" length="1" other_pos="1668" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2001-09-10" typeLabel="TEXT" pos="1666" length="10" other_pos="1669" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1676" length="1" other_pos="1679" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1677" length="1" other_pos="1680" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="1678" length="12" other_pos="1681" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1690" length="1" other_pos="1693" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1691" length="7" other_pos="1694" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1698" length="1" other_pos="1701" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="1699" length="11" other_pos="1702" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1710" length="1" other_pos="1713" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="The two daughters of Maeve, half-sisters, 
+      battle one another for control of England. Sequel to 
+      Oberon's Legacy." typeLabel="TEXT" pos="1711" length="125" other_pos="1714" other_length="125"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1836" length="1" other_pos="1839" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1837" length="1" other_pos="1840" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="1838" length="11" other_pos="1841" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1849" length="1" other_pos="1852" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="1850" length="4" other_pos="1853" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="1854" length="1" other_pos="1857" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="1855" length="1" other_pos="1858" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="1856" length="4" other_pos="1859" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1860" length="1" other_pos="1863" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="1861" length="4" other_pos="1864" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="1865" length="1" other_pos="1868" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="1866" length="4" other_pos="1869" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="1871" length="2" other_pos="1874" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="1873" length="1" other_pos="1876" other_length="1"></tree>
+            <tree type="15" label="&quot;bk106&quot;" typeLabel="STRING" pos="1874" length="7" other_pos="1877" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1881" length="1" other_pos="1884" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1882" length="7" other_pos="1885" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1889" length="1" other_pos="1892" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="1890" length="6" other_pos="1893" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1896" length="1" other_pos="1899" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Randall, Cynthia" typeLabel="TEXT" pos="1897" length="16" other_pos="1900" other_length="16"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1913" length="1" other_pos="1916" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1914" length="1" other_pos="1917" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="1915" length="6" other_pos="1918" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1921" length="1" other_pos="1924" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1922" length="7" other_pos="1925" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1929" length="1" other_pos="1932" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="1930" length="5" other_pos="1933" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1935" length="1" other_pos="1938" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Lover Birds" typeLabel="TEXT" pos="1936" length="11" other_pos="1939" other_length="11"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1947" length="1" other_pos="1950" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1948" length="1" other_pos="1951" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="1949" length="5" other_pos="1952" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1954" length="1" other_pos="1957" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1955" length="7" other_pos="1958" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1962" length="1" other_pos="1965" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="1963" length="5" other_pos="1966" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1968" length="1" other_pos="1971" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Romance" typeLabel="TEXT" pos="1969" length="7" other_pos="1972" other_length="7"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1976" length="1" other_pos="1979" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="1977" length="1" other_pos="1980" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="1978" length="5" other_pos="1981" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1983" length="1" other_pos="1986" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="1984" length="7" other_pos="1987" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="1991" length="1" other_pos="1994" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="1992" length="5" other_pos="1995" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="1997" length="1" other_pos="2000" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="4.95" typeLabel="TEXT" pos="1998" length="4" other_pos="2001" other_length="4"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2002" length="1" other_pos="2005" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2003" length="1" other_pos="2006" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="2004" length="5" other_pos="2007" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2009" length="1" other_pos="2012" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2010" length="7" other_pos="2013" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2017" length="1" other_pos="2020" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="2018" length="12" other_pos="2021" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2030" length="1" other_pos="2033" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2000-09-02" typeLabel="TEXT" pos="2031" length="10" other_pos="2034" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2041" length="1" other_pos="2044" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2042" length="1" other_pos="2045" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="2043" length="12" other_pos="2046" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2055" length="1" other_pos="2058" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2056" length="7" other_pos="2059" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2063" length="1" other_pos="2066" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="2064" length="11" other_pos="2067" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2075" length="1" other_pos="2078" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="When Carla meets Paul at an ornithology 
+      conference, tempers fly as feathers get ruffled." typeLabel="TEXT" pos="2076" length="95" other_pos="2079" other_length="95"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2171" length="1" other_pos="2174" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2172" length="1" other_pos="2175" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="2173" length="11" other_pos="2176" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2184" length="1" other_pos="2187" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="2185" length="4" other_pos="2188" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="2189" length="1" other_pos="2192" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="2190" length="1" other_pos="2193" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="2191" length="4" other_pos="2194" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2195" length="1" other_pos="2198" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="2196" length="4" other_pos="2199" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="2200" length="1" other_pos="2203" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="2201" length="4" other_pos="2204" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="2206" length="2" other_pos="2209" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="2208" length="1" other_pos="2211" other_length="1"></tree>
+            <tree type="15" label="&quot;bk107&quot;" typeLabel="STRING" pos="2209" length="7" other_pos="2212" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2216" length="1" other_pos="2219" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2217" length="7" other_pos="2220" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2224" length="1" other_pos="2227" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="2225" length="6" other_pos="2228" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2231" length="1" other_pos="2234" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Thurman, Paula" typeLabel="TEXT" pos="2232" length="14" other_pos="2235" other_length="14"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2246" length="1" other_pos="2249" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2247" length="1" other_pos="2250" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="2248" length="6" other_pos="2251" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2254" length="1" other_pos="2257" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2255" length="7" other_pos="2258" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2262" length="1" other_pos="2265" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="2263" length="5" other_pos="2266" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2268" length="1" other_pos="2271" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Splish Splash" typeLabel="TEXT" pos="2269" length="13" other_pos="2272" other_length="13"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2282" length="1" other_pos="2285" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2283" length="1" other_pos="2286" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="2284" length="5" other_pos="2287" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2289" length="1" other_pos="2292" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2290" length="7" other_pos="2293" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2297" length="1" other_pos="2300" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="2298" length="5" other_pos="2301" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2303" length="1" other_pos="2306" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Romance" typeLabel="TEXT" pos="2304" length="7" other_pos="2307" other_length="7"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2311" length="1" other_pos="2314" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2312" length="1" other_pos="2315" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="2313" length="5" other_pos="2316" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2318" length="1" other_pos="2321" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2319" length="7" other_pos="2322" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2326" length="1" other_pos="2329" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="2327" length="5" other_pos="2330" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2332" length="1" other_pos="2335" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="4.95" typeLabel="TEXT" pos="2333" length="4" other_pos="2336" other_length="4"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2337" length="1" other_pos="2340" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2338" length="1" other_pos="2341" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="2339" length="5" other_pos="2342" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2344" length="1" other_pos="2347" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2345" length="7" other_pos="2348" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2352" length="1" other_pos="2355" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="2353" length="12" other_pos="2356" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2365" length="1" other_pos="2368" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2000-11-02" typeLabel="TEXT" pos="2366" length="10" other_pos="2369" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2376" length="1" other_pos="2379" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2377" length="1" other_pos="2380" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="2378" length="12" other_pos="2381" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2390" length="1" other_pos="2393" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2391" length="7" other_pos="2394" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2398" length="1" other_pos="2401" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="2399" length="11" other_pos="2402" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2410" length="1" other_pos="2413" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="A deep sea diver finds true love twenty 
+      thousand leagues beneath the sea." typeLabel="TEXT" pos="2411" length="80" other_pos="2414" other_length="80"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2491" length="1" other_pos="2494" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2492" length="1" other_pos="2495" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="2493" length="11" other_pos="2496" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2504" length="1" other_pos="2507" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="2505" length="4" other_pos="2508" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="2509" length="1" other_pos="2512" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="2510" length="1" other_pos="2513" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="2511" length="4" other_pos="2514" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2515" length="1" other_pos="2518" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="2516" length="4" other_pos="2519" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="2520" length="1" other_pos="2523" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="2521" length="4" other_pos="2524" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="2526" length="2" other_pos="2529" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="2528" length="1" other_pos="2531" other_length="1"></tree>
+            <tree type="15" label="&quot;bk108&quot;" typeLabel="STRING" pos="2529" length="7" other_pos="2532" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2536" length="1" other_pos="2539" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2537" length="7" other_pos="2540" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2544" length="1" other_pos="2547" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="2545" length="6" other_pos="2548" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2551" length="1" other_pos="2554" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Knorr, Stefan" typeLabel="TEXT" pos="2552" length="13" other_pos="2555" other_length="13"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2565" length="1" other_pos="2568" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2566" length="1" other_pos="2569" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="2567" length="6" other_pos="2570" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2573" length="1" other_pos="2576" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2574" length="7" other_pos="2577" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2581" length="1" other_pos="2584" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="2582" length="5" other_pos="2585" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2587" length="1" other_pos="2590" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Creepy Crawlies" typeLabel="TEXT" pos="2588" length="15" other_pos="2591" other_length="15"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2603" length="1" other_pos="2606" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2604" length="1" other_pos="2607" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="2605" length="5" other_pos="2608" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2610" length="1" other_pos="2613" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2611" length="7" other_pos="2614" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2618" length="1" other_pos="2621" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="2619" length="5" other_pos="2622" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2624" length="1" other_pos="2627" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Horror" typeLabel="TEXT" pos="2625" length="6" other_pos="2628" other_length="6"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2631" length="1" other_pos="2634" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2632" length="1" other_pos="2635" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="2633" length="5" other_pos="2636" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2638" length="1" other_pos="2641" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2639" length="7" other_pos="2642" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2646" length="1" other_pos="2649" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="2647" length="5" other_pos="2650" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2652" length="1" other_pos="2655" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="4.95" typeLabel="TEXT" pos="2653" length="4" other_pos="2656" other_length="4"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2657" length="1" other_pos="2660" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2658" length="1" other_pos="2661" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="2659" length="5" other_pos="2662" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2664" length="1" other_pos="2667" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2665" length="7" other_pos="2668" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2672" length="1" other_pos="2675" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="2673" length="12" other_pos="2676" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2685" length="1" other_pos="2688" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2000-12-06" typeLabel="TEXT" pos="2686" length="10" other_pos="2689" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2696" length="1" other_pos="2699" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2697" length="1" other_pos="2700" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="2698" length="12" other_pos="2701" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2710" length="1" other_pos="2713" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2711" length="7" other_pos="2714" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2718" length="1" other_pos="2721" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="2719" length="11" other_pos="2722" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2730" length="1" other_pos="2733" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="An anthology of horror stories about roaches,
+      centipedes, scorpions  and other insects." typeLabel="TEXT" pos="2731" length="93" other_pos="2734" other_length="93"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2824" length="1" other_pos="2827" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2825" length="1" other_pos="2828" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="2826" length="11" other_pos="2829" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2837" length="1" other_pos="2840" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="2838" length="4" other_pos="2841" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="2842" length="1" other_pos="2845" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="2843" length="1" other_pos="2846" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="2844" length="4" other_pos="2847" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2848" length="1" other_pos="2851" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="2849" length="4" other_pos="2852" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="2853" length="1" other_pos="2856" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="2854" length="4" other_pos="2857" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="2859" length="2" other_pos="2862" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="2861" length="1" other_pos="2864" other_length="1"></tree>
+            <tree type="15" label="&quot;bk109&quot;" typeLabel="STRING" pos="2862" length="7" other_pos="2865" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2869" length="1" other_pos="2872" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2870" length="7" other_pos="2873" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2877" length="1" other_pos="2880" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="2878" length="6" other_pos="2881" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2884" length="1" other_pos="2887" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Kress, Peter" typeLabel="TEXT" pos="2885" length="12" other_pos="2888" other_length="12"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2897" length="1" other_pos="2900" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2898" length="1" other_pos="2901" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="2899" length="6" other_pos="2902" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2905" length="1" other_pos="2908" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2906" length="7" other_pos="2909" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2913" length="1" other_pos="2916" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="2914" length="5" other_pos="2917" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2919" length="1" other_pos="2922" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Paradox Lost" typeLabel="TEXT" pos="2920" length="12" other_pos="2923" other_length="12"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2932" length="1" other_pos="2935" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2933" length="1" other_pos="2936" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="2934" length="5" other_pos="2937" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2939" length="1" other_pos="2942" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2940" length="7" other_pos="2943" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2947" length="1" other_pos="2950" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="2948" length="5" other_pos="2951" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2953" length="1" other_pos="2956" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Science Fiction" typeLabel="TEXT" pos="2954" length="15" other_pos="2957" other_length="15"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2969" length="1" other_pos="2972" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2970" length="1" other_pos="2973" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="2971" length="5" other_pos="2974" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2976" length="1" other_pos="2979" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="2977" length="7" other_pos="2980" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2984" length="1" other_pos="2987" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="2985" length="5" other_pos="2988" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="2990" length="1" other_pos="2993" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="6.95" typeLabel="TEXT" pos="2991" length="4" other_pos="2994" other_length="4"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="2995" length="1" other_pos="2998" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="2996" length="1" other_pos="2999" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="2997" length="5" other_pos="3000" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3002" length="1" other_pos="3005" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3003" length="7" other_pos="3006" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3010" length="1" other_pos="3013" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="3011" length="12" other_pos="3014" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3023" length="1" other_pos="3026" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2000-11-02" typeLabel="TEXT" pos="3024" length="10" other_pos="3027" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3034" length="1" other_pos="3037" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3035" length="1" other_pos="3038" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="3036" length="12" other_pos="3039" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3048" length="1" other_pos="3051" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3049" length="7" other_pos="3052" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3056" length="1" other_pos="3059" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="3057" length="11" other_pos="3060" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3068" length="1" other_pos="3071" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="After an inadvertant trip through a Heisenberg
+      Uncertainty Device, James Salway discovers the problems 
+      of being quantum." typeLabel="TEXT" pos="3069" length="133" other_pos="3072" other_length="133"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3202" length="1" other_pos="3205" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3203" length="1" other_pos="3206" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="3204" length="11" other_pos="3207" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3215" length="1" other_pos="3218" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="3216" length="4" other_pos="3219" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="3220" length="1" other_pos="3223" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="3221" length="1" other_pos="3224" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="3222" length="4" other_pos="3225" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3226" length="1" other_pos="3229" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="3227" length="4" other_pos="3230" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="3231" length="1" other_pos="3234" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="3232" length="4" other_pos="3235" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="3237" length="2" other_pos="3240" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="3239" length="1" other_pos="3242" other_length="1"></tree>
+            <tree type="15" label="&quot;bk110&quot;" typeLabel="STRING" pos="3240" length="7" other_pos="3243" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3247" length="1" other_pos="3250" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3248" length="7" other_pos="3251" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3255" length="1" other_pos="3258" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="3256" length="6" other_pos="3259" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3262" length="1" other_pos="3265" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="O'Brien, Tim" typeLabel="TEXT" pos="3263" length="12" other_pos="3266" other_length="12"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3275" length="1" other_pos="3278" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3276" length="1" other_pos="3279" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="3277" length="6" other_pos="3280" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3283" length="1" other_pos="3286" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3284" length="7" other_pos="3287" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3291" length="1" other_pos="3294" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="3292" length="5" other_pos="3295" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3297" length="1" other_pos="3300" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Microsoft .NET: The Programming Bible" typeLabel="TEXT" pos="3298" length="37" other_pos="3301" other_length="37"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3335" length="1" other_pos="3338" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3336" length="1" other_pos="3339" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="3337" length="5" other_pos="3340" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3342" length="1" other_pos="3345" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3343" length="7" other_pos="3346" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3350" length="1" other_pos="3353" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="3351" length="5" other_pos="3354" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3356" length="1" other_pos="3359" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Computer" typeLabel="TEXT" pos="3357" length="8" other_pos="3360" other_length="8"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3365" length="1" other_pos="3368" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3366" length="1" other_pos="3369" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="3367" length="5" other_pos="3370" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3372" length="1" other_pos="3375" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3373" length="7" other_pos="3376" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3380" length="1" other_pos="3383" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="3381" length="5" other_pos="3384" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3386" length="1" other_pos="3389" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="36.95" typeLabel="TEXT" pos="3387" length="5" other_pos="3390" other_length="5"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3392" length="1" other_pos="3395" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3393" length="1" other_pos="3396" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="3394" length="5" other_pos="3397" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3399" length="1" other_pos="3402" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3400" length="7" other_pos="3403" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3407" length="1" other_pos="3410" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="3408" length="12" other_pos="3411" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3420" length="1" other_pos="3423" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2000-12-09" typeLabel="TEXT" pos="3421" length="10" other_pos="3424" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3431" length="1" other_pos="3434" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3432" length="1" other_pos="3435" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="3433" length="12" other_pos="3436" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3445" length="1" other_pos="3448" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3446" length="7" other_pos="3449" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3453" length="1" other_pos="3456" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="3454" length="11" other_pos="3457" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3465" length="1" other_pos="3468" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Microsoft's .NET initiative is explored in 
+      detail in this deep programmer's reference." typeLabel="TEXT" pos="3466" length="93" other_pos="3469" other_length="93"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3559" length="1" other_pos="3562" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3560" length="1" other_pos="3563" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="3561" length="11" other_pos="3564" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3572" length="1" other_pos="3575" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="3573" length="4" other_pos="3576" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="3577" length="1" other_pos="3580" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="3578" length="1" other_pos="3581" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="3579" length="4" other_pos="3582" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3583" length="1" other_pos="3586" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="3584" length="4" other_pos="3587" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="3588" length="1" other_pos="3591" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="3589" length="4" other_pos="3592" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="3594" length="2" other_pos="3597" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="3596" length="1" other_pos="3599" other_length="1"></tree>
+            <tree type="15" label="&quot;bk111&quot;" typeLabel="STRING" pos="3597" length="7" other_pos="3600" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3604" length="1" other_pos="3607" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3605" length="7" other_pos="3608" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3612" length="1" other_pos="3615" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="3613" length="6" other_pos="3616" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3619" length="1" other_pos="3622" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="O'Brien, Tim" typeLabel="TEXT" pos="3620" length="12" other_pos="3623" other_length="12"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3632" length="1" other_pos="3635" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3633" length="1" other_pos="3636" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="3634" length="6" other_pos="3637" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3640" length="1" other_pos="3643" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3641" length="7" other_pos="3644" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3648" length="1" other_pos="3651" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="3649" length="5" other_pos="3652" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3654" length="1" other_pos="3657" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="MSXML3: A Comprehensive Guide" typeLabel="TEXT" pos="3655" length="29" other_pos="3658" other_length="29"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3684" length="1" other_pos="3687" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3685" length="1" other_pos="3688" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="3686" length="5" other_pos="3689" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3691" length="1" other_pos="3694" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3692" length="7" other_pos="3695" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3699" length="1" other_pos="3702" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="3700" length="5" other_pos="3703" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3705" length="1" other_pos="3708" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Computer" typeLabel="TEXT" pos="3706" length="8" other_pos="3709" other_length="8"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3714" length="1" other_pos="3717" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3715" length="1" other_pos="3718" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="3716" length="5" other_pos="3719" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3721" length="1" other_pos="3724" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3722" length="7" other_pos="3725" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3729" length="1" other_pos="3732" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="3730" length="5" other_pos="3733" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3735" length="1" other_pos="3738" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="36.95" typeLabel="TEXT" pos="3736" length="5" other_pos="3739" other_length="5"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3741" length="1" other_pos="3744" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3742" length="1" other_pos="3745" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="3743" length="5" other_pos="3746" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3748" length="1" other_pos="3751" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3749" length="7" other_pos="3752" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3756" length="1" other_pos="3759" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="3757" length="12" other_pos="3760" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3769" length="1" other_pos="3772" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2000-12-01" typeLabel="TEXT" pos="3770" length="10" other_pos="3773" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3780" length="1" other_pos="3783" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3781" length="1" other_pos="3784" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="3782" length="12" other_pos="3785" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3794" length="1" other_pos="3797" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3795" length="7" other_pos="3798" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3802" length="1" other_pos="3805" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="3803" length="11" other_pos="3806" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3814" length="1" other_pos="3817" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="The Microsoft MSXML3 parser is covered in 
+      detail, with attention to XML DOM interfaces, XSLT processing, 
+      SAX and more." typeLabel="TEXT" pos="3815" length="132" other_pos="3818" other_length="132"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="3947" length="1" other_pos="3950" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="3948" length="1" other_pos="3951" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="3949" length="11" other_pos="3952" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3960" length="1" other_pos="3963" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="3961" length="4" other_pos="3964" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="3965" length="1" other_pos="3968" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="3966" length="1" other_pos="3969" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="3967" length="4" other_pos="3970" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3971" length="1" other_pos="3974" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+   " typeLabel="SEA_WS" pos="3972" length="4" other_pos="3975" other_length="4"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="3976" length="1" other_pos="3979" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="3977" length="4" other_pos="3980" other_length="4"></tree>
+          <tree type="-5" label="attribute">
+            <tree type="16" label="id" typeLabel="Name" pos="3982" length="2" other_pos="3985" other_length="2"></tree>
+            <tree type="14" label="=" typeLabel="EQUALS" pos="3984" length="1" other_pos="3987" other_length="1"></tree>
+            <tree type="15" label="&quot;bk112&quot;" typeLabel="STRING" pos="3985" length="7" other_pos="3988" other_length="7"></tree>
+          </tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="3992" length="1" other_pos="3995" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="3993" length="7" other_pos="3996" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4000" length="1" other_pos="4003" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="4001" length="6" other_pos="4004" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4007" length="1" other_pos="4010" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Galos, Mike" typeLabel="TEXT" pos="4008" length="11" other_pos="4011" other_length="11"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4019" length="1" other_pos="4022" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="4020" length="1" other_pos="4023" other_length="1"></tree>
+              <tree type="16" label="author" typeLabel="Name" pos="4021" length="6" other_pos="4024" other_length="6"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4027" length="1" other_pos="4030" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="4028" length="7" other_pos="4031" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4035" length="1" other_pos="4038" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="4036" length="5" other_pos="4039" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4041" length="1" other_pos="4044" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Visual Studio 7: A Comprehensive Guide" typeLabel="TEXT" pos="4042" length="38" other_pos="4045" other_length="38"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4080" length="1" other_pos="4083" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="4081" length="1" other_pos="4084" other_length="1"></tree>
+              <tree type="16" label="title" typeLabel="Name" pos="4082" length="5" other_pos="4085" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4087" length="1" other_pos="4090" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="4088" length="7" other_pos="4091" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4095" length="1" other_pos="4098" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="4096" length="5" other_pos="4099" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4101" length="1" other_pos="4104" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Computer" typeLabel="TEXT" pos="4102" length="8" other_pos="4105" other_length="8"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4110" length="1" other_pos="4113" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="4111" length="1" other_pos="4114" other_length="1"></tree>
+              <tree type="16" label="genre" typeLabel="Name" pos="4112" length="5" other_pos="4115" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4117" length="1" other_pos="4120" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="4118" length="7" other_pos="4121" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4125" length="1" other_pos="4128" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="4126" length="5" other_pos="4129" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4131" length="1" other_pos="4134" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="49.95" typeLabel="TEXT" pos="4132" length="5" other_pos="4135" other_length="5"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4137" length="1" other_pos="4140" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="4138" length="1" other_pos="4141" other_length="1"></tree>
+              <tree type="16" label="price" typeLabel="Name" pos="4139" length="5" other_pos="4142" other_length="5"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4144" length="1" other_pos="4147" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="4145" length="7" other_pos="4148" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4152" length="1" other_pos="4155" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="4153" length="12" other_pos="4156" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4165" length="1" other_pos="4168" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="2001-04-16" typeLabel="TEXT" pos="4166" length="10" other_pos="4169" other_length="10"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4176" length="1" other_pos="4179" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="4177" length="1" other_pos="4180" other_length="1"></tree>
+              <tree type="16" label="publish_date" typeLabel="Name" pos="4178" length="12" other_pos="4181" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4190" length="1" other_pos="4193" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+      " typeLabel="SEA_WS" pos="4191" length="7" other_pos="4194" other_length="7"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4198" length="1" other_pos="4201" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="4199" length="11" other_pos="4202" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4210" length="1" other_pos="4213" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="Microsoft Visual Studio 7 is explored in depth,
+      looking at how Visual Basic, Visual C++, C#, and ASP+ are 
+      integrated into a comprehensive development 
+      environment." typeLabel="TEXT" pos="4211" length="182" other_pos="4214" other_length="182"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="4393" length="1" other_pos="4396" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="4394" length="1" other_pos="4397" other_length="1"></tree>
+              <tree type="16" label="description" typeLabel="Name" pos="4395" length="11" other_pos="4398" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4406" length="1" other_pos="4409" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+   " typeLabel="SEA_WS" pos="4407" length="4" other_pos="4410" other_length="4"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="4411" length="1" other_pos="4414" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="4412" length="1" other_pos="4415" other_length="1"></tree>
+          <tree type="16" label="book" typeLabel="Name" pos="4413" length="4" other_pos="4416" other_length="4"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4417" length="1" other_pos="4420" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+" typeLabel="SEA_WS" pos="4418" length="1" other_pos="4421" other_length="1"></tree>
+        </tree>
+      </tree>
+      <tree type="7" label="&lt;" typeLabel="OPEN" pos="4419" length="1" other_pos="4422" other_length="1"></tree>
+      <tree type="13" label="/" typeLabel="SLASH" pos="4420" length="1" other_pos="4423" other_length="1"></tree>
+      <tree type="16" label="catalog" typeLabel="Name" pos="4421" length="7" other_pos="4424" other_length="7"></tree>
+      <tree type="10" label="&gt;" typeLabel="CLOSE" pos="4428" length="1" other_pos="4431" other_length="1"></tree>
+    </tree>
+    <tree type="-7" label="misc">
+      <tree type="6" label="
+" typeLabel="SEA_WS" pos="4429" length="1" other_pos="4432" other_length="1"></tree>
+    </tree>
+  </tree>
+</root>

@@ -68,7 +68,7 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
 configure(subprojects.findAll { it.name.startsWith('gen.antlr4') }) {
   apply plugin: 'antlr'
   dependencies {
-    antlr 'org.antlr:antlr4:4.5'
+    antlr 'org.antlr:antlr4:4.7'
   }
   if (it.name.startsWith('gen.antlr4-')) {
     dependencies {
