@@ -1,0 +1,24 @@
+MOV 					-3@@element
+						7@@<
+						16@@author
+						10@@>
+						-2@@content
+							-6@@chardata
+								9@@Corets, Eva
+						7@@<
+						13@@/
+						16@@author
+						10@@>
+ to -2@@content at 1
+MOV 					-3@@element
+						7@@<
+						16@@author
+						10@@>
+						-2@@content
+							-6@@chardata
+								9@@Corets, Svante
+						7@@<
+						13@@/
+						16@@author
+						10@@>
+ to -2@@content at 1
