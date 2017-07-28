@@ -1,0 +1,139 @@
+MOV 			-6@@chardata
+				6@@
+   
+ to -2@@content at 10
+MOV 			-6@@chardata
+				6@@
+   
+ to -2@@content at 12
+MOV 			-6@@chardata
+				6@@
+   
+ to -2@@content at 14
+MOV 			-6@@chardata
+				6@@
+   
+ to -2@@content at 16
+MOV 			-6@@chardata
+				6@@
+   
+ to -2@@content at 18
+MOV 			-6@@chardata
+				6@@
+   
+ to -2@@content at 20
+MOV 			-6@@chardata
+				6@@
+   
+ to -2@@content at 22
+MOV 					-6@@chardata
+						6@@
+   
+ to -2@@content at 7
+UPD 9@@Ralls, Kim from Ralls, Kim to Schubert, Svante
+UPD 9@@5.95 from 5.95 to 77.95
+DEL 7@@<
+DEL 16@@book
+DEL 16@@id
+DEL 14@@=
+DEL 15@@"bk103"
+DEL -5@@attribute
+DEL 10@@>
+DEL 6@@
+      
+DEL -6@@chardata
+DEL 7@@<
+DEL 16@@author
+DEL 10@@>
+DEL 9@@Corets, Eva
+DEL -6@@chardata
+DEL -2@@content
+DEL 7@@<
+DEL 13@@/
+DEL 16@@author
+DEL 10@@>
+DEL -3@@element
+DEL 6@@
+      
+DEL -6@@chardata
+DEL 7@@<
+DEL 16@@title
+DEL 10@@>
+DEL 9@@Maeve Ascendant
+DEL -6@@chardata
+DEL -2@@content
+DEL 7@@<
+DEL 13@@/
+DEL 16@@title
+DEL 10@@>
+DEL -3@@element
+DEL 6@@
+      
+DEL -6@@chardata
+DEL 7@@<
+DEL 16@@genre
+DEL 10@@>
+DEL 9@@Fantasy
+DEL -6@@chardata
+DEL -2@@content
+DEL 7@@<
+DEL 13@@/
+DEL 16@@genre
+DEL 10@@>
+DEL -3@@element
+DEL 6@@
+      
+DEL -6@@chardata
+DEL 7@@<
+DEL 16@@price
+DEL 10@@>
+DEL 9@@5.95
+DEL -6@@chardata
+DEL -2@@content
+DEL 7@@<
+DEL 13@@/
+DEL 16@@price
+DEL 10@@>
+DEL -3@@element
+DEL 6@@
+      
+DEL -6@@chardata
+DEL 7@@<
+DEL 16@@publish_date
+DEL 10@@>
+DEL 9@@2000-11-17
+DEL -6@@chardata
+DEL -2@@content
+DEL 7@@<
+DEL 13@@/
+DEL 16@@publish_date
+DEL 10@@>
+DEL -3@@element
+DEL 6@@
+      
+DEL -6@@chardata
+DEL 7@@<
+DEL 16@@description
+DEL 10@@>
+DEL 9@@After the collapse of a nanotechnology 
+      society in England, the young survivors lay the 
+      foundation for a new society.
+DEL -6@@chardata
+DEL -2@@content
+DEL 7@@<
+DEL 13@@/
+DEL 16@@description
+DEL 10@@>
+DEL -3@@element
+DEL -2@@content
+DEL 7@@<
+DEL 13@@/
+DEL 16@@book
+DEL 10@@>
+DEL -3@@element
+DEL 6@@
+   
+DEL -6@@chardata
+DEL 6@@
+   
+DEL -6@@chardata

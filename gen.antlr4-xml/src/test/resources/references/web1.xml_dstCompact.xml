@@ -1,0 +1,216 @@
+<?xml version="1.0" ?>
+<root>
+  <0 label="document">
+    <-1 label="prolog">
+      <XMLDeclOpen label="&lt;?xml "/>
+      <-5 label="attribute">
+        <Name label="version"/>
+        <EQUALS label="="/>
+        <STRING label="&quot;1.0&quot;"/>
+      </-5>
+      <-5 label="attribute">
+        <Name label="encoding"/>
+        <EQUALS label="="/>
+        <STRING label="&quot;ISO-8859-1&quot;"/>
+      </-5>
+      <SPECIAL_CLOSE label="?&gt;"/>
+    </-1>
+    <-7 label="misc">
+      <SEA_WS label="
+
+"/>
+    </-7>
+    <-3 label="element">
+      <OPEN label="&lt;"/>
+      <Name label="web-app"/>
+      <-5 label="attribute">
+        <Name label="xmlns"/>
+        <EQUALS label="="/>
+        <STRING label="&quot;http://java.sun.com/xml/ns/j2ee&quot;"/>
+      </-5>
+      <-5 label="attribute">
+        <Name label="xmlns:xsi"/>
+        <EQUALS label="="/>
+        <STRING label="&quot;http://www.w3.org/2001/XMLSchema-instance&quot;"/>
+      </-5>
+      <-5 label="attribute">
+        <Name label="xsi:schemaLocation"/>
+        <EQUALS label="="/>
+        <STRING label="&quot;http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd&quot;"/>
+      </-5>
+      <-5 label="attribute">
+        <Name label="version"/>
+        <EQUALS label="="/>
+        <STRING label="&quot;3&quot;"/>
+      </-5>
+      <CLOSE label="&gt;"/>
+      <-2 label="content">
+        <-6 label="chardata">
+          <SEA_WS label="
+
+    "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="display-name"/>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <TEXT label="HelloWorld Application"/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="display-name"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+    "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="description"/>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <TEXT label="
+        This is a simple web application with a source code organization
+        based on the recommendations of the Application Developer's Guide.
+    "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="description"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+
+    "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="servlet"/>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+        "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="servlet-name"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="HelloServlet2"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="servlet-name"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+        "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="servlet-class"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="examples.Hello"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="servlet-class"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+    "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="servlet"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+
+    "/>
+        </-6>
+        <-3 label="element">
+          <OPEN label="&lt;"/>
+          <Name label="servlet-mapping"/>
+          <CLOSE label="&gt;"/>
+          <-2 label="content">
+            <-6 label="chardata">
+              <SEA_WS label="
+        "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="servlet-name"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="HelloServlet2"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="servlet-name"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+        "/>
+            </-6>
+            <-3 label="element">
+              <OPEN label="&lt;"/>
+              <Name label="url-pattern"/>
+              <CLOSE label="&gt;"/>
+              <-2 label="content">
+                <-6 label="chardata">
+                  <TEXT label="/hello"/>
+                </-6>
+              </-2>
+              <OPEN label="&lt;"/>
+              <SLASH label="/"/>
+              <Name label="url-pattern"/>
+              <CLOSE label="&gt;"/>
+            </-3>
+            <-6 label="chardata">
+              <SEA_WS label="
+    "/>
+            </-6>
+          </-2>
+          <OPEN label="&lt;"/>
+          <SLASH label="/"/>
+          <Name label="servlet-mapping"/>
+          <CLOSE label="&gt;"/>
+        </-3>
+        <-6 label="chardata">
+          <SEA_WS label="
+
+"/>
+        </-6>
+      </-2>
+      <OPEN label="&lt;"/>
+      <SLASH label="/"/>
+      <Name label="web-app"/>
+      <CLOSE label="&gt;"/>
+    </-3>
+    <-7 label="misc">
+      <SEA_WS label="
+"/>
+    </-7>
+  </0>
+</root>

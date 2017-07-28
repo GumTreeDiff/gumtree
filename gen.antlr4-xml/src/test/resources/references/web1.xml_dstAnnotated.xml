@@ -1,0 +1,217 @@
+<?xml version="1.0" ?>
+<root>
+  <context></context>
+  <tree type="0" label="document">
+    <tree type="-1" label="prolog">
+      <tree type="8" label="&lt;?xml " typeLabel="XMLDeclOpen" pos="0" length="6" other_pos="0" other_length="6"></tree>
+      <tree type="-5" label="attribute">
+        <tree type="16" label="version" typeLabel="Name" pos="6" length="7" other_pos="6" other_length="7"></tree>
+        <tree type="14" label="=" typeLabel="EQUALS" pos="13" length="1" other_pos="13" other_length="1"></tree>
+        <tree type="15" label="&quot;1.0&quot;" typeLabel="STRING" pos="14" length="5" other_pos="14" other_length="5"></tree>
+      </tree>
+      <tree type="-5" label="attribute">
+        <tree type="16" label="encoding" typeLabel="Name" pos="20" length="8" other_pos="20" other_length="8"></tree>
+        <tree type="14" label="=" typeLabel="EQUALS" pos="28" length="1" other_pos="28" other_length="1"></tree>
+        <tree type="15" label="&quot;ISO-8859-1&quot;" typeLabel="STRING" pos="29" length="12" other_pos="29" other_length="12"></tree>
+      </tree>
+      <tree type="11" label="?&gt;" typeLabel="SPECIAL_CLOSE" pos="42" length="2" other_pos="42" other_length="2"></tree>
+    </tree>
+    <tree type="-7" label="misc">
+      <tree type="6" label="
+
+" typeLabel="SEA_WS" pos="44" length="2" other_pos="44" other_length="2"></tree>
+    </tree>
+    <tree type="-3" label="element">
+      <tree type="7" label="&lt;" typeLabel="OPEN" pos="46" length="1" other_pos="46" other_length="1"></tree>
+      <tree type="16" label="web-app" typeLabel="Name" pos="47" length="7" other_pos="47" other_length="7"></tree>
+      <tree type="-5" label="attribute">
+        <tree type="16" label="xmlns" typeLabel="Name" pos="55" length="5" other_pos="55" other_length="5"></tree>
+        <tree type="14" label="=" typeLabel="EQUALS" pos="60" length="1" other_pos="60" other_length="1"></tree>
+        <tree type="15" label="&quot;http://java.sun.com/xml/ns/j2ee&quot;" typeLabel="STRING" pos="61" length="33" other_pos="61" other_length="33"></tree>
+      </tree>
+      <tree type="-5" label="attribute">
+        <tree type="16" label="xmlns:xsi" typeLabel="Name" pos="99" length="9" other_pos="99" other_length="9"></tree>
+        <tree type="14" label="=" typeLabel="EQUALS" pos="108" length="1" other_pos="108" other_length="1"></tree>
+        <tree type="15" label="&quot;http://www.w3.org/2001/XMLSchema-instance&quot;" typeLabel="STRING" pos="109" length="43" other_pos="109" other_length="43"></tree>
+      </tree>
+      <tree type="-5" label="attribute">
+        <tree type="16" label="xsi:schemaLocation" typeLabel="Name" pos="157" length="18" other_pos="157" other_length="18"></tree>
+        <tree type="14" label="=" typeLabel="EQUALS" pos="175" length="1" other_pos="175" other_length="1"></tree>
+        <tree type="15" label="&quot;http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd&quot;" typeLabel="STRING" pos="176" length="81" other_pos="176" other_length="81"></tree>
+      </tree>
+      <tree type="-5" label="attribute">
+        <tree type="16" label="version" typeLabel="Name" pos="262" length="7" other_pos="262" other_length="7"></tree>
+        <tree type="14" label="=" typeLabel="EQUALS" pos="269" length="1" other_pos="269" other_length="1"></tree>
+        <tree type="15" label="&quot;3&quot;" typeLabel="STRING" pos="270" length="3" other_pos="270" other_length="5"></tree>
+      </tree>
+      <tree type="10" label="&gt;" typeLabel="CLOSE" pos="273" length="1" other_pos="275" other_length="1"></tree>
+      <tree type="-2" label="content">
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+
+    " typeLabel="SEA_WS" pos="274" length="6" other_pos="276" other_length="6"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="280" length="1" other_pos="282" other_length="1"></tree>
+          <tree type="16" label="display-name" typeLabel="Name" pos="281" length="12" other_pos="283" other_length="12"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="293" length="1" other_pos="295" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="9" label="HelloWorld Application" typeLabel="TEXT" pos="294" length="22" other_pos="296" other_length="22"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="316" length="1" other_pos="318" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="317" length="1" other_pos="319" other_length="1"></tree>
+          <tree type="16" label="display-name" typeLabel="Name" pos="318" length="12" other_pos="320" other_length="12"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="330" length="1" other_pos="332" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+    " typeLabel="SEA_WS" pos="331" length="5" other_pos="333" other_length="5"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="336" length="1" other_pos="338" other_length="1"></tree>
+          <tree type="16" label="description" typeLabel="Name" pos="337" length="11" other_pos="339" other_length="11"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="348" length="1" other_pos="350" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="9" label="
+        This is a simple web application with a source code organization
+        based on the recommendations of the Application Developer's Guide.
+    " typeLabel="TEXT" pos="349" length="153" other_pos="351" other_length="153"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="502" length="1" other_pos="504" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="503" length="1" other_pos="505" other_length="1"></tree>
+          <tree type="16" label="description" typeLabel="Name" pos="504" length="11" other_pos="506" other_length="11"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="515" length="1" other_pos="517" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+
+    " typeLabel="SEA_WS" pos="516" length="6" other_pos="518" other_length="6"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="522" length="1" other_pos="524" other_length="1"></tree>
+          <tree type="16" label="servlet" typeLabel="Name" pos="523" length="7" other_pos="525" other_length="7"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="530" length="1" other_pos="532" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+        " typeLabel="SEA_WS" pos="531" length="9" other_pos="533" other_length="9"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="540" length="1" other_pos="542" other_length="1"></tree>
+              <tree type="16" label="servlet-name" typeLabel="Name" pos="541" length="12" other_pos="543" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="553" length="1" other_pos="555" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="HelloServlet2" typeLabel="TEXT" pos="554" length="13" other_pos="556" other_length="12"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="567" length="1" other_pos="568" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="568" length="1" other_pos="569" other_length="1"></tree>
+              <tree type="16" label="servlet-name" typeLabel="Name" pos="569" length="12" other_pos="570" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="581" length="1" other_pos="582" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+        " typeLabel="SEA_WS" pos="582" length="9" other_pos="583" other_length="9"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="591" length="1" other_pos="592" other_length="1"></tree>
+              <tree type="16" label="servlet-class" typeLabel="Name" pos="592" length="13" other_pos="593" other_length="13"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="605" length="1" other_pos="606" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="examples.Hello" typeLabel="TEXT" pos="606" length="14" other_pos="607" other_length="14"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="620" length="1" other_pos="621" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="621" length="1" other_pos="622" other_length="1"></tree>
+              <tree type="16" label="servlet-class" typeLabel="Name" pos="622" length="13" other_pos="623" other_length="13"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="635" length="1" other_pos="636" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+    " typeLabel="SEA_WS" pos="636" length="5" other_pos="637" other_length="5"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="641" length="1" other_pos="642" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="642" length="1" other_pos="643" other_length="1"></tree>
+          <tree type="16" label="servlet" typeLabel="Name" pos="643" length="7" other_pos="644" other_length="7"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="650" length="1" other_pos="651" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+
+    " typeLabel="SEA_WS" pos="651" length="6" other_pos="652" other_length="6"></tree>
+        </tree>
+        <tree type="-3" label="element">
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="657" length="1" other_pos="658" other_length="1"></tree>
+          <tree type="16" label="servlet-mapping" typeLabel="Name" pos="658" length="15" other_pos="659" other_length="15"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="673" length="1" other_pos="674" other_length="1"></tree>
+          <tree type="-2" label="content">
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+        " typeLabel="SEA_WS" pos="674" length="9" other_pos="675" other_length="9"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="683" length="1" other_pos="684" other_length="1"></tree>
+              <tree type="16" label="servlet-name" typeLabel="Name" pos="684" length="12" other_pos="685" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="696" length="1" other_pos="697" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="HelloServlet2" typeLabel="TEXT" pos="697" length="13" other_pos="698" other_length="12"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="710" length="1" other_pos="710" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="711" length="1" other_pos="711" other_length="1"></tree>
+              <tree type="16" label="servlet-name" typeLabel="Name" pos="712" length="12" other_pos="712" other_length="12"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="724" length="1" other_pos="724" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+        " typeLabel="SEA_WS" pos="725" length="9" other_pos="725" other_length="9"></tree>
+            </tree>
+            <tree type="-3" label="element">
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="734" length="1" other_pos="734" other_length="1"></tree>
+              <tree type="16" label="url-pattern" typeLabel="Name" pos="735" length="11" other_pos="735" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="746" length="1" other_pos="746" other_length="1"></tree>
+              <tree type="-2" label="content">
+                <tree type="-6" label="chardata">
+                  <tree type="9" label="/hello" typeLabel="TEXT" pos="747" length="6" other_pos="747" other_length="6"></tree>
+                </tree>
+              </tree>
+              <tree type="7" label="&lt;" typeLabel="OPEN" pos="753" length="1" other_pos="753" other_length="1"></tree>
+              <tree type="13" label="/" typeLabel="SLASH" pos="754" length="1" other_pos="754" other_length="1"></tree>
+              <tree type="16" label="url-pattern" typeLabel="Name" pos="755" length="11" other_pos="755" other_length="11"></tree>
+              <tree type="10" label="&gt;" typeLabel="CLOSE" pos="766" length="1" other_pos="766" other_length="1"></tree>
+            </tree>
+            <tree type="-6" label="chardata">
+              <tree type="6" label="
+    " typeLabel="SEA_WS" pos="767" length="5" other_pos="767" other_length="5"></tree>
+            </tree>
+          </tree>
+          <tree type="7" label="&lt;" typeLabel="OPEN" pos="772" length="1" other_pos="772" other_length="1"></tree>
+          <tree type="13" label="/" typeLabel="SLASH" pos="773" length="1" other_pos="773" other_length="1"></tree>
+          <tree type="16" label="servlet-mapping" typeLabel="Name" pos="774" length="15" other_pos="774" other_length="15"></tree>
+          <tree type="10" label="&gt;" typeLabel="CLOSE" pos="789" length="1" other_pos="789" other_length="1"></tree>
+        </tree>
+        <tree type="-6" label="chardata">
+          <tree type="6" label="
+
+" typeLabel="SEA_WS" pos="790" length="2" other_pos="790" other_length="2"></tree>
+        </tree>
+      </tree>
+      <tree type="7" label="&lt;" typeLabel="OPEN" pos="792" length="1" other_pos="792" other_length="1"></tree>
+      <tree type="13" label="/" typeLabel="SLASH" pos="793" length="1" other_pos="793" other_length="1"></tree>
+      <tree type="16" label="web-app" typeLabel="Name" pos="794" length="7" other_pos="794" other_length="7"></tree>
+      <tree type="10" label="&gt;" typeLabel="CLOSE" pos="801" length="1" other_pos="801" other_length="1"></tree>
+    </tree>
+    <tree type="-7" label="misc">
+      <tree type="6" label="
+" typeLabel="SEA_WS" pos="802" length="1" other_pos="802" other_length="1"></tree>
+    </tree>
+  </tree>
+</root>

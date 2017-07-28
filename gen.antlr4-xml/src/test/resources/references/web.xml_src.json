@@ -1,0 +1,1088 @@
+{
+	"root": {
+		"type": "0",
+		"label": "document",
+		"children": [
+			{
+				"type": "-1",
+				"label": "prolog",
+				"children": [
+					{
+						"type": "8",
+						"label": "<?xml ",
+						"typeLabel": "XMLDeclOpen",
+						"pos": "0",
+						"length": "6",
+						"children": []
+					},
+					{
+						"type": "-5",
+						"label": "attribute",
+						"children": [
+							{
+								"type": "16",
+								"label": "version",
+								"typeLabel": "Name",
+								"pos": "6",
+								"length": "7",
+								"children": []
+							},
+							{
+								"type": "14",
+								"label": "=",
+								"typeLabel": "EQUALS",
+								"pos": "13",
+								"length": "1",
+								"children": []
+							},
+							{
+								"type": "15",
+								"label": "\"1.0\"",
+								"typeLabel": "STRING",
+								"pos": "14",
+								"length": "5",
+								"children": []
+							}
+						]
+					},
+					{
+						"type": "-5",
+						"label": "attribute",
+						"children": [
+							{
+								"type": "16",
+								"label": "encoding",
+								"typeLabel": "Name",
+								"pos": "20",
+								"length": "8",
+								"children": []
+							},
+							{
+								"type": "14",
+								"label": "=",
+								"typeLabel": "EQUALS",
+								"pos": "28",
+								"length": "1",
+								"children": []
+							},
+							{
+								"type": "15",
+								"label": "\"ISO-8859-1\"",
+								"typeLabel": "STRING",
+								"pos": "29",
+								"length": "12",
+								"children": []
+							}
+						]
+					},
+					{
+						"type": "11",
+						"label": "?>",
+						"typeLabel": "SPECIAL_CLOSE",
+						"pos": "42",
+						"length": "2",
+						"children": []
+					}
+				]
+			},
+			{
+				"type": "-7",
+				"label": "misc",
+				"children": [
+					{
+						"type": "6",
+						"label": "\n\n",
+						"typeLabel": "SEA_WS",
+						"pos": "44",
+						"length": "2",
+						"children": []
+					}
+				]
+			},
+			{
+				"type": "-3",
+				"label": "element",
+				"children": [
+					{
+						"type": "7",
+						"label": "<",
+						"typeLabel": "OPEN",
+						"pos": "46",
+						"length": "1",
+						"children": []
+					},
+					{
+						"type": "16",
+						"label": "web-app",
+						"typeLabel": "Name",
+						"pos": "47",
+						"length": "7",
+						"children": []
+					},
+					{
+						"type": "-5",
+						"label": "attribute",
+						"children": [
+							{
+								"type": "16",
+								"label": "xmlns",
+								"typeLabel": "Name",
+								"pos": "55",
+								"length": "5",
+								"children": []
+							},
+							{
+								"type": "14",
+								"label": "=",
+								"typeLabel": "EQUALS",
+								"pos": "60",
+								"length": "1",
+								"children": []
+							},
+							{
+								"type": "15",
+								"label": "\"http://java.sun.com/xml/ns/j2ee\"",
+								"typeLabel": "STRING",
+								"pos": "61",
+								"length": "33",
+								"children": []
+							}
+						]
+					},
+					{
+						"type": "-5",
+						"label": "attribute",
+						"children": [
+							{
+								"type": "16",
+								"label": "xmlns:xsi",
+								"typeLabel": "Name",
+								"pos": "99",
+								"length": "9",
+								"children": []
+							},
+							{
+								"type": "14",
+								"label": "=",
+								"typeLabel": "EQUALS",
+								"pos": "108",
+								"length": "1",
+								"children": []
+							},
+							{
+								"type": "15",
+								"label": "\"http://www.w3.org/2001/XMLSchema-instance\"",
+								"typeLabel": "STRING",
+								"pos": "109",
+								"length": "43",
+								"children": []
+							}
+						]
+					},
+					{
+						"type": "-5",
+						"label": "attribute",
+						"children": [
+							{
+								"type": "16",
+								"label": "xsi:schemaLocation",
+								"typeLabel": "Name",
+								"pos": "157",
+								"length": "18",
+								"children": []
+							},
+							{
+								"type": "14",
+								"label": "=",
+								"typeLabel": "EQUALS",
+								"pos": "175",
+								"length": "1",
+								"children": []
+							},
+							{
+								"type": "15",
+								"label": "\"http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd\"",
+								"typeLabel": "STRING",
+								"pos": "176",
+								"length": "81",
+								"children": []
+							}
+						]
+					},
+					{
+						"type": "-5",
+						"label": "attribute",
+						"children": [
+							{
+								"type": "16",
+								"label": "version",
+								"typeLabel": "Name",
+								"pos": "262",
+								"length": "7",
+								"children": []
+							},
+							{
+								"type": "14",
+								"label": "=",
+								"typeLabel": "EQUALS",
+								"pos": "269",
+								"length": "1",
+								"children": []
+							},
+							{
+								"type": "15",
+								"label": "\"2.4\"",
+								"typeLabel": "STRING",
+								"pos": "270",
+								"length": "5",
+								"children": []
+							}
+						]
+					},
+					{
+						"type": "10",
+						"label": ">",
+						"typeLabel": "CLOSE",
+						"pos": "275",
+						"length": "1",
+						"children": []
+					},
+					{
+						"type": "-2",
+						"label": "content",
+						"children": [
+							{
+								"type": "-6",
+								"label": "chardata",
+								"children": [
+									{
+										"type": "6",
+										"label": "\n\n    ",
+										"typeLabel": "SEA_WS",
+										"pos": "276",
+										"length": "6",
+										"children": []
+									}
+								]
+							},
+							{
+								"type": "-3",
+								"label": "element",
+								"children": [
+									{
+										"type": "7",
+										"label": "<",
+										"typeLabel": "OPEN",
+										"pos": "282",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "16",
+										"label": "display-name",
+										"typeLabel": "Name",
+										"pos": "283",
+										"length": "12",
+										"children": []
+									},
+									{
+										"type": "10",
+										"label": ">",
+										"typeLabel": "CLOSE",
+										"pos": "295",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "-2",
+										"label": "content",
+										"children": [
+											{
+												"type": "-6",
+												"label": "chardata",
+												"children": [
+													{
+														"type": "9",
+														"label": "HelloWorld Application",
+														"typeLabel": "TEXT",
+														"pos": "296",
+														"length": "22",
+														"children": []
+													}
+												]
+											}
+										]
+									},
+									{
+										"type": "7",
+										"label": "<",
+										"typeLabel": "OPEN",
+										"pos": "318",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "13",
+										"label": "/",
+										"typeLabel": "SLASH",
+										"pos": "319",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "16",
+										"label": "display-name",
+										"typeLabel": "Name",
+										"pos": "320",
+										"length": "12",
+										"children": []
+									},
+									{
+										"type": "10",
+										"label": ">",
+										"typeLabel": "CLOSE",
+										"pos": "332",
+										"length": "1",
+										"children": []
+									}
+								]
+							},
+							{
+								"type": "-6",
+								"label": "chardata",
+								"children": [
+									{
+										"type": "6",
+										"label": "\n    ",
+										"typeLabel": "SEA_WS",
+										"pos": "333",
+										"length": "5",
+										"children": []
+									}
+								]
+							},
+							{
+								"type": "-3",
+								"label": "element",
+								"children": [
+									{
+										"type": "7",
+										"label": "<",
+										"typeLabel": "OPEN",
+										"pos": "338",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "16",
+										"label": "description",
+										"typeLabel": "Name",
+										"pos": "339",
+										"length": "11",
+										"children": []
+									},
+									{
+										"type": "10",
+										"label": ">",
+										"typeLabel": "CLOSE",
+										"pos": "350",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "-2",
+										"label": "content",
+										"children": [
+											{
+												"type": "-6",
+												"label": "chardata",
+												"children": [
+													{
+														"type": "9",
+														"label": "\n        This is a simple web application with a source code organization\n        based on the recommendations of the Application Developer's Guide.\n    ",
+														"typeLabel": "TEXT",
+														"pos": "351",
+														"length": "153",
+														"children": []
+													}
+												]
+											}
+										]
+									},
+									{
+										"type": "7",
+										"label": "<",
+										"typeLabel": "OPEN",
+										"pos": "504",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "13",
+										"label": "/",
+										"typeLabel": "SLASH",
+										"pos": "505",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "16",
+										"label": "description",
+										"typeLabel": "Name",
+										"pos": "506",
+										"length": "11",
+										"children": []
+									},
+									{
+										"type": "10",
+										"label": ">",
+										"typeLabel": "CLOSE",
+										"pos": "517",
+										"length": "1",
+										"children": []
+									}
+								]
+							},
+							{
+								"type": "-6",
+								"label": "chardata",
+								"children": [
+									{
+										"type": "6",
+										"label": "\n\n    ",
+										"typeLabel": "SEA_WS",
+										"pos": "518",
+										"length": "6",
+										"children": []
+									}
+								]
+							},
+							{
+								"type": "-3",
+								"label": "element",
+								"children": [
+									{
+										"type": "7",
+										"label": "<",
+										"typeLabel": "OPEN",
+										"pos": "524",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "16",
+										"label": "servlet",
+										"typeLabel": "Name",
+										"pos": "525",
+										"length": "7",
+										"children": []
+									},
+									{
+										"type": "10",
+										"label": ">",
+										"typeLabel": "CLOSE",
+										"pos": "532",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "-2",
+										"label": "content",
+										"children": [
+											{
+												"type": "-6",
+												"label": "chardata",
+												"children": [
+													{
+														"type": "6",
+														"label": "\n        ",
+														"typeLabel": "SEA_WS",
+														"pos": "533",
+														"length": "9",
+														"children": []
+													}
+												]
+											},
+											{
+												"type": "-3",
+												"label": "element",
+												"children": [
+													{
+														"type": "7",
+														"label": "<",
+														"typeLabel": "OPEN",
+														"pos": "542",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "16",
+														"label": "servlet-name",
+														"typeLabel": "Name",
+														"pos": "543",
+														"length": "12",
+														"children": []
+													},
+													{
+														"type": "10",
+														"label": ">",
+														"typeLabel": "CLOSE",
+														"pos": "555",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "-2",
+														"label": "content",
+														"children": [
+															{
+																"type": "-6",
+																"label": "chardata",
+																"children": [
+																	{
+																		"type": "9",
+																		"label": "HelloServlet",
+																		"typeLabel": "TEXT",
+																		"pos": "556",
+																		"length": "12",
+																		"children": []
+																	}
+																]
+															}
+														]
+													},
+													{
+														"type": "7",
+														"label": "<",
+														"typeLabel": "OPEN",
+														"pos": "568",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "13",
+														"label": "/",
+														"typeLabel": "SLASH",
+														"pos": "569",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "16",
+														"label": "servlet-name",
+														"typeLabel": "Name",
+														"pos": "570",
+														"length": "12",
+														"children": []
+													},
+													{
+														"type": "10",
+														"label": ">",
+														"typeLabel": "CLOSE",
+														"pos": "582",
+														"length": "1",
+														"children": []
+													}
+												]
+											},
+											{
+												"type": "-6",
+												"label": "chardata",
+												"children": [
+													{
+														"type": "6",
+														"label": "\n        ",
+														"typeLabel": "SEA_WS",
+														"pos": "583",
+														"length": "9",
+														"children": []
+													}
+												]
+											},
+											{
+												"type": "-3",
+												"label": "element",
+												"children": [
+													{
+														"type": "7",
+														"label": "<",
+														"typeLabel": "OPEN",
+														"pos": "592",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "16",
+														"label": "servlet-class",
+														"typeLabel": "Name",
+														"pos": "593",
+														"length": "13",
+														"children": []
+													},
+													{
+														"type": "10",
+														"label": ">",
+														"typeLabel": "CLOSE",
+														"pos": "606",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "-2",
+														"label": "content",
+														"children": [
+															{
+																"type": "-6",
+																"label": "chardata",
+																"children": [
+																	{
+																		"type": "9",
+																		"label": "examples.Hello",
+																		"typeLabel": "TEXT",
+																		"pos": "607",
+																		"length": "14",
+																		"children": []
+																	}
+																]
+															}
+														]
+													},
+													{
+														"type": "7",
+														"label": "<",
+														"typeLabel": "OPEN",
+														"pos": "621",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "13",
+														"label": "/",
+														"typeLabel": "SLASH",
+														"pos": "622",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "16",
+														"label": "servlet-class",
+														"typeLabel": "Name",
+														"pos": "623",
+														"length": "13",
+														"children": []
+													},
+													{
+														"type": "10",
+														"label": ">",
+														"typeLabel": "CLOSE",
+														"pos": "636",
+														"length": "1",
+														"children": []
+													}
+												]
+											},
+											{
+												"type": "-6",
+												"label": "chardata",
+												"children": [
+													{
+														"type": "6",
+														"label": "\n    ",
+														"typeLabel": "SEA_WS",
+														"pos": "637",
+														"length": "5",
+														"children": []
+													}
+												]
+											}
+										]
+									},
+									{
+										"type": "7",
+										"label": "<",
+										"typeLabel": "OPEN",
+										"pos": "642",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "13",
+										"label": "/",
+										"typeLabel": "SLASH",
+										"pos": "643",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "16",
+										"label": "servlet",
+										"typeLabel": "Name",
+										"pos": "644",
+										"length": "7",
+										"children": []
+									},
+									{
+										"type": "10",
+										"label": ">",
+										"typeLabel": "CLOSE",
+										"pos": "651",
+										"length": "1",
+										"children": []
+									}
+								]
+							},
+							{
+								"type": "-6",
+								"label": "chardata",
+								"children": [
+									{
+										"type": "6",
+										"label": "\n\n    ",
+										"typeLabel": "SEA_WS",
+										"pos": "652",
+										"length": "6",
+										"children": []
+									}
+								]
+							},
+							{
+								"type": "-3",
+								"label": "element",
+								"children": [
+									{
+										"type": "7",
+										"label": "<",
+										"typeLabel": "OPEN",
+										"pos": "658",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "16",
+										"label": "servlet-mapping",
+										"typeLabel": "Name",
+										"pos": "659",
+										"length": "15",
+										"children": []
+									},
+									{
+										"type": "10",
+										"label": ">",
+										"typeLabel": "CLOSE",
+										"pos": "674",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "-2",
+										"label": "content",
+										"children": [
+											{
+												"type": "-6",
+												"label": "chardata",
+												"children": [
+													{
+														"type": "6",
+														"label": "\n        ",
+														"typeLabel": "SEA_WS",
+														"pos": "675",
+														"length": "9",
+														"children": []
+													}
+												]
+											},
+											{
+												"type": "-3",
+												"label": "element",
+												"children": [
+													{
+														"type": "7",
+														"label": "<",
+														"typeLabel": "OPEN",
+														"pos": "684",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "16",
+														"label": "servlet-name",
+														"typeLabel": "Name",
+														"pos": "685",
+														"length": "12",
+														"children": []
+													},
+													{
+														"type": "10",
+														"label": ">",
+														"typeLabel": "CLOSE",
+														"pos": "697",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "-2",
+														"label": "content",
+														"children": [
+															{
+																"type": "-6",
+																"label": "chardata",
+																"children": [
+																	{
+																		"type": "9",
+																		"label": "HelloServlet",
+																		"typeLabel": "TEXT",
+																		"pos": "698",
+																		"length": "12",
+																		"children": []
+																	}
+																]
+															}
+														]
+													},
+													{
+														"type": "7",
+														"label": "<",
+														"typeLabel": "OPEN",
+														"pos": "710",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "13",
+														"label": "/",
+														"typeLabel": "SLASH",
+														"pos": "711",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "16",
+														"label": "servlet-name",
+														"typeLabel": "Name",
+														"pos": "712",
+														"length": "12",
+														"children": []
+													},
+													{
+														"type": "10",
+														"label": ">",
+														"typeLabel": "CLOSE",
+														"pos": "724",
+														"length": "1",
+														"children": []
+													}
+												]
+											},
+											{
+												"type": "-6",
+												"label": "chardata",
+												"children": [
+													{
+														"type": "6",
+														"label": "\n        ",
+														"typeLabel": "SEA_WS",
+														"pos": "725",
+														"length": "9",
+														"children": []
+													}
+												]
+											},
+											{
+												"type": "-3",
+												"label": "element",
+												"children": [
+													{
+														"type": "7",
+														"label": "<",
+														"typeLabel": "OPEN",
+														"pos": "734",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "16",
+														"label": "url-pattern",
+														"typeLabel": "Name",
+														"pos": "735",
+														"length": "11",
+														"children": []
+													},
+													{
+														"type": "10",
+														"label": ">",
+														"typeLabel": "CLOSE",
+														"pos": "746",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "-2",
+														"label": "content",
+														"children": [
+															{
+																"type": "-6",
+																"label": "chardata",
+																"children": [
+																	{
+																		"type": "9",
+																		"label": "/hello",
+																		"typeLabel": "TEXT",
+																		"pos": "747",
+																		"length": "6",
+																		"children": []
+																	}
+																]
+															}
+														]
+													},
+													{
+														"type": "7",
+														"label": "<",
+														"typeLabel": "OPEN",
+														"pos": "753",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "13",
+														"label": "/",
+														"typeLabel": "SLASH",
+														"pos": "754",
+														"length": "1",
+														"children": []
+													},
+													{
+														"type": "16",
+														"label": "url-pattern",
+														"typeLabel": "Name",
+														"pos": "755",
+														"length": "11",
+														"children": []
+													},
+													{
+														"type": "10",
+														"label": ">",
+														"typeLabel": "CLOSE",
+														"pos": "766",
+														"length": "1",
+														"children": []
+													}
+												]
+											},
+											{
+												"type": "-6",
+												"label": "chardata",
+												"children": [
+													{
+														"type": "6",
+														"label": "\n    ",
+														"typeLabel": "SEA_WS",
+														"pos": "767",
+														"length": "5",
+														"children": []
+													}
+												]
+											}
+										]
+									},
+									{
+										"type": "7",
+										"label": "<",
+										"typeLabel": "OPEN",
+										"pos": "772",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "13",
+										"label": "/",
+										"typeLabel": "SLASH",
+										"pos": "773",
+										"length": "1",
+										"children": []
+									},
+									{
+										"type": "16",
+										"label": "servlet-mapping",
+										"typeLabel": "Name",
+										"pos": "774",
+										"length": "15",
+										"children": []
+									},
+									{
+										"type": "10",
+										"label": ">",
+										"typeLabel": "CLOSE",
+										"pos": "789",
+										"length": "1",
+										"children": []
+									}
+								]
+							},
+							{
+								"type": "-6",
+								"label": "chardata",
+								"children": [
+									{
+										"type": "6",
+										"label": "\n\n",
+										"typeLabel": "SEA_WS",
+										"pos": "790",
+										"length": "2",
+										"children": []
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "7",
+						"label": "<",
+						"typeLabel": "OPEN",
+						"pos": "792",
+						"length": "1",
+						"children": []
+					},
+					{
+						"type": "13",
+						"label": "/",
+						"typeLabel": "SLASH",
+						"pos": "793",
+						"length": "1",
+						"children": []
+					},
+					{
+						"type": "16",
+						"label": "web-app",
+						"typeLabel": "Name",
+						"pos": "794",
+						"length": "7",
+						"children": []
+					},
+					{
+						"type": "10",
+						"label": ">",
+						"typeLabel": "CLOSE",
+						"pos": "801",
+						"length": "1",
+						"children": []
+					}
+				]
+			},
+			{
+				"type": "-7",
+				"label": "misc",
+				"children": [
+					{
+						"type": "6",
+						"label": "\n",
+						"typeLabel": "SEA_WS",
+						"pos": "802",
+						"length": "1",
+						"children": []
+					}
+				]
+			}
+		]
+	}
+}
