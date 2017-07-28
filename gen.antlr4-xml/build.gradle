@@ -1,10 +1,12 @@
-description = 'GumTree tree generator for XML code (AntLR4 based).'
+description = 'GumTree tree generator for XML code (ANTLR4 based).'
 
 generateGrammarSource {
   arguments = ['com/github/gumtreediff/gen/antlr4/xml/XMLLexer.g4', 'com/github/gumtreediff/gen/antlr4/xml/XMLParser.g4']
 }
 
 dependencies {
+    // see https://softnoise.wordpress.com/2014/09/07/gradle-sub-project-test-dependencies-in-multi-project-builds/
+    testCompile project(':gen.antlr4').sourceSets.test.output 
     testCompile project(':client')
     testCompile project(':client.diff')
     testCompile 'junit:junit:4.+'
