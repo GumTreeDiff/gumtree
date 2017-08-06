@@ -1,0 +1,13 @@
+#!/bin/bash
+p=$(pwd -P)
+function compile() {
+	cp ../../fast/src/fast/Fast.java src/main/java/fast
+	cp ../../fast/src/fast/antlr/FastAntlr.java src/main/java/fast/antlr
+	gradle build -x test -x checkstyleMain
+	cd ../gen.antlr3-smali/smali
+	./p
+	cd $p
+}
+compile >& t.t
+cat ../../fast/fast-antlr.proto | sed -e 's/int32 type = 1;/fast.antlr.Kind type = 1;/' | sed -e 's/package fast.antlr;/package fast.antlr; import "tokens.proto";/' > /tmp/fast-antlr.proto
+cat /tmp/output.pb | protoc -I/tmp --decode=fast.antlr.Element /tmp/tokens.proto /tmp/fast-antlr.proto
