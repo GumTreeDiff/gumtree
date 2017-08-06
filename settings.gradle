@@ -10,10 +10,10 @@ include 'benchmark',
         'gen.antlr3-php',
         'gen.antlr3-r',
         'gen.antlr3-xml',
-        'gen.antlr3-smali',
         'gen.c',
         'gen.css',
         'gen.jdt',
         'gen.js',
         'gen.ruby',
-        'gen.srcml'
+        'gen.srcml',
+        'gen.pb'

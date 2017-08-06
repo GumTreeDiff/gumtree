@@ -49,7 +49,16 @@ public class DiffView implements Renderable {
         TreeContext dst = Generators.getInstance().getTree(fDst.getAbsolutePath());
         Matcher matcher = Matchers.getInstance().getMatcher(src.getRoot(), dst.getRoot());
         matcher.match();
-        diffs = new HtmlDiffs(fSrc, fDst, src, dst, matcher);
+	if (fSrc.getAbsolutePath().endsWith(".pb")) {
+		String pathSrc = fSrc.getAbsolutePath();
+		pathSrc = pathSrc.substring(0, pathSrc.lastIndexOf(".pb")) + ".java";
+		String pathDst = fDst.getAbsolutePath();
+		pathDst = pathDst.substring(0, pathDst.lastIndexOf(".pb")) + ".java";
+		// System.out.println("ends with .pb " + pathSrc + " dst = " + pathDst);
+		diffs = new HtmlDiffs(new File(pathSrc), new File(pathDst), src, dst, matcher);
+	} else {
+		diffs = new HtmlDiffs(fSrc, fDst, src, dst, matcher);
+	}
         diffs.produce();
     }
 

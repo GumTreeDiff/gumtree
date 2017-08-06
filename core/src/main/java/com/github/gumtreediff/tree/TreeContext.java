@@ -37,7 +37,7 @@ public class TreeContext {
 
     private final MetadataSerializers serializers = new MetadataSerializers();
 
-    private ITree root;
+    public ITree root;
 
     @Override
     public String toString() {

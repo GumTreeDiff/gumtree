@@ -30,7 +30,7 @@ public abstract class TreeGenerator {
 
     public TreeContext generateFromReader(Reader r) throws IOException {
         TreeContext ctx = generate(r);
-        ctx.validate();
+	ctx.validate();
         return ctx;
     }
 

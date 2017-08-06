@@ -40,8 +40,6 @@ import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import fast.antlr.FastAntlr;
-
 public abstract class AbstractAntlr3TreeGenerator<L extends TokenSource, P extends Parser> extends TreeGenerator {
 
     private Deque<ITree> trees = new ArrayDeque<>();
@@ -114,7 +112,7 @@ public abstract class AbstractAntlr3TreeGenerator<L extends TokenSource, P exten
 	PrintStream protocol = new PrintStream("/tmp/tokens.proto");
         String[] names = getTokenNames();
        	protocol.println("syntax=\"proto3\";");
-       	protocol.println("package fast.antlr;");
+       	protocol.println("package fast;");
        	protocol.println("enum Kind {");
        	protocol.println("\tINVALID=0;");
        	protocol.println("\tEOR=1;");

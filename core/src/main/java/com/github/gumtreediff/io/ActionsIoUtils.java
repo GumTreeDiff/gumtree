@@ -34,13 +34,18 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.io.FileOutputStream;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import fast.Fast;
 
 public final class ActionsIoUtils {
 
     private ActionsIoUtils() {
     }
 
+    public static Map<ITree, fast.Fast.Element> pb_mappings = new HashMap<ITree, fast.Fast.Element>();
     public static ActionSerializer toText(TreeContext sctx, List<Action> actions,
                                           MappingStore mappings) throws IOException {
         return new ActionSerializer(sctx, mappings, actions) {
@@ -87,15 +92,82 @@ public final class ActionsIoUtils {
 
         protected abstract ActionFormatter newFormatter(TreeContext ctx, Writer writer) throws Exception;
 
+	static int id = 1;
+	static Map<Integer, fast.Fast.Element.Builder> src_map = new HashMap<Integer, fast.Fast.Element.Builder>();
+	static Map<Integer, fast.Fast.Element.Builder> dst_map = new HashMap<Integer, fast.Fast.Element.Builder>();
+
+	void pbToMapOne(Map<Integer, fast.Fast.Element.Builder> map, fast.Fast.Element.Builder element) {
+		if (element.getChildCount() > 0) {
+			for (int i=0; i<element.getChildCount(); i++) {
+				pbToMapOne(map, element.getChild(i).toBuilder());
+			}
+		}
+		map.put(id, element);
+		id++;
+	}
+	void pbToMap(Map<Integer, fast.Fast.Element.Builder> map, fast.Fast.Element element) {
+		id = 1;
+		map.clear();
+		pbToMapOne(map, element.toBuilder());
+	}
+
         @Override
         public void writeTo(Writer writer) throws Exception {
+	    boolean update_pb = false;
+	    if (context != null && context.root!=null && pb_mappings.size() > 0) {
+		    update_pb = true;
+	    }
+	    String filename = null;
+	    String dst_filename = null;
+	    String delta_filename = null;
+	    fast.Fast.Element unit = null;
+	    fast.Fast.Element dst_unit = null;
+	    if (update_pb) {
+		    unit = pb_mappings.get(context.root);
+		    if (unit.getUnit()!=null) {
+			filename = unit.getUnit().getFilename() + ".pb";
+			delta_filename = unit.getUnit().getFilename() + "-diff.pb";
+			fast.Fast.Data.Builder data_element = fast.Fast.Data.newBuilder();
+			if (unit!=null) data_element.setElement(unit);
+			if (filename!=null) {
+			    FileOutputStream output = new FileOutputStream(filename);
+			    data_element.build().writeTo(output);
+			    output.close();
+			}
+		    }
+		    pbToMap(src_map, unit);
+		    ITree dst = mappings.getDst(context.root);
+		    if (dst!=null) {
+			    dst_unit = pb_mappings.get(dst);
+			    if (dst_unit.getUnit()!=null) {
+				dst_filename = dst_unit.getUnit().getFilename() + ".pb";
+				fast.Fast.Data.Builder data_element = fast.Fast.Data.newBuilder();
+				if (dst_unit!=null) data_element.setElement(dst_unit);
+				if (dst_filename!=null) {
+				    FileOutputStream output = new FileOutputStream(dst_filename);
+				    data_element.build().writeTo(output);
+				    output.close();
+				}
+			    }
+			    pbToMap(dst_map, dst_unit);
+		    }
+	    }
             ActionFormatter fmt = newFormatter(context, writer);
             // Start the output
             fmt.startOutput();
 
+	    fast.Fast.Delta.Builder delta = fast.Fast.Delta.newBuilder();
+	    delta.setSrc(filename);
+	    delta.setDst(dst_filename);
+
             // Write the matches
             fmt.startMatches();
             for (Mapping m: mappings) {
+		fast.Fast.Delta.Diff.Builder dbuilder = delta.addDiffBuilder();
+		dbuilder.setType(fast.Fast.Delta.Diff.DeltaType.MATCH);
+		fast.Fast.Delta.Diff.Match.Builder mbuilder = dbuilder.getMatchBuilder();
+		mbuilder.setSrc(m.getFirst().getId());
+		mbuilder.setDst(m.getSecond().getId());
                 fmt.match(m.getFirst(), m.getSecond());
             }
             fmt.endMatches();
@@ -106,24 +178,186 @@ public final class ActionsIoUtils {
                 ITree src = a.getNode();
                 if (a instanceof Move) {
                     ITree dst = mappings.getDst(src);
-                    fmt.moveAction(src, dst.getParent(), ((Move) a).getPosition());
+		    fast.Fast.Delta.Diff.Builder dbuilder = delta.addDiffBuilder();
+		    dbuilder.setType(fast.Fast.Delta.Diff.DeltaType.MOVE);
+		    fast.Fast.Delta.Diff.Move.Builder mbuilder = dbuilder.getMoveBuilder();
+		    mbuilder.setSrc(src.getId());
+		    mbuilder.setDst(dst.getParent().getId());
+		    mbuilder.setPosition(((Move) a).getPosition());
+		    fmt.moveAction(src, dst.getParent(), ((Move) a).getPosition());
                 } else if (a instanceof Update) {
                     ITree dst = mappings.getDst(src);
+       		    fast.Fast.Delta.Diff.Builder dbuilder = delta.addDiffBuilder();
+		    dbuilder.setType(fast.Fast.Delta.Diff.DeltaType.UPDATE);
+		    fast.Fast.Delta.Diff.Update.Builder mbuilder = dbuilder.getUpdateBuilder();
+		    mbuilder.setSrc(src.getId());
+		    mbuilder.setDst(dst.getId());
                     fmt.updateAction(src, dst);
                 } else if (a instanceof Insert) {
                     ITree dst = a.getNode();
-                    if (dst.isRoot())
+                    if (dst.isRoot()) {
+			fast.Fast.Delta.Diff.Builder dbuilder = delta.addDiffBuilder();
+			dbuilder.setType(fast.Fast.Delta.Diff.DeltaType.ADD);
+			fast.Fast.Delta.Diff.Add.Builder mbuilder = dbuilder.getAddBuilder();
+			mbuilder.setSrc(src.getId());
                         fmt.insertRoot(src);
-                    else
+		    } else {
+			fast.Fast.Delta.Diff.Builder dbuilder = delta.addDiffBuilder();
+			dbuilder.setType(fast.Fast.Delta.Diff.DeltaType.ADD);
+			fast.Fast.Delta.Diff.Add.Builder mbuilder = dbuilder.getAddBuilder();
+			mbuilder.setSrc(src.getId());
+			mbuilder.setDst(dst.getParent().getId());
+			mbuilder.setPosition(dst.getParent().getChildPosition(dst));
                         fmt.insertAction(src, dst.getParent(), dst.getParent().getChildPosition(dst));
+		    }
                 } else if (a instanceof Delete) {
-                    fmt.deleteAction(src);
+			fast.Fast.Delta.Diff.Builder dbuilder = delta.addDiffBuilder();
+			dbuilder.setType(fast.Fast.Delta.Diff.DeltaType.DEL);
+			fast.Fast.Delta.Diff.Del.Builder mbuilder = dbuilder.getDelBuilder();
+			mbuilder.setSrc(src.getId());
+	                fmt.deleteAction(src);
                 }
             }
             fmt.endActions();
 
             // Finish up
             fmt.endOutput();
+	    if (update_pb) {
+		fast.Fast.Data.Builder data_element = fast.Fast.Data.newBuilder();
+		if (delta!=null) data_element.setDelta(delta);
+		FileOutputStream output = new FileOutputStream(delta_filename);
+		data_element.build().writeTo(output);
+		output.close();
+	    }
+	}
+
+        public void writeTo0(Writer writer) throws Exception {
+	    boolean update_pb = false;
+	    if (context != null && context.root!=null && pb_mappings.size() > 0) {
+		    update_pb = true;
+	    }
+	    String filename = null;
+	    fast.Fast.Element unit = null;
+	    fast.Fast.Element dst_unit = null;
+	    if (update_pb) {
+		    unit = pb_mappings.get(context.root);
+		    if (unit.getUnit()!=null)
+			filename = unit.getUnit().getFilename() + "-diff.pb";
+		    pbToMap(src_map, unit);
+		    ITree dst = mappings.getDst(context.root);
+		    if (dst!=null) {
+			    dst_unit = pb_mappings.get(dst);
+			    pbToMap(dst_map, dst_unit);
+		    }
+	    }
+
+            ActionFormatter fmt = newFormatter(context, writer);
+            // Start the output
+            fmt.startOutput();
+
+	    Map<ITree, ITree> dst_to_src_mappings = new HashMap<ITree, ITree>();
+            // Write the matches
+            // fmt.startMatches();
+            for (Mapping m: mappings) {
+		    if (update_pb)
+			dst_to_src_mappings.put(m.getSecond(), m.getFirst());
+                // fmt.match(m.getFirst(), m.getSecond());
+            }
+            // fmt.endMatches();
+
+            // Write the actions
+            fmt.startActions();
+            for (Action a : actions) {
+                ITree src = a.getNode();
+                if (a instanceof Move) {
+                    fast.Fast.Element e_src = pb_mappings.get(src);
+                    fast.Fast.Element.Builder eb_src = e_src.toBuilder();
+                    eb_src.setChange(fast.Fast.Element.DiffType.CHANGED_FROM);
+                    ITree dst = mappings.getDst(src);
+                    fast.Fast.Element e_dst = pb_mappings.get(dst);
+                    fast.Fast.Element.Builder eb_dst = e_dst.toBuilder();
+                    eb_dst.setChange(fast.Fast.Element.DiffType.CHANGED_TO);
+		    ITree dParent = dst.getParent();
+		    if (dParent != null) {
+			    ITree sParent = dst_to_src_mappings.get(dParent);
+			    if (sParent != null) {
+				    fast.Fast.Element.Builder eb_sparent = pb_mappings.get(sParent).toBuilder();
+				    if (((Move) a).getPosition() <= eb_sparent.getChildCount())
+					    eb_sparent.addChild(((Move) a).getPosition(), eb_dst);
+			    }
+		    }
+                    fmt.moveAction(src, dst.getParent(), ((Move) a).getPosition());
+                } else if (a instanceof Update) {
+                    fast.Fast.Element.Builder eb_src = src_map.get(src.getId());
+                    eb_src.setChange(fast.Fast.Element.DiffType.CHANGED_FROM);
+		    src_map.put(src.getId(), eb_src);
+		    ITree node = src;
+		    while (node.getParent()!=null) {
+			    fast.Fast.Element.Builder eb_node = src_map.get(node.getId());
+			    eb_node.build();
+			    src_map.put(node.getId(), eb_node);
+			    node = node.getParent();
+		    }
+		    unit = src_map.get(src_map.size()).build();
+                    System.out.println(unit);
+                    ITree dst = mappings.getDst(src);
+                    fast.Fast.Element e_dst = pb_mappings.get(dst);
+                    fast.Fast.Element.Builder eb_dst = e_dst.toBuilder();
+                    eb_dst.setChange(fast.Fast.Element.DiffType.CHANGED_TO);
+                    pb_mappings.put(dst, eb_dst.build());
+                    // System.out.println(eb_dst);
+		    ITree sParent = src.getParent();
+		    if (sParent != null) {
+			    fast.Fast.Element.Builder eb_sparent = pb_mappings.get(sParent).toBuilder();
+				// System.out.println(eb_sparent);
+			    int i;
+			    for (i=0; i<eb_sparent.getChildCount(); i++) {
+				    if (eb_sparent.getChild(i).hashCode() == eb_src.hashCode())
+					    break;
+			    }
+			    if (i+1 <= eb_sparent.getChildCount())
+			        eb_sparent.addChild(i+1, eb_dst);
+		    }
+                    fmt.updateAction(src, dst);
+                } else if (a instanceof Insert) {
+                    ITree dst = a.getNode();
+                    fast.Fast.Element e_dst = pb_mappings.get(dst);
+                    fast.Fast.Element.Builder eb_dst = e_dst.toBuilder();
+                    eb_dst.setChange(fast.Fast.Element.DiffType.ADDED);
+		    ITree s_root;
+                    if (dst.isRoot()) {
+			s_root = context.root;
+                        fmt.insertRoot(src);
+		    } else {
+			ITree root = dst.getParent();
+		    	s_root = dst_to_src_mappings.get(root);
+                        fmt.insertAction(src, dst.getParent(), dst.getParent().getChildPosition(dst));
+		    }
+		    if (s_root != null && pb_mappings.get(s_root)!= null) {
+                fast.Fast.Element.Builder eb_root = pb_mappings.get(s_root).toBuilder();
+                eb_root.addChild(eb_dst);
+            }
+                } else if (a instanceof Delete) {
+                    fast.Fast.Element e_src = pb_mappings.get(src);
+                    fast.Fast.Element.Builder eb_src = e_src.toBuilder();
+                    eb_src.setChange(fast.Fast.Element.DiffType.DELETED);
+	            fmt.deleteAction(src);
+                }
+            }
+            fmt.endActions();
+
+            // Finish up
+            fmt.endOutput();
+
+	    if (update_pb) {
+		fast.Fast.Data.Builder data_element = fast.Fast.Data.newBuilder();
+		if (unit!=null) data_element.setElement(unit);
+		if (filename!=null) {
+		    FileOutputStream output = new FileOutputStream(filename);
+		    data_element.build().writeTo(output);
+		    output.close();
+		}
+	    }
         }
     }
 

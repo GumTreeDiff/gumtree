@@ -24,7 +24,8 @@ package com.github.gumtreediff.gen.jdt;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 
-@Register(id = "java-jdt", accept = "\\.java$", priority = Registry.Priority.MAXIMUM)
+// @Register(id = "java-jdt", accept = "\\.java$", priority = Registry.Priority.MAXIMUM)
+@Register(id = "java-jdt", accept = "\\.java$", priority = Registry.Priority.MINIMUM)
 public class JdtTreeGenerator extends AbstractJdtTreeGenerator {
 
     @Override

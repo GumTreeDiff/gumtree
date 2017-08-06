@@ -21,13 +21,13 @@ dependencies {
 	compile project(':gen.antlr3-php')
 	compile project(':gen.antlr3-r')
 	compile project(':gen.antlr3-xml')
-	compile project(':gen.antlr3-smali')
 	compile project(':gen.c')
 	compile project(':gen.css')
 	compile project(':gen.jdt')
 	compile project(':gen.js')
 	compile project(':gen.ruby')
 	compile project(':gen.srcml')
+	compile project(':gen.pb')
 }
 
 run {

@@ -28,7 +28,7 @@ public class CompositeMatcher extends Matcher {
 
     public CompositeMatcher(ITree src, ITree dst, MappingStore store, Matcher[] matchers) {
         super(src, dst, store);
-	    System.out.println("instantiating ... " + getClass().getName() );
+	    // System.out.println("instantiating ... " + getClass().getName() );
         this.matchers = matchers;
     }
 
