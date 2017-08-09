@@ -51,6 +51,10 @@ public class TreeLoader {
         return new Pair<>(load("/Dummy_v0.xml"), load("/Dummy_v1.xml"));
     }
 
+    public static Pair<TreeContext, TreeContext> getCdCustomPair() {
+        return new Pair<>(load("/cd_v0.xml"), load("/cd_v1.xml"));
+    }
+ 
     public static ITree getDummySrc() {
         return load("/Dummy_v0.xml").getRoot();
     }
