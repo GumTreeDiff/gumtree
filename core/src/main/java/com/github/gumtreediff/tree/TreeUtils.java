@@ -306,6 +306,9 @@ public final class TreeUtils {
                     if (current.isLeaf())
                         break;
                 }
+                if (!it.hasNext()) {
+                    current = null;
+                }
                 return val;
             }
 
