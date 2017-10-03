@@ -44,15 +44,26 @@ public abstract class Registry<K, C, A> {
 
     public C get(K key, Object... args) {
         Factory<? extends C> factory = getFactory(key);
-        if (factory != null)
-            return factory.instantiate(args);
+        if (factory != null) {
+	    C c = factory.instantiate(args);
+	    if (c == null) {
+		System.err.println("can't instantiate for key = " + key);
+		System.err.println("can't instantiate for factory = " + factory.getClass().getName());
+		System.err.println("can't instantiate for n args = " + args.length);
+		for (int i = 0; i < args.length; i++) {
+			System.err.println("can't instantiate for arg " + i + " = " + args[i].getClass().getName());
+		}
+	    }
+            return c;
+	} 
         return null;
     }
 
     public Factory<? extends C> getFactory(K key) {
         Entry entry = find(key);
-        if (entry != null)
+        if (entry != null) {
             return entry.factory;
+	}
         return null;
     }
 

@@ -1,0 +1,18 @@
+#!/bin/bash
+function compile() {
+	gradle build -x checkstyleMain -x test
+}
+compile
+cd .. > /dev/null
+gumtree=gumtree-$(date '+%Y%m%d')-2.1.0-SNAPSHOT
+gumtree=gumtree-20170806-2.1.0-SNAPSHOT
+if [ ! -d $gumtree/lib/ ]; then
+	gradle build -x checkstyleMain -x test
+	unzip dist/build/distributions/$gumtree.zip
+fi
+cp core/build/libs/core-2.1.0-SNAPSHOT.jar $gumtree/lib/
+fast Hello1.java Hello1.pb
+fast Hello2.java Hello2.pb
+$gumtree/bin/gumtree diff Hello1.pb Hello2.pb
+#$gumtree/bin/gumtree webdiff Hello1.pb Hello2.pb
+cd - > /dev/null

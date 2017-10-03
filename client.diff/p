@@ -1,0 +1,10 @@
+#!/bin/bash
+p=$(pwd -P)
+function compile() {
+	gradle build -x checkstyleMain
+}
+compile
+cp build/libs/client.diff-2.1.0-SNAPSHOT.jar ../gumtree-20170805-2.1.0-SNAPSHOT/lib/
+cd ..
+gumtree-20170805-2.1.0-SNAPSHOT/bin/gumtree webdiff Hello1.pb Hello2.pb
+cd -

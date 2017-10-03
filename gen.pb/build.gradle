@@ -1,4 +1,5 @@
-description = 'GumTree abstract AntLR module.'
+description = 'GumTree Protobuf module.'
+apply plugin:'java'
 dependencies {
     compile files('lib/protobuf-java-3.3.1.jar')
     runtime files('lib/protobuf-java-3.3.1.jar')

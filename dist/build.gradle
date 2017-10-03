@@ -27,6 +27,7 @@ dependencies {
 	compile project(':gen.js')
 	compile project(':gen.ruby')
 	compile project(':gen.srcml')
+	compile project(':gen.pb')
 }
 
 run {
