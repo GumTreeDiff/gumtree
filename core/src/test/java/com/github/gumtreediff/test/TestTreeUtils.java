@@ -170,4 +170,18 @@ public class TestTreeUtils {
         Iterator<ITree> it = TreeUtils.breadthFirstIterator(big);
         compareListIterator(lst, it);
     }
+    
+    @Test
+    public void testLeafIterator() {
+        ITree src = TreeLoader.getDummySrc();
+        Iterator<ITree> srcLeaves = TreeUtils.leafIterator(TreeUtils.postOrderIterator(src));
+        ITree leaf = null;
+        leaf = srcLeaves.next();
+        leaf = srcLeaves.next();
+        leaf = srcLeaves.next();
+        leaf = srcLeaves.next();
+        leaf = srcLeaves.next();
+        assertNull(leaf);
+    }
+
 }

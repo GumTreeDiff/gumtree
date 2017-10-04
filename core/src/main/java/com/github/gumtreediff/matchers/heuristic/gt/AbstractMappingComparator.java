@@ -45,7 +45,13 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
     }
 
     public int compare(Mapping m1, Mapping m2) {
-        return Double.compare(similarities.get(m2), similarities.get(m1));
+        if (similarities.get(m2).compareTo(similarities.get(m1)) != 0) {
+            return Double.compare(similarities.get(m2), similarities.get(m1));
+        }
+        if (m1.first.getId() != m2.first.getId()) {
+            return Integer.compare(m1.first.getId(), m2.first.getId());
+        }
+        return Integer.compare(m1.second.getId(), m2.second.getId());
     }
 
     protected abstract double similarity(ITree src, ITree dst);
