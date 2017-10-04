@@ -40,7 +40,7 @@ public class TestCdMatcher {
         ITree dst = trees.getSecond().getRoot();
         Matcher matcher = new ChangeDistillerLeavesMatcher(src, dst, new MappingStore());
         matcher.match();
-        assertEquals(2, matcher.getMappingSet().size());
+        assertEquals(2, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src.getChild(0), dst.getChild(1)));
         assertTrue(matcher.getMappings().has(src.getChild(1), dst.getChild(0)));
     }
