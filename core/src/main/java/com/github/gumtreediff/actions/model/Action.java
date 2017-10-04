@@ -22,6 +22,7 @@ package com.github.gumtreediff.actions.model;
 
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
 
 public abstract class Action {
 
@@ -43,5 +44,7 @@ public abstract class Action {
 
     @Override
     public abstract String toString();
+
+    public abstract String format(TreeContext ctx);
 
 }
