@@ -58,7 +58,8 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
         Collections.sort(leavesMappings, new LeafMappingComparator());
         while (leavesMappings.size() > 0) {
             Mapping bestMapping = leavesMappings.remove(0);
-            if (!(ignoredSrcTrees.contains(bestMapping.getFirst()) || ignoredDstTrees.contains(bestMapping.getSecond()))) {
+            if (!(ignoredSrcTrees.contains(bestMapping.getFirst())
+                    || ignoredDstTrees.contains(bestMapping.getSecond()))) {
                 addMapping(bestMapping.getFirst(),bestMapping.getSecond());
                 ignoredSrcTrees.add(bestMapping.getFirst());
                 ignoredDstTrees.add(bestMapping.getSecond());

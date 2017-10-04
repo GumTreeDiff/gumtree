@@ -138,7 +138,7 @@ public class DirectoryComparator {
         if (l1 != l2) return true;
         else {
             try (DataInputStream dis1 = new DataInputStream(new FileInputStream(f1));
-                 DataInputStream dis2 = new DataInputStream(new FileInputStream(f2))) {
+                    DataInputStream dis2 = new DataInputStream(new FileInputStream(f2))) {
                 int c1, c2;
                 while ((c1 = dis1.read()) != -1) {
                     c2 = dis2.read();

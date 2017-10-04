@@ -24,7 +24,6 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.antlr3.AbstractAntlr3TreeGenerator;
 import org.antlr.runtime.*;
 
-
 @Register(id = "json-antlr", accept =  "\\.json$")
 public class AntlrJsonTreeGenerator extends AbstractAntlr3TreeGenerator<JSONLexer, JSONParser> {
 
