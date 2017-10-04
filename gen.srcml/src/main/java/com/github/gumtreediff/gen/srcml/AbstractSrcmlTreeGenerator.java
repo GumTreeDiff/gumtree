@@ -44,6 +44,10 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
     private Set<String> labeled = new HashSet<String>(
             Arrays.asList("specifier", "name", "comment", "literal", "operator"));
 
+    private StringBuffer currentLabel;
+
+    private TreeContext context;
+
     @Override
     public TreeContext generate(Reader r) throws IOException {
         lr = new LineReader(r);
@@ -53,7 +57,8 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
 
     public TreeContext getTreeContext(String xml) {
         XMLInputFactory fact = XMLInputFactory.newInstance();
-        TreeContext context = new TreeContext();
+        context = new TreeContext();
+        currentLabel = new StringBuffer();
         try {
             Stack<ITree> trees = new Stack<>();
             XMLEventReader r = fact.createXMLEventReader(new StringReader(xml));
@@ -79,14 +84,16 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
                     }
                 } else if (ev.isEndElement()) {
                     EndElement end = ev.asEndElement();
-                    if (!end.getName().getLocalPart().equals("position"))
+                    if (!end.getName().getLocalPart().equals("position")) {
+                        if (isLabeled(trees))
+                            trees.peek().setLabel(currentLabel.toString());
                         trees.pop();
+                        currentLabel = new StringBuffer();
+                    }
                 } else if (ev.isCharacters()) {
                     Characters chars = ev.asCharacters();
-                    if (!chars.isWhiteSpace()
-                            && trees.peek().getLabel().equals("")
-                            && labeled.contains(context.getTypeLabel(trees.peek().getType())))
-                        trees.peek().setLabel(chars.getData().trim());
+                    if (!chars.isWhiteSpace() && isLabeled(trees))
+                        currentLabel.append(chars.getData().trim());
                 }
             }
             fixPos(context);
@@ -96,6 +103,10 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private boolean isLabeled(Stack<ITree> trees) {
+        return labeled.contains(context.getTypeLabel(trees.peek().getType()));
     }
 
     private void fixPos(TreeContext ctx) {
