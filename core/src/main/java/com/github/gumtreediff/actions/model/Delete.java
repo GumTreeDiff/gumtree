@@ -21,6 +21,7 @@
 package com.github.gumtreediff.actions.model;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
 
 public class Delete extends Action {
 
@@ -36,6 +37,11 @@ public class Delete extends Action {
     @Override
     public String toString() {
         return getName() + " " + node.toShortString();
+    }
+
+    @Override
+    public String format(TreeContext ctx) {
+        return getName() + " " + node.toPrettyString(ctx);
     }
 
 }

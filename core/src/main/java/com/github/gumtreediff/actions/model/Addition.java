@@ -21,6 +21,7 @@
 package com.github.gumtreediff.actions.model;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
 
 public abstract class Addition extends Action {
 
@@ -44,7 +45,12 @@ public abstract class Addition extends Action {
 
     @Override
     public String toString() {
-        return getName() + " " + node.toTreeString() + " to " + parent.toShortString() + " at " + pos;
+        return getName() + " " + node.toShortString() + " to " + parent.toShortString() + " at " + pos;
+    }
+
+    @Override
+    public String format(TreeContext ctx) {
+        return getName() + " " + node.toPrettyString(ctx) + " to " + parent.toPrettyString(ctx) + " at " + pos;
     }
 
 }
