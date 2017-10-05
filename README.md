@@ -40,4 +40,4 @@ To use GumTree, you can start by consulting the [Getting Started](https://github
 
 ## Nightlies
 
-You can find the latest binaries of GumTree on [Bintray](https://bintray.com/jrfaller/GumTree/nightlies/99.99.99#files).
+You can find the latest binaries of GumTree on [Bintray](https://bintray.com/jrfaller/GumTree/nightlies/2.0.1-2017-2#files).
