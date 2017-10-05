@@ -15,19 +15,19 @@
     },
 
     "version": {
-        "name": "99.99.99",
-				"desc": "Nightly version."
+        "name": "2.1.0-2017-2",
+        "desc": "Nightly version."
     },
 
     "files":
-        [
-            {
-                "includePattern": "dist/build/distributions/(.*)",
-                "uploadPattern": "$1",
-                "matrixParams": {
-                    "override": 1
-                }
+    [
+        {
+            "includePattern": "dist/build/distributions/(.*)",
+            "uploadPattern": "$1",
+            "matrixParams": {
+                "override": 1
             }
-        ],
+        }
+    ],
     "publish": true
 }
