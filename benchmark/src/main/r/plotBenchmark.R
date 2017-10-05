@@ -25,12 +25,13 @@ files <- list.files(path = folder, pattern = "*.csv", full.names = T)
 
 d <- ldply(files, function (filename) {
    fname = strsplit(gsub("^.*results_(\\d*)(_([^_]*))?.csv", "\\1 \\3 ???????", filename), " ")[[1]]
-   cbind(read.csv(filename), timestamp =
+   cbind(read.csv(filename,  stringsAsFactors = F), timestamp =
        paste(as.POSIXct(as.numeric(fname[[1]])/1000, origin="1970-01-01"),
              fname[[2]], sep='\n'))
 })
 
 d$name <- gsub('^.*perfs_(.*)_v0_(.*).xml$', '\\1_\\2', d$Param..refPath)
+d$Score <- as.numeric(gsub(",",".",d$Score))
 
 # according to my office mate we should change the size of each line from 0.5 to 0.1
 # but I don't know how to do this (size=seq(0.5, 0.1) does not work)
