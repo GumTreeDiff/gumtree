@@ -1,5 +1,5 @@
 plugins {
-    id 'me.champeau.gradle.jmh' version '0.2.0'
+    id "me.champeau.gradle.jmh" version "0.4.3"
 }
 
 apply plugin: 'me.champeau.gradle.jmh'
@@ -41,15 +41,15 @@ def getGitHash = { ->
 }
 
 jmh {
+    jmhVersion = '1.19'
     fork = 0
-    warmupIterations = 3
+    warmupIterations = 1
     iterations = 3
-    benchmarkMode = 'avgt'
+    benchmarkMode = ['AverageTime']
     benchmarkParameters = [
       'refPath' : new File("${project.projectDir}/src/jmh/resources/").listFiles()
         .collect { it.getAbsolutePath() }
         .findAll { it.matches(".*_v0_.*") }
-        .join(",")
     ]
     humanOutputFile = project.file("${project.buildDir}/reports/jmh/human_${new Date().getTime()}_${getGitHash()}.txt")
     resultsFile = project.file("${project.buildDir}/reports/jmh/results_${new Date().getTime()}_${getGitHash()}.csv")
