@@ -1,6 +1,6 @@
 sudo: required
 dist: trusty
-before_install: ./.travis-native-dependencies.sh
+before_install: ./.travis_native_dependencies.sh
 script: ./gradlew -Dgumtree.cgum.path=./cgum/cgum -Dgumtree.srcml.path=./srcML-src/bin/srcml check
 after_success:
   - ./gradlew coveralls uploadArchives

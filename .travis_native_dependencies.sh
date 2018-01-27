@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # 1) installing srcML
 # start by boost dependency
 sudo apt-get update
