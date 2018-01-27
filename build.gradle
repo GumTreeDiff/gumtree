@@ -44,7 +44,11 @@ subprojects {
 		testCompile 'junit:junit:4.+'
 	}
 
-	task allDeps(type: DependencyReportTask) {}
+	test {
+		testLogging {
+				exceptionFormat = 'full'
+		}
+	}
 }
 
 configure(subprojects.findAll {it.name != 'core'}) {
@@ -53,28 +57,18 @@ configure(subprojects.findAll {it.name != 'core'}) {
 	}
 }
 
-configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
+configure(subprojects.findAll { it.name.startsWith('gen.antlr') }) {
 	apply plugin: 'antlr'
-  dependencies {
-    antlr 'org.antlr:antlr:3.5.2'
-  }
-  if (it.name.startsWith('gen.antlr3-')) {
-    dependencies {
-      compile project(':gen.antlr3')
-    }
-  }
-}
 
-configure(subprojects.findAll { it.name.startsWith('gen.antlr4') }) {
-  apply plugin: 'antlr'
-  dependencies {
-    antlr 'org.antlr:antlr4:4.5'
-  }
-  if (it.name.startsWith('gen.antlr4-')) {
-    dependencies {
-      compile project(':gen.antlr4')
-    }
-  }
+	dependencies {
+		antlr 'org.antlr:antlr:3.5.2'
+	}
+
+	if (it.name.startsWith('gen.antlr-')) {
+		dependencies {
+			compile project(':gen.antlr')
+		}
+	}
 }
 
 def jacocoProjectsNames = ['core', 'gen.jdt', 'gen.c', 'gen.ruby', 'gen.js', 'gen.srcml', 'gen.css']

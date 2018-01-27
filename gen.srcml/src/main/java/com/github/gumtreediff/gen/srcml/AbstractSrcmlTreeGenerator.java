@@ -168,7 +168,7 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
             while ((line = br.readLine()) != null)
                 buf.append(line + "\n");
             p.waitFor();
-            if (p.exitValue() != 0) throw new RuntimeException();
+            if (p.exitValue() != 0) throw new RuntimeException(buf.toString());
             r.close();
             String xml = buf.toString();
             return xml;
