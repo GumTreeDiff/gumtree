@@ -57,16 +57,16 @@ configure(subprojects.findAll {it.name != 'core'}) {
 	}
 }
 
-configure(subprojects.findAll { it.name.startsWith('gen.antlr') }) {
+configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
 	apply plugin: 'antlr'
 
 	dependencies {
 		antlr 'org.antlr:antlr:3.5.2'
 	}
 
-	if (it.name.startsWith('gen.antlr-')) {
+	if (it.name.startsWith('gen.antlr3-')) {
 		dependencies {
-			compile project(':gen.antlr')
+			compile project(':gen.antlr3')
 		}
 	}
 }
