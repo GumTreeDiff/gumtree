@@ -24,3 +24,5 @@ cd cgum
 make
 cd ..
 export PATH="$PWD/cgum:$PATH"
+srcml --version
+cgum --help
