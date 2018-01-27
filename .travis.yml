@@ -1,6 +1,9 @@
 sudo: required
 dist: trusty
 before_install: ./.travis_native_dependencies.sh
+before_script:
+  - export PATH=$PWD/srcML-src/bin:$PATH
+  - export PATH=$PWD/cgum:$PATH
 script: ./gradlew check
 after_success:
   - ./gradlew coveralls uploadArchives

@@ -16,13 +16,9 @@ cd srcML-src
 cmake .
 make
 cd ..
-export PATH="$PWD/srcML-src/bin:$PATH"
 # 2) installing cgum
 sudo apt-get install  ocaml ocaml-native-compilers camlp4
 git clone https://github.com/GumTreeDiff/cgum.git --depth 1
 cd cgum
 make
 cd ..
-export PATH="$PWD/cgum:$PATH"
-srcml --version
-cgum --help
