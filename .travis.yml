@@ -11,10 +11,11 @@ language: java
 jdk:
   - oraclejdk8
 deploy:
-  provider: bintray
+  provider: releases
+  skip_cleanup: true
   on:
-    branch: develop
-  file: deploy.json
-  user: jrfaller
+    branch: master
+    tags: true
+  file: gumtree.zip
   key:
-    secure: g2h46zuZoa9GJ/lGrAePdmI7P/KhH9zImSmdERl/qlYZ2aKD9a3GuBd94v5xsTtgOoftZK4KoRfp4Wvb5IEPQPPYEjQb1ubOT/xGxyySj3wcniTAWBa2U3FLDlhU3AyPO3xn1h8HUikm7zODDXGDZxDjDvI5hxRgBiz0j/P5j7A=
+    KDxVpvCTWmZK2Nxa879vjP1OCWwI5qU2BSGf9fSb/d1SiBAlFZL9AB5FTpo1JBmfTXhhk4K3YrK2d5CtDs2CmAv2s1CNDQ7RaaZXlr1ApSS/UlhNNNEFwMTkL0ZiWz54/mQW812V6KbZPOf2XxO3fns+mN43x/8PYQn8mfBDxok=
