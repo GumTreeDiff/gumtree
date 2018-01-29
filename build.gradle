@@ -15,7 +15,7 @@ allprojects {
 	apply plugin: 'idea'
 
 	group = 'com.github.gumtreediff'
-	version = '2.1.0'
+	version = '2.1.1-SNAPSHOT'
 
 	repositories {
 		mavenCentral()
@@ -67,6 +67,20 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
 	if (it.name.startsWith('gen.antlr3-')) {
 		dependencies {
 			compile project(':gen.antlr3')
+		}
+	}
+}
+
+configure(subprojects.findAll { it.name.startsWith('gen.antlr4') }) {
+	apply plugin: 'antlr'
+
+	dependencies {
+		antlr 'org.antlr:antlr4:4.5'
+	}
+
+	if (it.name.startsWith('gen.antlr4-')) {
+		dependencies {
+			compile project(':gen.antlr4')
 		}
 	}
 }

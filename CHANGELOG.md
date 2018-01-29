@@ -1,6 +1,10 @@
 # Changelog of GumTree
 
-### Version 2.1.0
+## v2.1.1
+* New integration with antlr4 grammars
+* Add matlab grammar
+
+## v2.1.0 (Cedar)
 * Improve the web diff view
 * Integrate mergely to get a text diff from the web view
 * Fix actions text formatter
