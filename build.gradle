@@ -41,12 +41,12 @@ subprojects {
 	}
 
 	dependencies {
-		testCompile 'junit:junit:4.+'
+		testCompile 'junit:junit:[4,5)'
 	}
 
 	test {
 		testLogging {
-				exceptionFormat = 'full'
+			exceptionFormat = 'full'
 		}
 	}
 }
@@ -119,8 +119,8 @@ tasks.coveralls {
 evaluationDependsOnChildren();
 
 configure(subprojects) {
-		if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
-			it.test.enabled = false
+	if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
+	it.test.enabled = false
 }
 
 if (project.hasProperty('mvn')) {
@@ -142,11 +142,9 @@ if (project.hasProperty('mvn')) {
 			archives javadocJar, sourcesJar
 		}
 
-				if (project.isRelease && gradle.taskGraph.hasTask("uploadArchives")) {
-						signing {
-								sign configurations.archives
-						}
-				}
+		signing {
+			sign configurations.archives
+		}
 
 		uploadArchives {
 			repositories {
