@@ -15,7 +15,7 @@ allprojects {
 	apply plugin: 'idea'
 
 	group = 'com.github.gumtreediff'
-	version = '2.1.1-SNAPSHOT'
+	version = '2.1.1'
 
 	repositories {
 		mavenCentral()

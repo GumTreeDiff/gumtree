@@ -6,7 +6,7 @@ apply plugin: 'application'
 mainClassName = 'com.github.gumtreediff.client.Run'
 applicationName = 'gumtree'
 jar.enabled = false
-distZip.archiveName = 'gumtree-' + buildTime() + '-' + version + '.zip'
+distZip.archiveName  = (isRelease) ? 'gumtree.zip' : 'gumtree-' + buildTime() + '-' + version + '.zip'
 uploadArchives.enabled = false
 distTar.enabled = false
 
