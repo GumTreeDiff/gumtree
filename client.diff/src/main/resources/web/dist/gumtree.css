@@ -91,3 +91,7 @@ div {
 	border-color: black;
 	font-family: "Inconsolata", "Consolas", "Liberation Sans Regular", "DejaVu Sans Mono", monospace;
 }
+
+.tooltip-inner {
+    max-width: none;
+}
