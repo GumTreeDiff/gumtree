@@ -16,6 +16,6 @@ deploy:
   on:
     branch: master
     tags: true
-  file: gumtree.zip
+  file: dist/build/distributions/gumtree.zip
   key:
     KDxVpvCTWmZK2Nxa879vjP1OCWwI5qU2BSGf9fSb/d1SiBAlFZL9AB5FTpo1JBmfTXhhk4K3YrK2d5CtDs2CmAv2s1CNDQ7RaaZXlr1ApSS/UlhNNNEFwMTkL0ZiWz54/mQW812V6KbZPOf2XxO3fns+mN43x/8PYQn8mfBDxok=
