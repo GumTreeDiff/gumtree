@@ -1,213 +1,208 @@
-buildscript {
-	repositories {
-		mavenCentral()
-	}
 
-	dependencies {
-		classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
-	}
+plugins {
+    id 'net.ltgt.errorprone' version '0.0.13'
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
-apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'jacoco'
-
 allprojects {
-	apply plugin: 'idea'
+    apply plugin: 'idea'
 
-	group = 'com.github.gumtreediff'
-	version = '2.1.2-SNAPSHOT'
+    group = 'com.github.gumtreediff'
+    version = '2.1.2-SNAPSHOT'
 
-	repositories {
-		mavenCentral()
-		jcenter()
-	}
-	apply plugin: 'idea'
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
 }
 
 ext.isRelease = !project.version.endsWith("SNAPSHOT")
 
 subprojects {
-	apply plugin: 'java'
-	sourceCompatibility = '1.8'
-	targetCompatibility = '1.8'
+    apply plugin: 'java'
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
 
-	apply plugin: 'checkstyle'
-	checkstyle {
-		toolVersion = '7.0'
-		configFile = rootProject.file('gumtree_checkstyle.xml')
-		configProperties = [suppressionFile: "${rootProject.file('checkstyle_ignore.xml')}"]
-		ignoreFailures = false
-		showViolations = true
-	}
+    apply plugin: "net.ltgt.errorprone"
 
-	dependencies {
-		testCompile 'junit:junit:[4,5)'
-	}
+    apply plugin: 'checkstyle'
+    checkstyle {
+        toolVersion = '7.0'
+        configFile = rootProject.file('gumtree_checkstyle.xml')
+        configProperties = [suppressionFile: "${rootProject.file('checkstyle_ignore.xml')}"]
+        ignoreFailures = false
+        showViolations = true
+    }
 
-	test {
-		testLogging {
-			exceptionFormat = 'full'
-		}
-	}
+    dependencies {
+        testCompile 'junit:junit:[4,5)'
+    }
+
+    test {
+        testLogging {
+            exceptionFormat = 'full'
+        }
+    }
 }
 
-configure(subprojects.findAll {it.name != 'core'}) {
-	dependencies {
-		compile project(':core')
-	}
+configure(subprojects.findAll { it.name != 'core' }) {
+    dependencies {
+        compile project(':core')
+    }
 }
 
 configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
-	apply plugin: 'antlr'
+    apply plugin: 'antlr'
 
-	dependencies {
-		antlr 'org.antlr:antlr:3.5.2'
-	}
+    dependencies {
+        antlr 'org.antlr:antlr:3.5.2'
+    }
 
-	if (it.name.startsWith('gen.antlr3-')) {
-		dependencies {
-			compile project(':gen.antlr3')
-		}
-	}
+    if (it.name.startsWith('gen.antlr3-')) {
+        dependencies {
+            compile project(':gen.antlr3')
+        }
+    }
 }
 
 configure(subprojects.findAll { it.name.startsWith('gen.antlr4') }) {
-	apply plugin: 'antlr'
+    apply plugin: 'antlr'
 
-	dependencies {
-		antlr 'org.antlr:antlr4:4.5'
-	}
+    dependencies {
+        antlr 'org.antlr:antlr4:4.5'
+    }
 
-	if (it.name.startsWith('gen.antlr4-')) {
-		dependencies {
-			compile project(':gen.antlr4')
-		}
-	}
+    if (it.name.startsWith('gen.antlr4-')) {
+        dependencies {
+            compile project(':gen.antlr4')
+        }
+    }
 }
 
 def jacocoProjectsNames = ['core', 'gen.jdt', 'gen.c', 'gen.ruby', 'gen.js', 'gen.srcml', 'gen.css']
-def jacocoProjects = subprojects.findAll { it.name in jacocoProjectsNames}
+def jacocoProjects = subprojects.findAll { it.name in jacocoProjectsNames }
 configure(jacocoProjects) {
-	apply plugin: 'jacoco'
-	jacoco {
-		toolVersion = '0.7.7.201606060606'
-	}
+    apply plugin: 'jacoco'
+    jacoco {
+        toolVersion = '0.7.7.201606060606'
+    }
 
-	jacocoTestReport {
-		reports {
-			html.enabled = true
-			xml.enabled = true
-			csv.enabled = false
-		}
-	}
+    jacocoTestReport {
+        reports {
+            html.enabled = true
+            xml.enabled = true
+            csv.enabled = false
+        }
+    }
 }
 
 task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
-	description = 'Generates an aggregate report from all subprojects'
-	dependsOn(jacocoProjects.test)
+    description = 'Generates an aggregate report from all subprojects'
+    dependsOn(jacocoProjects.test)
 
-	additionalSourceDirs = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-	sourceDirectories = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-	classDirectories = files(jacocoProjects.sourceSets.main.output)
-	executionData = files(jacocoProjects.jacocoTestReport.executionData)
+    additionalSourceDirs = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(jacocoProjects.sourceSets.main.output)
+    executionData = files(jacocoProjects.jacocoTestReport.executionData)
 
-	reports {
-		html.enabled = true
-		xml.enabled = true
-	}
+    reports {
+        html.enabled = true
+        xml.enabled = true
+    }
 }
 
 coveralls {
-	sourceDirs = jacocoProjects.sourceSets.main.allSource.srcDirs.flatten()
-	jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+    sourceDirs = jacocoProjects.sourceSets.main.allSource.srcDirs.flatten()
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
 tasks.coveralls {
-	group = 'Coverage reports'
-	description = 'Uploads the aggregated coverage report to Coveralls'
+    group = 'Coverage reports'
+    description = 'Uploads the aggregated coverage report to Coveralls'
 
-	dependsOn jacocoRootReport
-	onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
+    dependsOn jacocoRootReport
+    onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
 }
 
 evaluationDependsOnChildren();
 
 configure(subprojects) {
-	if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
-	it.test.enabled = false
+    if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
+        it.test.enabled = false
 }
 
 if (project.hasProperty('mvn')) {
-	configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
-		apply plugin: 'maven'
-		apply plugin: 'signing'
+    configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
+        apply plugin: 'maven'
+        apply plugin: 'signing'
 
-		task javadocJar(type: Jar) {
-			classifier = 'javadoc'
-			from javadoc
-		}
+        task javadocJar(type: Jar) {
+            classifier = 'javadoc'
+            from javadoc
+        }
 
-		task sourcesJar(type: Jar) {
-			classifier = 'sources'
-			from sourceSets.main.allSource
-		}
+        task sourcesJar(type: Jar) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
 
-		artifacts {
-			archives javadocJar, sourcesJar
-		}
+        artifacts {
+            archives javadocJar, sourcesJar
+        }
 
-		signing {
-			sign configurations.archives
-		}
+        signing {
+            sign configurations.archives
+        }
 
-		uploadArchives {
-			repositories {
-				mavenDeployer {
-					beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+        uploadArchives {
+            repositories {
+                mavenDeployer {
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-					repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-						authentication(userName: ossrhUsername, password: ossrhPassword)
-					}
+                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
 
-					snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-						authentication(userName: ossrhUsername, password: ossrhPassword)
-					}
+                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
 
-					pom.project {
-						name "GumTree ${subproject.name}"
-						description subproject.description
-						url 'https://github.com/GumTreeDiff/gumtree/'
-						packaging 'jar'
+                    pom.project {
+                        name "GumTree ${subproject.name}"
+                        description subproject.description
+                        url 'https://github.com/GumTreeDiff/gumtree/'
+                        packaging 'jar'
 
-						scm {
-							connection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
-							developerConnection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
-							url 'https://github.com/GumTreeDiff/gumtree/'
-						}
+                        scm {
+                            connection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+                            developerConnection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+                            url 'https://github.com/GumTreeDiff/gumtree/'
+                        }
 
-						licenses {
-							license {
-								name 'GNU Lesser General Public License v3.0'
-								url 'https://www.gnu.org/copyleft/lesser.html'
-							}
-						}
+                        licenses {
+                            license {
+                                name 'GNU Lesser General Public License v3.0'
+                                url 'https://www.gnu.org/copyleft/lesser.html'
+                            }
+                        }
 
-						developers {
-							developer {
-								id 'jre'
-								name 'Jean-Rémy Falleri'
-								email 'jr.falleri@gmail.com'
-							}
+                        developers {
+                            developer {
+                                id 'jre'
+                                name 'Jean-Rémy Falleri'
+                                email 'jr.falleri@gmail.com'
+                            }
 
-							developer {
-								id 'flop'
-								name 'Floréal Morandat'
-								email 'florealm@gmail.com'
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                            developer {
+                                id 'flop'
+                                name 'Floréal Morandat'
+                                email 'florealm@gmail.com'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

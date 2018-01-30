@@ -44,7 +44,7 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
     private Set<String> labeled = new HashSet<String>(
             Arrays.asList("specifier", "name", "comment", "literal", "operator"));
 
-    private StringBuffer currentLabel;
+    private StringBuilder currentLabel;
 
     private TreeContext context;
 
@@ -58,7 +58,7 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
     public TreeContext getTreeContext(String xml) {
         XMLInputFactory fact = XMLInputFactory.newInstance();
         context = new TreeContext();
-        currentLabel = new StringBuffer();
+        currentLabel = new StringBuilder();
         try {
             Stack<ITree> trees = new Stack<>();
             XMLEventReader r = fact.createXMLEventReader(new StringReader(xml));
@@ -88,7 +88,7 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
                         if (isLabeled(trees))
                             trees.peek().setLabel(currentLabel.toString());
                         trees.pop();
-                        currentLabel = new StringBuffer();
+                        currentLabel = new StringBuilder();
                     }
                 } else if (ev.isCharacters()) {
                     Characters chars = ev.asCharacters();
@@ -161,7 +161,7 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
         b.directory(f.getParentFile());
         try {
             Process p = b.start();
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             br = new BufferedReader(new InputStreamReader(p.getInputStream()));
             // TODO Why do we need to read and bufferize everything, when we could/should only use generateFromStream
             line = null;

@@ -42,6 +42,7 @@ import java.io.*;
 @Register(id = "css-phcss", accept = {"\\.css$"}, priority = Registry.Priority.MAXIMUM)
 public class CssTreeGenerator extends TreeGenerator {
 
+    @Override
     public TreeContext generate(Reader r) throws IOException {
         LineReader lr = new LineReader(r);
         CSSCharStream s = new CSSCharStream(new LineReader(lr));

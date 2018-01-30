@@ -53,7 +53,7 @@ public class TagIndex {
 
     public String getEndTags(int pos) {
         if (!endTags.containsKey(pos)) return "";
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         for (String s: endTags.get(pos)) b.append(s);
         return b.toString();
     }
@@ -61,7 +61,7 @@ public class TagIndex {
     public String getStartTags(int pos) {
         if (!startTags.containsKey(pos))
             return "";
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         for (String s: startTags.get(pos))
             b.append(s);
         return b.toString();
