@@ -1,5 +1,8 @@
 # Changelog of GumTree
 
+## v2.1.2
+* New dockerfile to run GumTree
+
 ## v2.1.1
 * New integration with antlr4 grammars
 * Add matlab grammar
@@ -16,7 +19,7 @@
 * Automatically produce nightlies
 * Add new srcML tree generator that can deal with C++, C, C# and Java files
 * Add new css tree generator based on ph-css
-* Fix no label bug in ruby tree generator 
+* Fix no label bug in ruby tree generator
 * Add custom options to furnish srcml and cgum paths
 * Build script can exclude tests requiring an external tool
 * Use sparkjava for the web client instead of NanoHTTPd
