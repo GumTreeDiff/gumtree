@@ -3,7 +3,7 @@
 ## v2.1.2
 * New dockerfile to run GumTree
 
-## v2.1.1
+## v2.1.1
 * New integration with antlr4 grammars
 * Add matlab grammar
 
