@@ -2,8 +2,8 @@
 
 ## Status
 
-* Master branch: ![Build Status](https://travis-ci.org/GumTreeDiff/gumtree.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/GumTreeDiff/gumtree/badge.svg?branch=master)](https://coveralls.io/r/GumTreeDiff/gumtree?branch=master)
-* Develop branch: ![Build Status](https://travis-ci.org/GumTreeDiff/gumtree.svg?branch=develop) [![Coverage Status](https://coveralls.io/repos/GumTreeDiff/gumtree/badge.svg?branch=develop)](https://coveralls.io/r/GumTreeDiff/gumtree?branch=develop)
+* Master branch: ![Build Status](https://travis-ci.org/GumTreeDiff/gumtree.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/GumTreeDiff/gumtree/badge.svg?branch=master)](https://coveralls.io/github/GumTreeDiff/gumtree?branch=master)
+* Develop branch: ![Build Status](https://travis-ci.org/GumTreeDiff/gumtree.svg?branch=develop) [![Coverage Status](https://coveralls.io/repos/github/GumTreeDiff/gumtree/badge.svg?branch=develop)](https://coveralls.io/github/GumTreeDiff/gumtree?branch=develop)
 
 ## Description
 
