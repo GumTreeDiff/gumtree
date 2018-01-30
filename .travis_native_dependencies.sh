@@ -2,7 +2,7 @@
 # 1) installing srcML
 # start by boost dependency
 sudo apt-get update
-sudo apt-get install gcc g++ libxml2-dev libxslt1-dev libarchive-dev antlr libantlr-dev libcurl4-openssl-dev libssl-dev ocaml
+sudo apt-get install gcc g++ libxml2-dev libxslt1-dev libarchive-dev antlr libantlr-dev libcurl4-openssl-dev libssl-dev
 wget https://netix.dl.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.tar.gz
 tar -xzf boost_1_55_0.tar.gz
 cd boost_1_55_0
@@ -17,7 +17,7 @@ cmake .
 make
 cd ..
 # 2) installing cgum
-sudo apt-get install  ocaml ocaml-native-compilers camlp4
+sudo apt-get install ocaml ocaml-native-compilers camlp4
 git clone https://github.com/GumTreeDiff/cgum.git --depth 1
 cd cgum
 make
