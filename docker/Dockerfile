@@ -23,6 +23,7 @@ RUN ./gradlew build \
 	&& ln -s /opt/gumtree/gumtree/bin/gumtree /usr/bin/gumtree
 
 RUN mkdir /diff
+WORKDIR /diff
 VOLUME /diff
 
 EXPOSE 4567
