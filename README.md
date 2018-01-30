@@ -37,7 +37,3 @@ We are researchers, therefore if you use GumTree in an academic work we would be
 ## Documentation
 
 To use GumTree, you can start by consulting the [Getting Started](https://github.com/GumTreeDiff/gumtree/wiki/Getting-Started) page from our [wiki](https://github.com/GumTreeDiff/gumtree/wiki).
-
-## Nightlies
-
-You can find the latest binaries of GumTree on [Bintray](https://bintray.com/jrfaller/GumTree/nightlies/2.1.0-2017-2#files).
