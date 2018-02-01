@@ -39,6 +39,7 @@ public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher {
         super(src, dst, store);
     }
 
+    @Override
     public void match() {
         for (ITree t: src.postOrder())  {
             if (t.isRoot()) {

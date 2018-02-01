@@ -48,7 +48,7 @@ public class TestJsGenerator {
 
     @Test
     public void testComplexFile() throws IOException {
-        Reader r = new InputStreamReader(getClass().getResourceAsStream("/sample.js"));
+        Reader r = new InputStreamReader(getClass().getResourceAsStream("/sample.js"), "UTF-8");
         ITree tree = new RhinoTreeGenerator().generateFromReader(r).getRoot();
         assertEquals(402, tree.getSize());
     }

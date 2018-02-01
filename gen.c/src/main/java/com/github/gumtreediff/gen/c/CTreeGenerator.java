@@ -28,6 +28,8 @@ import com.github.gumtreediff.tree.TreeContext.MetadataSerializers;
 import com.github.gumtreediff.tree.TreeContext.MetadataUnserializers;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -56,32 +58,30 @@ public class CTreeGenerator extends TreeGenerator {
     public TreeContext generate(Reader r) throws IOException {
         //FIXME this is not efficient but I am not sure how to speed up things here.
         File f = File.createTempFile("gumtree", ".c");
-        FileWriter w = new FileWriter(f);
-        BufferedReader br = new BufferedReader(r);
-        String line = br.readLine();
-        while (line != null) {
-            w.append(line);
-            w.append(System.lineSeparator());
-            line = br.readLine();
+        try (
+                Writer w = Files.newBufferedWriter(f.toPath(), Charset.forName("UTF-8"));
+                BufferedReader br = new BufferedReader(r);
+        ) {
+            String line = br.readLine();
+            while (line != null) {
+                w.append(line + System.lineSeparator());
+                line = br.readLine();
+            }
         }
-        w.close();
-        br.close();
         ProcessBuilder b = new ProcessBuilder(COCCI_CMD, f.getAbsolutePath());
         b.directory(f.getParentFile());
-        try {
-            Process p = b.start();
-            StringBuffer buf = new StringBuffer();
-            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        Process p = b.start();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"))) {
+            StringBuilder buf = new StringBuilder();
             // TODO Why do we need to read and bufferize eveything, when we could/should only use generateFromStream
-            line = null;
+            String line = null;
             while ((line = br.readLine()) != null)
-                buf.append(line + "\n");
+                buf.append(line + System.lineSeparator());
             p.waitFor();
             if (p.exitValue() != 0)
                 throw new RuntimeException(
                     String.format("cgum Error [%d] %s\n", p.exitValue(), buf.toString())
                 );
-            r.close();
             String xml = buf.toString();
             return TreeIoUtils.fromXml(CTreeGenerator.defaultUnserializers).generateFromString(xml);
         } catch (InterruptedException e) {

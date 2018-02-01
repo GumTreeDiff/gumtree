@@ -106,12 +106,13 @@ public abstract class Option {
         return key.equals(arg);
     }
 
-    protected abstract  void process(String name, String[] args);
+    protected abstract void process(String name, String[] args);
 
     public String formatHelpText() {
         return String.format("%s%s\t%s", key, (paramCount > 0 ? " <" + paramCount + ">" : ""), description);
     }
 
+    @Override
     public String toString() {
         return key;
     }

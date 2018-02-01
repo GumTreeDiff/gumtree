@@ -138,6 +138,7 @@ public abstract class AbstractBottomUpMatcher extends Matcher {
                 && !(isSrcMatched(src) || isDstMatched(dst));
     }
 
+    @Override
     protected void addMapping(ITree src, ITree dst) {
         mappedSrc.putTree(src);
         mappedDst.putTree(dst);

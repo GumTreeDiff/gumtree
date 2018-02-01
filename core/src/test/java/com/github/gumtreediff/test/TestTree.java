@@ -22,7 +22,7 @@ package com.github.gumtreediff.test;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class TestTree {
     @Test
     public void testGetParents() {
         ITree tree = TreeLoader.getDummySrc();
-        List<ITree> trees = new LinkedList<>(tree.getTrees());
+        List<ITree> trees = new ArrayList<>(tree.getTrees());
         ITree n = trees.get(2);
         assertTrue(n.getLabel().equals("c"));
         List<ITree> parents = n.getParents();

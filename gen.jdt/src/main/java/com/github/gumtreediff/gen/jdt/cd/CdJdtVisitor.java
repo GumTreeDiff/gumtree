@@ -217,7 +217,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 
     @Override
     public boolean visit(SingleVariableDeclaration node) {
-        boolean isNotParam = getCurrentParent().getLabel() != EntityType.PARAMETERS.toString();// @inria
+        boolean isNotParam = !getCurrentParent().getLabel().equals(EntityType.PARAMETERS.toString());// @inria
         pushNode(node, node.getName().getIdentifier());
         node.getType().accept(this);
         return false;

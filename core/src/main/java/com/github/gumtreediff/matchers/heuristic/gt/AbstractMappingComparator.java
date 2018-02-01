@@ -44,6 +44,7 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
         this.ambiguousMappings = ambiguousMappings;
     }
 
+    @Override
     public int compare(Mapping m1, Mapping m2) {
         if (similarities.get(m2).compareTo(similarities.get(m1)) != 0) {
             return Double.compare(similarities.get(m2), similarities.get(m1));

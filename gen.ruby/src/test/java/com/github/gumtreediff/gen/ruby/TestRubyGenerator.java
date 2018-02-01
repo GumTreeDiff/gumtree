@@ -35,7 +35,7 @@ public class TestRubyGenerator {
 
     @Test
     public void testFileParsing() throws IOException {
-        Reader r = new InputStreamReader(getClass().getResourceAsStream("/sample.rb"));
+        Reader r = new InputStreamReader(getClass().getResourceAsStream("/sample.rb"), "UTF-8");
         ITree tree = new RubyTreeGenerator().generateFromReader(r).getRoot();
         assertEquals(102, tree.getType());
         assertEquals(1726, tree.getSize());

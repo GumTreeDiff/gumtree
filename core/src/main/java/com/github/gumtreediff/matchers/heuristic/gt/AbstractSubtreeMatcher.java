@@ -31,7 +31,9 @@ import java.util.Set;
 
 public abstract class AbstractSubtreeMatcher extends Matcher {
 
-    public static int MIN_HEIGHT = Integer.parseInt(System.getProperty("gt.stm.mh", System.getProperty("gumtree.match.gt.minh", "1")));
+    public static int MIN_HEIGHT = Integer.parseInt(
+            System.getProperty("gt.stm.mh", System.getProperty("gumtree.match.gt.minh", "1"))
+    );
 
     public AbstractSubtreeMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
@@ -44,6 +46,7 @@ public abstract class AbstractSubtreeMatcher extends Matcher {
             dstTrees.open();
     }
 
+    @Override
     public void match() {
         MultiMappingStore multiMappings = new MultiMappingStore();
 

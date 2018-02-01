@@ -51,7 +51,8 @@ public class BenchmarkCollector {
         List<Path> outputPaths = new ArrayList<>();
         try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
             outputPaths = paths.filter(
-                    p -> p.getFileName().toString().matches(".*_v0\\.(java|js|rb|c)")).collect(Collectors.toList());
+                    p -> p.getFileName().toString().matches(".*_v0\\.(java|js|rb|c)")
+            ).collect(Collectors.toList());
         }
         Files.createDirectories(Paths.get(OUTPUT_DIR));
         for (Path path : outputPaths) {

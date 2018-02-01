@@ -37,6 +37,9 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Stack;
@@ -123,7 +126,7 @@ public final class TreeIoUtils {
         public void writeTo(OutputStream writer) throws Exception {
             // FIXME Since the stream is already open, we should not close it, however due to semantic issue
             // it should stay like this
-            try (OutputStreamWriter os = new OutputStreamWriter(writer)) {
+            try (OutputStreamWriter os = new OutputStreamWriter(writer, "UTF-8")) {
                 writeTo(os);
             }
         }
@@ -138,13 +141,13 @@ public final class TreeIoUtils {
         }
 
         public void writeTo(String file) throws Exception {
-            try (FileWriter w = new FileWriter(file)) {
+            try (Writer w = Files.newBufferedWriter(Paths.get(file), Charset.forName("UTF-8"))) {
                 writeTo(w);
             }
         }
 
         public void writeTo(File file) throws Exception {
-            try (FileWriter w = new FileWriter(file)) {
+            try (Writer w = Files.newBufferedWriter(file.toPath(), Charset.forName("UTF-8"))) {
                 writeTo(w);
             }
         }

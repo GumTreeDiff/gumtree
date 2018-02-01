@@ -42,6 +42,7 @@ public class XyBottomUpMatcher extends Matcher {
         super(src, dst, store);
     }
 
+    @Override
     public void match() {
         for (ITree src: this.src.postOrder())  {
             if (src.isRoot()) {

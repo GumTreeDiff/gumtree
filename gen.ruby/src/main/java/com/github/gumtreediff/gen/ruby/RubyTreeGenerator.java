@@ -36,6 +36,7 @@ import java.io.Reader;
 @Register(id = "ruby-jruby", accept = {"\\.ruby$", "\\.rb$"}, priority = Registry.Priority.MAXIMUM)
 public class RubyTreeGenerator extends TreeGenerator {
 
+    @Override
     public TreeContext generate(Reader r) throws IOException {
         Parser p = new Parser();
         CompatVersion version = CompatVersion.RUBY2_0;

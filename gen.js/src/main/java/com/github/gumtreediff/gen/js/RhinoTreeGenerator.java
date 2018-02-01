@@ -33,6 +33,7 @@ import java.io.Reader;
 @Register(id = "js-rhino", accept = "\\.js$", priority = Registry.Priority.MAXIMUM)
 public class RhinoTreeGenerator extends TreeGenerator {
 
+    @Override
     public TreeContext generate(Reader r) throws IOException {
         CompilerEnvirons env = new CompilerEnvirons();
         env.setRecordingLocalJsDocComments(true);

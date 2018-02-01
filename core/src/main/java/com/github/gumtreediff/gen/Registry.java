@@ -34,7 +34,7 @@ public abstract class Registry<K, C, A> {
         return cmp;
     });
 
-    public class Priority {
+    public static class Priority {
         public static final int MAXIMUM = 0;
         public static final int HIGH = 25;
         public static final int MEDIUM = 50;

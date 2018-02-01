@@ -33,6 +33,7 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher {
         super(src, dst, store);
     }
 
+    @Override
     public void filterMappings(MultiMappingStore multiMappings) {
         List<MultiMappingStore> ambiguousList = new ArrayList<>();
         Set<ITree> ignored = new HashSet<>();
@@ -74,7 +75,7 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher {
         return 111D - sim(src, dst);
     }
 
-    private class MultiMappingComparator implements Comparator<MultiMappingStore> {
+    private static class MultiMappingComparator implements Comparator<MultiMappingStore> {
 
         @Override
         public int compare(MultiMappingStore m1, MultiMappingStore m2) {

@@ -31,6 +31,7 @@ public class CompositeMatcher extends Matcher {
         this.matchers = matchers;
     }
 
+    @Override
     public void match() {
         for (Matcher matcher : matchers) {
             matcher.match();

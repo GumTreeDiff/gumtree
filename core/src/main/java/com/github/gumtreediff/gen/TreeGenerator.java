@@ -23,6 +23,9 @@ package com.github.gumtreediff.gen;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public abstract class TreeGenerator {
 
@@ -35,15 +38,15 @@ public abstract class TreeGenerator {
     }
 
     public TreeContext generateFromFile(String path) throws IOException {
-        return generateFromReader(new FileReader(path));
+        return generateFromReader(Files.newBufferedReader(Paths.get(path), Charset.forName("UTF-8")));
     }
 
     public TreeContext generateFromFile(File file) throws IOException {
-        return generateFromReader(new FileReader(file));
+        return generateFromReader(Files.newBufferedReader(file.toPath(), Charset.forName("UTF-8")));
     }
 
     public TreeContext generateFromStream(InputStream stream) throws IOException {
-        return generateFromReader(new InputStreamReader(stream));
+        return generateFromReader(new InputStreamReader(stream, "UTF-8"));
     }
 
     public TreeContext generateFromString(String content) throws IOException {
