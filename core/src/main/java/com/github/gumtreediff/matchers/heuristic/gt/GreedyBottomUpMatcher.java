@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher {
 
-    public static double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.3"));
+    public static double SIM_THRESHOLD = Double.parseDouble(System.getProperty("gumtree.match.bu.sim", "0.6"));
 
     public GreedyBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
