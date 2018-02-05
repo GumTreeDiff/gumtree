@@ -7,7 +7,7 @@ wget https://netix.dl.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.ta
 tar -xzf boost_1_55_0.tar.gz
 cd boost_1_55_0
 ./bootstrap.sh --without-libraries=atomic,chrono,context,coroutine,exception,graph,graph_parallel,iostreams,locale,log,math,mpi,python,random,serialization,signals,test,timer,wave
-sudo ./b2 link=static cxxflags="-fPIC -static -Wl,--whole-archive" threading=multi install
+sudo ./b2 -d0 link=static cxxflags="-fPIC -static -Wl,--whole-archive" threading=multi install
 cd ..
 # then srcml itself
 wget http://131.123.42.38/lmcrs/beta/srcML-src.tar.gz
