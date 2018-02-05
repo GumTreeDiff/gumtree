@@ -1,5 +1,5 @@
 description = 'GumTree tree generator for CSS code based on ph-css.'
 
 dependencies {
-	compile 'com.helger:ph-css:6.0.0-b1'
+	compile 'com.helger:ph-css:6.0.0'
 }

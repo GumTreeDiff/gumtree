@@ -2,7 +2,8 @@ description = 'GumTree diff client'
 
 dependencies {
 	compile project(':client')
-	compile 'com.sparkjava:spark-core:2.6.0'
+	compile 'com.sparkjava:spark-core:2.7.1'
+	compile 'org.slf4j:slf4j-nop:1.7.25'
 	// exclude servlet-api 2.0 because it causes a bug with spark-core
 	compile('org.rendersnake:rendersnake:1.9.0') {
 		exclude group: 'javax.servlet', module: 'servlet-api'
