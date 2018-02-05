@@ -22,6 +22,7 @@ dependencies {
 	compile project(':gen.css')
 	compile project(':gen.jdt')
 	compile project(':gen.js')
+	compile project(':gen.python')
 	compile project(':gen.ruby')
 	compile project(':gen.srcml')
 }

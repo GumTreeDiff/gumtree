@@ -22,3 +22,7 @@ git clone https://github.com/GumTreeDiff/cgum.git --depth 1
 cd cgum
 make
 cd ..
+# 3) installing pythonparser
+git clone https://github.com/GumTreeDiff/pythonparser.git --depth 1
+pip2 install jsontree asttokens
+sudo ln -s /home/travis/pythonparser/pythonparser.py /usr/bin/pythonparser

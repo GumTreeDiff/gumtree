@@ -15,5 +15,6 @@ include 'benchmark',
         'gen.css',
         'gen.jdt',
         'gen.js',
+        'gen.python',
         'gen.ruby',
         'gen.srcml'

@@ -2,6 +2,7 @@
 
 ## v2.1.2
 * New dockerfile to run GumTree
+* Python tree generator
 
 ## v2.1.1
 * New integration with antlr4 grammars
