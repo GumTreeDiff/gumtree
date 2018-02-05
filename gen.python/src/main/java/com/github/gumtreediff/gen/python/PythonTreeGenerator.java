@@ -73,8 +73,8 @@ public class PythonTreeGenerator extends TreeGenerator {
                     StartElement s = ev.asStartElement();
                     String typeLabel = s.getName().getLocalPart();
                     String label = "";
-                    if (s.getAttributeByName(new QName("value")) != null)
-                        label = s.getAttributeByName(new QName("value")).getValue();
+                    if (s.getAttributeByName(VALUE) != null)
+                        label = s.getAttributeByName(VALUE).getValue();
                     int type = typeLabel.hashCode();
                     ITree t = context.createTree(type, label, typeLabel);
                     if (trees.isEmpty()) {
