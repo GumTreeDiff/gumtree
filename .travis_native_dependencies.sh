@@ -25,3 +25,5 @@ cd ..
 # 3) installing pythonparser
 git clone https://github.com/GumTreeDiff/pythonparser.git --depth 1
 ln -s /home/travis/pythonparser/pythonparser.py /home/travis/pythonparser/pythonparser
+cd pythonparser
+ln -s pythonparser.py pythonparser
