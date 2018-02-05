@@ -24,5 +24,4 @@ make
 cd ..
 # 3) installing pythonparser
 git clone https://github.com/GumTreeDiff/pythonparser.git --depth 1
-sudo pip2 install jsontree asttokens
-sudo ln -s /home/travis/pythonparser/pythonparser.py /usr/bin/pythonparser
+ln -s /home/travis/pythonparser/pythonparser.py /home/travis/pythonparser/pythonparser
