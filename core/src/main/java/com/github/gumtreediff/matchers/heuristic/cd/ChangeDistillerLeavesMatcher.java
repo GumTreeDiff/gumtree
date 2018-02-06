@@ -39,7 +39,7 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 
     @Override
     public void match() {
-        List<Mapping> leavesMappings = new LinkedList<>();
+        List<Mapping> leavesMappings = new ArrayList<>();
         List<ITree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
         for (Iterator<ITree> srcLeaves = TreeUtils.leafIterator(
                 TreeUtils.postOrderIterator(src)); srcLeaves.hasNext();) {

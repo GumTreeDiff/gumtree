@@ -173,7 +173,7 @@ public class ZsMatcher extends Matcher {
             return Double.MAX_VALUE;
     }
 
-    private final class ZsTree {
+    private static final class ZsTree {
 
         private int start; // internal array position of leafmost leaf descendant of the root node
 

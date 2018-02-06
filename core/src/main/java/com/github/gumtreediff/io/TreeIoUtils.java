@@ -40,6 +40,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Stack;
@@ -131,6 +132,7 @@ public final class TreeIoUtils {
             }
         }
 
+        @Override
         public String toString() {
             try (StringWriter s = new StringWriter()) {
                 writeTo(s);
@@ -165,6 +167,7 @@ public final class TreeIoUtils {
         protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
                 throws Exception;
 
+        @Override
         public void writeTo(Writer writer) throws Exception {
             TreeFormatter formatter = newFormatter(context, serializers, writer);
             try {
@@ -269,7 +272,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public Exception getCause() {
+        public synchronized Exception getCause() {
             return cause;
         }
     }
@@ -632,7 +635,7 @@ public final class TreeIoUtils {
             XMLInputFactory fact = XMLInputFactory.newInstance();
             TreeContext context = new TreeContext();
             try {
-                Stack<ITree> trees = new Stack<>();
+                ArrayDeque<ITree> trees = new ArrayDeque<>();
                 XMLEventReader r = fact.createXMLEventReader(source);
                 while (r.hasNext()) {
                     XMLEvent e = r.nextEvent();
@@ -654,12 +657,12 @@ public final class TreeIoUtils {
                         if (trees.isEmpty())
                             context.setRoot(t);
                         else
-                            t.setParentAndUpdateChildren(trees.peek());
-                        trees.push(t);
+                            t.setParentAndUpdateChildren(trees.peekFirst());
+                        trees.addFirst(t);
                     } else if (e instanceof EndElement) {
                         if (!((EndElement)e).getName().getLocalPart().equals("tree")) // FIXME need to deal with options
                             continue;
-                        trees.pop();
+                        trees.removeFirst();
                     }
                 }
                 context.validate();

@@ -55,6 +55,8 @@ public class TreePanel extends JPanel {
 
         jtree = new JTree(top) {
             private static final long serialVersionUID = 1L;
+            
+            @Override
             public String convertValueToText(Object value, boolean selected,
                                              boolean expanded, boolean leaf, int row,
                                              boolean hasFocus) {
@@ -102,6 +104,7 @@ public class TreePanel extends JPanel {
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(tree);
         trees.put(tree, node);
         parent.add(node);
-        for (ITree child: tree.getChildren()) createNodes(node, child);
+        for (ITree child: tree.getChildren())
+            createNodes(node, child);
     }
 }

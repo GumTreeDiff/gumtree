@@ -140,7 +140,7 @@ public class DirectoryComparatorView implements Renderable {
 
     }
 
-    private class AddedOrDeletedFiles implements Renderable {
+    private static class AddedOrDeletedFiles implements Renderable {
 
         private Set<File> files;
 

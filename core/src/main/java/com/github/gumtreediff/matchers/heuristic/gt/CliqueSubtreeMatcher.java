@@ -118,6 +118,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
                 simMap.put(mapping, sims(mapping.getFirst(), mapping.getSecond()));
         }
 
+        @Override
         public int compare(Mapping m1, Mapping m2) {
             double[] sims1 = simMap.get(m1);
             double[] sims2 = simMap.get(m2);
