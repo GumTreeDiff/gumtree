@@ -73,12 +73,6 @@ public class RootAndLeavesClassifier extends TreeClassifier {
                 fSrcDelTrees.add(t);
         }
         srcDelTrees = fSrcDelTrees;
-        
-        for (ITree t: srcDelTrees) {
-            if (!srcDelTrees.contains(t.getParent()))
-                fSrcDelTrees.add(t);
-        }
-        srcDelTrees = fSrcDelTrees;
     }
 
 }
