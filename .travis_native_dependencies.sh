@@ -18,7 +18,7 @@ make
 cd ..
 # 2) installing cgum
 sudo apt-get install ocaml ocaml-native-compilers camlp4
-git clone https://github.com/GumTreeDiff/cgum.git --depth 1
+git clone --branch v1.0.0 https://github.com/GumTreeDiff/cgum.git --depth 1
 cd cgum
 make
 cd ..
