@@ -40,7 +40,7 @@ public class TestOptimizedMatchers {
         ITree dst = trees.getSecond().getRoot();
         Matcher matcher = new OptimizedVersions.Rtedacdef(src, dst, new MappingStore());
         matcher.match();
-        assertEquals(5, matcher.getMappingSet().size());
+        assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src, dst));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
@@ -55,7 +55,7 @@ public class TestOptimizedMatchers {
         ITree dst = trees.getSecond().getRoot();
         Matcher matcher = new OptimizedVersions.CdabcdefPar(src, dst, new MappingStore());
         matcher.match();
-        assertEquals(5, matcher.getMappingSet().size());
+        assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
@@ -70,7 +70,7 @@ public class TestOptimizedMatchers {
         ITree dst = trees.getSecond().getRoot();
         Matcher matcher = new OptimizedVersions.Rtedacdef(src, dst, new MappingStore());
         matcher.match();
-        assertEquals(5, matcher.getMappingSet().size());
+        assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src, dst));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
