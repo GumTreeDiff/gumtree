@@ -38,7 +38,7 @@ import java.util.*;
 @Register(id = "python-pythonparser", accept = {"\\.py"}, priority = Registry.Priority.MAXIMUM)
 public class PythonTreeGenerator extends TreeGenerator {
 
-    private static final String PYTHONPARSER_CMD = System.getProperty("gt.python.path", "pythonparser");
+    private static final String PYTHONPARSER_CMD = System.getProperty("gt.pp.path", "pythonparser");
 
     private static final QName VALUE = new QName("value");
 

@@ -36,7 +36,7 @@ import java.util.*;
 
 public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
 
-    private static final String SRCML_CMD = System.getProperty("gumtree.srcml.path", "srcml");
+    private static final String SRCML_CMD = System.getProperty("gt.srcml.path", "srcml");
 
     private static final QName LINE = new  QName("http://www.srcML.org/srcML/position", "line", "pos");
 
