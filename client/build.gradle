@@ -1,5 +1,5 @@
 description = 'GumTree abstract client module.'
 
 dependencies {
-	compile 'org.reflections:reflections:0.9.11'
+	compile 'org.atteo.classindex:classindex:3.4'
 }

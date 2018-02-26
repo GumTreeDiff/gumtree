@@ -23,13 +23,10 @@ package com.github.gumtreediff.client;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.TreeGenerator;
-import org.reflections.Reflections;
+import org.atteo.classindex.ClassIndex;
 
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 public class Run {
 
@@ -53,27 +50,23 @@ public class Run {
     }
 
     public static void initGenerators() {
-        Reflections reflections = new Reflections("com.github.gumtreediff.gen");
-
-        reflections.getSubTypesOf(TreeGenerator.class).forEach(
+        ClassIndex.getSubclasses(TreeGenerator.class).forEach(
                 gen -> {
                     com.github.gumtreediff.gen.Register a =
                             gen.getAnnotation(com.github.gumtreediff.gen.Register.class);
                     if (a != null)
                         Generators.getInstance().install(gen, a);
-            });
+                });
     }
 
     public static void initClients() {
-        Reflections reflections = new Reflections("com.github.gumtreediff.client");
-
-        reflections.getSubTypesOf(Client.class).forEach(
+        ClassIndex.getSubclasses(Client.class).forEach(
                 cli -> {
                     com.github.gumtreediff.client.Register a =
                             cli.getAnnotation(com.github.gumtreediff.client.Register.class);
-                if (a != null)
-                    Clients.getInstance().install(cli, a);
-            });
+                    if (a != null)
+                        Clients.getInstance().install(cli, a);
+                });
     }
 
     static {
