@@ -49,7 +49,7 @@ public class IdenticalSubtreeMatcherThetaA extends Matcher {
         for (ITree child : node.getChildren()) {
             tmp += getHash(child, quickFind, stringMap);
         }
-        tmp += "\u2620";
+        tmp += "\\u2620";
         quickFind.put(node, tmp.hashCode());
         stringMap.put(node, tmp);
         return tmp;

@@ -131,7 +131,8 @@ public class ZsMatcher extends Matcher {
                 } else {
                     // node with postorderID row in ted1 is renamed to node col
                     // in ted2
-                    if ((zsSrc.lld(row) - 1 == zsSrc.lld(lastRow) - 1) && (zsDst.lld(col) - 1 == zsDst.lld(lastCol) - 1)) {
+                    if ((zsSrc.lld(row) - 1 == zsSrc.lld(lastRow) - 1)
+                            && (zsDst.lld(col) - 1 == zsDst.lld(lastCol) - 1)) {
                         // if both subforests are trees, map nodes
                         ITree tSrc = zsSrc.tree(row);
                         ITree tDst = zsDst.tree(col);
