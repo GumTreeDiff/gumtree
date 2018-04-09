@@ -39,7 +39,7 @@ public class Run {
 
                         @Override
                         protected void process(String name, String[] args) {
-                            String key = args[0].startsWith("gumtree.") ? args[0] : "gumtree." + args[0];
+                            String key = args[0].startsWith("gt.") ? args[0] : "gt." + args[0];
                             System.setProperty(key, args[1]);
                         }
                     },
