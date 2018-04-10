@@ -151,7 +151,7 @@
 										 value="Method name ''{0}'' must match pattern ''{1}''."/>
 				</module>
 				<module name="EmptyCatchBlock">
-						<property name="exceptionVariableName" value="expected"/>
+						<property name="exceptionVariableName" value="ignore"/>
 				</module>
 		</module>
 </module>

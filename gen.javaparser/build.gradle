@@ -1,0 +1,5 @@
+description = 'GumTree tree generator for Java code (JavaParser based).'
+
+dependencies {
+	compile 'com.github.javaparser:javaparser-symbol-solver-core:3.6.0'
+}

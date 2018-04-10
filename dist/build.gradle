@@ -20,6 +20,7 @@ dependencies {
 	compile project(':gen.antlr3-xml')
 	compile project(':gen.c')
 	compile project(':gen.css')
+	compile project(':gen.javaparser')
 	compile project(':gen.jdt')
 	compile project(':gen.js')
 	compile project(':gen.python')
