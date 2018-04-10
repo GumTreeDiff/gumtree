@@ -54,4 +54,15 @@ public class TestJdtGenerator {
         assertEquals(24, tree.getSize());
     }
 
+    @Test
+    public void testJava9Syntax() throws IOException {
+        String input = "module gumtree.test {\n" +
+                "    requires gumtree.req;\n" +
+                "    exports gumtree.test;\n" +
+                "}";
+        ITree tree = new JdtTreeGenerator().generateFromString(input).getRoot();
+        assertEquals(15, tree.getType());
+        assertEquals(1, tree.getSize()); //TODO  JDT does not seems to parse modules?
+    }
+
 }
