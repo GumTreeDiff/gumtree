@@ -125,8 +125,9 @@ public final class HtmlDiffs {
             }
         }
 
+        String charset = System.getProperty("gt.charset.decoding", "UTF-8");
         StringWriter w1 = new StringWriter();
-        BufferedReader r = Files.newBufferedReader(fSrc.toPath(), Charset.forName("UTF-8"));
+        BufferedReader r = Files.newBufferedReader(fSrc.toPath(), Charset.forName(charset));
         int cursor = 0;
 
         while (r.ready()) {
@@ -141,7 +142,7 @@ public final class HtmlDiffs {
         srcDiff = w1.toString();
 
         StringWriter w2 = new StringWriter();
-        r = Files.newBufferedReader(fDst.toPath(), Charset.forName("UTF-8"));
+        r = Files.newBufferedReader(fDst.toPath(), Charset.forName(charset));
         cursor = 0;
 
         while (r.ready()) {

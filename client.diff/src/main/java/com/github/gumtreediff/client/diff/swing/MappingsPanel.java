@@ -97,10 +97,11 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         add(split);
 
         try {
+            String charset = System.getProperty("gt.charset.decoding", "UTF-8");
             txtSrc.getUI().getEditorKit(txtSrc).read(Files.newBufferedReader(Paths.get(srcPath),
-                    Charset.forName("UTF-8")), txtSrc.getDocument(), 0);
+                    Charset.forName(charset)), txtSrc.getDocument(), 0);
             txtDst.getUI().getEditorKit(txtDst).read(Files.newBufferedReader(Paths.get(dstPath),
-                    Charset.forName("UTF-8")), txtDst.getDocument(), 0);
+                    Charset.forName(charset)), txtDst.getDocument(), 0);
         } catch (IOException | BadLocationException e) {
             e.printStackTrace();
         }
