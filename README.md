@@ -18,7 +18,22 @@ Compared to classical code differencing tools, it has two important particularit
 * it works on a tree structure rather than a text structure,
 * it can detect moved or renamed elements in addition of deleted and inserted elements.
 
-We already deal with a wide range of languages: Java, C, JavaScript and Ruby. More languages are coming soon, if you want to help contact [me](http://www.labri.fr/perso/falleri).
+Supported languages
+---------------------------
+
+Java: we have three backends for Java:
+
+* JavaParser, see https://github.com/GumTreeDiff/gumtree/tree/develop/gen.javaparser
+* JDT, see https://github.com/GumTreeDiff/gumtree/tree/develop/gen.jdt
+* Spoon, see https://github.com/SpoonLabs/gumtree-spoon-ast-diff/
+
+C: see https://github.com/GumTreeDiff/cgum
+
+JavaScript: see https://github.com/GumTreeDiff/gumtree/tree/develop/gen.js
+
+Others: see folders `gen.*` in the repo
+
+If you want to contribute with a new language, [contact Jean-Rémy Falleri](http://www.labri.fr/perso/falleri).
 
 ## Citing GumTree
 
