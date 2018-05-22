@@ -18,7 +18,11 @@ Compared to classical code differencing tools, it has two important particularit
 * it works on a tree structure rather than a text structure,
 * it can detect moved or renamed elements in addition of deleted and inserted elements.
 
-We already deal with a wide range of languages: Java, C, JavaScript and Ruby. More languages are coming soon, if you want to help contact [me](http://www.labri.fr/perso/falleri).
+## Supported languages
+
+We already deal with a wide range of languages: C, Java, JavaScript, Python, R, Ruby. Click [here](https://github.com/GumTreeDiff/gumtree/wiki/Languages) for more details about the language we support.
+
+More languages are coming soon, if you want to help contact [me](http://www.labri.fr/perso/falleri).
 
 ## Citing GumTree
 
