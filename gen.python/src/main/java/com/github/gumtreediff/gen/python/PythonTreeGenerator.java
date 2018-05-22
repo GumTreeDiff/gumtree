@@ -102,14 +102,14 @@ public class PythonTreeGenerator extends TreeGenerator {
         }
         int line = Integer.parseInt(e.getAttributeByName(LINENO).getValue());
         int column = Integer.parseInt(e.getAttributeByName(COL).getValue());
-        t.setPos(lr.positionFor(line, column));
+        t.setPos(lr.positionFor(line, column) + 2);
         if (e.getAttributeByName(END_LINENO) == null) { //FIXME some nodes have no end position
             System.out.println(t.getLabel());
             return;
         }
         int endLine = Integer.parseInt(e.getAttributeByName(END_LINENO).getValue());
         int endColumn = Integer.parseInt(e.getAttributeByName(END_COL).getValue());
-        t.setLength(lr.positionFor(endLine, endColumn) - t.getPos());
+        t.setLength(lr.positionFor(endLine, endColumn) - lr.positionFor(line, column));
     }
 
     public String getXml(Reader r) throws IOException {
@@ -117,12 +117,14 @@ public class PythonTreeGenerator extends TreeGenerator {
         File f = File.createTempFile("gumtree", "");
         try (
                 Writer w = Files.newBufferedWriter(f.toPath(), Charset.forName("UTF-8"));
-                BufferedReader br = new BufferedReader(r);
         ) {
-            String line = br.readLine();
-            while (line != null) {
-                w.append(line + System.lineSeparator());
-                line = br.readLine();
+            char[] buf = new char[8192];
+            while (true)
+            {
+                int length = r.read(buf);
+                if (length < 0)
+                    break;
+                w.write(buf, 0, length);
             }
         }
         ProcessBuilder b = new ProcessBuilder(getArguments(f.getAbsolutePath()));
