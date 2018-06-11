@@ -176,8 +176,6 @@ public class ZsMatcher extends Matcher {
 
     private static final class ZsTree {
 
-        private int start; // internal array position of leafmost leaf descendant of the root node
-
         private int nodeCount; // number of nodes
 
         private int leafCount;
@@ -189,11 +187,10 @@ public class ZsMatcher extends Matcher {
         private int[] kr;
 
         private ZsTree(ITree t) {
-            this.start = 0;
             this.nodeCount = t.getSize();
             this.leafCount = 0;
-            this.llds = new int[start + nodeCount];
-            this.labels = new ITree[start + nodeCount];
+            this.llds = new int[nodeCount];
+            this.labels = new ITree[nodeCount];
 
             int idx = 1;
             Map<ITree,Integer> tmpData = new HashMap<>();
@@ -210,13 +207,13 @@ public class ZsMatcher extends Matcher {
         }
 
         public void setITree(int i, ITree tree) {
-            labels[i + start - 1] = tree;
+            labels[i - 1] = tree;
             if (nodeCount < i)
                 nodeCount = i;
         }
 
         public void setLld(int i, int lld) {
-            llds[i + start - 1] = lld + start - 1;
+            llds[i - 1] = lld - 1;
             if (nodeCount < i)
                 nodeCount = i;
         }
@@ -226,11 +223,11 @@ public class ZsMatcher extends Matcher {
         }
 
         public int lld(int i) {
-            return llds[i + start - 1] - start + 1;
+            return llds[i - 1] + 1;
         }
 
         public ITree tree(int i) {
-            return labels[i + start - 1];
+            return labels[i - 1];
         }
 
         public void setKeyRoots() {
