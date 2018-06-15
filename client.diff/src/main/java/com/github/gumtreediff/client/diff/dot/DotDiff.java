@@ -46,6 +46,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
         try {
             StringWriter writer = new StringWriter();
             writer.write("digraph G {\n");
+            writer.write("node [style=filled];\n");
             writer.write("subgraph cluster_src {\n");
             writeTree(getSrcTreeContext(), writer, matcher);
             writer.write("}\n");
@@ -53,8 +54,8 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
             writeTree(getDstTreeContext(), writer, matcher);
             writer.write("}\n");
             for (Mapping m: matcher.getMappingsAsSet()) {
-                writer.write(getDotId(getSrcTreeContext(), m.getFirst()) +
-                        " -> " + getDotId(getDstTreeContext(), m.getSecond()) + ";\n");
+                writer.write(String.format("%s -> %s [style=dashed]\n;",
+                        getDotId(getSrcTreeContext(), m.getFirst()), getDotId(getDstTreeContext(), m.getSecond())));
             }
             writer.write("}\n");
             System.out.println(writer.toString());
