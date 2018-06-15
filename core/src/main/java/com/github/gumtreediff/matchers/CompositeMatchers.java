@@ -43,6 +43,16 @@ public class CompositeMatchers {
         }
     }
 
+    @Register(id = "gumtree-topdown", defaultMatcher = true, priority = Registry.Priority.HIGH)
+    public static class GumtreeTopDown extends CompositeMatcher {
+
+        public GumtreeTopDown(ITree src, ITree dst, MappingStore store) {
+            super(src, dst, store, new Matcher[]{
+                    new GreedySubtreeMatcher(src, dst, store)
+            });
+        }
+    }
+
     @Register(id = "gumtree-complete")
     public static class CompleteGumtreeMatcher extends CompositeMatcher {
 
