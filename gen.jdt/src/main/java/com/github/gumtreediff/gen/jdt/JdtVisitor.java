@@ -48,6 +48,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         if (n instanceof Assignment) return ((Assignment) n).getOperator().toString();
         if (n instanceof TextElement) return n.toString();
         if (n instanceof TagElement) return ((TagElement) n).getTagName();
+        if (n instanceof TypeDeclaration) return ((TypeDeclaration) n).isInterface()?"interface":"class";
 
         return "";
     }
