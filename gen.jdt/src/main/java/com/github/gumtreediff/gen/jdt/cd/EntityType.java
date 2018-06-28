@@ -212,4 +212,15 @@ public enum EntityType {
                 return false;
         }
     }
+
+
+    public String getJdtCompliantName() {
+        StringBuilder compliantName = new StringBuilder();
+        String []part = name().split("_");
+        for (int i = 0; i < part.length; i++) {
+            compliantName.append(part[0].substring(0, 1).toUpperCase())
+                         .append(part[0].substring(1).toLowerCase());
+        }
+        return compliantName.toString();
+    }
 }
