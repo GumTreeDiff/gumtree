@@ -37,8 +37,8 @@ public class TestIssue100 {
 
     @Test
     public void shouldHaveAModifierNode() throws IOException {
-        String left = "import com.github.gumtreediff.gen.jdt";
-        String right = "import static com.github.gumtreediff.gen.jdt";
+        String left = "import com.github.gumtreediff.gen.jdt;";
+        String right = "import static com.github.gumtreediff.gen.jdt;";
 
         ITree leftTree = new JdtTreeGenerator().generateFromString(left).getRoot();
         ITree rightTree = new JdtTreeGenerator().generateFromString(right).getRoot();
@@ -55,8 +55,8 @@ public class TestIssue100 {
 
     @Test
     public void shouldBeDifferentKindOfImport() throws IOException {
-        String left = "import com.github.gumtreediff.gen.jdt";
-        String right = "import com.github.gumtreediff.gen.jdt.*";
+        String left = "import com.github.gumtreediff.gen.jdt;";
+        String right = "import com.github.gumtreediff.gen.jdt.*;";
 
         ITree leftTree = new JdtTreeGenerator().generateFromString(left).getRoot();
         ITree rightTree = new JdtTreeGenerator().generateFromString(right).getRoot();
