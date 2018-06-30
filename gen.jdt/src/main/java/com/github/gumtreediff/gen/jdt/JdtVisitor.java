@@ -22,6 +22,7 @@
 package com.github.gumtreediff.gen.jdt;
 
 
+import com.github.gumtreediff.gen.jdt.cd.EntityType;
 import org.eclipse.jdt.core.dom.*;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
@@ -32,6 +33,17 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     @Override
     public void preVisit(ASTNode n) {
         pushNode(n, getLabel(n));
+    }
+
+    @Override
+    public boolean visit(ImportDeclaration node) {
+        if (node.isStatic()) {
+            final String statik = "static";
+            int startPosition = node.toString().indexOf(statik);
+            pushFakeNode(EntityType.MODIFIER, statik, startPosition, statik.length());
+            popNode();
+        }
+        return super.visit(node);
     }
 
     protected String getLabel(ASTNode n) {
@@ -48,7 +60,8 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         if (n instanceof Assignment) return ((Assignment) n).getOperator().toString();
         if (n instanceof TextElement) return n.toString();
         if (n instanceof TagElement) return ((TagElement) n).getTagName();
-        if (n instanceof TypeDeclaration) return ((TypeDeclaration) n).isInterface()?"interface":"class";
+        if (n instanceof TypeDeclaration) return ((TypeDeclaration) n).isInterface() ? "interface" : "class";
+        if (n instanceof ImportDeclaration) return ((ImportDeclaration) n).isOnDemand() ? "on-demand" : "single-type";
 
         return "";
     }

@@ -54,9 +54,13 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
     }
 
     protected void pushFakeNode(EntityType n, int startPosition, int length) {
+        pushFakeNode(n, "", startPosition, length);
+    }
+
+    protected void pushFakeNode(EntityType n, String label, int startPosition, int length) {
         int type = -n.ordinal(); // Fake types have negative types (but does it matter ?)
-        String typeName = n.name();
-        push(type, typeName, "", startPosition, length);
+        String typeName = n.getJdtCompliantName();
+        push(type, typeName, label, startPosition, length);
     }
 
     private void push(int type, String typeName, String label, int startPosition, int length) {
