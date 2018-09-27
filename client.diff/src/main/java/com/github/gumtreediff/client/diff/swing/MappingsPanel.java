@@ -98,25 +98,30 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         add(split);
 
         try {
-            txtSrc.getUI().getEditorKit(txtSrc).read(new StringReader(readFileAsString(srcPath)), txtSrc.getDocument(), 0);
-            txtDst.getUI().getEditorKit(txtDst).read(new StringReader(readFileAsString(dstPath)), txtDst.getDocument(), 0);
+            txtSrc
+                .getUI()
+                .getEditorKit(txtSrc)
+                .read(new StringReader(readFileAsString(srcPath)), txtSrc.getDocument(), 0);
+            txtDst
+                .getUI()
+                .getEditorKit(txtDst)
+                .read(new StringReader(readFileAsString(dstPath)), txtDst.getDocument(), 0);
         } catch (IOException | BadLocationException e) {
             e.printStackTrace();
         }
-
         setPreferredSize(new Dimension(1024, 768));
         openNodes();
     }
 
     private static String readFileAsString(String filePath) {
-      String content = "";
-      try {
-        content = new String(Files.readAllBytes(Paths.get(filePath)));
-        content = content.replaceAll("\r\n", "\r\n ");
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      return content;
+        String content = "";
+        try {
+            content = new String(Files.readAllBytes(Paths.get(filePath)));
+            content = content.replaceAll("\r\n", "\r\n ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
     }
 
     private void openNodes() {
