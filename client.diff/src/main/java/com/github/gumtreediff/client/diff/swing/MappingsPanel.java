@@ -26,6 +26,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -97,16 +98,30 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         add(split);
 
         try {
-            txtSrc.getUI().getEditorKit(txtSrc).read(Files.newBufferedReader(Paths.get(srcPath),
-                    Charset.forName("UTF-8")), txtSrc.getDocument(), 0);
-            txtDst.getUI().getEditorKit(txtDst).read(Files.newBufferedReader(Paths.get(dstPath),
-                    Charset.forName("UTF-8")), txtDst.getDocument(), 0);
+            txtSrc
+                .getUI()
+                .getEditorKit(txtSrc)
+                .read(new StringReader(readFileAsString(srcPath)), txtSrc.getDocument(), 0);
+            txtDst
+                .getUI()
+                .getEditorKit(txtDst)
+                .read(new StringReader(readFileAsString(dstPath)), txtDst.getDocument(), 0);
         } catch (IOException | BadLocationException e) {
             e.printStackTrace();
         }
-
         setPreferredSize(new Dimension(1024, 768));
         openNodes();
+    }
+
+    private static String readFileAsString(String filePath) {
+        String content = "";
+        try {
+            content = new String(Files.readAllBytes(Paths.get(filePath)));
+            content = content.replaceAll("\r\n", "\r\n ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
     }
 
     private void openNodes() {
