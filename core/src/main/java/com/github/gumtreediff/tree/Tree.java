@@ -57,7 +57,7 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     // Only used for cloning ...
-    private Tree(Tree other) {
+    protected Tree(Tree other) {
         this.type = other.type;
         this.label = other.getLabel();
         this.id = other.getId();
