@@ -21,9 +21,11 @@ package com.github.gumtreediff.gen.js;
 
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
 import org.mozilla.javascript.CompilerEnvirons;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
 
@@ -40,9 +42,14 @@ public class RhinoTreeGenerator extends TreeGenerator {
         env.setAllowSharpComments(true);
         env.setRecordingComments(true);
         Parser p = new Parser(env);
-        AstRoot root = p.parse(r, null, 1);
-        RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
-        root.visitAll(visitor);
-        return visitor.getTree(root);
+        try {
+            AstRoot root = p.parse(r, null, 1);
+            RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
+            root.visitAll(visitor);
+            return visitor.getTree(root);
+        }
+        catch (EvaluatorException e) {
+            throw new SyntaxException(this, r);
+        }
     }
 }

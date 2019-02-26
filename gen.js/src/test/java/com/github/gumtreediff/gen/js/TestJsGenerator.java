@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import com.github.gumtreediff.gen.SyntaxException;
+import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
 import com.github.gumtreediff.tree.ITree;
@@ -51,6 +53,12 @@ public class TestJsGenerator {
         Reader r = new InputStreamReader(getClass().getResourceAsStream("/sample.js"), "UTF-8");
         ITree tree = new RhinoTreeGenerator().generateFromReader(r).getRoot();
         assertEquals(402, tree.getSize());
+    }
+
+    @Test(expected = SyntaxException.class)
+    public void badSyntax() throws IOException {
+        String input = "function foo((bar) {}";
+        TreeContext ct = new RhinoTreeGenerator().generateFromString(input);
     }
 
 }

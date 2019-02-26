@@ -27,6 +27,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 
+import com.github.gumtreediff.gen.SyntaxException;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.CommonTree;
 
@@ -79,10 +80,8 @@ public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Par
             buildTree(context, ct);
             return context;
         } catch (RecognitionException e) {
-            System.out.println("at " + e.line + ":" + e.charPositionInLine);
-            e.printStackTrace();
+            throw new SyntaxException(this, r);
         }
-        return null;
     }
 
     protected abstract String[] getTokenNames();

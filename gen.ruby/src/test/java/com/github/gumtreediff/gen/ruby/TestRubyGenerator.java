@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
@@ -60,6 +61,12 @@ public class TestRubyGenerator {
         String input = "module Baz\nclass Foo\n\tdef foo(bar)\n\t\tputs bar\n\tend\nend\nend";
         TreeContext ctx = new RubyTreeGenerator().generateFromString(input);
         ITree root = ctx.getRoot();
+    }
+
+    @Test(expected = SyntaxException.class)
+    public void badSyntax() throws IOException {
+        String input = "module Foo\ndef foo((bar)\n\tputs 'foo'\nend\n";
+        TreeContext ct = new RubyTreeGenerator().generateFromString(input);
     }
 
 }

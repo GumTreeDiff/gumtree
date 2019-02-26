@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
@@ -57,6 +58,12 @@ public class TestJavaParserGenerator {
         ITree tree = new JavaParserGenerator().generateFromString(input).getRoot();
         assertEquals(-1795686804, tree.getType());
         assertEquals(23, tree.getSize());
+    }
+
+    @Test(expected = SyntaxException.class)
+    public void badSyntax() throws IOException {
+        String input = "public clas Foo {}";
+        TreeContext ct = new JavaParserGenerator().generateFromString(input);
     }
 
 }
