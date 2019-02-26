@@ -36,7 +36,7 @@ public class TestJavaParserGenerator {
         String input = "public class Foo { public int foo; }";
         ITree tree = new JavaParserGenerator().generateFromString(input).getRoot();
         assertEquals(-1795686804, tree.getType());
-        assertEquals(7, tree.getSize());
+        assertEquals(9, tree.getSize());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class TestJavaParserGenerator {
 
         System.out.println(tree.toTreeString());
         assertEquals(-1795686804, tree.getType());
-        assertEquals(34, tree.getSize());
+        assertEquals(37, tree.getSize());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class TestJavaParserGenerator {
         String input = "public class Foo { public void foo(){ new ArrayList<Object>().stream().forEach(a -> {}); } }";
         ITree tree = new JavaParserGenerator().generateFromString(input).getRoot();
         assertEquals(-1795686804, tree.getType());
-        assertEquals(21, tree.getSize());
+        assertEquals(23, tree.getSize());
     }
 
 }

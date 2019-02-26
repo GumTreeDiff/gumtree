@@ -25,6 +25,7 @@ import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class JavaParserGenerator extends TreeGenerator {
     @Override
     public TreeContext generate(Reader r) throws IOException {
         LineReader lr = new LineReader(r);
-        CompilationUnit cu = JavaParser.parse(lr);;
+        CompilationUnit cu = StaticJavaParser.parse(lr);
         JavaParserVisitor v = new JavaParserVisitor(lr);
         v.visitPreOrder(cu);
         return v.getTreeContext();

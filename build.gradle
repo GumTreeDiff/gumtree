@@ -35,7 +35,7 @@ subprojects {
     dependencies {
         annotationProcessor 'org.atteo.classindex:classindex:3.4'
         implementation 'org.atteo.classindex:classindex:3.4'
-        testCompile 'junit:junit:[4,5)'
+        testImplementation 'junit:junit:[4,5)'
     }
 
     test {
@@ -47,7 +47,7 @@ subprojects {
 
 configure(subprojects.findAll { it.name != 'core' }) {
     dependencies {
-        compile project(':core')
+        implementation project(':core')
     }
 }
 
@@ -60,7 +60,7 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
 
     if (it.name.startsWith('gen.antlr3-')) {
         dependencies {
-            compile project(':gen.antlr3')
+            implementation project(':gen.antlr3')
         }
     }
 }
@@ -74,7 +74,7 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr4') }) {
 
     if (it.name.startsWith('gen.antlr4-')) {
         dependencies {
-            compile project(':gen.antlr4')
+            implementation project(':gen.antlr4')
         }
     }
 }
