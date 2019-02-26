@@ -1,6 +1,5 @@
 
 plugins {
-    id 'net.ltgt.errorprone' version '0.0.13'
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.6.3'
 }
@@ -23,8 +22,6 @@ subprojects {
     apply plugin: 'java'
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
-
-    apply plugin: "net.ltgt.errorprone"
 
     apply plugin: 'checkstyle'
     checkstyle {
