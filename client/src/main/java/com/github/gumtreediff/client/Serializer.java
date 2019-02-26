@@ -41,7 +41,7 @@ public class Serializer extends Client {
 
     static class Options implements Option.Context {
         protected OutputFormat format = OutputFormat.JSON;
-        public List<String> generators = new ArrayList<>();
+        protected String generator = null;
         protected String output = null;
         protected String[] files;
 
@@ -61,13 +61,13 @@ public class Serializer extends Client {
                     new Option("-o", "Output filename (or directory if more than one file), defaults to stdout", 1) {
                         @Override
                         protected void process(String name, String[] args) {
-
+                            output = args[0];
                         }
                     },
                     new Option("-g", "Preferred generator to use (can be used more than once).", 1) {
                         @Override
                         protected void process(String name, String[] args) {
-                            generators.add(args[0]);
+                            generator = args[0];
                         }
                     }
             };
@@ -141,10 +141,10 @@ public class Serializer extends Client {
     private TreeContext getTreeContext(String file) {
         try {
             TreeContext t;
-            if (opts.generators.isEmpty())
+            if (opts.generator == null)
                 t = Generators.getInstance().getTree(file);
             else
-                t = Generators.getInstance().getTree(opts.generators.get(0), file);
+                t = Generators.getInstance().getTree(opts.generator, file);
             return t;
         } catch (IOException e) {
             e.printStackTrace();
