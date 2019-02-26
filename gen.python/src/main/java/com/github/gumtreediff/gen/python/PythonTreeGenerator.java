@@ -140,6 +140,7 @@ public class PythonTreeGenerator extends TreeGenerator {
             if (p.exitValue() != 0)
                 throw new RuntimeException(buf.toString());
             r.close();
+            p.destroy();
             String xml = buf.toString();
             return xml;
         } catch (InterruptedException e) {
