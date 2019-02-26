@@ -1,5 +1,1 @@
 description = 'GumTree abstract client module.'
-
-dependencies {
-	compile 'org.atteo.classindex:classindex:3.4'
-}

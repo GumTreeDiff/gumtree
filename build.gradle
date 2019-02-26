@@ -33,6 +33,8 @@ subprojects {
     }
 
     dependencies {
+        annotationProcessor 'org.atteo.classindex:classindex:3.4'
+        implementation 'org.atteo.classindex:classindex:3.4'
         testCompile 'junit:junit:[4,5)'
     }
 
