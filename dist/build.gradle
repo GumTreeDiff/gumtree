@@ -28,6 +28,8 @@ dependencies {
 	compile project(':gen.srcml')
 }
 
+build.finalizedBy(installDist)
+
 run {
 	if ( project.hasProperty("params") ) {
 		args Eval.me(params)
