@@ -3,6 +3,8 @@
 ## v2.1.2
 * New dockerfile to run GumTree
 * Python tree generator
+* JavaParser tree generator
+* Several minor bugfixes
 
 ## v2.1.1
 * New integration with antlr4 grammars
