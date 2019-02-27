@@ -1,42 +1,37 @@
-import java.text.SimpleDateFormat
-import java.util.Date
-
 apply plugin: 'application'
 
 mainClassName = 'com.github.gumtreediff.client.Run'
 applicationName = 'gumtree'
+archivesBaseName = 'gumtree'
 jar.enabled = false
-distZip.archiveName  = (isRelease) ? 'gumtree.zip' : 'gumtree-' + buildTime() + '-' + version + '.zip'
 uploadArchives.enabled = false
 distTar.enabled = false
 
-description = 'GumTree whole distribution.'
+description = 'GumTree distribution.'
 
 dependencies {
-	compile project(':client')
-	compile project(':client.diff')
-	compile project(':gen.antlr3')
-	compile project(':gen.antlr3-antlr')
-	compile project(':gen.antlr3-json')
-	compile project(':gen.antlr3-php')
-	compile project(':gen.antlr3-r')
-	compile project(':gen.antlr3-xml')
-	compile project(':gen.c')
-	compile project(':gen.css')
-	compile project(':gen.jdt')
-	compile project(':gen.js')
-	compile project(':gen.ruby')
-	compile project(':gen.srcml')
+	implementation project(':client')
+	implementation project(':client.diff')
+	implementation project(':gen.antlr3')
+	implementation project(':gen.antlr3-antlr')
+	implementation project(':gen.antlr3-json')
+	implementation project(':gen.antlr3-php')
+	implementation project(':gen.antlr3-r')
+	implementation project(':gen.antlr3-xml')
+	implementation project(':gen.c')
+	implementation project(':gen.css')
+	implementation project(':gen.javaparser')
+	implementation project(':gen.jdt')
+	implementation project(':gen.js')
+	implementation project(':gen.python')
+	implementation project(':gen.ruby')
+	implementation project(':gen.srcml')
 }
+
+build.finalizedBy(installDist)
 
 run {
 	if ( project.hasProperty("params") ) {
 		args Eval.me(params)
 	}
-}
-
-def buildTime() {
-	def df = new SimpleDateFormat("yyyyMMdd")
-	df.setTimeZone(TimeZone.getTimeZone("UTC"))
-	return df.format(new Date())
 }

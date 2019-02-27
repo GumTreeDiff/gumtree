@@ -31,7 +31,7 @@ import java.util.*;
 
 public class ChangeDistillerLeavesMatcher extends Matcher {
 
-    public static final double LABEL_SIM_THRESHOLD = 0.5D;
+    public static final double LABEL_SIM_THRESHOLD = Double.parseDouble(System.getProperty("gt.cd.lsim", "0.5"));
 
     public ChangeDistillerLeavesMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
@@ -39,7 +39,7 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 
     @Override
     public void match() {
-        List<Mapping> leavesMappings = new LinkedList<>();
+        List<Mapping> leavesMappings = new ArrayList<>();
         List<ITree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
         for (Iterator<ITree> srcLeaves = TreeUtils.leafIterator(
                 TreeUtils.postOrderIterator(src)); srcLeaves.hasNext();) {

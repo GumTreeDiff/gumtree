@@ -21,12 +21,14 @@
 package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.tree.ITree;
+import org.atteo.classindex.IndexSubclasses;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+@IndexSubclasses
 public abstract class Matcher {
 
     public static final Logger LOGGER = Logger.getLogger("com.github.gumtreediff.matchers");

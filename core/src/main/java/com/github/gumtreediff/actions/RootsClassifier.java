@@ -45,6 +45,7 @@ public class RootsClassifier extends TreeClassifier {
         super(src, dst, m);
     }
 
+    @Override
     public void classify() {
         for (Action a: actions) {
             if (a instanceof Delete) srcDelTrees.add(a.getNode());

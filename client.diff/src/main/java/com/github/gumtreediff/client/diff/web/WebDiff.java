@@ -46,13 +46,13 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
     }
 
     static class Options extends AbstractDiffClient.Options {
-        protected int defaultPort = Integer.parseInt(System.getProperty("gumtree.client.web.port", "4567"));
+        protected int defaultPort = Integer.parseInt(System.getProperty("gt.webdiff.port", "4567"));
         boolean stdin = true;
 
         @Override
         public Option[] values() {
             return Option.Context.addValue(super.values(),
-                    new Option("--port", String.format("set server port (default to)", defaultPort), 1) {
+                    new Option("--port", String.format("set server port (default to %d)", defaultPort), 1) {
                         @Override
                         protected void process(String name, String[] args) {
                             int p = Integer.parseInt(args[0]);

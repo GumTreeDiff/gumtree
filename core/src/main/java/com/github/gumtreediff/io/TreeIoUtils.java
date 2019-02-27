@@ -37,6 +37,10 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Stack;
@@ -123,11 +127,12 @@ public final class TreeIoUtils {
         public void writeTo(OutputStream writer) throws Exception {
             // FIXME Since the stream is already open, we should not close it, however due to semantic issue
             // it should stay like this
-            try (OutputStreamWriter os = new OutputStreamWriter(writer)) {
+            try (OutputStreamWriter os = new OutputStreamWriter(writer, "UTF-8")) {
                 writeTo(os);
             }
         }
 
+        @Override
         public String toString() {
             try (StringWriter s = new StringWriter()) {
                 writeTo(s);
@@ -138,13 +143,13 @@ public final class TreeIoUtils {
         }
 
         public void writeTo(String file) throws Exception {
-            try (FileWriter w = new FileWriter(file)) {
+            try (Writer w = Files.newBufferedWriter(Paths.get(file), Charset.forName("UTF-8"))) {
                 writeTo(w);
             }
         }
 
         public void writeTo(File file) throws Exception {
-            try (FileWriter w = new FileWriter(file)) {
+            try (Writer w = Files.newBufferedWriter(file.toPath(), Charset.forName("UTF-8"))) {
                 writeTo(w);
             }
         }
@@ -162,6 +167,7 @@ public final class TreeIoUtils {
         protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
                 throws Exception;
 
+        @Override
         public void writeTo(Writer writer) throws Exception {
             TreeFormatter formatter = newFormatter(context, serializers, writer);
             try {
@@ -266,7 +272,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public Exception getCause() {
+        public synchronized Exception getCause() {
             return cause;
         }
     }
@@ -629,7 +635,7 @@ public final class TreeIoUtils {
             XMLInputFactory fact = XMLInputFactory.newInstance();
             TreeContext context = new TreeContext();
             try {
-                Stack<ITree> trees = new Stack<>();
+                ArrayDeque<ITree> trees = new ArrayDeque<>();
                 XMLEventReader r = fact.createXMLEventReader(source);
                 while (r.hasNext()) {
                     XMLEvent e = r.nextEvent();
@@ -651,12 +657,12 @@ public final class TreeIoUtils {
                         if (trees.isEmpty())
                             context.setRoot(t);
                         else
-                            t.setParentAndUpdateChildren(trees.peek());
-                        trees.push(t);
+                            t.setParentAndUpdateChildren(trees.peekFirst());
+                        trees.addFirst(t);
                     } else if (e instanceof EndElement) {
                         if (!((EndElement)e).getName().getLocalPart().equals("tree")) // FIXME need to deal with options
                             continue;
-                        trees.pop();
+                        trees.removeFirst();
                     }
                 }
                 context.validate();

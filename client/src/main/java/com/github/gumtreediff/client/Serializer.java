@@ -30,7 +30,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Register(name = "parse", description = "Parse file and dump result")
 public class Serializer extends Client {
@@ -39,6 +41,7 @@ public class Serializer extends Client {
 
     static class Options implements Option.Context {
         protected OutputFormat format = OutputFormat.JSON;
+        protected String generator = null;
         protected String output = null;
         protected String[] files;
 
@@ -58,7 +61,13 @@ public class Serializer extends Client {
                     new Option("-o", "Output filename (or directory if more than one file), defaults to stdout", 1) {
                         @Override
                         protected void process(String name, String[] args) {
-
+                            output = args[0];
+                        }
+                    },
+                    new Option("-g", "Preferred generator to use.", 1) {
+                        @Override
+                        protected void process(String name, String[] args) {
+                            generator = args[0];
                         }
                     }
             };
@@ -119,7 +128,7 @@ public class Serializer extends Client {
 
         for (String file : opts.files) {
             try {
-                TreeContext tc = Generators.getInstance().getTree(file);
+                TreeContext tc = getTreeContext(file);
                 opts.format.getSerializer(tc).writeTo(opts.output == null
                         ? System.out
                         : new FileOutputStream(opts.output));
@@ -127,5 +136,19 @@ public class Serializer extends Client {
                 System.err.println(e);
             }
         }
+    }
+
+    private TreeContext getTreeContext(String file) {
+        try {
+            TreeContext t;
+            if (opts.generator == null)
+                t = Generators.getInstance().getTree(file);
+            else
+                t = Generators.getInstance().getTree(opts.generator, file);
+            return t;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

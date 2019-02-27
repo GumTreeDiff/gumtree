@@ -33,13 +33,14 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.Stack;
 
 public class GtCssVisitor implements ICSSVisitor {
 
     private TreeContext ctx;
 
-    private Stack<ITree> trees;
+    private ArrayDeque<ITree> trees;
 
     private LineReader lr;
 
@@ -52,7 +53,7 @@ public class GtCssVisitor implements ICSSVisitor {
         this.settings = new CSSWriterSettings();
         this.sheet = sheet;
         this.ctx = new TreeContext();
-        this.trees = new Stack<>();
+        this.trees = new ArrayDeque<>();
         ITree root = this.ctx.createTree(hashCode(sheet), "", "CascadingStyleSheet");
         setLocation(root, sheet);
         this.ctx.setRoot(root);
@@ -84,7 +85,7 @@ public class GtCssVisitor implements ICSSVisitor {
     public void onImport(@Nonnull CSSImportRule i) {
         //TODO add media nodes
         ITree t = ctx.createTree(hashCode(i), i.getAsCSSString(settings, 0), "CSSImportRule");
-        t.setParentAndUpdateChildren(trees.peek());
+        t.setParentAndUpdateChildren(trees.peekFirst());
         setLocation(t, i);
     }
 
@@ -96,7 +97,7 @@ public class GtCssVisitor implements ICSSVisitor {
     @Override
     public void onDeclaration(@Nonnull CSSDeclaration d) {
         ITree t = ctx.createTree(hashCode(d), d.getProperty(), "CSSDeclaration");
-        t.setParentAndUpdateChildren(trees.peek());
+        t.setParentAndUpdateChildren(trees.peekFirst());
         setLocation(t, d);
         CSSExpression e = d.getExpression();
         ITree c = ctx.createTree(hashCode(e), e.getAsCSSString(settings, 0), "CSSExpression");
@@ -116,20 +117,20 @@ public class GtCssVisitor implements ICSSVisitor {
     public void onBeginStyleRule(@Nonnull CSSStyleRule s) {
         ITree t = ctx.createTree(hashCode(s), "", "CSSStyleRule");
         setLocation(t, s);
-        t.setParentAndUpdateChildren(trees.peek());
-        trees.push(t);
+        t.setParentAndUpdateChildren(trees.peekFirst());
+        trees.addFirst(t);
     }
 
     @Override
     public void onStyleRuleSelector(@Nonnull CSSSelector s) {
         ITree t = ctx.createTree(hashCode(s), s.getAsCSSString(settings, 0), "CSSSelector");
-        t.setParentAndUpdateChildren(trees.peek());
+        t.setParentAndUpdateChildren(trees.peekFirst());
         setLocation(t, s);
     }
 
     @Override
     public void onEndStyleRule(@Nonnull CSSStyleRule aStyleRule) {
-        trees.pop();
+        trees.removeFirst();
     }
 
     @Override

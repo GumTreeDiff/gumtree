@@ -43,7 +43,7 @@ public class Update extends Action {
 
     @Override
     public String toString() {
-        return getName() + " " + node.toString() + " from " + node.getLabel() + " to " + value;
+        return getName() + " " + node.toShortString() + " from " + node.getLabel() + " to " + value;
     }
 
     @Override

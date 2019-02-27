@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class AbstractBottomUpMatcher extends Matcher {
+    //TODO make final?
     public static int SIZE_THRESHOLD =
             Integer.parseInt(System.getProperty("gt.bum.szt", "1000"));
     public static final double SIM_THRESHOLD =
@@ -138,6 +139,7 @@ public abstract class AbstractBottomUpMatcher extends Matcher {
                 && !(isSrcMatched(src) || isDstMatched(dst));
     }
 
+    @Override
     protected void addMapping(ITree src, ITree dst) {
         mappedSrc.putTree(src);
         mappedDst.putTree(dst);

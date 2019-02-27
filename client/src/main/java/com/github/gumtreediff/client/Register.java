@@ -21,6 +21,7 @@
 package com.github.gumtreediff.client;
 
 import com.github.gumtreediff.gen.Registry;
+import org.atteo.classindex.IndexAnnotated;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -29,6 +30,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
+@IndexAnnotated
 public @interface Register {
     String name() default no_value;
     String description() default "";

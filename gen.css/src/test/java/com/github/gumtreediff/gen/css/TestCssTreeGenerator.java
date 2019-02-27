@@ -19,6 +19,7 @@
 
 package com.github.gumtreediff.gen.css;
 
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
@@ -42,5 +43,11 @@ public class TestCssTreeGenerator {
         TreeContext ctx = new CssTreeGenerator().generateFromReader(r);
         ITree tree = ctx.getRoot();
         assertEquals(10, tree.getSize());
+    }
+
+    @Test(expected = SyntaxException.class)
+    public void badSyntax() throws IOException {
+        String input = ".foo \"toto {\nfont-size: 11pt;\n}";
+        TreeContext ct = new CssTreeGenerator().generateFromString(input);
     }
 }

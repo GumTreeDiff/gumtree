@@ -52,9 +52,9 @@ public class HashUtils {
     public static int md5(String s) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] digest = md.digest(s.getBytes());
+            byte[] digest = md.digest(s.getBytes("UTF-8"));
             return byteArrayToInt(digest);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ITree.NO_VALUE;

@@ -25,6 +25,7 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 
+import java.util.ArrayDeque;
 import java.util.List;
 
 public class RtedMatcher extends Matcher {
@@ -39,7 +40,7 @@ public class RtedMatcher extends Matcher {
         a.init(src, dst);
         a.computeOptimalStrategy();
         a.nonNormalizedTreeDist();
-        List<int[]> arrayMappings = a.computeEditMapping();
+        ArrayDeque<int[]> arrayMappings = a.computeEditMapping();
         List<ITree> srcs = TreeUtils.postOrder(src);
         List<ITree> dsts = TreeUtils.postOrder(dst);
         for (int[] m: arrayMappings) {

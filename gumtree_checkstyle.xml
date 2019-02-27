@@ -4,7 +4,7 @@
 				"http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
 		<property name="charset" value="UTF-8"/>
-		<property name="severity" value="warning"/>
+		<property name="severity" value="error"/>
 		<property name="fileExtensions" value="java, properties, xml"/>
 		<module name="SuppressionFilter">
 				<property name="file" value="${suppressionFile}"/>
@@ -151,7 +151,7 @@
 										 value="Method name ''{0}'' must match pattern ''{1}''."/>
 				</module>
 				<module name="EmptyCatchBlock">
-						<property name="exceptionVariableName" value="expected"/>
+						<property name="exceptionVariableName" value="ignore"/>
 				</module>
 		</module>
 </module>

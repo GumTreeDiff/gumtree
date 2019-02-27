@@ -37,6 +37,7 @@ public final class SiblingsMappingComparator extends AbstractMappingComparator {
             similarities.put(ambiguousMapping, similarity(ambiguousMapping.getFirst(), ambiguousMapping.getSecond()));
     }
 
+    @Override
     protected double similarity(ITree src, ITree dst) {
         return 100D * siblingsJaccardSimilarity(src.getParent(), dst.getParent())
                 +  10D * posInParentSimilarity(src, dst) + numberingSimilarity(src , dst);

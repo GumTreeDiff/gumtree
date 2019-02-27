@@ -29,9 +29,11 @@ import java.util.List;
 
 public class ChangeDistillerBottomUpMatcher extends Matcher {
 
-    public static final double STRUCT_SIM_THRESHOLD_1 = 0.6D;
+    public static final double STRUCT_SIM_THRESHOLD_1 =  Double.parseDouble(System.getProperty("gt.cd.ssim1", "0.6"));
 
-    public static final double STRUCT_SIM_THRESHOLD_2 = 0.4D;
+    public static final double STRUCT_SIM_THRESHOLD_2 = Double.parseDouble(System.getProperty("gt.cd.ssim2", "0.4"));
+
+    public static final int MAX_NUMBER_OF_LEAVES = Integer.parseInt(System.getProperty("gt.cd.ml", "4"));
 
     public ChangeDistillerBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
@@ -46,8 +48,8 @@ public class ChangeDistillerBottomUpMatcher extends Matcher {
                 if (isMappingAllowed(currentSrcTree, currentDstTree)
                         && !(currentSrcTree.isLeaf() || currentDstTree.isLeaf())) {
                     double similarity = chawatheSimilarity(currentSrcTree, currentDstTree);
-                    if ((numberOfLeaves > 4 && similarity >= STRUCT_SIM_THRESHOLD_1)
-                            || (numberOfLeaves <= 4 && similarity >= STRUCT_SIM_THRESHOLD_2)) {
+                    if ((numberOfLeaves > MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_1)
+                            || (numberOfLeaves <= MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_2)) {
                         addMapping(currentSrcTree, currentDstTree);
                         break;
                     }

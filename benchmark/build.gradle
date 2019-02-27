@@ -1,8 +1,6 @@
 plugins {
-    id "me.champeau.gradle.jmh" version "0.4.3"
+    id "me.champeau.gradle.jmh" version "0.4.5"
 }
-
-apply plugin: 'me.champeau.gradle.jmh'
 
 uploadArchives.enabled = false
 jar.enabled = false

@@ -31,6 +31,7 @@ public final class SwingTree {
     public static void main(String[] args) throws IOException {
         final TreeContext t = Generators.getInstance().getTree(args[0]);
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 createAndShow(t);
             }

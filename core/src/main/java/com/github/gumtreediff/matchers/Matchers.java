@@ -38,6 +38,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
         install(CompositeMatchers.ClassicGumtree.class);
         install(CompositeMatchers.ChangeDistiller.class);
         install(CompositeMatchers.XyMatcher.class);
+        install(CompositeMatchers.GumtreeTopDown.class);
     }
 
     private void install(Class<? extends Matcher> clazz) {

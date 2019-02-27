@@ -28,6 +28,7 @@ import static com.github.gumtreediff.tree.hash.HashUtils.*;
 
 public abstract class RollingHashGenerator implements HashGenerator {
 
+    @Override
     public void hash(ITree t) {
         for (ITree n: t.postOrder())
             if (n.isLeaf())

@@ -38,6 +38,7 @@ public final class SwingDiff extends AbstractDiffClient<AbstractDiffClient.Optio
     public void run() {
         final Matcher matcher = matchTrees();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 JFrame frame = new JFrame("GumTree");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -91,6 +91,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
     /** newLine followed by copies of indent. */
     private char[] linePrefix = null;
 
+    @Override
     public void setIndent(String indent) {
         if (!indent.equals(this.indent)) {
             this.indent = indent;
@@ -98,10 +99,12 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
         }
     }
 
+    @Override
     public String getIndent() {
         return indent;
     }
 
+    @Override
     public void setNewLine(String newLine) {
         if (!newLine.equals(this.newLine)) {
             this.newLine = newLine;
@@ -122,64 +125,75 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
         return NORMAL_END_OF_LINE;
     }
 
+    @Override
     public String getNewLine() {
         return newLine;
     }
 
+    @Override
     public void writeStartDocument() throws XMLStreamException {
         beforeMarkup();
         out.writeStartDocument();
         afterMarkup();
     }
 
+    @Override
     public void writeStartDocument(String version) throws XMLStreamException {
         beforeMarkup();
         out.writeStartDocument(version);
         afterMarkup();
     }
 
+    @Override
     public void writeStartDocument(String encoding, String version) throws XMLStreamException {
         beforeMarkup();
         out.writeStartDocument(encoding, version);
         afterMarkup();
     }
 
+    @Override
     public void writeDTD(String dtd) throws XMLStreamException {
         beforeMarkup();
         out.writeDTD(dtd);
         afterMarkup();
     }
 
+    @Override
     public void writeProcessingInstruction(String target) throws XMLStreamException {
         beforeMarkup();
         out.writeProcessingInstruction(target);
         afterMarkup();
     }
 
+    @Override
     public void writeProcessingInstruction(String target, String data) throws XMLStreamException {
         beforeMarkup();
         out.writeProcessingInstruction(target, data);
         afterMarkup();
     }
 
+    @Override
     public void writeComment(String data) throws XMLStreamException {
         beforeMarkup();
         out.writeComment(data);
         afterMarkup();
     }
 
+    @Override
     public void writeEmptyElement(String localName) throws XMLStreamException {
         beforeMarkup();
         out.writeEmptyElement(localName);
         afterMarkup();
     }
 
+    @Override
     public void writeEmptyElement(String namespaceURI, String localName) throws XMLStreamException {
         beforeMarkup();
         out.writeEmptyElement(namespaceURI, localName);
         afterMarkup();
     }
 
+    @Override
     public void writeEmptyElement(String prefix, String localName, String namespaceURI)
             throws XMLStreamException {
         beforeMarkup();
@@ -187,18 +201,21 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
         afterMarkup();
     }
 
+    @Override
     public void writeStartElement(String localName) throws XMLStreamException {
         beforeStartElement();
         out.writeStartElement(localName);
         afterStartElement();
     }
 
+    @Override
     public void writeStartElement(String namespaceURI, String localName) throws XMLStreamException {
         beforeStartElement();
         out.writeStartElement(namespaceURI, localName);
         afterStartElement();
     }
 
+    @Override
     public void writeStartElement(String prefix, String localName, String namespaceURI)
             throws XMLStreamException {
         beforeStartElement();
@@ -206,32 +223,38 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
         afterStartElement();
     }
 
+    @Override
     public void writeCharacters(String text) throws XMLStreamException {
         out.writeCharacters(text);
         afterData();
     }
 
+    @Override
     public void writeCharacters(char[] text, int start, int len) throws XMLStreamException {
         out.writeCharacters(text, start, len);
         afterData();
     }
 
+    @Override
     public void writeCData(String data) throws XMLStreamException {
         out.writeCData(data);
         afterData();
     }
 
+    @Override
     public void writeEntityRef(String name) throws XMLStreamException {
         out.writeEntityRef(name);
         afterData();
     }
 
+    @Override
     public void writeEndElement() throws XMLStreamException {
         beforeEndElement();
         out.writeEndElement();
         afterEndElement();
     }
 
+    @Override
     public void writeEndDocument() throws XMLStreamException {
         try {
             while (depth > 0) {

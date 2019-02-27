@@ -21,10 +21,11 @@
 package com.github.gumtreediff.gen.jdt.cd;
 
 import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.jdt.AbstractJdtVisitor;
 import com.github.gumtreediff.gen.jdt.AbstractJdtTreeGenerator;
 
-@Register(id = "java-jdt-cd")
+@Register(id = "java-cdjdt", accept = "\\.java$", priority = Registry.Priority.MINIMUM)
 public class CdJdtTreeGenerator extends AbstractJdtTreeGenerator {
     @Override
     protected AbstractJdtVisitor createVisitor() {

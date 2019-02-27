@@ -33,9 +33,10 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
         super(src, dst, store);
     }
 
+    @Override
     public void filterMappings(MultiMappingStore multiMappings) {
         // Select unique mappings first and extract ambiguous mappings.
-        List<Mapping> ambiguousList = new LinkedList<>();
+        List<Mapping> ambiguousList = new ArrayList<>();
         Set<ITree> ignored = new HashSet<>();
         for (ITree src: multiMappings.getSrcs()) {
             if (multiMappings.isSrcUnique(src))

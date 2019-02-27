@@ -34,8 +34,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActionsCollector {
 
@@ -62,10 +64,13 @@ public class ActionsCollector {
 
     public static void collectActions() throws Exception {
         Run.initGenerators();
-        List<Path> paths = Files.walk(Paths.get(RES_DIR)).filter(
+        List<Path> outputPaths = new ArrayList<>();
+        try (Stream<Path> paths = Files.walk(Paths.get(RES_DIR))) {
+            outputPaths = paths.filter(
                 p -> p.getFileName().toString().matches(".*_v0_.*\\.xml")).collect(Collectors.toList());
+        }
         Files.createDirectories(Paths.get(OUTPUT_DIR));
-        for (Path path : paths) {
+        for (Path path : outputPaths) {
             Path otherPath = Paths.get(path.toString().replace("_v0_","_v1_"));
             Path outputPath = Paths.get(path.toString().replace("_v0_","_actions_"));
             TreeContext src = TreeIoUtils.fromXml().generateFromFile(path.toString());
@@ -83,11 +88,14 @@ public class ActionsCollector {
 
     public static void checkActions() throws Exception {
         Run.initGenerators();
-        List<Path> paths = Files.walk(Paths.get(RES_DIR)).filter(
+        List<Path> outputPaths = new ArrayList<>();
+        try (Stream<Path> paths = Files.walk(Paths.get(RES_DIR))) {
+            outputPaths = paths.filter(
                 p -> p.getFileName().toString().matches(".*_v0_.*\\.xml")).collect(Collectors.toList());
+        }
         boolean dirty = false;
-        StringBuffer b = new StringBuffer();
-        for (Path path : paths) {
+        StringBuilder b = new StringBuilder();
+        for (Path path : outputPaths) {
             Path otherPath = Paths.get(path.toString().replace("_v0_","_v1_"));
             TreeContext src = TreeIoUtils.fromXml().generateFromFile(path.toString());
             TreeContext dst = TreeIoUtils.fromXml().generateFromFile(otherPath.toString());

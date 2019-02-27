@@ -27,6 +27,7 @@ import static com.github.gumtreediff.tree.hash.HashUtils.*;
 
 public abstract class StaticHashGenerator implements HashGenerator {
 
+    @Override
     public void hash(ITree t) {
         for (ITree n: t.postOrder())
             n.setHash(nodeHash(n));

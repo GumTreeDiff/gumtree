@@ -27,6 +27,7 @@ public abstract class IterableEnumeration<T> implements Iterable<T> {
 
     public static <T> Iterable<T> make(Enumeration<T> en) {
         return new Iterable<T>() {
+            @Override
             public Iterator<T> iterator() {
                 return new Iterator<T>() {
                     @Override

@@ -31,6 +31,8 @@ import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.List;
 
 public final class HtmlDiffs {
@@ -124,7 +126,7 @@ public final class HtmlDiffs {
         }
 
         StringWriter w1 = new StringWriter();
-        BufferedReader r = new BufferedReader(new FileReader(fSrc));
+        BufferedReader r = Files.newBufferedReader(fSrc.toPath(), Charset.forName("UTF-8"));
         int cursor = 0;
 
         while (r.ready()) {
@@ -139,7 +141,7 @@ public final class HtmlDiffs {
         srcDiff = w1.toString();
 
         StringWriter w2 = new StringWriter();
-        r = new BufferedReader(new FileReader(fDst));
+        r = Files.newBufferedReader(fDst.toPath(), Charset.forName("UTF-8"));
         cursor = 0;
 
         while (r.ready()) {

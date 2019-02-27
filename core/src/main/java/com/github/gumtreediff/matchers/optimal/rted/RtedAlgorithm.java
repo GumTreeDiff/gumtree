@@ -15,9 +15,7 @@
 
 package com.github.gumtreediff.matchers.optimal.rted;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 
 import com.github.gumtreediff.tree.ITree;
 
@@ -1063,7 +1061,7 @@ public class RtedAlgorithm {
 	 *         in ted1 and A[1]=ted2.node is the postorderID in ted2. The
 	 *         postorderID of the empty node (insertion, deletion) is zero.
 	 */
-	public LinkedList<int[]> computeEditMapping() {
+	public ArrayDeque<int[]> computeEditMapping() {
 
 		// initialize tree and forest distance arrays
 		double[][] treedist = new double[size1 + 1][size2 + 1];
@@ -1088,18 +1086,18 @@ public class RtedAlgorithm {
 		forestDist(it1, it2, size1, size2, treedist, forestdist);
 
 		// empty edit mapping
-		LinkedList<int[]> editMapping = new LinkedList<int[]>();
+		ArrayDeque<int[]> editMapping = new ArrayDeque<>();
 
 		// empty stack of tree Pairs
-		LinkedList<int[]> treePairs = new LinkedList<int[]>();
+		ArrayDeque<int[]> treePairs = new ArrayDeque<>();
 
 		// push the pair of trees (ted1,ted2) to stack
-		treePairs.push(new int[] { size1, size2 });
+		treePairs.addFirst(new int[] { size1, size2 });
 
 		while (!treePairs.isEmpty()) {
 
 			// get next tree pair to be processed
-			int[] treePair = treePairs.pop();
+			int[] treePair = treePairs.removeFirst();
 			int lastRow = treePair[0];
 			int lastCol = treePair[1];
 
@@ -1118,12 +1116,12 @@ public class RtedAlgorithm {
 				if ((row > firstRow)
 						&& (forestdist[row - 1][col] + costDel == forestdist[row][col])) {
 					// node with postorderID row is deleted from ted1
-					editMapping.push(new int[] { row, 0 });
+					editMapping.addFirst(new int[] { row, 0 });
 					row--;
 				} else if ((col > firstCol)
 						&& (forestdist[row][col - 1] + costIns == forestdist[row][col])) {
 					// node with postorderID col is inserted into ted2
-					editMapping.push(new int[] { 0, col });
+					editMapping.addFirst(new int[] { 0, col });
 					col--;
 				} else {
 					// node with postorderID row in ted1 is renamed to node col
@@ -1132,12 +1130,12 @@ public class RtedAlgorithm {
 					if ((it1.getInfo(POST2_LLD, row - 1) == it1.getInfo(POST2_LLD, lastRow - 1))
 							&& (it2.getInfo(POST2_LLD, col - 1) == it2.getInfo(POST2_LLD, lastCol - 1))) {
 						// if both subforests are trees, map nodes
-						editMapping.push(new int[] { row, col });
+						editMapping.addFirst(new int[] { row, col });
 						row--;
 						col--;
 					} else {
 						// pop subtree pair
-						treePairs.push(new int[] { row, col });
+						treePairs.addFirst(new int[] { row, col });
 
 						// continue with forest to the left of the popped
 						// subtree pair

@@ -20,8 +20,9 @@
 
 package com.github.gumtreediff.client;
 
-import java.io.IOException;
+import org.atteo.classindex.IndexSubclasses;
 
+@IndexSubclasses
 public abstract class Client {
     @SuppressWarnings("unused")
     public Client(String[] args) {}
