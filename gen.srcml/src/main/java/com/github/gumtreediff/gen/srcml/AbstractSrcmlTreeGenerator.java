@@ -51,7 +51,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
     @Override
     public TreeContext generate(Reader r) throws IOException {
         lr = new LineReader(r);
-        String output = readStandardOutput(r);
+        String output = readStandardOutput(lr);
         return getTreeContext(output);
     }
 
