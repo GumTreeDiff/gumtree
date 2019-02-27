@@ -34,7 +34,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import java.io.IOException;
 import java.io.Reader;
 
-@Register(id = "java-javaparser", accept = "\\.java", priority = Registry.Priority.MEDIUM)
+@Register(id = "java-javaparser", accept = "\\.java$", priority = Registry.Priority.MEDIUM)
 public class JavaParserGenerator extends TreeGenerator {
 
     @Override

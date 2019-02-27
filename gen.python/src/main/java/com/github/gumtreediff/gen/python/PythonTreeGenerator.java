@@ -35,7 +35,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.*;
 
-@Register(id = "python-pythonparser", accept = {"\\.py"}, priority = Registry.Priority.MAXIMUM)
+@Register(id = "python-pythonparser", accept = {"\\.py$"}, priority = Registry.Priority.MAXIMUM)
 public class PythonTreeGenerator extends TreeGenerator {
 
     private static final String PYTHONPARSER_CMD = System.getProperty("gt.pp.path", "pythonparser");
