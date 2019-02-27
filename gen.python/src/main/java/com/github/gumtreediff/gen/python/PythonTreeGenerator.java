@@ -19,9 +19,9 @@
 
 package com.github.gumtreediff.gen.python;
 
+import com.github.gumtreediff.gen.ExternalProcessTreeGenerator;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
-import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
@@ -31,12 +31,10 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.*;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.*;
 
 @Register(id = "python-pythonparser", accept = {"\\.py$"}, priority = Registry.Priority.MAXIMUM)
-public class PythonTreeGenerator extends TreeGenerator {
+public class PythonTreeGenerator extends ExternalProcessTreeGenerator {
 
     private static final String PYTHONPARSER_CMD = System.getProperty("gt.pp.path", "pythonparser");
 
@@ -57,8 +55,8 @@ public class PythonTreeGenerator extends TreeGenerator {
     @Override
     public TreeContext generate(Reader r) throws IOException {
         lr = new LineReader(r);
-        String xml = getXml(lr);
-        return getTreeContext(xml);
+        String output = readStandardOutput(lr);
+        return getTreeContext(output);
     }
 
     public TreeContext getTreeContext(String xml) {
@@ -112,45 +110,7 @@ public class PythonTreeGenerator extends TreeGenerator {
         t.setLength(lr.positionFor(endLine, endColumn) - lr.positionFor(line, column));
     }
 
-    public String getXml(Reader r) throws IOException {
-        //FIXME this is not efficient but I am not sure how to speed up things here.
-        File f = File.createTempFile("gumtree", "");
-        try (
-                Writer w = Files.newBufferedWriter(f.toPath(), Charset.forName("UTF-8"));
-        ) {
-            char[] buf = new char[8192];
-            while (true)
-            {
-                int length = r.read(buf);
-                if (length < 0)
-                    break;
-                w.write(buf, 0, length);
-            }
-        }
-        ProcessBuilder b = new ProcessBuilder(getArguments(f.getAbsolutePath()));
-        b.directory(f.getParentFile());
-        Process p = b.start();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"));) {
-            StringBuilder buf = new StringBuilder();
-            // TODO Why do we need to read and bufferize everything, when we could/should only use generateFromStream
-            String line = null;
-            while ((line = br.readLine()) != null)
-                buf.append(line + System.lineSeparator());
-            p.waitFor();
-            if (p.exitValue() != 0)
-                throw new RuntimeException(buf.toString());
-            r.close();
-            p.destroy();
-            String xml = buf.toString();
-            return xml;
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } finally {
-            f.delete();
-        }
-    }
-
-    public String[] getArguments(String file) {
+    public String[] getCommandLine(String file) {
         return new String[]{PYTHONPARSER_CMD, file};
     }
 }

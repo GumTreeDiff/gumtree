@@ -19,7 +19,7 @@
 
 package com.github.gumtreediff.gen.srcml;
 
-import com.github.gumtreediff.gen.TreeGenerator;
+import com.github.gumtreediff.gen.ExternalProcessTreeGenerator;
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
@@ -29,12 +29,9 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.*;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
-public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
+public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGenerator {
 
     private static final String SRCML_CMD = System.getProperty("gt.srcml.path", "srcml");
 
@@ -54,8 +51,8 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
     @Override
     public TreeContext generate(Reader r) throws IOException {
         lr = new LineReader(r);
-        String xml = getXml(lr);
-        return getTreeContext(xml);
+        String output = readStandardOutput(r);
+        return getTreeContext(output);
     }
 
     public TreeContext getTreeContext(String xml) {
@@ -147,45 +144,9 @@ public abstract class AbstractSrcmlTreeGenerator extends TreeGenerator {
         }
     }
 
-    public String getXml(Reader r) throws IOException {
-        //FIXME this is not efficient but I am not sure how to speed up things here.
-        File f = File.createTempFile("gumtree", "");
-        try (
-                Writer w = Files.newBufferedWriter(f.toPath(), Charset.forName("UTF-8"));
-                BufferedReader br = new BufferedReader(r);
-        ) {
-            String line = br.readLine();
-            while (line != null) {
-                w.append(line + System.lineSeparator());
-                line = br.readLine();
-            }
-        }
-        ProcessBuilder b = new ProcessBuilder(getArguments(f.getAbsolutePath()));
-        b.directory(f.getParentFile());
-        Process p = b.start();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"));) {
-            StringBuilder buf = new StringBuilder();
-            // TODO Why do we need to read and bufferize everything, when we could/should only use generateFromStream
-            String line = null;
-            while ((line = br.readLine()) != null)
-                buf.append(line + System.lineSeparator());
-            p.waitFor();
-            if (p.exitValue() != 0)
-                throw new RuntimeException(buf.toString());
-            p.destroy();
-            r.close();
-            String xml = buf.toString();
-            return xml;
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } finally {
-            f.delete();
-        }
-    }
-
     public abstract String getLanguage();
 
-    public String[] getArguments(String file) {
+    public String[] getCommandLine(String file) {
         return new String[]{SRCML_CMD, "-l", getLanguage(), "--position", file, "--tabs=1"};
     }
 }
