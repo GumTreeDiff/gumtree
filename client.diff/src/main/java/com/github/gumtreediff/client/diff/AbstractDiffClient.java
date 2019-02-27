@@ -40,7 +40,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
 
     public static class Options implements Option.Context {
         public String matcher;
-        public ArrayList<String> generators = new ArrayList<>();
+        public String generator = null;
         public String src;
         public String dst;
 
@@ -56,7 +56,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
                     new Option("-g", "Preferred generator to use (can be used more than once).", 1) {
                         @Override
                         protected void process(String name, String[] args) {
-                            generators.add(args[0]);
+                            generator = args[0];
                         }
                     },
                     new Option.Help(this) {
@@ -124,10 +124,10 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
     private TreeContext getTreeContext(String file) {
         try {
             TreeContext t;
-            if (opts.generators.isEmpty())
+            if (opts.generator == null)
                 t = Generators.getInstance().getTree(file);
             else
-                t = Generators.getInstance().getTree(opts.generators.get(0), file);
+                t = Generators.getInstance().getTree(opts.generator, file);
             return t;
         } catch (IOException e) {
             e.printStackTrace();
