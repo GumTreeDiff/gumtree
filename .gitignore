@@ -1,3 +1,6 @@
+gradle.properties
+.vscode/
+bin/
 target/
 samples/
 .settings/
