@@ -1,5 +1,7 @@
 # Changelog of GumTree
 
+## v2.1.3
+
 ## v2.1.2
 * New dockerfile to run GumTree
 * Python tree generator
