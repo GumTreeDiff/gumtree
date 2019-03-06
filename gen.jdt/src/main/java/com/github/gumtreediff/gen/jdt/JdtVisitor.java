@@ -34,6 +34,29 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         pushNode(n, getLabel(n));
     }
 
+    public boolean visit(MethodInvocation i)  {
+        if (i.getExpression() !=  null) {
+            push(-12, "MethodInvocationReceiver", "", i.getExpression().getStartPosition(),
+                    i.getExpression().getLength());
+            i.getExpression().accept(this);
+            popNode();
+        }
+        pushNode(i.getName(), getLabel(i.getName()));
+        popNode();
+        if (i.arguments().size() >  0) {
+            int startPos = ((ASTNode) i.arguments().get(0)).getStartPosition();
+            int length = ((ASTNode) i.arguments().get(i.arguments().size() - 1)).getStartPosition()
+                    + ((ASTNode) i.arguments().get(i.arguments().size() - 1)).getLength() -  startPos;
+            push(-14, "MethodInvocationArguments","", startPos , length);
+            for (Object o : i.arguments()) {
+                ((ASTNode) o).accept(this);
+
+            }
+            popNode();
+        }
+        return false;
+    }
+
     protected String getLabel(ASTNode n) {
         if (n instanceof Name) return ((Name) n).getFullyQualifiedName();
         if (n instanceof Type) return n.toString();

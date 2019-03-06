@@ -59,7 +59,7 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
         push(type, typeName, "", startPosition, length);
     }
 
-    private void push(int type, String typeName, String label, int startPosition, int length) {
+    protected void push(int type, String typeName, String label, int startPosition, int length) {
         ITree t = context.createTree(type, label, typeName);
         t.setPos(startPosition);
         t.setLength(length);

@@ -23,6 +23,7 @@ package com.github.gumtreediff.gen.jdt;
 import java.io.IOException;
 
 import com.github.gumtreediff.gen.SyntaxException;
+import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
@@ -45,7 +46,27 @@ public class TestJdtGenerator {
                 + "{ for (A f : foo) { System.out.println(f); } } }";
         ITree tree = new JdtTreeGenerator().generateFromString(input).getRoot();
         assertEquals(15, tree.getType());
-        assertEquals(32, tree.getSize());
+        assertEquals(34, tree.getSize());
+    }
+
+    @Test
+    public void testMethodInvocation() throws IOException {
+        String input = "class Main {\n"
+                + "    public static void foo() {\n"
+                + "        a(b);\n"
+                + "    }\n"
+                + "}\n";
+        TreeContext ctx = new JdtTreeGenerator().generateFromString(input);
+        String o1 = TreeIoUtils.toLisp(ctx).toString();
+
+        input = "class Main {\n"
+                + "    public static void foo() {\n"
+                + "        a.b();\n"
+                + "    }\n"
+                + "}";
+        ctx = new JdtTreeGenerator().generateFromString(input);
+        String o2 = TreeIoUtils.toLisp(ctx).toString();
+        assertNotEquals(o1, o2);
     }
 
     @Test
@@ -53,7 +74,7 @@ public class TestJdtGenerator {
         String input = "public class Foo { public void foo(){ new ArrayList<Object>().stream().forEach(a -> {}); } }";
         ITree tree = new JdtTreeGenerator().generateFromString(input).getRoot();
         assertEquals(15, tree.getType());
-        assertEquals(24, tree.getSize());
+        assertEquals(27, tree.getSize());
     }
 
     @Test(expected = SyntaxException.class)
