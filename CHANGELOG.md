@@ -1,6 +1,9 @@
 # Changelog of GumTree
 
 ## v2.1.3
+* Fix position problem in javaparser generator
+* Fix method invocation handling in jdt generator
+* Webdiff command is compatible with -g option
 
 ## v2.1.2
 * New dockerfile to run GumTree
