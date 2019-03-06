@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import com.github.gumtreediff.gen.SyntaxException;
+import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
@@ -46,16 +47,19 @@ public class TestJavaParserGenerator {
                 + "{ for (A f : foo) { System.out.println(f); } } }";
         TreeContext context = new JavaParserGenerator().generateFromString(input);
         ITree tree = context.getRoot();
-
-        System.out.println(tree.toTreeString());
         assertEquals(-1795686804, tree.getType());
         assertEquals(37, tree.getSize());
     }
 
     @Test
     public void testJava8Syntax() throws IOException {
-        String input = "public class Foo { public void foo(){ new ArrayList<Object>().stream().forEach(a -> {}); } }";
-        ITree tree = new JavaParserGenerator().generateFromString(input).getRoot();
+        String input = "public class Foo {\n"
+                + "\tpublic void foo() {\n"
+                + "\t\tnew ArrayList<Object>().stream().forEach(a -> {});\n"
+                + "\t}\n"
+                + "}";
+        TreeContext ctx = new JavaParserGenerator().generateFromString(input);
+        ITree tree = ctx.getRoot();
         assertEquals(-1795686804, tree.getType());
         assertEquals(23, tree.getSize());
     }
