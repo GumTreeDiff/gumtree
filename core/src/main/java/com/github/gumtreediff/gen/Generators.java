@@ -72,7 +72,7 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
 
             @Override
             public String toString() {
-                return String.format("%d\t%s: %s", priority, Arrays.toString(accept), clazz.getCanonicalName());
+                return String.format("%d\t%s\t%s: %s", priority, id, Arrays.toString(accept), clazz.getCanonicalName());
             }
         };
     }
