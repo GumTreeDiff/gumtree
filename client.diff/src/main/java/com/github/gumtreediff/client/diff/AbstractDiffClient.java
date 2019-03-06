@@ -121,7 +121,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
         return dst;
     }
 
-    private TreeContext getTreeContext(String file) {
+    protected TreeContext getTreeContext(String file) {
         try {
             TreeContext t;
             if (opts.generator == null)

@@ -86,7 +86,7 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         System.out.println(String.format("Starting server: %s:%d", "http://127.0.0.1", opts.defaultPort));
     }
 
-    public static void configureSpark(final DirectoryComparator comparator, int port) {
+    public void configureSpark(final DirectoryComparator comparator, int port) {
         port(port);
         staticFiles.location("/web/");
         get("/", (request, response) -> {
@@ -103,7 +103,9 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         get("/diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new DiffView(pair.getFirst(), pair.getSecond());
+            Renderable view = new DiffView(pair.getFirst(), pair.getSecond(),
+                    this.getTreeContext(pair.getFirst().getAbsolutePath()),
+                    this.getTreeContext(pair.getSecond().getAbsolutePath()));
             return render(view);
         });
         get("/mergely/:id", (request, response) -> {
