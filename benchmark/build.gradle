@@ -1,5 +1,5 @@
 plugins {
-    id "me.champeau.gradle.jmh" version "0.4.5"
+    id "me.champeau.gradle.jmh" version "0.4.8"
 }
 
 uploadArchives.enabled = false
@@ -39,10 +39,9 @@ def getGitHash = { ->
 }
 
 jmh {
-    jmhVersion = '1.19'
     fork = 0
     warmupIterations = 1
-    iterations = 3
+    iterations = 2
     benchmarkMode = ['AverageTime']
     benchmarkParameters = [
       'refPath' : new File("${project.projectDir}/src/jmh/resources/").listFiles()
@@ -59,16 +58,16 @@ task jmhPlot(type: Exec, dependsOn: 'jmh') {
 }
 
 dependencies {
-    compile project(':client')
-    compile project(':client.diff')
-    compile project(':gen.antlr3')
-    compile project(':gen.antlr3-antlr')
-    compile project(':gen.antlr3-json')
-    compile project(':gen.antlr3-php')
-    compile project(':gen.antlr3-r')
-    compile project(':gen.antlr3-xml')
-    compile project(':gen.c')
-    compile project(':gen.jdt')
-    compile project(':gen.js')
-    compile project(':gen.ruby')
+    implementation project(':client')
+    implementation project(':client.diff')
+    implementation project(':gen.antlr3')
+    implementation project(':gen.antlr3-antlr')
+    implementation project(':gen.antlr3-json')
+    implementation project(':gen.antlr3-php')
+    implementation project(':gen.antlr3-r')
+    implementation project(':gen.antlr3-xml')
+    implementation project(':gen.c')
+    implementation project(':gen.jdt')
+    implementation project(':gen.js')
+    implementation project(':gen.ruby')
 }
