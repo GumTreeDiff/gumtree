@@ -25,5 +25,11 @@
 		<tree type="0" label="c" />
 		<tree type="0" label="d" />
 	</tree>
-	<tree type="0" label="g" />
+	<tree type="0" label="g">
+		<tree type="0" label="h" />
+	</tree>
+	<tree type="0" label="i"/>
+	<tree type="0" label="j">
+		<tree type="0" label="k" />
+	</tree>
 </tree>

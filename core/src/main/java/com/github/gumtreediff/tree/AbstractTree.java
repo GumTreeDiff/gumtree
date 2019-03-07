@@ -263,7 +263,6 @@ public abstract class AbstractTree implements ITree {
         return b.toString();
     }
 
-
     @Override
     public String toPrettyString(TreeContext ctx) {
         if (hasLabel())

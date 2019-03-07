@@ -30,7 +30,7 @@ public class Insert extends Addition {
 
     @Override
     public String getName() {
-        return "INS";
+        return "insert-node";
     }
 
 }

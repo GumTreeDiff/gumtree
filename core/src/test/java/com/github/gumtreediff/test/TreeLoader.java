@@ -31,6 +31,37 @@ public class TreeLoader {
 
     private TreeLoader() {}
 
+    /*
+     v0
+     --
+     a
+       e
+         f
+       b
+         c
+         d
+       g
+         h
+       i
+       j
+         k
+
+     v1
+     --
+     z
+       b
+         c
+         d
+       h
+         e
+           y
+       x
+         w
+       j
+         u
+           v
+             k
+     */
     public static Pair<TreeContext, TreeContext> getActionPair() {
         return new Pair<>(load("/action_v0.xml"), load("/action_v1.xml"));
     }

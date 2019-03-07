@@ -14,38 +14,50 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
- * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
 package com.github.gumtreediff.actions.model;
 
+import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-public class Delete extends Action {
+public abstract class TreeAddition extends TreeAction {
 
-    public Delete(ITree node) {
+    protected ITree parent;
+
+    protected int pos;
+
+    public TreeAddition(ITree node, ITree parent, int pos) {
         super(node);
+        this.parent = parent;
+        this.pos = pos;
     }
 
-    @Override
-    public String getName() {
-        return "delete-node";
+    public ITree getParent() {
+        return parent;
+    }
+
+    public int getPosition() {
+        return pos;
     }
 
     @Override
     public String toString() {
-        return String.format("===\n%s\n---\n%s\n===",
+        return String.format("===\n%s\n---\n%s\nto\n%s\nat %d",
                 getName(),
-                node.toShortString());
+                node.toTreeString(),
+                parent.toShortString(),
+                pos);
     }
 
     @Override
     public String format(TreeContext ctx) {
-        return String.format("===\n%s\n---\n%s\n===",
+        return String.format("===\n%s\n---\n%s\nto\n%s\nat %d",
                 getName(),
-                node.toPrettyString(ctx));
+                node.toPrettyTreeString(ctx),
+                parent.toPrettyString(ctx),
+                pos);
     }
-
 }

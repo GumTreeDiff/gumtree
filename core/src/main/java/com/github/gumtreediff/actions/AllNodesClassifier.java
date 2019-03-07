@@ -23,40 +23,48 @@ package com.github.gumtreediff.actions;
 import java.util.List;
 import java.util.Set;
 
+import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Move;
-import com.github.gumtreediff.actions.model.Update;
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.TreeContext;
 
-public class RootsClassifier extends TreeClassifier {
+public class AllNodesClassifier extends TreeClassifier {
 
-    public RootsClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> script) {
+    public AllNodesClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> script) {
         super(src, dst, rawMappings, script);
     }
 
-    public RootsClassifier(TreeContext src, TreeContext dst, Matcher m) {
+    public AllNodesClassifier(TreeContext src, TreeContext dst, Matcher m) {
         super(src, dst, m);
     }
 
     @Override
     public void classify() {
         for (Action a: actions) {
-            if (a instanceof Delete) srcDelTrees.add(a.getNode());
+            if (a instanceof Delete)
+                srcDelTrees.add(a.getNode());
+            else if (a instanceof TreeDelete) {
+                srcDelTrees.add(a.getNode());
+                srcDelTrees.addAll(a.getNode().getDescendants());
+            }
             else if (a instanceof Insert)
                 dstAddTrees.add(a.getNode());
+            else if (a instanceof TreeInsert) {
+                dstAddTrees.add(a.getNode());
+                dstAddTrees.addAll(a.getNode().getDescendants());
+            }
             else if (a instanceof Update) {
                 srcUpdTrees.add(a.getNode());
                 dstUpdTrees.add(mappings.getDst(a.getNode()));
-            } else if (a instanceof Move) {
+            }
+            else if (a instanceof Move) {
                 srcMvTrees.add(a.getNode());
+                srcMvTrees.addAll(a.getNode().getDescendants());
                 dstMvTrees.add(mappings.getDst(a.getNode()));
+                dstMvTrees.addAll(mappings.getDst(a.getNode()).getDescendants());
             }
         }
     }

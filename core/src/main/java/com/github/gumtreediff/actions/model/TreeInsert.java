@@ -14,38 +14,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
- * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
 package com.github.gumtreediff.actions.model;
 
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
 
-public class Delete extends Action {
+public class TreeInsert extends TreeAddition {
 
-    public Delete(ITree node) {
-        super(node);
+    public TreeInsert(ITree node, ITree parent, int pos) {
+        super(node, parent, pos);
     }
 
     @Override
     public String getName() {
-        return "delete-node";
+        return "insert-tree";
     }
-
-    @Override
-    public String toString() {
-        return String.format("===\n%s\n---\n%s\n===",
-                getName(),
-                node.toShortString());
-    }
-
-    @Override
-    public String format(TreeContext ctx) {
-        return String.format("===\n%s\n---\n%s\n===",
-                getName(),
-                node.toPrettyString(ctx));
-    }
-
 }

@@ -34,7 +34,7 @@ public class Update extends Action {
 
     @Override
     public String getName() {
-        return "UPD";
+        return "update-node";
     }
 
     public String getValue() {
@@ -43,12 +43,20 @@ public class Update extends Action {
 
     @Override
     public String toString() {
-        return getName() + " " + node.toShortString() + " from " + node.getLabel() + " to " + value;
+        return String.format("===\n%s\n---\n%s\nreplace %s by %s",
+                getName(),
+                node.toShortString(),
+                node.getLabel(),
+                getValue());
     }
 
     @Override
     public String format(TreeContext ctx) {
-        return getName() + " " + node.toPrettyString(ctx) + " from " + node.getLabel() + " to " + value;
+        return String.format("===\n%s\n---\n%s\nreplace %s by %s",
+                getName(),
+                node.toPrettyString(ctx),
+                node.getLabel(),
+                getValue());
     }
 
 }

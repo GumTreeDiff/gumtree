@@ -22,9 +22,19 @@
 		<tree type="0" label="c" />
 		<tree type="0" label="d" />
 	</tree>
-	<tree type="1" label="h">
+	<tree type="0" label="h">
 		<tree type="0" label="e">
 			<tree type="0" label="y" />
+		</tree>
+	</tree>
+	<tree type="0" label="x">
+		<tree type="0" label="w" />
+	</tree>
+	<tree type="0" label="j">
+		<tree type="0" label="u">
+			<tree type="0" label="v">
+				<tree type="0" label="k" />
+			</tree>
 		</tree>
 	</tree>
 </tree>

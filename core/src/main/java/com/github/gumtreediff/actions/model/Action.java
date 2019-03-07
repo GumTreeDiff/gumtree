@@ -42,9 +42,6 @@ public abstract class Action {
 
     public abstract String getName();
 
-    @Override
-    public abstract String toString();
-
     public abstract String format(TreeContext ctx);
 
 }

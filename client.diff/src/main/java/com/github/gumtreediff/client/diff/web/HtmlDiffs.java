@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client.diff.web;
 
-import com.github.gumtreediff.actions.RootAndLeavesClassifier;
+import com.github.gumtreediff.actions.OnlyRootsClassifier;
 import com.github.gumtreediff.actions.TreeClassifier;
 import com.github.gumtreediff.utils.StringAlgorithms;
 import com.github.gumtreediff.matchers.MappingStore;
@@ -70,7 +70,7 @@ public final class HtmlDiffs {
     }
 
     public void produce() throws IOException {
-        TreeClassifier c = new RootAndLeavesClassifier(src, dst, matcher);
+        TreeClassifier c = new OnlyRootsClassifier(src, dst, matcher);
         TIntIntMap mappingIds = new TIntIntHashMap();
 
         int uId = 1;
