@@ -100,10 +100,10 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     description = 'Generates an aggregate report from all subprojects'
     dependsOn(jacocoProjects.test)
 
-    additionalSourceDirs = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-    classDirectories = files(jacocoProjects.sourceSets.main.output)
-    executionData = files(jacocoProjects.jacocoTestReport.executionData)
+    getAdditionalSourceDirs().from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+    getSourceDirectories().from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+    getClassDirectories().from = files(jacocoProjects.sourceSets.main.output)
+    getExecutionData().from = files(jacocoProjects.jacocoTestReport.executionData)
 
     reports {
         html.enabled = true
