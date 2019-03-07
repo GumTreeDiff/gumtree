@@ -4,6 +4,7 @@
 * Fix position problem in javaparser generator
 * Fix method invocation handling in jdt generator
 * Webdiff command is compatible with -g option
+* TreeInsert and TreeDelete actions added
 
 ## v2.1.2
 * New dockerfile to run GumTree
