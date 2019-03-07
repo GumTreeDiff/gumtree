@@ -256,6 +256,15 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
+    public String toPrettyTreeString(TreeContext ctx) {
+        StringBuilder b = new StringBuilder();
+        for (ITree t : TreeUtils.preOrder(this))
+            b.append(indent(t) + t.toPrettyString(ctx) + "\n");
+        return b.toString();
+    }
+
+
+    @Override
     public String toPrettyString(TreeContext ctx) {
         if (hasLabel())
             return ctx.getTypeLabel(this) + ": " + getLabel();

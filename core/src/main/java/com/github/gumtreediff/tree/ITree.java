@@ -223,6 +223,8 @@ public interface ITree {
 
     String toTreeString();
 
+    String toPrettyTreeString(TreeContext ctx);
+
     String toPrettyString(TreeContext ctx);
 
     Object getMetadata(String key);
