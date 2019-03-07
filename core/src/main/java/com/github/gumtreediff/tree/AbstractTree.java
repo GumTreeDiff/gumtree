@@ -116,7 +116,7 @@ public abstract class AbstractTree implements ITree {
 
     private String indent(ITree t) {
         StringBuilder b = new StringBuilder();
-        for (int i = 0; i < t.getDepth(); i++)
+        for (int i = this.getDepth(); i < t.getDepth(); i++)
             b.append("\t");
         return b.toString();
     }
