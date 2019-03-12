@@ -54,6 +54,41 @@ public final class StringAlgorithms {
         return indexes;
     }
 
+    public static List<int[]> longestCommonSubsequenceWithWords(String s0, String s1) {
+        String[] srcWords = s0.split("\\s+");
+        String[] dstWords = s1.split("\\s+");
+        int[][] lengths = new int[srcWords.length + 1][dstWords.length + 1];
+        for (int i = 0; i < srcWords.length; i++)
+            for (int j = 0; j < dstWords.length; j++)
+                if (srcWords[i].equals(dstWords[j]))
+                    lengths[i + 1][j + 1] = lengths[i][j] + 1;
+                else
+                    lengths[i + 1][j + 1] = Math.max(lengths[i + 1][j], lengths[i][j + 1]);
+
+        List<int[]> indexes = new ArrayList<>();
+
+        for (int x = s0.length(), y = s1.length(); x != 0 && y != 0; ) {
+            if (lengths[x][y] == lengths[x - 1][y]) x--;
+            else if (lengths[x][y] == lengths[x][y - 1]) y--;
+            else {
+                indexes.add(new int[] {x - 1, y - 1});
+                x--;
+                y--;
+            }
+        }
+        Collections.reverse(indexes);
+
+        List<int[]> fixedIndexes = new ArrayList<>();
+        for (int[] index :  indexes) {
+            int curPos = 0;
+            String w = srcWords[index[0]];
+            fixedIndexes.add(new int[] { s0.indexOf(w, curPos), s1.indexOf(curPos) });
+            curPos += w.length();
+        }
+
+        return fixedIndexes;
+    }
+
     public static List<int[]> hunks(String s0, String s1) {
         List<int[]> lcs = lcss(s0 ,s1);
         List<int[]> hunks = new ArrayList<int[]>();
