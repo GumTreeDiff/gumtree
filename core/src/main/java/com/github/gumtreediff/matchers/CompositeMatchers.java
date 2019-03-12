@@ -23,11 +23,8 @@ package com.github.gumtreediff.matchers;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.*;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.CliqueSubtreeMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
 import com.github.gumtreediff.tree.ITree;
 
 public class CompositeMatchers {
@@ -39,6 +36,17 @@ public class CompositeMatchers {
             super(src, dst, store, new Matcher[]{
                     new GreedySubtreeMatcher(src, dst, store),
                     new GreedyBottomUpMatcher(src, dst, store)
+            });
+        }
+    }
+
+    @Register(id = "gumtree-simple", defaultMatcher = true, priority = Registry.Priority.HIGH)
+    public static class SimpleGumtree extends CompositeMatcher {
+
+        public SimpleGumtree(ITree src, ITree dst, MappingStore store) {
+            super(src, dst, store, new Matcher[]{
+                    new GreedySubtreeMatcher(src, dst, store),
+                    new SimpleBottomUpMatcher(src, dst, store)
             });
         }
     }
