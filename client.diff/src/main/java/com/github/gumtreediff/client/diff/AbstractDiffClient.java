@@ -47,13 +47,13 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
         @Override
         public Option[] values() {
             return new Option[] {
-                    new Option("-m", "The qualified name of the class implementing the matcher.", 1) {
+                    new Option("-m", "Matcher to use.", 1) {
                         @Override
                         protected void process(String name, String[] args) {
                             matcher = args[0];
                         }
                     },
-                    new Option("-g", "Preferred generator to use (can be used more than once).", 1) {
+                    new Option("-g", "Generator to use.", 1) {
                         @Override
                         protected void process(String name, String[] args) {
                             generator = args[0];
