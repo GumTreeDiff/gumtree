@@ -27,4 +27,8 @@ public class SyntaxException extends RuntimeException {
         super(String.format("Syntax error on source code %s using generator %s", r, g));
     }
 
+    public SyntaxException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

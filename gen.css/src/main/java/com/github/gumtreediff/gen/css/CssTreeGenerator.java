@@ -59,7 +59,7 @@ public class CssTreeGenerator extends TreeGenerator {
             CSSVisitor.visitCSS(sheet, v);
             return v.getTreeContext();
         } catch (ParseException e) {
-            throw new SyntaxException(this, r);
+            throw new SyntaxException(e.getMessage(), e);
         }
     }
 }

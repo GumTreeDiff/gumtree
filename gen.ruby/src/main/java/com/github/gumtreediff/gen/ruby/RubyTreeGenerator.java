@@ -46,8 +46,11 @@ public class RubyTreeGenerator extends TreeGenerator {
             Node n = p.parse("<code>", r, config);
             return extractTreeContext(new TreeContext(), n, null);
         }
-        catch (org.jrubyparser.lexer.SyntaxException e ) {
-            throw new SyntaxException(this, r);
+        catch (org.jrubyparser.lexer.SyntaxException e) {
+            throw new SyntaxException(
+                    String.format("Syntax exception: %s at %s", e.getMessage(), e.getPosition()),
+                    e
+            );
         }
     }
 
