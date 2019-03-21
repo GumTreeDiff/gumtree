@@ -55,6 +55,8 @@ public class ActionGenerator {
 
     private TIntObjectMap<ITree> cpySrcTrees;
 
+    public static boolean REMOVE_MOVES_AND_UPDATES = Boolean.valueOf(System.getProperty("gt.ag.nomove", "false"));
+
     public ActionGenerator(ITree src, ITree dst, MappingStore mappings) {
         this.origSrc = src;
         this.newSrc = this.origSrc.deepCopy();
@@ -141,9 +143,43 @@ public class ActionGenerator {
             if (!newMappings.hasSrc(w))
                 actions.add(new Delete(origSrcTrees.get(w.getId())));
 
+
+        if (REMOVE_MOVES_AND_UPDATES)
+            actions = removeMovesAndUpdates();
+
         simplify();
 
         return actions;
+    }
+
+    private List<Action> removeMovesAndUpdates() {
+        List<Action> actionsCpy = new ArrayList<>(actions.size());
+        for (Action a: actions) {
+            if (a instanceof Update) {
+                Update u = (Update) a;
+                ITree src = cpySrcTrees.get(a.getNode().getId());
+                ITree dst = origMappings.getDst(src);
+                actionsCpy.add(new Insert(
+                        dst,
+                        dst.getParent(),
+                        dst.positionInParent()));
+                actionsCpy.add(new Delete(origSrcTrees.get(u.getNode().getId())));
+            }
+            else if (a instanceof Move) {
+                Move m = (Move) a;
+                ITree src = cpySrcTrees.get(a.getNode().getId());
+                ITree dst = origMappings.getDst(src);
+                actionsCpy.add(new TreeInsert(
+                        dst,
+                        dst.getParent(),
+                        m.getPosition()));
+                actionsCpy.add(new TreeDelete(origSrcTrees.get(m.getNode().getId())));
+            }
+            else
+                actionsCpy.add(a);
+        }
+
+        return actionsCpy;
     }
 
     private void simplify() {

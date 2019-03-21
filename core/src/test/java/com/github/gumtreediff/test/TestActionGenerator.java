@@ -116,6 +116,31 @@ public class TestActionGenerator {
     }
 
     @Test
+    public void testWithActionExampleNoMove() {
+        ActionGenerator.REMOVE_MOVES_AND_UPDATES = true;
+        Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
+        ITree src = trees.getFirst().getRoot();
+        ITree dst = trees.getSecond().getRoot();
+        MappingStore ms = new MappingStore();
+        ms.link(src, dst);
+        ms.link(src.getChild(1), dst.getChild(0));
+        ms.link(src.getChild(1).getChild(0), dst.getChild(0).getChild(0));
+        ms.link(src.getChild(1).getChild(1), dst.getChild(0).getChild(1));
+        ms.link(src.getChild(0), dst.getChild(1).getChild(0));
+        ms.link(src.getChild(0).getChild(0), dst.getChild(1).getChild(0).getChild(0));
+        ms.link(src.getChild(4), dst.getChild(3));
+        ms.link(src.getChild(4).getChild(0), dst.getChild(3).getChild(0).getChild(0).getChild(0));
+
+        ActionGenerator ag = new ActionGenerator(src, dst, ms);
+        ag.generate();
+
+        for (Action a: ag.getActions())
+            System.out.println(a.format(trees.getFirst()));
+
+        List<Action> actions = ag.getActions();
+    }
+
+    @Test
     public void testWithZsCustomExample() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsCustomPair();
         ITree src = trees.getFirst().getRoot();
@@ -130,7 +155,6 @@ public class TestActionGenerator {
         ActionGenerator ag = new ActionGenerator(src, dst, ms);
         ag.generate();
         List<Action> actions = ag.getActions();
-        System.out.println(actions);
     }
 
 }

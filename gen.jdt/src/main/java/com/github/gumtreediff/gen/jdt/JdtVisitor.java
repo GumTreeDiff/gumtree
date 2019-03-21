@@ -26,6 +26,15 @@ import com.github.gumtreediff.tree.ITree;
 import org.eclipse.jdt.core.dom.*;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
+
+    private static final int INFIX_EXPRESSION_OPERATOR = -1;
+    private static final int METHOD_INVOCATION_RECEIVER = -2;
+    private static final int METHOD_INVOCATION_ARGUMENTS = -3;
+    private static final int TYPE_DECLARATION_KIND = -4;
+    private static final int ASSIGNMENT_OPERATOR = -5;
+    private static final int PREFIX_EXPRESSION_OPERATOR = -6;
+    private static final int POSTFIX_EXPRESSION_OPERATOR = -7;
+
     public JdtVisitor() {
         super();
     }
@@ -37,7 +46,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
 
     public boolean visit(MethodInvocation i)  {
         if (i.getExpression() !=  null) {
-            push(-12, "MethodInvocationReceiver", "", i.getExpression().getStartPosition(),
+            push(METHOD_INVOCATION_RECEIVER, "MethodInvocationReceiver", "", i.getExpression().getStartPosition(),
                     i.getExpression().getLength());
             i.getExpression().accept(this);
             popNode();
@@ -48,7 +57,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             int startPos = ((ASTNode) i.arguments().get(0)).getStartPosition();
             int length = ((ASTNode) i.arguments().get(i.arguments().size() - 1)).getStartPosition()
                     + ((ASTNode) i.arguments().get(i.arguments().size() - 1)).getLength() -  startPos;
-            push(-14, "MethodInvocationArguments","", startPos , length);
+            push(METHOD_INVOCATION_ARGUMENTS, "MethodInvocationArguments","", startPos , length);
             for (Object o : i.arguments()) {
                 ((ASTNode) o).accept(this);
 
@@ -59,22 +68,26 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     protected String getLabel(ASTNode n) {
-        if (n instanceof Name) return ((Name) n).getFullyQualifiedName();
-        if (n instanceof Type) return n.toString();
-        if (n instanceof Modifier) return n.toString();
-        if (n instanceof StringLiteral) return ((StringLiteral) n).getEscapedValue();
-        if (n instanceof NumberLiteral) return ((NumberLiteral) n).getToken();
-        if (n instanceof CharacterLiteral) return ((CharacterLiteral) n).getEscapedValue();
-        if (n instanceof BooleanLiteral) return ((BooleanLiteral) n).toString();
-        if (n instanceof InfixExpression) return ((InfixExpression) n).getOperator().toString();
-        if (n instanceof PrefixExpression) return ((PrefixExpression) n).getOperator().toString();
-        if (n instanceof PostfixExpression) return ((PostfixExpression) n).getOperator().toString();
-        if (n instanceof Assignment) return ((Assignment) n).getOperator().toString();
-        if (n instanceof TextElement) return n.toString();
-        if (n instanceof TagElement) return ((TagElement) n).getTagName();
-        //if (n instanceof TypeDeclaration) return ((TypeDeclaration) n).isInterface() ? "interface" : "class";
-
-        return "";
+        if (n instanceof Name)
+            return ((Name) n).getFullyQualifiedName();
+        else if (n instanceof Type)
+            return n.toString();
+        else if (n instanceof Modifier)
+            return n.toString();
+        else if (n instanceof StringLiteral)
+            return ((StringLiteral) n).getEscapedValue();
+        else if (n instanceof NumberLiteral)
+            return ((NumberLiteral) n).getToken();
+        else if (n instanceof CharacterLiteral)
+            return ((CharacterLiteral) n).getEscapedValue();
+        else if (n instanceof BooleanLiteral)
+            return ((BooleanLiteral) n).toString();
+        else if (n instanceof TextElement)
+            return n.toString();
+        else if (n instanceof TagElement)
+            return ((TagElement) n).getTagName();
+        else
+            return "";
     }
 
     @Override
@@ -95,23 +108,78 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     @Override
     public void postVisit(ASTNode n) {
         if (n instanceof TypeDeclaration)
-            handleTypeDeclerationPostVisit((TypeDeclaration) n);
+            handlePostVisit((TypeDeclaration) n);
+        else if (n instanceof InfixExpression)
+            handlePostVisit((InfixExpression) n);
+        else if (n instanceof Assignment)
+            handlePostVisit((Assignment)  n);
+        else if (n instanceof PrefixExpression)
+            handlePostVisit((PrefixExpression) n);
+        else if (n instanceof PostfixExpression)
+            handlePostVisit((PostfixExpression) n);
 
         popNode();
     }
 
-    private void handleTypeDeclerationPostVisit(TypeDeclaration d) {
+    private void handlePostVisit(PostfixExpression e) {
+        ITree t = this.trees.peek();
+        String label  = e.getOperator().toString();
+        int pos = t.getPos() + e.toString().indexOf(label);
+        ITree s = context.createTree(POSTFIX_EXPRESSION_OPERATOR, label, "PostfixExpressionOperator");
+        s.setPos(pos);
+        s.setLength(label.length());
+        t.getChildren().add(1, s);
+        s.setParent(t);
+    }
+
+    private void handlePostVisit(PrefixExpression e) {
+        ITree t = this.trees.peek();
+        String label  = e.getOperator().toString();
+        int pos = t.getPos() + e.toString().indexOf(label);
+        ITree s = context.createTree(PREFIX_EXPRESSION_OPERATOR, label, "PrefixExpressionOperator");
+        s.setPos(pos);
+        s.setLength(label.length());
+        t.getChildren().add(0, s);
+        s.setParent(t);
+    }
+
+    private void handlePostVisit(Assignment a) {
+        ITree t = this.trees.peek();
+        String label  = a.getOperator().toString();
+        int pos = t.getPos() + a.toString().indexOf(label);
+        ITree s = context.createTree(ASSIGNMENT_OPERATOR, label, "AssignmentOperator");
+        s.setPos(pos);
+        s.setLength(label.length());
+        t.getChildren().add(1, s);
+        s.setParent(t);
+    }
+
+    private void handlePostVisit(InfixExpression e) {
+        ITree t = this.trees.peek();
+        String label  = e.getOperator().toString();
+        int pos = t.getPos() + e.toString().indexOf(label);
+        ITree s = context.createTree(INFIX_EXPRESSION_OPERATOR, label, "InfixExpressionOperator");
+        s.setPos(pos);
+        s.setLength(label.length());
+        t.getChildren().add(1, s);
+        s.setParent(t);
+    }
+
+    private void handlePostVisit(TypeDeclaration d) {
+        ITree t = this.trees.peek();
         String label = "class";
         if (d.isInterface())
             label = "interface";
-
-        int pos = d.toString().indexOf(label);
-
-        ITree t = this.trees.peek();
-        ITree s = context.createTree(-21, label, "TypeDeclarationKind");
+        int pos = t.getPos() + d.toString().indexOf(label);
+        ITree s = context.createTree(TYPE_DECLARATION_KIND, label, "TypeDeclarationKind");
         s.setPos(pos);
         s.setLength(label.length());
-        t.getChildren().add(t.getChildren().size() - 1, s);
+        int index = 0;
+        for (ITree c : t.getChildren()) {
+            if (!context.getTypeLabel(c).equals("SimpleName"))
+                index++;
+        }
+        t.getChildren().add(index - 1, s);
         s.setParent(t);
     }
 }
