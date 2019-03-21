@@ -22,6 +22,7 @@
 package com.github.gumtreediff.gen.jdt;
 
 
+import com.github.gumtreediff.tree.ITree;
 import org.eclipse.jdt.core.dom.*;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
@@ -71,9 +72,14 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         if (n instanceof Assignment) return ((Assignment) n).getOperator().toString();
         if (n instanceof TextElement) return n.toString();
         if (n instanceof TagElement) return ((TagElement) n).getTagName();
-        if (n instanceof TypeDeclaration) return ((TypeDeclaration) n).isInterface() ? "interface" : "class";
+        //if (n instanceof TypeDeclaration) return ((TypeDeclaration) n).isInterface() ? "interface" : "class";
 
         return "";
+    }
+
+    @Override
+    public boolean visit(TypeDeclaration d) {
+        return true;
     }
 
     @Override
@@ -88,6 +94,24 @@ public class JdtVisitor  extends AbstractJdtVisitor {
 
     @Override
     public void postVisit(ASTNode n) {
+        if (n instanceof TypeDeclaration)
+            handleTypeDeclerationPostVisit((TypeDeclaration) n);
+
         popNode();
+    }
+
+    private void handleTypeDeclerationPostVisit(TypeDeclaration d) {
+        String label = "class";
+        if (d.isInterface())
+            label = "interface";
+
+        int pos = d.toString().indexOf(label);
+
+        ITree t = this.trees.peek();
+        ITree s = context.createTree(-21, label, "TypeDeclarationKind");
+        s.setPos(pos);
+        s.setLength(label.length());
+        t.getChildren().add(t.getChildren().size() - 1, s);
+        s.setParent(t);
     }
 }

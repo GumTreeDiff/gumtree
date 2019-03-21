@@ -83,4 +83,13 @@ public class TestJdtGenerator {
         TreeContext ct = new JdtTreeGenerator().generateFromString(input);
     }
 
+    @Test
+    public void testTypeDefinition() throws IOException {
+        String input1 = "public class Foo {}";
+        String input2 = "public interface Foo {}";
+        TreeContext ct1 = new JdtTreeGenerator().generateFromString(input1);
+        TreeContext ct2 = new JdtTreeGenerator().generateFromString(input2);
+        assertTrue(!ct1.getRoot().toStaticHashString().equals(ct2.getRoot().toStaticHashString()));
+    }
+
 }
