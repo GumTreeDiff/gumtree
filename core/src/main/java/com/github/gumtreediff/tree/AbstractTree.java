@@ -266,9 +266,11 @@ public abstract class AbstractTree implements ITree {
     @Override
     public String toPrettyString(TreeContext ctx) {
         if (hasLabel())
-            return ctx.getTypeLabel(this) + ": " + getLabel();
+            return String.format("%s: %s [%d,%d]",
+                    ctx.getTypeLabel(this), getLabel(), getPos(), getEndPos());
         else
-            return ctx.getTypeLabel(this);
+            return String.format("%s [%d,%d]",
+                    ctx.getTypeLabel(this), getPos(), getEndPos());
     }
 
     public static class FakeTree extends AbstractTree {
