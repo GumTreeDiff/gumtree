@@ -17,9 +17,10 @@
  * Copyright 2016 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtree.dist.diggit;
+package com.github.gumtree.dist;
 
 import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
+import com.github.gumtreediff.gen.ruby.RubyTreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeValidator;
 
@@ -30,6 +31,8 @@ import java.nio.file.Paths;
 public class DiggitFolderProcessor {
 
     private static String inputDir;
+
+    private static int processedFilePairs = 0;
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
@@ -50,21 +53,30 @@ public class DiggitFolderProcessor {
                 processFilePair(name, dst);
             }
         });
+        System.out.println(String.format("Processed %d file pairs.", processedFilePairs));
     }
 
     public static void processFilePair(String src, String dst) {
-        System.out.println(src);
-        TreeContext tcSrc = getTreeContext(src);
-        new TreeValidator().validate(tcSrc);
-        System.out.println(dst);
-        TreeContext tcDst = getTreeContext(dst);
-        new TreeValidator().validate(tcDst);
+        processedFilePairs++;
+        try {
+            System.out.println(src);
+            TreeContext tcSrc = getTreeContext(src);
+            new TreeValidator().validate(tcSrc);
+            System.out.println(dst);
+            TreeContext tcDst = getTreeContext(dst);
+            new TreeValidator().validate(tcDst);
+        }
+        catch (TreeValidator.TreeException e) {
+            System.err.println(e);
+        }
     }
 
     private static TreeContext getTreeContext(String file) {
         try {
             if (file.endsWith(".java"))
                 return new JdtTreeGenerator().generateFromFile(file);
+            else if (file.endsWith(".rb"))
+                return new RubyTreeGenerator().generateFromFile(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
