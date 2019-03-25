@@ -20,8 +20,11 @@
 
 package com.github.gumtreediff.tree;
 
+import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.hash.HashUtils;
 
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.*;
 
 public abstract class AbstractTree implements ITree {
@@ -257,10 +260,20 @@ public abstract class AbstractTree implements ITree {
 
     @Override
     public String toPrettyTreeString(TreeContext ctx) {
-        StringBuilder b = new StringBuilder();
-        for (ITree t : TreeUtils.preOrder(this))
-            b.append(indent(t) + t.toPrettyString(ctx) + "\n");
-        return b.toString();
+        StringWriter w = new StringWriter();
+        try {
+            new TreeIoUtils.TreeSerializer(ctx, this) {
+                @Override
+                protected TreeIoUtils.TreeFormatter newFormatter(
+                        TreeContext ctx, TreeContext.MetadataSerializers serializer, Writer writer)
+                {
+                    return new TreeIoUtils.TextFormatter(writer, ctx);
+                }
+            }.writeTo(w);
+            return w.toString();
+        } catch (Exception e) {
+            return e.getLocalizedMessage();
+        }
     }
 
     @Override

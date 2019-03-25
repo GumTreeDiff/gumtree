@@ -61,7 +61,11 @@ public final class TreeIoUtils {
     }
 
     public static TreeSerializer toXml(TreeContext ctx) {
-        return new TreeSerializer(ctx) {
+        return toXml(ctx, ctx.getRoot());
+    }
+
+    public static TreeSerializer toXml(TreeContext ctx, ITree root) {
+        return new TreeSerializer(ctx, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
                     throws XMLStreamException {
@@ -71,7 +75,11 @@ public final class TreeIoUtils {
     }
 
     public static TreeSerializer toAnnotatedXml(TreeContext ctx, boolean isSrc, MappingStore m) {
-        return new TreeSerializer(ctx) {
+        return toAnnotatedXml(ctx, ctx.getRoot(), isSrc, m);
+    }
+
+    public static TreeSerializer toAnnotatedXml(TreeContext ctx, ITree root, boolean isSrc, MappingStore m) {
+        return new TreeSerializer(ctx, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
                     throws XMLStreamException {
@@ -81,7 +89,11 @@ public final class TreeIoUtils {
     }
 
     public static TreeSerializer toCompactXml(TreeContext ctx) {
-        return new TreeSerializer(ctx) {
+        return toCompactXml(ctx, ctx.getRoot());
+    }
+
+    public static TreeSerializer toCompactXml(TreeContext ctx, ITree root) {
+        return new TreeSerializer(ctx, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
                     throws Exception {
@@ -91,31 +103,53 @@ public final class TreeIoUtils {
     }
 
     public static TreeSerializer toJson(TreeContext ctx) {
-        return new TreeSerializer(ctx) {
+        return toJson(ctx, ctx.getRoot());
+    }
+
+    public static TreeSerializer toJson(TreeContext ctx, ITree root) {
+        return new TreeSerializer(ctx, root) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
-                    throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) {
                 return new JsonFormatter(writer, ctx);
             }
         };
     }
 
     public static TreeSerializer toLisp(TreeContext ctx) {
-        return new TreeSerializer(ctx) {
+        return toLisp(ctx, ctx.getRoot());
+    }
+
+    public static TreeSerializer toLisp(TreeContext ctx, ITree tree) {
+        return new TreeSerializer(ctx, tree) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
-                    throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) {
                 return new LispFormatter(writer, ctx);
             }
         };
     }
 
     public static TreeSerializer toDot(TreeContext ctx) {
-        return new TreeSerializer(ctx) {
+        return toDot(ctx, ctx.getRoot());
+    }
+
+    public static TreeSerializer toDot(TreeContext ctx, ITree root) {
+        return new TreeSerializer(ctx, root) {
             @Override
-            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer)
-                    throws Exception {
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) {
                 return new DotFormatter(writer, ctx);
+            }
+        };
+    }
+
+    public static TreeSerializer toText(TreeContext ctx) {
+        return toText(ctx, ctx.getRoot());
+    }
+
+    public static TreeSerializer toText(TreeContext ctx, ITree root) {
+        return new TreeSerializer(ctx, root) {
+            @Override
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) {
+                return new TextFormatter(writer, ctx);
             }
         };
     }
@@ -156,22 +190,23 @@ public final class TreeIoUtils {
     }
 
     public abstract static class TreeSerializer extends AbstractSerializer {
-        final TreeContext context;
+        private final TreeContext context;
+        private final ITree root;
         final MetadataSerializers serializers = new MetadataSerializers();
 
-        public TreeSerializer(TreeContext ctx) {
+        public TreeSerializer(TreeContext ctx, ITree root) {
             context = ctx;
+            this.root = root;
             serializers.addAll(ctx.getSerializers());
         }
 
         protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
                 throws Exception;
 
-        @Override
         public void writeTo(Writer writer) throws Exception {
             TreeFormatter formatter = newFormatter(context, serializers, writer);
             try {
-                writeTree(formatter, context.getRoot());
+                writeTree(formatter, root);
             } finally {
                 formatter.close();
             }
@@ -603,6 +638,32 @@ public final class TreeIoUtils {
         @Override
         public void close() throws IOException {
             writer.close();
+        }
+    }
+
+    public static class TextFormatter extends TreeFormatterAdapter {
+        protected final Writer writer;
+        int level = 0;
+
+        public TextFormatter(Writer w, TreeContext ctx) {
+            super(ctx);
+            writer = w;
+        }
+
+        @Override
+        public void startTree(ITree tree) throws IOException {
+            if (level != 0)
+                writer.write("\n");
+            for (int i = 0; i < level; i ++)
+                writer.write("    ");
+            level ++;
+
+            writer.write(tree.toPrettyString(context));
+        }
+
+        @Override
+        public void endTree(ITree tree) throws IOException {
+            level --;
         }
     }
 

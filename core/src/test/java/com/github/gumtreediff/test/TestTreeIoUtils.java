@@ -64,6 +64,29 @@ public class TestTreeIoUtils {
     }
 
     @Test
+    public void testPrintTextTree() throws Exception {
+        TreeContext tc = new TreeContext();
+        ITree a = tc.createTree(0, "a", "type0");
+        tc.setRoot(a);
+
+        ITree b = tc.createTree(1, "b", "type1");
+        b.setParentAndUpdateChildren(a);
+        ITree c = tc.createTree(3, "c", "type3");
+        c.setParentAndUpdateChildren(b);
+        ITree d = tc.createTree(3, "d", "type3");
+        d.setParentAndUpdateChildren(b);
+        ITree e = tc.createTree(2, null, "type2");
+        e.setParentAndUpdateChildren(a);
+        // Refresh metrics is called because it is automatically called in fromXML
+        tc.validate();
+
+        System.out.println("*****************");
+        System.out.println(a.toPrettyTreeString(tc));
+        System.out.println("-----------------");
+        System.out.println(b.toPrettyTreeString(tc));
+    }
+
+    @Test
     public void testLoadBigTree() {
         ITree big = TreeLoader.getDummyBig();
         assertEquals("a", big.getLabel());
