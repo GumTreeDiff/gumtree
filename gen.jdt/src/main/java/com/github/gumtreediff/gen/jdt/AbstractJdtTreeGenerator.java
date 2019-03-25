@@ -26,6 +26,8 @@ import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.ToolFactory;
+import org.eclipse.jdt.core.compiler.IScanner;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -63,8 +65,11 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         pOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_11);
         pOptions.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
         parser.setCompilerOptions(pOptions);
-        parser.setSource(readerToCharArray(r));
-        AbstractJdtVisitor v = createVisitor();
+        char[] source = readerToCharArray(r);
+        parser.setSource(source);
+        IScanner scanner = ToolFactory.createScanner(false, false, false, false);
+        scanner.setSource(source);
+        AbstractJdtVisitor v = createVisitor(scanner);
         ASTNode node = parser.createAST(null);
         if ((node.getFlags() & ASTNode.MALFORMED) != 0) // bitwise flag to check if the node has a syntax error
             throw new SyntaxException(this, r);
@@ -72,5 +77,5 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         return v.getTreeContext();
     }
 
-    protected abstract AbstractJdtVisitor createVisitor();
+    protected abstract AbstractJdtVisitor createVisitor(IScanner scanner);
 }

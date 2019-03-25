@@ -22,8 +22,14 @@
 package com.github.gumtreediff.gen.jdt;
 
 
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.ITree;
+import org.eclipse.jdt.core.compiler.IScanner;
+import org.eclipse.jdt.core.compiler.ITerminalSymbols;
+import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jdt.core.dom.*;
+
+import java.lang.reflect.Array;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
 
@@ -35,8 +41,11 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private static final int PREFIX_EXPRESSION_OPERATOR = -6;
     private static final int POSTFIX_EXPRESSION_OPERATOR = -7;
 
-    public JdtVisitor() {
+    private IScanner scanner;
+
+    public JdtVisitor(IScanner scanner) {
         super();
+        this.scanner = scanner;
     }
 
     @Override
@@ -70,7 +79,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     protected String getLabel(ASTNode n) {
         if (n instanceof Name)
             return ((Name) n).getFullyQualifiedName();
-        else if (n instanceof Type)
+        else if (n instanceof PrimitiveType)
             return n.toString();
         else if (n instanceof Modifier)
             return n.toString();
@@ -84,8 +93,6 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             return ((BooleanLiteral) n).toString();
         else if (n instanceof TextElement)
             return n.toString();
-        else if (n instanceof TagElement)
-            return ((TagElement) n).getTagName();
         else
             return "";
     }
@@ -117,69 +124,203 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             handlePostVisit((PrefixExpression) n);
         else if (n instanceof PostfixExpression)
             handlePostVisit((PostfixExpression) n);
+        else if (n instanceof ArrayCreation)
+            handlePostVisit((ArrayCreation) n);
 
         popNode();
+    }
+
+    private void handlePostVisit(ArrayCreation c) {
+        ITree t = this.trees.peek();
+        if (t.getChild(1).getType() == ArrayInitializer.ARRAY_INITIALIZER)
+            return;
+        for (int i = 1; i < t.getChild(0).getChildren().size(); i++) {
+            ITree dim = t.getChild(0).getChild(i);
+            if (t.getChildren().size() < 2)
+                break;
+            ITree expr = t.getChildren().remove(1);
+            dim.addChild(expr);
+        }
     }
 
     private void handlePostVisit(PostfixExpression e) {
         ITree t = this.trees.peek();
         String label  = e.getOperator().toString();
-        int pos = t.getPos() + e.toString().indexOf(label);
         ITree s = context.createTree(POSTFIX_EXPRESSION_OPERATOR, label, "PostfixExpressionOperator");
-        s.setPos(pos);
-        s.setLength(label.length());
+        PosAndLength pl = searchPostfixExpressionPosition(e);
+        s.setPos(pl.pos);
+        s.setLength(pl.length);
         t.getChildren().add(1, s);
         s.setParent(t);
+    }
+
+    private PosAndLength searchPostfixExpressionPosition(PostfixExpression e) {
+        ITree t = this.trees.peek();
+        scanner.resetTo(t.getChild(0).getEndPos(), t.getEndPos());
+        int pos = 0;
+        int length = 0;
+        try {
+            int token = scanner.getNextToken();
+            while (token != ITerminalSymbols.TokenNameEOF) {
+                pos = scanner.getCurrentTokenStartPosition();
+                length = pos - scanner.getCurrentTokenEndPosition() + 1;
+                break;
+            }
+        }
+        catch (InvalidInputException ex) {
+            throw new SyntaxException(ex.getMessage(), ex);
+        }
+
+        return new PosAndLength(pos, length);
     }
 
     private void handlePostVisit(PrefixExpression e) {
         ITree t = this.trees.peek();
         String label  = e.getOperator().toString();
-        int pos = t.getPos() + e.toString().indexOf(label);
         ITree s = context.createTree(PREFIX_EXPRESSION_OPERATOR, label, "PrefixExpressionOperator");
-        s.setPos(pos);
-        s.setLength(label.length());
+        PosAndLength pl = searchPrefixExpressionPosition(e);
+        s.setPos(pl.pos);
+        s.setLength(pl.length);
         t.getChildren().add(0, s);
         s.setParent(t);
+    }
+
+    private PosAndLength searchPrefixExpressionPosition(PrefixExpression e) {
+        ITree t = this.trees.peek();
+        scanner.resetTo(t.getPos(), t.getChild(0).getPos());
+        int pos = 0;
+        int length = 0;
+        try {
+            int token = scanner.getNextToken();
+            while (token != ITerminalSymbols.TokenNameEOF) {
+                pos = scanner.getCurrentTokenStartPosition();
+                length = pos - scanner.getCurrentTokenEndPosition() + 1;;
+                break;
+            }
+        }
+        catch (InvalidInputException ex) {
+            throw new SyntaxException(ex.getMessage(), ex);
+        }
+
+        return new PosAndLength(pos, length);
     }
 
     private void handlePostVisit(Assignment a) {
         ITree t = this.trees.peek();
         String label  = a.getOperator().toString();
-        int pos = t.getPos() + a.toString().indexOf(label);
         ITree s = context.createTree(ASSIGNMENT_OPERATOR, label, "AssignmentOperator");
-        s.setPos(pos);
-        s.setLength(label.length());
+        PosAndLength pl = searchAssignmentOperatorPosition(a);
+        s.setPos(pl.pos);
+        s.setLength(pl.length);
         t.getChildren().add(1, s);
         s.setParent(t);
+    }
+
+    private PosAndLength searchAssignmentOperatorPosition(Assignment a) {
+        ITree t = this.trees.peek();
+        scanner.resetTo(t.getChild(0).getEndPos(), t.getChild(1).getPos());
+        int pos = 0;
+        int length = 0;
+        try {
+            int token = scanner.getNextToken();
+            while (token != ITerminalSymbols.TokenNameEOF) {
+                pos = scanner.getCurrentTokenStartPosition();
+                length = pos - scanner.getCurrentTokenEndPosition() + 1;
+                break;
+            }
+        }
+        catch (InvalidInputException ex) {
+            throw new SyntaxException(ex.getMessage(), ex);
+        }
+
+        return new PosAndLength(pos, length);
     }
 
     private void handlePostVisit(InfixExpression e) {
         ITree t = this.trees.peek();
         String label  = e.getOperator().toString();
-        int pos = t.getPos() + e.toString().indexOf(label);
         ITree s = context.createTree(INFIX_EXPRESSION_OPERATOR, label, "InfixExpressionOperator");
-        s.setPos(pos);
-        s.setLength(label.length());
+        PosAndLength pl = searchInfixOperatorPosition(e);
+        s.setPos(pl.pos);
+        s.setLength(pl.length);
         t.getChildren().add(1, s);
         s.setParent(t);
     }
 
-    private void handlePostVisit(TypeDeclaration d) {
+    private PosAndLength searchInfixOperatorPosition(InfixExpression e) {
         ITree t = this.trees.peek();
+        scanner.resetTo(t.getChild(0).getEndPos(), t.getChild(1).getPos());
+        int pos = 0;
+        int length = 0;
+        try {
+            int token = scanner.getNextToken();
+            while (token != ITerminalSymbols.TokenNameEOF) {
+                pos = scanner.getCurrentTokenStartPosition();
+                length = pos - scanner.getCurrentTokenEndPosition() + 1;
+                break;
+            }
+        }
+        catch (InvalidInputException ex) {
+            throw new SyntaxException(ex.getMessage(), ex);
+        }
+
+        return new PosAndLength(pos, length);
+    }
+
+    private void handlePostVisit(TypeDeclaration d) {
         String label = "class";
         if (d.isInterface())
             label = "interface";
-        int pos = t.getPos() + d.toString().indexOf(label);
+
         ITree s = context.createTree(TYPE_DECLARATION_KIND, label, "TypeDeclarationKind");
-        s.setPos(pos);
-        s.setLength(label.length());
+        PosAndLength pl = searchTypeDeclarationKindPosition(d);
+        s.setPos(pl.pos);
+        s.setLength(pl.length);
         int index = 0;
+        ITree t = this.trees.peek();
         for (ITree c : t.getChildren()) {
-            if (!context.getTypeLabel(c).equals("SimpleName"))
+            if (c.getType() != SimpleName.SIMPLE_NAME)
                 index++;
+            else
+                break;
         }
-        t.getChildren().add(index - 1, s);
-        s.setParent(t);
+        t.insertChild(s, index);
     }
+
+    private PosAndLength searchTypeDeclarationKindPosition(TypeDeclaration d) {
+        int start = d.getStartPosition();
+        int end = start + d.getLength();
+        scanner.resetTo(start, end);
+        int pos = 0;
+        int length = 0;
+        try {
+            int prevToken = -1;
+            while (true) {
+                int token = scanner.getNextToken();
+                if ((token == ITerminalSymbols.TokenNameclass || token == ITerminalSymbols.TokenNameinterface)
+                        && prevToken != ITerminalSymbols.TokenNameDOT) {
+                    pos = scanner.getCurrentTokenStartPosition();
+                    length = pos - scanner.getCurrentTokenEndPosition() + 1;
+                    break;
+                }
+                prevToken = token;
+            }
+        }
+        catch (InvalidInputException e) {
+            throw new SyntaxException(e.getMessage(), e);
+        }
+        return new PosAndLength(pos, length);
+    }
+
+    public static class PosAndLength {
+        public int pos;
+
+        public int length;
+
+        public PosAndLength(int pos, int length) {
+            this.pos = pos;
+            this.length = length;
+        }
+    }
+
 }

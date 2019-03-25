@@ -120,4 +120,15 @@ public class TestJdtGenerator {
         System.out.println(ct.getRoot().toPrettyTreeString(ct));
     }
 
+    @Test
+    public void testArrayCreation() throws IOException {
+        String input1 = "class Foo { void foo() { int[][] t = new int[12][]; } }";
+        TreeContext ct1 = new JdtTreeGenerator().generateFromString(input1);
+        System.out.println(ct1.getRoot().toPrettyTreeString(ct1));
+
+        String input2 = "class Foo { void foo() { int[][] t = new int[][12]; } }";
+        TreeContext ct2 = new JdtTreeGenerator().generateFromString(input2);
+        System.out.println(ct2.getRoot().toPrettyTreeString(ct2));
+    }
+
 }
