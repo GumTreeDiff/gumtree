@@ -21,7 +21,10 @@ package com.github.gumtreediff.tree;
 
 public class TreeValidator {
 
+    private TreeContext context;
+
     public void validate(TreeContext context) {
+        this.context = context;
         validate(context.getRoot());
     }
 
@@ -29,26 +32,44 @@ public class TreeValidator {
         for (ITree t : root.preOrder()) {
             if (!t.isLeaf()) {
                 if (!t.getLabel().equals(ITree.NO_LABEL))
-                    throw new RuntimeException("Inner node with label");
+                    throw new TreeException(String.format("%s : %s\n%s",
+                            "Inner node with label",
+                            t.toPrettyString(context),
+                            t.toPrettyTreeString(context)));
 
                 if (t.getChildren().get(0).getPos() < t.getPos())
-                    throw new RuntimeException("Children begin position before node begin position");
+                    throw new TreeException(String.format("%s : %s\n%s",
+                            "Children begin position before node begin position",
+                            t.getChildren().get(0).toPrettyString(context),
+                            t.toPrettyTreeString(context)));
 
                 if (t.getChildren().get(t.getChildren().size() - 1).getEndPos() > t.getEndPos())
-                    throw new RuntimeException("Children end position after node end position");
+                    throw new TreeException(String.format("%s : %s\n%s",
+                            "Children end position after node end position",
+                            t.getChildren().get(t.getChildren().size() - 1).toPrettyString(context),
+                            t.toPrettyTreeString(context)));
 
                 if (t.getChildren().size() > 1) {
                     for (int i = 1; i < t.getChildren().size(); i++) {
                         ITree b = t.getChild(i -  1);
                         ITree c = t.getChild(i);
                         if (c.getPos() < b.getEndPos())
-                            throw new RuntimeException("Sibling begin position before node end position.");
+                            throw new TreeException(String.format("%s : %s\n%s",
+                                    "Sibling begin position before node end position",
+                                    c.toPrettyString(context),
+                                    t.toPrettyTreeString(context)));
                     }
                 }
             }
 
         }
 
+    }
+
+    public static class TreeException extends RuntimeException {
+        public TreeException(String message) {
+            super(message);
+        }
     }
 
 }
