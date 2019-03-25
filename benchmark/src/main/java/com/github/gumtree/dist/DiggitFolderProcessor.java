@@ -20,6 +20,7 @@
 package com.github.gumtree.dist;
 
 import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
+import com.github.gumtreediff.gen.js.RhinoTreeGenerator;
 import com.github.gumtreediff.gen.ruby.RubyTreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeValidator;
@@ -77,6 +78,8 @@ public class DiggitFolderProcessor {
                 return new JdtTreeGenerator().generateFromFile(file);
             else if (file.endsWith(".rb"))
                 return new RubyTreeGenerator().generateFromFile(file);
+            else if (file.endsWith(".js"))
+                return new RhinoTreeGenerator().generateFromFile(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
