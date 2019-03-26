@@ -117,13 +117,6 @@ public abstract class AbstractTree implements ITree {
         return TreeUtils.preOrder(this);
     }
 
-    private String indent(ITree t) {
-        StringBuilder b = new StringBuilder();
-        for (int i = this.getDepth(); i < t.getDepth(); i++)
-            b.append("\t");
-        return b.toString();
-    }
-
     @Override
     public boolean isIsomorphicTo(ITree tree) {
         if (this.getHash() != tree.getHash())
@@ -251,32 +244,6 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public String toTreeString() {
-        StringBuilder b = new StringBuilder();
-        for (ITree t : TreeUtils.preOrder(this))
-            b.append(indent(t) + t.toShortString() + "\n");
-        return b.toString();
-    }
-
-    @Override
-    public String toPrettyTreeString(TreeContext ctx) {
-        StringWriter w = new StringWriter();
-        try {
-            new TreeIoUtils.TreeSerializer(ctx, this) {
-                @Override
-                protected TreeIoUtils.TreeFormatter newFormatter(
-                        TreeContext ctx, TreeContext.MetadataSerializers serializer, Writer writer)
-                {
-                    return new TreeIoUtils.TextFormatter(writer, ctx);
-                }
-            }.writeTo(w);
-            return w.toString();
-        } catch (Exception e) {
-            return e.getLocalizedMessage();
-        }
-    }
-
-    @Override
     public String toPrettyString(TreeContext ctx) {
         if (hasLabel())
             return String.format("%s: %s [%d,%d]",
@@ -284,6 +251,16 @@ public abstract class AbstractTree implements ITree {
         else
             return String.format("%s [%d,%d]",
                     ctx.getTypeLabel(this), getPos(), getEndPos());
+    }
+
+    @Override
+    public String toTreeString() {
+        return TreeIoUtils.toShortText(this).toString();
+    }
+
+    @Override
+    public String toPrettyTreeString(TreeContext ctx) {
+        return TreeIoUtils.toText(ctx, this).toString();
     }
 
     public static class FakeTree extends AbstractTree {

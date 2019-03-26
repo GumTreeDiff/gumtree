@@ -48,7 +48,8 @@ import java.util.regex.Pattern;
 
 public final class TreeIoUtils {
 
-    private TreeIoUtils() {} // Forbids instantiation of TreeIOUtils
+    private TreeIoUtils() {
+    } // Forbids instantiation of TreeIOUtils
 
     public static TreeGenerator fromXml() {
         return new XmlInternalGenerator();
@@ -150,6 +151,15 @@ public final class TreeIoUtils {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) {
                 return new TextFormatter(writer, ctx);
+            }
+        };
+    }
+
+    public static TreeSerializer toShortText(ITree root) {
+        return new TreeSerializer(null, root) {
+            @Override
+            protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) {
+                return new ShortTextFormatter(writer, ctx);
             }
         };
     }
@@ -263,7 +273,7 @@ public final class TreeIoUtils {
         }
 
         public TreeSerializer export(String... name) {
-            for (String n: name)
+            for (String n : name)
                 serializers.add(n, Object::toString);
             return this;
         }
@@ -320,28 +330,36 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void startSerialization() throws Exception { }
+        public void startSerialization() throws Exception {
+        }
 
         @Override
-        public void endProlog() throws Exception { }
+        public void endProlog() throws Exception {
+        }
 
         @Override
-        public void startTree(ITree tree) throws Exception { }
+        public void startTree(ITree tree) throws Exception {
+        }
 
         @Override
-        public void endTreeProlog(ITree tree) throws Exception { }
+        public void endTreeProlog(ITree tree) throws Exception {
+        }
 
         @Override
-        public void endTree(ITree tree) throws Exception { }
+        public void endTree(ITree tree) throws Exception {
+        }
 
         @Override
-        public void stopSerialization() throws Exception { }
+        public void stopSerialization() throws Exception {
+        }
 
         @Override
-        public void close() throws Exception { }
+        public void close() throws Exception {
+        }
 
         @Override
-        public void serializeAttribute(String name, String value) throws Exception { }
+        public void serializeAttribute(String name, String value) throws Exception {
+        }
     }
 
     abstract static class AbsXmlFormatter extends TreeFormatterAdapter {
@@ -507,15 +525,15 @@ public final class TreeIoUtils {
         public void startTree(ITree tree) throws IOException {
             if (!tree.isRoot())
                 writer.write("\n");
-            for (int i = 0; i < level; i ++)
+            for (int i = 0; i < level; i++)
                 writer.write("    ");
-            level ++;
+            level++;
 
             String pos = (ITree.NO_VALUE == tree.getPos() ? "" : String.format("(%d %d)",
                     tree.getPos(), tree.getLength()));
 
             writer.write(String.format("(%d %s %s (%s",
-                            tree.getType(), protect(context.getTypeLabel(tree)), protect(tree.getLabel()), pos));
+                    tree.getType(), protect(context.getTypeLabel(tree)), protect(tree.getLabel()), pos));
         }
 
         @Override
@@ -540,7 +558,7 @@ public final class TreeIoUtils {
         @Override
         public void endTree(ITree tree) throws IOException {
             writer.write(")");
-            level --;
+            level--;
         }
 
         @Override
@@ -641,29 +659,58 @@ public final class TreeIoUtils {
         }
     }
 
-    public static class TextFormatter extends TreeFormatterAdapter {
+    public abstract static class AbstractTextFormatter extends TreeFormatterAdapter {
         protected final Writer writer;
         int level = 0;
 
-        public TextFormatter(Writer w, TreeContext ctx) {
+        public AbstractTextFormatter(Writer w, TreeContext ctx) {
             super(ctx);
             writer = w;
         }
 
-        @Override
-        public void startTree(ITree tree) throws IOException {
-            if (level != 0)
-                writer.write("\n");
-            for (int i = 0; i < level; i ++)
-                writer.write("    ");
-            level ++;
-
-            writer.write(tree.toPrettyString(context));
+        protected void indent(int level, String prefix) throws IOException {
+            for (int i = 0; i < level; i++)
+                writer.write(prefix);
         }
 
         @Override
+        public void startTree(ITree tree) throws IOException {
+            if (level != 0) writer.write("\n");
+            indent(level, "    ");
+            level++;
+
+            writeTree(tree);
+        }
+
+        protected abstract void writeTree(ITree tree) throws IOException;
+
+        @Override
         public void endTree(ITree tree) throws IOException {
-            level --;
+            level--;
+        }
+    }
+
+    public static class TextFormatter extends AbstractTextFormatter {
+
+        public TextFormatter(Writer w, TreeContext ctx) {
+            super(w, ctx);
+        }
+
+        @Override
+        public void writeTree(ITree tree) throws IOException {
+            writer.write(tree.toPrettyString(context));
+        }
+    }
+
+    public static class ShortTextFormatter extends AbstractTextFormatter {
+
+        public ShortTextFormatter(Writer w, TreeContext ctx) {
+            super(w, ctx);
+        }
+
+        @Override
+        public void writeTree(ITree tree) throws IOException {
+            writer.write(tree.toShortString());
         }
     }
 
@@ -721,7 +768,7 @@ public final class TreeIoUtils {
                             t.setParentAndUpdateChildren(trees.peekFirst());
                         trees.addFirst(t);
                     } else if (e instanceof EndElement) {
-                        if (!((EndElement)e).getName().getLocalPart().equals("tree")) // FIXME need to deal with options
+                        if (!((EndElement) e).getName().getLocalPart().equals("tree")) // FIXME need to deal with option
                             continue;
                         trees.removeFirst();
                     }
