@@ -20,22 +20,27 @@
 
 package com.github.gumtreediff.gen.antlr3.json;
 
+import static com.github.gumtreediff.tree.Symbol.symbol;
 import static org.junit.Assert.*;
 
 import java.io.InputStreamReader;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
 public class TestJsonParsing {
+
+    public static final Symbol ARRAY = symbol(JSONParser.tokenNames[JSONParser.ARRAY]);
 
     @Test
     public void testJsonParsing() throws Exception {
         TreeContext tc = new AntlrJsonTreeGenerator().generateFromReader(
                 new InputStreamReader(getClass().getResourceAsStream("/sample.json"), "UTF-8"));
         ITree tree = tc.getRoot();
-        assertEquals(4, tree.getType());
+
+        assertEquals(ARRAY, tree.getType());
         assertEquals(37, tree.getSize());
     }
 

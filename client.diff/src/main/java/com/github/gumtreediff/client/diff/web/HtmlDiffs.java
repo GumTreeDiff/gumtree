@@ -167,7 +167,7 @@ public final class HtmlDiffs {
 
     private static String tooltip(TreeContext ctx, ITree t) {
         return (t.getParent() != null)
-                ? ctx.getTypeLabel(t.getParent()) + "/" + ctx.getTypeLabel(t) : ctx.getTypeLabel(t);
+                ? t.getParent().getType() + "/" + t.getType() : t.getType().toString();
     }
 
     private static void append(char cr, Writer w) throws IOException {

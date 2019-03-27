@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.gumtreediff.gen.SyntaxException;
+import com.github.gumtreediff.tree.Symbol;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.CommonTree;
 
@@ -86,22 +87,22 @@ public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Par
 
     protected abstract String[] getTokenNames();
 
-    protected String getTokenName(int tokenType) {
+    protected Symbol getTokenName(int tokenType) {
         String[] names = getTokenNames();
         if (tokenType < 0 || tokenType >= names.length)
-            return ITree.NO_LABEL;
-        return names[tokenType];
+            return Symbol.NO_SYMBOL;
+        return Symbol.symbol(names[tokenType]);
     }
 
     @SuppressWarnings("unchecked")
     protected void buildTree(TreeContext context, CommonTree ct) {
         int type = ct.getType();
-        String tokenName = getTokenName(type);
+        Symbol tokenName = getTokenName(type);
         String label = ct.getText();
-        if (tokenName.equals(label))
+        if (tokenName.name.equals(label)) // FIXME
             label = ITree.NO_LABEL;
 
-        ITree t = context.createTree(type, label, tokenName);
+        ITree t = context.createTree(tokenName, label);
 
         int start = startPos(ct.getTokenStartIndex());
         int stop = stopPos(ct.getTokenStopIndex());

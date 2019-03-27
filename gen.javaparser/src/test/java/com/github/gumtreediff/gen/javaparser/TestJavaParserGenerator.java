@@ -19,49 +19,59 @@
 
 package com.github.gumtreediff.gen.javaparser;
 
+import static com.github.gumtreediff.tree.Symbol.symbol;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.util.Arrays;
+import java.util.Collection;
 
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.io.TreeIoUtils;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
 import com.github.gumtreediff.tree.ITree;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+@RunWith(Parameterized.class)
 public class TestJavaParserGenerator {
+
+    private final String input;
+    private final Symbol expectedRootSymbol;
+    private final int expectedSize;
+
+    public static final Symbol COMPILATION_UNIT = symbol("CompilationUnit");
+
+    public TestJavaParserGenerator(Symbol expectedRootSymbol, int expectedSize, String input) {
+        this.expectedRootSymbol = expectedRootSymbol;
+        this.expectedSize = expectedSize;
+        this.input = input;
+    }
+
+    @Parameterized.Parameters
+    public static Collection provideStringAndExpectedLength() {
+        return Arrays.asList(new Object[][] {
+                {COMPILATION_UNIT, 9,
+                        "public class Foo { public int foo; }"},
+                {COMPILATION_UNIT, 37, // Java 5
+                        "public class Foo<A> { public List<A> foo; public void foo() "
+                                + "{ for (A f : foo) { System.out.println(f); } } }"},
+                {COMPILATION_UNIT, 23, // Java 8
+                        "public class Foo {\n"
+                                + "\tpublic void foo() {\n"
+                                + "\t\tnew ArrayList<Object>().stream().forEach(a -> {});\n"
+                                + "\t}\n"
+                                + "}"},
+        });
+    }
+
     @Test
     public void testSimpleSyntax() throws IOException {
-        String input = "public class Foo { public int foo; }";
         ITree tree = new JavaParserGenerator().generateFromString(input).getRoot();
-        assertEquals(-1795686804, tree.getType());
-        assertEquals(9, tree.getSize());
-    }
-
-    @Test
-    public void testJava5Syntax() throws IOException {
-        String input = "public class Foo<A> { public List<A> foo; public void foo() "
-                + "{ for (A f : foo) { System.out.println(f); } } }";
-        TreeContext context = new JavaParserGenerator().generateFromString(input);
-        ITree tree = context.getRoot();
-        assertEquals(-1795686804, tree.getType());
-        assertEquals(37, tree.getSize());
-    }
-
-    @Test
-    public void testJava8Syntax() throws IOException {
-        String input = "public class Foo {\n"
-                + "\tpublic void foo() {\n"
-                + "\t\tnew ArrayList<Object>().stream().forEach(a -> {});\n"
-                + "\t}\n"
-                + "}";
-        TreeContext ctx = new JavaParserGenerator().generateFromString(input);
-        ITree tree = ctx.getRoot();
-        assertEquals(-1795686804, tree.getType());
-        assertEquals(23, tree.getSize());
+        assertEquals(expectedRootSymbol, tree.getType());
+        assertEquals(expectedSize, tree.getSize());
     }
 
     @Test(expected = SyntaxException.class)

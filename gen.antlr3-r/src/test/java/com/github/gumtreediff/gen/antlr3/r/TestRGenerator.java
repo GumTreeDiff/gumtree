@@ -21,21 +21,45 @@
 package com.github.gumtreediff.gen.antlr3.r;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-import com.github.gumtreediff.tree.ITree;
+import static com.github.gumtreediff.tree.Symbol.symbol;
 import static org.junit.Assert.*;
 
+@RunWith(Parameterized.class)
 public class TestRGenerator {
 
+    public static final Symbol SEQUENCE = symbol(RParser.tokenNames[RParser.SEQUENCE]);
+
+    private final String input;
+    private final Symbol expectedRootSymbol;
+    private final int expectedSize;
+
+    public TestRGenerator(String input, Symbol expectedRootSymbol, int expectedSize) {
+        this.input = input;
+        this.expectedRootSymbol = expectedRootSymbol;
+        this.expectedSize = expectedSize;
+    }
+
+    @Parameterized.Parameters
+    public static Collection provideStringAndExpectedLength() {
+        return Arrays.asList(new Object[][] {
+                { "v <- c(1,2,3);", SEQUENCE, 8 },
+        });
+    }
+
     @Test
-    public void testSimpleSyntax() throws IOException {
-        String input = "v <- c(1,2,3);";
+    public void testSimpleParse() throws IOException {
         ITree t = new RTreeGenerator().generateFromString(input).getRoot();
-        assertEquals(67, t.getType());
-        assertEquals(8, t.getSize());
+        assertEquals(expectedRootSymbol, t.getType());
+        assertEquals(expectedSize, t.getSize());
     }
 
 }

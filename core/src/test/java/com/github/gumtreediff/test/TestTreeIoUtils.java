@@ -22,6 +22,7 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
@@ -30,23 +31,29 @@ import java.util.ListIterator;
 
 import java.io.ByteArrayOutputStream;
 
+import static com.github.gumtreediff.tree.Symbol.symbol;
 import static org.junit.Assert.*;
 
 public class TestTreeIoUtils {
 
+    private static final Symbol TYPE_0 = symbol("TYPE_0");
+    private static final Symbol TYPE_1 = symbol("TYPE_1");
+    private static final Symbol TYPE_2 = symbol("TYPE_2");
+    private static final Symbol TYPE_3 = symbol("TYPE_3");
+
     @Test
     public void testSerializeTree() throws Exception {
         TreeContext tc = new TreeContext();
-        ITree a = tc.createTree(0, "a", "type0");
+        ITree a = tc.createTree(TYPE_0, "a");
         tc.setRoot(a);
 
-        ITree b = tc.createTree(1, "b", null);
+        ITree b = tc.createTree(TYPE_1, "b");
         b.setParentAndUpdateChildren(a);
-        ITree c = tc.createTree(3, "c", null);
+        ITree c = tc.createTree(TYPE_3, "c");
         c.setParentAndUpdateChildren(b);
-        ITree d = tc.createTree(3, "d", null);
+        ITree d = tc.createTree(TYPE_3, "d");
         d.setParentAndUpdateChildren(b);
-        ITree e = tc.createTree(2, null, null);
+        ITree e = tc.createTree(TYPE_2, null);
         e.setParentAndUpdateChildren(a);
         // Refresh metrics is called because it is automatically called in fromXML
         tc.validate();
@@ -58,24 +65,23 @@ public class TestTreeIoUtils {
         ITree ca = tca.getRoot();
 
         assertTrue(a.isIsomorphicTo(ca));
-        assertTrue(ca.getType() == 0);
-        assertTrue(tc.getTypeLabel(ca).equals("type0"));
+        assertTrue(ca.getType() == TYPE_0);
         assertTrue(ca.getLabel().equals("a"));
     }
 
     @Test
     public void testPrintTextTree() throws Exception {
         TreeContext tc = new TreeContext();
-        ITree a = tc.createTree(0, "a", "type0");
+        ITree a = tc.createTree(TYPE_0, "a");
         tc.setRoot(a);
 
-        ITree b = tc.createTree(1, "b", "type1");
+        ITree b = tc.createTree(TYPE_1, "b");
         b.setParentAndUpdateChildren(a);
-        ITree c = tc.createTree(3, "c", "type3");
+        ITree c = tc.createTree(TYPE_3, "c");
         c.setParentAndUpdateChildren(b);
-        ITree d = tc.createTree(3, "d", "type3");
+        ITree d = tc.createTree(TYPE_3, "d");
         d.setParentAndUpdateChildren(b);
-        ITree e = tc.createTree(2, null, "type2");
+        ITree e = tc.createTree(TYPE_2, null);
         e.setParentAndUpdateChildren(a);
         // Refresh metrics is called because it is automatically called in fromXML
         tc.validate();

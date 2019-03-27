@@ -25,6 +25,7 @@ import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 import org.jrubyparser.CompatVersion;
 import org.jrubyparser.Parser;
@@ -33,6 +34,8 @@ import org.jrubyparser.parser.ParserConfiguration;
 
 import java.io.IOException;
 import java.io.Reader;
+
+import static com.github.gumtreediff.tree.Symbol.symbol;
 
 @Register(id = "ruby-jruby", accept = {"\\.ruby$", "\\.rb$"}, priority = Registry.Priority.MAXIMUM)
 public class RubyTreeGenerator extends TreeGenerator {
@@ -55,10 +58,9 @@ public class RubyTreeGenerator extends TreeGenerator {
     }
 
     private TreeContext extractTreeContext(TreeContext treeContext, Node node, ITree parent) {
-        String typeLabel = node.getNodeType().name();
-        int type = node.getNodeType().ordinal() + 1;
+        Symbol type = symbol(node.getNodeType().name());
         String label = extractLabel(node);
-        ITree tree = treeContext.createTree(type, label, typeLabel);
+        ITree tree = treeContext.createTree(type, label);
         if (parent == null)
             treeContext.setRoot(tree);
         else

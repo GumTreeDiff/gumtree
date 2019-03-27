@@ -31,8 +31,6 @@ import java.util.regex.Pattern;
 
 public class TreeContext {
 
-    private Map<Integer, String> typeLabels = new HashMap<>();
-
     private final Map<String, Object> metadata = new HashMap<>();
 
     private final MetadataSerializers serializers = new MetadataSerializers();
@@ -52,37 +50,7 @@ public class TreeContext {
         return root;
     }
 
-    public String getTypeLabel(ITree tree) {
-        return getTypeLabel(tree.getType());
-    }
-
-    public String getTypeLabel(int type) {
-        String tl = typeLabels.get(type);
-        if (tl == null)
-            tl = Integer.toString(type);
-        return tl;
-    }
-
-    protected void registerTypeLabel(int type, String name) {
-        if (name == null || name.equals(ITree.NO_LABEL))
-            return;
-        String typeLabel = typeLabels.get(type);
-        if (typeLabel == null)
-            typeLabels.put(type, name);
-        else if (!typeLabel.equals(name))
-            throw new RuntimeException(String.format("Redefining type %d: '%s' with '%s'", type, typeLabel, name));
-    }
-
-    public void importTypeLabels(TreeContext ctx) {
-        for (Map.Entry<Integer, String> label : ctx.typeLabels.entrySet()) {
-            if (!typeLabels.containsValue(label.getValue())) {
-                typeLabels.put(label.getKey(), label.getValue());
-            }
-        }
-    }
-
-    public ITree createTree(int type, String label, String typeLabel) {
-        registerTypeLabel(type, typeLabel);
+    public ITree createTree(Symbol type, String label) {
         return new Tree(type, label);
     }
 
@@ -93,10 +61,6 @@ public class TreeContext {
     public void validate() {
         root.refresh();
         TreeUtils.postOrderNumbering(root);
-    }
-
-    public boolean hasLabelFor(int type) {
-        return typeLabels.containsKey(type);
     }
 
     /**
@@ -186,7 +150,6 @@ public class TreeContext {
     public TreeContext deriveTree() { // FIXME Should we refactor TreeContext class to allow shared metadata etc ...
         TreeContext newContext = new TreeContext();
         newContext.setRoot(getRoot().deepCopy());
-        newContext.typeLabels = typeLabels;
         newContext.metadata.putAll(metadata);
         newContext.serializers.addAll(serializers);
         return newContext;

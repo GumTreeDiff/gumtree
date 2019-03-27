@@ -47,7 +47,6 @@ public class DiffView implements Renderable {
         this.fDst = fDst;
         Matcher matcher = Matchers.getInstance().getMatcher(src.getRoot(), dst.getRoot());
         matcher.match();
-        src.importTypeLabels(dst);
         diffs = new HtmlDiffs(fSrc, fDst, src, dst, matcher);
         diffs.produce();
     }

@@ -24,7 +24,9 @@ import java.io.IOException;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.io.TreeIoUtils;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.junit.Test;
 
 import com.github.gumtreediff.tree.ITree;
@@ -32,11 +34,13 @@ import static org.junit.Assert.*;
 
 public class TestJdtGenerator {
 
+    private static final Symbol COMPILATION_UNIT = AbstractJdtVisitor.nodeAsSymbol(ASTNode.COMPILATION_UNIT);
+
     @Test
     public void testSimpleSyntax() throws IOException {
         String input = "public class Foo { public int foo; }";
         ITree tree = new JdtTreeGenerator().generateFromString(input).getRoot();
-        assertEquals(15, tree.getType());
+        assertEquals(COMPILATION_UNIT, tree.getType());
         assertEquals(10, tree.getSize());
     }
 
@@ -45,7 +49,7 @@ public class TestJdtGenerator {
         String input = "public class Foo<A> { public List<A> foo; public void foo() "
                 + "{ for (A f : foo) { System.out.println(f); } } }";
         ITree tree = new JdtTreeGenerator().generateFromString(input).getRoot();
-        assertEquals(15, tree.getType());
+        assertEquals(COMPILATION_UNIT, tree.getType());
         assertEquals(35, tree.getSize());
     }
 
@@ -73,7 +77,7 @@ public class TestJdtGenerator {
     public void testJava8Syntax() throws IOException {
         String input = "public class Foo { public void foo(){ new ArrayList<Object>().stream().forEach(a -> {}); } }";
         ITree tree = new JdtTreeGenerator().generateFromString(input).getRoot();
-        assertEquals(15, tree.getType());
+        assertEquals(COMPILATION_UNIT, tree.getType());
         assertEquals(28, tree.getSize());
     }
 

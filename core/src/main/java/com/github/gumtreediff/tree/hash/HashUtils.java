@@ -38,7 +38,7 @@ public class HashUtils {
     }
 
     public static int standardHash(ITree t) {
-        return Integer.hashCode(t.getType()) + HashUtils.BASE * t.getLabel().hashCode();
+        return Integer.hashCode(t.getType().name.hashCode()) + HashUtils.BASE * t.getLabel().hashCode();
     }
 
     public static String inSeed(ITree t) {

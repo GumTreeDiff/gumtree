@@ -24,6 +24,7 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeContext.MetadataSerializers;
 import com.github.gumtreediff.tree.TreeContext.MetadataUnserializers;
@@ -44,7 +45,10 @@ import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Stack;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.github.gumtreediff.tree.Symbol.symbol;
 
 public final class TreeIoUtils {
 
@@ -420,10 +424,8 @@ public final class TreeIoUtils {
         @Override
         public void startTree(ITree tree) throws XMLStreamException {
             writer.writeStartElement("tree");
-            writer.writeAttribute("type", Integer.toString(tree.getType()));
+            writer.writeAttribute("type", tree.getType().toString());
             if (tree.hasLabel()) writer.writeAttribute("label", tree.getLabel());
-            if (context.hasLabelFor(tree.getType()))
-                writer.writeAttribute("typeLabel", context.getTypeLabel(tree.getType()));
             if (ITree.NO_VALUE != tree.getPos()) {
                 writer.writeAttribute("pos", Integer.toString(tree.getPos()));
                 writer.writeAttribute("length", Integer.toString(tree.getLength()));
@@ -492,9 +494,9 @@ public final class TreeIoUtils {
         @Override
         public void startTree(ITree tree) throws XMLStreamException {
             if (tree.getChildren().size() == 0)
-                writer.writeEmptyElement(context.getTypeLabel(tree.getType()));
+                writer.writeEmptyElement(tree.getType().toString());
             else
-                writer.writeStartElement(context.getTypeLabel(tree.getType()));
+                writer.writeStartElement(tree.getType().toString());
             if (tree.hasLabel())
                 writer.writeAttribute("label", tree.getLabel());
         }
@@ -508,7 +510,8 @@ public final class TreeIoUtils {
 
     static class LispFormatter extends TreeFormatterAdapter {
         protected final Writer writer;
-        protected final Pattern replacer = Pattern.compile("[\\\\\"]");
+        protected final Pattern protectChars = Pattern.compile("[ ,\"]");
+        protected final Pattern escapeChars = Pattern.compile("[\\\\\"]");
         int level = 0;
 
         protected LispFormatter(Writer w, TreeContext ctx) {
@@ -532,8 +535,8 @@ public final class TreeIoUtils {
             String pos = (ITree.NO_VALUE == tree.getPos() ? "" : String.format("(%d %d)",
                     tree.getPos(), tree.getLength()));
 
-            writer.write(String.format("(%d %s %s (%s",
-                    tree.getType(), protect(context.getTypeLabel(tree)), protect(tree.getLabel()), pos));
+            writer.write(String.format("(%s %s (%s",
+                    protect(tree.getType().toString()), protect(tree.getLabel()), pos));
         }
 
         @Override
@@ -552,7 +555,11 @@ public final class TreeIoUtils {
         }
 
         protected String protect(String val) {
-            return String.format("\"%s\"", replacer.matcher(val).replaceAll("\\\\$0"));
+            String text = escapeChars.matcher(val).replaceAll("\\\\$0");
+            if (protectChars.matcher(text).find() || val.isEmpty())
+                return String.format("\"%s\"", text);
+            else
+                return text;
         }
 
         @Override
@@ -611,9 +618,8 @@ public final class TreeIoUtils {
         @Override
         public void startTree(ITree t) throws IOException {
             writer.beginObject();
-            writer.name("type").value(Integer.toString(t.getType()));
+            writer.name("type").value(t.getType().toString());
             if (t.hasLabel()) writer.name("label").value(t.getLabel());
-            if (context.hasLabelFor(t.getType())) writer.name("typeLabel").value(context.getTypeLabel(t.getType()));
             if (ITree.NO_VALUE != t.getPos()) {
                 writer.name("pos").value(Integer.toString(t.getPos()));
                 writer.name("length").value(Integer.toString(t.getLength()));
@@ -725,7 +731,6 @@ public final class TreeIoUtils {
         private static final QName TYPE = new QName("type");
 
         private static final QName LABEL = new QName("label");
-        private static final QName TYPE_LABEL = new QName("typeLabel");
         private static final String POS = "pos";
         private static final String LENGTH = "length";
 
@@ -751,10 +756,9 @@ public final class TreeIoUtils {
                         StartElement s = (StartElement) e;
                         if (!s.getName().getLocalPart().equals("tree")) // FIXME need to deal with options
                             continue;
-                        int type = Integer.parseInt(s.getAttributeByName(TYPE).getValue());
+                        Symbol type = symbol(s.getAttributeByName(TYPE).getValue());
 
-                        ITree t = context.createTree(type,
-                                labelForAttribute(s, LABEL), labelForAttribute(s, TYPE_LABEL));
+                        ITree t = context.createTree(type, labelForAttribute(s, LABEL));
                         // FIXME this iterator has no type, due to the API. We have to cast it later
                         Iterator<?> it = s.getAttributes();
                         while (it.hasNext()) {

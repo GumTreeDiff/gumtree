@@ -23,8 +23,6 @@ package com.github.gumtreediff.tree;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.hash.HashUtils;
 
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.*;
 
 public abstract class AbstractTree implements ITree {
@@ -240,17 +238,17 @@ public abstract class AbstractTree implements ITree {
 
     @Override
     public String toShortString() {
-        return String.format("%d%s%s", getType(), SEPARATE_SYMBOL, getLabel());
+        return String.format("%s%s%s", getType(), SEPARATE_SYMBOL, getLabel());
     }
 
     @Override
     public String toPrettyString(TreeContext ctx) {
         if (hasLabel())
             return String.format("%s: %s [%d,%d]",
-                    ctx.getTypeLabel(this), getLabel(), getPos(), getEndPos());
+                    getType(), getLabel(), getPos(), getEndPos());
         else
             return String.format("%s [%d,%d]",
-                    ctx.getTypeLabel(this), getPos(), getEndPos());
+                    getType(), getPos(), getEndPos());
     }
 
     @Override
@@ -314,8 +312,8 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public int getType() {
-            return -1;
+        public Symbol getType() {
+            return Symbol.NO_SYMBOL;
         }
 
         @Override
@@ -344,7 +342,7 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public void setType(int type) {
+        public void setType(Symbol type) {
             throw unsupportedOperation();
         }
 

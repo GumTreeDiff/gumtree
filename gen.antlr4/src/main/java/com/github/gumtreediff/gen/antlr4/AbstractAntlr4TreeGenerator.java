@@ -28,6 +28,7 @@ import java.util.Map;
 
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -35,6 +36,8 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+
+import static com.github.gumtreediff.tree.Symbol.symbol;
 
 public abstract class AbstractAntlr4TreeGenerator extends TreeGenerator {
 
@@ -65,25 +68,36 @@ public abstract class AbstractAntlr4TreeGenerator extends TreeGenerator {
 
     protected abstract String[] getTokenNames();
 
-    protected String getTokenName(int tokenType) {
+    protected abstract String[] getRuleNames();
+
+    protected Symbol getTokenName(int tokenType) {
         String[] names = getTokenNames();
         if (tokenType < 0 || tokenType >= names.length)
-            return ITree.NO_LABEL;
-        return names[tokenType];
+            return Symbol.NO_SYMBOL;
+        return Symbol.symbol(names[tokenType]);
+    }
+
+    protected Symbol getRuleName(int ruleType) {
+        String[] names = getRuleNames();
+        if (ruleType < 0 || ruleType >= names.length)
+            return Symbol.NO_SYMBOL;
+        return Symbol.symbol(names[ruleType]);
     }
 
     @SuppressWarnings("unchecked")
     protected void buildTree(TreeContext context, ParseTree pt) {
         Object payload = pt.getPayload(); //getType();
-        int type = 0;
-        if (payload instanceof Token) type = ((Token)payload).getType();
-        else if (payload instanceof RuleContext) type = -((RuleContext)payload).getRuleIndex();
-        String tokenName = getTokenName(type);
+        Symbol type = null;
+        if (payload instanceof Token)
+            type = getTokenName(((Token)payload).getType());
+        else if (payload instanceof RuleContext)
+            type = getRuleName(((RuleContext)payload).getRuleIndex());
+
         String label = pt.getText();
-        if (tokenName.equals(label))
+        if (type.name.equals(label)) // FIXME
             label = ITree.NO_LABEL;
 
-        ITree t = context.createTree(type, label, tokenName);
+        ITree t = context.createTree(type, label);
 
 //        int start = startPos(pt.getSourceInterval().a);
 //        int stop = stopPos(pt.getSourceInterval().b);

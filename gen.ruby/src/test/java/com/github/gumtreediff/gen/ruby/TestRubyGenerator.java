@@ -26,19 +26,25 @@ import java.io.Reader;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
+import org.jrubyparser.ast.NodeType;
 import org.junit.Test;
+
+import static com.github.gumtreediff.tree.Symbol.symbol;
 import static org.junit.Assert.*;
 
 import com.github.gumtreediff.tree.ITree;
 
 public class TestRubyGenerator {
 
+    private static final Symbol ROOT_NODE = symbol(NodeType.ROOTNODE.name());
+
     @Test
     public void testFileParsing() throws IOException {
         Reader r = new InputStreamReader(getClass().getResourceAsStream("/sample.rb"), "UTF-8");
         ITree tree = new RubyTreeGenerator().generateFromReader(r).getRoot();
-        assertEquals(102, tree.getType());
+        assertEquals(ROOT_NODE, tree.getType());
         assertEquals(1726, tree.getSize());
     }
 
@@ -46,14 +52,14 @@ public class TestRubyGenerator {
     public void testSimpleSyntax() throws IOException {
         String input = "module Foo; puts \"Hello world!\"; end;";
         ITree t = new RubyTreeGenerator().generateFromString(input).getRoot();
-        assertEquals(102, t.getType());
+        assertEquals(ROOT_NODE, t.getType());
     }
 
     @Test
     public void testRuby2Syntax() throws IOException {
         String input = "{ foo: true }";
         ITree t = new RubyTreeGenerator().generateFromString(input).getRoot();
-        assertEquals(102, t.getType());
+        assertEquals(ROOT_NODE, t.getType());
     }
 
     @Test

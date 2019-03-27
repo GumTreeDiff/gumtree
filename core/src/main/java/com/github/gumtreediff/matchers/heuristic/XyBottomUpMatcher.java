@@ -23,6 +23,7 @@ package com.github.gumtreediff.matchers.heuristic;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeMap;
 
 import java.util.*;
@@ -93,8 +94,8 @@ public class XyBottomUpMatcher extends Matcher {
     }
 
     private void lastChanceMatch(ITree src, ITree dst) {
-        Map<Integer,List<ITree>> srcKinds = new HashMap<>();
-        Map<Integer,List<ITree>> dstKinds = new HashMap<>();
+        Map<Symbol, List<ITree>> srcKinds = new HashMap<>();
+        Map<Symbol, List<ITree>> dstKinds = new HashMap<>();
         for (ITree c: src.getChildren()) {
             if (!srcKinds.containsKey(c.getType())) srcKinds.put(c.getType(), new ArrayList<>());
             srcKinds.get(c.getType()).add(c);
@@ -104,7 +105,7 @@ public class XyBottomUpMatcher extends Matcher {
             dstKinds.get(c.getType()).add(c);
         }
 
-        for (int t: srcKinds.keySet())
+        for (Symbol t: srcKinds.keySet())
             if (dstKinds.get(t) != null && srcKinds.get(t).size() == dstKinds.get(t).size()
                     && srcKinds.get(t).size() == 1)
                 addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));

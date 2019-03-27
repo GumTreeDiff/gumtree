@@ -21,6 +21,7 @@ package com.github.gumtreediff.gen.javaparser;
 
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
@@ -73,21 +74,23 @@ public class JavaParserVisitor extends TreeVisitor {
     }
 
     protected void pushNode(Node n, String label) {
-        int type = n.getClass().getName().hashCode();
-        String typeName = n.getClass().getSimpleName();
         try {
             Position begin = n.getRange().get().begin;
             Position end = n.getRange().get().end;
             int startPos = reader.positionFor(begin.line, begin.column);
             int length = reader.positionFor(end.line, end.column) - startPos + 2;
-            push(type, typeName, label, startPos, length);
+            push(nodeAsSymbol(n), label, startPos, length);
         }
         catch (NoSuchElementException ignore) { }
 
     }
 
-    private void push(int type, String typeName, String label, int startPosition, int length) {
-        ITree t = context.createTree(type, label, typeName);
+    protected Symbol nodeAsSymbol(Node n) {
+        return Symbol.symbol(n.getClass().getSimpleName());
+    }
+
+    private void push(Symbol type, String label, int startPosition, int length) {
+        ITree t = context.createTree(type, label);
         t.setPos(startPosition);
         t.setLength(length);
 

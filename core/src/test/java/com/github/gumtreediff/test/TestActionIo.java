@@ -53,7 +53,7 @@ public class TestActionIo {
     @Test
     public void testPos() throws Exception {
         src.getRoot().breadthFirst().forEach(
-                x -> System.out.printf("%d) %s [%d:%d]:%d\n",
+                x -> System.out.printf("%s) %s [%d:%d]:%d\n",
                         x.getType(), x.getLabel(), x.getPos(), x.getEndPos(), x.getLength()));
     }
 

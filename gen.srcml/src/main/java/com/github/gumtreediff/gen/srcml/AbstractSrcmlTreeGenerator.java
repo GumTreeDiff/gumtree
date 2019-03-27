@@ -22,6 +22,7 @@ package com.github.gumtreediff.gen.srcml;
 import com.github.gumtreediff.gen.ExternalProcessTreeGenerator;
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 
 import javax.xml.namespace.QName;
@@ -30,6 +31,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.*;
 import java.io.*;
 import java.util.*;
+
+import static com.github.gumtreediff.tree.Symbol.symbol;
 
 public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGenerator {
 
@@ -41,8 +44,15 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
 
     private LineReader lr;
 
-    private Set<String> labeled = new HashSet<String>(
-            Arrays.asList("specifier", "name", "comment", "literal", "operator"));
+    private Set<Symbol> labeled = new HashSet<>(
+            Arrays.asList(
+                    symbol("specifier"),
+                    symbol("name"),
+                    symbol("comment"),
+                    symbol("literal"),
+                    symbol("operator")));
+
+    Symbol position = symbol("position");
 
     private StringBuilder currentLabel;
 
@@ -66,12 +76,11 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                 XMLEvent ev = r.nextEvent();
                 if (ev.isStartElement()) {
                     StartElement s = ev.asStartElement();
-                    String typeLabel = s.getName().getLocalPart();
-                    if (typeLabel.equals("position"))
+                    Symbol type = symbol(s.getName().getLocalPart());
+                    if (type.equals(position))
                         setLength(trees.peekFirst(), s);
                     else {
-                        int type = typeLabel.hashCode();
-                        ITree t = context.createTree(type, "", typeLabel);
+                        ITree t = context.createTree(type, "");
 
                         if (trees.isEmpty()) {
                             context.setRoot(t);
@@ -84,7 +93,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                     }
                 } else if (ev.isEndElement()) {
                     EndElement end = ev.asEndElement();
-                    if (!end.getName().getLocalPart().equals("position")) {
+                    if (!end.getName().getLocalPart().equals(position)) {
                         if (isLabeled(trees))
                             trees.peekFirst().setLabel(currentLabel.toString());
                         trees.removeFirst();
@@ -106,7 +115,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
     }
 
     private boolean isLabeled(ArrayDeque<ITree> trees) {
-        return labeled.contains(context.getTypeLabel(trees.peekFirst().getType()));
+        return labeled.contains(trees.peekFirst().getType());
     }
 
     private void fixPos(TreeContext ctx) {

@@ -24,22 +24,26 @@ package com.github.gumtreediff.gen.jdt;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import org.eclipse.jdt.core.compiler.IScanner;
 import org.eclipse.jdt.core.compiler.ITerminalSymbols;
 import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jdt.core.dom.*;
 
-import java.lang.reflect.Array;
+import static com.github.gumtreediff.tree.Symbol.symbol;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
 
-    private static final int INFIX_EXPRESSION_OPERATOR = -1;
-    private static final int METHOD_INVOCATION_RECEIVER = -2;
-    private static final int METHOD_INVOCATION_ARGUMENTS = -3;
-    private static final int TYPE_DECLARATION_KIND = -4;
-    private static final int ASSIGNMENT_OPERATOR = -5;
-    private static final int PREFIX_EXPRESSION_OPERATOR = -6;
-    private static final int POSTFIX_EXPRESSION_OPERATOR = -7;
+    private static final Symbol INFIX_EXPRESSION_OPERATOR = symbol("INFIX_EXPRESSION_OPERATOR");
+    private static final Symbol METHOD_INVOCATION_RECEIVER = symbol("METHOD_INVOCATION_RECEIVER");
+    private static final Symbol METHOD_INVOCATION_ARGUMENTS = symbol("METHOD_INVOCATION_ARGUMENTS");
+    private static final Symbol TYPE_DECLARATION_KIND = symbol("TYPE_DECLARATION_KIND");
+    private static final Symbol ASSIGNMENT_OPERATOR = symbol("ASSIGNEMENT_OPERATOR");
+    private static final Symbol PREFIX_EXPRESSION_OPERATOR = symbol("PREFIX_EXPRESSION_OPERATOR");
+    private static final Symbol POSTFIX_EXPRESSION_OPERATOR = symbol("POSTFIX_EXPRESSION_OPERATOR");
+
+    private static final Symbol ARRAY_INITIALIZER = nodeAsSymbol(ASTNode.ARRAY_INITIALIZER);
+    private static final Symbol SIMPLE_NAME = nodeAsSymbol(ASTNode.SIMPLE_NAME);
 
     private IScanner scanner;
 
@@ -55,7 +59,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
 
     public boolean visit(MethodInvocation i)  {
         if (i.getExpression() !=  null) {
-            push(METHOD_INVOCATION_RECEIVER, "MethodInvocationReceiver", "", i.getExpression().getStartPosition(),
+            push(METHOD_INVOCATION_RECEIVER, "", i.getExpression().getStartPosition(),
                     i.getExpression().getLength());
             i.getExpression().accept(this);
             popNode();
@@ -66,7 +70,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             int startPos = ((ASTNode) i.arguments().get(0)).getStartPosition();
             int length = ((ASTNode) i.arguments().get(i.arguments().size() - 1)).getStartPosition()
                     + ((ASTNode) i.arguments().get(i.arguments().size() - 1)).getLength() -  startPos;
-            push(METHOD_INVOCATION_ARGUMENTS, "MethodInvocationArguments","", startPos , length);
+            push(METHOD_INVOCATION_ARGUMENTS,"", startPos , length);
             for (Object o : i.arguments()) {
                 ((ASTNode) o).accept(this);
 
@@ -132,7 +136,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
 
     private void handlePostVisit(ArrayCreation c) {
         ITree t = this.trees.peek();
-        if (t.getChild(1).getType() == ArrayInitializer.ARRAY_INITIALIZER)
+        if (t.getChild(1).getType() == ARRAY_INITIALIZER)
             return;
         for (int i = 1; i < t.getChild(0).getChildren().size(); i++) {
             ITree dim = t.getChild(0).getChild(i);
@@ -146,7 +150,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private void handlePostVisit(PostfixExpression e) {
         ITree t = this.trees.peek();
         String label  = e.getOperator().toString();
-        ITree s = context.createTree(POSTFIX_EXPRESSION_OPERATOR, label, "PostfixExpressionOperator");
+        ITree s = context.createTree(POSTFIX_EXPRESSION_OPERATOR, label);
         PosAndLength pl = searchPostfixExpressionPosition(e);
         s.setPos(pl.pos);
         s.setLength(pl.length);
@@ -177,7 +181,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private void handlePostVisit(PrefixExpression e) {
         ITree t = this.trees.peek();
         String label  = e.getOperator().toString();
-        ITree s = context.createTree(PREFIX_EXPRESSION_OPERATOR, label, "PrefixExpressionOperator");
+        ITree s = context.createTree(PREFIX_EXPRESSION_OPERATOR, label);
         PosAndLength pl = searchPrefixExpressionPosition(e);
         s.setPos(pl.pos);
         s.setLength(pl.length);
@@ -208,7 +212,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private void handlePostVisit(Assignment a) {
         ITree t = this.trees.peek();
         String label  = a.getOperator().toString();
-        ITree s = context.createTree(ASSIGNMENT_OPERATOR, label, "AssignmentOperator");
+        ITree s = context.createTree(ASSIGNMENT_OPERATOR, label);
         PosAndLength pl = searchAssignmentOperatorPosition(a);
         s.setPos(pl.pos);
         s.setLength(pl.length);
@@ -239,7 +243,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private void handlePostVisit(InfixExpression e) {
         ITree t = this.trees.peek();
         String label  = e.getOperator().toString();
-        ITree s = context.createTree(INFIX_EXPRESSION_OPERATOR, label, "InfixExpressionOperator");
+        ITree s = context.createTree(INFIX_EXPRESSION_OPERATOR, label);
         PosAndLength pl = searchInfixOperatorPosition(e);
         s.setPos(pl.pos);
         s.setLength(pl.length);
@@ -272,14 +276,14 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         if (d.isInterface())
             label = "interface";
 
-        ITree s = context.createTree(TYPE_DECLARATION_KIND, label, "TypeDeclarationKind");
+        ITree s = context.createTree(TYPE_DECLARATION_KIND, label);
         PosAndLength pl = searchTypeDeclarationKindPosition(d);
         s.setPos(pl.pos);
         s.setLength(pl.length);
         int index = 0;
         ITree t = this.trees.peek();
         for (ITree c : t.getChildren()) {
-            if (c.getType() != SimpleName.SIMPLE_NAME)
+            if (c.getType() != SIMPLE_NAME)
                 index++;
             else
                 break;

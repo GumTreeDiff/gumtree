@@ -22,6 +22,7 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 import com.google.common.collect.Sets;
 import org.junit.Before;
@@ -33,6 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import static com.github.gumtreediff.tree.Symbol.symbol;
 import static org.junit.Assert.*;
 
 public class TestMetadata {
@@ -47,7 +49,7 @@ public class TestMetadata {
     @Before
     public void setUp() throws Exception {
         tc = new TreeContext();
-        someNode = tc.createTree(0, "", "");
+        someNode = tc.createTree(symbol("type0"), "");
         tc.setRoot(someNode);
     }
 
@@ -163,21 +165,21 @@ public class TestMetadata {
             + "\t\"other\": \"more\",\n"
             + "\t\"more\": \"more\",\n"
             + "\t\"root\": {\n"
-            + "\t\t\"type\": \"0\",\n"
+            + "\t\t\"type\": \"type0\",\n"
             + "\t\t\"key\": \"test\",\n"
             + "\t\t\"pos\": \"[1, 2, 3, 4]\",\n"
             + "\t\t\"children\": []\n"
             + "\t}\n"
             + "}";
 
-    final String valLisp = "(((:other \"more\") ) (0 \"0\" \"\" ((:key \"test\") (:pos \"[1, 2, 3, 4]\") ) ())";
+    final String valLisp = "(((:other more) ) (type0 \"\" ((:key test) (:pos \"[1, 2, 3, 4]\") ) ())";
 
     final String valXml = "<?xml version=\"1.0\" ?>\n"
             + "<root>\n"
             + "  <context>\n"
             + "    <other>more</other>\n"
             + "  </context>\n"
-            + "  <tree type=\"0\">\n"
+            + "  <tree type=\"type0\">\n"
             + "    <key>test</key>\n"
             + "    <pos>[1, 2, 3, 4]</pos>\n"
             + "  </tree>\n"
@@ -185,6 +187,6 @@ public class TestMetadata {
 
     final String valXmlCompact = "<?xml version=\"1.0\" ?>\n"
             + "<root other=\"more\">\n"
-            + "  <0 key=\"test\" pos=\"[1, 2, 3, 4]\"/>\n"
+            + "  <type0 key=\"test\" pos=\"[1, 2, 3, 4]\"/>\n"
             + "</root>\n";
 }

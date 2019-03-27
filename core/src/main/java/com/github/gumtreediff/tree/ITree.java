@@ -185,9 +185,9 @@ public interface ITree {
 
     void setSize(int size);
 
-    int getType();
+    Symbol getType();
 
-    void setType(int type);
+    void setType(Symbol type);
 
     /**
      * @return a boolean indicating if the trees have the same type.

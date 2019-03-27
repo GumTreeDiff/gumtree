@@ -24,6 +24,7 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 
 import javax.xml.namespace.QName;
@@ -32,6 +33,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.*;
 import java.io.*;
 import java.util.*;
+
+import static com.github.gumtreediff.tree.Symbol.symbol;
 
 @Register(id = "python-pythonparser", accept = {"\\.py$"}, priority = Registry.Priority.MAXIMUM)
 public class PythonTreeGenerator extends ExternalProcessTreeGenerator {
@@ -69,12 +72,11 @@ public class PythonTreeGenerator extends ExternalProcessTreeGenerator {
                 XMLEvent ev = r.nextEvent();
                 if (ev.isStartElement()) {
                     StartElement s = ev.asStartElement();
-                    String typeLabel = s.getName().getLocalPart();
+                    Symbol type = symbol(s.getName().getLocalPart());
                     String label = "";
                     if (s.getAttributeByName(VALUE) != null)
                         label = s.getAttributeByName(VALUE).getValue();
-                    int type = typeLabel.hashCode();
-                    ITree t = context.createTree(type, label, typeLabel);
+                    ITree t = context.createTree(type, label);
                     if (trees.isEmpty()) {
                         context.setRoot(t);
                     } else {
