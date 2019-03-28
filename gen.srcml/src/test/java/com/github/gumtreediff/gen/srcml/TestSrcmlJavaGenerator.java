@@ -36,7 +36,7 @@ public class TestSrcmlJavaGenerator {
                 + "System.out.println(\"Hello, World\");\n"
                 + "}\n"
                 + "}";
-        TreeContext ctx = new SrcmlJavaTreeGenerator().generateFromString(input);
+        TreeContext ctx = new SrcmlJavaTreeGenerator().generateFrom().string(input);
         ITree t = ctx.getRoot();
         Assert.assertEquals(33, t.getSize());
     }

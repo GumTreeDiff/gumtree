@@ -37,28 +37,28 @@ public class TestJsGenerator {
     @Test
     public void testStatement() throws IOException {
         String input = "console.log(\"Hello world!\");";
-        ITree tree = new RhinoTreeGenerator().generateFromString(input).getRoot();
+        ITree tree = new RhinoTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(7, tree.getSize());
     }
 
     @Test
     public void testComment() throws IOException {
         String input = "console.log(\"Hello world!\"); /* with comment */";
-        ITree tree = new RhinoTreeGenerator().generateFromString(input).getRoot();
+        ITree tree = new RhinoTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(8, tree.getSize());
     }
 
     @Test
     public void testComplexFile() throws IOException {
-        Reader r = new InputStreamReader(getClass().getResourceAsStream("/sample.js"), "UTF-8");
-        ITree tree = new RhinoTreeGenerator().generateFromReader(r).getRoot();
+        ITree tree = new RhinoTreeGenerator().generateFrom().charset("UTF-8").
+                stream(getClass().getResourceAsStream("/sample.js")).getRoot();
         assertEquals(402, tree.getSize());
     }
 
     @Test(expected = SyntaxException.class)
     public void badSyntax() throws IOException {
         String input = "function foo((bar) {}";
-        TreeContext ct = new RhinoTreeGenerator().generateFromString(input);
+        TreeContext ct = new RhinoTreeGenerator().generateFrom().string(input);
     }
 
 }

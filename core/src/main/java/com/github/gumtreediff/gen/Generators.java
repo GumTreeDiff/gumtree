@@ -40,13 +40,13 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
         TreeGenerator p = get(file);
         if (p == null)
             throw new UnsupportedOperationException("No generator found for file: " + file);
-        return p.generateFromFile(file);
+        return p.generateFrom().file(file);
     }
 
     public TreeContext getTree(String generator, String file) throws UnsupportedOperationException, IOException {
         for (Entry e : entries)
             if (e.id.equals(generator))
-                return e.instantiate(null).generateFromFile(file);
+                return e.instantiate(null).generateFrom().file(file);
         throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
     }
 

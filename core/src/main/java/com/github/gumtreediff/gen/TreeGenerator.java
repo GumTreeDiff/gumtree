@@ -26,6 +26,7 @@ import org.atteo.classindex.IndexSubclasses;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @IndexSubclasses
@@ -33,25 +34,57 @@ public abstract class TreeGenerator {
 
     protected abstract TreeContext generate(Reader r) throws IOException;
 
-    public TreeContext generateFromReader(Reader r) throws IOException {
+    protected TreeContext generateTree(Reader r) throws IOException {
         TreeContext ctx = generate(r);
         ctx.validate();
         return ctx;
     }
 
-    public TreeContext generateFromFile(String path) throws IOException {
-        return generateFromReader(Files.newBufferedReader(Paths.get(path), Charset.forName("UTF-8")));
+    public ReaderConfigurator generateFrom() {
+        return new ReaderConfigurator();
     }
 
-    public TreeContext generateFromFile(File file) throws IOException {
-        return generateFromReader(Files.newBufferedReader(file.toPath(), Charset.forName("UTF-8")));
-    }
+    public class ReaderConfigurator {
 
-    public TreeContext generateFromStream(InputStream stream) throws IOException {
-        return generateFromReader(new InputStreamReader(stream, "UTF-8"));
-    }
+        private String charsetName = "UTF-8";
+        private Charset charset;
 
-    public TreeContext generateFromString(String content) throws IOException {
-        return generateFromReader(new StringReader(content));
+        private Charset charset() {
+            return (charset != null) ? charset : Charset.forName(charsetName);
+        }
+
+        public ReaderConfigurator charset(Charset charset) {
+            this.charset = charset;
+            return this;
+        }
+
+        public ReaderConfigurator charset(String name) {
+            charsetName = name;
+            return this;
+        }
+
+        public TreeContext file(Path path) throws IOException {
+            return reader(Files.newBufferedReader(path, charset()));
+        }
+
+        public TreeContext file(String path) throws IOException {
+            return file(Paths.get(path));
+        }
+
+        public TreeContext file(File file) throws IOException {
+            return file(file.toPath());
+        }
+
+        public TreeContext reader(Reader stream) throws IOException {
+            return generateTree(stream);
+        }
+
+        public TreeContext stream(InputStream stream) throws IOException {
+            return reader(new InputStreamReader(stream, charset()));
+        }
+
+        public TreeContext string(String content) throws IOException {
+            return reader(new StringReader(content));
+        }
     }
 }

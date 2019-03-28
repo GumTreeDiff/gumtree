@@ -55,7 +55,7 @@ public class CTreeGenerator extends ExternalProcessTreeGenerator {
     @Override
     public TreeContext generate(Reader r) throws IOException {
         String output = readStandardOutput(r);
-        return TreeIoUtils.fromXml(CTreeGenerator.defaultUnserializers).generateFromString(output);
+        return TreeIoUtils.fromXml(CTreeGenerator.defaultUnserializers).generateFrom().string(output);
     }
 
     protected String[] getCommandLine(String file) {

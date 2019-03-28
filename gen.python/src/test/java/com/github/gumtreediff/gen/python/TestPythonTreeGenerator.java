@@ -31,7 +31,7 @@ public class TestPythonTreeGenerator {
     @Test
     public void testSimple() throws IOException {
         String input = "import sys\nimport json as json\n";
-        TreeContext ctx = new PythonTreeGenerator().generateFromString(input);
+        TreeContext ctx = new PythonTreeGenerator().generateFrom().string(input);
         ITree t = ctx.getRoot();
         Assert.assertEquals(6, t.getSize());
     }

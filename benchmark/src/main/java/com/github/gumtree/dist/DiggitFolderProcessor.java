@@ -75,11 +75,11 @@ public class DiggitFolderProcessor {
     private static TreeContext getTreeContext(String file) {
         try {
             if (file.endsWith(".java"))
-                return new JdtTreeGenerator().generateFromFile(file);
+                return new JdtTreeGenerator().generateFrom().file(file);
             else if (file.endsWith(".rb"))
-                return new RubyTreeGenerator().generateFromFile(file);
+                return new RubyTreeGenerator().generateFrom().file(file);
             else if (file.endsWith(".js"))
-                return new RhinoTreeGenerator().generateFromFile(file);
+                return new RhinoTreeGenerator().generateFrom().file(file);
         } catch (IOException e) {
             e.printStackTrace();
         }

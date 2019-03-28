@@ -100,7 +100,7 @@ public class TreeLoader {
 
     public static TreeContext load(String name) {
         try {
-            return TreeIoUtils.fromXml().generateFromStream(System.class.getResourceAsStream(name));
+            return TreeIoUtils.fromXml().generateFrom().stream(System.class.getResourceAsStream(name));
         } catch (IOException e) {
             throw new RuntimeException(String.format("Unable to load test ressorce: %s", name), e);
         }

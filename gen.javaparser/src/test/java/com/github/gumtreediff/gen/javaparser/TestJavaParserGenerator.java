@@ -69,7 +69,7 @@ public class TestJavaParserGenerator {
 
     @Test
     public void testSimpleSyntax() throws IOException {
-        ITree tree = new JavaParserGenerator().generateFromString(input).getRoot();
+        ITree tree = new JavaParserGenerator().generateFrom().string(input).getRoot();
         assertEquals(expectedRootSymbol, tree.getType());
         assertEquals(expectedSize, tree.getSize());
     }
@@ -77,7 +77,7 @@ public class TestJavaParserGenerator {
     @Test(expected = SyntaxException.class)
     public void badSyntax() throws IOException {
         String input = "public clas Foo {}";
-        TreeContext ct = new JavaParserGenerator().generateFromString(input);
+        TreeContext ct = new JavaParserGenerator().generateFrom().string(input);
     }
 
 }

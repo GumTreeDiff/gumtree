@@ -40,8 +40,8 @@ public class TestIssue98 {
         String left = "public interface Main { }";
         String right = "public class Main { }";
 
-        ITree leftTree = new JdtTreeGenerator().generateFromString(left).getRoot();
-        ITree rightTree = new JdtTreeGenerator().generateFromString(right).getRoot();
+        ITree leftTree = new JdtTreeGenerator().generateFrom().string(left).getRoot();
+        ITree rightTree = new JdtTreeGenerator().generateFrom().string(right).getRoot();
         Matcher m = Matchers.getInstance().getMatcher(leftTree, rightTree);
         m.match();
 

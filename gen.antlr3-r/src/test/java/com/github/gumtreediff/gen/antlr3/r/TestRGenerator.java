@@ -57,7 +57,7 @@ public class TestRGenerator {
 
     @Test
     public void testSimpleParse() throws IOException {
-        ITree t = new RTreeGenerator().generateFromString(input).getRoot();
+        ITree t = new RTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(expectedRootSymbol, t.getType());
         assertEquals(expectedSize, t.getSize());
     }

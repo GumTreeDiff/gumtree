@@ -38,7 +38,7 @@ public class TestSrcmlCsGenerator {
                 + "Console.ReadLine();\n"
                 + "}\n"
                 + "}";
-        ITree t = new SrcmlCsTreeGenerator().generateFromString(input).getRoot();
+        ITree t = new SrcmlCsTreeGenerator().generateFrom().string(input).getRoot();
         Assert.assertEquals(34, t.getSize());
     }
 

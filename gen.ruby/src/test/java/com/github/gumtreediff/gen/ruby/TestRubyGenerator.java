@@ -34,16 +34,14 @@ import org.junit.Test;
 import static com.github.gumtreediff.tree.Symbol.symbol;
 import static org.junit.Assert.*;
 
-import com.github.gumtreediff.tree.ITree;
-
 public class TestRubyGenerator {
 
     private static final Symbol ROOT_NODE = symbol(NodeType.ROOTNODE.name());
 
     @Test
     public void testFileParsing() throws IOException {
-        Reader r = new InputStreamReader(getClass().getResourceAsStream("/sample.rb"), "UTF-8");
-        ITree tree = new RubyTreeGenerator().generateFromReader(r).getRoot();
+        ITree tree = new RubyTreeGenerator().generateFrom().
+                charset("UTF-8").stream(getClass().getResourceAsStream("/sample.rb")).getRoot();
         assertEquals(ROOT_NODE, tree.getType());
         assertEquals(1726, tree.getSize());
     }
@@ -51,28 +49,28 @@ public class TestRubyGenerator {
     @Test
     public void testSimpleSyntax() throws IOException {
         String input = "module Foo; puts \"Hello world!\"; end;";
-        ITree t = new RubyTreeGenerator().generateFromString(input).getRoot();
+        ITree t = new RubyTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(ROOT_NODE, t.getType());
     }
 
     @Test
     public void testRuby2Syntax() throws IOException {
         String input = "{ foo: true }";
-        ITree t = new RubyTreeGenerator().generateFromString(input).getRoot();
+        ITree t = new RubyTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(ROOT_NODE, t.getType());
     }
 
     @Test
     public void testPosition() throws IOException {
         String input = "module Baz\nclass Foo\n\tdef foo(bar)\n\t\tputs bar\n\tend\nend\nend";
-        TreeContext ctx = new RubyTreeGenerator().generateFromString(input);
+        TreeContext ctx = new RubyTreeGenerator().generateFrom().string(input);
         ITree root = ctx.getRoot();
     }
 
     @Test(expected = SyntaxException.class)
     public void badSyntax() throws IOException {
         String input = "module Foo\ndef foo((bar)\n\tputs 'foo'\nend\n";
-        TreeContext ct = new RubyTreeGenerator().generateFromString(input);
+        TreeContext ct = new RubyTreeGenerator().generateFrom().string(input);
     }
 
 }

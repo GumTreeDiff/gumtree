@@ -36,8 +36,8 @@ public class TestJsonParsing {
 
     @Test
     public void testJsonParsing() throws Exception {
-        TreeContext tc = new AntlrJsonTreeGenerator().generateFromReader(
-                new InputStreamReader(getClass().getResourceAsStream("/sample.json"), "UTF-8"));
+        TreeContext tc = new AntlrJsonTreeGenerator().generateFrom().charset("UTF-8").
+                stream(getClass().getResourceAsStream("/sample.json"));
         ITree tree = tc.getRoot();
 
         assertEquals(ARRAY, tree.getType());

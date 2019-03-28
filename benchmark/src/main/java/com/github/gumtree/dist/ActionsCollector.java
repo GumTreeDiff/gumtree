@@ -73,8 +73,8 @@ public class ActionsCollector {
         for (Path path : outputPaths) {
             Path otherPath = Paths.get(path.toString().replace("_v0_","_v1_"));
             Path outputPath = Paths.get(path.toString().replace("_v0_","_actions_"));
-            TreeContext src = TreeIoUtils.fromXml().generateFromFile(path.toString());
-            TreeContext dst = TreeIoUtils.fromXml().generateFromFile(otherPath.toString());
+            TreeContext src = TreeIoUtils.fromXml().generateFrom().file(path.toString());
+            TreeContext dst = TreeIoUtils.fromXml().generateFrom().file(otherPath.toString());
             CompositeMatchers.ClassicGumtree matcher = new CompositeMatchers.ClassicGumtree(
                     src.getRoot(), dst.getRoot(), new MappingStore());
             matcher.match();
@@ -97,8 +97,8 @@ public class ActionsCollector {
         StringBuilder b = new StringBuilder();
         for (Path path : outputPaths) {
             Path otherPath = Paths.get(path.toString().replace("_v0_","_v1_"));
-            TreeContext src = TreeIoUtils.fromXml().generateFromFile(path.toString());
-            TreeContext dst = TreeIoUtils.fromXml().generateFromFile(otherPath.toString());
+            TreeContext src = TreeIoUtils.fromXml().generateFrom().file(path.toString());
+            TreeContext dst = TreeIoUtils.fromXml().generateFrom().file(otherPath.toString());
             CompositeMatchers.ClassicGumtree matcher = new CompositeMatchers.ClassicGumtree(
                     src.getRoot(), dst.getRoot(), new MappingStore());
             matcher.match();

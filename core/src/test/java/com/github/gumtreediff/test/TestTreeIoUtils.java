@@ -61,7 +61,7 @@ public class TestTreeIoUtils {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         TreeIoUtils.toXml(tc).writeTo(bos);
-        TreeContext tca = TreeIoUtils.fromXml().generateFromString(bos.toString());
+        TreeContext tca = TreeIoUtils.fromXml().generateFrom().string(bos.toString());
         ITree ca = tca.getRoot();
 
         assertTrue(a.isIsomorphicTo(ca));
