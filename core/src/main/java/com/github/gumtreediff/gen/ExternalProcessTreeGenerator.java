@@ -67,5 +67,4 @@ public abstract class ExternalProcessTreeGenerator extends TreeGenerator {
     }
 
     protected abstract String[] getCommandLine(String file);
-
 }

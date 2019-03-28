@@ -16,36 +16,23 @@
  *
  * Copyright 2015-2017 Floréal Morandat <florealm@gmail.com>
  */
-
 package com.github.gumtreediff.tree;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import java.util.HashMap;
+import java.util.Map;
 
-public final class Symbol {
+public class SymbolSet {
+    private static final SymbolFactoryImplementation implementation = new SymbolFactoryImplementation();
 
-    public final String name;
-
-    public static final Symbol NO_SYMBOL = symbol("");
-
-    private Symbol(String value) {
-        name = value;
+    public static Symbol symbol(String value) {
+        return implementation.getSymbol(value);
     }
 
-    public boolean isEmpty() {
-        return this == NO_SYMBOL;
-    }
+    private static class SymbolFactoryImplementation extends Symbol.SymbolFactory {
+        private final Map<String, Symbol> symbols = new HashMap<>();
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    static class SymbolFactory {
-        protected SymbolFactory() {}
-
-        protected Symbol makeSymbol(String name) {
-            return new Symbol(name);
+        public Symbol getSymbol(String value) {
+            return symbols.computeIfAbsent(value == null ? "" : value, (key) -> makeSymbol(key));
         }
     }
 }
-
