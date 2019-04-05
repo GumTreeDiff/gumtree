@@ -93,7 +93,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                     }
                 } else if (ev.isEndElement()) {
                     EndElement end = ev.asEndElement();
-                    if (!end.getName().getLocalPart().equals(position)) {
+                    if (symbol(end.getName().getLocalPart()) != position) {
                         if (isLabeled(trees))
                             trees.peekFirst().setLabel(currentLabel.toString());
                         trees.removeFirst();
