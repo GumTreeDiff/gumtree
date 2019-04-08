@@ -29,6 +29,7 @@ import java.util.Map;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.Symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.CommonTree;
 
@@ -91,7 +92,7 @@ public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Par
         String[] names = getTokenNames();
         if (tokenType < 0 || tokenType >= names.length)
             return Symbol.NO_SYMBOL;
-        return Symbol.symbol(names[tokenType]);
+        return symbol(names[tokenType]);
     }
 
     @SuppressWarnings("unchecked")

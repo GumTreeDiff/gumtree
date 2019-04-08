@@ -31,7 +31,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 
 public abstract class AbstractJdtVisitor extends ASTVisitor {
 

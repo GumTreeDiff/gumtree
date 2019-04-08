@@ -34,7 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 import static org.junit.Assert.*;
 
 public class TestMetadata {

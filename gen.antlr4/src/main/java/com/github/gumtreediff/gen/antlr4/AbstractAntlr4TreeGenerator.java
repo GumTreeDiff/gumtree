@@ -37,7 +37,7 @@ import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 
 public abstract class AbstractAntlr4TreeGenerator extends TreeGenerator {
 
@@ -74,14 +74,14 @@ public abstract class AbstractAntlr4TreeGenerator extends TreeGenerator {
         String[] names = getTokenNames();
         if (tokenType < 0 || tokenType >= names.length)
             return Symbol.NO_SYMBOL;
-        return Symbol.symbol(names[tokenType]);
+        return symbol(names[tokenType]);
     }
 
     protected Symbol getRuleName(int ruleType) {
         String[] names = getRuleNames();
         if (ruleType < 0 || ruleType >= names.length)
             return Symbol.NO_SYMBOL;
-        return Symbol.symbol(names[ruleType]);
+        return symbol(names[ruleType]);
     }
 
     @SuppressWarnings("unchecked")

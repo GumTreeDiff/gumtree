@@ -50,8 +50,8 @@ public class TestJsGenerator {
 
     @Test
     public void testComplexFile() throws IOException {
-        ITree tree = new RhinoTreeGenerator().generateFrom().charset("UTF-8").
-                stream(getClass().getResourceAsStream("/sample.js")).getRoot();
+        ITree tree = new RhinoTreeGenerator().generateFrom().charset("UTF-8")
+                .stream(getClass().getResourceAsStream("/sample.js")).getRoot();
         assertEquals(402, tree.getSize());
     }
 

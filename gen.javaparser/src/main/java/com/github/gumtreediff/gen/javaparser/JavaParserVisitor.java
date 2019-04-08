@@ -22,6 +22,7 @@ package com.github.gumtreediff.gen.javaparser;
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Symbol;
+import com.github.gumtreediff.tree.SymbolSet;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
@@ -86,7 +87,7 @@ public class JavaParserVisitor extends TreeVisitor {
     }
 
     protected Symbol nodeAsSymbol(Node n) {
-        return Symbol.symbol(n.getClass().getSimpleName());
+        return SymbolSet.symbol(n.getClass().getSimpleName());
     }
 
     private void push(Symbol type, String label, int startPosition, int length) {

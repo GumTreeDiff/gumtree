@@ -22,6 +22,7 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
@@ -31,7 +32,6 @@ import java.util.ListIterator;
 
 import java.io.ByteArrayOutputStream;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
 import static org.junit.Assert.*;
 
 public class TestTreeIoUtils {

@@ -19,7 +19,7 @@
 
 package com.github.gumtreediff.gen.javaparser;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;

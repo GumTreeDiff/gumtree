@@ -30,7 +30,7 @@ import org.antlr.runtime.*;
 import java.io.IOException;
 import java.io.Reader;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 
 @Register(id = "xml-antlr", accept = {"\\.xml$", "\\.xsd$", "\\.wadl$"})
 public class XmlTreeGenerator extends AbstractAntlr3TreeGenerator<XMLLexer, XMLParser> {

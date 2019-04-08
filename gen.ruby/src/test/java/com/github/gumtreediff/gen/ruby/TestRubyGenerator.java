@@ -21,8 +21,6 @@
 package com.github.gumtreediff.gen.ruby;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.ITree;
@@ -31,7 +29,7 @@ import com.github.gumtreediff.tree.TreeContext;
 import org.jrubyparser.ast.NodeType;
 import org.junit.Test;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 import static org.junit.Assert.*;
 
 public class TestRubyGenerator {
@@ -40,8 +38,8 @@ public class TestRubyGenerator {
 
     @Test
     public void testFileParsing() throws IOException {
-        ITree tree = new RubyTreeGenerator().generateFrom().
-                charset("UTF-8").stream(getClass().getResourceAsStream("/sample.rb")).getRoot();
+        ITree tree = new RubyTreeGenerator().generateFrom()
+                .charset("UTF-8").stream(getClass().getResourceAsStream("/sample.rb")).getRoot();
         assertEquals(ROOT_NODE, tree.getType());
         assertEquals(1726, tree.getSize());
     }

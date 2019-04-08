@@ -44,11 +44,9 @@ import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 
 public final class TreeIoUtils {
 

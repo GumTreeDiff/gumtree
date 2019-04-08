@@ -35,7 +35,7 @@ import org.jrubyparser.parser.ParserConfiguration;
 import java.io.IOException;
 import java.io.Reader;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 
 @Register(id = "ruby-jruby", accept = {"\\.ruby$", "\\.rb$"}, priority = Registry.Priority.MAXIMUM)
 public class RubyTreeGenerator extends TreeGenerator {

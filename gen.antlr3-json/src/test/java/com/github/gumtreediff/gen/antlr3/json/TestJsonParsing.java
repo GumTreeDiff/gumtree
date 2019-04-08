@@ -20,10 +20,8 @@
 
 package com.github.gumtreediff.gen.antlr3.json;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 import static org.junit.Assert.*;
-
-import java.io.InputStreamReader;
 
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Symbol;
@@ -36,8 +34,8 @@ public class TestJsonParsing {
 
     @Test
     public void testJsonParsing() throws Exception {
-        TreeContext tc = new AntlrJsonTreeGenerator().generateFrom().charset("UTF-8").
-                stream(getClass().getResourceAsStream("/sample.json"));
+        TreeContext tc = new AntlrJsonTreeGenerator().generateFrom().charset("UTF-8")
+                .stream(getClass().getResourceAsStream("/sample.json"));
         ITree tree = tc.getRoot();
 
         assertEquals(ARRAY, tree.getType());

@@ -32,7 +32,7 @@ import javax.xml.stream.events.*;
 import java.io.*;
 import java.util.*;
 
-import static com.github.gumtreediff.tree.Symbol.symbol;
+import static com.github.gumtreediff.tree.SymbolSet.symbol;
 
 public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGenerator {
 
