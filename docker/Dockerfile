@@ -33,9 +33,9 @@ RUN ln -s /opt/pythonparser/pythonparser /usr/bin/pythonparser
 WORKDIR /opt
 RUN git clone -b develop https://github.com/GumTreeDiff/gumtree.git --depth 1
 WORKDIR /opt/gumtree
-RUN ./gradlew build -x check \
-	&& unzip dist/build/distributions/gumtree.zip \
-	&& ln -s /opt/gumtree/gumtree/bin/gumtree /usr/bin/gumtree
+RUN export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8 \
+    && ./gradlew build -x check \
+	&& ln -s /opt/gumtree/dist/build/install/gumtree/bin/gumtree /usr/bin/gumtree
 
 # define volume diff to make available files to diff
 RUN mkdir /diff
