@@ -104,6 +104,12 @@ public class Serializer extends Client {
             TreeIoUtils.TreeSerializer getSerializer(TreeContext ctx) {
                 return TreeIoUtils.toLisp(ctx);
             }
+        },
+        TEXT  {
+            @Override
+            TreeIoUtils.TreeSerializer getSerializer(TreeContext ctx) {
+                return TreeIoUtils.toText(ctx);
+            }
         };
 
         abstract TreeIoUtils.TreeSerializer getSerializer(TreeContext ctx);
