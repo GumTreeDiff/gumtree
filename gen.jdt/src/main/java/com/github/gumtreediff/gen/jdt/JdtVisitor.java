@@ -167,7 +167,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             int token = scanner.getNextToken();
             while (token != ITerminalSymbols.TokenNameEOF) {
                 pos = scanner.getCurrentTokenStartPosition();
-                length = pos - scanner.getCurrentTokenEndPosition() + 1;
+                length = scanner.getCurrentTokenEndPosition() - pos + 1;
                 break;
             }
         }
@@ -198,7 +198,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             int token = scanner.getNextToken();
             while (token != ITerminalSymbols.TokenNameEOF) {
                 pos = scanner.getCurrentTokenStartPosition();
-                length = pos - scanner.getCurrentTokenEndPosition() + 1;;
+                length = scanner.getCurrentTokenEndPosition() - pos + 1;
                 break;
             }
         }
@@ -229,7 +229,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             int token = scanner.getNextToken();
             while (token != ITerminalSymbols.TokenNameEOF) {
                 pos = scanner.getCurrentTokenStartPosition();
-                length = pos - scanner.getCurrentTokenEndPosition() + 1;
+                length = scanner.getCurrentTokenEndPosition() - pos + 1;
                 break;
             }
         }
@@ -260,7 +260,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             int token = scanner.getNextToken();
             while (token != ITerminalSymbols.TokenNameEOF) {
                 pos = scanner.getCurrentTokenStartPosition();
-                length = pos - scanner.getCurrentTokenEndPosition() + 1;
+                length = scanner.getCurrentTokenEndPosition() - pos + 1;
                 break;
             }
         }
@@ -304,7 +304,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
                 if ((token == ITerminalSymbols.TokenNameclass || token == ITerminalSymbols.TokenNameinterface)
                         && prevToken != ITerminalSymbols.TokenNameDOT) {
                     pos = scanner.getCurrentTokenStartPosition();
-                    length = pos - scanner.getCurrentTokenEndPosition() + 1;
+                    length = scanner.getCurrentTokenEndPosition() - pos + 1;
                     break;
                 }
                 prevToken = token;
