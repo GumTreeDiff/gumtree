@@ -1,20 +1,44 @@
-@startuml
+@startuml Core API
 class Symbol {
 }
 
 class SymbolSet {
-  public static void symbol(String symbol);
+  + {static} Symbol symbol(String symbol);
 }
 
 interface Tree {
-  Node getRoot();
+  + Node getRoot();
 }
 
 interface Node {
-  List<Node> getChildren();
-  Node getParent();
-  Symbol getSymbol();
-  String getLabel();
+  + List<Node> getChildren();
+  + Node getParent();
+  + Symbol getSymbol();
+  + String getLabel();
+}
+
+interface Matcher {
+  + match(Tree src, Tree dst)
+}
+
+interface MappingSet {
+  + map(Node src, Node dst);
+}
+
+class Mapping {
+  + Node getSrc();
+  + Node getDst();
+}
+
+class Diff {
+  + Tree getSrc();
+  + Tree getDst();
+  + MappingSet getMappings();
+  + Script getScript();
+}
+
+class Script {
+
 }
 
 @enduml
