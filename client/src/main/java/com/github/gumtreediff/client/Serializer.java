@@ -40,7 +40,7 @@ public class Serializer extends Client {
     public static final String SYNTAX = "Syntax: parse [options] file ...";
 
     static class Options implements Option.Context {
-        protected OutputFormat format = OutputFormat.JSON;
+        protected OutputFormat format = OutputFormat.TEXT;
         protected String generator = null;
         protected String output = null;
         protected String[] files;
