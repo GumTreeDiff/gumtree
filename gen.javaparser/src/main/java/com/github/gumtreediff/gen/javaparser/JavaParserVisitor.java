@@ -25,8 +25,10 @@ import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.SymbolSet;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Position;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 
 import java.util.ArrayDeque;
@@ -71,6 +73,10 @@ public class JavaParserVisitor extends TreeVisitor {
             label = Boolean.toString(((BooleanLiteralExpr) node).getValue());
         else if (node instanceof LiteralStringValueExpr)
             label = ((LiteralStringValueExpr) node).getValue();
+        else if (node instanceof PrimitiveType)
+            label = ((PrimitiveType) node).asString();
+        else if (node instanceof Modifier)
+            label = ((Modifier) node).getKeyword().asString();
         pushNode(node, label);
     }
 
