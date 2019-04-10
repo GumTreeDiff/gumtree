@@ -1,0 +1,20 @@
+@startuml
+class Symbol {
+}
+
+class SymbolSet {
+  public static void symbol(String symbol);
+}
+
+interface Tree {
+  Node getRoot();
+}
+
+interface Node {
+  List<Node> getChildren();
+  Node getParent();
+  Symbol getSymbol();
+  String getLabel();
+}
+
+@enduml
