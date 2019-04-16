@@ -20,11 +20,14 @@
 
 package com.github.gumtreediff.test;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.gumtreediff.tree.SymbolSet;
+import com.github.gumtreediff.tree.Tree;
 import org.junit.Test;
 
 import com.github.gumtreediff.tree.ITree;
@@ -70,6 +73,19 @@ public class TestTree {
         assertTrue(root.getLabel().equals("new"));
         assertTrue(root.getChildren().get(0).getLabel().equals("new"));
         assertTrue(root.getChildren().get(0).getChildren().get(0).getLabel().equals("new"));
+    }
+
+    @Test
+    public void testIsomophism() {
+        ITree root = TreeLoader.getDummySrc();
+        ITree rootCpy = TreeLoader.getDummySrc();
+        assertTrue(root.isIsomorphicTo(rootCpy));
+        rootCpy.getChild(0).getChild(0).setLabel("foo");
+        assertFalse(root.isIsomorphicTo(rootCpy));
+        root.getChild(0).getChild(0).setLabel("foo");
+        assertTrue(root.isIsomorphicTo(rootCpy));
+        rootCpy.addChild(new Tree(SymbolSet.symbol("foo"), "toto"));
+        assertFalse(root.isIsomorphicTo(rootCpy));
     }
 
     @Test

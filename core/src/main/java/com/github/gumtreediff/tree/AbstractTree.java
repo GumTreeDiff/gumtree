@@ -117,10 +117,19 @@ public abstract class AbstractTree implements ITree {
 
     @Override
     public boolean isIsomorphicTo(ITree tree) {
-        if (this.getHash() != tree.getHash())
+        if (!hasSameTypeAndLabel(tree))
             return false;
-        else
-            return this.toStaticHashString().equals(tree.toStaticHashString());
+
+        if (getChildren().size() != tree.getChildren().size())
+            return false;
+
+        for (int i = 0; i < getChildren().size(); i++)  {
+            boolean isChildrenIsomophic = getChild(i).isIsomorphicTo(tree.getChild(i));
+            if (!isChildrenIsomophic)
+                return false;
+        }
+
+        return true;
     }
 
     @Override
