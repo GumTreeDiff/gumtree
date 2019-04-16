@@ -22,14 +22,11 @@ package com.github.gumtreediff.client.diff.dot;
 
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
-import com.github.gumtreediff.client.diff.swing.MappingsPanel;
-import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import javax.swing.*;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -68,7 +65,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
     private void writeTree(TreeContext context, Writer writer, Matcher matcher) throws Exception {
         for (ITree tree : context.getRoot().getTrees()) {
             String fillColor = "red";
-            if (matcher.getMappings().hasSrc(tree) || matcher.getMappings().hasDst(tree))
+            if (matcher.getMappings().isSrcMapped(tree) || matcher.getMappings().isDstMapped(tree))
                 fillColor = "blue";
             writer.write(String.format("%s [label=\"%s\", color=%s];\n",
                     getDotId(context, tree), getDotLabel(context, tree), fillColor));
@@ -84,7 +81,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
     }
 
     private String getDotLabel(TreeContext context, ITree tree) {
-        String label = tree.toPrettyString(context);
+        String label = tree.toString();
         if (label.contains("\"") || label.contains("\\s"))
             label = label.replaceAll("\"", "").replaceAll("\\s", "").replaceAll("\\\\", "");
         if (label.length() > 30)

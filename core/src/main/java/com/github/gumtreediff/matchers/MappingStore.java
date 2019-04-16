@@ -26,17 +26,18 @@ import com.github.gumtreediff.tree.ITree;
 
 public class MappingStore implements Iterable<Mapping> {
 
-    private Map<ITree, ITree> srcs;
-    private Map<ITree, ITree> dsts;
+    private Map<ITree, ITree> srcToDst;
+    private Map<ITree, ITree> dstToSrc;
 
     public MappingStore(Set<Mapping> mappings) {
         this();
-        for (Mapping m: mappings) link(m.getFirst(), m.getSecond());
+        for (Mapping m: mappings)
+            addMapping(m.getFirst(), m.getSecond());
     }
 
     public MappingStore() {
-        srcs = new  HashMap<>();
-        dsts = new HashMap<>();
+        srcToDst = new HashMap<>();
+        dstToSrc = new HashMap<>();
     }
 
     public Set<Mapping> asSet() {
@@ -44,7 +45,7 @@ public class MappingStore implements Iterable<Mapping> {
 
             @Override
             public Iterator<Mapping> iterator() {
-                Iterator<ITree> it = srcs.keySet().iterator();
+                Iterator<ITree> it = srcToDst.keySet().iterator();
                 return new Iterator<Mapping>() {
                     @Override
                     public boolean hasNext() {
@@ -55,14 +56,14 @@ public class MappingStore implements Iterable<Mapping> {
                     public Mapping next() {
                         ITree src = it.next();
                         if (src == null) return null;
-                        return new Mapping(src, srcs.get(src));
+                        return new Mapping(src, srcToDst.get(src));
                     }
                 };
             }
 
             @Override
             public int size() {
-                return srcs.keySet().size();
+                return srcToDst.keySet().size();
             }
         };
     }
@@ -71,66 +72,34 @@ public class MappingStore implements Iterable<Mapping> {
         return new MappingStore(asSet());
     }
 
-    public void link(ITree src, ITree dst) {
-        srcs.put(src, dst);
-        dsts.put(dst, src);
+    public void addMapping(ITree src, ITree dst) {
+        srcToDst.put(src, dst);
+        dstToSrc.put(dst, src);
     }
 
-    public void unlink(ITree src, ITree dst) {
-        srcs.remove(src);
-        dsts.remove(dst);
+    public void removeMapping(ITree src, ITree dst) {
+        srcToDst.remove(src);
+        dstToSrc.remove(dst);
     }
 
-    public ITree firstMappedSrcParent(ITree src) {
-        ITree p = src.getParent();
-        if (p == null) return null;
-        else {
-            while (!hasSrc(p)) {
-                p = p.getParent();
-                if (p == null) return p;
-            }
-            return p;
-        }
+    public ITree getDstForSrc(ITree src) {
+        return srcToDst.get(src);
     }
 
-    public ITree firstMappedDstParent(ITree dst) {
-        ITree p = dst.getParent();
-        if (p == null) return null;
-        else {
-            while (!hasDst(p)) {
-                p = p.getParent();
-                if (p == null) return p;
-            }
-            return p;
-        }
+    public ITree getSrcForDst(ITree dst) {
+        return dstToSrc.get(dst);
     }
 
-    public ITree getDst(ITree src) {
-        return srcs.get(src);
+    public boolean isSrcMapped(ITree src) {
+        return srcToDst.containsKey(src);
     }
 
-    public ITree getSrc(ITree dst) {
-        return dsts.get(dst);
-    }
-
-    public boolean hasSrc(ITree src) {
-        return srcs.containsKey(src);
-    }
-
-    public boolean hasDst(ITree dst) {
-        return dsts.containsKey(dst);
+    public boolean isDstMapped(ITree dst) {
+        return dstToSrc.containsKey(dst);
     }
 
     public boolean has(ITree src, ITree dst) {
-        return srcs.get(src) == dst;
-    }
-
-    /**
-     * Indicate whether or not a tree is mappable to another given tree.
-     * @return true if both trees are not mapped and if the trees have the same type, false either.
-     */
-    public boolean isMatchable(ITree src, ITree dst) {
-        return src.hasSameType(dst) && !(srcs.containsKey(src)  || dsts.containsKey(dst));
+        return srcToDst.get(src) == dst;
     }
 
     @Override
@@ -140,7 +109,10 @@ public class MappingStore implements Iterable<Mapping> {
 
     @Override
     public String toString() {
-        return asSet().toString();
+        StringBuilder b = new StringBuilder();
+        for (Mapping m : this)
+            b.append(m.getFirst() + " -> " + m.getSecond() + "\n");
+        return b.toString();
     }
 
 }

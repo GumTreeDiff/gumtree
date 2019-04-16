@@ -93,15 +93,15 @@ public class LeafMoveMatcherThetaE extends Matcher {
             workListTmp = new LinkedList<>();
             for (Mapping pair : workList) {
                 ITree firstParent = pair.first.getParent();
-                if (!mappings.hasDst(firstParent)) {
+                if (!mappings.isDstMapped(firstParent)) {
                     continue;
                 }
-                ITree secondParent = mappings.getDst(pair.first.getParent());
+                ITree secondParent = mappings.getDstForSrc(pair.first.getParent());
                 reevaluateLeaves(firstParent, secondParent, pair, changeMap);
             }
             Collections.sort(changeMap, new MappingComparator());
             for (Mapping entry : changeMap) {
-                if (!mappings.hasSrc(entry.first) && !mappings.hasDst(entry.second)) {
+                if (!mappings.isSrcMapped(entry.first) && !mappings.isDstMapped(entry.second)) {
                     addMapping(entry.first, entry.second);
                 }
                 if (!entry.first.getLabel().equals(entry.second.getLabel()) && entry.first.isLeaf()
@@ -134,7 +134,7 @@ public class LeafMoveMatcherThetaE extends Matcher {
             }
             Collections.sort(changeMap, new MappingComparator());
             for (Mapping entry : changeMap) {
-                if (!mappings.hasSrc(entry.first) && !mappings.hasDst(entry.second)) {
+                if (!mappings.isSrcMapped(entry.first) && !mappings.isDstMapped(entry.second)) {
                     addMapping(entry.first, entry.second);
                 }
                 if (!entry.first.getLabel().equals(entry.second.getLabel()) && entry.first.isLeaf()
@@ -172,12 +172,12 @@ public class LeafMoveMatcherThetaE extends Matcher {
             if (count != 1 && foundPosDstNode != null) {
                 foundDstNode = foundPosDstNode;
             }
-            if (mappings.hasDst(foundDstNode)) {
+            if (mappings.isDstMapped(foundDstNode)) {
 
-                ITree foundSrc = mappings.getSrc(foundDstNode);
+                ITree foundSrc = mappings.getSrcForDst(foundDstNode);
                 if (!foundSrc.getLabel().equals(foundDstNode.getLabel())) {
-                    mappings.unlink(pair.first, pair.second);
-                    mappings.unlink(foundSrc, foundDstNode);
+                    mappings.removeMapping(pair.first, pair.second);
+                    mappings.removeMapping(foundSrc, foundDstNode);
                     changeMap.add(new Mapping(pair.first, foundDstNode));
                     addedMappingKey = new Mapping(foundSrc, foundDstNode);
                     if (foundDstNode != pair.second && foundSrc != pair.first) {
@@ -186,7 +186,7 @@ public class LeafMoveMatcherThetaE extends Matcher {
                 }
             } else {
 
-                mappings.unlink(pair.first, pair.second);
+                mappings.removeMapping(pair.first, pair.second);
                 if (pair.first.getLabel().equals(foundDstNode.getLabel())) {
                     LinkedList<Mapping> toRemove = new LinkedList<>();
                     for (Mapping mapPair : changeMap) {
@@ -204,7 +204,7 @@ public class LeafMoveMatcherThetaE extends Matcher {
                 }
                 changeMap.add(new Mapping(pair.first, foundDstNode));
                 for (ITree child : firstParent.getChildren()) {
-                    if (child.isLeaf() && !mappings.hasDst(child)
+                    if (child.isLeaf() && !mappings.isDstMapped(child)
                             && child.getType() == pair.second.getType()
                             && child.getLabel().equals(pair.second.getLabel())) {
                         addMapping(child, pair.second);
@@ -236,12 +236,12 @@ public class LeafMoveMatcherThetaE extends Matcher {
             if (addedMappingKey != null) {
                 changeMap.remove(addedMappingKey);
             }
-            if (mappings.hasSrc(foundSrcNode)) {
-                ITree foundDst = mappings.getSrc(foundSrcNode);
+            if (mappings.isSrcMapped(foundSrcNode)) {
+                ITree foundDst = mappings.getSrcForDst(foundSrcNode);
                 if (foundDst != null && foundSrcNode != null
                         && !foundDst.getLabel().equals(foundSrcNode.getLabel())) {
-                    mappings.unlink(pair.first, pair.second);
-                    mappings.unlink(foundSrcNode, foundDst);
+                    mappings.removeMapping(pair.first, pair.second);
+                    mappings.removeMapping(foundSrcNode, foundDst);
                     changeMap.add(new Mapping(foundSrcNode, pair.second));
                     if (addedMappingKey == null && foundDst != null) {
                         if (foundSrcNode != pair.first && foundDst != pair.second) {
@@ -250,7 +250,7 @@ public class LeafMoveMatcherThetaE extends Matcher {
                     }
                 }
             } else {
-                mappings.unlink(pair.first, pair.second);
+                mappings.removeMapping(pair.first, pair.second);
                 if (foundSrcNode.getLabel().equals(pair.second.getLabel())) {
                     LinkedList<Mapping> toRemove = new LinkedList<>();
                     for (Mapping mapPair : changeMap) {
@@ -268,7 +268,7 @@ public class LeafMoveMatcherThetaE extends Matcher {
                 }
                 changeMap.add(new Mapping(foundSrcNode, pair.second));
                 for (ITree child : secondParent.getChildren()) {
-                    if (child.isLeaf() && !mappings.hasSrc(child)
+                    if (child.isLeaf() && !mappings.isSrcMapped(child)
                             && child.getType() == pair.first.getType()
                             && child.getLabel().equals(pair.first.getLabel())) {
                         addMapping(pair.first, child);

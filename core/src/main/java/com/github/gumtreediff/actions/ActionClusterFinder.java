@@ -130,10 +130,10 @@ public class ActionClusterFinder {
             for (Action a : cluster)
                 if (graph.inDegreeOf(a) == 0)
                     root = (Insert) a;
-            return root.format(src);
+            return root.toString();
         } else if (first instanceof Move) {
             Move m = (Move) first;
-            return "MOVE from " + m.getParent().toPrettyString(src);
+            return "MOVE from " + m.getParent().toString();
         } else if (first instanceof Update) {
             Update u = (Update) first;
             return "UPDATE from " + first.getNode().getLabel() + " to " + u.getValue();
@@ -142,7 +142,7 @@ public class ActionClusterFinder {
             for (Action a : cluster)
                 if (graph.inDegreeOf(a) == 0)
                     root = (Delete) a;
-            return root.format(src);
+            return root.toString();
         } else
             return "Unknown cluster type";
     }

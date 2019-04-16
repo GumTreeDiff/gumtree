@@ -219,13 +219,9 @@ public interface ITree {
 
     String toStaticHashString();
 
-    String toShortString();
-
     String toTreeString();
 
     String toPrettyTreeString(TreeContext ctx);
-
-    String toPrettyString(TreeContext ctx);
 
     Object getMetadata(String key);
 

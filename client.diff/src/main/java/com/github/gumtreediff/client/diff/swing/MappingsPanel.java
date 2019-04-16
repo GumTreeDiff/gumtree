@@ -153,17 +153,17 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
             selJTextArea = txtSrc;
             matchTreePanel = panDst;
             matchJTextArea = txtDst;
-            if (mappings.hasSrc(sel)) {
+            if (mappings.isSrcMapped(sel)) {
                 isMapped = true;
-                match = mappings.getDst(sel);
+                match = mappings.getDstForSrc(sel);
             }
         } else {
             selJTextArea = txtDst;
             matchTreePanel = panSrc;
             matchJTextArea = txtSrc;
-            if (mappings.hasDst(sel)) {
+            if (mappings.isDstMapped(sel)) {
                 isMapped = true;
-                match = mappings.getSrc(sel);
+                match = mappings.getSrcForDst(sel);
             }
         }
         try {

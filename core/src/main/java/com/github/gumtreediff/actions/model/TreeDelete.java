@@ -24,7 +24,6 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 public class TreeDelete extends TreeAction {
-
     public TreeDelete(ITree node) {
         super(node);
     }
@@ -39,12 +38,5 @@ public class TreeDelete extends TreeAction {
         return String.format("===\n%s\n---\n%s",
                 getName(),
                 node.toTreeString());
-    }
-
-    @Override
-    public String format(TreeContext ctx) {
-        return String.format("===\n%s\n---\n%s",
-                getName(),
-                node.toPrettyTreeString(ctx));
     }
 }

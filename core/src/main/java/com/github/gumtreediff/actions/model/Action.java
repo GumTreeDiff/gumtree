@@ -25,7 +25,6 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 public abstract class Action {
-
     protected ITree node;
 
     public Action(ITree node) {
@@ -41,7 +40,4 @@ public abstract class Action {
     }
 
     public abstract String getName();
-
-    public abstract String format(TreeContext ctx);
-
 }

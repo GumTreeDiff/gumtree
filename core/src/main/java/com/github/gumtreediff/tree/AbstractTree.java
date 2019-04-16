@@ -232,7 +232,7 @@ public abstract class AbstractTree implements ITree {
     public String toStaticHashString() {
         StringBuilder b = new StringBuilder();
         b.append(OPEN_SYMBOL);
-        b.append(this.toShortString());
+        b.append(this.toString());
         for (ITree c: this.getChildren())
             b.append(c.toStaticHashString());
         b.append(CLOSE_SYMBOL);
@@ -241,17 +241,6 @@ public abstract class AbstractTree implements ITree {
 
     @Override
     public String toString() {
-        System.err.println("This method should currently not be used (please use toShortString())");
-        return toShortString();
-    }
-
-    @Override
-    public String toShortString() {
-        return String.format("%s%s%s", getType(), SEPARATE_SYMBOL, getLabel());
-    }
-
-    @Override
-    public String toPrettyString(TreeContext ctx) {
         if (hasLabel())
             return String.format("%s: %s [%d,%d]",
                     getType(), getLabel(), getPos(), getEndPos());
@@ -356,7 +345,7 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public String toPrettyString(TreeContext ctx) {
+        public String toString() {
             return "FakeTree";
         }
 

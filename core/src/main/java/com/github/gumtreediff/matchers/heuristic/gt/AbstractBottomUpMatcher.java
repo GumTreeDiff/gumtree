@@ -61,7 +61,7 @@ public abstract class AbstractBottomUpMatcher extends Matcher {
     protected List<ITree> getDstCandidates(ITree src) {
         List<ITree> seeds = new ArrayList<>();
         for (ITree c: src.getDescendants()) {
-            ITree m = mappings.getDst(c);
+            ITree m = mappings.getDstForSrc(c);
             if (m != null) seeds.add(m);
         }
         List<ITree> candidates = new ArrayList<>();

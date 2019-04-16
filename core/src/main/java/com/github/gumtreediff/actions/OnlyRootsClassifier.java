@@ -20,7 +20,6 @@
 
 package com.github.gumtreediff.actions;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +27,6 @@ import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 public class OnlyRootsClassifier extends TreeClassifier {
@@ -50,11 +48,11 @@ public class OnlyRootsClassifier extends TreeClassifier {
                 dstAddTrees.add(a.getNode());
             else if (a instanceof Update) {
                 srcUpdTrees.add(a.getNode());
-                dstUpdTrees.add(mappings.getDst(a.getNode()));
+                dstUpdTrees.add(mappings.getDstForSrc(a.getNode()));
             }
             else if (a instanceof Move) {
                 srcMvTrees.add(a.getNode());
-                dstMvTrees.add(mappings.getDst(a.getNode()));
+                dstMvTrees.add(mappings.getDstForSrc(a.getNode()));
             }
         }
     }

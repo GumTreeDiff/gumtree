@@ -24,7 +24,6 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 public abstract class Addition extends Action {
-
     protected ITree parent;
 
     protected int pos;
@@ -47,18 +46,8 @@ public abstract class Addition extends Action {
     public String toString() {
         return String.format("===\n%s\n---\n%s\nto\n%s\nat %d",
                 getName(),
-                node.toShortString(),
-                parent.toShortString(),
+                node.toString(),
+                parent.toString(),
                 pos);
     }
-
-    @Override
-    public String format(TreeContext ctx) {
-        return String.format("===\n%s\n---\n%s\nto\n%s\nat %d",
-                getName(),
-                node.toPrettyString(ctx),
-                parent.toPrettyString(ctx),
-                pos);
-    }
-
 }

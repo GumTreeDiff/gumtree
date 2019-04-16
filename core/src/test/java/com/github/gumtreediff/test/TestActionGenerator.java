@@ -22,7 +22,6 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.*;
-import com.github.gumtreediff.io.ActionsIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.utils.Pair;
@@ -42,14 +41,14 @@ public class TestActionGenerator {
         ITree src = trees.getFirst().getRoot();
         ITree dst = trees.getSecond().getRoot();
         MappingStore ms = new MappingStore();
-        ms.link(src, dst);
-        ms.link(src.getChild(1), dst.getChild(0));
-        ms.link(src.getChild(1).getChild(0), dst.getChild(0).getChild(0));
-        ms.link(src.getChild(1).getChild(1), dst.getChild(0).getChild(1));
-        ms.link(src.getChild(0), dst.getChild(1).getChild(0));
-        ms.link(src.getChild(0).getChild(0), dst.getChild(1).getChild(0).getChild(0));
-        ms.link(src.getChild(4), dst.getChild(3));
-        ms.link(src.getChild(4).getChild(0), dst.getChild(3).getChild(0).getChild(0).getChild(0));
+        ms.addMapping(src, dst);
+        ms.addMapping(src.getChild(1), dst.getChild(0));
+        ms.addMapping(src.getChild(1).getChild(0), dst.getChild(0).getChild(0));
+        ms.addMapping(src.getChild(1).getChild(1), dst.getChild(0).getChild(1));
+        ms.addMapping(src.getChild(0), dst.getChild(1).getChild(0));
+        ms.addMapping(src.getChild(0).getChild(0), dst.getChild(1).getChild(0).getChild(0));
+        ms.addMapping(src.getChild(4), dst.getChild(3));
+        ms.addMapping(src.getChild(4).getChild(0), dst.getChild(3).getChild(0).getChild(0).getChild(0));
 
         ActionGenerator ag = new ActionGenerator(src, dst, ms);
         ag.generate();
@@ -59,60 +58,60 @@ public class TestActionGenerator {
         Action a = actions.get(0);
         assertTrue(a instanceof Insert);
         Insert i = (Insert) a;
-        assertEquals("0@@h", i.getNode().toShortString());
-        assertEquals("0@@a", i.getParent().toShortString());
+        assertEquals("h", i.getNode().getLabel());
+        assertEquals("a", i.getParent().getLabel());
         assertEquals(2, i.getPosition());
 
         a = actions.get(1);
         assertTrue(a instanceof TreeInsert);
         TreeInsert ti = (TreeInsert) a;
-        assertEquals("0@@x", ti.getNode().toShortString());
-        assertEquals("0@@a", ti.getParent().toShortString());
+        assertEquals("x", ti.getNode().getLabel());
+        assertEquals("a", ti.getParent().getLabel());
         assertEquals(3, ti.getPosition());
 
         a = actions.get(2);
         assertTrue(a instanceof Move);
         Move m = (Move) a;
-        assertEquals("0@@e", m.getNode().toShortString());
-        assertEquals("0@@h", m.getParent().toShortString());
+        assertEquals("e", m.getNode().getLabel());
+        assertEquals("h", m.getParent().getLabel());
         assertEquals(0, m.getPosition());
 
         a = actions.get(3);
         assertTrue(a instanceof Insert);
         Insert i2 = (Insert) a;
-        assertEquals("0@@u", i2.getNode().toShortString());
-        assertEquals("0@@j", i2.getParent().toShortString());
+        assertEquals("u", i2.getNode().getLabel());
+        assertEquals("j", i2.getParent().getLabel());
         assertEquals(0, i2.getPosition());
 
         a = actions.get(4);
         assertTrue(a instanceof Update);
         Update u = (Update) a;
-        assertEquals("0@@f", u.getNode().toShortString());
+        assertEquals("f", u.getNode().getLabel());
         assertEquals("y", u.getValue());
 
         a = actions.get(5);
         assertTrue(a instanceof Insert);
         Insert i3 = (Insert) a;
-        assertEquals("0@@v", i3.getNode().toShortString());
-        assertEquals("0@@u", i3.getParent().toShortString());
+        assertEquals("v", i3.getNode().getLabel());
+        assertEquals("u", i3.getParent().getLabel());
         assertEquals(0, i3.getPosition());
 
         a = actions.get(6);
         assertTrue(a instanceof Move);
         Move m2 = (Move) a;
-        assertEquals("0@@k", m2.getNode().toShortString());
-        assertEquals("0@@v", m2.getParent().toShortString());
+        assertEquals("k", m2.getNode().getLabel());
+        assertEquals("v", m2.getParent().getLabel());
         assertEquals(0, m.getPosition());
 
         a = actions.get(7);
         assertTrue(a instanceof TreeDelete);
         TreeDelete td = (TreeDelete) a;
-        assertEquals("0@@g", td.getNode().toShortString());
+        assertEquals("g", td.getNode().getLabel());
 
         a = actions.get(8);
         assertTrue(a instanceof Delete);
         Delete d = (Delete) a;
-        assertEquals("0@@i", d.getNode().toShortString());
+        assertEquals("i", d.getNode().getLabel());
     }
 
     @Test
@@ -122,20 +121,20 @@ public class TestActionGenerator {
         ITree src = trees.getFirst().getRoot();
         ITree dst = trees.getSecond().getRoot();
         MappingStore ms = new MappingStore();
-        ms.link(src, dst);
-        ms.link(src.getChild(1), dst.getChild(0));
-        ms.link(src.getChild(1).getChild(0), dst.getChild(0).getChild(0));
-        ms.link(src.getChild(1).getChild(1), dst.getChild(0).getChild(1));
-        ms.link(src.getChild(0), dst.getChild(1).getChild(0));
-        ms.link(src.getChild(0).getChild(0), dst.getChild(1).getChild(0).getChild(0));
-        ms.link(src.getChild(4), dst.getChild(3));
-        ms.link(src.getChild(4).getChild(0), dst.getChild(3).getChild(0).getChild(0).getChild(0));
+        ms.addMapping(src, dst);
+        ms.addMapping(src.getChild(1), dst.getChild(0));
+        ms.addMapping(src.getChild(1).getChild(0), dst.getChild(0).getChild(0));
+        ms.addMapping(src.getChild(1).getChild(1), dst.getChild(0).getChild(1));
+        ms.addMapping(src.getChild(0), dst.getChild(1).getChild(0));
+        ms.addMapping(src.getChild(0).getChild(0), dst.getChild(1).getChild(0).getChild(0));
+        ms.addMapping(src.getChild(4), dst.getChild(3));
+        ms.addMapping(src.getChild(4).getChild(0), dst.getChild(3).getChild(0).getChild(0).getChild(0));
 
         ActionGenerator ag = new ActionGenerator(src, dst, ms);
         ag.generate();
 
         for (Action a: ag.getActions())
-            System.out.println(a.format(trees.getFirst()));
+            System.out.println(a.toString());
 
         List<Action> actions = ag.getActions();
     }
@@ -146,11 +145,11 @@ public class TestActionGenerator {
         ITree src = trees.getFirst().getRoot();
         ITree dst = trees.getSecond().getRoot();
         MappingStore ms = new MappingStore();
-        ms.link(src, dst.getChild(0));
-        ms.link(src.getChild(0), dst.getChild(0).getChild(0));
-        ms.link(src.getChild(1), dst.getChild(0).getChild(1));
-        ms.link(src.getChild(1).getChild(0), dst.getChild(0).getChild(1).getChild(0));
-        ms.link(src.getChild(1).getChild(2), dst.getChild(0).getChild(1).getChild(2));
+        ms.addMapping(src, dst.getChild(0));
+        ms.addMapping(src.getChild(0), dst.getChild(0).getChild(0));
+        ms.addMapping(src.getChild(1), dst.getChild(0).getChild(1));
+        ms.addMapping(src.getChild(1).getChild(0), dst.getChild(0).getChild(1).getChild(0));
+        ms.addMapping(src.getChild(1).getChild(2), dst.getChild(0).getChild(1).getChild(2));
 
         ActionGenerator ag = new ActionGenerator(src, dst, ms);
         ag.generate();

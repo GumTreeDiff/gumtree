@@ -64,7 +64,7 @@ public abstract class Matcher {
     }
 
     protected void addMapping(ITree src, ITree dst) {
-        mappings.link(src, dst);
+        mappings.addMapping(src, dst);
     }
 
     protected void addMappingRecursively(ITree src, ITree dst) {
@@ -98,7 +98,7 @@ public abstract class Matcher {
         int common = 0;
 
         for (ITree t : src.getDescendants()) {
-            ITree m = mappings.getDst(t);
+            ITree m = mappings.getDstForSrc(t);
             if (m != null && dstDescendants.contains(m))
                 common++;
         }
@@ -107,6 +107,6 @@ public abstract class Matcher {
     }
 
     public boolean isMappingAllowed(ITree src, ITree dst) {
-        return src.hasSameType(dst) && !(mappings.hasSrc(src) || mappings.hasDst(dst));
+        return src.hasSameType(dst) && !(mappings.isSrcMapped(src) || mappings.isDstMapped(dst));
     }
 }

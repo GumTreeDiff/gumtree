@@ -79,17 +79,17 @@ public final class HtmlDiffs {
         TagIndex ltags = new TagIndex();
         for (ITree t: src.getRoot().getTrees()) {
             if (c.getSrcMvTrees().contains(t)) {
-                mappingIds.put(mappings.getDst(t).getId(), mId);
+                mappingIds.put(mappings.getDstForSrc(t).getId(), mId);
                 ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 ltags.addTags(t.getPos(), String.format(
                                 SRC_MV_SPAN, "token mv", mId++, tooltip(src, t)), t.getEndPos(), END_SPAN);
             }
             if (c.getSrcUpdTrees().contains(t)) {
-                mappingIds.put(mappings.getDst(t).getId(), mId);
+                mappingIds.put(mappings.getDstForSrc(t).getId(), mId);
                 ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 ltags.addTags(t.getPos(), String.format(
                                 SRC_MV_SPAN, "token upd", mId++, tooltip(src, t)), t.getEndPos(), END_SPAN);
-                List<int[]> hunks = StringAlgorithms.hunks(t.getLabel(), mappings.getDst(t).getLabel());
+                List<int[]> hunks = StringAlgorithms.hunks(t.getLabel(), mappings.getDstForSrc(t).getLabel());
                 for (int[] hunk: hunks)
                     ltags.addTags(t.getPos() + hunk[0], UPD_SPAN, t.getPos() + hunk[1], END_SPAN);
 
@@ -114,7 +114,7 @@ public final class HtmlDiffs {
                 rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 rtags.addTags(t.getPos(), String.format(
                                 DST_MV_SPAN, "token upd", dId, tooltip(dst, t)), t.getEndPos(), END_SPAN);
-                List<int[]> hunks = StringAlgorithms.hunks(mappings.getSrc(t).getLabel(), t.getLabel());
+                List<int[]> hunks = StringAlgorithms.hunks(mappings.getSrcForDst(t).getLabel(), t.getLabel());
                 for (int[] hunk: hunks)
                     rtags.addTags(t.getPos() + hunk[2], UPD_SPAN, t.getPos() + hunk[3], END_SPAN);
             }

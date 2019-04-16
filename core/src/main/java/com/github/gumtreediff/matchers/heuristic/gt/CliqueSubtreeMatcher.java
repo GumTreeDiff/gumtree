@@ -142,7 +142,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
             int common = 0;
 
             for (ITree t: srcDescendants.get(src)) {
-                ITree m = mappings.getDst(t);
+                ITree m = mappings.getDstForSrc(t);
                 if (m != null && dstDescendants.get(dst).contains(m)) common++;
             }
 

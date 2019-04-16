@@ -26,7 +26,6 @@ import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
-import com.google.gson.internal.Excluder;
 import com.google.gson.stream.JsonWriter;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -105,10 +104,10 @@ public final class ActionsIoUtils {
             for (Action a : actions) {
                 ITree src = a.getNode();
                 if (a instanceof Move) {
-                    ITree dst = mappings.getDst(src);
+                    ITree dst = mappings.getDstForSrc(src);
                     fmt.moveAction((Move) a, src, dst.getParent(), ((Move) a).getPosition());
                 } else if (a instanceof Update) {
-                    ITree dst = mappings.getDst(src);
+                    ITree dst = mappings.getDstForSrc(src);
                     fmt.updateAction((Update) a, src, dst);
                 } else if (a instanceof Insert) {
                     ITree dst = a.getNode();
@@ -305,37 +304,37 @@ public final class ActionsIoUtils {
 
         @Override
         public void insertRoot(Insert action, ITree node) throws Exception {
-            write(action.format(context));
+            write(action.toString());
         }
 
         @Override
         public void insertAction(Insert action, ITree node, ITree parent, int index) throws Exception {
-            write(action.format(context));
+            write(action.toString());
         }
 
         @Override
         public void insertTreeAction(TreeInsert action, ITree node, ITree parent, int index) throws Exception {
-            write(action.format(context));
+            write(action.toString());
         }
 
         @Override
         public void moveAction(Move action, ITree src, ITree dst, int position) throws Exception {
-            write(action.format(context));
+            write(action.toString());
         }
 
         @Override
         public void updateAction(Update action, ITree src, ITree dst) throws Exception {
-            write(action.format(context));
+            write(action.toString());
         }
 
         @Override
         public void deleteAction(Delete action, ITree node) throws Exception {
-            write(action.format(context));
+            write(action.toString());
         }
 
         @Override
         public void deleteTreeAction(TreeDelete action, ITree node) throws Exception {
-            write(action.format(context));
+            write(action.toString());
         }
 
         @Override
@@ -348,7 +347,7 @@ public final class ActionsIoUtils {
         }
 
         private String toS(ITree node) {
-            return String.format("%s(%d)", node.toPrettyString(context), node.getId());
+            return String.format("%s(%d)", node.toString(), node.getId());
         }
     }
 

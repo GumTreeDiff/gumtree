@@ -49,7 +49,7 @@ public class ClusterDiff extends AbstractDiffClient<AbstractDiffClient.Options> 
             System.out.println(f.getClusterLabel(cluster));
             System.out.println("------------");
             for (Action a: cluster)
-                System.out.println(a.format(getSrcTreeContext()));
+                System.out.println(a.toString());
             System.out.println("");
         }
     }

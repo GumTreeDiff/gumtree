@@ -71,7 +71,7 @@ public class ActionGenerator {
 
         origMappings = new MappingStore();
         for (Mapping m: mappings)
-            this.origMappings.link(cpySrcTrees.get(m.getFirst().getId()), m.getSecond());
+            this.origMappings.addMapping(cpySrcTrees.get(m.getFirst().getId()), m.getSecond());
         this.newMappings = origMappings.copy();
     }
 
@@ -90,15 +90,15 @@ public class ActionGenerator {
         srcInOrder = new HashSet<>();
 
         lastId = newSrc.getSize() + 1;
-        newMappings.link(srcFakeRoot, dstFakeRoot);
+        newMappings.addMapping(srcFakeRoot, dstFakeRoot);
 
         List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
         for (ITree x: bfsDst) {
             ITree w = null;
             ITree y = x.getParent();
-            ITree z = newMappings.getSrc(y);
+            ITree z = newMappings.getSrcForDst(y);
 
-            if (!newMappings.hasDst(x)) {
+            if (!newMappings.isDstMapped(x)) {
                 int k = findPos(x);
                 // Insertion case : insert new node.
                 w = new AbstractTree.FakeTree();
@@ -110,11 +110,11 @@ public class ActionGenerator {
                 actions.add(ins);
                 //System.out.println(ins);
                 origSrcTrees.put(w.getId(), x);
-                newMappings.link(w, x);
+                newMappings.addMapping(w, x);
                 z.getChildren().add(k, w);
                 w.setParent(z);
             } else {
-                w = newMappings.getSrc(x);
+                w = newMappings.getSrcForDst(x);
                 if (!x.equals(origDst)) { // TODO => x != origDst // Case of the root
                     ITree v = w.getParent();
                     if (!w.getLabel().equals(x.getLabel())) {
@@ -140,7 +140,7 @@ public class ActionGenerator {
         }
 
         for (ITree w : newSrc.postOrder())
-            if (!newMappings.hasSrc(w))
+            if (!newMappings.isSrcMapped(w))
                 actions.add(new Delete(origSrcTrees.get(w.getId())));
 
 
@@ -158,7 +158,7 @@ public class ActionGenerator {
             if (a instanceof Update) {
                 Update u = (Update) a;
                 ITree src = cpySrcTrees.get(a.getNode().getId());
-                ITree dst = origMappings.getDst(src);
+                ITree dst = origMappings.getDstForSrc(src);
                 actionsCpy.add(new Insert(
                         dst,
                         dst.getParent(),
@@ -168,7 +168,7 @@ public class ActionGenerator {
             else if (a instanceof Move) {
                 Move m = (Move) a;
                 ITree src = cpySrcTrees.get(a.getNode().getId());
-                ITree dst = origMappings.getDst(src);
+                ITree dst = origMappings.getDstForSrc(src);
                 actionsCpy.add(new TreeInsert(
                         dst,
                         dst.getParent(),
@@ -231,14 +231,14 @@ public class ActionGenerator {
 
         List<ITree> s1 = new ArrayList<>();
         for (ITree c: w.getChildren())
-            if (newMappings.hasSrc(c))
-                if (x.getChildren().contains(newMappings.getDst(c)))
+            if (newMappings.isSrcMapped(c))
+                if (x.getChildren().contains(newMappings.getDstForSrc(c)))
                     s1.add(c);
 
         List<ITree> s2 = new ArrayList<>();
         for (ITree c: x.getChildren())
-            if (newMappings.hasDst(c))
-                if (w.getChildren().contains(newMappings.getSrc(c)))
+            if (newMappings.isDstMapped(c))
+                if (w.getChildren().contains(newMappings.getSrcForDst(c)))
                     s2.add(c);
 
         List<Mapping> lcs = lcs(s1, s2);
@@ -291,7 +291,7 @@ public class ActionGenerator {
         //if (v == null) throw new RuntimeException("No rightmost sibling in order");
         if (v == null) return 0;
 
-        ITree u = newMappings.getSrc(v);
+        ITree u = newMappings.getSrcForDst(v);
         // siblings = u.getParent().getChildren();
         // int upos = siblings.indexOf(u);
         int upos = u.positionInParent();
@@ -313,14 +313,14 @@ public class ActionGenerator {
         int[][] opt = new int[m + 1][n + 1];
         for (int i = m - 1; i >= 0; i--) {
             for (int j = n - 1; j >= 0; j--) {
-                if (newMappings.getSrc(y.get(j)).equals(x.get(i))) opt[i][j] = opt[i + 1][j + 1] + 1;
+                if (newMappings.getSrcForDst(y.get(j)).equals(x.get(i))) opt[i][j] = opt[i + 1][j + 1] + 1;
                 else  opt[i][j] = Math.max(opt[i + 1][j], opt[i][j + 1]);
             }
         }
 
         int i = 0, j = 0;
         while (i < m && j < n) {
-            if (newMappings.getSrc(y.get(j)).equals(x.get(i))) {
+            if (newMappings.getSrcForDst(y.get(j)).equals(x.get(i))) {
                 lcs.add(new Mapping(x.get(i), y.get(j)));
                 i++;
                 j++;

@@ -124,14 +124,14 @@ public class InnerNodesMatcherThetaD extends Matcher {
                 }
             }
             if (maxCount == 1) {
-                if (mappings.getDst(countEntry.getKey()) != null
-                        && mappings.getSrc(maxNode) != null) {
-                    ITree partner = mappings.getDst(countEntry.getKey());
-                    ITree maxNodePartner = mappings.getSrc(maxNode);
+                if (mappings.getDstForSrc(countEntry.getKey()) != null
+                        && mappings.getSrcForDst(maxNode) != null) {
+                    ITree partner = mappings.getDstForSrc(countEntry.getKey());
+                    ITree maxNodePartner = mappings.getSrcForDst(maxNode);
                     if (partner != maxNode) {
                         if (max > countEntry.getKey().getChildren().size() / 2
                                 || countEntry.getKey().getChildren().size() == 1) {
-                            ITree parentPartner = mappings.getDst(countEntry.getKey().getParent());
+                            ITree parentPartner = mappings.getDstForSrc(countEntry.getKey().getParent());
 
                             if (parentPartner != null && parentPartner == partner.getParent()) {
                                 continue;
@@ -139,10 +139,10 @@ public class InnerNodesMatcherThetaD extends Matcher {
                             if (allowedMatching(countEntry.getKey(), maxNodePartner)) {
                                 if (countEntry.getKey().getType() == maxNode.getType()) {
                                     if (maxNodePartner != null) {
-                                        mappings.unlink(maxNodePartner, maxNode);
+                                        mappings.removeMapping(maxNodePartner, maxNode);
                                     }
                                     if (partner != null) {
-                                        mappings.unlink(countEntry.getKey(), partner);
+                                        mappings.removeMapping(countEntry.getKey(), partner);
                                     }
                                     addMapping(countEntry.getKey(), maxNode);
                                 }

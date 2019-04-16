@@ -209,7 +209,8 @@ public final class TreeIoUtils {
         public TreeSerializer(TreeContext ctx, ITree root) {
             context = ctx;
             this.root = root;
-            serializers.addAll(ctx.getSerializers());
+            if (ctx != null)
+                serializers.addAll(ctx.getSerializers());
         }
 
         protected abstract TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
@@ -230,7 +231,8 @@ public final class TreeIoUtils {
 
         protected void writeTree(TreeFormatter formatter, ITree root) throws Exception {
             formatter.startSerialization();
-            writeAttributes(formatter, context.getMetadata());
+            if (context != null)
+                writeAttributes(formatter, context.getMetadata());
             formatter.endProlog();
             try {
                 TreeUtils.visitTree(root, new TreeUtils.TreeVisitor() {
@@ -444,9 +446,9 @@ public final class TreeIoUtils {
             super(w, ctx);
 
             if (isSrc)
-                searchOther = (tree) -> m.hasSrc(tree) ? m.getDst(tree) : null;
+                searchOther = (tree) -> m.isSrcMapped(tree) ? m.getDstForSrc(tree) : null;
             else
-                searchOther = (tree) -> m.hasDst(tree) ? m.getSrc(tree) : null;
+                searchOther = (tree) -> m.isDstMapped(tree) ? m.getSrcForDst(tree) : null;
         }
 
         interface SearchOther {
@@ -587,7 +589,7 @@ public final class TreeIoUtils {
 
         @Override
         public void startTree(ITree tree) throws Exception {
-            String label = tree.toPrettyString(context);
+            String label = tree.toString();
             if (label.contains("\"") || label.contains("\\s"))
                 label = label.replaceAll("\"", "").replaceAll("\\s", "").replaceAll("\\\\", "");
             if (label.length() > 30)
@@ -702,7 +704,7 @@ public final class TreeIoUtils {
 
         @Override
         public void writeTree(ITree tree) throws IOException {
-            writer.write(tree.toPrettyString(context));
+            writer.write(tree.toString());
         }
     }
 
@@ -714,7 +716,7 @@ public final class TreeIoUtils {
 
         @Override
         public void writeTree(ITree tree) throws IOException {
-            writer.write(tree.toShortString());
+            writer.write(tree.toString());
         }
     }
 

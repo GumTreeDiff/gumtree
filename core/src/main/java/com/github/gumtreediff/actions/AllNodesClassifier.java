@@ -58,13 +58,13 @@ public class AllNodesClassifier extends TreeClassifier {
             }
             else if (a instanceof Update) {
                 srcUpdTrees.add(a.getNode());
-                dstUpdTrees.add(mappings.getDst(a.getNode()));
+                dstUpdTrees.add(mappings.getDstForSrc(a.getNode()));
             }
             else if (a instanceof Move) {
                 srcMvTrees.add(a.getNode());
                 srcMvTrees.addAll(a.getNode().getDescendants());
-                dstMvTrees.add(mappings.getDst(a.getNode()));
-                dstMvTrees.addAll(mappings.getDst(a.getNode()).getDescendants());
+                dstMvTrees.add(mappings.getDstForSrc(a.getNode()));
+                dstMvTrees.addAll(mappings.getDstForSrc(a.getNode()).getDescendants());
             }
         }
     }

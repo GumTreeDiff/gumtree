@@ -62,7 +62,7 @@ public class TreePanel extends JPanel {
                                              boolean hasFocus) {
                 if (value != null) {
                     ITree node = ((ITree) ((DefaultMutableTreeNode) value).getUserObject());
-                    return node.toPrettyString(tree);
+                    return node.toString();
                 }
                 return "";
             }

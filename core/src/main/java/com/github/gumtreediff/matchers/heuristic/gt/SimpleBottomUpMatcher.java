@@ -23,7 +23,6 @@ package com.github.gumtreediff.matchers.heuristic.gt;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.optimal.zs.ZsMatcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeMap;
 import com.github.gumtreediff.utils.StringAlgorithms;
@@ -95,7 +94,7 @@ public class SimpleBottomUpMatcher extends Matcher {
     protected List<ITree> getDstCandidates(ITree src) {
         List<ITree> seeds = new ArrayList<>();
         for (ITree c: src.getDescendants()) {
-            ITree m = mappings.getDst(c);
+            ITree m = mappings.getDstForSrc(c);
             if (m != null) seeds.add(m);
         }
         List<ITree> candidates = new ArrayList<>();

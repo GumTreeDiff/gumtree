@@ -56,12 +56,12 @@ public class LcsOptMatcherThetaB extends Matcher {
         Set<ITree> unmatchedNodes1 = new HashSet<>();
         Set<ITree> unmatchedNodes2 = new HashSet<>();
         for (ITree node : allNodesSrc) {
-            if (!mappings.hasSrc(node)) {
+            if (!mappings.isSrcMapped(node)) {
                 unmatchedNodes1.add(node);
             }
         }
         for (ITree node : allNodesDst) {
-            if (!mappings.hasDst(node)) {
+            if (!mappings.isDstMapped(node)) {
                 unmatchedNodes2.add(node);
             }
         }
@@ -82,12 +82,12 @@ public class LcsOptMatcherThetaB extends Matcher {
                 if (parent == src) {
                     partner = dst;
                 } else {
-                    partner = mappings.getDst(parent);
+                    partner = mappings.getDstForSrc(parent);
                 }
 
                 while (parent != null && partner == null) {
                     parent = parent.getParent();
-                    partner = mappings.getDst(parent);
+                    partner = mappings.getDstForSrc(parent);
                 }
                 if (parent != null && partner != null) {
                     if (checkedParent.contains(parent)) {
@@ -101,7 +101,7 @@ public class LcsOptMatcherThetaB extends Matcher {
                     getNodeListInPostOrder(partner, list2);
                     List<Mapping> lcsMatch = lcs(list1, list2, unmatchedNodes1, unmatchedNodes2);
                     for (Mapping match : lcsMatch) {
-                        if (!mappings.hasSrc(match.first) && !mappings.hasDst(match.second)) {
+                        if (!mappings.isSrcMapped(match.first) && !mappings.isDstMapped(match.second)) {
                             addMapping(match.first, match.second);
                             unmatchedNodes1.remove(match.first);
                             unmatchedNodes2.remove(match.second);
@@ -120,7 +120,7 @@ public class LcsOptMatcherThetaB extends Matcher {
         while (ipar > 0 && jpar > 0) {
             if (testCondition(list1.get(ipar - 1), list2.get(jpar - 1), unmatchedNodes1,
                     unmatchedNodes2)) {
-                if (!mappings.hasSrc(list1.get(ipar - 1))) {
+                if (!mappings.isSrcMapped(list1.get(ipar - 1))) {
                     resultList.add(new Mapping(list1.get(ipar - 1), list2.get(jpar - 1)));
                 }
             }
@@ -146,7 +146,7 @@ public class LcsOptMatcherThetaB extends Matcher {
             for (ITree child : tree.getChildren()) {
                 getNodeListInPostOrder(child, nodes);
             }
-            if (!mappings.hasSrc(tree) && !mappings.hasDst(tree)) {
+            if (!mappings.isSrcMapped(tree) && !mappings.isDstMapped(tree)) {
                 nodes.add(tree);
             }
         }
@@ -195,7 +195,7 @@ public class LcsOptMatcherThetaB extends Matcher {
         if (node1.getType() != node2.getType()) {
             return false;
         }
-        if (mappings.hasSrc(node1) && mappings.getDst(node1) == node2) {
+        if (mappings.isSrcMapped(node1) && mappings.getDstForSrc(node1) == node2) {
             return true;
         }
         if (unmatchedNodes1.contains(node1) && unmatchedNodes2.contains(node2)) {
