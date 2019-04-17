@@ -21,6 +21,6 @@ package com.github.gumtreediff.tree;
 
 public interface MetricProvider<M> {
 
-    M getMetric(ITree tree);
+    M get(ITree tree);
 
 }
