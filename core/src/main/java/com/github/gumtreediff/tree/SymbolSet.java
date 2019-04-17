@@ -31,15 +31,15 @@ public class SymbolSet {
     private static class SymbolFactoryImplementation extends Symbol.SymbolFactory {
         private final Map<String, Symbol> symbols = new HashMap<>();
 
-        public Symbol getSymbol(String value) {
-//            return symbols.computeIfAbsent(value == null ? "" : value, (key) -> makeSymbol(key));
-            if (value == null)
-                value = "";
+        public Symbol getSymbol(String name) {
+//            return symbols.computeIfAbsent(name == null ? "" : name, (key) -> makeSymbol(key));
+            if (name == null)
+                name = "";
 
-            Symbol sym = symbols.get(value);
+            Symbol sym = symbols.get(name);
             if (sym == null) {
-                sym = makeSymbol(value);
-                symbols.put(value, sym);
+                sym = makeSymbol(name);
+                symbols.put(name, sym);
             }
 
             return sym;
