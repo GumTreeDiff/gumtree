@@ -40,6 +40,10 @@ public class MappingStore implements Iterable<Mapping> {
         dstToSrc = new HashMap<>();
     }
 
+    public int size() {
+        return srcToDst.size();
+    }
+
     public Set<Mapping> asSet() {
         return new AbstractSet<Mapping>() {
 

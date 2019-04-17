@@ -57,13 +57,13 @@ public class TestGumtreeMatcher {
         Matcher m = new CompositeMatchers.ClassicGumtree(
                 trees.first.getRoot(), trees.second.getRoot(), new MappingStore());
         m.match();
-        assertEquals(5, m.getMappingsAsSet().size());
+        assertEquals(5, m.getMappings().size());
         GreedySubtreeMatcher.MIN_HEIGHT = 0;
-        AbstractBottomUpMatcher.SIZE_THRESHOLD = 5;
+        AbstractBottomUpMatcher.SIZE_THRESHOLD = 8;
         m = new CompositeMatchers.ClassicGumtree(
                 trees.first.getRoot(), trees.second.getRoot(), new MappingStore());
         m.match();
-        assertEquals(6, m.getMappingsAsSet().size());
+        assertEquals(5, m.getMappings().size());
     }
 
 }

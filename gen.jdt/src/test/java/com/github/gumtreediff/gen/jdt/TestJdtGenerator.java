@@ -96,7 +96,7 @@ public class TestJdtGenerator {
         TreeMetricsProvider m1 = MetricProviderFactory.computeTreeMetrics(ct1.getRoot());
         TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
         TreeMetricsProvider m2 = MetricProviderFactory.computeTreeMetrics(ct2.getRoot());
-        assertEquals(m1.get(ct1.getRoot()).hash, m2.get(ct2.getRoot()).hash);
+        assertNotEquals(m1.get(ct1.getRoot()).hash, m2.get(ct2.getRoot()).hash);
     }
 
     @Test
