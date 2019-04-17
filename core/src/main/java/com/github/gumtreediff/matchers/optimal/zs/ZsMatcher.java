@@ -23,7 +23,7 @@ package com.github.gumtreediff.matchers.optimal.zs;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeMetricsProviderFactory;
+import com.github.gumtreediff.tree.TreeMetricsProvider;
 import org.simmetrics.StringMetrics;
 
 import java.util.*;
@@ -189,7 +189,7 @@ public class ZsMatcher extends Matcher {
 
         private int[] kr;
 
-        private ZsTree(ITree t, TreeMetricsProviderFactory.TreeMetricsProvider treeMetrics) {
+        private ZsTree(ITree t, TreeMetricsProvider treeMetrics) {
             this.start = 0;
             this.nodeCount = treeMetrics.get(t).size;
             this.leafCount = 0;

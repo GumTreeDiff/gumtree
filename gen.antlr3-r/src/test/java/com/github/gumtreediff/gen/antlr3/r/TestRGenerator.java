@@ -25,7 +25,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.MetricProviderFactory;
 import com.github.gumtreediff.tree.Symbol;
+import com.github.gumtreediff.tree.TreeMetricsProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -58,8 +60,9 @@ public class TestRGenerator {
     @Test
     public void testSimpleParse() throws IOException {
         ITree t = new RTreeGenerator().generateFrom().string(input).getRoot();
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(t);
         assertEquals(expectedRootSymbol, t.getType());
-        assertEquals(expectedSize, t.getSize());
+        assertEquals(expectedSize, m.get(t).size);
     }
 
 }

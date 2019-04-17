@@ -87,7 +87,6 @@ public class PythonTreeGenerator extends ExternalProcessTreeGenerator {
                 } else if (ev.isEndElement())
                     trees.removeFirst();
             }
-            context.validate();
             return context;
         } catch (Exception e) {
             e.printStackTrace();

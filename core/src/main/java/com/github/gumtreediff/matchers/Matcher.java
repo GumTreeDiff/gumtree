@@ -22,11 +22,10 @@ package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.MetricProviderFactory;
-import com.github.gumtreediff.tree.TreeMetricsProviderFactory;
+import com.github.gumtreediff.tree.TreeMetricsProvider;
 import org.atteo.classindex.IndexSubclasses;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -41,9 +40,9 @@ public abstract class Matcher {
 
     protected final MappingStore mappings;
 
-    protected final TreeMetricsProviderFactory.TreeMetricsProvider srcMetrics;
+    protected final TreeMetricsProvider srcMetrics;
 
-    protected final TreeMetricsProviderFactory.TreeMetricsProvider dstMetrics;
+    protected final TreeMetricsProvider dstMetrics;
 
     public Matcher(ITree src, ITree dst, MappingStore mappings) {
         this.src = src;

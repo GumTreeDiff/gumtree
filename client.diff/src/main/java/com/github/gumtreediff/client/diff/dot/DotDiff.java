@@ -52,7 +52,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
             writer.write("}\n");
             for (Mapping m: matcher.getMappingsAsSet()) {
                 writer.write(String.format("%s -> %s [style=dashed]\n;",
-                        getDotId(getSrcTreeContext(), m.getFirst()), getDotId(getDstTreeContext(), m.getSecond())));
+                        getDotId(getSrcTreeContext(), m.first), getDotId(getDstTreeContext(), m.second)));
             }
             writer.write("}\n");
             System.out.println(writer.toString());
@@ -77,7 +77,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
     }
 
     private String getDotId(TreeContext context, ITree tree) {
-        return "n_" + context.hashCode() + "_" + tree.getId();
+        return "n_" + context.hashCode() + "_" + tree.hashCode();
     }
 
     private String getDotLabel(TreeContext context, ITree tree) {

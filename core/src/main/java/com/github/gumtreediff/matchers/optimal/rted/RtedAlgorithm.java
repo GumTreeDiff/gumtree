@@ -18,7 +18,7 @@ package com.github.gumtreediff.matchers.optimal.rted;
 import java.util.*;
 
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeMetricsProviderFactory;
+import com.github.gumtreediff.tree.TreeMetricsProvider;
 
 
 /**
@@ -119,7 +119,7 @@ public class RtedAlgorithm {
 		return computeDistUsingStrArray(it1, it2);
 	}
 
-	public void init(ITree src, TreeMetricsProviderFactory.TreeMetricsProvider srcMetrics, ITree dst, TreeMetricsProviderFactory.TreeMetricsProvider dstMetrics) {
+	public void init(ITree src, TreeMetricsProvider srcMetrics, ITree dst, TreeMetricsProvider dstMetrics) {
 		ld = new LabelDictionary();
 		it1 = new InfoTree(src, srcMetrics, ld);
 		it2 = new InfoTree(dst, dstMetrics, ld);

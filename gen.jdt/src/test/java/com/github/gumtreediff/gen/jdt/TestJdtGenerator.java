@@ -24,12 +24,10 @@ import java.io.IOException;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.Symbol;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.*;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.junit.Test;
 
-import com.github.gumtreediff.tree.ITree;
 import static org.junit.Assert.*;
 
 public class TestJdtGenerator {
@@ -41,7 +39,8 @@ public class TestJdtGenerator {
         String input = "public class Foo { public int foo; }";
         ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
-        assertEquals(10, tree.getSize());
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
+        assertEquals(10, m.get(tree).size);
     }
 
     @Test
@@ -50,7 +49,8 @@ public class TestJdtGenerator {
                 + "{ for (A f : foo) { System.out.println(f); } } }";
         ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
-        assertEquals(35, tree.getSize());
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
+        assertEquals(35, m.get(tree).size);
     }
 
     @Test
@@ -78,7 +78,8 @@ public class TestJdtGenerator {
         String input = "public class Foo { public void foo(){ new ArrayList<Object>().stream().forEach(a -> {}); } }";
         ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
-        assertEquals(28, tree.getSize());
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
+        assertEquals(28, m.get(tree).size);
     }
 
     @Test(expected = SyntaxException.class)
@@ -92,8 +93,10 @@ public class TestJdtGenerator {
         String input1 = "public class Foo {}";
         String input2 = "public interface Foo {}";
         TreeContext ct1 = new JdtTreeGenerator().generateFrom().string(input1);
+        TreeMetricsProvider m1 = MetricProviderFactory.computeTreeMetrics(ct1.getRoot());
         TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
-        assertTrue(!ct1.getRoot().toStaticHashString().equals(ct2.getRoot().toStaticHashString()));
+        TreeMetricsProvider m2 = MetricProviderFactory.computeTreeMetrics(ct2.getRoot());
+        assertEquals(m1.get(ct1.getRoot()).hash, m2.get(ct2.getRoot()).hash);
     }
 
     @Test

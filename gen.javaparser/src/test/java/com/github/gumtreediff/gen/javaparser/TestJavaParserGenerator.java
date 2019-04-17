@@ -27,11 +27,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.tree.Symbol;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.*;
 import org.junit.Test;
 
-import com.github.gumtreediff.tree.ITree;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -70,8 +68,9 @@ public class TestJavaParserGenerator {
     @Test
     public void testSimpleSyntax() throws IOException {
         ITree tree = new JavaParserGenerator().generateFrom().string(input).getRoot();
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
         assertEquals(expectedRootSymbol, tree.getType());
-        assertEquals(expectedSize, tree.getSize());
+        assertEquals(expectedSize, m.get(tree).size);
     }
 
     @Test(expected = SyntaxException.class)

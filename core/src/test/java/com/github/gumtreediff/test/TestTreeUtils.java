@@ -28,14 +28,14 @@ import java.util.List;
 import com.github.gumtreediff.tree.*;
 import org.junit.Test;
 
-import static com.github.gumtreediff.tree.TreeMetricsProviderFactory.BASE;
+import static com.github.gumtreediff.tree.TreeMetricsProvider.Factory.BASE;
 
 public class TestTreeUtils {
 
     @Test
     public void testPostOrderNumbering() {
         ITree root = TreeLoader.getDummySrc();
-        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(4, m.get(root).position);
         assertEquals(2, m.get(root.getChild(0)).position);
         assertEquals(0, m.get(root.getChild(0).getChild(0)).position);
@@ -47,7 +47,7 @@ public class TestTreeUtils {
     public void testDepth2() {
         ITree root = TreeLoader.getDummySrc();
         System.out.println(root.toTreeString());
-        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(0, m.get(root).depth);
         assertEquals(1, m.get(root.getChildren().get(0)).depth);
         assertEquals(2, m.get(root.getChildren().get(0).getChildren().get(0)).depth);
@@ -59,7 +59,7 @@ public class TestTreeUtils {
     public void testSize2() {
         ITree root = TreeLoader.getDummySrc();
         System.out.println(root.toTreeString());
-        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(5, m.get(root).size);
         assertEquals(3, m.get(root.getChildren().get(0)).size);
         assertEquals(1, m.get(root.getChildren().get(0).getChildren().get(0)).size);
@@ -71,7 +71,7 @@ public class TestTreeUtils {
     public void testHash2() {
         ITree root = TreeLoader.getDummySrc();
         System.out.println(root.toTreeString());
-        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(
                 96746278
                         + BASE * 96747270
@@ -100,7 +100,7 @@ public class TestTreeUtils {
     @Test
     public void testHeight2() {
         ITree root = TreeLoader.getDummySrc();
-        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(2, m.get(root).height); // depth of a
         assertEquals(1, m.get(root.getChildren().get(0)).height); // depth of b
         assertEquals(0, m.get(root.getChildren().get(0).getChildren().get(0)).height); // depth of c

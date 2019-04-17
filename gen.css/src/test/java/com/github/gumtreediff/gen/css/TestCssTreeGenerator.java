@@ -21,7 +21,9 @@ package com.github.gumtreediff.gen.css;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.MetricProviderFactory;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.TreeMetricsProvider;
 import org.junit.Test;
 
 import java.io.*;
@@ -41,7 +43,8 @@ public class TestCssTreeGenerator {
                 + "}");
         TreeContext ctx = new CssTreeGenerator().generateFrom().reader(r);
         ITree tree = ctx.getRoot();
-        assertEquals(10, tree.getSize());
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
+        assertEquals(10, m.get(tree).size);
     }
 
     @Test(expected = SyntaxException.class)

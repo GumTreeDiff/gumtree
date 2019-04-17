@@ -23,9 +23,7 @@ package com.github.gumtreediff.gen.ruby;
 import java.io.IOException;
 
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.*;
 import org.jrubyparser.ast.NodeType;
 import org.junit.Test;
 
@@ -41,7 +39,8 @@ public class TestRubyGenerator {
         ITree tree = new RubyTreeGenerator().generateFrom()
                 .charset("UTF-8").stream(getClass().getResourceAsStream("/sample.rb")).getRoot();
         assertEquals(ROOT_NODE, tree.getType());
-        assertEquals(1726, tree.getSize());
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
+        assertEquals(1726, m.get(tree).size);
     }
 
     @Test

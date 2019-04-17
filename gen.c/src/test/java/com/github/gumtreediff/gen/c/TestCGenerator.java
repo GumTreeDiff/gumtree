@@ -22,6 +22,8 @@ package com.github.gumtreediff.gen.c;
 
 import java.io.IOException;
 
+import com.github.gumtreediff.tree.MetricProviderFactory;
+import com.github.gumtreediff.tree.TreeMetricsProvider;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -34,7 +36,8 @@ public class TestCGenerator {
     public void testSimpleSyntax() throws IOException {
         String input = "int main() { printf(\"Hello world!\"); return 0; }";
         ITree t = new CTreeGenerator().generateFrom().string(input).getRoot();
-        Assert.assertEquals(18, t.getSize());
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(t);
+        Assert.assertEquals(18, m.get(t).size);
     }
 
 }

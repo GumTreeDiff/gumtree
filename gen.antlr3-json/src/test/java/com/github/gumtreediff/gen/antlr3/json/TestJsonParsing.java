@@ -23,9 +23,7 @@ package com.github.gumtreediff.gen.antlr3.json;
 import static com.github.gumtreediff.tree.SymbolSet.symbol;
 import static org.junit.Assert.*;
 
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.*;
 import org.junit.Test;
 
 public class TestJsonParsing {
@@ -37,9 +35,10 @@ public class TestJsonParsing {
         TreeContext tc = new AntlrJsonTreeGenerator().generateFrom().charset("UTF-8")
                 .stream(getClass().getResourceAsStream("/sample.json"));
         ITree tree = tc.getRoot();
+        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
 
         assertEquals(ARRAY, tree.getType());
-        assertEquals(37, tree.getSize());
+        assertEquals(37, m.get(tree).size);
     }
 
 }

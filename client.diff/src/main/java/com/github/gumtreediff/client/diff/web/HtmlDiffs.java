@@ -28,7 +28,9 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import gnu.trove.map.TIntIntMap;
+import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -71,7 +73,7 @@ public final class HtmlDiffs {
 
     public void produce() throws IOException {
         TreeClassifier c = new OnlyRootsClassifier(src, dst, matcher);
-        TIntIntMap mappingIds = new TIntIntHashMap();
+        TObjectIntMap mappingIds = new TObjectIntHashMap();
 
         int uId = 1;
         int mId = 1;
@@ -79,13 +81,13 @@ public final class HtmlDiffs {
         TagIndex ltags = new TagIndex();
         for (ITree t: src.getRoot().getTrees()) {
             if (c.getSrcMvTrees().contains(t)) {
-                mappingIds.put(mappings.getDstForSrc(t).getId(), mId);
+                mappingIds.put(mappings.getDstForSrc(t), mId);
                 ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 ltags.addTags(t.getPos(), String.format(
                                 SRC_MV_SPAN, "token mv", mId++, tooltip(src, t)), t.getEndPos(), END_SPAN);
             }
             if (c.getSrcUpdTrees().contains(t)) {
-                mappingIds.put(mappings.getDstForSrc(t).getId(), mId);
+                mappingIds.put(mappings.getDstForSrc(t), mId);
                 ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 ltags.addTags(t.getPos(), String.format(
                                 SRC_MV_SPAN, "token upd", mId++, tooltip(src, t)), t.getEndPos(), END_SPAN);
@@ -104,13 +106,13 @@ public final class HtmlDiffs {
         TagIndex rtags = new TagIndex();
         for (ITree t: dst.getRoot().getTrees()) {
             if (c.getDstMvTrees().contains(t)) {
-                int dId = mappingIds.get(t.getId());
+                int dId = mappingIds.get(t);
                 rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 rtags.addTags(t.getPos(), String.format(
                                 DST_MV_SPAN, "token mv", dId, tooltip(dst, t)), t.getEndPos(), END_SPAN);
             }
             if (c.getDstUpdTrees().contains(t)) {
-                int dId = mappingIds.get(t.getId());
+                int dId = mappingIds.get(t);
                 rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 rtags.addTags(t.getPos(), String.format(
                                 DST_MV_SPAN, "token upd", dId, tooltip(dst, t)), t.getEndPos(), END_SPAN);

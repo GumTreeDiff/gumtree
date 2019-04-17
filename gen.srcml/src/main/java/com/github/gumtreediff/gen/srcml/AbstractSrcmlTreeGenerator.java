@@ -106,7 +106,6 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                 }
             }
             fixPos(context);
-            context.validate();
             return context;
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +120,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
     private void fixPos(TreeContext ctx) {
         for (ITree t : ctx.getRoot().postOrder()) {
             if (!t.isLeaf()) {
-                if (t.getPos() == ITree.NO_VALUE || t.getLength() == ITree.NO_VALUE) {
+                if (t.getPos() == ITree.NO_POS || t.getLength() == ITree.NO_POS) {
                     ITree firstChild = t.getChild(0);
                     t.setPos(firstChild.getPos());
                     if (t.getChildren().size() == 1)

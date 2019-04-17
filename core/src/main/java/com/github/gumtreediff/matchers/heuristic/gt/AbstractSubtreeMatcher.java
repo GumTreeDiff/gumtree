@@ -24,7 +24,7 @@ import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeMetricsProviderFactory;
+import com.github.gumtreediff.tree.TreeMetricsProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,14 +123,14 @@ public abstract class AbstractSubtreeMatcher extends Matcher {
 
         private List<ITree>[] trees;
 
-        private TreeMetricsProviderFactory.TreeMetricsProvider treeMetrics;
+        private TreeMetricsProvider treeMetrics;
 
         private int maxHeight;
 
         private int currentIdx;
 
         @SuppressWarnings("unchecked")
-        public PriorityTreeList(ITree tree, TreeMetricsProviderFactory.TreeMetricsProvider treeMetrics) {
+        public PriorityTreeList(ITree tree, TreeMetricsProvider treeMetrics) {
             this.treeMetrics = treeMetrics;
             int listSize = treeMetrics.get(tree).height - MIN_HEIGHT + 1;
             if (listSize < 0)

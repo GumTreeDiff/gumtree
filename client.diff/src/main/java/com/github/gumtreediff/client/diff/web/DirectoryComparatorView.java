@@ -122,7 +122,7 @@ public class DirectoryComparatorView implements Renderable {
             for (Pair<File, File> file : files) {
                 tbody
                 .tr()
-                    .td(class_("col-md-10")).content(comparator.getSrc().relativize(file.getFirst().toPath()).toString())
+                    .td(class_("col-md-10")).content(comparator.getSrc().relativize(file.first.toPath()).toString())
                     .td(class_("col-md-2"))
                         .a(class_("btn btn-primary btn-xs").href("/diff/" + id)).content("diff")
                         .write(" ")
