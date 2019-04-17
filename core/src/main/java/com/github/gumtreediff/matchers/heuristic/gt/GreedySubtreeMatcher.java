@@ -54,7 +54,8 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
         // Rank the mappings by score.
         Set<ITree> srcIgnored = new HashSet<>();
         Set<ITree> dstIgnored = new HashSet<>();
-        Collections.sort(ambiguousList, new SiblingsMappingComparator(ambiguousList, mappings, srcMetrics, dstMetrics, getMaxTreeSize()));
+        Collections.sort(ambiguousList,
+                new SiblingsMappingComparator(ambiguousList, mappings, srcMetrics, dstMetrics, getMaxTreeSize()));
 
         // Select the best ambiguous mappings
         retainBestMapping(ambiguousList, srcIgnored, dstIgnored);

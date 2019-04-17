@@ -588,13 +588,16 @@ public final class TreeIoUtils {
         public void startTree(ITree tree) throws Exception {
             String label = tree.toString();
             if (label.contains("\"") || label.contains("\\s"))
-                label = label.replaceAll("\"", "").replaceAll("\\s", "").replaceAll("\\\\", "");
+                label = label
+                        .replaceAll("\"", "")
+                        .replaceAll("\\s", "")
+                        .replaceAll("\\\\", "");
             if (label.length() > 30)
                 label = label.substring(0, 30);
-            writer.write(tree.hashCode() + " [label=\"" + label + "\"];\n"); //TODO use UUID instead of hashCode here
+            writer.write(tree.hashCode() + " [label=\"" + label + "\"];\n"); // TODO use UUID instead of hashCode
 
             if (tree.getParent() != null)
-                writer.write(tree.getParent().hashCode() + " -> " + tree.hashCode() + ";\n"); //TODO use UUID instead of hashCode here
+                writer.write(tree.getParent().hashCode() + " -> " + tree.hashCode() + ";\n"); // TODO use UUID
         }
 
         @Override

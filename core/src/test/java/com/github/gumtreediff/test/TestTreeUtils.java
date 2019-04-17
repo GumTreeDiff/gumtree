@@ -82,8 +82,8 @@ public class TestTreeUtils {
                         + BASE * BASE * BASE * BASE * BASE * BASE * 102926053
                         + BASE * BASE * BASE * BASE * BASE * BASE * BASE * 96748324
                         + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * 102927107
-                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * 102925061
-                , m.get(root).hash);
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * 102925061,
+                m.get(root).hash);
         assertEquals(
                 96747270
                 + BASE * 96749223

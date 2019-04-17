@@ -100,7 +100,8 @@ public abstract class AbstractSubtreeMatcher extends Matcher {
         int maxDstPos =  (dst.isRoot()) ? 1 : dst.getParent().getChildren().size();
         int maxPosDiff = Math.max(maxSrcPos, maxDstPos);
         double pos = 1D - ((double) Math.abs(posSrc - posDst) / (double) maxPosDiff);
-        double po = 1D - ((double) Math.abs(srcMetrics.get(src).position - dstMetrics.get(dst).position) / (double) this.getMaxTreeSize());
+        double po = 1D - ((double) Math.abs(srcMetrics.get(src).position - dstMetrics.get(dst).position)
+                / (double) this.getMaxTreeSize());
         return 100 * jaccard + 10 * pos + po;
     }
 
