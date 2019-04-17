@@ -49,10 +49,10 @@ public class TestTreeUtils {
         System.out.println(root.toTreeString());
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(0, m.get(root).depth);
-        assertEquals(1, m.get(root.getChildren().get(0)).depth);
-        assertEquals(2, m.get(root.getChildren().get(0).getChildren().get(0)).depth);
-        assertEquals(2, m.get(root.getChildren().get(0).getChildren().get(1)).depth);
-        assertEquals(1, m.get(root.getChildren().get(1)).depth);
+        assertEquals(1, m.get(root.getChild(0)).depth);
+        assertEquals(2, m.get(root.getChild(0).getChild(0)).depth);
+        assertEquals(2, m.get(root.getChild(0).getChild(1)).depth);
+        assertEquals(1, m.get(root.getChild(1)).depth);
     }
 
     @Test
@@ -61,11 +61,26 @@ public class TestTreeUtils {
         System.out.println(root.toTreeString());
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(5, m.get(root).size);
-        assertEquals(3, m.get(root.getChildren().get(0)).size);
-        assertEquals(1, m.get(root.getChildren().get(0).getChildren().get(0)).size);
-        assertEquals(1, m.get(root.getChildren().get(0).getChildren().get(1)).size);
-        assertEquals(1, m.get(root.getChildren().get(1)).size);
+        assertEquals(3, m.get(root.getChild(0)).size);
+        assertEquals(1, m.get(root.getChild(0).getChild(0)).size);
+        assertEquals(1, m.get(root.getChild(0).getChild(1)).size);
+        assertEquals(1, m.get(root.getChild(1)).size);
     }
+
+    public static final int H_AO = 96746278;
+    public static final int H_AL = 102925061;
+
+    public static final int H_BO = 96747270;
+    public static final int H_BL = 102926053;
+
+    public static final int H_CO = 96749223;
+    public static final int H_CL = 102928006;
+
+    public static final int H_DO = 96749254;
+    public static final int H_DL = 102928037;
+
+    public static final int H_EO = 96748324;
+    public static final int H_EL = 102927107;
 
     @Test
     public void testHash2() {
@@ -73,28 +88,28 @@ public class TestTreeUtils {
         System.out.println(root.toTreeString());
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(
-                96746278
-                        + BASE * 96747270
-                        + BASE * BASE * 96749223
-                        + BASE * BASE * BASE * 102928006
-                        + BASE * BASE * BASE * BASE * 96749254
-                        + BASE * BASE * BASE * BASE * BASE * 102928037
-                        + BASE * BASE * BASE * BASE * BASE * BASE * 102926053
-                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * 96748324
-                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * 102927107
-                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * 102925061,
+                H_AO
+                        + BASE * H_BO
+                        + BASE * BASE * H_CO
+                        + BASE * BASE * BASE * H_CL
+                        + BASE * BASE * BASE * BASE * H_DO
+                        + BASE * BASE * BASE * BASE * BASE * H_DL
+                        + BASE * BASE * BASE * BASE * BASE * BASE * H_BL
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * H_EO
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * H_EL
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * H_AL,
                 m.get(root).hash);
         assertEquals(
-                96747270
-                + BASE * 96749223
-                + BASE * BASE * 102928006
-                + BASE * BASE * BASE * 96749254
-                + BASE * BASE * BASE * BASE * 102928037
-                + BASE * BASE * BASE * BASE * BASE * 102926053,
+                H_BO
+                + BASE * H_CO
+                + BASE * BASE * H_CL
+                + BASE * BASE * BASE * H_DO
+                + BASE * BASE * BASE * BASE * H_DL
+                + BASE * BASE * BASE * BASE * BASE * H_BL,
                 m.get(root.getChild(0)).hash);
-        assertEquals(96749223 + BASE * 102928006, m.get(root.getChild(0).getChild(0)).hash);
-        assertEquals(96749254 + BASE * 102928037, m.get(root.getChild(0).getChild(1)).hash);
-        assertEquals(96748324 + BASE * 102927107, m.get(root.getChild(1)).hash);
+        assertEquals(H_CO + BASE * H_CL, m.get(root.getChild(0).getChild(0)).hash);
+        assertEquals(H_DO + BASE * H_DL, m.get(root.getChild(0).getChild(1)).hash);
+        assertEquals(H_EO + BASE * H_EL, m.get(root.getChild(1)).hash);
     }
 
     @Test
@@ -102,10 +117,10 @@ public class TestTreeUtils {
         ITree root = TreeLoader.getDummySrc();
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(2, m.get(root).height); // depth of a
-        assertEquals(1, m.get(root.getChildren().get(0)).height); // depth of b
-        assertEquals(0, m.get(root.getChildren().get(0).getChildren().get(0)).height); // depth of c
-        assertEquals(0, m.get(root.getChildren().get(0).getChildren().get(1)).height); // depth of d
-        assertEquals(0, m.get(root.getChildren().get(1)).height); // depth of e
+        assertEquals(1, m.get(root.getChild(0)).height); // depth of b
+        assertEquals(0, m.get(root.getChild(0).getChild(0)).height); // depth of c
+        assertEquals(0, m.get(root.getChild(0).getChild(1)).height); // depth of d
+        assertEquals(0, m.get(root.getChild(1)).height); // depth of e
     }
 
     @Test
