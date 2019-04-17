@@ -40,6 +40,11 @@ public final class Symbol {
         return name;
     }
 
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
     static class SymbolFactory {
         protected SymbolFactory() {}
 

@@ -20,7 +20,9 @@
 package com.github.gumtreediff.tree;
 
 public interface MetricProviderFactory<M> {
+    static TreeMetricsProviderFactory.TreeMetricsProvider computeTreeMetrics(TreeContext context) {
+        return new TreeMetricsProviderFactory().computeMetric(context);
+    }
 
-    MetricProvider<M> computeMetric(ITree tree);
-
+    MetricProvider<M> computeMetric(TreeContext context);
 }

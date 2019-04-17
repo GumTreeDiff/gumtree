@@ -23,12 +23,9 @@ package com.github.gumtreediff.io;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.*;
 import com.github.gumtreediff.tree.TreeContext.MetadataSerializers;
 import com.github.gumtreediff.tree.TreeContext.MetadataUnserializers;
-import com.github.gumtreediff.tree.TreeUtils;
 import com.google.gson.stream.JsonWriter;
 
 import javax.xml.namespace.QName;
@@ -235,7 +232,7 @@ public final class TreeIoUtils {
                 writeAttributes(formatter, context.getMetadata());
             formatter.endProlog();
             try {
-                TreeUtils.visitTree(root, new TreeUtils.TreeVisitor() {
+                TreeVisitor.visitTree(root, new TreeVisitor() {
 
                     @Override
                     public void startTree(ITree tree) {

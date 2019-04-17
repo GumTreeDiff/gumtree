@@ -228,30 +228,6 @@ public final class TreeUtils {
         };
     }
 
-    public static void visitTree(ITree root, TreeVisitor visitor) {
-        Deque<Pair<ITree, Iterator<ITree>>> stack = new ArrayDeque<>();
-        stack.push(new Pair<>(root, root.getChildren().iterator()));
-        visitor.startTree(root);
-        while (!stack.isEmpty()) {
-            Pair<ITree, Iterator<ITree>> it = stack.peek();
-
-            if (!it.second.hasNext()) {
-                visitor.endTree(it.first);
-                stack.pop();
-            } else {
-                ITree child = it.second.next();
-                stack.push(new Pair<>(child, child.getChildren().iterator()));
-                visitor.startTree(child);
-            }
-        }
-    }
-
-    public interface TreeVisitor {
-        void startTree(ITree tree);
-
-        void endTree(ITree tree);
-    }
-
     public static Iterator<ITree> preOrderIterator(ITree tree) {
         return new Iterator<ITree>() {
             Deque<Iterator<ITree>> stack = new ArrayDeque<>();

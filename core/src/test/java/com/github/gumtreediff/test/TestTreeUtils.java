@@ -25,10 +25,8 @@ import static org.junit.Assert.*;
 import java.util.Iterator;
 import java.util.List;
 
+import com.github.gumtreediff.tree.*;
 import org.junit.Test;
-
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeUtils;
 
 public class TestTreeUtils {
 
@@ -55,6 +53,34 @@ public class TestTreeUtils {
     }
 
     @Test
+    public void testDepth2() {
+        TreeContext context = new TreeContext();
+        ITree root = TreeLoader.getDummySrc();
+        context.setRoot(root);
+        System.out.println(root.toTreeString());
+        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(context);
+        assertEquals(0, m.get(root).depth);
+        assertEquals(1, m.get(root.getChildren().get(0)).depth);
+        assertEquals(2, m.get(root.getChildren().get(0).getChildren().get(0)).depth);
+        assertEquals(2, m.get(root.getChildren().get(0).getChildren().get(1)).depth);
+        assertEquals(1, m.get(root.getChildren().get(1)).depth);
+    }
+
+    @Test
+    public void testSize2() {
+        TreeContext context = new TreeContext();
+        ITree root = TreeLoader.getDummySrc();
+        context.setRoot(root);
+        System.out.println(root.toTreeString());
+        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(context);
+        assertEquals(5, m.get(root).size);
+        assertEquals(3, m.get(root.getChildren().get(0)).size);
+        assertEquals(1, m.get(root.getChildren().get(0).getChildren().get(0)).size);
+        assertEquals(1, m.get(root.getChildren().get(0).getChildren().get(1)).size);
+        assertEquals(1, m.get(root.getChildren().get(1)).size);
+    }
+
+    @Test
     public void testHeight() {
         ITree root = TreeLoader.getDummySrc();
         assertEquals(2, root.getHeight()); // depth of a
@@ -62,6 +88,19 @@ public class TestTreeUtils {
         assertEquals(0, root.getChildren().get(0).getChildren().get(0).getHeight()); // depth of c
         assertEquals(0, root.getChildren().get(0).getChildren().get(1).getHeight()); // depth of d
         assertEquals(0, root.getChildren().get(1).getHeight()); // depth of e
+    }
+
+    @Test
+    public void testHeight2() {
+        TreeContext context = new TreeContext();
+        context.setRoot(TreeLoader.getDummySrc());
+        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(context);
+        ITree root = context.getRoot();
+        assertEquals(2, m.get(root).height); // depth of a
+        assertEquals(1, m.get(root.getChildren().get(0)).height); // depth of b
+        assertEquals(0, m.get(root.getChildren().get(0).getChildren().get(0)).height); // depth of c
+        assertEquals(0, m.get(root.getChildren().get(0).getChildren().get(1)).height); // depth of d
+        assertEquals(0, m.get(root.getChildren().get(1)).height); // depth of e
     }
 
     @Test
