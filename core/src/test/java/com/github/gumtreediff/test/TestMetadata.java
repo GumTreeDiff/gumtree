@@ -166,20 +166,22 @@ public class TestMetadata {
             + "\t\"more\": \"more\",\n"
             + "\t\"root\": {\n"
             + "\t\t\"type\": \"type0\",\n"
+            + "\t\t\"pos\": \"0\",\n"
+            + "\t\t\"length\": \"0\",\n"
             + "\t\t\"key\": \"test\",\n"
             + "\t\t\"pos\": \"[1, 2, 3, 4]\",\n"
             + "\t\t\"children\": []\n"
             + "\t}\n"
             + "}";
 
-    final String valLisp = "(((:other more) ) (type0 \"\" ((:key test) (:pos \"[1, 2, 3, 4]\") ) ())";
+    final String valLisp = "(((:other more) ) (type0 \"\" ((0 0)(:key test) (:pos \"[1, 2, 3, 4]\") ) ())";
 
     final String valXml = "<?xml version=\"1.0\" ?>\n"
             + "<root>\n"
             + "  <context>\n"
             + "    <other>more</other>\n"
             + "  </context>\n"
-            + "  <tree type=\"type0\">\n"
+            + "  <tree type=\"type0\" pos=\"0\" length=\"0\">\n"
             + "    <key>test</key>\n"
             + "    <pos>[1, 2, 3, 4]</pos>\n"
             + "  </tree>\n"
