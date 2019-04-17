@@ -44,7 +44,7 @@ public class InnerNodesMatcherThetaD extends Matcher {
         public int compare(Entry<ITree, IdentityHashMap<ITree, Integer>> o1,
                 Entry<ITree, IdentityHashMap<ITree, Integer>> o2) {
 
-            return Integer.compare(o1.getKey().getId(), o2.getKey().getId());
+            return Integer.compare(srcMetrics.get(o1.getKey()).position, srcMetrics.get(o2.getKey()).position);
         }
 
     }
@@ -58,13 +58,6 @@ public class InnerNodesMatcherThetaD extends Matcher {
      */
     public InnerNodesMatcherThetaD(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
-    }
-
-    @Override
-    protected void addMapping(ITree src, ITree dst) {
-        assert (src != null);
-        assert (dst != null);
-        super.addMapping(src, dst);
     }
 
     private boolean allowedMatching(ITree key, ITree maxNodePartner) {
@@ -144,11 +137,11 @@ public class InnerNodesMatcherThetaD extends Matcher {
                                     if (partner != null) {
                                         mappings.removeMapping(countEntry.getKey(), partner);
                                     }
-                                    addMapping(countEntry.getKey(), maxNode);
+                                    mappings.addMapping(countEntry.getKey(), maxNode);
                                 }
                                 if (maxNodePartner != null) {
                                     if (maxNodePartner.getType() == partner.getType()) {
-                                        addMapping(maxNodePartner, partner);
+                                        mappings.addMapping(maxNodePartner, partner);
                                     }
                                 }
                             }

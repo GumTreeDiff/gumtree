@@ -29,6 +29,7 @@ import com.github.gumtreediff.tree.TreeUtils;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
+import javax.swing.plaf.TreeUI;
 import java.util.*;
 
 public class ActionGenerator {
@@ -51,9 +52,9 @@ public class ActionGenerator {
 
     private List<Action> actions;
 
-    private TIntObjectMap<ITree> origSrcTrees;
+    private Map<ITree, ITree> origToCopy;
 
-    private TIntObjectMap<ITree> cpySrcTrees;
+    private Map<ITree, ITree> copyToOrig;
 
     public static boolean REMOVE_MOVES_AND_UPDATES = Boolean.valueOf(System.getProperty("gt.ag.nomove", "false"));
 
@@ -62,16 +63,18 @@ public class ActionGenerator {
         this.newSrc = this.origSrc.deepCopy();
         this.origDst = dst;
 
-        origSrcTrees = new TIntObjectHashMap<>();
-        for (ITree t: origSrc.getTrees())
-            origSrcTrees.put(t.getId(), t);
-        cpySrcTrees = new TIntObjectHashMap<>();
-        for (ITree t: newSrc.getTrees())
-            cpySrcTrees.put(t.getId(), t);
+        origToCopy = new HashMap<>();
+        copyToOrig = new HashMap<>();
+        Iterator<ITree> cpyTreeIterator = TreeUtils.preOrderIterator(newSrc);
+        for (ITree origTree: TreeUtils.preOrder(origSrc)) {
+            ITree cpyTree = cpyTreeIterator.next();
+            origToCopy.put(origTree, cpyTree);
+            copyToOrig.put(cpyTree, origTree);
+        }
 
         origMappings = new MappingStore();
         for (Mapping m: mappings)
-            this.origMappings.addMapping(cpySrcTrees.get(m.getFirst().getId()), m.getSecond());
+            this.origMappings.addMapping(origToCopy.get(m.first), m.second);
         this.newMappings = origMappings.copy();
     }
 
@@ -89,7 +92,7 @@ public class ActionGenerator {
         dstInOrder = new HashSet<>();
         srcInOrder = new HashSet<>();
 
-        lastId = newSrc.getSize() + 1;
+        // lastId = newSrc.getSize() + 1;
         newMappings.addMapping(srcFakeRoot, dstFakeRoot);
 
         List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
@@ -102,7 +105,6 @@ public class ActionGenerator {
                 int k = findPos(x);
                 // Insertion case : insert new node.
                 w = new AbstractTree.FakeTree();
-                w.setId(newId());
                 // In order to use the real nodes from the second tree, we
                 // furnish x instead of w and fake that x has the newly
                 // generated ID.
@@ -244,8 +246,8 @@ public class ActionGenerator {
         List<Mapping> lcs = lcs(s1, s2);
 
         for (Mapping m : lcs) {
-            srcInOrder.add(m.getFirst());
-            dstInOrder.add(m.getSecond());
+            srcInOrder.add(m.first);
+            dstInOrder.add(m.second);
         }
 
         for (ITree a : s1) {

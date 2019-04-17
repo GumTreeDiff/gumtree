@@ -46,7 +46,7 @@ public class XyBottomUpMatcher extends Matcher {
     public void match() {
         for (ITree src: this.src.postOrder())  {
             if (src.isRoot()) {
-                addMapping(src, this.dst);
+                mappings.addMapping(src, this.dst);
                 lastChanceMatch(src, this.dst);
             } else if (!(mappings.isSrcMapped(src) || src.isLeaf())) {
                 Set<ITree> candidates = getDstCandidates(src);
@@ -63,7 +63,7 @@ public class XyBottomUpMatcher extends Matcher {
 
                 if (best != null) {
                     lastChanceMatch(src, best);
-                    addMapping(src, best);
+                    mappings.addMapping(src, best);
                 }
             }
         }
@@ -107,6 +107,6 @@ public class XyBottomUpMatcher extends Matcher {
         for (Symbol t: srcKinds.keySet())
             if (dstKinds.get(t) != null && srcKinds.get(t).size() == dstKinds.get(t).size()
                     && srcKinds.get(t).size() == 1)
-                addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));
+                mappings.addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));
     }
 }

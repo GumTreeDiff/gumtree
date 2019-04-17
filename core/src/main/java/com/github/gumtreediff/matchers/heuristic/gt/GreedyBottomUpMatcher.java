@@ -41,10 +41,10 @@ public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher {
     public void match() {
         for (ITree t: src.postOrder())  {
             if (t.isRoot()) {
-                addMapping(t, this.dst);
+                mappings.addMapping(t, this.dst);
                 lastChanceMatch(t, this.dst);
                 break;
-            } else if (!(isSrcMatched(t) || t.isLeaf())) {
+            } else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
                 List<ITree> candidates = getDstCandidates(t);
                 ITree best = null;
                 double max = -1D;
@@ -59,7 +59,7 @@ public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher {
 
                 if (best != null) {
                     lastChanceMatch(t, best);
-                    addMapping(t, best);
+                    mappings.addMapping(t, best);
                 }
             }
         }

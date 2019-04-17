@@ -170,10 +170,10 @@ public class ChangeDistillerParallelLeavesMatcher extends Matcher {
         Collections.sort(leafMappings, new LeafMappingComparator(simMap));
         while (leafMappings.size() > 0) {
             Mapping best = leafMappings.remove(0);
-            if (!(srcIgnored.contains(best.getFirst()) || dstIgnored.contains(best.getSecond()))) {
-                addMapping(best.getFirst(), best.getSecond());
-                srcIgnored.add(best.getFirst());
-                dstIgnored.add(best.getSecond());
+            if (!(srcIgnored.contains(best.first) || dstIgnored.contains(best.second))) {
+                mappings.addMapping(best.first, best.second);
+                srcIgnored.add(best.first);
+                dstIgnored.add(best.second);
             }
         }
     }

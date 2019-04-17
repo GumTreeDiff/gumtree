@@ -423,7 +423,7 @@ public final class TreeIoUtils {
             writer.writeStartElement("tree");
             writer.writeAttribute("type", tree.getType().toString());
             if (tree.hasLabel()) writer.writeAttribute("label", tree.getLabel());
-            if (ITree.NO_VALUE != tree.getPos()) {
+            if (ITree.NO_POS != tree.getPos()) {
                 writer.writeAttribute("pos", Integer.toString(tree.getPos()));
                 writer.writeAttribute("length", Integer.toString(tree.getLength()));
             }
@@ -458,7 +458,7 @@ public final class TreeIoUtils {
             ITree o = searchOther.lookup(tree);
 
             if (o != null) {
-                if (ITree.NO_VALUE != o.getPos()) {
+                if (ITree.NO_POS != o.getPos()) {
                     writer.writeAttribute("other_pos", Integer.toString(o.getPos()));
                     writer.writeAttribute("other_length", Integer.toString(o.getLength()));
                 }
@@ -529,7 +529,7 @@ public final class TreeIoUtils {
                 writer.write("    ");
             level++;
 
-            String pos = (ITree.NO_VALUE == tree.getPos() ? "" : String.format("(%d %d)",
+            String pos = (ITree.NO_POS == tree.getPos() ? "" : String.format("(%d %d)",
                     tree.getPos(), tree.getLength()));
 
             writer.write(String.format("(%s %s (%s",
@@ -591,10 +591,10 @@ public final class TreeIoUtils {
                 label = label.replaceAll("\"", "").replaceAll("\\s", "").replaceAll("\\\\", "");
             if (label.length() > 30)
                 label = label.substring(0, 30);
-            writer.write(tree.getId() + " [label=\"" + label + "\"];\n");
+            writer.write(tree.hashCode() + " [label=\"" + label + "\"];\n"); //TODO use UUID instead of hashCode here
 
             if (tree.getParent() != null)
-                writer.write(tree.getParent().getId() + " -> " + tree.getId() + ";\n");
+                writer.write(tree.getParent().hashCode() + " -> " + tree.hashCode() + ";\n"); //TODO use UUID instead of hashCode here
         }
 
         @Override
@@ -617,7 +617,7 @@ public final class TreeIoUtils {
             writer.beginObject();
             writer.name("type").value(t.getType().toString());
             if (t.hasLabel()) writer.name("label").value(t.getLabel());
-            if (ITree.NO_VALUE != t.getPos()) {
+            if (ITree.NO_POS != t.getPos()) {
                 writer.name("pos").value(Integer.toString(t.getPos()));
                 writer.name("length").value(Integer.toString(t.getLength()));
             }
@@ -774,7 +774,6 @@ public final class TreeIoUtils {
                         trees.removeFirst();
                     }
                 }
-                context.validate();
                 return context;
             } catch (Exception e) {
                 e.printStackTrace();

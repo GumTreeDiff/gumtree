@@ -54,7 +54,11 @@ public class CrossMoveMatcherThetaF extends Matcher {
                 workList.addAll(node.getChildren());
             }
             for (int i = 0; i < list.size(); i++) {
-                map.put(list.get(i).getId(), i);
+                int position = -1;
+                if (srcMetrics.get(list.get(i)) != null) //TODO improve this, it checks in both src and dst provider to know where the tree is.
+                    map.put(srcMetrics.get(list.get(i)).position, i);
+                else
+                    map.put(dstMetrics.get(list.get(i)).position, i);
             }
             return map;
         }
@@ -66,12 +70,12 @@ public class CrossMoveMatcherThetaF extends Matcher {
 
         @Override
         public int compare(Mapping o1, Mapping o2) {
-            if (o1.first.getId() != o2.first.getId()) {
-                return Integer.compare(positionSrc.get(o1.first.getId()),
-                        positionSrc.get(o2.first.getId()));
+            if (srcMetrics.get(o1.first).position != srcMetrics.get(o2.first).position) {
+                return Integer.compare(positionSrc.get(srcMetrics.get(o1.first).position),
+                        positionSrc.get(srcMetrics.get(o2.first).position));
             }
-            return Integer.compare(positionDst.get(o1.second.getId()),
-                    positionDst.get(o2.second.getId()));
+            return Integer.compare(positionDst.get(dstMetrics.get(o1.second).position),
+                    positionDst.get(dstMetrics.get(o2.second).position));
         }
 
     }
@@ -87,13 +91,6 @@ public class CrossMoveMatcherThetaF extends Matcher {
         super(src, dst, store);
     }
 
-    @Override
-    protected void addMapping(ITree src, ITree dst) {
-        assert (src != null);
-        assert (dst != null);
-        super.addMapping(src, dst);
-    }
-
     /**
      * Match.
      */
@@ -106,8 +103,8 @@ public class CrossMoveMatcherThetaF extends Matcher {
         LinkedList<Mapping> workList = new LinkedList<>(mappings.asSet());
         Collections.sort(workList, new BfsComparator(src, dst));
         for (Mapping pair : workList) {
-            ITree parentOld = pair.getFirst().getParent();
-            ITree parentNew = pair.getSecond().getParent();
+            ITree parentOld = pair.first.getParent();
+            ITree parentNew = pair.second.getParent();
             if (mappings.isSrcMapped(parentOld) && mappings.getDstForSrc(parentOld) != parentNew) {
                 if (mappings.isDstMapped(parentNew) && mappings.getSrcForDst(parentNew) != parentOld) {
                     ITree parentOldOther = mappings.getSrcForDst(parentNew);
@@ -118,19 +115,19 @@ public class CrossMoveMatcherThetaF extends Matcher {
                         for (ITree childOldOther : parentOldOther.getChildren()) {
                             if (mappings.isSrcMapped(childOldOther)) {
                                 ITree childNewOther = mappings.getDstForSrc(childOldOther);
-                                if (pair.getFirst().getLabel().equals(childNewOther.getLabel())
+                                if (pair.first.getLabel().equals(childNewOther.getLabel())
                                         && childOldOther.getLabel()
-                                                .equals(pair.getSecond().getLabel())
-                                        || !(pair.getFirst().getLabel()
-                                                .equals(pair.getSecond().getLabel())
+                                                .equals(pair.second.getLabel())
+                                        || !(pair.first.getLabel()
+                                                .equals(pair.second.getLabel())
                                                 || childOldOther.getLabel()
                                                         .equals(childNewOther.getLabel()))) {
                                     if (childNewOther.getParent() == parentNewOther) {
-                                        if (childOldOther.getType() == pair.getFirst().getType()) {
-                                            mappings.removeMapping(pair.getFirst(), pair.getSecond());
+                                        if (childOldOther.getType() == pair.first.getType()) {
+                                            mappings.removeMapping(pair.first, pair.second);
                                             mappings.removeMapping(childOldOther, childNewOther);
-                                            addMapping(pair.getFirst(), childNewOther);
-                                            addMapping(childOldOther, pair.getSecond());
+                                            mappings.addMapping(pair.first, childNewOther);
+                                            mappings.addMapping(childOldOther, pair.second);
                                             // done = true;
                                         }
                                     }
@@ -142,19 +139,19 @@ public class CrossMoveMatcherThetaF extends Matcher {
                                 if (mappings.isDstMapped(childNewOther)) {
                                     ITree childOldOther = mappings.getSrcForDst(childNewOther);
                                     if (childOldOther.getParent() == parentOldOther) {
-                                        if (childNewOther.getType() == pair.getSecond().getType()) {
-                                            if (pair.getFirst().getLabel()
+                                        if (childNewOther.getType() == pair.second.getType()) {
+                                            if (pair.first.getLabel()
                                                     .equals(childNewOther.getLabel())
                                                     && childOldOther.getLabel()
-                                                            .equals(pair.getSecond().getLabel())
-                                                    || !(pair.getFirst().getLabel()
-                                                            .equals(pair.getSecond().getLabel())
+                                                            .equals(pair.second.getLabel())
+                                                    || !(pair.first.getLabel()
+                                                            .equals(pair.second.getLabel())
                                                             || childOldOther.getLabel().equals(
                                                                     childNewOther.getLabel()))) {
-                                                mappings.removeMapping(pair.getFirst(), pair.getSecond());
+                                                mappings.removeMapping(pair.first, pair.second);
                                                 mappings.removeMapping(childOldOther, childNewOther);
-                                                addMapping(childOldOther, pair.getSecond());
-                                                addMapping(pair.getFirst(), childNewOther);
+                                                mappings.addMapping(childOldOther, pair.second);
+                                                mappings.addMapping(pair.first, childNewOther);
                                             }
                                         }
                                     }

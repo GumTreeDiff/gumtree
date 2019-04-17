@@ -58,11 +58,6 @@ public class TreeContext {
         return new AbstractTree.FakeTree(trees);
     }
 
-    public void validate() {
-        root.refresh();
-        TreeUtils.postOrderNumbering(root);
-    }
-
     /**
      * Get a global metadata.
      * There is no way to know if the metadata is really null or does not exists.

@@ -45,14 +45,6 @@ public class Tree extends AbstractTree implements ITree {
     public Tree(Symbol type, String label) {
         this.type = type;
         this.label = (label == null) ? NO_LABEL : label.intern();
-        this.id = NO_ID;
-        this.depth = NO_VALUE;
-        this.hash = NO_VALUE;
-        this.height = NO_VALUE;
-        this.depth = NO_VALUE;
-        this.size = NO_VALUE;
-        this.pos = NO_VALUE;
-        this.length = NO_VALUE;
         this.children = new ArrayList<>();
     }
 
@@ -60,14 +52,8 @@ public class Tree extends AbstractTree implements ITree {
     protected Tree(Tree other) {
         this.type = other.type;
         this.label = other.getLabel();
-        this.id = other.getId();
         this.pos = other.getPos();
         this.length = other.getLength();
-        this.height = other.getHeight();
-        this.size = other.getSize();
-        this.depth = other.getDepth();
-        this.hash = other.getHash();
-        this.depth = other.getDepth();
         this.children = new ArrayList<>();
         this.metadata = other.metadata;
     }

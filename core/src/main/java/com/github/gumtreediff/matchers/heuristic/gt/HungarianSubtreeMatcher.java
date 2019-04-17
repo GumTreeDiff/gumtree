@@ -39,7 +39,7 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher {
         Set<ITree> ignored = new HashSet<>();
         for (ITree src: multiMappings.getSrcs())
             if (multiMappings.isSrcUnique(src))
-                addMappingRecursively(src, multiMappings.getDst(src).iterator().next());
+                mappings.addMappingRecursively(src, multiMappings.getDst(src).iterator().next());
             else if (!ignored.contains(src)) {
                 MultiMappingStore ambiguous = new MultiMappingStore();
                 Set<ITree> adsts = multiMappings.getDst(src);
@@ -66,7 +66,8 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher {
             int[] solutions = hgAlg.execute();
             for (int i = 0; i < solutions.length; i++) {
                 int dstIdx = solutions[i];
-                if (dstIdx != -1) addMappingRecursively(lstSrcs.get(i), lstDsts.get(dstIdx));
+                if (dstIdx != -1)
+                    mappings.addMappingRecursively(lstSrcs.get(i), lstDsts.get(dstIdx));
             }
         }
     }

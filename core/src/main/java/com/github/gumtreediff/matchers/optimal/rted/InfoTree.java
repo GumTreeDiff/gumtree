@@ -16,6 +16,7 @@
 package com.github.gumtreediff.matchers.optimal.rted;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeMetricsProviderFactory;
 
 import java.util.*;
 
@@ -27,8 +28,8 @@ import java.util.*;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class InfoTree {
-
     private ITree inputTree;
+    private TreeMetricsProviderFactory.TreeMetricsProvider treeMetrics;
 
     private static final byte LEFT = 0;
     private static final byte RIGHT = 1;
@@ -96,9 +97,10 @@ public class InfoTree {
      * @param aInputTree an LblTree object
      * @param aLd  a LabelDictionary object
      */
-    public InfoTree(ITree aInputTree, LabelDictionary aLd) {
+    public InfoTree(ITree aInputTree, TreeMetricsProviderFactory.TreeMetricsProvider treeMetrics, LabelDictionary aLd) {
         this.inputTree = aInputTree;
-        treeSize = inputTree.getSize();
+        this.treeMetrics = treeMetrics;
+        treeSize = treeMetrics.get(inputTree).size;
         this.info = new int[16][treeSize];
         Arrays.fill(info[POST2_PARENT], -1);
         Arrays.fill(info[POST2_MIN_KR], -1);

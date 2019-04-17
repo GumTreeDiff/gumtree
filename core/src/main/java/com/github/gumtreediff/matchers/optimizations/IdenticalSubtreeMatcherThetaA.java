@@ -130,8 +130,8 @@ public class IdenticalSubtreeMatcherThetaA extends Matcher {
             }
         }
         for (Mapping mapping : pairs) {
-            List<ITree> stream1 = getNodeStream(mapping.getFirst());
-            List<ITree> stream2 = getNodeStream(mapping.getSecond());
+            List<ITree> stream1 = getNodeStream(mapping.first);
+            List<ITree> stream2 = getNodeStream(mapping.second);
             stream1 = new ArrayList<>(stream1);
             stream2 = new ArrayList<>(stream2);
             assert (stream1.size() == stream2.size());
@@ -140,7 +140,7 @@ public class IdenticalSubtreeMatcherThetaA extends Matcher {
                 ITree newNode = stream2.get(i);
                 assert (oldNode.getType() == newNode.getType());
                 assert (oldNode.getLabel().equals(newNode.getLabel()));
-                this.addMapping(oldNode, newNode);
+                mappings.addMapping(oldNode, newNode);
             }
         }
 

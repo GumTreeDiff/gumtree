@@ -24,7 +24,6 @@ import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeMap;
 import com.github.gumtreediff.utils.StringAlgorithms;
 
 import java.util.ArrayList;
@@ -33,39 +32,21 @@ import java.util.List;
 import java.util.Set;
 
 public class SimpleBottomUpMatcher extends Matcher {
-    //TODO make final?
-    public static int SIZE_THRESHOLD =
-            Integer.parseInt(System.getProperty("gt.bum.szt", "1000"));
     public static final double SIM_THRESHOLD =
             Double.parseDouble(System.getProperty("gt.bum.smt", "0.5"));
 
-    protected TreeMap srcIds;
-    protected TreeMap dstIds;
-
-    protected TreeMap mappedSrc;
-    protected TreeMap mappedDst;
-
     public SimpleBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
-        srcIds = new TreeMap(src);
-        dstIds = new TreeMap(dst);
-
-        mappedSrc = new TreeMap();
-        mappedDst = new TreeMap();
-        for (Mapping m : store.asSet()) {
-            mappedSrc.putTrees(m.getFirst());
-            mappedDst.putTrees(m.getSecond());
-        }
     }
 
     @Override
     public void match() {
         for (ITree t: src.postOrder())  {
             if (t.isRoot()) {
-                addMapping(t, this.dst);
+                mappings.addMapping(t, this.dst);
                 lastChanceMatch(t, this.dst);
                 break;
-            } else if (!(isSrcMatched(t) || t.isLeaf())) {
+            } else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
                 List<ITree> candidates = getDstCandidates(t);
                 ITree best = null;
                 double max = -1D;
@@ -73,9 +54,9 @@ public class SimpleBottomUpMatcher extends Matcher {
                 for (ITree cand: candidates) {
                     double sim = jaccardSimilarity(t, cand);
                     if (sim > max && sim >= SIM_THRESHOLD) {
-                        if (t.getDepth() == cand.getDepth()) {
+                        if (srcMetrics.get(t).depth == srcMetrics.get(cand).depth) {
                             lastChanceMatch(t, best);
-                            addMapping(t, best);
+                            mappings.addMapping(t, best);
                             return;
                         }
                         max = sim;
@@ -85,7 +66,7 @@ public class SimpleBottomUpMatcher extends Matcher {
 
                 if (best != null) {
                     lastChanceMatch(t, best);
-                    addMapping(t, best);
+                    mappings.addMapping(t, best);
                 }
             }
         }
@@ -105,7 +86,7 @@ public class SimpleBottomUpMatcher extends Matcher {
                 if (visited.contains(parent))
                     break;
                 visited.add(parent);
-                if (parent.getType() == src.getType() && !isDstMatched(parent) && !parent.isRoot())
+                if (parent.getType() == src.getType() && !mappings.isDstMapped(parent) && !parent.isRoot())
                     candidates.add(parent);
                 seed = parent;
             }
@@ -123,45 +104,8 @@ public class SimpleBottomUpMatcher extends Matcher {
 
             ITree t1 = srcChildren.get(x[0]);
             ITree t2 = dstChildren.get(x[1]);
-            if (!(mappedSrc.contains(t1) || mappedDst.contains(t2)))
-                addMapping(t1, t2);
+            if (isMappingAllowed(t1, t2))
+                mappings.addMapping(t1, t2);
         }
-    }
-
-    /**
-     * Remove mapped nodes from the tree. Be careful this method will invalidate
-     * all the metrics of this tree and its descendants. If you need them, you need
-     * to recompute them.
-     */
-    public ITree removeMatched(ITree tree, boolean isSrc) {
-        for (ITree t: tree.getTrees()) {
-            if ((isSrc && isSrcMatched(t)) || ((!isSrc) && isDstMatched(t))) {
-                if (t.getParent() != null) t.getParent().getChildren().remove(t);
-                t.setParent(null);
-            }
-        }
-        tree.refresh();
-        return tree;
-    }
-
-    @Override
-    public boolean isMappingAllowed(ITree src, ITree dst) {
-        return src.hasSameType(dst)
-                && !(isSrcMatched(src) || isDstMatched(dst));
-    }
-
-    @Override
-    protected void addMapping(ITree src, ITree dst) {
-        mappedSrc.putTree(src);
-        mappedDst.putTree(dst);
-        super.addMapping(src, dst);
-    }
-
-    boolean isSrcMatched(ITree tree) {
-        return mappedSrc.contains(tree);
-    }
-
-    boolean isDstMatched(ITree tree) {
-        return mappedDst.contains(tree);
     }
 }

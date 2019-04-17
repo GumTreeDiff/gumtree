@@ -18,6 +18,7 @@ package com.github.gumtreediff.matchers.optimal.rted;
 import java.util.*;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeMetricsProviderFactory;
 
 
 /**
@@ -108,20 +109,6 @@ public class RtedAlgorithm {
 		this.costMatch = matchCost;
 	}
 
-	/**
-	 * Computes the tree edit distance between trees t1 and t2.
-	 * 
-	 * @param t1
-	 * @param t2
-	 * @return tree edit distance between trees t1 and t2
-	 */
-	public double nonNormalizedTreeDist(ITree t1, ITree t2) {
-		init(t1, t2);
-		str = new int[size1][size2];
-		computeOptimalStrategy();
-		return computeDistUsingStrArray(it1, it2);
-	}
-
 	public double nonNormalizedTreeDist() {
 		if (it1 == null || it2 == null) {
 			System.err.println("No stored trees to compare.");
@@ -132,16 +119,10 @@ public class RtedAlgorithm {
 		return computeDistUsingStrArray(it1, it2);
 	}
 
-	/**
-	 * Initialization method.
-	 * 
-	 * @param t1
-	 * @param t2
-	 */
-	public void init(ITree t1, ITree t2) {
+	public void init(ITree src, TreeMetricsProviderFactory.TreeMetricsProvider srcMetrics, ITree dst, TreeMetricsProviderFactory.TreeMetricsProvider dstMetrics) {
 		ld = new LabelDictionary();
-		it1 = new InfoTree(t1, ld);
-		it2 = new InfoTree(t2, ld);
+		it1 = new InfoTree(src, srcMetrics, ld);
+		it2 = new InfoTree(dst, dstMetrics, ld);
 		size1 = it1.getSize();
 		size2 = it2.getSize();
 		ij = new int[Math.max(size1, size2)][Math.max(size1, size2)];

@@ -102,7 +102,7 @@ public class LcsOptMatcherThetaB extends Matcher {
                     List<Mapping> lcsMatch = lcs(list1, list2, unmatchedNodes1, unmatchedNodes2);
                     for (Mapping match : lcsMatch) {
                         if (!mappings.isSrcMapped(match.first) && !mappings.isDstMapped(match.second)) {
-                            addMapping(match.first, match.second);
+                            mappings.addMapping(match.first, match.second);
                             unmatchedNodes1.remove(match.first);
                             unmatchedNodes2.remove(match.second);
                         }

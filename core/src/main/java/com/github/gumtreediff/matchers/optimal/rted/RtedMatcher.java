@@ -37,7 +37,7 @@ public class RtedMatcher extends Matcher {
     @Override
     public void match() {
         RtedAlgorithm a = new RtedAlgorithm(1D, 1D, 1D);
-        a.init(src, dst);
+        a.init(src, srcMetrics, dst, dstMetrics);
         a.computeOptimalStrategy();
         a.nonNormalizedTreeDist();
         ArrayDeque<int[]> arrayMappings = a.computeEditMapping();
@@ -48,7 +48,7 @@ public class RtedMatcher extends Matcher {
                 ITree src = srcs.get(m[0] - 1);
                 ITree dst = dsts.get(m[1] - 1);
                 if (isMappingAllowed(src, dst))
-                    addMapping(src, dst);
+                    mappings.addMapping(src, dst);
             }
         }
     }

@@ -46,7 +46,7 @@ public class LcsMatcher extends Matcher {
 
             ITree t1 = srcSeq.get(x[0]);
             ITree t2 = dstSeq.get(x[1]);
-            addMapping(t1, t2);
+            mappings.addMapping(t1, t2);
         }
     }
 }

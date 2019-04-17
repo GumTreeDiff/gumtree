@@ -39,19 +39,19 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
     public void filterMappings(MultiMappingStore multiMappings) {
         TIntObjectHashMap<Pair<List<ITree>, List<ITree>>> cliques = new TIntObjectHashMap<>();
         for (Mapping m : multiMappings) {
-            int hash = m.getFirst().getHash();
+            int hash = srcMetrics.get(m.first).hash;
             if (!cliques.containsKey(hash))
                 cliques.put(hash, new Pair<>(new ArrayList<>(), new ArrayList<>()));
-            cliques.get(hash).getFirst().add(m.getFirst());
-            cliques.get(hash).getSecond().add(m.getSecond());
+            cliques.get(hash).first.add(m.first);
+            cliques.get(hash).second.add(m.second);
         }
 
         List<Pair<List<ITree>, List<ITree>>> ccliques = new ArrayList<>();
 
         for (int hash : cliques.keys()) {
             Pair<List<ITree>, List<ITree>> clique = cliques.get(hash);
-            if (clique.getFirst().size() == 1 && clique.getSecond().size() == 1) {
-                addMappingRecursively(clique.getFirst().get(0), clique.getSecond().get(0));
+            if (clique.first.size() == 1 && clique.second.size() == 1) {
+                mappings.addMappingRecursively(clique.first.get(0), clique.second.get(0));
                 cliques.remove(hash);
             } else
                 ccliques.add(clique);
@@ -70,13 +70,13 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
     private List<Mapping> fromClique(Pair<List<ITree>, List<ITree>> clique) {
         List<Mapping> cliqueAsMappings = new ArrayList<Mapping>();
-        for (ITree src: clique.getFirst())
-            for (ITree dst: clique.getFirst())
+        for (ITree src: clique.first)
+            for (ITree dst: clique.first)
                 cliqueAsMappings.add(new Mapping(src, dst));
         return cliqueAsMappings;
     }
 
-    private static class CliqueComparator implements Comparator<Pair<List<ITree>, List<ITree>>> {
+    private class CliqueComparator implements Comparator<Pair<List<ITree>, List<ITree>>> {
 
         @Override
         public int compare(Pair<List<ITree>, List<ITree>> l1,
@@ -94,17 +94,17 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
         private int minDepth(Pair<List<ITree>, List<ITree>> trees) {
             int depth = Integer.MAX_VALUE;
-            for (ITree t : trees.getFirst())
-                if (depth > t.getDepth())
-                    depth = t.getDepth();
-            for (ITree t : trees.getSecond())
-                if (depth > t.getDepth())
-                    depth = t.getDepth();
+            for (ITree t : trees.first)
+                if (depth > srcMetrics.get(t).depth)
+                    depth = srcMetrics.get(t).depth;
+            for (ITree t : trees.second)
+                if (depth > dstMetrics.get(t).depth)
+                    depth = dstMetrics.get(t).depth;
             return depth;
         }
 
         private int size(Pair<List<ITree>, List<ITree>> trees) {
-            return trees.getFirst().size() + trees.getSecond().size();
+            return trees.first.size() + trees.second.size();
         }
 
     }
@@ -115,7 +115,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
         public MappingComparator(List<Mapping> mappings) {
             for (Mapping mapping: mappings)
-                simMap.put(mapping, sims(mapping.getFirst(), mapping.getSecond()));
+                simMap.put(mapping, sims(mapping.first, mapping.second));
         }
 
         @Override
@@ -153,8 +153,8 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
             double[] sims = new double[4];
             sims[0] = jaccardSimilarity(src.getParent(), dst.getParent());
             sims[1] = src.positionInParent() - dst.positionInParent();
-            sims[2] = src.getId() - dst.getId();
-            sims[3] = src.getId();
+            sims[2] = srcMetrics.get(src).position - dstMetrics.get(dst).position;
+            sims[3] = srcMetrics.get(src).position;
             return sims;
         }
 

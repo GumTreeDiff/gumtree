@@ -35,54 +35,6 @@ public final class TreeUtils {
     }
 
     /**
-     * Compute the depth of every node of the tree. The size is set
-     * directly on the nodes and is then accessible using {@link Tree#getSize()}.
-     * @param tree a Tree
-     */
-    public static void computeSize(ITree tree) {
-        for (ITree t: tree.postOrder()) {
-            int size = 1;
-            if (!t.isLeaf())
-                for (ITree c: t.getChildren())
-                    size += c.getSize();
-            t.setSize(size);
-        }
-    }
-
-    /**
-     * Compute the depth of every node of the tree. The depth is set
-     * directly on the nodes and is then accessible using {@link Tree#getDepth()}.
-     * @param tree a Tree
-     */
-    public static void computeDepth(ITree tree) {
-        List<ITree> trees = preOrder(tree);
-        for (ITree t: trees) {
-            int depth = 0;
-            if (!t.isRoot()) depth = t.getParent().getDepth() + 1;
-            t.setDepth(depth);
-        }
-    }
-
-    /**
-     * Compute the height of every node of the tree. The height is set
-     * directly on the nodes and is then accessible using {@link Tree#getHeight()}.
-     * @param tree a Tree.
-     */
-    public static void computeHeight(ITree tree) {
-        for (ITree t: tree.postOrder()) {
-            int height = 0;
-            if (!t.isLeaf()) {
-                for (ITree c: t.getChildren()) {
-                    int cHeight = c.getHeight();
-                    if (cHeight > height) height = cHeight;
-                }
-                height++;
-            }
-            t.setHeight(height);
-        }
-    }
-
-    /**
      * Returns a list of every subtrees and the tree ordered using a pre-order.
      * @param tree a Tree.
      */
@@ -97,10 +49,6 @@ public final class TreeUtils {
         if (!tree.isLeaf())
             for (ITree c: tree.getChildren())
                 preOrder(c, trees);
-    }
-
-    public static void preOrderNumbering(ITree tree) {
-        numbering(tree.preOrder());
     }
 
     /**
@@ -160,16 +108,6 @@ public final class TreeUtils {
         };
     }
 
-    public static void breadthFirstNumbering(ITree tree) {
-        numbering(tree.breadthFirst());
-    }
-
-    public static void numbering(Iterable<ITree> iterable) {
-        int i = 0;
-        for (ITree t: iterable)
-            t.setId(i++);
-    }
-
     /**
      * Returns a list of every subtrees and the tree ordered using a post-order.
      * @param tree a Tree.
@@ -203,12 +141,12 @@ public final class TreeUtils {
             public ITree next() {
                 if (stack.isEmpty())
                     throw new NoSuchElementException();
-                return selectNextChild(stack.peek().getSecond());
+                return selectNextChild(stack.peek().second);
             }
 
             ITree selectNextChild(Iterator<ITree> it) {
                 if (!it.hasNext())
-                    return stack.pop().getFirst();
+                    return stack.pop().first;
                 ITree item = it.next();
                 if (item.isLeaf())
                     return item;
@@ -293,9 +231,5 @@ public final class TreeUtils {
                 throw new RuntimeException("Not yet implemented implemented.");
             }
         };
-    }
-
-    public static void postOrderNumbering(ITree tree) {
-        numbering(tree.postOrder());
     }
 }

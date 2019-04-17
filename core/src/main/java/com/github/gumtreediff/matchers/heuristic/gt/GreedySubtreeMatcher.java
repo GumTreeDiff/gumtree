@@ -40,7 +40,7 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
         Set<ITree> ignored = new HashSet<>();
         for (ITree src: multiMappings.getSrcs()) {
             if (multiMappings.isSrcUnique(src))
-                addMappingRecursively(src, multiMappings.getDst(src).iterator().next());
+                mappings.addMappingRecursively(src, multiMappings.getDst(src).iterator().next());
             else if (!ignored.contains(src)) {
                 Set<ITree> adsts = multiMappings.getDst(src);
                 Set<ITree> asrcs = multiMappings.getSrc(multiMappings.getDst(src).iterator().next());
@@ -54,7 +54,7 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
         // Rank the mappings by score.
         Set<ITree> srcIgnored = new HashSet<>();
         Set<ITree> dstIgnored = new HashSet<>();
-        Collections.sort(ambiguousList, new SiblingsMappingComparator(ambiguousList, mappings, getMaxTreeSize()));
+        Collections.sort(ambiguousList, new SiblingsMappingComparator(ambiguousList, mappings, srcMetrics, dstMetrics, getMaxTreeSize()));
 
         // Select the best ambiguous mappings
         retainBestMapping(ambiguousList, srcIgnored, dstIgnored);

@@ -42,10 +42,10 @@ public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher {
     public void match() {
         for (ITree t: src.postOrder())  {
             if (t.isRoot()) {
-                addMapping(t, this.dst);
+                mappings.addMapping(t, this.dst);
                 lastChanceMatch(t, this.dst);
                 break;
-            } else if (!(isSrcMatched(t) || t.isLeaf())) {
+            } else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
                 List<ITree> srcCandidates = t.getParents().stream()
                         .filter(p -> p.getType() == t.getType())
                         .collect(Collectors.toList());
@@ -68,7 +68,7 @@ public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher {
 
                 if (srcBest != null) {
                     lastChanceMatch(srcBest, dstBest);
-                    addMapping(srcBest, dstBest);
+                    mappings.addMapping(srcBest, dstBest);
                 }
             }
         }

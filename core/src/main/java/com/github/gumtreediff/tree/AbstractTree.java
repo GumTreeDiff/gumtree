@@ -21,25 +21,14 @@
 package com.github.gumtreediff.tree;
 
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.hash.HashUtils;
 
 import java.util.*;
 
 public abstract class AbstractTree implements ITree {
 
-    protected int id;
-
     protected ITree parent;
 
     protected List<ITree> children;
-
-    protected int height;
-
-    protected int size;
-
-    protected int depth;
-
-    protected int hash;
 
     @Override
     public int getChildPosition(ITree child) {
@@ -52,30 +41,10 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public int getDepth() {
-        return depth;
-    }
-
-    @Override
     public List<ITree> getDescendants() {
         List<ITree> trees = TreeUtils.preOrder(this);
         trees.remove(0);
         return trees;
-    }
-
-    @Override
-    public int getHash() {
-        return hash;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
-    }
-
-    @Override
-    public int getId() {
-        return id;
     }
 
     @Override
@@ -103,11 +72,6 @@ public abstract class AbstractTree implements ITree {
             parents.addAll(getParent().getParents());
         }
         return parents;
-    }
-
-    @Override
-    public int getSize() {
-        return size;
     }
 
     @Override
@@ -193,50 +157,6 @@ public abstract class AbstractTree implements ITree {
             return -1;
         else
             return p.getChildren().indexOf(this);
-    }
-
-    @Override
-    public void refresh() {
-        TreeUtils.computeSize(this);
-        TreeUtils.computeDepth(this);
-        TreeUtils.computeHeight(this);
-        HashUtils.DEFAULT_HASH_GENERATOR.hash(this);
-    }
-
-    @Override
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
-
-    @Override
-    public void setHash(int digest) {
-        this.hash = digest;
-    }
-
-    @Override
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    @Override
-    public String toStaticHashString() {
-        StringBuilder b = new StringBuilder();
-        b.append(OPEN_SYMBOL);
-        b.append(this.toString());
-        for (ITree c: this.getChildren())
-            b.append(c.toStaticHashString());
-        b.append(CLOSE_SYMBOL);
-        return b.toString();
     }
 
     @Override

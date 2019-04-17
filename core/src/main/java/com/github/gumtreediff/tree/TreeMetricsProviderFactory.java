@@ -1,3 +1,23 @@
+/*
+ * This file is part of GumTree.
+ *
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2019 Floréal Morandat <florealm@gmail.com>
+ */
+
 package com.github.gumtreediff.tree;
 
 import java.util.HashMap;
@@ -29,8 +49,8 @@ public class TreeMetricsProviderFactory implements MetricProviderFactory<TreeMet
     }
 
     @Override
-    public TreeMetricsProvider computeMetric(TreeContext context) {
-        return new TreeMetricsProvider(context.getRoot());
+    public TreeMetricsProvider computeMetric(ITree root) {
+        return new TreeMetricsProvider(root);
     }
 
     public static class TreeMetricsProvider implements MetricProvider<TreeMetrics> {
@@ -46,9 +66,8 @@ public class TreeMetricsProviderFactory implements MetricProviderFactory<TreeMet
         }
 
         private class TreeMetricComputer extends TreeVisitor.InnerNodesAndLeavesVisitor {
-
-
             int currentDepth = 0;
+            int currentPosition = 0;
 
             @Override
             public void startInnerNode(ITree tree) {
@@ -57,7 +76,8 @@ public class TreeMetricsProviderFactory implements MetricProviderFactory<TreeMet
 
             @Override
             public void visitLeave(ITree tree) {
-                metricsForTree.put(tree, new TreeMetrics(1, 0, leafHash(tree), currentDepth));
+                metricsForTree.put(tree, new TreeMetrics(1, 0, leafHash(tree), currentDepth, currentPosition));
+                currentPosition++;
             }
 
             @Override
@@ -78,7 +98,8 @@ public class TreeMetricsProviderFactory implements MetricProviderFactory<TreeMet
                         sumSize + 1,
                         maxHeight + 1,
                         innerNodeHash(tree, 2 * sumSize + 1, currentHash),
-                        currentDepth));
+                        currentDepth, currentPosition));
+                currentPosition++;
             }
 
             private int innerNodeHash(ITree tree, int size, int middleHash) {
@@ -102,11 +123,14 @@ public class TreeMetricsProviderFactory implements MetricProviderFactory<TreeMet
 
         public final int depth; //TODO try to remove this redundant metric
 
-        public TreeMetrics(int size, int height, int hash, int depth) {
+        public final int position;
+
+        public TreeMetrics(int size, int height, int hash, int depth, int position) {
             this.size = size;
             this.height = height;
             this.hash = hash;
             this.depth = depth;
+            this.position = position;
         }
     }
 }

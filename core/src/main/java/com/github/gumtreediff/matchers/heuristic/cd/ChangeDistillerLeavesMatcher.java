@@ -58,11 +58,11 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
         Collections.sort(leavesMappings, new LeafMappingComparator());
         while (leavesMappings.size() > 0) {
             Mapping bestMapping = leavesMappings.remove(0);
-            if (!(ignoredSrcTrees.contains(bestMapping.getFirst())
-                    || ignoredDstTrees.contains(bestMapping.getSecond()))) {
-                addMapping(bestMapping.getFirst(),bestMapping.getSecond());
-                ignoredSrcTrees.add(bestMapping.getFirst());
-                ignoredDstTrees.add(bestMapping.getSecond());
+            if (!(ignoredSrcTrees.contains(bestMapping.first)
+                    || ignoredDstTrees.contains(bestMapping.second))) {
+                mappings.addMapping(bestMapping.first,bestMapping.second);
+                ignoredSrcTrees.add(bestMapping.first);
+                ignoredDstTrees.add(bestMapping.second);
             }
         }
     }
@@ -85,7 +85,7 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
         }
 
         public double sim(Mapping m) {
-            return StringMetrics.qGramsDistance().compare(m.getFirst().getLabel(), m.getSecond().getLabel());
+            return StringMetrics.qGramsDistance().compare(m.first.getLabel(), m.second.getLabel());
         }
 
     }

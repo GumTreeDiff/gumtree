@@ -23,6 +23,7 @@ package com.github.gumtreediff.matchers.optimal.zs;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeMetricsProviderFactory;
 import org.simmetrics.StringMetrics;
 
 import java.util.*;
@@ -45,8 +46,8 @@ public class ZsMatcher extends Matcher {
 
     public ZsMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
-        this.zsSrc = new ZsTree(src);
-        this.zsDst = new ZsTree(dst);
+        this.zsSrc = new ZsTree(src, srcMetrics);
+        this.zsDst = new ZsTree(dst, dstMetrics);
     }
 
     private double[][] computeTreeDist() {
@@ -137,7 +138,7 @@ public class ZsMatcher extends Matcher {
                         ITree tSrc = zsSrc.tree(row);
                         ITree tDst = zsDst.tree(col);
                         if (tSrc.getType() == tDst.getType())
-                            addMapping(tSrc, tDst);
+                            mappings.addMapping(tSrc, tDst);
                         else
                             throw new RuntimeException("Should not map incompatible nodes.");
                         row--;
@@ -188,9 +189,9 @@ public class ZsMatcher extends Matcher {
 
         private int[] kr;
 
-        private ZsTree(ITree t) {
+        private ZsTree(ITree t, TreeMetricsProviderFactory.TreeMetricsProvider treeMetrics) {
             this.start = 0;
-            this.nodeCount = t.getSize();
+            this.nodeCount = treeMetrics.get(t).size;
             this.leafCount = 0;
             this.llds = new int[start + nodeCount];
             this.labels = new ITree[start + nodeCount];

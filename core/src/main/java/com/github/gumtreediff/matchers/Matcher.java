@@ -21,6 +21,8 @@
 package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.MetricProviderFactory;
+import com.github.gumtreediff.tree.TreeMetricsProviderFactory;
 import org.atteo.classindex.IndexSubclasses;
 
 import java.util.HashSet;
@@ -39,9 +41,15 @@ public abstract class Matcher {
 
     protected final MappingStore mappings;
 
+    protected final TreeMetricsProviderFactory.TreeMetricsProvider srcMetrics;
+
+    protected final TreeMetricsProviderFactory.TreeMetricsProvider dstMetrics;
+
     public Matcher(ITree src, ITree dst, MappingStore mappings) {
         this.src = src;
         this.dst = dst;
+        this.srcMetrics = MetricProviderFactory.computeTreeMetrics(src);
+        this.dstMetrics = MetricProviderFactory.computeTreeMetrics(dst);
         this.mappings = mappings;
     }
 
@@ -61,20 +69,6 @@ public abstract class Matcher {
 
     public ITree getDst() {
         return dst;
-    }
-
-    protected void addMapping(ITree src, ITree dst) {
-        mappings.addMapping(src, dst);
-    }
-
-    protected void addMappingRecursively(ITree src, ITree dst) {
-        List<ITree> srcTrees = src.getTrees();
-        List<ITree> dstTrees = dst.getTrees();
-        for (int i = 0; i < srcTrees.size(); i++) {
-            ITree currentSrcTree = srcTrees.get(i);
-            ITree currentDstTree = dstTrees.get(i);
-            addMapping(currentSrcTree, currentDstTree);
-        }
     }
 
     protected double chawatheSimilarity(ITree src, ITree dst) {
@@ -107,6 +101,6 @@ public abstract class Matcher {
     }
 
     public boolean isMappingAllowed(ITree src, ITree dst) {
-        return src.hasSameType(dst) && !(mappings.isSrcMapped(src) || mappings.isDstMapped(dst));
+        return src.hasSameType(dst) && mappings.areBothUnmapped(src, dst);
     }
 }

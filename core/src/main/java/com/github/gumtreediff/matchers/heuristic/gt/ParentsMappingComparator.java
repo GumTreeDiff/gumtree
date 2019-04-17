@@ -22,16 +22,19 @@ package com.github.gumtreediff.matchers.heuristic.gt;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeMetricsProviderFactory;
 import com.github.gumtreediff.utils.StringAlgorithms;
 
 import java.util.*;
 
 public final class ParentsMappingComparator extends AbstractMappingComparator {
 
-    public ParentsMappingComparator(List<Mapping> ambiguousMappings, MappingStore mappings, int maxTreeSize) {
-        super(ambiguousMappings, mappings, maxTreeSize);
+    public ParentsMappingComparator(List<Mapping> ambiguousMappings, MappingStore mappings,
+                                    TreeMetricsProviderFactory.TreeMetricsProvider srcMetrics,
+                                    TreeMetricsProviderFactory.TreeMetricsProvider dstMetrics, int maxTreeSize) {
+        super(ambiguousMappings, mappings, srcMetrics, dstMetrics, maxTreeSize);
         for (Mapping ambiguousMapping: ambiguousMappings)
-            similarities.put(ambiguousMapping, similarity(ambiguousMapping.getFirst(), ambiguousMapping.getSecond()));
+            similarities.put(ambiguousMapping, similarity(ambiguousMapping.first, ambiguousMapping.second));
     }
 
     @Override

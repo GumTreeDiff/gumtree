@@ -32,7 +32,7 @@ public class MappingStore implements Iterable<Mapping> {
     public MappingStore(Set<Mapping> mappings) {
         this();
         for (Mapping m: mappings)
-            addMapping(m.getFirst(), m.getSecond());
+            addMapping(m.first, m.second);
     }
 
     public MappingStore() {
@@ -77,6 +77,12 @@ public class MappingStore implements Iterable<Mapping> {
         dstToSrc.put(dst, src);
     }
 
+    public void addMappingRecursively(ITree src, ITree dst) {
+        addMapping(src, dst);
+        for (int i = 0; i < src.getChildren().size(); i++)
+            addMappingRecursively(src.getChild(i), dst.getChild(i));
+    }
+
     public void removeMapping(ITree src, ITree dst) {
         srcToDst.remove(src);
         dstToSrc.remove(dst);
@@ -98,6 +104,10 @@ public class MappingStore implements Iterable<Mapping> {
         return dstToSrc.containsKey(dst);
     }
 
+    public boolean areBothUnmapped(ITree src, ITree dst) {
+        return !(isSrcMapped(src) || isDstMapped(dst));
+    }
+
     public boolean has(ITree src, ITree dst) {
         return srcToDst.get(src) == dst;
     }
@@ -111,7 +121,7 @@ public class MappingStore implements Iterable<Mapping> {
     public String toString() {
         StringBuilder b = new StringBuilder();
         for (Mapping m : this)
-            b.append(m.getFirst() + " -> " + m.getSecond() + "\n");
+            b.append(m.toString()).append('\n');
         return b.toString();
     }
 

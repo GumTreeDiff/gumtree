@@ -29,23 +29,9 @@ import java.util.Map.Entry;
  */
 public interface ITree {
 
-    String OPEN_SYMBOL = "[(";
-    String CLOSE_SYMBOL = ")]";
-    String SEPARATE_SYMBOL = "@@";
-
-    int NO_ID = Integer.MIN_VALUE;
-
     String NO_LABEL = "";
 
-    int NO_VALUE = -1;
-
-    /**
-     * @see com.github.gumtreediff.tree.hash.HashGenerator
-     * @return a hash (probably unique) representing the tree
-     */
-    int getHash();
-
-    void setHash(int hash);
+    int NO_POS = -1;
 
     /**
      * @return all the nodes contained in the tree, using a pre-order.
@@ -129,33 +115,6 @@ public interface ITree {
      */
     ITree deepCopy();
 
-    /**
-     * @see TreeUtils#computeDepth(ITree)
-     * @return the depth of the tree, defined as the distance to the root
-     */
-    int getDepth();
-
-    void setDepth(int depth);
-
-    /**
-     * @see TreeUtils#computeHeight(ITree)
-     * @return the height of the tree, defined as the maximal depth of its descendants.
-     */
-    int getHeight();
-
-    void setHeight(int height);
-
-    /**
-     * @see TreeUtils#numbering(Iterable)
-     * @see TreeUtils#preOrderNumbering(ITree)
-     * @see TreeUtils#postOrderNumbering(ITree)
-     * @see TreeUtils#breadthFirstNumbering(ITree)
-     * @return the number of the node
-     */
-    int getId();
-
-    void setId(int id);
-
     boolean hasLabel();
 
     String getLabel();
@@ -177,14 +136,6 @@ public interface ITree {
         return getPos() + getLength();
     }
 
-    /**
-     * @see TreeUtils#computeSize(ITree)
-     * @return the number of all nodes contained in the tree
-     */
-    int getSize();
-
-    void setSize(int size);
-
     Symbol getType();
 
     void setType(Symbol type);
@@ -195,8 +146,6 @@ public interface ITree {
     boolean hasSameType(ITree t);
 
     /**
-     * @see #toStaticHashString()
-     * @see #getHash()
      * @return a boolean indicating if the two trees are isomorphics, defined has
      *     having the same hash and the same hash serialization.
      */
@@ -207,17 +156,6 @@ public interface ITree {
      * @return true if they are compatible and have same label, false either
      */
     boolean hasSameTypeAndLabel(ITree t);
-
-    /**
-     * Refresh hash, size, depth and height of the tree.
-     * @see com.github.gumtreediff.tree.hash.HashGenerator
-     * @see TreeUtils#computeDepth(ITree)
-     * @see TreeUtils#computeHeight(ITree)
-     * @see TreeUtils#computeSize(ITree)
-     */
-    void refresh();
-
-    String toStaticHashString();
 
     String toTreeString();
 

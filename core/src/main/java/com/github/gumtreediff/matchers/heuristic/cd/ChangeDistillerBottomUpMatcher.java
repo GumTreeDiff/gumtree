@@ -50,7 +50,7 @@ public class ChangeDistillerBottomUpMatcher extends Matcher {
                     double similarity = chawatheSimilarity(currentSrcTree, currentDstTree);
                     if ((numberOfLeaves > MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_1)
                             || (numberOfLeaves <= MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_2)) {
-                        addMapping(currentSrcTree, currentDstTree);
+                        mappings.addMapping(currentSrcTree, currentDstTree);
                         break;
                     }
                 }
