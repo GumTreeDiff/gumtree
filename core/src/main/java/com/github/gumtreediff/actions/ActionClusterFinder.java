@@ -63,7 +63,7 @@ public class ActionClusterFinder {
             }
         }
 
-        ConnectivityInspector alg = new ConnectivityInspector(graph);
+        ConnectivityInspector<Action, DefaultEdge> alg = new ConnectivityInspector<>(graph);
         clusters = alg.connectedSets();
     }
 

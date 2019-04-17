@@ -93,7 +93,7 @@ public class InnerNodesMatcherThetaD extends Matcher {
                 }
                 Integer count = countMap.get(parentPartner);
                 if (count == null) {
-                    count = new Integer(0);
+                    count = Integer.valueOf(0);
                 }
                 countMap.put(parentPartner, count + 1);
             }
