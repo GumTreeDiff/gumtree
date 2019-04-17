@@ -36,8 +36,8 @@ public class TestCdMatcher {
     @Test
     public void testLeafMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getCdCustomPair();
-        ITree src = trees.getFirst().getRoot();
-        ITree dst = trees.getSecond().getRoot();
+        ITree src = trees.first.getRoot();
+        ITree dst = trees.second.getRoot();
         Matcher matcher = new ChangeDistillerLeavesMatcher(src, dst, new MappingStore());
         matcher.match();
         assertEquals(2, matcher.getMappingsAsSet().size());

@@ -38,8 +38,8 @@ public class TestActionGenerator {
     @Test
     public void testWithActionExample() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
-        ITree src = trees.getFirst().getRoot();
-        ITree dst = trees.getSecond().getRoot();
+        ITree src = trees.first.getRoot();
+        ITree dst = trees.second.getRoot();
         MappingStore ms = new MappingStore();
         ms.addMapping(src, dst);
         ms.addMapping(src.getChild(1), dst.getChild(0));
@@ -118,8 +118,8 @@ public class TestActionGenerator {
     public void testWithActionExampleNoMove() {
         ActionGenerator.REMOVE_MOVES_AND_UPDATES = true;
         Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
-        ITree src = trees.getFirst().getRoot();
-        ITree dst = trees.getSecond().getRoot();
+        ITree src = trees.first.getRoot();
+        ITree dst = trees.second.getRoot();
         MappingStore ms = new MappingStore();
         ms.addMapping(src, dst);
         ms.addMapping(src.getChild(1), dst.getChild(0));
@@ -142,8 +142,8 @@ public class TestActionGenerator {
     @Test
     public void testWithZsCustomExample() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsCustomPair();
-        ITree src = trees.getFirst().getRoot();
-        ITree dst = trees.getSecond().getRoot();
+        ITree src = trees.first.getRoot();
+        ITree dst = trees.second.getRoot();
         MappingStore ms = new MappingStore();
         ms.addMapping(src, dst.getChild(0));
         ms.addMapping(src.getChild(0), dst.getChild(0).getChild(0));

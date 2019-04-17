@@ -58,22 +58,22 @@ public class TestTree {
         assertTrue(parents.get(1).getLabel().equals("a"));
     }
 
-    @Test
-    public void testDeepCopy() {
-        ITree root = TreeLoader.getDummySrc();
-        TreeUtils.postOrderNumbering(root);
-        ITree croot = root.deepCopy();
-        assertTrue(croot.getSize() == root.getSize());
-        root.setLabel("new");
-        root.getChildren().get(0).setLabel("new");
-        root.getChildren().get(0).getChildren().get(0).setLabel("new");
-        assertTrue(croot.getLabel().equals("a"));
-        assertTrue(croot.getChildren().get(0).getLabel().equals("b"));
-        assertTrue(croot.getChildren().get(0).getChildren().get(0).getLabel().equals("c"));
-        assertTrue(root.getLabel().equals("new"));
-        assertTrue(root.getChildren().get(0).getLabel().equals("new"));
-        assertTrue(root.getChildren().get(0).getChildren().get(0).getLabel().equals("new"));
-    }
+//    @Test
+//    public void testDeepCopy() {
+//        ITree root = TreeLoader.getDummySrc();
+//        TreeUtils.postOrderNumbering(root);
+//        ITree croot = root.deepCopy();
+//        assertTrue(croot.getSize() == root.getSize());
+//        root.setLabel("new");
+//        root.getChildren().get(0).setLabel("new");
+//        root.getChildren().get(0).getChildren().get(0).setLabel("new");
+//        assertTrue(croot.getLabel().equals("a"));
+//        assertTrue(croot.getChildren().get(0).getLabel().equals("b"));
+//        assertTrue(croot.getChildren().get(0).getChildren().get(0).getLabel().equals("c"));
+//        assertTrue(root.getLabel().equals("new"));
+//        assertTrue(root.getChildren().get(0).getLabel().equals("new"));
+//        assertTrue(root.getChildren().get(0).getChildren().get(0).getLabel().equals("new"));
+//    }
 
     @Test
     public void testIsomophism() {

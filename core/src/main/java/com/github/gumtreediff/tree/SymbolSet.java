@@ -32,7 +32,17 @@ public class SymbolSet {
         private final Map<String, Symbol> symbols = new HashMap<>();
 
         public Symbol getSymbol(String value) {
-            return symbols.computeIfAbsent(value == null ? "" : value, (key) -> makeSymbol(key));
+//            return symbols.computeIfAbsent(value == null ? "" : value, (key) -> makeSymbol(key));
+            if (value == null)
+                value = "";
+
+            Symbol sym = symbols.get(value);
+            if (sym == null) {
+                sym = makeSymbol(value);
+                symbols.put(value, sym);
+            }
+
+            return sym;
         }
     }
 }

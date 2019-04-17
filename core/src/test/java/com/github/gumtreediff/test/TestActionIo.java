@@ -43,8 +43,8 @@ public class TestActionIo {
     @Before
     public void setUp() throws Exception {
         Pair<TreeContext, TreeContext> p = TreeLoader.getActionPair();
-        src = p.getFirst();
-        dst = p.getSecond();
+        src = p.first;
+        dst = p.second;
         Matcher m = Matchers.getInstance().getMatcher(src.getRoot(), dst.getRoot());
         mappings = m.getMappings();
         actions = new ActionGenerator(src.getRoot(), dst.getRoot(), mappings).generate();

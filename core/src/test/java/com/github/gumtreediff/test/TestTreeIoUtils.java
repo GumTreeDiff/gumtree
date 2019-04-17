@@ -56,7 +56,6 @@ public class TestTreeIoUtils {
         ITree e = tc.createTree(TYPE_2, null);
         e.setParentAndUpdateChildren(a);
         // Refresh metrics is called because it is automatically called in fromXML
-        tc.validate();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
@@ -84,7 +83,6 @@ public class TestTreeIoUtils {
         ITree e = tc.createTree(TYPE_2, null);
         e.setParentAndUpdateChildren(a);
         // Refresh metrics is called because it is automatically called in fromXML
-        tc.validate();
 
         System.out.println("*****************");
         System.out.println(a.toPrettyTreeString(tc));

@@ -108,10 +108,10 @@ public class ActionGenerator {
                 // In order to use the real nodes from the second tree, we
                 // furnish x instead of w and fake that x has the newly
                 // generated ID.
-                Action ins = new Insert(x, origSrcTrees.get(z.getId()), k);
+                Action ins = new Insert(x, copyToOrig.get(z), k);
                 actions.add(ins);
                 //System.out.println(ins);
-                origSrcTrees.put(w.getId(), x);
+                copyToOrig.put(w, x);
                 newMappings.addMapping(w, x);
                 z.getChildren().add(k, w);
                 w.setParent(z);
@@ -120,12 +120,12 @@ public class ActionGenerator {
                 if (!x.equals(origDst)) { // TODO => x != origDst // Case of the root
                     ITree v = w.getParent();
                     if (!w.getLabel().equals(x.getLabel())) {
-                        actions.add(new Update(origSrcTrees.get(w.getId()), x.getLabel()));
+                        actions.add(new Update(copyToOrig.get(w), x.getLabel()));
                         w.setLabel(x.getLabel());
                     }
                     if (!z.equals(v)) {
                         int k = findPos(x);
-                        Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(z.getId()), k);
+                        Action mv = new Move(copyToOrig.get(w), copyToOrig.get(z), k);
                         actions.add(mv);
                         //System.out.println(mv);
                         int oldk = w.positionInParent();
@@ -143,7 +143,7 @@ public class ActionGenerator {
 
         for (ITree w : newSrc.postOrder())
             if (!newMappings.isSrcMapped(w))
-                actions.add(new Delete(origSrcTrees.get(w.getId())));
+                actions.add(new Delete(copyToOrig.get(w)));
 
 
         if (REMOVE_MOVES_AND_UPDATES)
@@ -159,23 +159,23 @@ public class ActionGenerator {
         for (Action a: actions) {
             if (a instanceof Update) {
                 Update u = (Update) a;
-                ITree src = cpySrcTrees.get(a.getNode().getId());
+                ITree src = origToCopy.get(a.getNode());
                 ITree dst = origMappings.getDstForSrc(src);
                 actionsCpy.add(new Insert(
                         dst,
                         dst.getParent(),
                         dst.positionInParent()));
-                actionsCpy.add(new Delete(origSrcTrees.get(u.getNode().getId())));
+                actionsCpy.add(new Delete(copyToOrig.get(u.getNode())));
             }
             else if (a instanceof Move) {
                 Move m = (Move) a;
-                ITree src = cpySrcTrees.get(a.getNode().getId());
+                ITree src = origToCopy.get(a.getNode());
                 ITree dst = origMappings.getDstForSrc(src);
                 actionsCpy.add(new TreeInsert(
                         dst,
                         dst.getParent(),
                         m.getPosition()));
-                actionsCpy.add(new TreeDelete(origSrcTrees.get(m.getNode().getId())));
+                actionsCpy.add(new TreeDelete(copyToOrig.get(m.getNode())));
             }
             else
                 actionsCpy.add(a);
@@ -255,7 +255,7 @@ public class ActionGenerator {
                 if (origMappings.has(a, b)) {
                     if (!lcs.contains(new Mapping(a, b))) {
                         int k = findPos(b);
-                        Action mv = new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k);
+                        Action mv = new Move(copyToOrig.get(a), copyToOrig.get(w), k);
                         actions.add(mv);
                         //System.out.println(mv);
                         int oldk = a.positionInParent();
