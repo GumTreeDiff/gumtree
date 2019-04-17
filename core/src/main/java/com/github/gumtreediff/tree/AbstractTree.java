@@ -23,8 +23,11 @@ package com.github.gumtreediff.tree;
 import com.github.gumtreediff.io.TreeIoUtils;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public abstract class AbstractTree implements ITree {
+
+    private static final Pattern urlPattern = Pattern.compile("\\d+(\\.\\d+)*");
 
     protected ITree parent;
 
@@ -38,6 +41,21 @@ public abstract class AbstractTree implements ITree {
     @Override
     public ITree getChild(int position) {
         return getChildren().get(position);
+    }
+
+    @Override
+    public ITree getChild(String url) {
+        if (!urlPattern.matcher(url).matches())
+            throw new IllegalArgumentException("Wrong URL format : " + url);
+
+        List<String> path = new LinkedList<>(Arrays.asList(url.split("\\.")));
+        ITree current = this;
+        while (path.size() > 0) {
+            int next = Integer.parseInt(path.remove(0));
+            current = current.getChild(next);
+        }
+
+        return current;
     }
 
     @Override

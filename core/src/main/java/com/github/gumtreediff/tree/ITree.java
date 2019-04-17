@@ -66,6 +66,12 @@ public interface ITree {
      */
     ITree getChild(int position);
 
+    /**
+     * Returns the child node at the given URL
+     * @param url the URL, such as <code>0.1.2</code>
+     */
+    ITree getChild(String url);
+
     List<ITree> getChildren();
 
     /**

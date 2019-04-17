@@ -347,7 +347,7 @@ public final class ActionsIoUtils {
         }
 
         private String toS(ITree node) {
-            return String.format("%s(%d)", node.toString(), node.toString());
+            return String.format("%s", node.toString());
         }
     }
 

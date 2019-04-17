@@ -20,9 +20,6 @@
 
 package com.github.gumtreediff.test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +28,8 @@ import com.github.gumtreediff.tree.Tree;
 import org.junit.Test;
 
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeUtils;
+
+import static org.junit.Assert.*;
 
 public class TestTree {
 
@@ -44,6 +42,15 @@ public class TestTree {
         assertTrue(nodes.get(2).getLabel().equals("c"));
         assertTrue(nodes.get(3).getLabel().equals("d"));
         assertTrue(nodes.get(4).getLabel().equals("e"));
+    }
+
+    @Test
+    public void testChildUrl() {
+        ITree root = TreeLoader.getDummySrc();
+        assertEquals("b", root.getChild("0").getLabel());
+        assertEquals("c", root.getChild("0.0").getLabel());
+        assertEquals("d", root.getChild("0.1").getLabel());
+        assertEquals("e", root.getChild("1").getLabel());
     }
 
     @Test

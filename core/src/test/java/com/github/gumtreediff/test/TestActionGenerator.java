@@ -24,6 +24,8 @@ import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.SymbolSet;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
@@ -43,13 +45,12 @@ public class TestActionGenerator {
         MappingStore ms = new MappingStore();
         ms.addMapping(src, dst);
         ms.addMapping(src.getChild(1), dst.getChild(0));
-        ms.addMapping(src.getChild(1).getChild(0), dst.getChild(0).getChild(0));
-        ms.addMapping(src.getChild(1).getChild(1), dst.getChild(0).getChild(1));
+        ms.addMapping(src.getChild("1.0"), dst.getChild("0.0"));
+        ms.addMapping(src.getChild("1.1"), dst.getChild("0.1"));
         ms.addMapping(src.getChild(0), dst.getChild(1).getChild(0));
-        ms.addMapping(src.getChild(0).getChild(0), dst.getChild(1).getChild(0).getChild(0));
+        ms.addMapping(src.getChild("0.0"), dst.getChild("1.0.0"));
         ms.addMapping(src.getChild(4), dst.getChild(3));
-        ms.addMapping(src.getChild(4).getChild(0), dst.getChild(3).getChild(0).getChild(0).getChild(0));
-
+        ms.addMapping(src.getChild("4.0"), dst.getChild("3.0.0.0"));
         ActionGenerator ag = new ActionGenerator(src, dst, ms);
         ag.generate();
         List<Action> actions = ag.getActions();
@@ -112,6 +113,18 @@ public class TestActionGenerator {
         assertTrue(a instanceof Delete);
         Delete d = (Delete) a;
         assertEquals("i", d.getNode().getLabel());
+    }
+
+    @Test
+    public void testWithUnmappedRoot() {
+        ITree src = new Tree(SymbolSet.symbol("foo"), "");
+        ITree dst = new Tree(SymbolSet.symbol("bar"), "");
+        MappingStore ms = new MappingStore();
+        ActionGenerator ag = new ActionGenerator(src, dst, ms);
+        ag.generate();
+        List<Action> actions = ag.getActions();
+        for (Action a : actions)
+            System.out.println(a.toString());
     }
 
     @Test
