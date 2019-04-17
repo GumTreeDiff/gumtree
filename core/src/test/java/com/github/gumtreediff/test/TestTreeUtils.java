@@ -28,6 +28,8 @@ import java.util.List;
 import com.github.gumtreediff.tree.*;
 import org.junit.Test;
 
+import static com.github.gumtreediff.tree.TreeMetricsProviderFactory.BASE;
+
 public class TestTreeUtils {
 
     @Test
@@ -78,6 +80,38 @@ public class TestTreeUtils {
         assertEquals(1, m.get(root.getChildren().get(0).getChildren().get(0)).size);
         assertEquals(1, m.get(root.getChildren().get(0).getChildren().get(1)).size);
         assertEquals(1, m.get(root.getChildren().get(1)).size);
+    }
+
+    @Test
+    public void testHash2() {
+        TreeContext context = new TreeContext();
+        ITree root = TreeLoader.getDummySrc();
+        context.setRoot(root);
+        System.out.println(root.toTreeString());
+        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(context);
+        assertEquals(
+                96746278
+                        + BASE * 96747270
+                        + BASE * BASE * 96749223
+                        + BASE * BASE * BASE * 102928006
+                        + BASE * BASE * BASE * BASE * 96749254
+                        + BASE * BASE * BASE * BASE * BASE * 102928037
+                        + BASE * BASE * BASE * BASE * BASE * BASE * 102926053
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * 96748324
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * 102927107
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * 102925061
+                , m.get(root).hash);
+        assertEquals(
+                96747270
+                + BASE * 96749223
+                + BASE * BASE * 102928006
+                + BASE * BASE * BASE * 96749254
+                + BASE * BASE * BASE * BASE * 102928037
+                + BASE * BASE * BASE * BASE * BASE * 102926053,
+                m.get(root.getChild(0)).hash);
+        assertEquals(96749223 + BASE * 102928006, m.get(root.getChild(0).getChild(0)).hash);
+        assertEquals(96749254 + BASE * 102928037, m.get(root.getChild(0).getChild(1)).hash);
+        assertEquals(96748324 + BASE * 102927107, m.get(root.getChild(1)).hash);
     }
 
     @Test

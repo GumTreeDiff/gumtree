@@ -14,6 +14,8 @@ public class TreeMetricsProviderFactory implements MetricProviderFactory<TreeMet
     }
 
     private static int fastExponentiation(int base, int exponent) {
+        if (exponent == 0)
+            return 1;
         if (exponent == 1)
             return base;
         int result = 1;
