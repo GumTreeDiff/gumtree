@@ -42,6 +42,14 @@ public class Tree extends AbstractTree implements ITree {
      * Constructs a new node. If you need type labels corresponding to the integer
      * @see TreeContext#createTree(Type, String)
      */
+    public Tree(Type type) {
+        this(type, NO_LABEL);
+    }
+
+    /**
+     * Constructs a new node. If you need type labels corresponding to the integer
+     * @see TreeContext#createTree(Type, String)
+     */
     public Tree(Type type, String label) {
         this.type = type;
         this.label = (label == null) ? NO_LABEL : label.intern();
