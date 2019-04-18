@@ -93,7 +93,7 @@ public abstract class AbstractSubtreeMatcher extends Matcher {
     public abstract void filterMappings(MultiMappingStore multiMappings);
 
     protected double sim(ITree src, ITree dst) {
-        double jaccard = jaccardSimilarity(src.getParent(), dst.getParent());
+        double jaccard = SimilarityMetrics.jaccardSimilarity(src.getParent(), dst.getParent(), mappings);
         int posSrc = (src.isRoot()) ? 0 : src.getParent().getChildPosition(src);
         int posDst = (dst.isRoot()) ? 0 : dst.getParent().getChildPosition(dst);
         int maxSrcPos =  (src.isRoot()) ? 1 : src.getParent().getChildren().size();

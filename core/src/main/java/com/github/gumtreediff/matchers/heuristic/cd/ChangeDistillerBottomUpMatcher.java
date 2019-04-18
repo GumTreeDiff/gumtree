@@ -22,6 +22,7 @@ package com.github.gumtreediff.matchers.heuristic.cd;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 
@@ -47,7 +48,7 @@ public class ChangeDistillerBottomUpMatcher extends Matcher {
             for (ITree currentDstTree: dstTrees) {
                 if (isMappingAllowed(currentSrcTree, currentDstTree)
                         && !(currentSrcTree.isLeaf() || currentDstTree.isLeaf())) {
-                    double similarity = chawatheSimilarity(currentSrcTree, currentDstTree);
+                    double similarity = SimilarityMetrics.chawatheSimilarity(currentSrcTree, currentDstTree, mappings);
                     if ((numberOfLeaves > MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_1)
                             || (numberOfLeaves <= MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_2)) {
                         mappings.addMapping(currentSrcTree, currentDstTree);

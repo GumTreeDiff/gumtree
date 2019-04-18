@@ -70,35 +70,6 @@ public abstract class Matcher {
         return dst;
     }
 
-    protected double chawatheSimilarity(ITree src, ITree dst) {
-        int max = Math.max(src.getDescendants().size(), dst.getDescendants().size());
-        return (double) numberOfCommonDescendants(src, dst) / (double) max;
-    }
-
-    protected double diceSimilarity(ITree src, ITree dst) {
-        double c = (double) numberOfCommonDescendants(src, dst);
-        return (2D * c) / ((double) src.getDescendants().size() + (double) dst.getDescendants().size());
-    }
-
-    protected double jaccardSimilarity(ITree src, ITree dst) {
-        double num = (double) numberOfCommonDescendants(src, dst);
-        double den = (double) src.getDescendants().size() + (double) dst.getDescendants().size() - num;
-        return num / den;
-    }
-
-    protected int numberOfCommonDescendants(ITree src, ITree dst) {
-        Set<ITree> dstDescendants = new HashSet<>(dst.getDescendants());
-        int common = 0;
-
-        for (ITree t : src.getDescendants()) {
-            ITree m = mappings.getDstForSrc(t);
-            if (m != null && dstDescendants.contains(m))
-                common++;
-        }
-
-        return common;
-    }
-
     public boolean isMappingAllowed(ITree src, ITree dst) {
         return src.hasSameType(dst) && mappings.areBothUnmapped(src, dst);
     }

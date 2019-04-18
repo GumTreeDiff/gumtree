@@ -23,6 +23,7 @@ package com.github.gumtreediff.matchers.heuristic.gt;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.utils.StringAlgorithms;
 
@@ -52,7 +53,7 @@ public class SimpleBottomUpMatcher extends Matcher {
                 double max = -1D;
 
                 for (ITree cand: candidates) {
-                    double sim = jaccardSimilarity(t, cand);
+                    double sim = SimilarityMetrics.jaccardSimilarity(t, cand, mappings);
                     if (sim > max && sim >= SIM_THRESHOLD) {
                         if (srcMetrics.get(t).depth == srcMetrics.get(cand).depth) {
                             lastChanceMatch(t, best);

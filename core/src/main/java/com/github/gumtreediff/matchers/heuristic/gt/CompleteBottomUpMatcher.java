@@ -21,6 +21,7 @@
 package com.github.gumtreediff.matchers.heuristic.gt;
 
 import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher {
                 for (ITree srcCand: srcCandidates) {
                     for (ITree dstCand: dstCandidates) {
 
-                        double sim = jaccardSimilarity(srcCand, dstCand);
+                        double sim = SimilarityMetrics.jaccardSimilarity(srcCand, dstCand, mappings);
                         if (sim > max && sim >= SIM_THRESHOLD) {
                             max = sim;
                             srcBest = srcCand;

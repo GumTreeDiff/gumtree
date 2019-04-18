@@ -21,6 +21,7 @@
 package com.github.gumtreediff.matchers.heuristic.gt;
 
 import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher {
                 double max = -1D;
 
                 for (ITree cand: candidates) {
-                    double sim = jaccardSimilarity(t, cand);
+                    double sim = SimilarityMetrics.jaccardSimilarity(t, cand, mappings);
                     if (sim > max && sim >= SIM_THRESHOLD) {
                         max = sim;
                         best = cand;

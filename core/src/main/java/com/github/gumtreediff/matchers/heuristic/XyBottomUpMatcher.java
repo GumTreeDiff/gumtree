@@ -22,6 +22,7 @@ package com.github.gumtreediff.matchers.heuristic;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Type;
 
@@ -54,7 +55,7 @@ public class XyBottomUpMatcher extends Matcher {
                 double max = -1D;
 
                 for (ITree cand: candidates ) {
-                    double sim = jaccardSimilarity(src, cand);
+                    double sim = SimilarityMetrics.jaccardSimilarity(src, cand, mappings);
                     if (sim > max && sim >= SIM_THRESHOLD) {
                         max = sim;
                         best = cand;
