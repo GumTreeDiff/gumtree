@@ -22,8 +22,8 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
-import com.github.gumtreediff.tree.Symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
+import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.Test;
 
@@ -36,10 +36,10 @@ import static org.junit.Assert.*;
 
 public class TestTreeIoUtils {
 
-    private static final Symbol TYPE_0 = symbol("TYPE_0");
-    private static final Symbol TYPE_1 = symbol("TYPE_1");
-    private static final Symbol TYPE_2 = symbol("TYPE_2");
-    private static final Symbol TYPE_3 = symbol("TYPE_3");
+    private static final Type TYPE_0 = type("TYPE_0");
+    private static final Type TYPE_1 = type("TYPE_1");
+    private static final Type TYPE_2 = type("TYPE_2");
+    private static final Type TYPE_3 = type("TYPE_3");
 
     @Test
     public void testSerializeTree() throws Exception {

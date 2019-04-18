@@ -192,13 +192,13 @@ public interface ITree {
      * Returns the type (i.e. IfStatement).
      * @return
      */
-    Symbol getType();
+    Type getType();
 
     /**
      * Sets the type of the node (i.e. IfStatement).
      *
      */
-    void setType(Symbol type);
+    void setType(Type type);
 
     /**
      * @return a boolean indicating if the trees have the same type.

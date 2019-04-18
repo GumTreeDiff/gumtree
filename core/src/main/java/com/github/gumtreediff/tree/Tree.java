@@ -27,7 +27,7 @@ import java.util.Map.Entry;
 
 public class Tree extends AbstractTree implements ITree {
 
-    private Symbol type;
+    private Type type;
 
     private String label;
 
@@ -40,9 +40,9 @@ public class Tree extends AbstractTree implements ITree {
 
     /**
      * Constructs a new node. If you need type labels corresponding to the integer
-     * @see TreeContext#createTree(Symbol, String)
+     * @see TreeContext#createTree(Type, String)
      */
-    public Tree(Symbol type, String label) {
+    public Tree(Type type, String label) {
         this.type = type;
         this.label = (label == null) ? NO_LABEL : label.intern();
         this.children = new ArrayList<>();
@@ -104,7 +104,7 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public Symbol getType() {
+    public Type getType() {
         return type;
     }
 
@@ -145,7 +145,7 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public void setType(Symbol type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

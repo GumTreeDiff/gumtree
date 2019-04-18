@@ -23,20 +23,19 @@ package com.github.gumtreediff.gen.antlr3.xml;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.antlr3.AbstractAntlr3TreeGenerator;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
+import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
-import com.github.gumtreediff.tree.TreeUtils;
 import org.antlr.runtime.*;
 
 import java.io.IOException;
 import java.io.Reader;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 
 @Register(id = "xml-antlr", accept = {"\\.xml$", "\\.xsd$", "\\.wadl$"})
 public class XmlTreeGenerator extends AbstractAntlr3TreeGenerator<XMLLexer, XMLParser> {
 
-    private static final Symbol PCDATA = symbol(XMLParser.tokenNames[XMLParser.PCDATA]);
+    private static final Type PCDATA = type(XMLParser.tokenNames[XMLParser.PCDATA]);
 
     @Override
     public TreeContext generate(Reader file) throws IOException {

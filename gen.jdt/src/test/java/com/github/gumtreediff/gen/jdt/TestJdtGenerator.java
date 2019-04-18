@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 
 public class TestJdtGenerator {
 
-    private static final Symbol COMPILATION_UNIT = AbstractJdtVisitor.nodeAsSymbol(ASTNode.COMPILATION_UNIT);
+    private static final Type COMPILATION_UNIT = AbstractJdtVisitor.nodeAsSymbol(ASTNode.COMPILATION_UNIT);
 
     @Test
     public void testSimpleSyntax() throws IOException {

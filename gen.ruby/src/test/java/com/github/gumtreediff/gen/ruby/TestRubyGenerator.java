@@ -27,12 +27,12 @@ import com.github.gumtreediff.tree.*;
 import org.jrubyparser.ast.NodeType;
 import org.junit.Test;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.Assert.*;
 
 public class TestRubyGenerator {
 
-    private static final Symbol ROOT_NODE = symbol(NodeType.ROOTNODE.name());
+    private static final Type ROOT_NODE = type(NodeType.ROOTNODE.name());
 
     @Test
     public void testFileParsing() throws IOException {

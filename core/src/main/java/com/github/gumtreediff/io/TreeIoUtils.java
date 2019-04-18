@@ -43,7 +43,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 
 public final class TreeIoUtils {
 
@@ -756,7 +756,7 @@ public final class TreeIoUtils {
                         StartElement s = (StartElement) e;
                         if (!s.getName().getLocalPart().equals("tree")) // FIXME need to deal with options
                             continue;
-                        Symbol type = symbol(s.getAttributeByName(TYPE).getValue());
+                        Type type = type(s.getAttributeByName(TYPE).getValue());
 
                         ITree t = context.createTree(type, labelForAttribute(s, LABEL));
                         // FIXME this iterator has no type, due to the API. We have to cast it later

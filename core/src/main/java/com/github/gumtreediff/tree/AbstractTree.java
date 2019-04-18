@@ -238,8 +238,8 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public Symbol getType() {
-            return Symbol.NO_SYMBOL;
+        public Type getType() {
+            return Type.NO_TYPE;
         }
 
         @Override
@@ -268,7 +268,7 @@ public abstract class AbstractTree implements ITree {
         }
 
         @Override
-        public void setType(Symbol type) {
+        public void setType(Type type) {
             throw unsupportedOperation();
         }
 

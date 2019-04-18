@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.gen.antlr3.json;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.Assert.*;
 
 import com.github.gumtreediff.tree.*;
@@ -28,7 +28,7 @@ import org.junit.Test;
 
 public class TestJsonParsing {
 
-    public static final Symbol ARRAY = symbol(JSONParser.tokenNames[JSONParser.ARRAY]);
+    public static final Type ARRAY = type(JSONParser.tokenNames[JSONParser.ARRAY]);
 
     @Test
     public void testJsonParsing() throws Exception {

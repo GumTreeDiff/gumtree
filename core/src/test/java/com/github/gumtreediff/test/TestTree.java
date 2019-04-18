@@ -23,7 +23,7 @@ package com.github.gumtreediff.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.gumtreediff.tree.SymbolSet;
+import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 import org.junit.Test;
@@ -92,7 +92,7 @@ public class TestTree {
         assertFalse(root.isIsomorphicTo(rootCpy));
         root.getChild(0).getChild(0).setLabel("foo");
         assertTrue(root.isIsomorphicTo(rootCpy));
-        rootCpy.addChild(new Tree(SymbolSet.symbol("foo"), "toto"));
+        rootCpy.addChild(new Tree(TypeSet.type("foo"), "toto"));
         assertFalse(root.isIsomorphicTo(rootCpy));
     }
 

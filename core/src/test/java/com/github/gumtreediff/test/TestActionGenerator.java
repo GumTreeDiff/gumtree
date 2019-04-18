@@ -24,7 +24,7 @@ import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.SymbolSet;
+import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
@@ -117,8 +117,8 @@ public class TestActionGenerator {
 
     @Test
     public void testWithUnmappedRoot() {
-        ITree src = new Tree(SymbolSet.symbol("foo"), "");
-        ITree dst = new Tree(SymbolSet.symbol("bar"), "");
+        ITree src = new Tree(TypeSet.type("foo"), "");
+        ITree dst = new Tree(TypeSet.type("bar"), "");
         MappingStore ms = new MappingStore();
         ActionGenerator ag = new ActionGenerator(src, dst, ms);
         ag.generate();

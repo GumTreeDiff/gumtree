@@ -22,7 +22,6 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
 import com.google.common.collect.Sets;
 import org.junit.Before;
@@ -34,7 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.Assert.*;
 
 public class TestMetadata {
@@ -49,7 +48,7 @@ public class TestMetadata {
     @Before
     public void setUp() throws Exception {
         tc = new TreeContext();
-        someNode = tc.createTree(symbol("type0"), "");
+        someNode = tc.createTree(type("type0"), "");
         tc.setRoot(someNode);
     }
 

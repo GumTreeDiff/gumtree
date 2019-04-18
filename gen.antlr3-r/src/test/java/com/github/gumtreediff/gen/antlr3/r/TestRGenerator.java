@@ -26,27 +26,27 @@ import java.util.Collection;
 
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.MetricProviderFactory;
-import com.github.gumtreediff.tree.Symbol;
+import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeMetricsProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class TestRGenerator {
 
-    public static final Symbol SEQUENCE = symbol(RParser.tokenNames[RParser.SEQUENCE]);
+    public static final Type SEQUENCE = type(RParser.tokenNames[RParser.SEQUENCE]);
 
     private final String input;
-    private final Symbol expectedRootSymbol;
+    private final Type expectedRootType;
     private final int expectedSize;
 
-    public TestRGenerator(String input, Symbol expectedRootSymbol, int expectedSize) {
+    public TestRGenerator(String input, Type expectedRootType, int expectedSize) {
         this.input = input;
-        this.expectedRootSymbol = expectedRootSymbol;
+        this.expectedRootType = expectedRootType;
         this.expectedSize = expectedSize;
     }
 
@@ -61,7 +61,7 @@ public class TestRGenerator {
     public void testSimpleParse() throws IOException {
         ITree t = new RTreeGenerator().generateFrom().string(input).getRoot();
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(t);
-        assertEquals(expectedRootSymbol, t.getType());
+        assertEquals(expectedRootType, t.getType());
         assertEquals(expectedSize, m.get(t).size);
     }
 

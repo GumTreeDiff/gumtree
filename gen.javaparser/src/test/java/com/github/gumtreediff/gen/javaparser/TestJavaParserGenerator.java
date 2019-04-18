@@ -19,7 +19,7 @@
 
 package com.github.gumtreediff.gen.javaparser;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -37,13 +37,13 @@ import org.junit.runners.Parameterized;
 public class TestJavaParserGenerator {
 
     private final String input;
-    private final Symbol expectedRootSymbol;
+    private final Type expectedRootType;
     private final int expectedSize;
 
-    public static final Symbol COMPILATION_UNIT = symbol("CompilationUnit");
+    public static final Type COMPILATION_UNIT = type("CompilationUnit");
 
-    public TestJavaParserGenerator(Symbol expectedRootSymbol, int expectedSize, String input) {
-        this.expectedRootSymbol = expectedRootSymbol;
+    public TestJavaParserGenerator(Type expectedRootType, int expectedSize, String input) {
+        this.expectedRootType = expectedRootType;
         this.expectedSize = expectedSize;
         this.input = input;
     }
@@ -69,7 +69,7 @@ public class TestJavaParserGenerator {
     public void testSimpleSyntax() throws IOException {
         ITree tree = new JavaParserGenerator().generateFrom().string(input).getRoot();
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
-        assertEquals(expectedRootSymbol, tree.getType());
+        assertEquals(expectedRootType, tree.getType());
         assertEquals(expectedSize, m.get(tree).size);
     }
 

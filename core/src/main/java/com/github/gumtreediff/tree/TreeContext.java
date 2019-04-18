@@ -50,7 +50,7 @@ public class TreeContext {
         return root;
     }
 
-    public ITree createTree(Symbol type, String label) {
+    public ITree createTree(Type type, String label) {
         return new Tree(type, label);
     }
 
