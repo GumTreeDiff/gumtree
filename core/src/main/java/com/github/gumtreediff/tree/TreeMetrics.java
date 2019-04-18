@@ -15,12 +15,27 @@
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2019 Floréal Morandat <florealm@gmail.com>
  */
 
 package com.github.gumtreediff.tree;
 
-public interface MetricProvider<M> {
+public class TreeMetrics {
+    public final int size;
 
-    M get(ITree tree);
+    public final int height;
 
+    public final int hash;
+
+    public final int depth;
+
+    public final int position;
+
+    public TreeMetrics(int size, int height, int hash, int depth, int position) {
+        this.size = size;
+        this.height = height;
+        this.hash = hash;
+        this.depth = depth;
+        this.position = position;
+    }
 }

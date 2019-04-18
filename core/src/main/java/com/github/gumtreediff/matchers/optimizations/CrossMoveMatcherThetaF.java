@@ -55,11 +55,7 @@ public class CrossMoveMatcherThetaF extends Matcher {
             }
             for (int i = 0; i < list.size(); i++) {
                 int position = -1;
-                if (srcMetrics.get(list.get(i)) != null) //TODO improve this,
-                                                    // it checks in both src and dst provider to know where the tree is.
-                    map.put(srcMetrics.get(list.get(i)).position, i);
-                else
-                    map.put(dstMetrics.get(list.get(i)).position, i);
+                map.put(list.get(i).getMetrics().position, i);
             }
             return map;
         }
@@ -71,12 +67,12 @@ public class CrossMoveMatcherThetaF extends Matcher {
 
         @Override
         public int compare(Mapping o1, Mapping o2) {
-            if (srcMetrics.get(o1.first).position != srcMetrics.get(o2.first).position) {
-                return Integer.compare(positionSrc.get(srcMetrics.get(o1.first).position),
-                        positionSrc.get(srcMetrics.get(o2.first).position));
+            if (o1.first.getMetrics().position != o2.first.getMetrics().position) {
+                return Integer.compare(positionSrc.get(o1.first.getMetrics().position),
+                        positionSrc.get(o2.first.getMetrics().position));
             }
-            return Integer.compare(positionDst.get(dstMetrics.get(o1.second).position),
-                    positionDst.get(dstMetrics.get(o2.second).position));
+            return Integer.compare(positionDst.get(o1.second.getMetrics().position),
+                    positionDst.get(o2.second.getMetrics().position));
         }
 
     }

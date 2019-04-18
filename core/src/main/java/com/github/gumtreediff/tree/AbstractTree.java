@@ -26,12 +26,13 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public abstract class AbstractTree implements ITree {
-
     private static final Pattern urlPattern = Pattern.compile("\\d+(\\.\\d+)*");
 
     protected ITree parent;
 
     protected List<ITree> children;
+
+    protected TreeMetrics metrics;
 
     @Override
     public int getChildPosition(ITree child) {
@@ -185,6 +186,23 @@ public abstract class AbstractTree implements ITree {
     @Override
     public String toTreeString() {
         return TreeIoUtils.toShortText(this).toString();
+    }
+
+    public TreeMetrics getMetrics() {
+        if (metrics == null) {
+            ITree root = this;
+            if (!this.isRoot()) {
+                List<ITree> parents = this.getParents();
+                root = parents.get(parents.size() - 1);
+            }
+            TreeVisitor.visitTree(root, new TreeMetricComputer());
+        }
+
+        return metrics;
+    }
+
+    public void setMetrics(TreeMetrics metrics) {
+        this.metrics = metrics;
     }
 
     public static class FakeTree extends AbstractTree {

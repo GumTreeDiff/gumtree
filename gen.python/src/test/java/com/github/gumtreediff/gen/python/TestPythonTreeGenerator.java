@@ -20,9 +20,8 @@
 package com.github.gumtreediff.gen.python;
 
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.MetricProviderFactory;
 import com.github.gumtreediff.tree.TreeContext;
-import com.github.gumtreediff.tree.TreeMetricsProvider;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
@@ -35,8 +34,7 @@ public class TestPythonTreeGenerator {
         String input = "import sys\nimport json as json\n";
         TreeContext ctx = new PythonTreeGenerator().generateFrom().string(input);
         ITree t = ctx.getRoot();
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(t);
-        assertEquals(6, m.get(t).size);
+        assertEquals(6, t.getMetrics().size);
     }
 
 }

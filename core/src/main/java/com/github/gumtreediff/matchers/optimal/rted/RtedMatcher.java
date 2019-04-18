@@ -37,7 +37,7 @@ public class RtedMatcher extends Matcher {
     @Override
     public void match() {
         RtedAlgorithm a = new RtedAlgorithm(1D, 1D, 1D);
-        a.init(src, srcMetrics, dst, dstMetrics);
+        a.init(src, dst);
         a.computeOptimalStrategy();
         a.nonNormalizedTreeDist();
         ArrayDeque<int[]> arrayMappings = a.computeEditMapping();

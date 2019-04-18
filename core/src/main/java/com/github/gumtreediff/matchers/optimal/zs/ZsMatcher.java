@@ -23,13 +23,11 @@ package com.github.gumtreediff.matchers.optimal.zs;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeMetricsProvider;
 import org.simmetrics.StringMetrics;
 
 import java.util.*;
 
 public class ZsMatcher extends Matcher {
-
     private ZsTree zsSrc;
     private ZsTree zsDst;
 
@@ -46,8 +44,8 @@ public class ZsMatcher extends Matcher {
 
     public ZsMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
-        this.zsSrc = new ZsTree(src, srcMetrics);
-        this.zsDst = new ZsTree(dst, dstMetrics);
+        this.zsSrc = new ZsTree(src);
+        this.zsDst = new ZsTree(dst);
     }
 
     private double[][] computeTreeDist() {
@@ -189,9 +187,9 @@ public class ZsMatcher extends Matcher {
 
         private int[] kr;
 
-        private ZsTree(ITree t, TreeMetricsProvider treeMetrics) {
+        private ZsTree(ITree t) {
             this.start = 0;
-            this.nodeCount = treeMetrics.get(t).size;
+            this.nodeCount = t.getMetrics().size;
             this.leafCount = 0;
             this.llds = new int[start + nodeCount];
             this.labels = new ITree[start + nodeCount];

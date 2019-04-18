@@ -59,9 +59,8 @@ public class TestJavaParserGenerator {
     @MethodSource("provideStringAndExpectedLength")
     public void testSimpleSyntax(String expectedRootType, int expectedSize, String input) throws IOException {
         ITree tree = new JavaParserGenerator().generateFrom().string(input).getRoot();
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
         assertEquals(type(expectedRootType), tree.getType());
-        assertEquals(expectedSize, m.get(tree).size);
+        assertEquals(expectedSize, tree.getMetrics().size);
     }
 
     @Test

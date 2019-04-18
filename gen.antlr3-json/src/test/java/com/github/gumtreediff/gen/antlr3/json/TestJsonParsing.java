@@ -35,10 +35,9 @@ public class TestJsonParsing {
         TreeContext tc = new AntlrJsonTreeGenerator().generateFrom().charset("UTF-8")
                 .stream(getClass().getResourceAsStream("/sample.json"));
         ITree tree = tc.getRoot();
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
 
         assertEquals(ARRAY, tree.getType());
-        assertEquals(37, m.get(tree).size);
+        assertEquals(37, tree.getMetrics().size);
     }
 
 }

@@ -24,7 +24,6 @@ import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeMetricsProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +50,8 @@ public abstract class AbstractSubtreeMatcher extends Matcher {
     public void match() {
         MultiMappingStore multiMappings = new MultiMappingStore();
 
-        PriorityTreeList srcTrees = new PriorityTreeList(src, srcMetrics);
-        PriorityTreeList dstTrees = new PriorityTreeList(dst, dstMetrics);
+        PriorityTreeList srcTrees = new PriorityTreeList(src);
+        PriorityTreeList dstTrees = new PriorityTreeList(dst);
 
         while (srcTrees.peekHeight() != -1 && dstTrees.peekHeight() != -1) {
             while (srcTrees.peekHeight() != dstTrees.peekHeight())
@@ -100,13 +99,13 @@ public abstract class AbstractSubtreeMatcher extends Matcher {
         int maxDstPos =  (dst.isRoot()) ? 1 : dst.getParent().getChildren().size();
         int maxPosDiff = Math.max(maxSrcPos, maxDstPos);
         double pos = 1D - ((double) Math.abs(posSrc - posDst) / (double) maxPosDiff);
-        double po = 1D - ((double) Math.abs(srcMetrics.get(src).position - dstMetrics.get(dst).position)
+        double po = 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position)
                 / (double) this.getMaxTreeSize());
         return 100 * jaccard + 10 * pos + po;
     }
 
     protected int getMaxTreeSize() {
-        return Math.max(srcMetrics.get(src).size, dstMetrics.get(dst).size);
+        return Math.max(src.getMetrics().size, dst.getMetrics().size);
     }
 
     protected void retainBestMapping(List<Mapping> mappingList, Set<ITree> srcIgnored, Set<ITree> dstIgnored) {
@@ -121,30 +120,26 @@ public abstract class AbstractSubtreeMatcher extends Matcher {
     }
 
     private static class PriorityTreeList {
-
         private List<ITree>[] trees;
-
-        private TreeMetricsProvider treeMetrics;
 
         private int maxHeight;
 
         private int currentIdx;
 
         @SuppressWarnings("unchecked")
-        public PriorityTreeList(ITree tree, TreeMetricsProvider treeMetrics) {
-            this.treeMetrics = treeMetrics;
-            int listSize = treeMetrics.get(tree).height - MIN_HEIGHT + 1;
+        public PriorityTreeList(ITree tree) {
+            int listSize = tree.getMetrics().height - MIN_HEIGHT + 1;
             if (listSize < 0)
                 listSize = 0;
             if (listSize == 0)
                 currentIdx = -1;
             trees = (List<ITree>[]) new ArrayList[listSize];
-            maxHeight = treeMetrics.get(tree).height;
+            maxHeight = tree.getMetrics().height;
             addTree(tree);
         }
 
         private int idx(ITree tree) {
-            return idx(treeMetrics.get(tree).height);
+            return idx(tree.getMetrics().height);
         }
 
         private int idx(int height) {
@@ -156,7 +151,7 @@ public abstract class AbstractSubtreeMatcher extends Matcher {
         }
 
         private void addTree(ITree tree) {
-            if (treeMetrics.get(tree).height >= MIN_HEIGHT) {
+            if (tree.getMetrics().height >= MIN_HEIGHT) {
                 int idx = idx(tree);
                 if (trees[idx] == null) trees[idx] = new ArrayList<>();
                 trees[idx].add(tree);

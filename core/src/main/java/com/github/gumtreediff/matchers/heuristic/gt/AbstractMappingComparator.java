@@ -22,7 +22,6 @@ package com.github.gumtreediff.matchers.heuristic.gt;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeMetricsProvider;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -30,11 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractMappingComparator implements Comparator<Mapping> {
-
-    protected TreeMetricsProvider srcMetrics;
-
-    protected TreeMetricsProvider dstMetrics;
-
     protected List<Mapping> ambiguousMappings;
 
     protected Map<Mapping, Double> similarities = new HashMap<>();
@@ -43,14 +37,11 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
 
     protected MappingStore mappings;
 
-    public AbstractMappingComparator(List<Mapping> ambiguousMappings, MappingStore mappings,
-                                     TreeMetricsProvider srcMetrics,
-                                     TreeMetricsProvider dstMetrics, int maxTreeSize) {
+    public AbstractMappingComparator(List<Mapping> ambiguousMappings,
+                                     MappingStore mappings, int maxTreeSize) {
         this.maxTreeSize = maxTreeSize;
         this.mappings = mappings;
         this.ambiguousMappings = ambiguousMappings;
-        this.srcMetrics = srcMetrics;
-        this.dstMetrics = dstMetrics;
     }
 
     @Override
@@ -58,12 +49,12 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
         if (similarities.get(m2).compareTo(similarities.get(m1)) != 0) {
             return Double.compare(similarities.get(m2), similarities.get(m1));
         }
-        int srcPos = srcMetrics.get(m1.first).position;
-        int dstPos = srcMetrics.get(m2.first).position;
+        int srcPos = m1.first.getMetrics().position;
+        int dstPos = m2.first.getMetrics().position;
         if (srcPos != dstPos) {
             return Integer.compare(srcPos, dstPos);
         }
-        return Integer.compare(dstMetrics.get(m1.second).position, dstMetrics.get(m2.second).position);
+        return Integer.compare(m1.second.getMetrics().position, m2.second.getMetrics().position);
     }
 
     protected abstract double similarity(ITree src, ITree dst);
@@ -78,7 +69,7 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
     }
 
     protected double numberingSimilarity(ITree src, ITree dst) {
-        return 1D - ((double) Math.abs(srcMetrics.get(src).position - dstMetrics.get(dst).position)
+        return 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position)
                 / (double) maxTreeSize);
     }
 

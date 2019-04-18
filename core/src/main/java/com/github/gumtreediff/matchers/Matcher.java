@@ -21,13 +21,7 @@
 package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.MetricProviderFactory;
-import com.github.gumtreediff.tree.TreeMetricsProvider;
 import org.atteo.classindex.IndexSubclasses;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Logger;
 
 @IndexSubclasses
 public abstract class Matcher {
@@ -37,15 +31,9 @@ public abstract class Matcher {
 
     protected final MappingStore mappings;
 
-    protected final TreeMetricsProvider srcMetrics;
-
-    protected final TreeMetricsProvider dstMetrics;
-
     public Matcher(ITree src, ITree dst, MappingStore mappings) {
         this.src = src;
         this.dst = dst;
-        this.srcMetrics = MetricProviderFactory.computeTreeMetrics(src);
-        this.dstMetrics = MetricProviderFactory.computeTreeMetrics(dst);
         this.mappings = mappings;
     }
 

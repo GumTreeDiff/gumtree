@@ -39,8 +39,7 @@ public class TestJdtGenerator {
         String input = "public class Foo { public int foo; }";
         ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
-        assertEquals(10, m.get(tree).size);
+        assertEquals(10, tree.getMetrics().size);
     }
 
     @Test
@@ -49,8 +48,7 @@ public class TestJdtGenerator {
                 + "{ for (A f : foo) { System.out.println(f); } } }";
         ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
-        assertEquals(35, m.get(tree).size);
+        assertEquals(35, tree.getMetrics().size);
     }
 
     @Test
@@ -78,8 +76,7 @@ public class TestJdtGenerator {
         String input = "public class Foo { public void foo(){ new ArrayList<Object>().stream().forEach(a -> {}); } }";
         ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
-        assertEquals(28, m.get(tree).size);
+        assertEquals(28, tree.getMetrics().size);
     }
 
     @Test
@@ -95,10 +92,8 @@ public class TestJdtGenerator {
         String input1 = "public class Foo {}";
         String input2 = "public interface Foo {}";
         TreeContext ct1 = new JdtTreeGenerator().generateFrom().string(input1);
-        TreeMetricsProvider m1 = MetricProviderFactory.computeTreeMetrics(ct1.getRoot());
         TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
-        TreeMetricsProvider m2 = MetricProviderFactory.computeTreeMetrics(ct2.getRoot());
-        assertNotEquals(m1.get(ct1.getRoot()).hash, m2.get(ct2.getRoot()).hash);
+        assertNotEquals(ct1.getRoot().getMetrics().hash, ct2.getRoot().getMetrics().hash);
     }
 
     @Test

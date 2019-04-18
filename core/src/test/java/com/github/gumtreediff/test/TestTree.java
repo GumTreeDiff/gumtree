@@ -50,6 +50,7 @@ public class TestTree {
         assertEquals(2, parents.size());
         assertEquals("b", parents.get(0).getLabel());
         assertEquals("a", parents.get(1).getLabel());
+        assertEquals(tree, parents.get(parents.size() - 1));
     }
 
     @Test

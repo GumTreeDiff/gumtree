@@ -26,9 +26,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.tree.MetricProviderFactory;
 import com.github.gumtreediff.tree.TreeContext;
-import com.github.gumtreediff.tree.TreeMetricsProvider;
 
 import com.github.gumtreediff.tree.ITree;
 
@@ -37,24 +35,21 @@ public class TestJsGenerator {
     public void testStatement() throws IOException {
         String input = "console.log(\"Hello world!\");";
         ITree tree = new RhinoTreeGenerator().generateFrom().string(input).getRoot();
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
-        assertEquals(7, m.get(tree).size);
+        assertEquals(7, tree.getMetrics().size);
     }
 
     @Test
     public void testComment() throws IOException {
         String input = "console.log(\"Hello world!\"); /* with comment */";
         ITree tree = new RhinoTreeGenerator().generateFrom().string(input).getRoot();
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
-        assertEquals(8, m.get(tree).size);
+        assertEquals(8, tree.getMetrics().size);
     }
 
     @Test
     public void testComplexFile() throws IOException {
         ITree tree = new RhinoTreeGenerator().generateFrom().charset("UTF-8")
                 .stream(getClass().getResourceAsStream("/sample.js")).getRoot();
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
-        assertEquals(402, m.get(tree).size);
+        assertEquals(402, tree.getMetrics().size);
     }
 
     @Test

@@ -39,8 +39,7 @@ public class TestRubyGenerator {
         ITree tree = new RubyTreeGenerator().generateFrom()
                 .charset("UTF-8").stream(getClass().getResourceAsStream("/sample.rb")).getRoot();
         assertEquals(ROOT_NODE, tree.getType());
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
-        assertEquals(1726, m.get(tree).size);
+        assertEquals(1726, tree.getMetrics().size);
     }
 
     @Test

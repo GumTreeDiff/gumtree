@@ -224,6 +224,10 @@ public interface ITree {
      */
     String toTreeString();
 
+    TreeMetrics getMetrics();
+
+    void setMetrics(TreeMetrics metrics);
+
     Object getMetadata(String key);
 
     Object setMetadata(String key, Object value);

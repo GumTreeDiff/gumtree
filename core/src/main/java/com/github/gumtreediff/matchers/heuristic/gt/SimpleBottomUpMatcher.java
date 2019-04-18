@@ -55,7 +55,7 @@ public class SimpleBottomUpMatcher extends Matcher {
                 for (ITree cand: candidates) {
                     double sim = SimilarityMetrics.jaccardSimilarity(t, cand, mappings);
                     if (sim > max && sim >= SIM_THRESHOLD) {
-                        if (srcMetrics.get(t).depth == srcMetrics.get(cand).depth) {
+                        if (t.getMetrics().depth == cand.getMetrics().depth) {
                             lastChanceMatch(t, best);
                             mappings.addMapping(t, best);
                             return;

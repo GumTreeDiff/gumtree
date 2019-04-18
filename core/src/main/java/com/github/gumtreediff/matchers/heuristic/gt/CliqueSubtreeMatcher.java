@@ -39,7 +39,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
     public void filterMappings(MultiMappingStore multiMappings) {
         TIntObjectHashMap<Pair<List<ITree>, List<ITree>>> cliques = new TIntObjectHashMap<>();
         for (Mapping m : multiMappings) {
-            int hash = srcMetrics.get(m.first).hash;
+            int hash = m.first.getMetrics().hash;
             if (!cliques.containsKey(hash))
                 cliques.put(hash, new Pair<>(new ArrayList<>(), new ArrayList<>()));
             cliques.get(hash).first.add(m.first);
@@ -95,11 +95,11 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
         private int minDepth(Pair<List<ITree>, List<ITree>> trees) {
             int depth = Integer.MAX_VALUE;
             for (ITree t : trees.first)
-                if (depth > srcMetrics.get(t).depth)
-                    depth = srcMetrics.get(t).depth;
+                if (depth > t.getMetrics().depth)
+                    depth = t.getMetrics().depth;
             for (ITree t : trees.second)
-                if (depth > dstMetrics.get(t).depth)
-                    depth = dstMetrics.get(t).depth;
+                if (depth > t.getMetrics().depth)
+                    depth = t.getMetrics().depth;
             return depth;
         }
 
@@ -153,8 +153,8 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
             double[] sims = new double[4];
             sims[0] = jaccardSimilarity(src.getParent(), dst.getParent());
             sims[1] = src.positionInParent() - dst.positionInParent();
-            sims[2] = srcMetrics.get(src).position - dstMetrics.get(dst).position;
-            sims[3] = srcMetrics.get(src).position;
+            sims[2] = src.getMetrics().position - dst.getMetrics().position;
+            sims[3] = src.getMetrics().position;
             return sims;
         }
 

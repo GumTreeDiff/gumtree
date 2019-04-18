@@ -21,15 +21,9 @@
 package com.github.gumtreediff.gen.antlr3.r;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.stream.Stream;
 
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.MetricProviderFactory;
-import com.github.gumtreediff.tree.Type;
-import com.github.gumtreediff.tree.TreeMetricsProvider;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -52,8 +46,7 @@ public class TestRGenerator {
     @MethodSource("provideStringAndExpectedLength")
     public void testSimpleParse(String input, String expectedRootType, int expectedSize) throws IOException {
         ITree t = new RTreeGenerator().generateFrom().string(input).getRoot();
-        TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(t);
         assertEquals(type(expectedRootType), t.getType());
-        assertEquals(expectedSize, m.get(t).size);
+        assertEquals(expectedSize, t.getMetrics().size);
     }
 }
