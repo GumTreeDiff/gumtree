@@ -21,59 +21,51 @@ package com.github.gumtreediff.gen.javaparser;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsSources;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class TestJavaParserGenerator {
-    public static final Type COMPILATION_UNIT = type("CompilationUnit");
+    public static final String COMPILATION_UNIT = "CompilationUnit";
 
-    /*
-
-    private final String input;
-    private final Type expectedRootType;
-    private final int expectedSize;
-
-    public TestJavaParserGenerator(Type expectedRootType, int expectedSize, String input) {
-        this.expectedRootType = expectedRootType;
-        this.expectedSize = expectedSize;
-        this.input = input;
-    }
-
-    @Parameterized.Parameters
-    public static Collection provideStringAndExpectedLength() {
-        return Arrays.asList(new Object[][] {
-                {COMPILATION_UNIT, 9,
-                        "public class Foo { public int foo; }"},
-                {COMPILATION_UNIT, 37, // Java 5
+    static Stream<Arguments> provideStringAndExpectedLength() {
+        return Stream.of(
+                arguments(COMPILATION_UNIT, 9,
+                        "public class Foo { public int foo; }"),
+                arguments(COMPILATION_UNIT, 37, // Java 5
                         "public class Foo<A> { public List<A> foo; public void foo() "
-                                + "{ for (A f : foo) { System.out.println(f); } } }"},
-                {COMPILATION_UNIT, 23, // Java 8
+                                + "{ for (A f : foo) { System.out.println(f); } } }"),
+                arguments(COMPILATION_UNIT, 23, // Java 8
                         "public class Foo {\n"
                                 + "\tpublic void foo() {\n"
                                 + "\t\tnew ArrayList<Object>().stream().forEach(a -> {});\n"
                                 + "\t}\n"
-                                + "}"},
-        });
+                                + "}"));
     }
 
-    @Test
-    public void testSimpleSyntax() throws IOException {
+    @ParameterizedTest
+    @MethodSource("provideStringAndExpectedLength")
+    public void testSimpleSyntax(String expectedRootType, int expectedSize, String input) throws IOException {
         ITree tree = new JavaParserGenerator().generateFrom().string(input).getRoot();
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(tree);
-        assertEquals(expectedRootType, tree.getType());
+        assertEquals(type(expectedRootType), tree.getType());
         assertEquals(expectedSize, m.get(tree).size);
     }
 
-     */
-
     @Test
-    public void badSyntax() throws IOException {
+    public void badSyntax() {
         String input = "public clas Foo {}";
         assertThrows(SyntaxException.class, () -> {
             TreeContext ct = new JavaParserGenerator().generateFrom().string(input);

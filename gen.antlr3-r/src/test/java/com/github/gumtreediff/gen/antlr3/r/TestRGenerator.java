@@ -23,43 +23,37 @@ package com.github.gumtreediff.gen.antlr3.r;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.MetricProviderFactory;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeMetricsProvider;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class TestRGenerator {
 
-    public static final Type SEQUENCE = type(RParser.tokenNames[RParser.SEQUENCE]);
+    public static final String SEQUENCE = RParser.tokenNames[RParser.SEQUENCE];
 
-    private final String input;
-    private final Type expectedRootType;
-    private final int expectedSize;
-
-    public TestRGenerator(String input, Type expectedRootType, int expectedSize) {
-        this.input = input;
-        this.expectedRootType = expectedRootType;
-        this.expectedSize = expectedSize;
+    static Stream<Arguments> provideStringAndExpectedLength() {
+        return Stream.of(
+                arguments("v <- c(1,2,3);", SEQUENCE, 8)
+        );
     }
 
-    public static Collection provideStringAndExpectedLength() {
-        return Arrays.asList(new Object[][] {
-                { "v <- c(1,2,3);", SEQUENCE, 8 },
-        });
-    }
-
-    /*
-    @Test
-    public void testSimpleParse() throws IOException {
+    @ParameterizedTest
+    @MethodSource("provideStringAndExpectedLength")
+    public void testSimpleParse(String input, String expectedRootType, int expectedSize) throws IOException {
         ITree t = new RTreeGenerator().generateFrom().string(input).getRoot();
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(t);
-        assertEquals(expectedRootType, t.getType());
+        assertEquals(type(expectedRootType), t.getType());
         assertEquals(expectedSize, m.get(t).size);
     }
-    */
 }
