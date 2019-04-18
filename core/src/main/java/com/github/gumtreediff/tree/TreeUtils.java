@@ -103,7 +103,7 @@ public final class TreeUtils {
 
             @Override
             public void remove() {
-                throw new RuntimeException("Not yet implemented implemented.");
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -161,7 +161,7 @@ public final class TreeUtils {
 
             @Override
             public void remove() {
-                throw new RuntimeException("Not yet implemented implemented.");
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -199,7 +199,7 @@ public final class TreeUtils {
 
             @Override
             public void remove() {
-                throw new RuntimeException("Not yet implemented implemented.");
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -228,7 +228,7 @@ public final class TreeUtils {
 
             @Override
             public void remove() {
-                throw new RuntimeException("Not yet implemented implemented.");
+                throw new UnsupportedOperationException();
             }
         };
     }
