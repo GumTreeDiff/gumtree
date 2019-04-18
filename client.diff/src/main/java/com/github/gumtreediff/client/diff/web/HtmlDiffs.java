@@ -73,7 +73,7 @@ public final class HtmlDiffs {
 
     public void produce() throws IOException {
         TreeClassifier c = new OnlyRootsClassifier(src, dst, matcher);
-        TObjectIntMap mappingIds = new TObjectIntHashMap();
+        TObjectIntMap<ITree> mappingIds = new TObjectIntHashMap<>();
 
         int uId = 1;
         int mId = 1;

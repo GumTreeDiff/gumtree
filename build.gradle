@@ -84,7 +84,7 @@ def jacocoProjects = subprojects.findAll { it.name in jacocoProjectsNames }
 configure(jacocoProjects) {
     apply plugin: 'jacoco'
     jacoco {
-        toolVersion = '0.7.7.201606060606'
+        toolVersion = '0.8.3'
     }
 
     jacocoTestReport {
