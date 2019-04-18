@@ -20,12 +20,10 @@
 
 package com.github.gumtreediff.test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.tree.Tree;
-import com.github.gumtreediff.tree.TreeUtils;
 import org.junit.jupiter.api.Test;
 
 import com.github.gumtreediff.tree.ITree;
@@ -33,17 +31,6 @@ import com.github.gumtreediff.tree.ITree;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTree {
-
-    @Test
-    public void testIdComparator() {
-        ITree root = TreeLoader.getDummySrc();
-        List<ITree> nodes = TreeUtils.preOrder(root);
-        assertTrue(nodes.get(0).getLabel().equals("a"));
-        assertTrue(nodes.get(1).getLabel().equals("b"));
-        assertTrue(nodes.get(2).getLabel().equals("c"));
-        assertTrue(nodes.get(3).getLabel().equals("d"));
-        assertTrue(nodes.get(4).getLabel().equals("e"));
-    }
 
     @Test
     public void testChildUrl() {
@@ -57,31 +44,52 @@ public class TestTree {
     @Test
     public void testGetParents() {
         ITree tree = TreeLoader.getDummySrc();
-        List<ITree> trees = new ArrayList<>(TreeUtils.preOrder(tree));
-        ITree n = trees.get(2);
-        assertTrue(n.getLabel().equals("c"));
-        List<ITree> parents = n.getParents();
-        assertTrue(parents.size() == 2);
-        assertTrue(parents.get(0).getLabel().equals("b"));
-        assertTrue(parents.get(1).getLabel().equals("a"));
+        ITree c = tree.getChild("0.0");
+        assertEquals("c", c.getLabel());
+        List<ITree> parents = c.getParents();
+        assertEquals(2, parents.size());
+        assertEquals("b", parents.get(0).getLabel());
+        assertEquals("a", parents.get(1).getLabel());
     }
 
-//    @Test
-//    public void testDeepCopy() {
-//        ITree root = TreeLoader.getDummySrc();
-//        TreeUtils.postOrderNumbering(root);
-//        ITree croot = root.deepCopy();
-//        assertTrue(croot.getSize() == root.getSize());
-//        root.setLabel("new");
-//        root.getChildren().get(0).setLabel("new");
-//        root.getChildren().get(0).getChildren().get(0).setLabel("new");
-//        assertTrue(croot.getLabel().equals("a"));
-//        assertTrue(croot.getChildren().get(0).getLabel().equals("b"));
-//        assertTrue(croot.getChildren().get(0).getChildren().get(0).getLabel().equals("c"));
-//        assertTrue(root.getLabel().equals("new"));
-//        assertTrue(root.getChildren().get(0).getLabel().equals("new"));
-//        assertTrue(root.getChildren().get(0).getChildren().get(0).getLabel().equals("new"));
-//    }
+    @Test
+    public void testGetDescendants() {
+        ITree tree = TreeLoader.getDummySrc();
+        ITree b = tree.getChild(0);
+        assertEquals("b", b.getLabel());
+        List<ITree> descendants = b.getDescendants();
+        assertEquals(2, descendants.size());
+        assertEquals("c", descendants.get(0).getLabel());
+        assertEquals("d", descendants.get(1).getLabel());
+    }
+
+    @Test
+    public void testChildManipulation() {
+        ITree t1 = new Tree(TypeSet.type("foo"));
+        assertTrue(t1.isLeaf());
+        assertTrue(t1.isRoot());
+        assertEquals(0, t1.getChildren().size());
+        ITree t2 = new Tree(TypeSet.type("foo"));
+        t1.addChild(t2);
+        assertFalse(t1.isLeaf());
+        assertTrue(t1.isRoot());
+        assertTrue(t2.isLeaf());
+        assertEquals(t1, t2.getParent());
+        ITree t3 = new Tree(TypeSet.type("foo"));
+        t3.setParentAndUpdateChildren(t1);
+        assertTrue(t3.isLeaf());
+        assertEquals(t1, t3.getParent());
+        assertEquals(2, t1.getChildren().size());
+        assertEquals(t3, t1.getChild(1));
+    }
+
+    @Test
+    public void testDeepCopy() {
+        ITree root = TreeLoader.getDummySrc();
+        ITree croot = root.deepCopy();
+        assertTrue(root.isIsomorphicTo(croot));
+        assertNotEquals(root, croot);
+    }
 
     @Test
     public void testIsomophism() {
