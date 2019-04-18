@@ -45,7 +45,7 @@ public class TestIssue98 {
         Matcher m = Matchers.getInstance().getMatcher(leftTree, rightTree);
         m.match();
 
-        ActionGenerator g = new ActionGenerator(leftTree, rightTree, m.getMappings());
+        ActionGenerator g = new ActionGenerator(m.getMappings());
         List<Action> actions = g.generate();
 
         assertEquals(1, actions.size());

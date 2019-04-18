@@ -67,7 +67,7 @@ public abstract class AbstractBottomUpMatcher extends Matcher {
     protected void lastChanceMatch(ITree src, ITree dst) {
         if (srcMetrics.get(src).size < AbstractBottomUpMatcher.SIZE_THRESHOLD
                 || dstMetrics.get(dst).size < AbstractBottomUpMatcher.SIZE_THRESHOLD) {
-            Matcher m = new ZsMatcher(src, dst, new MappingStore());
+            Matcher m = new ZsMatcher(src, dst, new MappingStore(src, dst));
             m.match();
             for (Mapping candidate : m.getMappings()) {
                 ITree srcCand = candidate.first;

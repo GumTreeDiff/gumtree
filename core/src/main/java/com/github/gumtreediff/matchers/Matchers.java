@@ -51,11 +51,11 @@ public class Matchers extends Registry<String, Matcher, Register> {
     }
 
     public Matcher getMatcher(String id, ITree src, ITree dst) {
-        return get(id, src, dst, new MappingStore());
+        return get(id, src, dst, new MappingStore(src, dst));
     }
 
     public Matcher getMatcher(ITree src, ITree dst) {
-        return defaultMatcherFactory.instantiate(new Object[]{src, dst, new MappingStore()});
+        return defaultMatcherFactory.instantiate(new Object[]{src, dst, new MappingStore(src, dst)});
     }
 
     protected String getName(Register annotation, Class<? extends Matcher> clazz) {

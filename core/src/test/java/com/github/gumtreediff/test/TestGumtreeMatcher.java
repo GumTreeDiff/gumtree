@@ -38,13 +38,15 @@ public class TestGumtreeMatcher {
         GreedySubtreeMatcher.MIN_HEIGHT = 0;
         AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
         Matcher m = new CompositeMatchers.ClassicGumtree(
-                trees.first.getRoot(), trees.second.getRoot(), new MappingStore());
+                trees.first.getRoot(), trees.second.getRoot(),
+                new MappingStore(trees.first.getRoot(), trees.second.getRoot()));
         m.match();
         assertEquals(5, m.getMappingsAsSet().size());
         GreedySubtreeMatcher.MIN_HEIGHT = 1;
         AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
         m = new CompositeMatchers.ClassicGumtree(
-                trees.first.getRoot(), trees.second.getRoot(), new MappingStore());
+                trees.first.getRoot(), trees.second.getRoot(),
+                new MappingStore(trees.first.getRoot(), trees.second.getRoot()));
         m.match();
         assertEquals(4, m.getMappingsAsSet().size());
     }
@@ -55,13 +57,15 @@ public class TestGumtreeMatcher {
         GreedySubtreeMatcher.MIN_HEIGHT = 0;
         AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
         Matcher m = new CompositeMatchers.ClassicGumtree(
-                trees.first.getRoot(), trees.second.getRoot(), new MappingStore());
+                trees.first.getRoot(), trees.second.getRoot(),
+                new MappingStore(trees.first.getRoot(), trees.second.getRoot()));
         m.match();
         assertEquals(5, m.getMappings().size());
         GreedySubtreeMatcher.MIN_HEIGHT = 0;
         AbstractBottomUpMatcher.SIZE_THRESHOLD = 8;
         m = new CompositeMatchers.ClassicGumtree(
-                trees.first.getRoot(), trees.second.getRoot(), new MappingStore());
+                trees.first.getRoot(), trees.second.getRoot(),
+                new MappingStore(trees.first.getRoot(), trees.second.getRoot()));
         m.match();
         assertEquals(5, m.getMappings().size());
     }

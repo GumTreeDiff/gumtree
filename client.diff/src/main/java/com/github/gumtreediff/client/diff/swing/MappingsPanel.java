@@ -73,8 +73,8 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         super(new GridLayout(1, 0));
         this.src = src;
         this.dst = dst;
-        this.classifyTrees = new AllNodesClassifier(src, dst, m);
-        this.mappings = new MappingStore(m.getMappingsAsSet());
+        this.classifyTrees = new AllNodesClassifier(m);
+        this.mappings = new MappingStore(m.getMappings());
         this.panSrc = new TreePanel(this.src, new MappingsCellRenderer(true));
         this.panSrc.getJTree().addTreeSelectionListener(this);
         this.panDst = new TreePanel(this.dst, new MappingsCellRenderer(false));

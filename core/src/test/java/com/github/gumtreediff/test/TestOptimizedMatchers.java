@@ -38,7 +38,7 @@ public class TestOptimizedMatchers {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        Matcher matcher = new OptimizedVersions.Rtedacdef(src, dst, new MappingStore());
+        Matcher matcher = new OptimizedVersions.Rtedacdef(src, dst, new MappingStore(src, dst));
         matcher.match();
         assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src, dst));
@@ -53,7 +53,7 @@ public class TestOptimizedMatchers {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        Matcher matcher = new OptimizedVersions.CdabcdefPar(src, dst, new MappingStore());
+        Matcher matcher = new OptimizedVersions.CdabcdefPar(src, dst, new MappingStore(src, dst));
         matcher.match();
         assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
@@ -68,7 +68,7 @@ public class TestOptimizedMatchers {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        Matcher matcher = new OptimizedVersions.Rtedacdef(src, dst, new MappingStore());
+        Matcher matcher = new OptimizedVersions.Rtedacdef(src, dst, new MappingStore(src, dst));
         matcher.match();
         assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src, dst));

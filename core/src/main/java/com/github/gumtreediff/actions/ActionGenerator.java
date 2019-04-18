@@ -53,11 +53,11 @@ public class ActionGenerator {
 
     public static boolean REMOVE_MOVES_AND_UPDATES = Boolean.valueOf(System.getProperty("gt.ag.nomove", "false"));
 
-    public ActionGenerator(ITree src, ITree dst, MappingStore mappings) {
-        this.origSrc = src;
+    public ActionGenerator(MappingStore ms) {
+        this.origSrc = ms.src;
         this.cpySrc = this.origSrc.deepCopy();
-        this.origDst = dst;
-        this.origMappings = mappings;
+        this.origDst = ms.dst;
+        this.origMappings = ms;
 
         origToCopy = new HashMap<>();
         copyToOrig = new HashMap<>();
@@ -68,7 +68,7 @@ public class ActionGenerator {
             copyToOrig.put(cpyTree, origTree);
         }
 
-        cpyMappings = new MappingStore();
+        cpyMappings = new MappingStore(ms.src, ms.dst);
         for (Mapping m: origMappings)
             cpyMappings.addMapping(origToCopy.get(m.first), m.second);
     }

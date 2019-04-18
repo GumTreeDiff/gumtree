@@ -46,8 +46,7 @@ public class JsonDiff extends AbstractDiffClient<AbstractDiffClient.Options> {
     @Override
     public void run() {
         Matcher m = matchTrees();
-        ActionGenerator g = new ActionGenerator(getSrcTreeContext().getRoot(),
-                getDstTreeContext().getRoot(), m.getMappings());
+        ActionGenerator g = new ActionGenerator(m.getMappings());
         g.generate();
         List<Action> actions = g.getActions();
         try {

@@ -47,7 +47,7 @@ public class TestActionIo {
         p = TreeLoader.getActionPair();
         src = p.first.getRoot();
         dst = p.second.getRoot();
-        ms = new MappingStore();
+        ms = new MappingStore(src, dst);
         ms.addMapping(src, dst);
         ms.addMapping(src.getChild(1), dst.getChild(0));
         ms.addMapping(src.getChild("1.0"), dst.getChild("0.0"));
@@ -56,7 +56,7 @@ public class TestActionIo {
         ms.addMapping(src.getChild("0.0"), dst.getChild("1.0.0"));
         ms.addMapping(src.getChild(4), dst.getChild(3));
         ms.addMapping(src.getChild("4.0"), dst.getChild("3.0.0.0"));
-        actions = new ActionGenerator(src, dst, ms).generate();
+        actions = new ActionGenerator(ms).generate();
     }
 
     @Test

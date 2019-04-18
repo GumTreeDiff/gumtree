@@ -38,7 +38,7 @@ public class TestZsMatcher {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsCustomPair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        Matcher matcher = new ZsMatcher(src, dst, new MappingStore());
+        Matcher matcher = new ZsMatcher(src, dst, new MappingStore(src, dst));
         matcher.match();
         assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src, dst.getChild(0)));
@@ -53,7 +53,7 @@ public class TestZsMatcher {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        Matcher matcher = new ZsMatcher(src, dst, new MappingStore());
+        Matcher matcher = new ZsMatcher(src, dst, new MappingStore(src, dst));
         matcher.match();
         assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src, dst));

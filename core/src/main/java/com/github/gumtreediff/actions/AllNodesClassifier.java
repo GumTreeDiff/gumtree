@@ -32,13 +32,8 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.TreeContext;
 
 public class AllNodesClassifier extends TreeClassifier {
-
-    public AllNodesClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> script) {
-        super(src, dst, rawMappings, script);
-    }
-
-    public AllNodesClassifier(TreeContext src, TreeContext dst, Matcher m) {
-        super(src, dst, m);
+    public AllNodesClassifier(Matcher m) {
+        super(m);
     }
 
     @Override

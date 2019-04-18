@@ -33,7 +33,7 @@ public class TestMappingStore {
     public void testAddAndRemove() {
         ITree t1 = new Tree(TypeSet.type("foo"));
         ITree t2 = new Tree(TypeSet.type("foo"));
-        MappingStore ms = new MappingStore();
+        MappingStore ms = new MappingStore(t1, t2);
         assertEquals(0, ms.size());
         ms.addMapping(t1, t2);
         assertEquals(1, ms.size());

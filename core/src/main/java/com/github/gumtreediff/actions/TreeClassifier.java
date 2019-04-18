@@ -45,32 +45,20 @@ public abstract class TreeClassifier {
 
     protected Set<ITree> dstAddTrees;
 
-    protected TreeContext src;
-
-    protected TreeContext dst;
-
     protected MappingStore mappings;
 
     protected List<Action> actions;
 
-    public TreeClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> actions) {
-        this(src, dst, rawMappings);
-        this.actions = actions;
-        classify();
-    }
-
-    public TreeClassifier(TreeContext src, TreeContext dst, Matcher m) {
-        this(src, dst, m.getMappingsAsSet());
-        ActionGenerator g = new ActionGenerator(src.getRoot(), dst.getRoot(), m.getMappings());
+    public TreeClassifier(Matcher m) {
+        this(m.getMappings());
+        ActionGenerator g = new ActionGenerator(m.getMappings());
         g.generate();
         this.actions = g.getActions();
         classify();
     }
 
-    private TreeClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings) {
-        this.src = src;
-        this.dst = dst;
-        this.mappings = new MappingStore(rawMappings);
+    private TreeClassifier(MappingStore ms) {
+        this.mappings = new MappingStore(ms);
         this.srcDelTrees = new HashSet<>();
         this.srcMvTrees = new HashSet<>();
         this.srcUpdTrees = new HashSet<>();

@@ -25,17 +25,21 @@ import java.util.*;
 import com.github.gumtreediff.tree.ITree;
 
 public class MappingStore implements Iterable<Mapping> {
+    public final ITree src;
+    public final ITree dst;
 
     private Map<ITree, ITree> srcToDst;
     private Map<ITree, ITree> dstToSrc;
 
-    public MappingStore(Set<Mapping> mappings) {
-        this();
-        for (Mapping m: mappings)
+    public MappingStore(MappingStore ms) {
+        this(ms.src, ms.dst);
+        for (Mapping m : ms)
             addMapping(m.first, m.second);
     }
 
-    public MappingStore() {
+    public MappingStore(ITree src, ITree dst) {
+        this.src = src;
+        this.dst = dst;
         srcToDst = new HashMap<>();
         dstToSrc = new HashMap<>();
     }
@@ -70,10 +74,6 @@ public class MappingStore implements Iterable<Mapping> {
                 return srcToDst.keySet().size();
             }
         };
-    }
-
-    public MappingStore copy() {
-        return new MappingStore(asSet());
     }
 
     public void addMapping(ITree src, ITree dst) {

@@ -38,7 +38,7 @@ public class TestRtedMatcher {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        Matcher matcher = new RtedMatcher(src, dst, new MappingStore());
+        Matcher matcher = new RtedMatcher(src, dst, new MappingStore(src, dst));
         matcher.match();
         assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src, dst));

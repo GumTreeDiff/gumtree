@@ -76,9 +76,9 @@ public class ActionsCollector {
             TreeContext src = TreeIoUtils.fromXml().generateFrom().file(path.toString());
             TreeContext dst = TreeIoUtils.fromXml().generateFrom().file(otherPath.toString());
             CompositeMatchers.ClassicGumtree matcher = new CompositeMatchers.ClassicGumtree(
-                    src.getRoot(), dst.getRoot(), new MappingStore());
+                    src.getRoot(), dst.getRoot(), new MappingStore(src.getRoot(), dst.getRoot()));
             matcher.match();
-            ActionGenerator g = new ActionGenerator(src.getRoot(), dst.getRoot(), matcher.getMappings());
+            ActionGenerator g = new ActionGenerator(matcher.getMappings());
             List<Action> actions = g.generate();
 
             String res = Paths.get(OUTPUT_DIR, outputPath.getFileName().toString()).toString();
@@ -100,9 +100,9 @@ public class ActionsCollector {
             TreeContext src = TreeIoUtils.fromXml().generateFrom().file(path.toString());
             TreeContext dst = TreeIoUtils.fromXml().generateFrom().file(otherPath.toString());
             CompositeMatchers.ClassicGumtree matcher = new CompositeMatchers.ClassicGumtree(
-                    src.getRoot(), dst.getRoot(), new MappingStore());
+                    src.getRoot(), dst.getRoot(), new MappingStore(src.getRoot(), dst.getRoot()));
             matcher.match();
-            ActionGenerator g = new ActionGenerator(src.getRoot(), dst.getRoot(), matcher.getMappings());
+            ActionGenerator g = new ActionGenerator(matcher.getMappings());
             List<Action> actions = g.generate();
             StringWriter w = new StringWriter();
             ActionsIoUtils.toText(src, actions, matcher.getMappings()).writeTo(w);

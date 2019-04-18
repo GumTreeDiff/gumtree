@@ -30,13 +30,8 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.TreeContext;
 
 public class OnlyRootsClassifier extends TreeClassifier {
-
-    public OnlyRootsClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> actions) {
-        super(src, dst, rawMappings, actions);
-    }
-
     public OnlyRootsClassifier(TreeContext src, TreeContext dst, Matcher m) {
-        super(src, dst, m);
+        super(m);
     }
 
     @Override
@@ -56,5 +51,4 @@ public class OnlyRootsClassifier extends TreeClassifier {
             }
         }
     }
-
 }
