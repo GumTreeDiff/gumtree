@@ -88,15 +88,7 @@ public class ActionGenerator {
         srcInOrder = new HashSet<>();
 
         cpyMappings.addMapping(srcFakeRoot, dstFakeRoot);
-/*
-        for (ITree w : cpySrc.postOrder()) {
-            System.out.println(w);
-            System.out.println(copyToOrig.get(w));
-            System.out.println("*");
-        }
 
-        System.out.println("---");
-*/
         List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
         for (ITree x: bfsDst) {
             ITree w = null;
@@ -141,9 +133,6 @@ public class ActionGenerator {
         }
 
         for (ITree w : cpySrc.postOrder()) {
-            //System.out.println(w);
-            //System.out.println(copyToOrig.get(w));
-            //System.out.println("*");
             if (!cpyMappings.isSrcMapped(w)) {
                 actions.add(new Delete(copyToOrig.get(w)));
             }
@@ -215,7 +204,6 @@ public class ActionGenerator {
         }
 
         for (ITree t : deletedTrees.keySet()) {
-            System.out.println(t);
             if (deletedTrees.keySet().contains(t.getParent()) && deletedTrees.keySet().containsAll(t.getDescendants()))
                 actions.remove(deletedTrees.get(t));
             else {
