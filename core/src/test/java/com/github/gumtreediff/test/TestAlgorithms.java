@@ -25,8 +25,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class TestAlgorithms {
-/*
+
     @Test
     public void testLcss() {
         // Exemple coming from:
@@ -57,5 +61,4 @@ public class TestAlgorithms {
         assertThat(result[1], is(1));
         assertThat(result[2], is(2));
     }
-*/
 }
