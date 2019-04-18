@@ -40,7 +40,7 @@ public class TestZsMatcher {
         ITree dst = trees.second.getRoot();
         Matcher matcher = new ZsMatcher(src, dst, new MappingStore(src, dst));
         matcher.match();
-        assertEquals(5, matcher.getMappingsAsSet().size());
+        assertEquals(5, matcher.getMappings().size());
         assertTrue(matcher.getMappings().has(src, dst.getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(0), dst.getChild(0).getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(1), dst.getChild(0).getChild(1)));
@@ -55,7 +55,7 @@ public class TestZsMatcher {
         ITree dst = trees.second.getRoot();
         Matcher matcher = new ZsMatcher(src, dst, new MappingStore(src, dst));
         matcher.match();
-        assertEquals(5, matcher.getMappingsAsSet().size());
+        assertEquals(5, matcher.getMappings().size());
         assertTrue(matcher.getMappings().has(src, dst));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));

@@ -31,9 +31,6 @@ import java.util.logging.Logger;
 
 @IndexSubclasses
 public abstract class Matcher {
-
-    public static final Logger LOGGER = Logger.getLogger("com.github.gumtreediff.matchers");
-
     protected final ITree src;
 
     protected final ITree dst;
@@ -56,10 +53,6 @@ public abstract class Matcher {
 
     public MappingStore getMappings() {
         return mappings;
-    }
-
-    public Set<Mapping> getMappingsAsSet() {
-        return mappings.asSet();
     }
 
     public boolean isMappingAllowed(ITree src, ITree dst) {

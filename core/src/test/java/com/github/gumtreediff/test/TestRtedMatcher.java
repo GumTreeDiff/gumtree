@@ -40,7 +40,7 @@ public class TestRtedMatcher {
         ITree dst = trees.second.getRoot();
         Matcher matcher = new RtedMatcher(src, dst, new MappingStore(src, dst));
         matcher.match();
-        assertEquals(5, matcher.getMappingsAsSet().size());
+        assertEquals(5, matcher.getMappings().size());
         assertTrue(matcher.getMappings().has(src, dst));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));

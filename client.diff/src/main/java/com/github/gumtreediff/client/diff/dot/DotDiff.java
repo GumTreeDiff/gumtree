@@ -50,7 +50,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
             writer.write("subgraph cluster_dst {\n");
             writeTree(getDstTreeContext(), writer, matcher);
             writer.write("}\n");
-            for (Mapping m: matcher.getMappingsAsSet()) {
+            for (Mapping m: matcher.getMappings()) {
                 writer.write(String.format("%s -> %s [style=dashed]\n;",
                         getDotId(getSrcTreeContext(), m.first), getDotId(getDstTreeContext(), m.second)));
             }
