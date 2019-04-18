@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test;
 import static com.github.gumtreediff.tree.TreeMetricsProvider.Factory.BASE;
 
 public class TestTreeUtils {
-
     @Test
     public void testPostOrderNumbering() {
         ITree root = TreeLoader.getDummySrc();
@@ -44,7 +43,7 @@ public class TestTreeUtils {
     }
 
     @Test
-    public void testDepth2() {
+    public void testDepth() {
         ITree root = TreeLoader.getDummySrc();
         System.out.println(root.toTreeString());
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
@@ -56,7 +55,7 @@ public class TestTreeUtils {
     }
 
     @Test
-    public void testSize2() {
+    public void testSize() {
         ITree root = TreeLoader.getDummySrc();
         System.out.println(root.toTreeString());
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
@@ -83,7 +82,7 @@ public class TestTreeUtils {
     public static final int H_EL = 102927107;
 
     @Test
-    public void testHash2() {
+    public void testHash() {
         ITree root = TreeLoader.getDummySrc();
         System.out.println(root.toTreeString());
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
@@ -113,7 +112,7 @@ public class TestTreeUtils {
     }
 
     @Test
-    public void testHeight2() {
+    public void testHeight() {
         ITree root = TreeLoader.getDummySrc();
         TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(root);
         assertEquals(2, m.get(root).height); // depth of a
@@ -220,5 +219,4 @@ public class TestTreeUtils {
         leaf = srcLeaves.next();
         assertNull(leaf);
     }
-
 }
