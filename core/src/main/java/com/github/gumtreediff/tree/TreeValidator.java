@@ -35,19 +35,19 @@ public class TreeValidator {
                     throw new TreeException(String.format("%s : %s\n%s",
                             "Inner node with label",
                             t.toString(),
-                            t.toPrettyTreeString(context)));
+                            t.toTreeString()));
 
                 if (t.getChildren().get(0).getPos() < t.getPos())
                     throw new TreeException(String.format("%s : %s\n%s",
                             "Children begin position before node begin position",
                             t.getChildren().get(0).toString(),
-                            t.toPrettyTreeString(context)));
+                            t.toTreeString()));
 
                 if (t.getChildren().get(t.getChildren().size() - 1).getEndPos() > t.getEndPos())
                     throw new TreeException(String.format("%s : %s\n%s",
                             "Children end position after node end position",
                             t.getChildren().get(t.getChildren().size() - 1).toString(),
-                            t.toPrettyTreeString(context)));
+                            t.toTreeString()));
 
                 if (t.getChildren().size() > 1) {
                     for (int i = 1; i < t.getChildren().size(); i++) {
@@ -57,7 +57,7 @@ public class TreeValidator {
                             throw new TreeException(String.format("%s : %s\n%s",
                                     "Sibling begin position before node end position",
                                     c.toString(),
-                                    t.toPrettyTreeString(context)));
+                                    t.toTreeString()));
                     }
                 }
             }

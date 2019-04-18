@@ -34,14 +34,21 @@ public interface ITree {
     int NO_POS = -1;
 
     /**
-     * @return all the nodes contained in the tree, using a pre-order.
+     * Returns a list containing the node and its descendants, ordered using a pre-order.
+     *
      */
-    List<ITree> getTrees();
-
     Iterable<ITree> preOrder();
 
+    /**
+     * Returns a list containing the node and its descendants, ordered using a post-order.
+     *
+     */
     Iterable<ITree> postOrder();
 
+    /**
+     * Returns a list containing the node and its descendants, ordered using a breadth-first order.
+     *
+     */
     Iterable<ITree> breadthFirst();
 
     /**
@@ -67,41 +74,53 @@ public interface ITree {
     ITree getChild(int position);
 
     /**
-     * Returns the child node at the given URL
+     * Returns the child node at the given URL.
      * @param url the URL, such as <code>0.1.2</code>
      */
     ITree getChild(String url);
 
+    /**
+     * Returns a list containing the node's children. If the node has no children, the list is empty.
+     * @see #isLeaf()
+     * @return
+     */
     List<ITree> getChildren();
 
     /**
-     * @return a boolean indicating if the tree has at least one child or not
+     * @return a boolean indicating if the tree has at least one child or not.
      */
     boolean isLeaf();
 
     /**
-     * @return all the descendants (children, children of children, etc.) of the tree,
-     *     using a pre-order.
+     * @return all the descendants (children, children of children, etc.) of the tree, using a pre-order.
+     *
      */
     List<ITree> getDescendants();
 
     /**
-     * Set the parent of this node. The parent won't have this node in its
-     * children list
+     * Set the parent of this node. Be careful that the parent node won't have this node in its
+     * children list.
      */
     void setParent(ITree parent);
 
     /**
      * Set the parent of this node. The parent will have this node in its
-     * children list, at the last position
+     * children list, at the last position.
+     * @see #setParentAndUpdateChildren(ITree)
      */
     void setParentAndUpdateChildren(ITree parent);
 
     /**
-     * @return a boolean indicating if the tree has a parent or not
+     * Returns a boolean indicating if the tree has a parent or not, and therefore is the root.
+     * @return
      */
     boolean isRoot();
 
+    /**
+     * Returns the parent node of the node. If the node is a root, the method returns null.
+     * @see #isRoot()
+     * @return
+     */
     ITree getParent();
 
     /**
@@ -115,35 +134,70 @@ public interface ITree {
     int positionInParent();
 
     /**
-     * Make a deep copy of the tree.
-     * Deep copy of node however shares Metadata
-     * @return a deep copy of the tree.
+     * Make a deep copy of the tree. Deep copy of node however shares Metadata
+     * @return
      */
     ITree deepCopy();
 
+    /**
+     * Indicates whether the node has a label or not.
+     * @return
+     */
     boolean hasLabel();
 
+    /**
+     * Returns the label of the node. If the node has no label, an empty string is returned.
+     * @see #hasLabel()
+     * @return
+     */
     String getLabel();
 
+    /**
+     * Sets the label of the node.
+     */
     void setLabel(String label);
 
+    /**
+     * Returns the absolute character beginning position of the node in its defining stream.
+     * @return
+     */
     int getPos();
 
+    /**
+     * Sets the absolute character beginning index of the node in its defining stream.
+     *
+     */
     void setPos(int pos);
 
+    /**
+     * Returns the number of character corresponding to the node in its defining stream.
+     * @return
+     */
     int getLength();
 
+    /**
+     * Sets the number of character corresponding to the node in its defining stream.
+     * @return
+     */
     void setLength(int length);
 
     /**
-     * @return the absolute character index where the tree ends
+     * @return the absolute character index where the node ends in its defining stream.
      */
     default int getEndPos()  {
         return getPos() + getLength();
     }
 
+    /**
+     * Returns the type (i.e. IfStatement).
+     * @return
+     */
     Symbol getType();
 
+    /**
+     * Sets the type of the node (i.e. IfStatement).
+     *
+     */
     void setType(Symbol type);
 
     /**
@@ -152,8 +206,9 @@ public interface ITree {
     boolean hasSameType(ITree t);
 
     /**
-     * @return a boolean indicating if the two trees are isomorphics, defined has
-     *     having the same hash and the same hash serialization.
+     * Indicllates whether or not this node and its descendants are isomorphic to the node
+     * given in parameter and its descendants (which must not be null).
+     * This test fails fast.
      */
     boolean isIsomorphicTo(ITree tree);
 
@@ -163,9 +218,11 @@ public interface ITree {
      */
     boolean hasSameTypeAndLabel(ITree t);
 
+    /**
+     * Returns a string description of the node as well as its descendants.
+     * @return
+     */
     String toTreeString();
-
-    String toPrettyTreeString(TreeContext ctx);
 
     Object getMetadata(String key);
 

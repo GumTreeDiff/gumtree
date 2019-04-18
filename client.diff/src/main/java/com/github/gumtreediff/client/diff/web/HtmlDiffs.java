@@ -79,7 +79,7 @@ public final class HtmlDiffs {
         int mId = 1;
 
         TagIndex ltags = new TagIndex();
-        for (ITree t: src.getRoot().getTrees()) {
+        for (ITree t: src.getRoot().preOrder()) {
             if (c.getSrcMvTrees().contains(t)) {
                 mappingIds.put(mappings.getDstForSrc(t), mId);
                 ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
@@ -104,7 +104,7 @@ public final class HtmlDiffs {
         }
 
         TagIndex rtags = new TagIndex();
-        for (ITree t: dst.getRoot().getTrees()) {
+        for (ITree t: dst.getRoot().preOrder()) {
             if (c.getDstMvTrees().contains(t)) {
                 int dId = mappingIds.get(t);
                 rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));

@@ -103,39 +103,39 @@ public class TestJdtGenerator {
     public void testInfixOperator() throws IOException {
         String input = "class Foo { int i = 3 + 3}";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toPrettyTreeString(ct));
+        System.out.println(ct.getRoot().toTreeString());
     }
 
     @Test
     public void testAssignment() throws IOException {
         String input = "class Foo { void foo() { s.foo  = 12; } }";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toPrettyTreeString(ct));
+        System.out.println(ct.getRoot().toTreeString());
     }
 
     @Test
     public void testPrefixExpression() throws IOException {
         String input = "class Foo { void foo() { ++s.i; } }";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toPrettyTreeString(ct));
+        System.out.println(ct.getRoot().toTreeString());
     }
 
     @Test
     public void testPostfixExpression() throws IOException {
         String input = "class Foo { void foo() { s.i++; } }";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toPrettyTreeString(ct));
+        System.out.println(ct.getRoot().toTreeString());
     }
 
     @Test
     public void testArrayCreation() throws IOException {
         String input1 = "class Foo { void foo() { int[][] t = new int[12][]; } }";
         TreeContext ct1 = new JdtTreeGenerator().generateFrom().string(input1);
-        System.out.println(ct1.getRoot().toPrettyTreeString(ct1));
+        System.out.println(ct1.getRoot().toTreeString());
 
         String input2 = "class Foo { void foo() { int[][] t = new int[][12]; } }";
         TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
-        System.out.println(ct2.getRoot().toPrettyTreeString(ct2));
+        System.out.println(ct2.getRoot().toTreeString());
     }
 
 }

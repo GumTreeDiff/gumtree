@@ -85,9 +85,9 @@ public class TestTreeIoUtils {
         // Refresh metrics is called because it is automatically called in fromXML
 
         System.out.println("*****************");
-        System.out.println(a.toPrettyTreeString(tc));
+        System.out.println(a.toTreeString());
         System.out.println("-----------------");
-        System.out.println(b.toPrettyTreeString(tc));
+        System.out.println(b.toTreeString());
     }
 
     @Test

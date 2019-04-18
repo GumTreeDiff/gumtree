@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.github.gumtreediff.tree.SymbolSet;
 import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.TreeUtils;
 import org.junit.Test;
 
 import com.github.gumtreediff.tree.ITree;
@@ -36,7 +37,7 @@ public class TestTree {
     @Test
     public void testIdComparator() {
         ITree root = TreeLoader.getDummySrc();
-        List<ITree> nodes = root.getTrees();
+        List<ITree> nodes = TreeUtils.preOrder(root);
         assertTrue(nodes.get(0).getLabel().equals("a"));
         assertTrue(nodes.get(1).getLabel().equals("b"));
         assertTrue(nodes.get(2).getLabel().equals("c"));
@@ -56,7 +57,7 @@ public class TestTree {
     @Test
     public void testGetParents() {
         ITree tree = TreeLoader.getDummySrc();
-        List<ITree> trees = new ArrayList<>(tree.getTrees());
+        List<ITree> trees = new ArrayList<>(TreeUtils.preOrder(tree));
         ITree n = trees.get(2);
         assertTrue(n.getLabel().equals("c"));
         List<ITree> parents = n.getParents();

@@ -63,7 +63,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
     }
 
     private void writeTree(TreeContext context, Writer writer, Matcher matcher) throws Exception {
-        for (ITree tree : context.getRoot().getTrees()) {
+        for (ITree tree : context.getRoot().preOrder()) {
             String fillColor = "red";
             if (matcher.getMappings().isSrcMapped(tree) || matcher.getMappings().isDstMapped(tree))
                 fillColor = "blue";

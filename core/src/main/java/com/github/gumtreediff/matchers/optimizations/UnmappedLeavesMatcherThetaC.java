@@ -23,6 +23,7 @@ package com.github.gumtreediff.matchers.optimizations;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,8 +54,8 @@ public class UnmappedLeavesMatcherThetaC extends Matcher {
     }
 
     private void thetaC() {
-        List<ITree> allNodesSrc = src.getTrees();
-        List<ITree> allNodesDst = dst.getTrees();
+        List<ITree> allNodesSrc = TreeUtils.preOrder(src);
+        List<ITree> allNodesDst = TreeUtils.preOrder(dst);
         List<ITree> unmatchedNodes1 = new LinkedList<>();
         List<ITree> unmatchedNodes2 = new LinkedList<>();
 

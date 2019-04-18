@@ -24,6 +24,7 @@ import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -51,8 +52,8 @@ public class LcsOptMatcherThetaB extends Matcher {
     }
 
     private void advancedLcsMatching() {
-        List<ITree> allNodesSrc = src.getTrees();
-        List<ITree> allNodesDst = dst.getTrees();
+        List<ITree> allNodesSrc = TreeUtils.preOrder(src);
+        List<ITree> allNodesDst = TreeUtils.preOrder(dst);
         Set<ITree> unmatchedNodes1 = new HashSet<>();
         Set<ITree> unmatchedNodes2 = new HashSet<>();
         for (ITree node : allNodesSrc) {

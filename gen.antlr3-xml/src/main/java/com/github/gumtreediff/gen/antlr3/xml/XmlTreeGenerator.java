@@ -25,6 +25,7 @@ import com.github.gumtreediff.gen.antlr3.AbstractAntlr3TreeGenerator;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Symbol;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.TreeUtils;
 import org.antlr.runtime.*;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class XmlTreeGenerator extends AbstractAntlr3TreeGenerator<XMLLexer, XMLP
         TreeContext ctx = super.generate(file);
         ITree t = ctx.getRoot();
 
-        for (ITree c: t.getTrees()) { // Prune top level empty pcdata
+        for (ITree c: t.preOrder()) { // Prune top level empty pcdata
             if (c.getType() == PCDATA && c.getLabel().trim().equals("") ) {
                 c.setParentAndUpdateChildren(null);
             }

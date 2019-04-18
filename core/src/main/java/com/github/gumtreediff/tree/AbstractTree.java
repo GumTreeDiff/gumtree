@@ -93,11 +93,6 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public List<ITree> getTrees() {
-        return TreeUtils.preOrder(this);
-    }
-
-    @Override
     public boolean isIsomorphicTo(ITree tree) {
         if (!hasSameTypeAndLabel(tree))
             return false;
@@ -190,11 +185,6 @@ public abstract class AbstractTree implements ITree {
     @Override
     public String toTreeString() {
         return TreeIoUtils.toShortText(this).toString();
-    }
-
-    @Override
-    public String toPrettyTreeString(TreeContext ctx) {
-        return TreeIoUtils.toText(ctx, this).toString();
     }
 
     public static class FakeTree extends AbstractTree {
