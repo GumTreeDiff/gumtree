@@ -62,14 +62,6 @@ public abstract class Matcher {
         return mappings.asSet();
     }
 
-    public ITree getSrc() {
-        return src;
-    }
-
-    public ITree getDst() {
-        return dst;
-    }
-
     public boolean isMappingAllowed(ITree src, ITree dst) {
         return src.hasSameType(dst) && mappings.areBothUnmapped(src, dst);
     }
