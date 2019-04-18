@@ -26,9 +26,9 @@ import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.*;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestJdtGenerator {
 
@@ -82,10 +82,12 @@ public class TestJdtGenerator {
         assertEquals(28, m.get(tree).size);
     }
 
-    @Test(expected = SyntaxException.class)
+    @Test
     public void badSyntax() throws IOException {
         String input = "public clas Foo {}";
-        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        assertThrows(SyntaxException.class, () -> {
+            TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        });
     }
 
     @Test

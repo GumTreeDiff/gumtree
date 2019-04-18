@@ -20,13 +20,13 @@
 
 package com.github.gumtreediff.test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Iterator;
 import java.util.List;
 
 import com.github.gumtreediff.tree.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.gumtreediff.tree.TreeMetricsProvider.Factory.BASE;
 
@@ -189,7 +189,7 @@ public class TestTreeUtils {
             ITree n = it.next();
             assertEquals(e, n.getLabel());
         }
-        assertFalse("Iterator has next", it.hasNext());
+        assertFalse(it.hasNext(),"Iterator has next");
     }
 
     @Test

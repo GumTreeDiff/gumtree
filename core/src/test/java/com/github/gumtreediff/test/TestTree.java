@@ -26,11 +26,11 @@ import java.util.List;
 import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.gumtreediff.tree.ITree;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTree {
 

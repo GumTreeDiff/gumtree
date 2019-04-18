@@ -24,14 +24,13 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.MetricProviderFactory;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeMetricsProvider;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCssTreeGenerator {
-
     @Test
     public void testSimple() throws Exception {
         Reader r = new StringReader("@import url(\"bluish.css\") projection, tv;\n"
@@ -47,9 +46,11 @@ public class TestCssTreeGenerator {
         assertEquals(10, m.get(tree).size);
     }
 
-    @Test(expected = SyntaxException.class)
+    @Test
     public void badSyntax() throws IOException {
         String input = ".foo \"toto {\nfont-size: 11pt;\n}";
-        TreeContext ct = new CssTreeGenerator().generateFrom().string(input);
+        assertThrows(SyntaxException.class, () -> {
+            TreeContext ct = new CssTreeGenerator().generateFrom().string(input);
+        });
     }
 }

@@ -20,7 +20,7 @@
 package com.github.gumtreediff.gen.javaparser;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -28,19 +28,16 @@ import java.util.Collection;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-@RunWith(Parameterized.class)
 public class TestJavaParserGenerator {
+    public static final Type COMPILATION_UNIT = type("CompilationUnit");
+
+    /*
 
     private final String input;
     private final Type expectedRootType;
     private final int expectedSize;
-
-    public static final Type COMPILATION_UNIT = type("CompilationUnit");
 
     public TestJavaParserGenerator(Type expectedRootType, int expectedSize, String input) {
         this.expectedRootType = expectedRootType;
@@ -73,10 +70,13 @@ public class TestJavaParserGenerator {
         assertEquals(expectedSize, m.get(tree).size);
     }
 
-    @Test(expected = SyntaxException.class)
+     */
+
+    @Test
     public void badSyntax() throws IOException {
         String input = "public clas Foo {}";
-        TreeContext ct = new JavaParserGenerator().generateFrom().string(input);
+        assertThrows(SyntaxException.class, () -> {
+            TreeContext ct = new JavaParserGenerator().generateFrom().string(input);
+        });
     }
-
 }

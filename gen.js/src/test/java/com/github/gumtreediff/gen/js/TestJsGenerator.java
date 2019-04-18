@@ -20,22 +20,19 @@
 
 package com.github.gumtreediff.gen.js;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.MetricProviderFactory;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeMetricsProvider;
-import org.junit.Test;
 
 import com.github.gumtreediff.tree.ITree;
 
 public class TestJsGenerator {
-
     @Test
     public void testStatement() throws IOException {
         String input = "console.log(\"Hello world!\");";
@@ -60,10 +57,11 @@ public class TestJsGenerator {
         assertEquals(402, m.get(tree).size);
     }
 
-    @Test(expected = SyntaxException.class)
+    @Test
     public void badSyntax() throws IOException {
         String input = "function foo((bar) {}";
-        TreeContext ct = new RhinoTreeGenerator().generateFrom().string(input);
+        assertThrows(SyntaxException.class, () -> {
+            TreeContext ct = new RhinoTreeGenerator().generateFrom().string(input);
+        });
     }
-
 }

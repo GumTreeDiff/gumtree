@@ -24,8 +24,8 @@ import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.google.common.collect.Sets;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMetadata {
     ITree someNode;
@@ -45,7 +45,7 @@ public class TestMetadata {
     final String v2 = "other";
     final String v3 = "more";
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         tc = new TreeContext();
         someNode = tc.createTree(type("type0"), "");
@@ -104,12 +104,12 @@ public class TestMetadata {
         while (it.hasNext()) {
             Entry<String, Object> e = it.next();
             int i = seen.indexOf(e.getKey());
-            assertNotEquals("Iterate more than once", -1, i);
+            assertNotEquals(-1, i,"Iterate more than once");
             seen.remove(i);
             i = keyList.indexOf(e.getKey());
-            assertEquals("Not the right entry", i, (Object) values[i]);
+            assertEquals(i, (Object) values[i],"Not the right entry");
         }
-        assertEquals("Some metadata are not iterated", 0, seen.size());
+        assertEquals(0, seen.size(),"Some metadata are not iterated");
     }
 
     @Test
@@ -140,24 +140,28 @@ public class TestMetadata {
         tc.export(key, v2);
         tc.export(pos, x -> Arrays.toString((int[]) x));
 
-        assertEquals("Export JSON", valJson, TreeIoUtils.toJson(tc).export(v3).toString());
-        assertEquals("Export LISP", valLisp, TreeIoUtils.toLisp(tc).toString());
-        assertEquals("Export XML", valXml, TreeIoUtils.toXml(tc).toString());
-        assertEquals("Export Compact XML", valXmlCompact, TreeIoUtils.toCompactXml(tc).toString());
+        assertEquals(valJson, TreeIoUtils.toJson(tc).export(v3).toString(), "Export JSON");
+        assertEquals(valLisp, TreeIoUtils.toLisp(tc).toString(),"Export LISP");
+        assertEquals(valXml, TreeIoUtils.toXml(tc).toString(),"Export XML");
+        assertEquals(valXmlCompact, TreeIoUtils.toCompactXml(tc).toString(),"Export Compact XML");
 
         assertEquals(Sets.newHashSet(key, v2, pos), tc.getSerializers().exports());
         tc.getSerializers().remove(pos);
         assertEquals(Sets.newHashSet(key, v2), tc.getSerializers().exports());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testExportInvalid1() {
-        tc.export("Test key");
+        assertThrows(RuntimeException.class, () -> {
+            tc.export("Test key");
+        });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testExportInvalid2() {
-        TreeIoUtils.toJson(tc).export("Test key");
+        assertThrows(RuntimeException.class, () -> {
+            TreeIoUtils.toJson(tc).export("Test key");
+        });
     }
 
     final String valJson = "{\n"

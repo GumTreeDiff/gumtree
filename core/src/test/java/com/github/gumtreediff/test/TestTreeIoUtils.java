@@ -25,14 +25,14 @@ import com.github.gumtreediff.tree.ITree;
 import static com.github.gumtreediff.tree.TypeSet.type;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.ListIterator;
 
 import java.io.ByteArrayOutputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTreeIoUtils {
 

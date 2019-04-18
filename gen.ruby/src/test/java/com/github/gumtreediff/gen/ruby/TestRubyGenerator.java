@@ -25,13 +25,13 @@ import java.io.IOException;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.*;
 import org.jrubyparser.ast.NodeType;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRubyGenerator {
-
     private static final Type ROOT_NODE = type(NodeType.ROOTNODE.name());
 
     @Test
@@ -64,10 +64,11 @@ public class TestRubyGenerator {
         ITree root = ctx.getRoot();
     }
 
-    @Test(expected = SyntaxException.class)
+    @Test
     public void badSyntax() throws IOException {
         String input = "module Foo\ndef foo((bar)\n\tputs 'foo'\nend\n";
-        TreeContext ct = new RubyTreeGenerator().generateFrom().string(input);
+        Assertions.assertThrows(SyntaxException.class, () -> {
+            TreeContext ct = new RubyTreeGenerator().generateFrom().string(input);
+        });
     }
-
 }

@@ -35,12 +35,17 @@ subprojects {
     dependencies {
         annotationProcessor 'org.atteo.classindex:classindex:3.4'
         implementation 'org.atteo.classindex:classindex:3.4'
-        testImplementation 'junit:junit:[4,5)'
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+        testImplementation 'org.hamcrest:hamcrest-library:2.1'
+
     }
 
     test {
+        useJUnitPlatform()
+
         testLogging {
             exceptionFormat = 'full'
+            events "passed", "skipped", "failed"
         }
     }
 }
