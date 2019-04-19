@@ -30,7 +30,6 @@ import java.util.NoSuchElementException;
 import com.github.gumtreediff.utils.Pair;
 
 public final class TreeUtils {
-
     private TreeUtils() {
     }
 
