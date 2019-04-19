@@ -63,7 +63,7 @@ public class ActionClusterFinder {
             }
         }
 
-        ConnectivityInspector alg = new ConnectivityInspector(graph);
+        ConnectivityInspector<Action, DefaultEdge> alg = new ConnectivityInspector<>(graph);
         clusters = alg.connectedSets();
     }
 
@@ -76,10 +76,7 @@ public class ActionClusterFinder {
             return false;
         Insert i1 = (Insert) a1;
         Insert i2 = (Insert) a2;
-        if (i2.getParent().equals(i1.getNode()))
-            return true;
-        else
-            return false;
+        return i2.getParent().equals(i1.getNode());
     }
 
     private boolean embeddedDeletes(Action a1, Action a2) {
@@ -89,10 +86,7 @@ public class ActionClusterFinder {
         Delete d2 = (Delete) a2;
         if (d2.getNode().getParent() == null)
             return false;
-        if (d2.getNode().getParent().equals(d1.getNode()))
-            return true;
-        else
-            return false;
+        return d2.getNode().getParent().equals(d1.getNode());
     }
 
     private boolean sameParentMoves(Action a1, Action a2) {
@@ -104,10 +98,7 @@ public class ActionClusterFinder {
             return false;
         if (m2.getNode() == null)
             return false;
-        if (m1.getNode().getParent().equals(m2.getNode().getParent()))
-            return true;
-        else
-            return false;
+        return m1.getNode().getParent().equals(m2.getNode().getParent());
     }
 
     private boolean sameValueUpdates(Action a1, Action a2) {
@@ -115,10 +106,7 @@ public class ActionClusterFinder {
             return false;
         Update u1 = (Update) a1;
         Update u2 = (Update) a2;
-        if (u1.getValue().equals(u2.getValue()))
-            return true;
-        else
-            return false;
+        return u1.getValue().equals(u2.getValue());
     }
 
     public String getClusterLabel(Set<Action> cluster) {

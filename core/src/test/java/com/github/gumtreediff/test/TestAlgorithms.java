@@ -21,11 +21,13 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.utils.HungarianAlgorithm;
 import com.github.gumtreediff.utils.StringAlgorithms;
-import org.junit.Test;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestAlgorithms {
 
@@ -59,5 +61,4 @@ public class TestAlgorithms {
         assertThat(result[1], is(1));
         assertThat(result[2], is(2));
     }
-
 }

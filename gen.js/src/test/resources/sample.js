@@ -69,7 +69,7 @@ $("body").keypress(
 			window.location = "/quit";
 		}
 	}	
-)
+);
 
 $("span.mv.token, span.token.upd").click(
 	function(event) {
@@ -89,14 +89,14 @@ $("span.mv.token, span.token.upd").click(
 		}
 		event.stopPropagation();
 	}
-)
+);
 
 $("span.add.token, span.token.del").click(
 	function(event) {
 		$("span.mv.token, span.token.upd").removeClass("selected");
 		event.stopPropagation();
 	}
-)
+);
 
 $("span.token").hover(
 	function (event) {

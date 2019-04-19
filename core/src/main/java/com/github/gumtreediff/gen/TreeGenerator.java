@@ -35,9 +35,7 @@ public abstract class TreeGenerator {
     protected abstract TreeContext generate(Reader r) throws IOException;
 
     protected TreeContext generateTree(Reader r) throws IOException {
-        TreeContext ctx = generate(r);
-        ctx.validate();
-        return ctx;
+        return generate(r);
     }
 
     public ReaderConfigurator generateFrom() {

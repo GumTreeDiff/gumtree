@@ -20,46 +20,46 @@
 
 package com.github.gumtreediff.tree;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 /**
  * Interface to represent abstract syntax trees.
  */
 public interface ITree {
-
-    String OPEN_SYMBOL = "[(";
-    String CLOSE_SYMBOL = ")]";
-    String SEPARATE_SYMBOL = "@@";
-
-    int NO_ID = Integer.MIN_VALUE;
+    Pattern urlPattern = Pattern.compile("\\d+(\\.\\d+)*");
 
     String NO_LABEL = "";
 
-    int NO_VALUE = -1;
+    int NO_POS = -1;
 
     /**
-     * @see com.github.gumtreediff.tree.hash.HashGenerator
-     * @return a hash (probably unique) representing the tree
+     * Returns a list containing the node and its descendants, ordered using a pre-order.
+     *
      */
-    int getHash();
-
-    void setHash(int hash);
+    default Iterable<ITree> preOrder() {
+        return () -> TreeUtils.preOrderIterator(ITree.this);
+    }
 
     /**
-     * @return all the nodes contained in the tree, using a pre-order.
+     * Returns a list containing the node and its descendants, ordered using a post-order.
+     *
      */
-    List<ITree> getTrees();
-
-    Iterable<ITree> preOrder();
-
-    Iterable<ITree> postOrder();
-
-    Iterable<ITree> breadthFirst();
+    default Iterable<ITree> postOrder() {
+        return () -> TreeUtils.postOrderIterator(ITree.this);
+    }
 
     /**
-     * Add the given tree as a child, and update its parent.
+     * Returns a list containing the node and its descendants, ordered using a breadth-first order.
+     *
+     */
+    default Iterable<ITree> breadthFirst() {
+        return () -> TreeUtils.breadthFirstIterator(ITree.this);
+    }
+
+    /**
+     * Add the given tree as a child, at the last position and update its parent.
      */
     void addChild(ITree t);
 
@@ -68,164 +68,245 @@ public interface ITree {
      */
     void insertChild(ITree t, int position);
 
+    /**
+     * Sets the list of children of this node.
+     *
+     */
     void setChildren(List<ITree> children);
 
     /**
      * @return the position of the child, or -1 if the given child is not in the children list.
      */
-    int getChildPosition(ITree child);
+    default int getChildPosition(ITree child) {
+        return getChildren().indexOf(child);
+    }
 
     /**
      * @param position the child position, starting at 0
      */
-    ITree getChild(int position);
+    default ITree getChild(int position) {
+        return getChildren().get(position);
+    }
 
+    /**
+     * Returns the child node at the given URL.
+     * @param url the URL, such as <code>0.1.2</code>
+     */
+    default ITree getChild(String url) {
+        if (!urlPattern.matcher(url).matches())
+            throw new IllegalArgumentException("Wrong URL format : " + url);
+
+        List<String> path = new LinkedList<>(Arrays.asList(url.split("\\.")));
+        ITree current = this;
+        while (path.size() > 0) {
+            int next = Integer.parseInt(path.remove(0));
+            current = current.getChild(next);
+        }
+
+        return current;
+    }
+
+    /**
+     * Returns a list containing the node's children. If the node has no children, the list is empty.
+     * @see #isLeaf()
+     */
     List<ITree> getChildren();
 
     /**
-     * @return a boolean indicating if the tree has at least one child or not
+     * @return a boolean indicating if the tree has at least one child or not.
      */
-    boolean isLeaf();
+    default boolean isLeaf() {
+        return getChildren().isEmpty();
+    }
 
     /**
-     * @return all the descendants (children, children of children, etc.) of the tree,
-     *     using a pre-order.
+     * @return all the descendants (children, children of children, etc.) of the tree, using a pre-order.
+     *
      */
-    List<ITree> getDescendants();
+    default List<ITree> getDescendants() {
+        List<ITree> trees = TreeUtils.preOrder(this);
+        trees.remove(0);
+        return trees;
+    }
 
     /**
-     * Set the parent of this node. The parent won't have this node in its
-     * children list
+     * Set the parent of this node. Be careful that the parent node won't have this node in its
+     * children list.
      */
     void setParent(ITree parent);
 
     /**
      * Set the parent of this node. The parent will have this node in its
-     * children list, at the last position
+     * children list, at the last position.
+     * @see #setParentAndUpdateChildren(ITree)
      */
     void setParentAndUpdateChildren(ITree parent);
 
     /**
-     * @return a boolean indicating if the tree has a parent or not
+     * Returns a boolean indicating if the tree has a parent or not, and therefore is the root.
      */
-    boolean isRoot();
+    default boolean isRoot() {
+        return getParent() == null;
+    }
 
+    /**
+     * Returns the parent node of the node. If the node is a root, the method returns null.
+     * @see #isRoot()
+     */
     ITree getParent();
 
     /**
      * @return the list of all parents of the node (parent, parent of parent, etc.)
      */
-    List<ITree> getParents();
+    default List<ITree> getParents() {
+        List<ITree> parents = new ArrayList<>();
+        if (getParent() == null)
+            return parents;
+        else {
+            parents.add(getParent());
+            parents.addAll(getParent().getParents());
+        }
+        return parents;
+    }
 
     /**
      * @return the position of the node in its parent children list
      */
-    int positionInParent();
+    default int positionInParent() {
+        ITree p = getParent();
+        if (p == null)
+            return -1;
+        else
+            return p.getChildren().indexOf(this);
+    }
 
     /**
-     * Make a deep copy of the tree.
-     * Deep copy of node however shares Metadata
-     * @return a deep copy of the tree.
+     * Make a deep copy of the tree. Deep copy of node however shares Metadata
      */
     ITree deepCopy();
 
     /**
-     * @see TreeUtils#computeDepth(ITree)
-     * @return the depth of the tree, defined as the distance to the root
+     * Indicates whether the node has a label or not.
      */
-    int getDepth();
-
-    void setDepth(int depth);
+    default boolean hasLabel() {
+        return !NO_LABEL.equals(getLabel());
+    }
 
     /**
-     * @see TreeUtils#computeHeight(ITree)
-     * @return the height of the tree, defined as the maximal depth of its descendants.
+     * Returns the label of the node. If the node has no label, an empty string is returned.
+     * @see #hasLabel()
      */
-    int getHeight();
-
-    void setHeight(int height);
-
-    /**
-     * @see TreeUtils#numbering(Iterable)
-     * @see TreeUtils#preOrderNumbering(ITree)
-     * @see TreeUtils#postOrderNumbering(ITree)
-     * @see TreeUtils#breadthFirstNumbering(ITree)
-     * @return the number of the node
-     */
-    int getId();
-
-    void setId(int id);
-
-    boolean hasLabel();
-
     String getLabel();
 
+    /**
+     * Sets the label of the node.
+     */
     void setLabel(String label);
 
+    /**
+     * Returns the absolute character beginning position of the node in its defining stream.
+     */
     int getPos();
 
+    /**
+     * Sets the absolute character beginning index of the node in its defining stream.
+     *
+     */
     void setPos(int pos);
 
+    /**
+     * Returns the number of character corresponding to the node in its defining stream.
+     */
     int getLength();
 
+    /**
+     * Sets the number of character corresponding to the node in its defining stream.
+     */
     void setLength(int length);
 
     /**
-     * @return the absolute character index where the tree ends
+     * @return the absolute character index where the node ends in its defining stream.
      */
     default int getEndPos()  {
         return getPos() + getLength();
     }
 
     /**
-     * @see TreeUtils#computeSize(ITree)
-     * @return the number of all nodes contained in the tree
+     * Returns the type (i.e. IfStatement).
      */
-    int getSize();
+    Type getType();
 
-    void setSize(int size);
-
-    Symbol getType();
-
-    void setType(Symbol type);
+    /**
+     * Sets the type of the node (i.e. IfStatement).
+     *
+     */
+    void setType(Type type);
 
     /**
      * @return a boolean indicating if the trees have the same type.
      */
-    boolean hasSameType(ITree t);
+    default boolean hasSameType(ITree t) {
+        return getType() == t.getType();
+    }
 
     /**
-     * @see #toStaticHashString()
-     * @see #getHash()
-     * @return a boolean indicating if the two trees are isomorphics, defined has
-     *     having the same hash and the same hash serialization.
-     */
-    boolean isIsomorphicTo(ITree tree);
-
-    /**
-     * Indicate whether or not the tree is similar to the given tree.
+     * Indicates whether or not the tree is similar to the given tree.
      * @return true if they are compatible and have same label, false either
      */
-    boolean hasSameTypeAndLabel(ITree t);
+    default boolean hasSameTypeAndLabel(ITree t) {
+        return hasSameType(t) && getLabel().equals(t.getLabel());
+    }
 
     /**
-     * Refresh hash, size, depth and height of the tree.
-     * @see com.github.gumtreediff.tree.hash.HashGenerator
-     * @see TreeUtils#computeDepth(ITree)
-     * @see TreeUtils#computeHeight(ITree)
-     * @see TreeUtils#computeSize(ITree)
+     * Indicates whether or not this node and its descendants are isomorphic to the node
+     * given in parameter and its descendants (which must not be null).
+     * This test fails fast.
      */
-    void refresh();
+    default boolean isIsomorphicTo(ITree tree) {
+        if (!hasSameTypeAndLabel(tree))
+            return false;
 
-    String toStaticHashString();
+        if (getChildren().size() != tree.getChildren().size())
+            return false;
 
+        for (int i = 0; i < getChildren().size(); i++)  {
+            boolean isChildrenIsomophic = getChild(i).isIsomorphicTo(tree.getChild(i));
+            if (!isChildrenIsomophic)
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns a string description of the node as well as its descendants.
+     */
     String toTreeString();
 
-    String toPrettyTreeString(TreeContext ctx);
+    /*
+     * Returns the metrics object computed for this node. This object is lazily computed
+     * when first requested. When metrics have been computed, the tree must remain unchanged.
+     */
+    TreeMetrics getMetrics();
 
+    /**
+     * Sets the metric object for this node.
+     *
+     */
+    void setMetrics(TreeMetrics metrics);
+
+    /**
+     * Returns the metadata with the given key for this node.
+     */
     Object getMetadata(String key);
 
+    /**
+     * Set the metadata with the given key and value for this node.
+     */
     Object setMetadata(String key, Object value);
 
+    /**
+     * Returns an iterator for all metadata of this node.
+     */
     Iterator<Entry<String, Object>> getMetadata();
 }

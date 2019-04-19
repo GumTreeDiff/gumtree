@@ -22,20 +22,20 @@ package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.tree.ITree;
 
-public class CompositeMatcher extends Matcher {
+public class CompositeMatcher implements Matcher {
 
     protected final Matcher[] matchers;
 
-    public CompositeMatcher(ITree src, ITree dst, MappingStore store, Matcher[] matchers) {
-        super(src, dst, store);
+    public CompositeMatcher(Matcher[] matchers) {
         this.matchers = matchers;
     }
 
     @Override
-    public void match() {
+    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
         for (Matcher matcher : matchers) {
-            matcher.match();
+            mappings = matcher.match(src, dst, mappings);
         }
+        return mappings;
     }
 
 }

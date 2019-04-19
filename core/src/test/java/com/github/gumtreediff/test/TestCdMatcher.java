@@ -26,23 +26,22 @@ import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestCdMatcher {
 
     @Test
     public void testLeafMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getCdCustomPair();
-        ITree src = trees.getFirst().getRoot();
-        ITree dst = trees.getSecond().getRoot();
-        Matcher matcher = new ChangeDistillerLeavesMatcher(src, dst, new MappingStore());
-        matcher.match();
-        assertEquals(2, matcher.getMappingsAsSet().size());
-        assertTrue(matcher.getMappings().has(src.getChild(0), dst.getChild(1)));
-        assertTrue(matcher.getMappings().has(src.getChild(1), dst.getChild(0)));
+        ITree src = trees.first.getRoot();
+        ITree dst = trees.second.getRoot();
+        MappingStore mappings = new ChangeDistillerLeavesMatcher().match(src, dst);
+        assertEquals(2, mappings.size());
+        assertTrue(mappings.has(src.getChild(0), dst.getChild(1)));
+        assertTrue(mappings.has(src.getChild(1), dst.getChild(0)));
     }
 
 }

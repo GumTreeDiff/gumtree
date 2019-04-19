@@ -24,26 +24,26 @@ package com.github.gumtreediff.gen.jdt;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
+import com.github.gumtreediff.tree.Type;
 import org.eclipse.jdt.core.compiler.IScanner;
 import org.eclipse.jdt.core.compiler.ITerminalSymbols;
 import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jdt.core.dom.*;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
 
-    private static final Symbol INFIX_EXPRESSION_OPERATOR = symbol("INFIX_EXPRESSION_OPERATOR");
-    private static final Symbol METHOD_INVOCATION_RECEIVER = symbol("METHOD_INVOCATION_RECEIVER");
-    private static final Symbol METHOD_INVOCATION_ARGUMENTS = symbol("METHOD_INVOCATION_ARGUMENTS");
-    private static final Symbol TYPE_DECLARATION_KIND = symbol("TYPE_DECLARATION_KIND");
-    private static final Symbol ASSIGNMENT_OPERATOR = symbol("ASSIGNEMENT_OPERATOR");
-    private static final Symbol PREFIX_EXPRESSION_OPERATOR = symbol("PREFIX_EXPRESSION_OPERATOR");
-    private static final Symbol POSTFIX_EXPRESSION_OPERATOR = symbol("POSTFIX_EXPRESSION_OPERATOR");
+    private static final Type INFIX_EXPRESSION_OPERATOR = type("INFIX_EXPRESSION_OPERATOR");
+    private static final Type METHOD_INVOCATION_RECEIVER = type("METHOD_INVOCATION_RECEIVER");
+    private static final Type METHOD_INVOCATION_ARGUMENTS = type("METHOD_INVOCATION_ARGUMENTS");
+    private static final Type TYPE_DECLARATION_KIND = type("TYPE_DECLARATION_KIND");
+    private static final Type ASSIGNMENT_OPERATOR = type("ASSIGNEMENT_OPERATOR");
+    private static final Type PREFIX_EXPRESSION_OPERATOR = type("PREFIX_EXPRESSION_OPERATOR");
+    private static final Type POSTFIX_EXPRESSION_OPERATOR = type("POSTFIX_EXPRESSION_OPERATOR");
 
-    private static final Symbol ARRAY_INITIALIZER = nodeAsSymbol(ASTNode.ARRAY_INITIALIZER);
-    private static final Symbol SIMPLE_NAME = nodeAsSymbol(ASTNode.SIMPLE_NAME);
+    private static final Type ARRAY_INITIALIZER = nodeAsSymbol(ASTNode.ARRAY_INITIALIZER);
+    private static final Type SIMPLE_NAME = nodeAsSymbol(ASTNode.SIMPLE_NAME);
 
     private IScanner scanner;
 
@@ -94,7 +94,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         else if (n instanceof CharacterLiteral)
             return ((CharacterLiteral) n).getEscapedValue();
         else if (n instanceof BooleanLiteral)
-            return ((BooleanLiteral) n).toString();
+            return n.toString();
         else if (n instanceof TextElement)
             return n.toString();
         else

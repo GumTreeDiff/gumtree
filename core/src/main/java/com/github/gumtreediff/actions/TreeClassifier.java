@@ -33,50 +33,28 @@ import com.github.gumtreediff.tree.TreeContext;
 
 public abstract class TreeClassifier {
 
-    protected Set<ITree> srcUpdTrees;
+    protected final Set<ITree> srcUpdTrees = new HashSet<>();
 
-    protected Set<ITree> dstUpdTrees;
+    protected final Set<ITree> dstUpdTrees = new HashSet<>();
 
-    protected Set<ITree> srcMvTrees;
+    protected final Set<ITree> srcMvTrees = new HashSet<>();
 
-    protected Set<ITree> dstMvTrees;
+    protected final Set<ITree> dstMvTrees = new HashSet<>();
 
-    protected Set<ITree> srcDelTrees;
+    protected final Set<ITree> srcDelTrees = new HashSet<>();
 
-    protected Set<ITree> dstAddTrees;
+    protected final Set<ITree> dstAddTrees = new HashSet<>();
 
-    protected TreeContext src;
+    protected final MappingStore mappings;
 
-    protected TreeContext dst;
+    protected final List<Action> actions;
 
-    protected MappingStore mappings;
-
-    protected List<Action> actions;
-
-    public TreeClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings, List<Action> actions) {
-        this(src, dst, rawMappings);
-        this.actions = actions;
-        classify();
-    }
-
-    public TreeClassifier(TreeContext src, TreeContext dst, Matcher m) {
-        this(src, dst, m.getMappingsAsSet());
-        ActionGenerator g = new ActionGenerator(src.getRoot(), dst.getRoot(), m.getMappings());
+    public TreeClassifier(MappingStore mappings) {
+        this.mappings = new MappingStore(mappings); // FIXME Why a copy ?
+        ActionGenerator g = new ActionGenerator(mappings);
         g.generate();
         this.actions = g.getActions();
         classify();
-    }
-
-    private TreeClassifier(TreeContext src, TreeContext dst, Set<Mapping> rawMappings) {
-        this.src = src;
-        this.dst = dst;
-        this.mappings = new MappingStore(rawMappings);
-        this.srcDelTrees = new HashSet<>();
-        this.srcMvTrees = new HashSet<>();
-        this.srcUpdTrees = new HashSet<>();
-        this.dstMvTrees = new HashSet<>();
-        this.dstAddTrees = new HashSet<>();
-        this.dstUpdTrees = new HashSet<>();
     }
 
     public abstract void classify();

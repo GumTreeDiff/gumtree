@@ -103,9 +103,9 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         get("/diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new DiffView(pair.getFirst(), pair.getSecond(),
-                    this.getTreeContext(pair.getFirst().getAbsolutePath()),
-                    this.getTreeContext(pair.getSecond().getAbsolutePath()));
+            Renderable view = new DiffView(pair.first, pair.second,
+                    this.getTreeContext(pair.first.getAbsolutePath()),
+                    this.getTreeContext(pair.second.getAbsolutePath()));
             return render(view);
         });
         get("/mergely/:id", (request, response) -> {
@@ -116,17 +116,17 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         get("/left/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            return readFile(pair.getFirst().getAbsolutePath(), Charset.defaultCharset());
+            return readFile(pair.first.getAbsolutePath(), Charset.defaultCharset());
         });
         get("/right/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            return readFile(pair.getSecond().getAbsolutePath(), Charset.defaultCharset());
+            return readFile(pair.second.getAbsolutePath(), Charset.defaultCharset());
         });
         get("/script/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new ScriptView(pair.getFirst(), pair.getSecond());
+            Renderable view = new ScriptView(pair.first, pair.second);
             return render(view);
         });
         get("/quit", (request, response) -> {

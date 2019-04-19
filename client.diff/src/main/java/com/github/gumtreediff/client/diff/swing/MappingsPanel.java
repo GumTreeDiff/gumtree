@@ -69,12 +69,12 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
     //private static final Color MIS_COLOR = new Color(0, 0, 128);
     private static final Color MV_COLOR = new Color(128, 0, 128);
 
-    public MappingsPanel(String srcPath, String dstPath, TreeContext src, TreeContext dst, Matcher m)  {
+    public MappingsPanel(String srcPath, String dstPath, TreeContext src, TreeContext dst, MappingStore m)  {
         super(new GridLayout(1, 0));
         this.src = src;
         this.dst = dst;
-        this.classifyTrees = new AllNodesClassifier(src, dst, m);
-        this.mappings = new MappingStore(m.getMappingsAsSet());
+        this.classifyTrees = new AllNodesClassifier(m);
+        this.mappings = new MappingStore(m);
         this.panSrc = new TreePanel(this.src, new MappingsCellRenderer(true));
         this.panSrc.getJTree().addTreeSelectionListener(this);
         this.panDst = new TreePanel(this.dst, new MappingsCellRenderer(false));

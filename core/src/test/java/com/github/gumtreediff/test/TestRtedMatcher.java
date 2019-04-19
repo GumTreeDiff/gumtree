@@ -26,26 +26,25 @@ import com.github.gumtreediff.matchers.optimal.rted.RtedMatcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestRtedMatcher {
 
     @Test
     public void testRtedMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
-        ITree src = trees.getFirst().getRoot();
-        ITree dst = trees.getSecond().getRoot();
-        Matcher matcher = new RtedMatcher(src, dst, new MappingStore());
-        matcher.match();
-        assertEquals(5, matcher.getMappingsAsSet().size());
-        assertTrue(matcher.getMappings().has(src, dst));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(2), dst.getChild(2)));
+        ITree src = trees.first.getRoot();
+        ITree dst = trees.second.getRoot();
+        MappingStore mappings = new RtedMatcher().match(src, dst);
+        assertEquals(5, mappings.size());
+        assertTrue(mappings.has(src, dst));
+        assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(2), dst.getChild(2)));
     }
 
 }

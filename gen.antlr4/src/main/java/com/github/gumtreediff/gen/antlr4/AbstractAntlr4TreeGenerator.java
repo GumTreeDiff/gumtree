@@ -28,7 +28,7 @@ import java.util.Map;
 
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
+import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
 
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -37,7 +37,7 @@ import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 
 public abstract class AbstractAntlr4TreeGenerator extends TreeGenerator {
 
@@ -70,24 +70,24 @@ public abstract class AbstractAntlr4TreeGenerator extends TreeGenerator {
 
     protected abstract String[] getRuleNames();
 
-    protected Symbol getTokenName(int tokenType) {
+    protected Type getTokenName(int tokenType) {
         String[] names = getTokenNames();
         if (tokenType < 0 || tokenType >= names.length)
-            return Symbol.NO_SYMBOL;
-        return symbol(names[tokenType]);
+            return Type.NO_TYPE;
+        return type(names[tokenType]);
     }
 
-    protected Symbol getRuleName(int ruleType) {
+    protected Type getRuleName(int ruleType) {
         String[] names = getRuleNames();
         if (ruleType < 0 || ruleType >= names.length)
-            return Symbol.NO_SYMBOL;
-        return symbol(names[ruleType]);
+            return Type.NO_TYPE;
+        return type(names[ruleType]);
     }
 
     @SuppressWarnings("unchecked")
     protected void buildTree(TreeContext context, ParseTree pt) {
-        Object payload = pt.getPayload(); //getType();
-        Symbol type = null;
+        Object payload = pt.getPayload(); //makeOrGetType();
+        Type type = null;
         if (payload instanceof Token)
             type = getTokenName(((Token)payload).getType());
         else if (payload instanceof RuleContext)

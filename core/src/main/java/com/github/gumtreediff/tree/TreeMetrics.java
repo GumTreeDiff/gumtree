@@ -14,43 +14,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2015-2017 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2019 Floréal Morandat <florealm@gmail.com>
  */
 
 package com.github.gumtreediff.tree;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+public class TreeMetrics {
+    public final int size;
 
-public final class Symbol {
+    public final int height;
 
-    public final String name;
+    public final int hash;
 
-    public static final Symbol NO_SYMBOL = symbol("");
+    public final int depth;
 
-    private Symbol(String value) {
-        name = value;
-    }
+    public final int position;
 
-    public boolean isEmpty() {
-        return this == NO_SYMBOL;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
-
-    static class SymbolFactory {
-        protected SymbolFactory() {}
-
-        protected Symbol makeSymbol(String name) {
-            return new Symbol(name);
-        }
+    public TreeMetrics(int size, int height, int hash, int depth, int position) {
+        this.size = size;
+        this.height = height;
+        this.hash = hash;
+        this.depth = depth;
+        this.position = position;
     }
 }
-

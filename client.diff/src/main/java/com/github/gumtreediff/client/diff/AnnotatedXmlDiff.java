@@ -26,6 +26,7 @@ import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.io.TreeIoUtils;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 
 @Register(name = "axmldiff", description = "Dump annotated xml tree",
@@ -66,11 +67,11 @@ public class AnnotatedXmlDiff extends AbstractDiffClient<AnnotatedXmlDiff.Option
 
     @Override
     public void run() {
-        Matcher m = matchTrees();
+        MappingStore m = matchTrees();
         try {
             TreeIoUtils.toAnnotatedXml((opts.isSrc)
                             ? getSrcTreeContext()
-                            : getDstTreeContext(), opts.isSrc, m.getMappings()
+                            : getDstTreeContext(), opts.isSrc, m
             ).writeTo(System.out);
         } catch (Exception e) {
             e.printStackTrace();

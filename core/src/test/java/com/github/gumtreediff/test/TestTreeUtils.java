@@ -20,143 +20,101 @@
 
 package com.github.gumtreediff.test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Iterator;
 import java.util.List;
 
 import com.github.gumtreediff.tree.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static com.github.gumtreediff.tree.TreeMetricsProviderFactory.BASE;
+import static com.github.gumtreediff.tree.TreeMetricComputer.BASE;
 
 public class TestTreeUtils {
-
     @Test
     public void testPostOrderNumbering() {
         ITree root = TreeLoader.getDummySrc();
-        TreeUtils.postOrderNumbering(root);
-        assertEquals(4, root.getId());
-        assertEquals(2, root.getChildren().get(0).getId());
-        assertEquals(0, root.getChildren().get(0).getChildren().get(0).getId());
-        assertEquals(1, root.getChildren().get(0).getChildren().get(1).getId());
-        assertEquals(3, root.getChildren().get(1).getId());
+        assertEquals(4, root.getMetrics().position);
+        assertEquals(2, root.getChild(0).getMetrics().position);
+        assertEquals(0, root.getChild("0.0").getMetrics().position);
+        assertEquals(1, root.getChild("0.1").getMetrics().position);
+        assertEquals(3, root.getChild(1).getMetrics().position);
     }
 
     @Test
     public void testDepth() {
         ITree root = TreeLoader.getDummySrc();
-        TreeUtils.computeDepth(root);
-        assertEquals(0, root.getDepth());
-        assertEquals(1, root.getChildren().get(0).getDepth());
-        assertEquals(2, root.getChildren().get(0).getChildren().get(0).getDepth());
-        assertEquals(2, root.getChildren().get(0).getChildren().get(1).getDepth());
-        assertEquals(1, root.getChildren().get(1).getDepth());
+        System.out.println(root.toTreeString());
+        assertEquals(0, root.getMetrics().depth);
+        assertEquals(1, root.getChild(0).getMetrics().depth);
+        assertEquals(2, root.getChild("0.0").getMetrics().depth);
+        assertEquals(2, root.getChild("0.1").getMetrics().depth);
+        assertEquals(1, root.getChild(1).getMetrics().depth);
     }
 
     @Test
-    public void testDepth2() {
-        TreeContext context = new TreeContext();
+    public void testSize() {
         ITree root = TreeLoader.getDummySrc();
-        context.setRoot(root);
         System.out.println(root.toTreeString());
-        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(context);
-        assertEquals(0, m.get(root).depth);
-        assertEquals(1, m.get(root.getChildren().get(0)).depth);
-        assertEquals(2, m.get(root.getChildren().get(0).getChildren().get(0)).depth);
-        assertEquals(2, m.get(root.getChildren().get(0).getChildren().get(1)).depth);
-        assertEquals(1, m.get(root.getChildren().get(1)).depth);
+        assertEquals(5, root.getMetrics().size);
+        assertEquals(3, root.getChild(0).getMetrics().size);
+        assertEquals(1, root.getChild("0.0").getMetrics().size);
+        assertEquals(1, root.getChild("0.1").getMetrics().size);
+        assertEquals(1, root.getChild(1).getMetrics().size);
     }
 
-    @Test
-    public void testSize2() {
-        TreeContext context = new TreeContext();
-        ITree root = TreeLoader.getDummySrc();
-        context.setRoot(root);
-        System.out.println(root.toTreeString());
-        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(context);
-        assertEquals(5, m.get(root).size);
-        assertEquals(3, m.get(root.getChildren().get(0)).size);
-        assertEquals(1, m.get(root.getChildren().get(0).getChildren().get(0)).size);
-        assertEquals(1, m.get(root.getChildren().get(0).getChildren().get(1)).size);
-        assertEquals(1, m.get(root.getChildren().get(1)).size);
-    }
+    public static final int H_AO = 96746278;
+    public static final int H_AL = 102925061;
+
+    public static final int H_BO = 96747270;
+    public static final int H_BL = 102926053;
+
+    public static final int H_CO = 96749223;
+    public static final int H_CL = 102928006;
+
+    public static final int H_DO = 96749254;
+    public static final int H_DL = 102928037;
+
+    public static final int H_EO = 96748324;
+    public static final int H_EL = 102927107;
 
     @Test
-    public void testHash2() {
-        TreeContext context = new TreeContext();
+    public void testHash() {
         ITree root = TreeLoader.getDummySrc();
-        context.setRoot(root);
         System.out.println(root.toTreeString());
-        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(context);
         assertEquals(
-                96746278
-                        + BASE * 96747270
-                        + BASE * BASE * 96749223
-                        + BASE * BASE * BASE * 102928006
-                        + BASE * BASE * BASE * BASE * 96749254
-                        + BASE * BASE * BASE * BASE * BASE * 102928037
-                        + BASE * BASE * BASE * BASE * BASE * BASE * 102926053
-                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * 96748324
-                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * 102927107
-                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * 102925061
-                , m.get(root).hash);
+                H_AO
+                        + BASE * H_BO
+                        + BASE * BASE * H_CO
+                        + BASE * BASE * BASE * H_CL
+                        + BASE * BASE * BASE * BASE * H_DO
+                        + BASE * BASE * BASE * BASE * BASE * H_DL
+                        + BASE * BASE * BASE * BASE * BASE * BASE * H_BL
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * H_EO
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * H_EL
+                        + BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * BASE * H_AL,
+                root.getMetrics().hash);
         assertEquals(
-                96747270
-                + BASE * 96749223
-                + BASE * BASE * 102928006
-                + BASE * BASE * BASE * 96749254
-                + BASE * BASE * BASE * BASE * 102928037
-                + BASE * BASE * BASE * BASE * BASE * 102926053,
-                m.get(root.getChild(0)).hash);
-        assertEquals(96749223 + BASE * 102928006, m.get(root.getChild(0).getChild(0)).hash);
-        assertEquals(96749254 + BASE * 102928037, m.get(root.getChild(0).getChild(1)).hash);
-        assertEquals(96748324 + BASE * 102927107, m.get(root.getChild(1)).hash);
+                H_BO
+                + BASE * H_CO
+                + BASE * BASE * H_CL
+                + BASE * BASE * BASE * H_DO
+                + BASE * BASE * BASE * BASE * H_DL
+                + BASE * BASE * BASE * BASE * BASE * H_BL,
+                root.getChild(0).getMetrics().hash);
+        assertEquals(H_CO + BASE * H_CL, root.getChild("0.0").getMetrics().hash);
+        assertEquals(H_DO + BASE * H_DL, root.getChild("0.1").getMetrics().hash);
+        assertEquals(H_EO + BASE * H_EL, root.getChild(1).getMetrics().hash);
     }
 
     @Test
     public void testHeight() {
         ITree root = TreeLoader.getDummySrc();
-        assertEquals(2, root.getHeight()); // depth of a
-        assertEquals(1, root.getChildren().get(0).getHeight()); // depth of b
-        assertEquals(0, root.getChildren().get(0).getChildren().get(0).getHeight()); // depth of c
-        assertEquals(0, root.getChildren().get(0).getChildren().get(1).getHeight()); // depth of d
-        assertEquals(0, root.getChildren().get(1).getHeight()); // depth of e
-    }
-
-    @Test
-    public void testHeight2() {
-        TreeContext context = new TreeContext();
-        context.setRoot(TreeLoader.getDummySrc());
-        TreeMetricsProviderFactory.TreeMetricsProvider m = MetricProviderFactory.computeTreeMetrics(context);
-        ITree root = context.getRoot();
-        assertEquals(2, m.get(root).height); // depth of a
-        assertEquals(1, m.get(root.getChildren().get(0)).height); // depth of b
-        assertEquals(0, m.get(root.getChildren().get(0).getChildren().get(0)).height); // depth of c
-        assertEquals(0, m.get(root.getChildren().get(0).getChildren().get(1)).height); // depth of d
-        assertEquals(0, m.get(root.getChildren().get(1)).height); // depth of e
-    }
-
-    @Test
-    public void testPreOrderNumbering() {
-        ITree root = TreeLoader.getDummySrc();
-        TreeUtils.preOrderNumbering(root);
-        assertEquals(0, root.getId()); // id of a
-        assertEquals(1, root.getChildren().get(0).getId()); // id of b
-        assertEquals(2, root.getChildren().get(0).getChildren().get(0).getId()); // id of c
-        assertEquals(3, root.getChildren().get(0).getChildren().get(1).getId()); // id of d
-        assertEquals(4, root.getChildren().get(1).getId()); // id of e
-    }
-
-    @Test
-    public void testBreadthFirstNumbering() {
-        ITree root = TreeLoader.getDummySrc();
-        TreeUtils.breadthFirstNumbering(root);
-        assertEquals(0, root.getId());
-        assertEquals(1, root.getChildren().get(0).getId());
-        assertEquals(2, root.getChildren().get(1).getId());
-        assertEquals(3, root.getChildren().get(0).getChildren().get(0).getId());
-        assertEquals(4, root.getChildren().get(0).getChildren().get(1).getId());
+        assertEquals(2, root.getMetrics().height); // depth of a
+        assertEquals(1, root.getChild(0).getMetrics().height); // depth of b
+        assertEquals(0, root.getChild("0.0").getMetrics().height); // depth of c
+        assertEquals(0, root.getChild("0.1").getMetrics().height); // depth of d
+        assertEquals(0, root.getChild(1).getMetrics().height); // depth of e
     }
 
     @Test
@@ -225,7 +183,7 @@ public class TestTreeUtils {
             ITree n = it.next();
             assertEquals(e, n.getLabel());
         }
-        assertFalse("Iterator has next", it.hasNext());
+        assertFalse(it.hasNext(),"Iterator has next");
     }
 
     @Test
@@ -256,5 +214,4 @@ public class TestTreeUtils {
         leaf = srcLeaves.next();
         assertNull(leaf);
     }
-
 }

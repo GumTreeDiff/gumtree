@@ -17,12 +17,22 @@
  * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.tree;
+package com.github.gumtreediff.test;
 
-public interface MetricProviderFactory<M> {
-    static TreeMetricsProviderFactory.TreeMetricsProvider computeTreeMetrics(TreeContext context) {
-        return new TreeMetricsProviderFactory().computeMetric(context);
+import com.github.gumtreediff.matchers.*;
+import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
+import com.github.gumtreediff.tree.ITree;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class TestRegistry {
+    @Test
+    public void testMatcherRegistry() {
+        Matcher m1 = Matchers.getInstance().getMatcher();
+        assertEquals(CompositeMatchers.ClassicGumtree.class, m1.getClass());
+        Matcher m2 = Matchers.getInstance().getMatcher("lcs");
+        assertEquals(LcsMatcher.class, m2.getClass());
     }
-
-    MetricProvider<M> computeMetric(TreeContext context);
 }

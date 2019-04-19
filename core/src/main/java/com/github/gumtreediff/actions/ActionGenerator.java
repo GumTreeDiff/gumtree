@@ -23,56 +23,53 @@ package com.github.gumtreediff.actions;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.AbstractTree;
+import com.github.gumtreediff.tree.FakeTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.util.*;
 
 public class ActionGenerator {
-
     private ITree origSrc;
 
-    private ITree newSrc;
+    private ITree cpySrc;
 
     private ITree origDst;
 
     private MappingStore origMappings;
 
-    private MappingStore newMappings;
+    private MappingStore cpyMappings;
 
     private Set<ITree> dstInOrder;
 
     private Set<ITree> srcInOrder;
 
-    private int lastId;
-
     private List<Action> actions;
 
-    private TIntObjectMap<ITree> origSrcTrees;
+    private Map<ITree, ITree> origToCopy;
 
-    private TIntObjectMap<ITree> cpySrcTrees;
+    private Map<ITree, ITree> copyToOrig;
 
     public static boolean REMOVE_MOVES_AND_UPDATES = Boolean.valueOf(System.getProperty("gt.ag.nomove", "false"));
 
-    public ActionGenerator(ITree src, ITree dst, MappingStore mappings) {
-        this.origSrc = src;
-        this.newSrc = this.origSrc.deepCopy();
-        this.origDst = dst;
+    public ActionGenerator(MappingStore ms) {
+        this.origSrc = ms.src;
+        this.cpySrc = this.origSrc.deepCopy();
+        this.origDst = ms.dst;
+        this.origMappings = ms;
 
-        origSrcTrees = new TIntObjectHashMap<>();
-        for (ITree t: origSrc.getTrees())
-            origSrcTrees.put(t.getId(), t);
-        cpySrcTrees = new TIntObjectHashMap<>();
-        for (ITree t: newSrc.getTrees())
-            cpySrcTrees.put(t.getId(), t);
+        origToCopy = new HashMap<>();
+        copyToOrig = new HashMap<>();
+        Iterator<ITree> cpyTreeIterator = TreeUtils.preOrderIterator(cpySrc);
+        for (ITree origTree: TreeUtils.preOrder(origSrc)) {
+            ITree cpyTree = cpyTreeIterator.next();
+            origToCopy.put(origTree, cpyTree);
+            copyToOrig.put(cpyTree, origTree);
+        }
 
-        origMappings = new MappingStore();
-        for (Mapping m: mappings)
-            this.origMappings.addMapping(cpySrcTrees.get(m.getFirst().getId()), m.getSecond());
-        this.newMappings = origMappings.copy();
+        cpyMappings = new MappingStore(ms.src, ms.dst);
+        for (Mapping m: origMappings)
+            cpyMappings.addMapping(origToCopy.get(m.first), m.second);
     }
 
     public List<Action> getActions() {
@@ -80,56 +77,49 @@ public class ActionGenerator {
     }
 
     public List<Action> generate() {
-        ITree srcFakeRoot = new AbstractTree.FakeTree(newSrc);
-        ITree dstFakeRoot = new AbstractTree.FakeTree(origDst);
-        newSrc.setParent(srcFakeRoot);
+        ITree srcFakeRoot = new FakeTree(cpySrc);
+        ITree dstFakeRoot = new FakeTree(origDst);
+        cpySrc.setParent(srcFakeRoot);
         origDst.setParent(dstFakeRoot);
 
         actions = new ArrayList<>();
         dstInOrder = new HashSet<>();
         srcInOrder = new HashSet<>();
 
-        lastId = newSrc.getSize() + 1;
-        newMappings.addMapping(srcFakeRoot, dstFakeRoot);
+        cpyMappings.addMapping(srcFakeRoot, dstFakeRoot);
 
         List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
         for (ITree x: bfsDst) {
             ITree w = null;
             ITree y = x.getParent();
-            ITree z = newMappings.getSrcForDst(y);
+            ITree z = cpyMappings.getSrcForDst(y);
 
-            if (!newMappings.isDstMapped(x)) {
+            if (!cpyMappings.isDstMapped(x)) {
                 int k = findPos(x);
                 // Insertion case : insert new node.
-                w = new AbstractTree.FakeTree();
-                w.setId(newId());
+                w = new FakeTree();
                 // In order to use the real nodes from the second tree, we
-                // furnish x instead of w and fake that x has the newly
-                // generated ID.
-                Action ins = new Insert(x, origSrcTrees.get(z.getId()), k);
+                // furnish x instead of w
+                Action ins = new Insert(x, copyToOrig.get(z), k);
                 actions.add(ins);
-                //System.out.println(ins);
-                origSrcTrees.put(w.getId(), x);
-                newMappings.addMapping(w, x);
-                z.getChildren().add(k, w);
-                w.setParent(z);
+                copyToOrig.put(w, x);
+                cpyMappings.addMapping(w, x);
+                z.insertChild(w, k);
             } else {
-                w = newMappings.getSrcForDst(x);
+                w = cpyMappings.getSrcForDst(x);
                 if (!x.equals(origDst)) { // TODO => x != origDst // Case of the root
                     ITree v = w.getParent();
                     if (!w.getLabel().equals(x.getLabel())) {
-                        actions.add(new Update(origSrcTrees.get(w.getId()), x.getLabel()));
+                        actions.add(new Update(copyToOrig.get(w), x.getLabel()));
                         w.setLabel(x.getLabel());
                     }
                     if (!z.equals(v)) {
                         int k = findPos(x);
-                        Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(z.getId()), k);
+                        Action mv = new Move(copyToOrig.get(w), copyToOrig.get(z), k);
                         actions.add(mv);
-                        //System.out.println(mv);
                         int oldk = w.positionInParent();
-                        z.getChildren().add(k, w);
                         w.getParent().getChildren().remove(oldk);
-                        w.setParent(z);
+                        z.insertChild(w, k);
                     }
                 }
             }
@@ -139,10 +129,9 @@ public class ActionGenerator {
             alignChildren(w, x);
         }
 
-        for (ITree w : newSrc.postOrder())
-            if (!newMappings.isSrcMapped(w))
-                actions.add(new Delete(origSrcTrees.get(w.getId())));
-
+        for (ITree w : cpySrc.postOrder())
+            if (!cpyMappings.isSrcMapped(w))
+                actions.add(new Delete(copyToOrig.get(w)));
 
         if (REMOVE_MOVES_AND_UPDATES)
             actions = removeMovesAndUpdates();
@@ -156,24 +145,23 @@ public class ActionGenerator {
         List<Action> actionsCpy = new ArrayList<>(actions.size());
         for (Action a: actions) {
             if (a instanceof Update) {
-                Update u = (Update) a;
-                ITree src = cpySrcTrees.get(a.getNode().getId());
+                ITree src = a.getNode();
                 ITree dst = origMappings.getDstForSrc(src);
                 actionsCpy.add(new Insert(
                         dst,
                         dst.getParent(),
                         dst.positionInParent()));
-                actionsCpy.add(new Delete(origSrcTrees.get(u.getNode().getId())));
+                actionsCpy.add(new Delete(a.getNode()));
             }
             else if (a instanceof Move) {
                 Move m = (Move) a;
-                ITree src = cpySrcTrees.get(a.getNode().getId());
+                ITree src = a.getNode();
                 ITree dst = origMappings.getDstForSrc(src);
                 actionsCpy.add(new TreeInsert(
                         dst,
                         dst.getParent(),
                         m.getPosition()));
-                actionsCpy.add(new TreeDelete(origSrcTrees.get(m.getNode().getId())));
+                actionsCpy.add(new TreeDelete(a.getNode()));
             }
             else
                 actionsCpy.add(a);
@@ -231,21 +219,21 @@ public class ActionGenerator {
 
         List<ITree> s1 = new ArrayList<>();
         for (ITree c: w.getChildren())
-            if (newMappings.isSrcMapped(c))
-                if (x.getChildren().contains(newMappings.getDstForSrc(c)))
+            if (cpyMappings.isSrcMapped(c))
+                if (x.getChildren().contains(cpyMappings.getDstForSrc(c)))
                     s1.add(c);
 
         List<ITree> s2 = new ArrayList<>();
         for (ITree c: x.getChildren())
-            if (newMappings.isDstMapped(c))
-                if (w.getChildren().contains(newMappings.getSrcForDst(c)))
+            if (cpyMappings.isDstMapped(c))
+                if (w.getChildren().contains(cpyMappings.getSrcForDst(c)))
                     s2.add(c);
 
         List<Mapping> lcs = lcs(s1, s2);
 
         for (Mapping m : lcs) {
-            srcInOrder.add(m.getFirst());
-            dstInOrder.add(m.getSecond());
+            srcInOrder.add(m.first);
+            dstInOrder.add(m.second);
         }
 
         for (ITree a : s1) {
@@ -253,9 +241,8 @@ public class ActionGenerator {
                 if (origMappings.has(a, b)) {
                     if (!lcs.contains(new Mapping(a, b))) {
                         int k = findPos(b);
-                        Action mv = new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k);
+                        Action mv = new Move(copyToOrig.get(a), copyToOrig.get(w), k);
                         actions.add(mv);
-                        //System.out.println(mv);
                         int oldk = a.positionInParent();
                         w.getChildren().add(k, a);
                         if (k  < oldk ) // FIXME this is an ugly way to patch the index
@@ -291,7 +278,7 @@ public class ActionGenerator {
         //if (v == null) throw new RuntimeException("No rightmost sibling in order");
         if (v == null) return 0;
 
-        ITree u = newMappings.getSrcForDst(v);
+        ITree u = cpyMappings.getSrcForDst(v);
         // siblings = u.getParent().getChildren();
         // int upos = siblings.indexOf(u);
         int upos = u.positionInParent();
@@ -299,10 +286,6 @@ public class ActionGenerator {
         // for (int i = 0; i <= upos; i++)
         // if (srcInOrder.contains(siblings.get(i))) r++;
         return upos + 1;
-    }
-
-    private int newId() {
-        return ++lastId;
     }
 
     private List<Mapping> lcs(List<ITree> x, List<ITree> y) {
@@ -313,14 +296,14 @@ public class ActionGenerator {
         int[][] opt = new int[m + 1][n + 1];
         for (int i = m - 1; i >= 0; i--) {
             for (int j = n - 1; j >= 0; j--) {
-                if (newMappings.getSrcForDst(y.get(j)).equals(x.get(i))) opt[i][j] = opt[i + 1][j + 1] + 1;
+                if (cpyMappings.getSrcForDst(y.get(j)).equals(x.get(i))) opt[i][j] = opt[i + 1][j + 1] + 1;
                 else  opt[i][j] = Math.max(opt[i + 1][j], opt[i][j + 1]);
             }
         }
 
         int i = 0, j = 0;
         while (i < m && j < n) {
-            if (newMappings.getSrcForDst(y.get(j)).equals(x.get(i))) {
+            if (cpyMappings.getSrcForDst(y.get(j)).equals(x.get(i))) {
                 lcs.add(new Mapping(x.get(i), y.get(j)));
                 i++;
                 j++;
@@ -330,5 +313,4 @@ public class ActionGenerator {
 
         return lcs;
     }
-
 }

@@ -27,151 +27,160 @@ import org.simmetrics.StringMetrics;
 
 import java.util.*;
 
-public class ZsMatcher extends Matcher {
-
-    private ZsTree zsSrc;
-    private ZsTree zsDst;
-
-    private double[][] treeDist;
-    private double[][] forestDist;
-
-    private static ITree getFirstLeaf(ITree t) {
-        ITree current = t;
-        while (!current.isLeaf())
-            current = current.getChild(0);
-
-        return current;
-    }
-
-    public ZsMatcher(ITree src, ITree dst, MappingStore store) {
-        super(src, dst, store);
-        this.zsSrc = new ZsTree(src);
-        this.zsDst = new ZsTree(dst);
-    }
-
-    private double[][] computeTreeDist() {
-
-        treeDist = new double[zsSrc.nodeCount + 1][zsDst.nodeCount + 1];
-        forestDist = new double[zsSrc.nodeCount + 1][zsDst.nodeCount + 1];
-
-        for (int i = 1; i < zsSrc.kr.length; i++) {
-            for (int j = 1; j < zsDst.kr.length; j++) {
-                forestDist(zsSrc.kr[i], zsDst.kr[j]);
-
-            }
-        }
-
-        return treeDist;
-    }
-
-    private void forestDist(int i, int j) {
-        forestDist[zsSrc.lld(i) - 1][zsDst.lld(j) - 1] = 0;
-        for (int di = zsSrc.lld(i); di <= i; di++) {
-            double costDel =  getDeletionCost(zsSrc.tree(di));
-            forestDist[di][zsDst.lld(j) - 1] = forestDist[di - 1][zsDst.lld(j) - 1] + costDel;
-            for (int dj = zsDst.lld(j); dj <= j; dj++) {
-                double costIns = getInsertionCost(zsDst.tree(dj));
-                forestDist[zsSrc.lld(i) - 1][dj] = forestDist[zsSrc.lld(i) - 1][dj - 1] + costIns;
-
-                if ((zsSrc.lld(di) == zsSrc.lld(i) && (zsDst.lld(dj) == zsDst.lld(j)))) {
-                    double costUpd = getUpdateCost(zsSrc.tree(di), zsDst.tree(dj));
-                    forestDist[di][dj] = Math.min(Math.min(forestDist[di - 1][dj] + costDel,
-                                    forestDist[di][dj - 1] + costIns),
-                            forestDist[di - 1][dj - 1] + costUpd);
-                    treeDist[di][dj] = forestDist[di][dj];
-                } else {
-                    forestDist[di][dj] = Math.min(Math.min(forestDist[di - 1][dj] + costDel,
-                                    forestDist[di][dj - 1] + costIns),
-                            forestDist[zsSrc.lld(di) - 1][zsDst.lld(dj) - 1]
-                                    + treeDist[di][dj]);
-                }
-            }
-        }
-    }
+public class ZsMatcher implements Matcher {
 
     @Override
-    public void match() {
-        computeTreeDist();
+    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+        Implementation impl = new Implementation(src, dst, mappings);
+        impl.match();
+        return impl.mappings;
+    }
 
-        boolean rootNodePair = true;
+    private static class Implementation {
+        private final MappingStore mappings;
+        private ZsTree zsSrc;
+        private ZsTree zsDst;
 
-        ArrayDeque<int[]> treePairs = new ArrayDeque<>();
+        private double[][] treeDist;
+        private double[][] forestDist;
 
-        // push the pair of trees (ted1,ted2) to stack
-        treePairs.addFirst(new int[] { zsSrc.nodeCount, zsDst.nodeCount });
+        public Implementation(ITree src, ITree dst, MappingStore mappings) {
+            this.zsSrc = new ZsTree(src);
+            this.zsDst = new ZsTree(dst);
+            this.mappings = mappings;
+        }
 
-        while (!treePairs.isEmpty()) {
-            int[] treePair = treePairs.removeFirst();
+        private static ITree getFirstLeaf(ITree t) {
+            ITree current = t;
+            while (!current.isLeaf())
+                current = current.getChild(0);
 
-            int lastRow = treePair[0];
-            int lastCol = treePair[1];
+            return current;
+        }
 
-            // compute forest distance matrix
-            if (!rootNodePair)
-                forestDist(lastRow, lastCol);
+        private double[][] computeTreeDist() {
 
-            rootNodePair = false;
+            treeDist = new double[zsSrc.nodeCount + 1][zsDst.nodeCount + 1];
+            forestDist = new double[zsSrc.nodeCount + 1][zsDst.nodeCount + 1];
 
-            // compute mapping for current forest distance matrix
-            int firstRow = zsSrc.lld(lastRow) - 1;
-            int firstCol = zsDst.lld(lastCol) - 1;
+            for (int i = 1; i < zsSrc.kr.length; i++) {
+                for (int j = 1; j < zsDst.kr.length; j++) {
+                    forestDist(zsSrc.kr[i], zsDst.kr[j]);
 
-            int row = lastRow;
-            int col = lastCol;
+                }
+            }
 
-            while ((row > firstRow) || (col > firstCol)) {
-                if ((row > firstRow)
-                        && (forestDist[row - 1][col] + 1D == forestDist[row][col])) {
-                    // node with postorderID row is deleted from ted1
-                    row--;
-                } else if ((col > firstCol)
-                        && (forestDist[row][col - 1] + 1D == forestDist[row][col])) {
-                    // node with postorderID col is inserted into ted2
-                    col--;
-                } else {
-                    // node with postorderID row in ted1 is renamed to node col
-                    // in ted2
-                    if ((zsSrc.lld(row) - 1 == zsSrc.lld(lastRow) - 1)
-                            && (zsDst.lld(col) - 1 == zsDst.lld(lastCol) - 1)) {
-                        // if both subforests are trees, map nodes
-                        ITree tSrc = zsSrc.tree(row);
-                        ITree tDst = zsDst.tree(col);
-                        if (tSrc.getType() == tDst.getType())
-                            addMapping(tSrc, tDst);
-                        else
-                            throw new RuntimeException("Should not map incompatible nodes.");
-                        row--;
-                        col--;
+            return treeDist;
+        }
+
+        private void forestDist(int i, int j) {
+            forestDist[zsSrc.lld(i) - 1][zsDst.lld(j) - 1] = 0;
+            for (int di = zsSrc.lld(i); di <= i; di++) {
+                double costDel = getDeletionCost(zsSrc.tree(di));
+                forestDist[di][zsDst.lld(j) - 1] = forestDist[di - 1][zsDst.lld(j) - 1] + costDel;
+                for (int dj = zsDst.lld(j); dj <= j; dj++) {
+                    double costIns = getInsertionCost(zsDst.tree(dj));
+                    forestDist[zsSrc.lld(i) - 1][dj] = forestDist[zsSrc.lld(i) - 1][dj - 1] + costIns;
+
+                    if ((zsSrc.lld(di) == zsSrc.lld(i) && (zsDst.lld(dj) == zsDst.lld(j)))) {
+                        double costUpd = getUpdateCost(zsSrc.tree(di), zsDst.tree(dj));
+                        forestDist[di][dj] = Math.min(Math.min(forestDist[di - 1][dj] + costDel,
+                                forestDist[di][dj - 1] + costIns),
+                                forestDist[di - 1][dj - 1] + costUpd);
+                        treeDist[di][dj] = forestDist[di][dj];
                     } else {
-                        // pop subtree pair
-                        treePairs.addFirst(new int[] { row, col });
-                        // continue with forest to the left of the popped
-                        // subtree pair
-
-                        row = zsSrc.lld(row) - 1;
-                        col = zsDst.lld(col) - 1;
+                        forestDist[di][dj] = Math.min(Math.min(forestDist[di - 1][dj] + costDel,
+                                forestDist[di][dj - 1] + costIns),
+                                forestDist[zsSrc.lld(di) - 1][zsDst.lld(dj) - 1]
+                                        + treeDist[di][dj]);
                     }
                 }
             }
         }
-    }
 
-    private double getDeletionCost(ITree n) {
-        return 1D;
-    }
+        public void match() {
+            computeTreeDist();
 
-    private double getInsertionCost(ITree n) {
-        return 1D;
-    }
+            boolean rootNodePair = true;
 
-    private double getUpdateCost(ITree n1, ITree n2) {
-        if (n1.getType() == n2.getType())
-            if ("".equals(n1.getLabel()) || "".equals(n2.getLabel()))
-                return 1D;
+            ArrayDeque<int[]> treePairs = new ArrayDeque<>();
+
+            // push the pair of trees (ted1,ted2) to stack
+            treePairs.addFirst(new int[] {zsSrc.nodeCount, zsDst.nodeCount});
+
+            while (!treePairs.isEmpty()) {
+                int[] treePair = treePairs.removeFirst();
+
+                int lastRow = treePair[0];
+                int lastCol = treePair[1];
+
+                // compute forest distance matrix
+                if (!rootNodePair)
+                    forestDist(lastRow, lastCol);
+
+                rootNodePair = false;
+
+                // compute mapping for current forest distance matrix
+                int firstRow = zsSrc.lld(lastRow) - 1;
+                int firstCol = zsDst.lld(lastCol) - 1;
+
+                int row = lastRow;
+                int col = lastCol;
+
+                while ((row > firstRow) || (col > firstCol)) {
+                    if ((row > firstRow)
+                            && (forestDist[row - 1][col] + 1D == forestDist[row][col])) {
+                        // node with postorderID row is deleted from ted1
+                        row--;
+                    } else if ((col > firstCol)
+                            && (forestDist[row][col - 1] + 1D == forestDist[row][col])) {
+                        // node with postorderID col is inserted into ted2
+                        col--;
+                    } else {
+                        // node with postorderID row in ted1 is renamed to node col
+                        // in ted2
+                        if ((zsSrc.lld(row) - 1 == zsSrc.lld(lastRow) - 1)
+                                && (zsDst.lld(col) - 1 == zsDst.lld(lastCol) - 1)) {
+                            // if both subforests are trees, map nodes
+                            ITree tSrc = zsSrc.tree(row);
+                            ITree tDst = zsDst.tree(col);
+                            if (tSrc.getType() == tDst.getType())
+                                mappings.addMapping(tSrc, tDst);
+                            else
+                                throw new RuntimeException("Should not map incompatible nodes.");
+                            row--;
+                            col--;
+                        } else {
+                            // pop subtree pair
+                            treePairs.addFirst(new int[] {row, col});
+                            // continue with forest to the left of the popped
+                            // subtree pair
+
+                            row = zsSrc.lld(row) - 1;
+                            col = zsDst.lld(col) - 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        private double getDeletionCost(ITree n) {
+            return 1D;
+        }
+
+        private double getInsertionCost(ITree n) {
+            return 1D;
+        }
+
+        private double getUpdateCost(ITree n1, ITree n2) {
+            if (n1.getType() == n2.getType())
+                if ("".equals(n1.getLabel()) || "".equals(n2.getLabel()))
+                    return 1D;
+                else
+                    return 1D - StringMetrics.qGramsDistance().compare(n1.getLabel(), n2.getLabel());
             else
-                return 1D - StringMetrics.qGramsDistance().compare(n1.getLabel(), n2.getLabel());
-        else
-            return Double.MAX_VALUE;
+                return Double.MAX_VALUE;
+        }
     }
 
     private static final class ZsTree {
@@ -190,7 +199,7 @@ public class ZsMatcher extends Matcher {
 
         private ZsTree(ITree t) {
             this.start = 0;
-            this.nodeCount = t.getSize();
+            this.nodeCount = t.getMetrics().size;
             this.leafCount = 0;
             this.llds = new int[start + nodeCount];
             this.labels = new ITree[start + nodeCount];
@@ -200,7 +209,7 @@ public class ZsMatcher extends Matcher {
             for (ITree n: t.postOrder()) {
                 tmpData.put(n, idx);
                 this.setITree(idx, n);
-                this.setLld(idx,  tmpData.get(ZsMatcher.getFirstLeaf(n)));
+                this.setLld(idx,  tmpData.get(Implementation.getFirstLeaf(n)));
                 if (n.isLeaf())
                     leafCount++;
                 idx++;

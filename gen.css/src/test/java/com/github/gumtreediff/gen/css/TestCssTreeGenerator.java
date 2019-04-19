@@ -22,14 +22,13 @@ package com.github.gumtreediff.gen.css;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCssTreeGenerator {
-
     @Test
     public void testSimple() throws Exception {
         Reader r = new StringReader("@import url(\"bluish.css\") projection, tv;\n"
@@ -41,12 +40,14 @@ public class TestCssTreeGenerator {
                 + "}");
         TreeContext ctx = new CssTreeGenerator().generateFrom().reader(r);
         ITree tree = ctx.getRoot();
-        assertEquals(10, tree.getSize());
+        assertEquals(10, tree.getMetrics().size);
     }
 
-    @Test(expected = SyntaxException.class)
+    @Test
     public void badSyntax() throws IOException {
         String input = ".foo \"toto {\nfont-size: 11pt;\n}";
-        TreeContext ct = new CssTreeGenerator().generateFrom().string(input);
+        assertThrows(SyntaxException.class, () -> {
+            TreeContext ct = new CssTreeGenerator().generateFrom().string(input);
+        });
     }
 }

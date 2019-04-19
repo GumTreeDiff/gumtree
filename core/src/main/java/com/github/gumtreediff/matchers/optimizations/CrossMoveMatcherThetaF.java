@@ -36,125 +36,123 @@ import java.util.LinkedList;
  * This implements the cross move matcher Theta F.
  *
  */
-public class CrossMoveMatcherThetaF extends Matcher {
-
-    private class BfsComparator implements Comparator<Mapping> {
-
-        private HashMap<Integer, Integer> positionSrc;
-        private HashMap<Integer, Integer> positionDst;
-
-        private HashMap<Integer, Integer> getHashSet(ITree tree) {
-            HashMap<Integer, Integer> map = new HashMap<>();
-            ArrayList<ITree> list = new ArrayList<>();
-            LinkedList<ITree> workList = new LinkedList<>();
-            workList.add(tree);
-            while (!workList.isEmpty()) {
-                ITree node = workList.removeFirst();
-                list.add(node);
-                workList.addAll(node.getChildren());
-            }
-            for (int i = 0; i < list.size(); i++) {
-                map.put(list.get(i).getId(), i);
-            }
-            return map;
-        }
-
-        public BfsComparator(ITree src, ITree dst) {
-            positionSrc = getHashSet(src);
-            positionDst = getHashSet(dst);
-        }
-
-        @Override
-        public int compare(Mapping o1, Mapping o2) {
-            if (o1.first.getId() != o2.first.getId()) {
-                return Integer.compare(positionSrc.get(o1.first.getId()),
-                        positionSrc.get(o2.first.getId()));
-            }
-            return Integer.compare(positionDst.get(o1.second.getId()),
-                    positionDst.get(o2.second.getId()));
-        }
-
-    }
-
-    /**
-     * Instantiates a new matcher for Theta F.
-     *
-     * @param src the src
-     * @param dst the dst
-     * @param store the store
-     */
-    public CrossMoveMatcherThetaF(ITree src, ITree dst, MappingStore store) {
-        super(src, dst, store);
-    }
+public class CrossMoveMatcherThetaF implements Matcher {
 
     @Override
-    protected void addMapping(ITree src, ITree dst) {
-        assert (src != null);
-        assert (dst != null);
-        super.addMapping(src, dst);
+    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+        Implementation impl = new Implementation(src, dst, mappings);
+        impl.match();
+        return impl.mappings;
     }
 
-    /**
-     * Match.
-     */
-    @Override
-    public void match() {
-        thetaF();
-    }
+    private static class Implementation {
+        private final ITree src;
+        private final ITree dst;
+        private final MappingStore mappings;
 
-    private void thetaF() {
-        LinkedList<Mapping> workList = new LinkedList<>(mappings.asSet());
-        Collections.sort(workList, new BfsComparator(src, dst));
-        for (Mapping pair : workList) {
-            ITree parentOld = pair.getFirst().getParent();
-            ITree parentNew = pair.getSecond().getParent();
-            if (mappings.isSrcMapped(parentOld) && mappings.getDstForSrc(parentOld) != parentNew) {
-                if (mappings.isDstMapped(parentNew) && mappings.getSrcForDst(parentNew) != parentOld) {
-                    ITree parentOldOther = mappings.getSrcForDst(parentNew);
-                    ITree parentNewOther = mappings.getDstForSrc(parentOld);
-                    if (parentOld.getLabel().equals(parentNewOther.getLabel())
-                            && parentNew.getLabel().equals(parentOldOther.getLabel())) {
-                        boolean done = false;
-                        for (ITree childOldOther : parentOldOther.getChildren()) {
-                            if (mappings.isSrcMapped(childOldOther)) {
-                                ITree childNewOther = mappings.getDstForSrc(childOldOther);
-                                if (pair.getFirst().getLabel().equals(childNewOther.getLabel())
-                                        && childOldOther.getLabel()
-                                                .equals(pair.getSecond().getLabel())
-                                        || !(pair.getFirst().getLabel()
-                                                .equals(pair.getSecond().getLabel())
-                                                || childOldOther.getLabel()
-                                                        .equals(childNewOther.getLabel()))) {
-                                    if (childNewOther.getParent() == parentNewOther) {
-                                        if (childOldOther.getType() == pair.getFirst().getType()) {
-                                            mappings.removeMapping(pair.getFirst(), pair.getSecond());
-                                            mappings.removeMapping(childOldOther, childNewOther);
-                                            addMapping(pair.getFirst(), childNewOther);
-                                            addMapping(childOldOther, pair.getSecond());
-                                            // done = true;
+        public Implementation(ITree src, ITree dst, MappingStore mappings) {
+            this.src = src;
+            this.dst = dst;
+            this.mappings = mappings;
+        }
+
+        private class BfsComparator implements Comparator<Mapping> {
+
+            private HashMap<Integer, Integer> positionSrc;
+            private HashMap<Integer, Integer> positionDst;
+
+            private HashMap<Integer, Integer> getHashSet(ITree tree) {
+                HashMap<Integer, Integer> map = new HashMap<>();
+                ArrayList<ITree> list = new ArrayList<>();
+                LinkedList<ITree> workList = new LinkedList<>();
+                workList.add(tree);
+                while (!workList.isEmpty()) {
+                    ITree node = workList.removeFirst();
+                    list.add(node);
+                    workList.addAll(node.getChildren());
+                }
+                for (int i = 0; i < list.size(); i++) {
+                    int position = -1;
+                    map.put(list.get(i).getMetrics().position, i);
+                }
+                return map;
+            }
+
+            public BfsComparator(ITree src, ITree dst) {
+                positionSrc = getHashSet(src);
+                positionDst = getHashSet(dst);
+            }
+
+            @Override
+            public int compare(Mapping o1, Mapping o2) {
+                if (o1.first.getMetrics().position != o2.first.getMetrics().position) {
+                    return Integer.compare(positionSrc.get(o1.first.getMetrics().position),
+                            positionSrc.get(o2.first.getMetrics().position));
+                }
+                return Integer.compare(positionDst.get(o1.second.getMetrics().position),
+                        positionDst.get(o2.second.getMetrics().position));
+            }
+
+        }
+
+        public void match() {
+            thetaF();
+        }
+
+        private void thetaF() {
+            LinkedList<Mapping> workList = new LinkedList<>(mappings.asSet());
+            Collections.sort(workList, new BfsComparator(src, dst));
+            for (Mapping pair : workList) {
+                ITree parentOld = pair.first.getParent();
+                ITree parentNew = pair.second.getParent();
+                if (mappings.isSrcMapped(parentOld) && mappings.getDstForSrc(parentOld) != parentNew) {
+                    if (mappings.isDstMapped(parentNew) && mappings.getSrcForDst(parentNew) != parentOld) {
+                        ITree parentOldOther = mappings.getSrcForDst(parentNew);
+                        ITree parentNewOther = mappings.getDstForSrc(parentOld);
+                        if (parentOld.getLabel().equals(parentNewOther.getLabel())
+                                && parentNew.getLabel().equals(parentOldOther.getLabel())) {
+                            boolean done = false;
+                            for (ITree childOldOther : parentOldOther.getChildren()) {
+                                if (mappings.isSrcMapped(childOldOther)) {
+                                    ITree childNewOther = mappings.getDstForSrc(childOldOther);
+                                    if (pair.first.getLabel().equals(childNewOther.getLabel())
+                                            && childOldOther.getLabel()
+                                            .equals(pair.second.getLabel())
+                                            || !(pair.first.getLabel()
+                                            .equals(pair.second.getLabel())
+                                            || childOldOther.getLabel()
+                                            .equals(childNewOther.getLabel()))) {
+                                        if (childNewOther.getParent() == parentNewOther) {
+                                            if (childOldOther.getType() == pair.first.getType()) {
+                                                mappings.removeMapping(pair.first, pair.second);
+                                                mappings.removeMapping(childOldOther, childNewOther);
+                                                mappings.addMapping(pair.first, childNewOther);
+                                                mappings.addMapping(childOldOther, pair.second);
+                                                // done = true;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        if (!done) {
-                            for (ITree childNewOther : parentNewOther.getChildren()) {
-                                if (mappings.isDstMapped(childNewOther)) {
-                                    ITree childOldOther = mappings.getSrcForDst(childNewOther);
-                                    if (childOldOther.getParent() == parentOldOther) {
-                                        if (childNewOther.getType() == pair.getSecond().getType()) {
-                                            if (pair.getFirst().getLabel()
-                                                    .equals(childNewOther.getLabel())
-                                                    && childOldOther.getLabel()
-                                                            .equals(pair.getSecond().getLabel())
-                                                    || !(pair.getFirst().getLabel()
-                                                            .equals(pair.getSecond().getLabel())
-                                                            || childOldOther.getLabel().equals(
-                                                                    childNewOther.getLabel()))) {
-                                                mappings.removeMapping(pair.getFirst(), pair.getSecond());
-                                                mappings.removeMapping(childOldOther, childNewOther);
-                                                addMapping(childOldOther, pair.getSecond());
-                                                addMapping(pair.getFirst(), childNewOther);
+                            if (!done) {
+                                for (ITree childNewOther : parentNewOther.getChildren()) {
+                                    if (mappings.isDstMapped(childNewOther)) {
+                                        ITree childOldOther = mappings.getSrcForDst(childNewOther);
+                                        if (childOldOther.getParent() == parentOldOther) {
+                                            if (childNewOther.getType() == pair.second.getType()) {
+                                                if (pair.first.getLabel()
+                                                        .equals(childNewOther.getLabel())
+                                                        && childOldOther.getLabel()
+                                                        .equals(pair.second.getLabel())
+                                                        || !(pair.first.getLabel()
+                                                        .equals(pair.second.getLabel())
+                                                        || childOldOther.getLabel().equals(
+                                                        childNewOther.getLabel()))) {
+                                                    mappings.removeMapping(pair.first, pair.second);
+                                                    mappings.removeMapping(childOldOther, childNewOther);
+                                                    mappings.addMapping(childOldOther, pair.second);
+                                                    mappings.addMapping(pair.first, childNewOther);
+                                                }
                                             }
                                         }
                                     }

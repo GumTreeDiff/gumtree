@@ -20,8 +20,9 @@
 package com.github.gumtreediff.gen.srcml;
 
 import com.github.gumtreediff.tree.ITree;
-import org.junit.Assert;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -46,7 +47,7 @@ public class TestSrcmlCppGenerator {
                 + "}\n"
                 + "}";
         ITree t = new SrcmlCppTreeGenerator().generateFrom().string(input).getRoot();
-        Assert.assertEquals(148, t.getSize());
+        assertEquals(148, t.getMetrics().size);
     }
 
 }

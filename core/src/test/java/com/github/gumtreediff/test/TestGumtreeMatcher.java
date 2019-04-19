@@ -20,50 +20,39 @@
 
 package com.github.gumtreediff.test;
 
-import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
+import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGumtreeMatcher {
-
     @Test
     public void testMinHeightThreshold() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();
+        ITree t1 = trees.first.getRoot();
+        ITree t2 = trees.second.getRoot();
         GreedySubtreeMatcher.MIN_HEIGHT = 0;
-        AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
-        Matcher m = new CompositeMatchers.ClassicGumtree(
-                trees.getFirst().getRoot(), trees.getSecond().getRoot(), new MappingStore());
-        m.match();
-        assertEquals(5, m.getMappingsAsSet().size());
+        GreedySubtreeMatcher matcher = new GreedySubtreeMatcher();
+        MappingStore ms1 = matcher.match(t1, t2);
+        assertEquals(4, ms1.size());
+        assertTrue(ms1.has(t1.getChild(1), t2.getChild(0)));
+        assertTrue(ms1.has(t1.getChild("1.0"), t2.getChild("0.0")));
+        assertTrue(ms1.has(t1.getChild("1.1"), t2.getChild("0.1")));
+        assertTrue(ms1.has(t1.getChild(2), t2.getChild(2)));
+
         GreedySubtreeMatcher.MIN_HEIGHT = 1;
-        AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
-        m = new CompositeMatchers.ClassicGumtree(
-                trees.getFirst().getRoot(), trees.getSecond().getRoot(), new MappingStore());
-        m.match();
-        assertEquals(4, m.getMappingsAsSet().size());
+        MappingStore ms2 = matcher.match(t1, t2);
+        assertEquals(3, ms2.size());
+        assertTrue(ms1.has(t1.getChild(1), t2.getChild(0)));
+        assertTrue(ms1.has(t1.getChild("1.0"), t2.getChild("0.0")));
+        assertTrue(ms1.has(t1.getChild("1.1"), t2.getChild("0.1")));
     }
 
     @Test
-    public void testSizeThreshold() {
-        Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();
-        GreedySubtreeMatcher.MIN_HEIGHT = 0;
-        AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
-        Matcher m = new CompositeMatchers.ClassicGumtree(
-                trees.getFirst().getRoot(), trees.getSecond().getRoot(), new MappingStore());
-        m.match();
-        assertEquals(5, m.getMappingsAsSet().size());
-        GreedySubtreeMatcher.MIN_HEIGHT = 0;
-        AbstractBottomUpMatcher.SIZE_THRESHOLD = 5;
-        m = new CompositeMatchers.ClassicGumtree(
-                trees.getFirst().getRoot(), trees.getSecond().getRoot(), new MappingStore());
-        m.match();
-        assertEquals(6, m.getMappingsAsSet().size());
+    public void testSimThreshold() {
+        //TODO needs a better test case.
     }
-
 }

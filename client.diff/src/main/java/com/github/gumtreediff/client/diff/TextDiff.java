@@ -95,14 +95,13 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
 
     @Override
     public void run() {
-        Matcher m = matchTrees();
-        ActionGenerator g = new ActionGenerator(getSrcTreeContext().getRoot(),
-                getDstTreeContext().getRoot(), m.getMappings());
+        MappingStore m = matchTrees();
+        ActionGenerator g = new ActionGenerator(m);
         g.generate();
         List<Action> actions = g.getActions();
         try {
             ActionsIoUtils.ActionSerializer serializer = opts.format.getSerializer(
-                    getSrcTreeContext(), actions, m.getMappings());
+                    getSrcTreeContext(), actions, m);
             if (opts.output == null)
                 serializer.writeTo(System.out);
             else

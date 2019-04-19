@@ -21,6 +21,8 @@
 package com.github.gumtreediff.matchers.heuristic.gt;
 
 import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 
 import java.util.List;
@@ -32,43 +34,50 @@ import java.util.stream.Collectors;
  * if they are mappable and have a dice coefficient greater than SIM_THRESHOLD. Whenever two trees are mapped
  * a exact ZS algorithm is applied to look to possibly forgotten nodes.
  */
-public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher {
-
-    public CompleteBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
-        super(src, dst, store);
+public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher implements Matcher {
+    @Override
+    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+        CompleteBottomUpMatcher.Implementation impl =  new CompleteBottomUpMatcher.Implementation(src, dst, mappings);
+        impl.match();
+        return impl.mappings;
     }
 
-    @Override
-    public void match() {
-        for (ITree t: src.postOrder())  {
-            if (t.isRoot()) {
-                addMapping(t, this.dst);
-                lastChanceMatch(t, this.dst);
-                break;
-            } else if (!(isSrcMatched(t) || t.isLeaf())) {
-                List<ITree> srcCandidates = t.getParents().stream()
-                        .filter(p -> p.getType() == t.getType())
-                        .collect(Collectors.toList());
+    protected static class Implementation extends AbstractBottomUpMatcher.Implementation {
+        public Implementation(ITree src, ITree dst, MappingStore mappings) {
+            super(src, dst, mappings);
+        }
 
-                List<ITree> dstCandidates = getDstCandidates(t);
-                ITree srcBest = null;
-                ITree dstBest = null;
-                double max = -1D;
-                for (ITree srcCand: srcCandidates) {
-                    for (ITree dstCand: dstCandidates) {
+        public void match() {
+            for (ITree t : src.postOrder()) {
+                if (t.isRoot()) {
+                    mappings.addMapping(t, this.dst);
+                    lastChanceMatch(t, this.dst);
+                    break;
+                } else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
+                    List<ITree> srcCandidates = t.getParents().stream()
+                            .filter(p -> p.getType() == t.getType())
+                            .collect(Collectors.toList());
 
-                        double sim = jaccardSimilarity(srcCand, dstCand);
-                        if (sim > max && sim >= SIM_THRESHOLD) {
-                            max = sim;
-                            srcBest = srcCand;
-                            dstBest = dstCand;
+                    List<ITree> dstCandidates = getDstCandidates(t);
+                    ITree srcBest = null;
+                    ITree dstBest = null;
+                    double max = -1D;
+                    for (ITree srcCand : srcCandidates) {
+                        for (ITree dstCand : dstCandidates) {
+
+                            double sim = SimilarityMetrics.jaccardSimilarity(srcCand, dstCand, mappings);
+                            if (sim > max && sim >= SIM_THRESHOLD) {
+                                max = sim;
+                                srcBest = srcCand;
+                                dstBest = dstCand;
+                            }
                         }
                     }
-                }
 
-                if (srcBest != null) {
-                    lastChanceMatch(srcBest, dstBest);
-                    addMapping(srcBest, dstBest);
+                    if (srcBest != null) {
+                        lastChanceMatch(srcBest, dstBest);
+                        mappings.addMapping(srcBest, dstBest);
+                    }
                 }
             }
         }

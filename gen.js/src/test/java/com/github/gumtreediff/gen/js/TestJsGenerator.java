@@ -20,45 +20,43 @@
 
 package com.github.gumtreediff.gen.js;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.TreeContext;
-import org.junit.Test;
 
 import com.github.gumtreediff.tree.ITree;
 
 public class TestJsGenerator {
-
     @Test
     public void testStatement() throws IOException {
         String input = "console.log(\"Hello world!\");";
         ITree tree = new RhinoTreeGenerator().generateFrom().string(input).getRoot();
-        assertEquals(7, tree.getSize());
+        assertEquals(7, tree.getMetrics().size);
     }
 
     @Test
     public void testComment() throws IOException {
         String input = "console.log(\"Hello world!\"); /* with comment */";
         ITree tree = new RhinoTreeGenerator().generateFrom().string(input).getRoot();
-        assertEquals(8, tree.getSize());
+        assertEquals(8, tree.getMetrics().size);
     }
 
     @Test
     public void testComplexFile() throws IOException {
         ITree tree = new RhinoTreeGenerator().generateFrom().charset("UTF-8")
                 .stream(getClass().getResourceAsStream("/sample.js")).getRoot();
-        assertEquals(402, tree.getSize());
+        assertEquals(402, tree.getMetrics().size);
     }
 
-    @Test(expected = SyntaxException.class)
+    @Test
     public void badSyntax() throws IOException {
         String input = "function foo((bar) {}";
-        TreeContext ct = new RhinoTreeGenerator().generateFrom().string(input);
+        assertThrows(SyntaxException.class, () -> {
+            TreeContext ct = new RhinoTreeGenerator().generateFrom().string(input);
+        });
     }
-
 }

@@ -36,6 +36,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
@@ -43,7 +44,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 
 public final class TreeIoUtils {
 
@@ -170,7 +171,7 @@ public final class TreeIoUtils {
         public void writeTo(OutputStream writer) throws Exception {
             // FIXME Since the stream is already open, we should not close it, however due to semantic issue
             // it should stay like this
-            try (OutputStreamWriter os = new OutputStreamWriter(writer, "UTF-8")) {
+            try (OutputStreamWriter os = new OutputStreamWriter(writer, StandardCharsets.UTF_8)) {
                 writeTo(os);
             }
         }
@@ -423,7 +424,7 @@ public final class TreeIoUtils {
             writer.writeStartElement("tree");
             writer.writeAttribute("type", tree.getType().toString());
             if (tree.hasLabel()) writer.writeAttribute("label", tree.getLabel());
-            if (ITree.NO_VALUE != tree.getPos()) {
+            if (ITree.NO_POS != tree.getPos()) {
                 writer.writeAttribute("pos", Integer.toString(tree.getPos()));
                 writer.writeAttribute("length", Integer.toString(tree.getLength()));
             }
@@ -458,7 +459,7 @@ public final class TreeIoUtils {
             ITree o = searchOther.lookup(tree);
 
             if (o != null) {
-                if (ITree.NO_VALUE != o.getPos()) {
+                if (ITree.NO_POS != o.getPos()) {
                     writer.writeAttribute("other_pos", Integer.toString(o.getPos()));
                     writer.writeAttribute("other_length", Integer.toString(o.getLength()));
                 }
@@ -529,7 +530,7 @@ public final class TreeIoUtils {
                 writer.write("    ");
             level++;
 
-            String pos = (ITree.NO_VALUE == tree.getPos() ? "" : String.format("(%d %d)",
+            String pos = (ITree.NO_POS == tree.getPos() ? "" : String.format("(%d %d)",
                     tree.getPos(), tree.getLength()));
 
             writer.write(String.format("(%s %s (%s",
@@ -588,13 +589,16 @@ public final class TreeIoUtils {
         public void startTree(ITree tree) throws Exception {
             String label = tree.toString();
             if (label.contains("\"") || label.contains("\\s"))
-                label = label.replaceAll("\"", "").replaceAll("\\s", "").replaceAll("\\\\", "");
+                label = label
+                        .replaceAll("\"", "")
+                        .replaceAll("\\s", "")
+                        .replaceAll("\\\\", "");
             if (label.length() > 30)
                 label = label.substring(0, 30);
-            writer.write(tree.getId() + " [label=\"" + label + "\"];\n");
+            writer.write(tree.hashCode() + " [label=\"" + label + "\"];\n"); // TODO use UUID instead of hashCode
 
             if (tree.getParent() != null)
-                writer.write(tree.getParent().getId() + " -> " + tree.getId() + ";\n");
+                writer.write(tree.getParent().hashCode() + " -> " + tree.hashCode() + ";\n"); // TODO use UUID
         }
 
         @Override
@@ -617,7 +621,7 @@ public final class TreeIoUtils {
             writer.beginObject();
             writer.name("type").value(t.getType().toString());
             if (t.hasLabel()) writer.name("label").value(t.getLabel());
-            if (ITree.NO_VALUE != t.getPos()) {
+            if (ITree.NO_POS != t.getPos()) {
                 writer.name("pos").value(Integer.toString(t.getPos()));
                 writer.name("length").value(Integer.toString(t.getLength()));
             }
@@ -753,7 +757,7 @@ public final class TreeIoUtils {
                         StartElement s = (StartElement) e;
                         if (!s.getName().getLocalPart().equals("tree")) // FIXME need to deal with options
                             continue;
-                        Symbol type = symbol(s.getAttributeByName(TYPE).getValue());
+                        Type type = type(s.getAttributeByName(TYPE).getValue());
 
                         ITree t = context.createTree(type, labelForAttribute(s, LABEL));
                         // FIXME this iterator has no type, due to the API. We have to cast it later
@@ -774,7 +778,6 @@ public final class TreeIoUtils {
                         trees.removeFirst();
                     }
                 }
-                context.validate();
                 return context;
             } catch (Exception e) {
                 e.printStackTrace();

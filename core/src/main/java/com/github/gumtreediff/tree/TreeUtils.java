@@ -30,56 +30,7 @@ import java.util.NoSuchElementException;
 import com.github.gumtreediff.utils.Pair;
 
 public final class TreeUtils {
-
     private TreeUtils() {
-    }
-
-    /**
-     * Compute the depth of every node of the tree. The size is set
-     * directly on the nodes and is then accessible using {@link Tree#getSize()}.
-     * @param tree a Tree
-     */
-    public static void computeSize(ITree tree) {
-        for (ITree t: tree.postOrder()) {
-            int size = 1;
-            if (!t.isLeaf())
-                for (ITree c: t.getChildren())
-                    size += c.getSize();
-            t.setSize(size);
-        }
-    }
-
-    /**
-     * Compute the depth of every node of the tree. The depth is set
-     * directly on the nodes and is then accessible using {@link Tree#getDepth()}.
-     * @param tree a Tree
-     */
-    public static void computeDepth(ITree tree) {
-        List<ITree> trees = preOrder(tree);
-        for (ITree t: trees) {
-            int depth = 0;
-            if (!t.isRoot()) depth = t.getParent().getDepth() + 1;
-            t.setDepth(depth);
-        }
-    }
-
-    /**
-     * Compute the height of every node of the tree. The height is set
-     * directly on the nodes and is then accessible using {@link Tree#getHeight()}.
-     * @param tree a Tree.
-     */
-    public static void computeHeight(ITree tree) {
-        for (ITree t: tree.postOrder()) {
-            int height = 0;
-            if (!t.isLeaf()) {
-                for (ITree c: t.getChildren()) {
-                    int cHeight = c.getHeight();
-                    if (cHeight > height) height = cHeight;
-                }
-                height++;
-            }
-            t.setHeight(height);
-        }
     }
 
     /**
@@ -97,10 +48,6 @@ public final class TreeUtils {
         if (!tree.isLeaf())
             for (ITree c: tree.getChildren())
                 preOrder(c, trees);
-    }
-
-    public static void preOrderNumbering(ITree tree) {
-        numbering(tree.preOrder());
     }
 
     /**
@@ -124,7 +71,7 @@ public final class TreeUtils {
             Deque<Iterator<ITree>> fifo = new ArrayDeque<>();
 
             {
-                addLasts(new AbstractTree.FakeTree(tree));
+                addLasts(new FakeTree(tree));
             }
 
             @Override
@@ -155,19 +102,9 @@ public final class TreeUtils {
 
             @Override
             public void remove() {
-                throw new RuntimeException("Not yet implemented implemented.");
+                throw new UnsupportedOperationException();
             }
         };
-    }
-
-    public static void breadthFirstNumbering(ITree tree) {
-        numbering(tree.breadthFirst());
-    }
-
-    public static void numbering(Iterable<ITree> iterable) {
-        int i = 0;
-        for (ITree t: iterable)
-            t.setId(i++);
     }
 
     /**
@@ -203,12 +140,12 @@ public final class TreeUtils {
             public ITree next() {
                 if (stack.isEmpty())
                     throw new NoSuchElementException();
-                return selectNextChild(stack.peek().getSecond());
+                return selectNextChild(stack.peek().second);
             }
 
             ITree selectNextChild(Iterator<ITree> it) {
                 if (!it.hasNext())
-                    return stack.pop().getFirst();
+                    return stack.pop().first;
                 ITree item = it.next();
                 if (item.isLeaf())
                     return item;
@@ -223,7 +160,7 @@ public final class TreeUtils {
 
             @Override
             public void remove() {
-                throw new RuntimeException("Not yet implemented implemented.");
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -232,7 +169,7 @@ public final class TreeUtils {
         return new Iterator<ITree>() {
             Deque<Iterator<ITree>> stack = new ArrayDeque<>();
             {
-                push(new AbstractTree.FakeTree(tree));
+                push(new FakeTree(tree));
             }
 
             @Override
@@ -261,7 +198,7 @@ public final class TreeUtils {
 
             @Override
             public void remove() {
-                throw new RuntimeException("Not yet implemented implemented.");
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -290,12 +227,8 @@ public final class TreeUtils {
 
             @Override
             public void remove() {
-                throw new RuntimeException("Not yet implemented implemented.");
+                throw new UnsupportedOperationException();
             }
         };
-    }
-
-    public static void postOrderNumbering(ITree tree) {
-        numbering(tree.postOrder());
     }
 }

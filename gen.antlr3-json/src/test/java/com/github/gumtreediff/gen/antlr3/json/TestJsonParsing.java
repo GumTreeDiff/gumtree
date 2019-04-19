@@ -20,17 +20,15 @@
 
 package com.github.gumtreediff.gen.antlr3.json;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
-import static org.junit.Assert.*;
+import static com.github.gumtreediff.tree.TypeSet.type;
+import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
-import com.github.gumtreediff.tree.TreeContext;
-import org.junit.Test;
+import com.github.gumtreediff.tree.*;
+import org.junit.jupiter.api.Test;
 
 public class TestJsonParsing {
 
-    public static final Symbol ARRAY = symbol(JSONParser.tokenNames[JSONParser.ARRAY]);
+    public static final Type ARRAY = type(JSONParser.tokenNames[JSONParser.ARRAY]);
 
     @Test
     public void testJsonParsing() throws Exception {
@@ -39,7 +37,7 @@ public class TestJsonParsing {
         ITree tree = tc.getRoot();
 
         assertEquals(ARRAY, tree.getType());
-        assertEquals(37, tree.getSize());
+        assertEquals(37, tree.getMetrics().size);
     }
 
 }

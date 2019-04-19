@@ -21,8 +21,8 @@ package com.github.gumtreediff.gen.css;
 
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
-import com.github.gumtreediff.tree.SymbolSet;
+import com.github.gumtreediff.tree.Type;
+import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.tree.TreeContext;
 import com.helger.css.CSSSourceLocation;
 import com.helger.css.ICSSSourceLocationAware;
@@ -72,8 +72,8 @@ public class GtCssVisitor implements ICSSVisitor {
         t.setLength(length);
     }
 
-    private Symbol symbol(ICSSSourceLocationAware a) {
-        return SymbolSet.symbol(a.getClass().getName());
+    private Type symbol(ICSSSourceLocationAware a) {
+        return TypeSet.type(a.getClass().getName());
     }
 
     @Override

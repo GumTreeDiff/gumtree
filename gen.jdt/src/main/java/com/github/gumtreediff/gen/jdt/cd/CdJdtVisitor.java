@@ -400,7 +400,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 	if (node.getException().getType() instanceof SimpleType) {
             pushNode(node, ((SimpleType) node.getException().getType()).getName().getFullyQualifiedName());
         } else {
-            pushNode(node, ((UnionType) node.getException().getType()).toString());
+            pushNode(node, node.getException().getType().toString());
         }
         // since exception type is used as value, visit children by hand
         node.getBody().accept(this);

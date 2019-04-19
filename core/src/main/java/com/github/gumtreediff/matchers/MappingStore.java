@@ -25,19 +25,27 @@ import java.util.*;
 import com.github.gumtreediff.tree.ITree;
 
 public class MappingStore implements Iterable<Mapping> {
+    public final ITree src;
+    public final ITree dst;
 
     private Map<ITree, ITree> srcToDst;
     private Map<ITree, ITree> dstToSrc;
 
-    public MappingStore(Set<Mapping> mappings) {
-        this();
-        for (Mapping m: mappings)
-            addMapping(m.getFirst(), m.getSecond());
+    public MappingStore(MappingStore ms) {
+        this(ms.src, ms.dst);
+        for (Mapping m : ms)
+            addMapping(m.first, m.second);
     }
 
-    public MappingStore() {
+    public MappingStore(ITree src, ITree dst) {
+        this.src = src;
+        this.dst = dst;
         srcToDst = new HashMap<>();
         dstToSrc = new HashMap<>();
+    }
+
+    public int size() {
+        return srcToDst.size();
     }
 
     public Set<Mapping> asSet() {
@@ -68,13 +76,15 @@ public class MappingStore implements Iterable<Mapping> {
         };
     }
 
-    public MappingStore copy() {
-        return new MappingStore(asSet());
-    }
-
     public void addMapping(ITree src, ITree dst) {
         srcToDst.put(src, dst);
         dstToSrc.put(dst, src);
+    }
+
+    public void addMappingRecursively(ITree src, ITree dst) {
+        addMapping(src, dst);
+        for (int i = 0; i < src.getChildren().size(); i++)
+            addMappingRecursively(src.getChild(i), dst.getChild(i));
     }
 
     public void removeMapping(ITree src, ITree dst) {
@@ -98,6 +108,10 @@ public class MappingStore implements Iterable<Mapping> {
         return dstToSrc.containsKey(dst);
     }
 
+    public boolean areBothUnmapped(ITree src, ITree dst) {
+        return !(isSrcMapped(src) || isDstMapped(dst));
+    }
+
     public boolean has(ITree src, ITree dst) {
         return srcToDst.get(src) == dst;
     }
@@ -111,8 +125,11 @@ public class MappingStore implements Iterable<Mapping> {
     public String toString() {
         StringBuilder b = new StringBuilder();
         for (Mapping m : this)
-            b.append(m.getFirst() + " -> " + m.getSecond() + "\n");
+            b.append(m.toString()).append('\n');
         return b.toString();
     }
 
+    public boolean isMappingAllowed(ITree src, ITree dst) {
+        return src.hasSameType(dst) && areBothUnmapped(src, dst);
+    }
 }

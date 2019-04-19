@@ -38,7 +38,7 @@ package com.github.gumtreediff.io;
 public interface Indentation {
 
     /** Two spaces; the default indentation. */
-    public static final String DEFAULT_INDENT = "  ";
+    String DEFAULT_INDENT = "  ";
 
     /**
      * Set the characters used for one level of indentation. The default is
@@ -53,7 +53,7 @@ public interface Indentation {
      * "\n"; the normalized representation of end-of-line in <a
      * href="http://www.w3.org/TR/xml11/#sec-line-ends">XML</a>.
      */
-    public static final String NORMAL_END_OF_LINE = "\n";
+    String NORMAL_END_OF_LINE = "\n";
 
     /**
      * Set the characters that introduce a new line. The default is
@@ -61,7 +61,7 @@ public interface Indentation {
      * {@link IndentingXMLStreamWriter#getLineSeparator}() is a popular
      * alternative.
      */
-    public void setNewLine(String newLine);
+    void setNewLine(String newLine);
 
     /** The characters that introduce a new line. */
     String getNewLine();

@@ -22,7 +22,7 @@ package com.github.gumtreediff.gen.srcml;
 import com.github.gumtreediff.gen.ExternalProcessTreeGenerator;
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
+import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
 
 import javax.xml.namespace.QName;
@@ -32,7 +32,7 @@ import javax.xml.stream.events.*;
 import java.io.*;
 import java.util.*;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 
 public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGenerator {
 
@@ -44,15 +44,15 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
 
     private LineReader lr;
 
-    private Set<Symbol> labeled = new HashSet<>(
+    private Set<Type> labeled = new HashSet<>(
             Arrays.asList(
-                    symbol("specifier"),
-                    symbol("name"),
-                    symbol("comment"),
-                    symbol("literal"),
-                    symbol("operator")));
+                    type("specifier"),
+                    type("name"),
+                    type("comment"),
+                    type("literal"),
+                    type("operator")));
 
-    Symbol position = symbol("position");
+    Type position = type("position");
 
     private StringBuilder currentLabel;
 
@@ -76,7 +76,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                 XMLEvent ev = r.nextEvent();
                 if (ev.isStartElement()) {
                     StartElement s = ev.asStartElement();
-                    Symbol type = symbol(s.getName().getLocalPart());
+                    Type type = type(s.getName().getLocalPart());
                     if (type.equals(position))
                         setLength(trees.peekFirst(), s);
                     else {
@@ -93,7 +93,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                     }
                 } else if (ev.isEndElement()) {
                     EndElement end = ev.asEndElement();
-                    if (symbol(end.getName().getLocalPart()) != position) {
+                    if (type(end.getName().getLocalPart()) != position) {
                         if (isLabeled(trees))
                             trees.peekFirst().setLabel(currentLabel.toString());
                         trees.removeFirst();
@@ -106,7 +106,6 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                 }
             }
             fixPos(context);
-            context.validate();
             return context;
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +120,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
     private void fixPos(TreeContext ctx) {
         for (ITree t : ctx.getRoot().postOrder()) {
             if (!t.isLeaf()) {
-                if (t.getPos() == ITree.NO_VALUE || t.getLength() == ITree.NO_VALUE) {
+                if (t.getPos() == ITree.NO_POS || t.getLength() == ITree.NO_POS) {
                     ITree firstChild = t.getChild(0);
                     t.setPos(firstChild.getPos());
                     if (t.getChildren().size() == 1)

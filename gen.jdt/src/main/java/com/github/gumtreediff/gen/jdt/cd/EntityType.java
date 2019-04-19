@@ -129,7 +129,7 @@ public enum EntityType {
 
     private final boolean fIsValidChange;
 
-    private EntityType(boolean isValidChange) {
+    EntityType(boolean isValidChange) {
         fIsValidChange = isValidChange;
     }
 

@@ -22,12 +22,13 @@ package com.github.gumtreediff.matchers.heuristic.cd;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 
 import java.util.List;
 
-public class ChangeDistillerBottomUpMatcher extends Matcher {
+public class ChangeDistillerBottomUpMatcher implements Matcher {
 
     public static final double STRUCT_SIM_THRESHOLD_1 =  Double.parseDouble(System.getProperty("gt.cd.ssim1", "0.6"));
 
@@ -35,34 +36,49 @@ public class ChangeDistillerBottomUpMatcher extends Matcher {
 
     public static final int MAX_NUMBER_OF_LEAVES = Integer.parseInt(System.getProperty("gt.cd.ml", "4"));
 
-    public ChangeDistillerBottomUpMatcher(ITree src, ITree dst, MappingStore store) {
-        super(src, dst, store);
+    @Override
+    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+        Implementation impl = new Implementation(src, dst, mappings);
+        impl.match();
+        return impl.mappings;
     }
 
-    @Override
-    public void match() {
-        List<ITree> dstTrees = TreeUtils.postOrder(this.dst);
-        for (ITree currentSrcTree: this.src.postOrder()) {
-            int numberOfLeaves = numberOfLeaves(currentSrcTree);
-            for (ITree currentDstTree: dstTrees) {
-                if (isMappingAllowed(currentSrcTree, currentDstTree)
-                        && !(currentSrcTree.isLeaf() || currentDstTree.isLeaf())) {
-                    double similarity = chawatheSimilarity(currentSrcTree, currentDstTree);
-                    if ((numberOfLeaves > MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_1)
-                            || (numberOfLeaves <= MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_2)) {
-                        addMapping(currentSrcTree, currentDstTree);
-                        break;
+    private static class Implementation {
+        private final ITree src;
+        private final ITree dst;
+        private final MappingStore mappings;
+
+        public Implementation(ITree src, ITree dst, MappingStore mappings) {
+            this.src = src;
+            this.dst = dst;
+            this.mappings = mappings;
+        }
+
+        public void match() {
+            List<ITree> dstTrees = TreeUtils.postOrder(this.dst);
+            for (ITree currentSrcTree : this.src.postOrder()) {
+                int numberOfLeaves = numberOfLeaves(currentSrcTree);
+                for (ITree currentDstTree : dstTrees) {
+                    if (mappings.isMappingAllowed(currentSrcTree, currentDstTree)
+                            && !(currentSrcTree.isLeaf() || currentDstTree.isLeaf())) {
+                        double similarity =
+                                SimilarityMetrics.chawatheSimilarity(currentSrcTree, currentDstTree, mappings);
+                        if ((numberOfLeaves > MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_1)
+                                || (numberOfLeaves <= MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_2)) {
+                            mappings.addMapping(currentSrcTree, currentDstTree);
+                            break;
+                        }
                     }
                 }
             }
         }
-    }
 
-    private int numberOfLeaves(ITree root) {
-        int numberOfLeaves = 0;
-        for (ITree tree : root.getDescendants())
-            if (tree.isLeaf())
-                numberOfLeaves++;
-        return numberOfLeaves;
+        private int numberOfLeaves(ITree root) {
+            int numberOfLeaves = 0;
+            for (ITree tree : root.getDescendants())
+                if (tree.isLeaf())
+                    numberOfLeaves++;
+            return numberOfLeaves;
+        }
     }
 }

@@ -21,45 +21,32 @@
 package com.github.gumtreediff.gen.antlr3.r;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.stream.Stream;
 
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Symbol;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
-import static org.junit.Assert.*;
+import static com.github.gumtreediff.tree.TypeSet.type;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-@RunWith(Parameterized.class)
 public class TestRGenerator {
 
-    public static final Symbol SEQUENCE = symbol(RParser.tokenNames[RParser.SEQUENCE]);
+    public static final String SEQUENCE = RParser.tokenNames[RParser.SEQUENCE];
 
-    private final String input;
-    private final Symbol expectedRootSymbol;
-    private final int expectedSize;
-
-    public TestRGenerator(String input, Symbol expectedRootSymbol, int expectedSize) {
-        this.input = input;
-        this.expectedRootSymbol = expectedRootSymbol;
-        this.expectedSize = expectedSize;
+    static Stream<Arguments> provideStringAndExpectedLength() {
+        return Stream.of(
+                arguments("v <- c(1,2,3);", SEQUENCE, 8)
+        );
     }
 
-    @Parameterized.Parameters
-    public static Collection provideStringAndExpectedLength() {
-        return Arrays.asList(new Object[][] {
-                { "v <- c(1,2,3);", SEQUENCE, 8 },
-        });
-    }
-
-    @Test
-    public void testSimpleParse() throws IOException {
+    @ParameterizedTest
+    @MethodSource("provideStringAndExpectedLength")
+    public void testSimpleParse(String input, String expectedRootType, int expectedSize) throws IOException {
         ITree t = new RTreeGenerator().generateFrom().string(input).getRoot();
-        assertEquals(expectedRootSymbol, t.getType());
-        assertEquals(expectedSize, t.getSize());
+        assertEquals(type(expectedRootType), t.getType());
+        assertEquals(expectedSize, t.getMetrics().size);
     }
-
 }

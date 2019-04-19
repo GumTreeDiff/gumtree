@@ -23,6 +23,7 @@ import com.github.gumtreediff.actions.ActionClusterFinder;
 import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.client.Register;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 
 import java.util.List;
@@ -38,9 +39,8 @@ public class ClusterDiff extends AbstractDiffClient<AbstractDiffClient.Options> 
 
     @Override
     public void run() {
-        Matcher m = matchTrees();
-        ActionGenerator g = new ActionGenerator(getSrcTreeContext().getRoot(),
-                getDstTreeContext().getRoot(), m.getMappings());
+        MappingStore m = matchTrees();
+        ActionGenerator g = new ActionGenerator(m);
         g.generate();
         List<Action> actions = g.getActions();
         ActionClusterFinder f = new ActionClusterFinder(getSrcTreeContext(), getDstTreeContext(), actions);
@@ -50,7 +50,7 @@ public class ClusterDiff extends AbstractDiffClient<AbstractDiffClient.Options> 
             System.out.println("------------");
             for (Action a: cluster)
                 System.out.println(a.toString());
-            System.out.println("");
+            System.out.println();
         }
     }
 

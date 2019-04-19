@@ -66,6 +66,28 @@ public class TreeLoader {
         return new Pair<>(load("/action_v0.xml"), load("/action_v1.xml"));
     }
 
+    /*
+       v0
+       -
+       a
+         e
+           f
+         b
+           c
+           d
+         g
+
+       v1
+       -
+       z
+         b
+           c
+           d
+         h
+           e
+             y
+         g
+     */
     public static Pair<TreeContext, TreeContext> getGumtreePair() {
         return new Pair<>(load("/gumtree_v0.xml"), load("/gumtree_v1.xml"));
     }
@@ -85,7 +107,14 @@ public class TreeLoader {
     public static Pair<TreeContext, TreeContext> getCdCustomPair() {
         return new Pair<>(load("/cd_v0.xml"), load("/cd_v1.xml"));
     }
- 
+
+    /*
+     *  a
+     *    b
+     *      c
+     *      d
+     *    e
+     */
     public static ITree getDummySrc() {
         return load("/Dummy_v0.xml").getRoot();
     }

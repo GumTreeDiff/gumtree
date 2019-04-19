@@ -50,17 +50,12 @@ public class TreeContext {
         return root;
     }
 
-    public ITree createTree(Symbol type, String label) {
+    public ITree createTree(Type type, String label) {
         return new Tree(type, label);
     }
 
     public ITree createTree(ITree... trees) {
-        return new AbstractTree.FakeTree(trees);
-    }
-
-    public void validate() {
-        root.refresh();
-        TreeUtils.postOrderNumbering(root);
+        return new FakeTree(trees);
     }
 
     /**

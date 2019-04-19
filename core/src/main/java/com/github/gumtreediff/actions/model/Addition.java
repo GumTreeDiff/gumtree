@@ -47,7 +47,7 @@ public abstract class Addition extends Action {
         return String.format("===\n%s\n---\n%s\nto\n%s\nat %d",
                 getName(),
                 node.toString(),
-                parent.toString(),
+                (parent != null) ? parent.toString() : "root",
                 pos);
     }
 }

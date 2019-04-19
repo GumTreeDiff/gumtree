@@ -35,12 +35,17 @@ subprojects {
     dependencies {
         annotationProcessor 'org.atteo.classindex:classindex:3.4'
         implementation 'org.atteo.classindex:classindex:3.4'
-        testImplementation 'junit:junit:[4,5)'
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+        testImplementation 'org.hamcrest:hamcrest-library:2.1'
+
     }
 
     test {
+        useJUnitPlatform()
+
         testLogging {
             exceptionFormat = 'full'
+            events "passed", "skipped", "failed"
         }
     }
 }
@@ -84,7 +89,7 @@ def jacocoProjects = subprojects.findAll { it.name in jacocoProjectsNames }
 configure(jacocoProjects) {
     apply plugin: 'jacoco'
     jacoco {
-        toolVersion = '0.7.7.201606060606'
+        toolVersion = '0.8.3'
     }
 
     jacocoTestReport {
@@ -124,7 +129,7 @@ tasks.coveralls {
     onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
 }
 
-evaluationDependsOnChildren();
+evaluationDependsOnChildren()
 
 configure(subprojects) {
     if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)

@@ -14,13 +14,43 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2015-2017 Floréal Morandat <florealm@gmail.com>
  */
 
 package com.github.gumtreediff.tree;
 
-public interface MetricProvider<M> {
+import static com.github.gumtreediff.tree.TypeSet.type;
 
-    M get(ITree tree);
+public final class Type {
 
+    public final String name;
+
+    public static final Type NO_TYPE = type("");
+
+    private Type(String value) {
+        name = value;
+    }
+
+    public boolean isEmpty() {
+        return this == NO_TYPE;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    static class TypeFactory {
+        protected TypeFactory() {}
+
+        protected Type makeType(String name) {
+            return new Type(name);
+        }
+    }
 }
+

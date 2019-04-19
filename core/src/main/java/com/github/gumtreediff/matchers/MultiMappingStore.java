@@ -36,7 +36,7 @@ public class MultiMappingStore implements Iterable<Mapping> {
 
     public MultiMappingStore(Set<Mapping> mappings) {
         this();
-        for (Mapping m: mappings) link(m.getFirst(), m.getSecond());
+        for (Mapping m: mappings) link(m.first, m.second);
     }
 
     public MultiMappingStore() {

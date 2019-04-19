@@ -22,19 +22,17 @@ package com.github.gumtreediff.gen.c;
 
 import java.io.IOException;
 
-import org.junit.Assert;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
 import com.github.gumtreediff.tree.ITree;
 
-public class TestCGenerator {
+import static org.junit.jupiter.api.Assertions.*;
 
+public class TestCGenerator {
     @Test
     public void testSimpleSyntax() throws IOException {
         String input = "int main() { printf(\"Hello world!\"); return 0; }";
         ITree t = new CTreeGenerator().generateFrom().string(input).getRoot();
-        Assert.assertEquals(18, t.getSize());
+        assertEquals(18, t.getMetrics().size);
     }
-
 }

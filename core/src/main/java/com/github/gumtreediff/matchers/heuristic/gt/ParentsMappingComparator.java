@@ -28,10 +28,11 @@ import java.util.*;
 
 public final class ParentsMappingComparator extends AbstractMappingComparator {
 
-    public ParentsMappingComparator(List<Mapping> ambiguousMappings, MappingStore mappings, int maxTreeSize) {
+    public ParentsMappingComparator(List<Mapping> ambiguousMappings, MappingStore mappings,
+                                    int maxTreeSize) {
         super(ambiguousMappings, mappings, maxTreeSize);
         for (Mapping ambiguousMapping: ambiguousMappings)
-            similarities.put(ambiguousMapping, similarity(ambiguousMapping.getFirst(), ambiguousMapping.getSecond()));
+            similarities.put(ambiguousMapping, similarity(ambiguousMapping.first, ambiguousMapping.second));
     }
 
     @Override

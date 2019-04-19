@@ -23,6 +23,7 @@ package com.github.gumtreediff.client.diff;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Client;
 import com.github.gumtreediff.gen.Generators;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.TreeContext;
@@ -97,15 +98,13 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
     // TODO after this line it should be rewrote in a better way
     private Matcher matcher;
 
-    protected Matcher matchTrees() {
+    protected MappingStore matchTrees() {
         Matchers matchers = Matchers.getInstance();
-        if (matcher != null)
-            return matcher;
+        // FIXME here was a kind of cache ... no clue why
         matcher = (opts.matcher == null)
-                ? matchers.getMatcher(getSrcTreeContext().getRoot(), getDstTreeContext().getRoot())
-                : matchers.getMatcher(opts.matcher, getSrcTreeContext().getRoot(), getDstTreeContext().getRoot());
-        matcher.match();
-        return matcher;
+                ? matchers.getMatcher()
+                : matchers.getMatcher(opts.matcher);
+        return matcher.match(getSrcTreeContext().getRoot(), getDstTreeContext().getRoot());
     }
 
     protected TreeContext getSrcTreeContext() {

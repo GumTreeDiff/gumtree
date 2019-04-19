@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractMappingComparator implements Comparator<Mapping> {
-
     protected List<Mapping> ambiguousMappings;
 
     protected Map<Mapping, Double> similarities = new HashMap<>();
@@ -38,7 +37,8 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
 
     protected MappingStore mappings;
 
-    public AbstractMappingComparator(List<Mapping> ambiguousMappings, MappingStore mappings, int maxTreeSize) {
+    public AbstractMappingComparator(List<Mapping> ambiguousMappings,
+                                     MappingStore mappings, int maxTreeSize) {
         this.maxTreeSize = maxTreeSize;
         this.mappings = mappings;
         this.ambiguousMappings = ambiguousMappings;
@@ -49,10 +49,12 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
         if (similarities.get(m2).compareTo(similarities.get(m1)) != 0) {
             return Double.compare(similarities.get(m2), similarities.get(m1));
         }
-        if (m1.first.getId() != m2.first.getId()) {
-            return Integer.compare(m1.first.getId(), m2.first.getId());
+        int srcPos = m1.first.getMetrics().position;
+        int dstPos = m2.first.getMetrics().position;
+        if (srcPos != dstPos) {
+            return Integer.compare(srcPos, dstPos);
         }
-        return Integer.compare(m1.second.getId(), m2.second.getId());
+        return Integer.compare(m1.second.getMetrics().position, m2.second.getMetrics().position);
     }
 
     protected abstract double similarity(ITree src, ITree dst);
@@ -67,7 +69,7 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
     }
 
     protected double numberingSimilarity(ITree src, ITree dst) {
-        return 1D - ((double) Math.abs(src.getId() - dst.getId())
+        return 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position)
                 / (double) maxTreeSize);
     }
 

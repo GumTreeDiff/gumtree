@@ -31,7 +31,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import static com.github.gumtreediff.tree.SymbolSet.symbol;
+import static com.github.gumtreediff.tree.TypeSet.type;
 
 public abstract class AbstractJdtVisitor extends ASTVisitor {
 
@@ -52,11 +52,11 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
     }
 
     protected void pushFakeNode(EntityType n, int startPosition, int length) {
-        Symbol type = symbol(n.name()); // FIXME is that consistent with AbstractJDTVisitor.symbol
+        Type type = type(n.name()); // FIXME is that consistent with AbstractJDTVisitor.type
         push(type,"", startPosition, length);
     }
 
-    protected void push(Symbol type, String label, int startPosition, int length) {
+    protected void push(Type type, String label, int startPosition, int length) {
         ITree t = context.createTree(type, label);
         t.setPos(startPosition);
         t.setLength(length);
@@ -79,11 +79,11 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
         trees.pop();
     }
 
-    protected static Symbol nodeAsSymbol(ASTNode node) {
+    protected static Type nodeAsSymbol(ASTNode node) {
         return nodeAsSymbol(node.getNodeType());
     }
 
-    protected static Symbol nodeAsSymbol(int id) {
-        return symbol(ASTNode.nodeClassForType(id).getSimpleName());
+    protected static Type nodeAsSymbol(int id) {
+        return type(ASTNode.nodeClassForType(id).getSimpleName());
     }
 }

@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client.diff.web;
 
-import com.github.gumtreediff.gen.Generators;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.TreeContext;
@@ -45,9 +45,9 @@ public class DiffView implements Renderable {
     public DiffView(File fSrc, File fDst, TreeContext src, TreeContext dst) throws IOException {
         this.fSrc = fSrc;
         this.fDst = fDst;
-        Matcher matcher = Matchers.getInstance().getMatcher(src.getRoot(), dst.getRoot());
-        matcher.match();
-        diffs = new HtmlDiffs(fSrc, fDst, src, dst, matcher);
+        Matcher matcher = Matchers.getInstance().getMatcher();
+        MappingStore mappings = matcher.match(src.getRoot(), dst.getRoot());
+        diffs = new HtmlDiffs(fSrc, fDst, src, dst, mappings);
         diffs.produce();
     }
 
@@ -87,8 +87,19 @@ public class DiffView implements Renderable {
             .div(class_("col-lg-12"))
                 .div(class_("btn-toolbar pull-right"))
                     .div(class_("btn-group"))
-                        .a(class_("btn btn-default btn-xs").id("legend").href("#").add("data-toggle", "popover").add("data-html", "true").add("data-placement", "bottom").add("data-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br><span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br><span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br><span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>", false).add("data-original-title", "Legend").title("Legend").role("button")).content("Legend")
-                        .a(class_("btn btn-default btn-xs").id("shortcuts").href("#").add("data-toggle", "popover").add("data-html", "true").add("data-placement", "bottom").add("data-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom", false).add("data-original-title", "Shortcuts").title("Shortcuts").role("button")).content("Shortcuts")
+                        .a(class_("btn btn-default btn-xs").id("legend").href("#").add("data-toggle", "popover")
+                                .add("data-html", "true").add("data-placement", "bottom")
+                                .add("data-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br>"
+                                        + "<span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br>"
+                                        + "<span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br>"
+                                        + "<span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>", false)
+                                .add("data-original-title", "Legend").title("Legend").role("button")).content("Legend")
+                        .a(class_("btn btn-default btn-xs").id("shortcuts").href("#").add("data-toggle", "popover")
+                                .add("data-html", "true").add("data-placement", "bottom")
+                                .add("data-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br>"
+                                        + "<b>t</b> top<br><b>b</b> bottom", false)
+                                .add("data-original-title", "Shortcuts").title("Shortcuts").role("button"))
+                            .content("Shortcuts")
                     ._div()
                     .div(class_("btn-group"))
                         .a(class_("btn btn-default btn-xs btn-danger").href("/quit")).content("Quit")

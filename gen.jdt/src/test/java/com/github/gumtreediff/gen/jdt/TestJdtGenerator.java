@@ -24,24 +24,22 @@ import java.io.IOException;
 
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.Symbol;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.*;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import com.github.gumtreediff.tree.ITree;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestJdtGenerator {
 
-    private static final Symbol COMPILATION_UNIT = AbstractJdtVisitor.nodeAsSymbol(ASTNode.COMPILATION_UNIT);
+    private static final Type COMPILATION_UNIT = AbstractJdtVisitor.nodeAsSymbol(ASTNode.COMPILATION_UNIT);
 
     @Test
     public void testSimpleSyntax() throws IOException {
         String input = "public class Foo { public int foo; }";
         ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
-        assertEquals(10, tree.getSize());
+        assertEquals(10, tree.getMetrics().size);
     }
 
     @Test
@@ -50,7 +48,7 @@ public class TestJdtGenerator {
                 + "{ for (A f : foo) { System.out.println(f); } } }";
         ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
-        assertEquals(35, tree.getSize());
+        assertEquals(35, tree.getMetrics().size);
     }
 
     @Test
@@ -78,13 +76,15 @@ public class TestJdtGenerator {
         String input = "public class Foo { public void foo(){ new ArrayList<Object>().stream().forEach(a -> {}); } }";
         ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
-        assertEquals(28, tree.getSize());
+        assertEquals(28, tree.getMetrics().size);
     }
 
-    @Test(expected = SyntaxException.class)
+    @Test
     public void badSyntax() throws IOException {
         String input = "public clas Foo {}";
-        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        assertThrows(SyntaxException.class, () -> {
+            TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        });
     }
 
     @Test
@@ -93,46 +93,46 @@ public class TestJdtGenerator {
         String input2 = "public interface Foo {}";
         TreeContext ct1 = new JdtTreeGenerator().generateFrom().string(input1);
         TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
-        assertTrue(!ct1.getRoot().toStaticHashString().equals(ct2.getRoot().toStaticHashString()));
+        assertNotEquals(ct1.getRoot().getMetrics().hash, ct2.getRoot().getMetrics().hash);
     }
 
     @Test
     public void testInfixOperator() throws IOException {
         String input = "class Foo { int i = 3 + 3}";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toPrettyTreeString(ct));
+        System.out.println(ct.getRoot().toTreeString());
     }
 
     @Test
     public void testAssignment() throws IOException {
         String input = "class Foo { void foo() { s.foo  = 12; } }";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toPrettyTreeString(ct));
+        System.out.println(ct.getRoot().toTreeString());
     }
 
     @Test
     public void testPrefixExpression() throws IOException {
         String input = "class Foo { void foo() { ++s.i; } }";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toPrettyTreeString(ct));
+        System.out.println(ct.getRoot().toTreeString());
     }
 
     @Test
     public void testPostfixExpression() throws IOException {
         String input = "class Foo { void foo() { s.i++; } }";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toPrettyTreeString(ct));
+        System.out.println(ct.getRoot().toTreeString());
     }
 
     @Test
     public void testArrayCreation() throws IOException {
         String input1 = "class Foo { void foo() { int[][] t = new int[12][]; } }";
         TreeContext ct1 = new JdtTreeGenerator().generateFrom().string(input1);
-        System.out.println(ct1.getRoot().toPrettyTreeString(ct1));
+        System.out.println(ct1.getRoot().toTreeString());
 
         String input2 = "class Foo { void foo() { int[][] t = new int[][12]; } }";
         TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
-        System.out.println(ct2.getRoot().toPrettyTreeString(ct2));
+        System.out.println(ct2.getRoot().toTreeString());
     }
 
 }

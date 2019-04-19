@@ -21,6 +21,7 @@
 package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
 import com.github.gumtreediff.tree.ITree;
 
 public class Matchers extends Registry<String, Matcher, Register> {
@@ -39,6 +40,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
         install(CompositeMatchers.ChangeDistiller.class);
         install(CompositeMatchers.XyMatcher.class);
         install(CompositeMatchers.GumtreeTopDown.class);
+        install(LcsMatcher.class);
     }
 
     private void install(Class<? extends Matcher> clazz) {
@@ -46,16 +48,16 @@ public class Matchers extends Registry<String, Matcher, Register> {
         if (a == null)
             throw new RuntimeException("Expecting @Register annotation on " + clazz.getName());
         if (defaultMatcherFactory == null && a.defaultMatcher())
-            defaultMatcherFactory = defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class);
+            defaultMatcherFactory = defaultFactory(clazz);
         install(clazz, a);
     }
 
-    public Matcher getMatcher(String id, ITree src, ITree dst) {
-        return get(id, src, dst, new MappingStore());
+    public Matcher getMatcher(String id) {
+        return get(id);
     }
 
-    public Matcher getMatcher(ITree src, ITree dst) {
-        return defaultMatcherFactory.instantiate(new Object[]{src, dst, new MappingStore()});
+    public Matcher getMatcher() {
+        return defaultMatcherFactory.instantiate(new Object[]{});
     }
 
     protected String getName(Register annotation, Class<? extends Matcher> clazz) {
@@ -65,7 +67,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
     @Override
     protected Entry newEntry(Class<? extends Matcher> clazz, Register annotation) {
         return new Entry(annotation.id(), clazz,
-                defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class), annotation.priority()) {
+                defaultFactory(clazz), annotation.priority()) {
 
             @Override
             protected boolean handle(String key) {
