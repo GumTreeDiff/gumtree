@@ -39,9 +39,13 @@ public final class StringAlgorithms {
                 else
                     lengths[i + 1][j + 1] = Math.max(lengths[i + 1][j], lengths[i][j + 1]);
 
+        return extractIndexes(lengths, s0.length(), s1.length());
+    }
+
+    private static List<int[]> extractIndexes(int[][] lengths, int length1, int length2) {
         List<int[]> indexes = new ArrayList<>();
 
-        for (int x = s0.length(), y = s1.length(); x != 0 && y != 0; ) {
+        for (int x = length1, y = length2; x != 0 && y != 0; ) {
             if (lengths[x][y] == lengths[x - 1][y]) x--;
             else if (lengths[x][y] == lengths[x][y - 1]) y--;
             else {
@@ -65,18 +69,7 @@ public final class StringAlgorithms {
                 else
                     lengths[i + 1][j + 1] = Math.max(lengths[i + 1][j], lengths[i][j + 1]);
 
-        List<int[]> indexes = new ArrayList<>();
-
-        for (int x = s0.length(), y = s1.length(); x != 0 && y != 0; ) {
-            if (lengths[x][y] == lengths[x - 1][y]) x--;
-            else if (lengths[x][y] == lengths[x][y - 1]) y--;
-            else {
-                indexes.add(new int[] {x - 1, y - 1});
-                x--;
-                y--;
-            }
-        }
-        Collections.reverse(indexes);
+        List<int[]> indexes = extractIndexes(lengths, s0.length(), s1.length());
 
         List<int[]> fixedIndexes = new ArrayList<>();
         for (int[] index :  indexes) {
@@ -143,19 +136,7 @@ public final class StringAlgorithms {
                 else
                     lengths[i + 1][j + 1] = Math.max(lengths[i + 1][j], lengths[i][j + 1]);
 
-        List<int[]> indexes = new ArrayList<>();
-
-        for (int x = s0.size(), y = s1.size(); x != 0 && y != 0; ) {
-            if (lengths[x][y] == lengths[x - 1][y]) x--;
-            else if (lengths[x][y] == lengths[x][y - 1]) y--;
-            else {
-                indexes.add(new int[] {x - 1, y - 1});
-                x--;
-                y--;
-            }
-        }
-        Collections.reverse(indexes);
-        return indexes;
+        return extractIndexes(lengths, s0.size(), s1.size());
     }
 
 }
