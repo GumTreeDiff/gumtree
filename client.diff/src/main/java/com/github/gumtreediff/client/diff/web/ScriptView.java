@@ -58,9 +58,8 @@ public class ScriptView implements Renderable {
         this.fDst = fDst;
         src = Generators.getInstance().getTree(fSrc.getAbsolutePath());
         dst = Generators.getInstance().getTree(fDst.getAbsolutePath());
-        Matcher matcher = Matchers.getInstance().getMatcher(src.getRoot(), dst.getRoot());
-        matcher.match();
-        mappings = matcher.getMappings();
+        Matcher matcher = Matchers.getInstance().getMatcher();
+        mappings = matcher.match(src.getRoot(), dst.getRoot());
         ActionGenerator g = new ActionGenerator(mappings);
         g.generate();
         this.script = g.getActions();

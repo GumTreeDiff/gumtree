@@ -38,14 +38,13 @@ public class TestOptimizedMatchers {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        Matcher matcher = new OptimizedVersions.Rtedacdef(src, dst, new MappingStore(src, dst));
-        matcher.match();
-        assertEquals(5, matcher.getMappings().size());
-        assertTrue(matcher.getMappings().has(src, dst));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(2), dst.getChild(1)));
+        MappingStore mappings = new OptimizedVersions.Rtedacdef().match(src, dst);
+        assertEquals(5, mappings.size());
+        assertTrue(mappings.has(src, dst));
+        assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(2), dst.getChild(1)));
     }
     
     @Test
@@ -53,14 +52,13 @@ public class TestOptimizedMatchers {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        Matcher matcher = new OptimizedVersions.CdabcdefPar(src, dst, new MappingStore(src, dst));
-        matcher.match();
-        assertEquals(5, matcher.getMappings().size());
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(2), dst.getChild(1)));
-        assertTrue(matcher.getMappings().has(src.getChild(0), dst));
+        MappingStore mappings = new OptimizedVersions.CdabcdefPar().match(src, dst);
+        assertEquals(5, mappings.size());
+        assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(2), dst.getChild(1)));
+        assertTrue(mappings.has(src.getChild(0), dst));
     }
     
     @Test
@@ -68,14 +66,13 @@ public class TestOptimizedMatchers {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        Matcher matcher = new OptimizedVersions.Rtedacdef(src, dst, new MappingStore(src, dst));
-        matcher.match();
-        assertEquals(5, matcher.getMappings().size());
-        assertTrue(matcher.getMappings().has(src, dst));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0), dst.getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
-        assertTrue(matcher.getMappings().has(src.getChild(0).getChild(2), dst.getChild(1)));
+        MappingStore mappings = new OptimizedVersions.Rtedacdef().match(src, dst);
+        assertEquals(5, mappings.size());
+        assertTrue(mappings.has(src, dst));
+        assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
+        assertTrue(mappings.has(src.getChild(0).getChild(2), dst.getChild(1)));
     }
 
 }

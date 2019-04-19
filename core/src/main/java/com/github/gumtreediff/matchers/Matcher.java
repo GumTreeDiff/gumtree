@@ -24,26 +24,11 @@ import com.github.gumtreediff.tree.ITree;
 import org.atteo.classindex.IndexSubclasses;
 
 @IndexSubclasses
-public abstract class Matcher {
-    protected final ITree src;
+public interface Matcher {
 
-    protected final ITree dst;
+    MappingStore match(ITree src, ITree dst, MappingStore mappings);
 
-    protected final MappingStore mappings;
-
-    public Matcher(ITree src, ITree dst, MappingStore mappings) {
-        this.src = src;
-        this.dst = dst;
-        this.mappings = mappings;
-    }
-
-    public abstract void match();
-
-    public MappingStore getMappings() {
-        return mappings;
-    }
-
-    public boolean isMappingAllowed(ITree src, ITree dst) {
-        return src.hasSameType(dst) && mappings.areBothUnmapped(src, dst);
+    default MappingStore match(ITree src, ITree dst) {
+        return match(src, dst, new MappingStore(src, dst));
     }
 }

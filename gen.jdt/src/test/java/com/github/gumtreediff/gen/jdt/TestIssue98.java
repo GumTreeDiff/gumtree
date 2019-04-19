@@ -22,6 +22,7 @@ package com.github.gumtreediff.gen.jdt;
 
 import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
@@ -42,10 +43,9 @@ public class TestIssue98 {
 
         ITree leftTree = new JdtTreeGenerator().generateFrom().string(left).getRoot();
         ITree rightTree = new JdtTreeGenerator().generateFrom().string(right).getRoot();
-        Matcher m = Matchers.getInstance().getMatcher(leftTree, rightTree);
-        m.match();
+        MappingStore m = Matchers.getInstance().getMatcher().match(leftTree, rightTree);
 
-        ActionGenerator g = new ActionGenerator(m.getMappings());
+        ActionGenerator g = new ActionGenerator(m);
         List<Action> actions = g.generate();
 
         assertEquals(1, actions.size());

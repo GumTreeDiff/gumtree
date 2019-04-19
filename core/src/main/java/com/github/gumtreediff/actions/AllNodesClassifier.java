@@ -28,11 +28,12 @@ import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.matchers.Mapping;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.TreeContext;
 
 public class AllNodesClassifier extends TreeClassifier {
-    public AllNodesClassifier(Matcher m) {
+    public AllNodesClassifier(MappingStore m) {
         super(m);
     }
 

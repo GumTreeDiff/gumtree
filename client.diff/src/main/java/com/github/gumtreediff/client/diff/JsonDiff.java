@@ -26,6 +26,7 @@ import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.io.ActionsIoUtils;
 import com.github.gumtreediff.io.TreeIoUtils;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 
 import java.util.List;
@@ -45,12 +46,12 @@ public class JsonDiff extends AbstractDiffClient<AbstractDiffClient.Options> {
 
     @Override
     public void run() {
-        Matcher m = matchTrees();
-        ActionGenerator g = new ActionGenerator(m.getMappings());
+        MappingStore m = matchTrees();
+        ActionGenerator g = new ActionGenerator(m);
         g.generate();
         List<Action> actions = g.getActions();
         try {
-            ActionsIoUtils.toJson(getSrcTreeContext(), actions, m.getMappings()).writeTo(System.out);
+            ActionsIoUtils.toJson(getSrcTreeContext(), actions, m).writeTo(System.out);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -46,16 +46,16 @@ public class Matchers extends Registry<String, Matcher, Register> {
         if (a == null)
             throw new RuntimeException("Expecting @Register annotation on " + clazz.getName());
         if (defaultMatcherFactory == null && a.defaultMatcher())
-            defaultMatcherFactory = defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class);
+            defaultMatcherFactory = defaultFactory(clazz);
         install(clazz, a);
     }
 
-    public Matcher getMatcher(String id, ITree src, ITree dst) {
-        return get(id, src, dst, new MappingStore(src, dst));
+    public Matcher getMatcher(String id) {
+        return get(id);
     }
 
-    public Matcher getMatcher(ITree src, ITree dst) {
-        return defaultMatcherFactory.instantiate(new Object[]{src, dst, new MappingStore(src, dst)});
+    public Matcher getMatcher() {
+        return defaultMatcherFactory.instantiate(new Object[]{});
     }
 
     protected String getName(Register annotation, Class<? extends Matcher> clazz) {

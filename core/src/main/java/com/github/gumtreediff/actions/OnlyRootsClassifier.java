@@ -26,11 +26,12 @@ import java.util.Set;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.matchers.Mapping;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.TreeContext;
 
 public class OnlyRootsClassifier extends TreeClassifier {
-    public OnlyRootsClassifier(TreeContext src, TreeContext dst, Matcher m) {
+    public OnlyRootsClassifier(MappingStore m) {
         super(m);
     }
 

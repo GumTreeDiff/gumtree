@@ -75,14 +75,12 @@ public class ActionsCollector {
             Path outputPath = Paths.get(path.toString().replace("_v0_","_actions_"));
             TreeContext src = TreeIoUtils.fromXml().generateFrom().file(path.toString());
             TreeContext dst = TreeIoUtils.fromXml().generateFrom().file(otherPath.toString());
-            CompositeMatchers.ClassicGumtree matcher = new CompositeMatchers.ClassicGumtree(
-                    src.getRoot(), dst.getRoot(), new MappingStore(src.getRoot(), dst.getRoot()));
-            matcher.match();
-            ActionGenerator g = new ActionGenerator(matcher.getMappings());
+            MappingStore mappings = new CompositeMatchers.ClassicGumtree().match(src.getRoot(), dst.getRoot());
+            ActionGenerator g = new ActionGenerator(mappings);
             List<Action> actions = g.generate();
 
             String res = Paths.get(OUTPUT_DIR, outputPath.getFileName().toString()).toString();
-            ActionsIoUtils.toText(src, actions, matcher.getMappings()).writeTo(new FileWriter(res));
+            ActionsIoUtils.toText(src, actions, mappings).writeTo(new FileWriter(res));
         }
     }
 
@@ -99,13 +97,11 @@ public class ActionsCollector {
             Path otherPath = Paths.get(path.toString().replace("_v0_","_v1_"));
             TreeContext src = TreeIoUtils.fromXml().generateFrom().file(path.toString());
             TreeContext dst = TreeIoUtils.fromXml().generateFrom().file(otherPath.toString());
-            CompositeMatchers.ClassicGumtree matcher = new CompositeMatchers.ClassicGumtree(
-                    src.getRoot(), dst.getRoot(), new MappingStore(src.getRoot(), dst.getRoot()));
-            matcher.match();
-            ActionGenerator g = new ActionGenerator(matcher.getMappings());
+            MappingStore mappings = new CompositeMatchers.ClassicGumtree().match(src.getRoot(), dst.getRoot());
+            ActionGenerator g = new ActionGenerator(mappings);
             List<Action> actions = g.generate();
             StringWriter w = new StringWriter();
-            ActionsIoUtils.toText(src, actions, matcher.getMappings()).writeTo(w);
+            ActionsIoUtils.toText(src, actions, mappings).writeTo(w);
             Path refPath = Paths.get(path.toString().replace("_v0_","_actions_"));
             String ref = Paths.get(REF_DIR, refPath.getFileName().toString()).toString();
             if (!contentEquals(new StringReader(w.toString()), new FileReader(ref))) {

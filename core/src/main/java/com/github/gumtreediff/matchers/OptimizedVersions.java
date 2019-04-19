@@ -46,21 +46,18 @@ public class OptimizedVersions {
 
         /**
          * Instantiates the sequential ChangeDistiller version with Theta A-F.
-         *
-         * @param src the src
-         * @param dst the dst
-         * @param store the store
          */
-        public CdabcdefSeq(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcherThetaA(src, dst, store),
-                            new ChangeDistillerLeavesMatcher(src, dst, store),
-                            new ChangeDistillerBottomUpMatcher(src, dst, store),
-                            new LcsOptMatcherThetaB(src, dst, store),
-                            new UnmappedLeavesMatcherThetaC(src, dst, store),
-                            new InnerNodesMatcherThetaD(src, dst, store),
-                            new LeafMoveMatcherThetaE(src, dst, store),
-                            new CrossMoveMatcherThetaF(src, dst, store) });
+        public CdabcdefSeq() {
+            super(new Matcher[] {
+                    new IdenticalSubtreeMatcherThetaA(),
+                    new ChangeDistillerLeavesMatcher(),
+                    new ChangeDistillerBottomUpMatcher(),
+                    new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(),
+                    new LeafMoveMatcherThetaE(),
+                    new CrossMoveMatcherThetaF()
+            });
         }
     }
 
@@ -68,23 +65,18 @@ public class OptimizedVersions {
 
         /**
          * Instantiates the parallel ChangeDistiller version with Theta A-F.
-         *
-         * @param src the src
-         * @param dst the dst
-         * @param store the store
          */
-        public CdabcdefPar(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcherThetaA(src, dst, store),
-                            new ChangeDistillerParallelLeavesMatcher(src, dst, store),
-                            new ChangeDistillerBottomUpMatcher(src, dst, store),
-                            new LcsOptMatcherThetaB(src, dst, store),
-                            new UnmappedLeavesMatcherThetaC(src, dst, store),
-                            new InnerNodesMatcherThetaD(src, dst, store),
-                            new LeafMoveMatcherThetaE(src, dst, store),
-                            new CrossMoveMatcherThetaF(src, dst, store)
-
-                    });
+        public CdabcdefPar() {
+            super(new Matcher[] {
+                    new IdenticalSubtreeMatcherThetaA(),
+                    new ChangeDistillerParallelLeavesMatcher(),
+                    new ChangeDistillerBottomUpMatcher(),
+                    new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(),
+                    new LeafMoveMatcherThetaE(),
+                    new CrossMoveMatcherThetaF()
+            });
         }
     }
 
@@ -92,20 +84,17 @@ public class OptimizedVersions {
 
         /**
          * Instantiates GumTree with Theta B-F.
-         *
-         * @param src the src
-         * @param dst the dst
-         * @param store the store
          */
-        public Gtbcdef(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store,
-                    new Matcher[] { new GreedySubtreeMatcher(src, dst, store),
-                            new GreedyBottomUpMatcher(src, dst, store),
-                            new LcsOptMatcherThetaB(src, dst, store),
-                            new UnmappedLeavesMatcherThetaC(src, dst, store),
-                            new InnerNodesMatcherThetaD(src, dst, store),
-                            new LeafMoveMatcherThetaE(src, dst, store),
-                            new CrossMoveMatcherThetaF(src, dst, store) });
+        public Gtbcdef() {
+            super(new Matcher[] {
+                    new GreedySubtreeMatcher(),
+                    new GreedyBottomUpMatcher(),
+                    new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(),
+                    new LeafMoveMatcherThetaE(),
+                    new CrossMoveMatcherThetaF()
+            });
         }
     }
 
@@ -113,22 +102,18 @@ public class OptimizedVersions {
 
         /**
          * Instantiates RTED with Theta A-F.
-         *
-         * @param src the src
-         * @param dst the dst
-         * @param store the store
          */
-        public Rtedacdef(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcherThetaA(src, dst, store),
-                            new RtedMatcher(src, dst, store),
-                            new LcsOptMatcherThetaB(src, dst, store),
-                            new UnmappedLeavesMatcherThetaC(src, dst, store),
-                            new InnerNodesMatcherThetaD(src, dst, store),
-                            new LeafMoveMatcherThetaE(src, dst, store),
-                            new CrossMoveMatcherThetaF(src, dst, store)
+        public Rtedacdef() {
+            super(new Matcher[] {
+                    new IdenticalSubtreeMatcherThetaA(),
+                    new RtedMatcher(),
+                    new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(),
+                    new LeafMoveMatcherThetaE(),
+                    new CrossMoveMatcherThetaF()
 
-                    });
+            });
         }
     }
 

@@ -129,4 +129,7 @@ public class MappingStore implements Iterable<Mapping> {
         return b.toString();
     }
 
+    public boolean isMappingAllowed(ITree src, ITree dst) {
+        return src.hasSameType(dst) && areBothUnmapped(src, dst);
+    }
 }

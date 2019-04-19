@@ -58,21 +58,18 @@ public final class HtmlDiffs {
 
     private File fDst;
 
-    private Matcher matcher;
-
     private MappingStore mappings;
 
-    public HtmlDiffs(File fSrc, File fDst, TreeContext src, TreeContext dst, Matcher matcher) {
+    public HtmlDiffs(File fSrc, File fDst, TreeContext src, TreeContext dst, MappingStore mappings) {
         this.fSrc = fSrc;
         this.fDst = fDst;
         this.src = src;
         this.dst = dst;
-        this.matcher = matcher;
-        this.mappings = matcher.getMappings();
+        this.mappings = mappings;
     }
 
     public void produce() throws IOException {
-        TreeClassifier c = new OnlyRootsClassifier(src, dst, matcher);
+        TreeClassifier c = new OnlyRootsClassifier(mappings);
         TObjectIntMap<ITree> mappingIds = new TObjectIntHashMap<>();
 
         int uId = 1;

@@ -33,38 +33,28 @@ import com.github.gumtreediff.tree.TreeContext;
 
 public abstract class TreeClassifier {
 
-    protected Set<ITree> srcUpdTrees;
+    protected final Set<ITree> srcUpdTrees = new HashSet<>();
 
-    protected Set<ITree> dstUpdTrees;
+    protected final Set<ITree> dstUpdTrees = new HashSet<>();
 
-    protected Set<ITree> srcMvTrees;
+    protected final Set<ITree> srcMvTrees = new HashSet<>();
 
-    protected Set<ITree> dstMvTrees;
+    protected final Set<ITree> dstMvTrees = new HashSet<>();
 
-    protected Set<ITree> srcDelTrees;
+    protected final Set<ITree> srcDelTrees = new HashSet<>();
 
-    protected Set<ITree> dstAddTrees;
+    protected final Set<ITree> dstAddTrees = new HashSet<>();
 
-    protected MappingStore mappings;
+    protected final MappingStore mappings;
 
-    protected List<Action> actions;
+    protected final List<Action> actions;
 
-    public TreeClassifier(Matcher m) {
-        this(m.getMappings());
-        ActionGenerator g = new ActionGenerator(m.getMappings());
+    public TreeClassifier(MappingStore mappings) {
+        this.mappings = new MappingStore(mappings); // FIXME Why a copy ?
+        ActionGenerator g = new ActionGenerator(mappings);
         g.generate();
         this.actions = g.getActions();
         classify();
-    }
-
-    private TreeClassifier(MappingStore ms) {
-        this.mappings = new MappingStore(ms);
-        this.srcDelTrees = new HashSet<>();
-        this.srcMvTrees = new HashSet<>();
-        this.srcUpdTrees = new HashSet<>();
-        this.dstMvTrees = new HashSet<>();
-        this.dstAddTrees = new HashSet<>();
-        this.dstUpdTrees = new HashSet<>();
     }
 
     public abstract void classify();

@@ -23,6 +23,7 @@ package com.github.gumtreediff.client.diff.swing;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
 import com.github.gumtreediff.client.diff.swing.MappingsPanel;
+import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 
 import javax.swing.*;
@@ -36,13 +37,13 @@ public final class SwingDiff extends AbstractDiffClient<AbstractDiffClient.Optio
 
     @Override
     public void run() {
-        final Matcher matcher = matchTrees();
+        final MappingStore mappings = matchTrees();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 JFrame frame = new JFrame("GumTree");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.add(new MappingsPanel(opts.src, opts.dst, getSrcTreeContext(), getDstTreeContext(), matcher));
+                frame.add(new MappingsPanel(opts.src, opts.dst, getSrcTreeContext(), getDstTreeContext(), mappings));
                 frame.pack();
                 frame.setVisible(true);
             }
