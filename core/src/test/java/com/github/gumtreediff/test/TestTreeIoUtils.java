@@ -35,7 +35,6 @@ import java.io.ByteArrayOutputStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTreeIoUtils {
-
     private static final Type TYPE_0 = type("TYPE_0");
     private static final Type TYPE_1 = type("TYPE_1");
     private static final Type TYPE_2 = type("TYPE_2");
@@ -88,6 +87,14 @@ public class TestTreeIoUtils {
         System.out.println(a.toTreeString());
         System.out.println("-----------------");
         System.out.println(b.toTreeString());
+    }
+
+    @Test
+    public void testDotFormatter() {
+        TreeContext context = new TreeContext();
+        ITree big = TreeLoader.getDummyBig();
+        context.setRoot(big);
+        System.out.println(TreeIoUtils.toDot(context));
     }
 
     @Test

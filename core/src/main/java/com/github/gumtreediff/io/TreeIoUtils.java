@@ -40,14 +40,16 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
 
 public final class TreeIoUtils {
-
     private TreeIoUtils() {
     } // Forbids instantiation of TreeIOUtils
 
@@ -575,6 +577,10 @@ public final class TreeIoUtils {
     static class DotFormatter extends TreeFormatterAdapter {
         protected final Writer writer;
 
+        private static AtomicLong idCounter = new AtomicLong();
+
+        private Map<ITree, String> idForTrees = new HashMap<>();
+
         protected DotFormatter(Writer w, TreeContext ctx) {
             super(ctx);
             writer = w;
@@ -587,6 +593,18 @@ public final class TreeIoUtils {
 
         @Override
         public void startTree(ITree tree) throws Exception {
+            String label = getCleanLabel(tree);
+            writer.write(String.format("\t%s [label=\"%s\"];\n", id(tree), label));
+            if (tree.getParent() != null)
+                writer.write(String.format("\t%s -> %s;\n", id(tree.getParent()), id(tree)));
+        }
+
+        @Override
+        public void stopSerialization() throws Exception {
+            writer.write("}");
+        }
+
+        private String getCleanLabel(ITree tree) {
             String label = tree.toString();
             if (label.contains("\"") || label.contains("\\s"))
                 label = label
@@ -595,15 +613,21 @@ public final class TreeIoUtils {
                         .replaceAll("\\\\", "");
             if (label.length() > 30)
                 label = label.substring(0, 30);
-            writer.write(tree.hashCode() + " [label=\"" + label + "\"];\n"); // TODO use UUID instead of hashCode
-
-            if (tree.getParent() != null)
-                writer.write(tree.getParent().hashCode() + " -> " + tree.hashCode() + ";\n"); // TODO use UUID
+            return label;
         }
 
-        @Override
-        public void stopSerialization() throws Exception {
-            writer.write("}");
+        private String id(ITree t) {
+            if (idForTrees.containsKey(t))
+                return idForTrees.get(t);
+            else {
+                String id = generateId();
+                idForTrees.put(t, id);
+                return id;
+            }
+        }
+
+        private static String generateId() {
+            return "id_" + String.valueOf(idCounter.getAndIncrement());
         }
     }
 
