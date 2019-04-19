@@ -48,11 +48,6 @@ public class FakeTree extends AbstractTree {
     }
 
     @Override
-    public List<ITree> getChildren() {
-        return children;
-    }
-
-    @Override
     public String getLabel() {
         return NO_LABEL;
     }

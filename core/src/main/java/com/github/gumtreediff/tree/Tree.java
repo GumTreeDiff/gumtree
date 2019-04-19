@@ -67,28 +67,11 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public void addChild(ITree t) {
-        children.add(t);
-        t.setParent(this);
-    }
-
-    @Override
-    public void insertChild(ITree t, int position) {
-        children.add(position, t);
-        t.setParent(this);
-    }
-
-    @Override
     public Tree deepCopy() {
         Tree copy = new Tree(this);
         for (ITree child : getChildren())
             copy.addChild(child.deepCopy());
         return copy;
-    }
-
-    @Override
-    public List<ITree> getChildren() {
-        return children;
     }
 
     @Override
@@ -112,13 +95,6 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public void setChildren(List<ITree> children) {
-        this.children = children;
-        for (ITree c : children)
-            c.setParent(this);
-    }
-
-    @Override
     public void setLabel(String label) {
         this.label = label;
     }
@@ -126,15 +102,6 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public void setLength(int length) {
         this.length = length;
-    }
-
-    @Override
-    public void setParentAndUpdateChildren(ITree parent) {
-        if (this.parent != null)
-            this.parent.getChildren().remove(this);
-        this.parent = parent;
-        if (this.parent != null)
-            parent.getChildren().add(this);
     }
 
     @Override

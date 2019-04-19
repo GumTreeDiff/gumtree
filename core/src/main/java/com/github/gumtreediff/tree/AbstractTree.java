@@ -33,16 +33,6 @@ public abstract class AbstractTree implements ITree {
     protected TreeMetrics metrics;
 
     @Override
-    public ITree getParent() {
-        return parent;
-    }
-
-    @Override
-    public void setParent(ITree parent) {
-        this.parent = parent;
-    }
-
-    @Override
     public String toString() {
         if (hasLabel())
             return String.format("%s: %s [%d,%d]",
@@ -55,6 +45,49 @@ public abstract class AbstractTree implements ITree {
     @Override
     public String toTreeString() {
         return TreeIoUtils.toShortText(this).toString();
+    }
+
+    @Override
+    public ITree getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(ITree parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public void setParentAndUpdateChildren(ITree parent) {
+        if (this.parent != null)
+            this.parent.getChildren().remove(this);
+        this.parent = parent;
+        if (this.parent != null)
+            parent.getChildren().add(this);
+    }
+
+    @Override
+    public List<ITree> getChildren() {
+        return children;
+    }
+
+    @Override
+    public void setChildren(List<ITree> children) {
+        this.children = children;
+        for (ITree c : children)
+            c.setParent(this);
+    }
+
+    @Override
+    public void addChild(ITree t) {
+        children.add(t);
+        t.setParent(this);
+    }
+
+    @Override
+    public void insertChild(ITree t, int position) {
+        children.add(position, t);
+        t.setParent(this);
     }
 
     public TreeMetrics getMetrics() {
