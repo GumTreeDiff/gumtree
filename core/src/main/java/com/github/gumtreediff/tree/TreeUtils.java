@@ -72,7 +72,7 @@ public final class TreeUtils {
             Deque<Iterator<ITree>> fifo = new ArrayDeque<>();
 
             {
-                addLasts(new AbstractTree.FakeTree(tree));
+                addLasts(new FakeTree(tree));
             }
 
             @Override
@@ -170,7 +170,7 @@ public final class TreeUtils {
         return new Iterator<ITree>() {
             Deque<Iterator<ITree>> stack = new ArrayDeque<>();
             {
-                push(new AbstractTree.FakeTree(tree));
+                push(new FakeTree(tree));
             }
 
             @Override

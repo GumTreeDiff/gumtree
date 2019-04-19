@@ -55,7 +55,7 @@ public class TreeContext {
     }
 
     public ITree createTree(ITree... trees) {
-        return new AbstractTree.FakeTree(trees);
+        return new FakeTree(trees);
     }
 
     /**

@@ -23,7 +23,7 @@ package com.github.gumtreediff.actions;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.AbstractTree;
+import com.github.gumtreediff.tree.FakeTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 
@@ -78,8 +78,8 @@ public class ActionGenerator {
     }
 
     public List<Action> generate() {
-        ITree srcFakeRoot = new AbstractTree.FakeTree(cpySrc);
-        ITree dstFakeRoot = new AbstractTree.FakeTree(origDst);
+        ITree srcFakeRoot = new FakeTree(cpySrc);
+        ITree dstFakeRoot = new FakeTree(origDst);
         cpySrc.setParent(srcFakeRoot);
         origDst.setParent(dstFakeRoot);
 
@@ -98,7 +98,7 @@ public class ActionGenerator {
             if (!cpyMappings.isDstMapped(x)) {
                 int k = findPos(x);
                 // Insertion case : insert new node.
-                w = new AbstractTree.FakeTree();
+                w = new FakeTree();
                 // In order to use the real nodes from the second tree, we
                 // furnish x instead of w
                 Action ins = new Insert(x, copyToOrig.get(z), k);
