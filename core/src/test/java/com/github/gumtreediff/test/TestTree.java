@@ -23,7 +23,6 @@ package com.github.gumtreediff.test;
 import java.util.Iterator;
 import java.util.List;
 
-import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.*;
 import org.junit.jupiter.api.Test;
 
@@ -105,6 +104,7 @@ public class TestTree {
             ITree t = rootIt.next();
             assertNotEquals(t, cpy);
         }
+        
         ITree rootWithFake = new Tree(TypeSet.type("foo"));
         ITree fakeChild = new FakeTree();
         rootWithFake.addChild(fakeChild);
