@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.test;
 
+import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
 import static com.github.gumtreediff.tree.TypeSet.type;
@@ -27,6 +28,8 @@ import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -65,6 +68,20 @@ public class TestTreeIoUtils {
         assertTrue(a.isIsomorphicTo(ca));
         assertTrue(ca.getType() == TYPE_0);
         assertTrue(ca.getLabel().equals("a"));
+    }
+
+    @Test
+    public void testLineReader() throws IOException {
+        LineReader lr = new LineReader(new StringReader("foo\nbar\nbaz\n"));
+        int intValueOfChar;
+        String targetString = "";
+        while ((intValueOfChar = lr.read()) != -1) {
+            targetString += (char) intValueOfChar;
+        }
+        lr.close();
+        assertEquals(3, lr.positionFor(2, 1));
+        assertEquals(7, lr.positionFor(3, 1));
+        assertEquals(-1, lr.positionFor(5, 1));
     }
 
     @Test

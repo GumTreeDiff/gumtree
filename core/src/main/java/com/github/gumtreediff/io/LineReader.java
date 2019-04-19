@@ -49,6 +49,9 @@ public class LineReader extends Reader {
 
     // Line and column starts at 1
     public int positionFor(int line, int column) {
+        if (lines.size() < line)
+            return -1;
+
         return lines.get(line - 1) + column - 1;
     }
 
