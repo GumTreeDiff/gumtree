@@ -65,7 +65,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
     @Override
     protected Entry newEntry(Class<? extends Matcher> clazz, Register annotation) {
         return new Entry(annotation.id(), clazz,
-                defaultFactory(clazz, ITree.class, ITree.class, MappingStore.class), annotation.priority()) {
+                defaultFactory(clazz), annotation.priority()) {
 
             @Override
             protected boolean handle(String key) {
