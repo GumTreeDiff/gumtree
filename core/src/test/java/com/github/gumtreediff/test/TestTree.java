@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.test;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.github.gumtreediff.gen.SyntaxException;
@@ -97,15 +98,20 @@ public class TestTree {
     @Test
     public void testDeepCopy() {
         ITree root = TreeLoader.getDummySrc();
-        ITree croot = root.deepCopy();
-        assertTrue(root.isIsomorphicTo(croot));
-        assertNotEquals(root, croot);
-        ITree t1 = new Tree(TypeSet.type("foo"));
+        ITree rootCpy = root.deepCopy();
+        assertTrue(root.isIsomorphicTo(rootCpy));
+        Iterator<ITree> rootIt = TreeUtils.preOrderIterator(root);
+        for (ITree cpy : rootCpy.preOrder()) {
+            ITree t = rootIt.next();
+            assertNotEquals(t, cpy);
+        }
+        ITree rootWithFake = new Tree(TypeSet.type("foo"));
         ITree fakeChild = new FakeTree();
-        t1.addChild(fakeChild);
-        assertThrows(UnsupportedOperationException.class, () -> {
-            t1.deepCopy();
-        });
+        rootWithFake.addChild(fakeChild);
+        ITree rootWithFakeCpy = rootWithFake.deepCopy();
+        assertTrue(rootWithFakeCpy.isIsomorphicTo(rootWithFake));
+        assertNotEquals(rootWithFake, rootWithFakeCpy);
+        assertNotEquals(rootWithFake.getChild(0), rootWithFakeCpy.getChild(0));
     }
 
     @Test

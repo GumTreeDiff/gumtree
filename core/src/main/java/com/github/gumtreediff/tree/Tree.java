@@ -67,8 +67,8 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public Tree deepCopy() {
-        Tree copy = new Tree(this);
+    public ITree deepCopy() {
+        ITree copy = new Tree(this);
         for (ITree child : getChildren())
             copy.addChild(child.deepCopy());
         return copy;

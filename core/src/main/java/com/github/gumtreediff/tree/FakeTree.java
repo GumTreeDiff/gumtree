@@ -34,7 +34,10 @@ public class FakeTree extends AbstractTree {
 
     @Override
     public ITree deepCopy() {
-        throw unsupportedOperation();
+        ITree copy = new FakeTree();
+        for (ITree child : getChildren())
+            copy.addChild(child.deepCopy());
+        return copy;
     }
 
     @Override
