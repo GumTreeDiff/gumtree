@@ -113,12 +113,14 @@ public class TestTree {
         ITree root = TreeLoader.getDummySrc();
         ITree rootCpy = TreeLoader.getDummySrc();
         assertTrue(root.isIsomorphicTo(rootCpy));
-        rootCpy.getChild(0).getChild(0).setLabel("foo");
+        rootCpy.getChild("0.0").setLabel("foo");
         assertFalse(root.isIsomorphicTo(rootCpy));
-        root.getChild(0).getChild(0).setLabel("foo");
+        root.getChild("0.0").setLabel("foo");
         assertTrue(root.isIsomorphicTo(rootCpy));
-        rootCpy.addChild(new Tree(TypeSet.type("foo"), "toto"));
+        root.addChild(new FakeTree());
         assertFalse(root.isIsomorphicTo(rootCpy));
+        rootCpy.addChild(new FakeTree());
+        assertTrue(root.isIsomorphicTo(rootCpy));
     }
 
     @Test
