@@ -36,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestActionGenerator {
-
     @Test
     public void testWithActionExample() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
@@ -168,5 +167,4 @@ public class TestActionGenerator {
         ag.generate();
         List<Action> actions = ag.getActions();
     }
-
 }

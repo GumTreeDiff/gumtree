@@ -30,7 +30,6 @@ import com.github.gumtreediff.tree.TreeUtils;
 import java.util.*;
 
 public class ActionGenerator {
-
     private ITree origSrc;
 
     private ITree cpySrc;
@@ -105,8 +104,7 @@ public class ActionGenerator {
                 actions.add(ins);
                 copyToOrig.put(w, x);
                 cpyMappings.addMapping(w, x);
-                z.getChildren().add(k, w);
-                w.setParent(z);
+                z.insertChild(w, k);
             } else {
                 w = cpyMappings.getSrcForDst(x);
                 if (!x.equals(origDst)) { // TODO => x != origDst // Case of the root
@@ -120,9 +118,8 @@ public class ActionGenerator {
                         Action mv = new Move(copyToOrig.get(w), copyToOrig.get(z), k);
                         actions.add(mv);
                         int oldk = w.positionInParent();
-                        z.getChildren().add(k, w);
                         w.getParent().getChildren().remove(oldk);
-                        w.setParent(z);
+                        z.insertChild(w, k);
                     }
                 }
             }
@@ -132,12 +129,9 @@ public class ActionGenerator {
             alignChildren(w, x);
         }
 
-        for (ITree w : cpySrc.postOrder()) {
-            if (!cpyMappings.isSrcMapped(w)) {
+        for (ITree w : cpySrc.postOrder())
+            if (!cpyMappings.isSrcMapped(w))
                 actions.add(new Delete(copyToOrig.get(w)));
-            }
-        }
-
 
         if (REMOVE_MOVES_AND_UPDATES)
             actions = removeMovesAndUpdates();
@@ -319,5 +313,4 @@ public class ActionGenerator {
 
         return lcs;
     }
-
 }

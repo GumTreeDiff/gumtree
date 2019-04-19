@@ -33,16 +33,6 @@ public class FakeTree extends AbstractTree {
     }
 
     @Override
-    public void addChild(ITree t) {
-        throw unsupportedOperation();
-    }
-
-    @Override
-    public void insertChild(ITree t, int position) {
-        throw unsupportedOperation();
-    }
-
-    @Override
     public ITree deepCopy() {
         throw unsupportedOperation();
     }
@@ -73,22 +63,12 @@ public class FakeTree extends AbstractTree {
     }
 
     @Override
-    public void setChildren(List<ITree> children) {
-        throw unsupportedOperation();
-    }
-
-    @Override
     public void setLabel(String label) {
         throw unsupportedOperation();
     }
 
     @Override
     public void setLength(int length) {
-        throw unsupportedOperation();
-    }
-
-    @Override
-    public void setParentAndUpdateChildren(ITree parent) {
         throw unsupportedOperation();
     }
 
