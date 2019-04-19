@@ -102,11 +102,6 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     @Override
-    public ITree getParent() {
-        return parent;
-    }
-
-    @Override
     public int getPos() {
         return pos;
     }
@@ -131,11 +126,6 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public void setLength(int length) {
         this.length = length;
-    }
-
-    @Override
-    public void setParent(ITree parent) {
-        this.parent = parent;
     }
 
     @Override
