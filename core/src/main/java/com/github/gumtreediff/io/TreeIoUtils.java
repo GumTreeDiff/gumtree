@@ -36,6 +36,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
@@ -170,7 +171,7 @@ public final class TreeIoUtils {
         public void writeTo(OutputStream writer) throws Exception {
             // FIXME Since the stream is already open, we should not close it, however due to semantic issue
             // it should stay like this
-            try (OutputStreamWriter os = new OutputStreamWriter(writer, "UTF-8")) {
+            try (OutputStreamWriter os = new OutputStreamWriter(writer, StandardCharsets.UTF_8)) {
                 writeTo(os);
             }
         }

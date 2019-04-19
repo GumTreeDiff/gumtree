@@ -21,6 +21,7 @@ package com.github.gumtreediff.gen;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public abstract class ExternalProcessTreeGenerator extends TreeGenerator {
@@ -31,7 +32,8 @@ public abstract class ExternalProcessTreeGenerator extends TreeGenerator {
         ProcessBuilder b = new ProcessBuilder(getCommandLine(f.getAbsolutePath()));
         b.directory(f.getParentFile());
         Process p = b.start();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"));) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder buf = new StringBuilder();
             String line = null;
             while ((line = br.readLine()) != null)
@@ -52,11 +54,10 @@ public abstract class ExternalProcessTreeGenerator extends TreeGenerator {
     private File dumpReaderInTempFile(Reader r) throws IOException {
         File f = File.createTempFile("gumtree", "");
         try (
-                Writer w = Files.newBufferedWriter(f.toPath(), Charset.forName("UTF-8"));
+                Writer w = Files.newBufferedWriter(f.toPath(), Charset.forName("UTF-8"))
         ) {
             char[] buf = new char[8192];
-            while (true)
-            {
+            while (true) {
                 int length = r.read(buf);
                 if (length < 0)
                     break;

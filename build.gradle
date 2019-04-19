@@ -129,7 +129,7 @@ tasks.coveralls {
     onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
 }
 
-evaluationDependsOnChildren();
+evaluationDependsOnChildren()
 
 configure(subprojects) {
     if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)

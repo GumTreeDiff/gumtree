@@ -94,7 +94,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         else if (n instanceof CharacterLiteral)
             return ((CharacterLiteral) n).getEscapedValue();
         else if (n instanceof BooleanLiteral)
-            return ((BooleanLiteral) n).toString();
+            return n.toString();
         else if (n instanceof TextElement)
             return n.toString();
         else

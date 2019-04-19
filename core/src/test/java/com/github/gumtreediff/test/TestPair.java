@@ -28,9 +28,9 @@ public class TestPair {
 
     @Test
     public void testEquals() {
-        Pair<String, String> p1 = new Pair<>(new String("a"), new String("b"));
-        Pair<String, String> p2 = new Pair<>(new String("a"), new String("b"));
-        Pair<String, String> p3 = new Pair<>(new String("b"), new String("a"));
+        Pair<String, String> p1 = new Pair<>("a", "b");
+        Pair<String, String> p2 = new Pair<>("a", "b");
+        Pair<String, String> p3 = new Pair<>("b", "a");
         assertTrue(p1.equals(p2));
         assertTrue(!p1.equals(p3));
     }

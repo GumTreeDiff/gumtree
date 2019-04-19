@@ -50,7 +50,7 @@ public class ClusterDiff extends AbstractDiffClient<AbstractDiffClient.Options> 
             System.out.println("------------");
             for (Action a: cluster)
                 System.out.println(a.toString());
-            System.out.println("");
+            System.out.println();
         }
     }
 

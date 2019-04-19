@@ -199,10 +199,7 @@ public class LcsOptMatcherThetaB implements Matcher {
             if (mappings.isSrcMapped(node1) && mappings.getDstForSrc(node1) == node2) {
                 return true;
             }
-            if (unmatchedNodes1.contains(node1) && unmatchedNodes2.contains(node2)) {
-                return true;
-            }
-            return false;
+            return unmatchedNodes1.contains(node1) && unmatchedNodes2.contains(node2);
         }
     }
 }

@@ -112,7 +112,7 @@ public class Run {
     public static void displayHelp(PrintStream out, Option.Context ctx) {
         out.println("Available Options:");
         Option.displayOptions(out, ctx);
-        out.println("");
+        out.println();
         listCommand(out);
     }
 
