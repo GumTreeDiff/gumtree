@@ -39,12 +39,7 @@ public interface ITree {
      *
      */
     default Iterable<ITree> preOrder() {
-        return new Iterable<ITree>() {
-            @Override
-            public Iterator<ITree> iterator() {
-                return TreeUtils.preOrderIterator(ITree.this);
-            }
-        };
+        return () -> TreeUtils.preOrderIterator(ITree.this);
     }
 
     /**
@@ -52,12 +47,7 @@ public interface ITree {
      *
      */
     default Iterable<ITree> postOrder() {
-        return new Iterable<ITree>() {
-            @Override
-            public Iterator<ITree> iterator() {
-                return TreeUtils.postOrderIterator(ITree.this);
-            }
-        };
+        return () -> TreeUtils.postOrderIterator(ITree.this);
     }
 
     /**
@@ -65,16 +55,11 @@ public interface ITree {
      *
      */
     default Iterable<ITree> breadthFirst() {
-        return new Iterable<ITree>() {
-            @Override
-            public Iterator<ITree> iterator() {
-                return TreeUtils.breadthFirstIterator(ITree.this);
-            }
-        };
+        return () -> TreeUtils.breadthFirstIterator(ITree.this);
     }
 
     /**
-     * Add the given tree as a child, and update its parent.
+     * Add the given tree as a child, at the last position and update its parent.
      */
     void addChild(ITree t);
 
@@ -124,7 +109,6 @@ public interface ITree {
     /**
      * Returns a list containing the node's children. If the node has no children, the list is empty.
      * @see #isLeaf()
-     * @return
      */
     List<ITree> getChildren();
 
@@ -160,7 +144,6 @@ public interface ITree {
 
     /**
      * Returns a boolean indicating if the tree has a parent or not, and therefore is the root.
-     * @return
      */
     default boolean isRoot() {
         return getParent() == null;
@@ -169,7 +152,6 @@ public interface ITree {
     /**
      * Returns the parent node of the node. If the node is a root, the method returns null.
      * @see #isRoot()
-     * @return
      */
     ITree getParent();
 
@@ -200,13 +182,11 @@ public interface ITree {
 
     /**
      * Make a deep copy of the tree. Deep copy of node however shares Metadata
-     * @return
      */
     ITree deepCopy();
 
     /**
      * Indicates whether the node has a label or not.
-     * @return
      */
     default boolean hasLabel() {
         return !NO_LABEL.equals(getLabel());
@@ -215,7 +195,6 @@ public interface ITree {
     /**
      * Returns the label of the node. If the node has no label, an empty string is returned.
      * @see #hasLabel()
-     * @return
      */
     String getLabel();
 
@@ -226,7 +205,6 @@ public interface ITree {
 
     /**
      * Returns the absolute character beginning position of the node in its defining stream.
-     * @return
      */
     int getPos();
 
@@ -238,13 +216,11 @@ public interface ITree {
 
     /**
      * Returns the number of character corresponding to the node in its defining stream.
-     * @return
      */
     int getLength();
 
     /**
      * Sets the number of character corresponding to the node in its defining stream.
-     * @return
      */
     void setLength(int length);
 
@@ -257,7 +233,6 @@ public interface ITree {
 
     /**
      * Returns the type (i.e. IfStatement).
-     * @return
      */
     Type getType();
 
@@ -275,7 +250,7 @@ public interface ITree {
     }
 
     /**
-     * Indicate whether or not the tree is similar to the given tree.
+     * Indicates whether or not the tree is similar to the given tree.
      * @return true if they are compatible and have same label, false either
      */
     default boolean hasSameTypeAndLabel(ITree t) {
@@ -283,7 +258,7 @@ public interface ITree {
     }
 
     /**
-     * Indicllates whether or not this node and its descendants are isomorphic to the node
+     * Indicates whether or not this node and its descendants are isomorphic to the node
      * given in parameter and its descendants (which must not be null).
      * This test fails fast.
      */
@@ -305,7 +280,6 @@ public interface ITree {
 
     /**
      * Returns a string description of the node as well as its descendants.
-     * @return
      */
     String toTreeString();
 
@@ -323,19 +297,16 @@ public interface ITree {
 
     /**
      * Returns the metadata with the given key for this node.
-     * @return
      */
     Object getMetadata(String key);
 
     /**
      * Set the metadata with the given key and value for this node.
-     * @return
      */
     Object setMetadata(String key, Object value);
 
     /**
      * Returns an iterator for all metadata of this node.
-     * @return
      */
     Iterator<Entry<String, Object>> getMetadata();
 }
