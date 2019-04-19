@@ -27,7 +27,6 @@ import java.util.List;
 import com.github.gumtreediff.tree.ITree;
 
 public final class StringAlgorithms {
-
     private StringAlgorithms() {}
 
     public static List<int[]> lcss(String s0, String s1) {
@@ -58,30 +57,10 @@ public final class StringAlgorithms {
         return indexes;
     }
 
-    public static List<int[]> longestCommonSubsequenceWithWords(String s0, String s1) {
-        String[] srcWords = s0.split("\\s+");
-        String[] dstWords = s1.split("\\s+");
-        int[][] lengths = new int[srcWords.length + 1][dstWords.length + 1];
-        for (int i = 0; i < srcWords.length; i++)
-            for (int j = 0; j < dstWords.length; j++)
-                if (srcWords[i].equals(dstWords[j]))
-                    lengths[i + 1][j + 1] = lengths[i][j] + 1;
-                else
-                    lengths[i + 1][j + 1] = Math.max(lengths[i + 1][j], lengths[i][j + 1]);
-
-        List<int[]> indexes = extractIndexes(lengths, s0.length(), s1.length());
-
-        List<int[]> fixedIndexes = new ArrayList<>();
-        for (int[] index :  indexes) {
-            int curPos = 0;
-            String w = srcWords[index[0]];
-            fixedIndexes.add(new int[] { s0.indexOf(w, curPos), s1.indexOf(curPos) });
-            curPos += w.length();
-        }
-
-        return fixedIndexes;
-    }
-
+    /**
+     * Returns the hunks of the longest common subsequence between s1 and s2.
+     * @return the hunks as a list of int arrays of size 4
+     */
     public static List<int[]> hunks(String s0, String s1) {
         List<int[]> lcs = lcss(s0 ,s1);
         List<int[]> hunks = new ArrayList<int[]>();
@@ -138,5 +117,4 @@ public final class StringAlgorithms {
 
         return extractIndexes(lengths, s0.size(), s1.size());
     }
-
 }
