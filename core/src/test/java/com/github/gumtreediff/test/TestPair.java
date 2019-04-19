@@ -22,17 +22,29 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.utils.Pair;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPair {
-
     @Test
     public void testEquals() {
         Pair<String, String> p1 = new Pair<>("a", "b");
         Pair<String, String> p2 = new Pair<>("a", "b");
         Pair<String, String> p3 = new Pair<>("b", "a");
-        assertTrue(p1.equals(p2));
-        assertTrue(!p1.equals(p3));
+        assertEquals(p1, p1);
+        assertEquals(p1, p2);
+        assertNotEquals(p1, p3);
+        Pair<String, String> p4 = new Pair<>("a", "c");
+        assertNotEquals(p1, p4);
+        assertNotEquals(p1, null);
+        assertNotEquals(p1, "foo");
     }
 
+    @Test
+    public void testToString() {
+        Pair<String, String> p1 = new Pair<>("a", "b");
+        Pair<String, String> p3 = new Pair<>("b", "a");
+        assertEquals("a -> b", p1.toString());
+        assertEquals("b -> a", p3.toString());
+    }
 }
