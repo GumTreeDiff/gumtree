@@ -29,10 +29,9 @@ import com.github.gumtreediff.tree.ITree;
 import java.util.*;
 
 public class GreedySubtreeMatcher extends AbstractSubtreeMatcher implements Matcher {
-
     @Override
     public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        CliqueSubtreeMatcher.Implementation impl =  new CliqueSubtreeMatcher.Implementation(src, dst, mappings);
+        GreedySubtreeMatcher.Implementation impl =  new GreedySubtreeMatcher.Implementation(src, dst, mappings);
         impl.match();
         return impl.mappings;
     }

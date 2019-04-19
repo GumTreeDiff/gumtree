@@ -20,10 +20,7 @@
 
 package com.github.gumtreediff.test;
 
-import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.utils.Pair;
@@ -31,9 +28,7 @@ import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-//TODO check and improve this test
 public class TestGumtreeMatcher {
-
     @Test
     public void testMinHeightThreshold() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();
@@ -57,23 +52,7 @@ public class TestGumtreeMatcher {
     }
 
     @Test
-    public void testSizeThreshold() {
-        Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();
-
-        {
-            GreedySubtreeMatcher.MIN_HEIGHT = 0;
-            AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
-            MappingStore mappings = new CompositeMatchers.ClassicGumtree()
-                    .match(trees.first.getRoot(), trees.second.getRoot());
-            assertEquals(4, mappings.size());
-        }
-        {
-            GreedySubtreeMatcher.MIN_HEIGHT = 0;
-            AbstractBottomUpMatcher.SIZE_THRESHOLD = 8;
-            MappingStore mappings = new CompositeMatchers.ClassicGumtree()
-                    .match(trees.first.getRoot(), trees.second.getRoot());
-            assertEquals(4, mappings.size());
-        }
+    public void testSimThreshold() {
+        //TODO needs a better test case.
     }
-
 }

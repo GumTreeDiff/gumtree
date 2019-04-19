@@ -29,10 +29,9 @@ import com.github.gumtreediff.tree.ITree;
 import java.util.*;
 
 public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements Matcher {
-
     @Override
     public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        CliqueSubtreeMatcher.Implementation impl =  new CliqueSubtreeMatcher.Implementation(src, dst, mappings);
+        HungarianSubtreeMatcher.Implementation impl =  new HungarianSubtreeMatcher.Implementation(src, dst, mappings);
         impl.match();
         return impl.mappings;
     }
@@ -103,7 +102,6 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
                 }
                 return impact;
             }
-
         }
     }
 }

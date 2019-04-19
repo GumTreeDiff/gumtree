@@ -35,10 +35,9 @@ import java.util.stream.Collectors;
  * a exact ZS algorithm is applied to look to possibly forgotten nodes.
  */
 public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher implements Matcher {
-
     @Override
     public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        CliqueSubtreeMatcher.Implementation impl =  new CliqueSubtreeMatcher.Implementation(src, dst, mappings);
+        CompleteBottomUpMatcher.Implementation impl =  new CompleteBottomUpMatcher.Implementation(src, dst, mappings);
         impl.match();
         return impl.mappings;
     }

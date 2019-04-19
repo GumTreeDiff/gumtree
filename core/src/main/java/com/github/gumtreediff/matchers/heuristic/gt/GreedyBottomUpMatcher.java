@@ -34,10 +34,9 @@ import java.util.List;
  * a exact ZS algorithm is applied to look to possibly forgotten nodes.
  */
 public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher implements Matcher {
-
     @Override
     public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        CliqueSubtreeMatcher.Implementation impl =  new CliqueSubtreeMatcher.Implementation(src, dst, mappings);
+        GreedyBottomUpMatcher.Implementation impl =  new GreedyBottomUpMatcher.Implementation(src, dst, mappings);
         impl.match();
         return impl.mappings;
     }
@@ -59,7 +58,7 @@ public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher implements Ma
                     double max = -1D;
 
                     for (ITree cand : candidates) {
-                        double sim = SimilarityMetrics.jaccardSimilarity(t, cand, mappings);
+                        double sim = SimilarityMetrics.diceSimilarity(t, cand, mappings);
                         if (sim > max && sim >= SIM_THRESHOLD) {
                             max = sim;
                             best = cand;

@@ -34,7 +34,7 @@ import java.util.Set;
 public abstract class AbstractBottomUpMatcher {
     public static int SIZE_THRESHOLD =
             Integer.parseInt(System.getProperty("gt.bum.szt", "1000"));
-    public static final double SIM_THRESHOLD =
+    public static double SIM_THRESHOLD =
             Double.parseDouble(System.getProperty("gt.bum.smt", "0.5"));
 
     protected abstract static class Implementation {
@@ -74,8 +74,10 @@ public abstract class AbstractBottomUpMatcher {
         protected void lastChanceMatch(ITree src, ITree dst) {
             if (src.getMetrics().size < AbstractBottomUpMatcher.SIZE_THRESHOLD
                     || dst.getMetrics().size < AbstractBottomUpMatcher.SIZE_THRESHOLD) {
+                System.out.println("too");
                 Matcher m = new ZsMatcher();
                 MappingStore zsMappings = m.match(src, dst, new MappingStore(src, dst));
+                System.out.println(zsMappings);
                 for (Mapping candidate : zsMappings) {
                     ITree srcCand = candidate.first;
                     ITree dstCand = candidate.second;
