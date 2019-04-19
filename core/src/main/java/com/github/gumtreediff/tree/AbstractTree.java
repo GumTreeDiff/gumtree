@@ -23,7 +23,6 @@ package com.github.gumtreediff.tree;
 import com.github.gumtreediff.io.TreeIoUtils;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 public abstract class AbstractTree implements ITree {
     protected ITree parent;
