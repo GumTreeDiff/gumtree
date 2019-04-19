@@ -23,12 +23,8 @@ package com.github.gumtreediff.test;
 import java.util.List;
 
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.tree.TreeContext;
-import com.github.gumtreediff.tree.TypeSet;
-import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.*;
 import org.junit.jupiter.api.Test;
-
-import com.github.gumtreediff.tree.ITree;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -104,6 +100,12 @@ public class TestTree {
         ITree croot = root.deepCopy();
         assertTrue(root.isIsomorphicTo(croot));
         assertNotEquals(root, croot);
+        ITree t1 = new Tree(TypeSet.type("foo"));
+        ITree fakeChild = new FakeTree();
+        t1.addChild(fakeChild);
+        assertThrows(UnsupportedOperationException.class, () -> {
+            t1.deepCopy();
+        });
     }
 
     @Test
