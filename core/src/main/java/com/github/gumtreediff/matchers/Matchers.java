@@ -21,6 +21,7 @@
 package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
 import com.github.gumtreediff.tree.ITree;
 
 public class Matchers extends Registry<String, Matcher, Register> {
@@ -39,6 +40,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
         install(CompositeMatchers.ChangeDistiller.class);
         install(CompositeMatchers.XyMatcher.class);
         install(CompositeMatchers.GumtreeTopDown.class);
+        install(LcsMatcher.class);
     }
 
     private void install(Class<? extends Matcher> clazz) {

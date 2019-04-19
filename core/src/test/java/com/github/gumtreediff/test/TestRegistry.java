@@ -20,6 +20,7 @@
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.matchers.*;
+import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
 import com.github.gumtreediff.tree.ITree;
 import org.junit.jupiter.api.Test;
 
@@ -31,5 +32,7 @@ public class TestRegistry {
     public void testMatcherRegistry() {
         Matcher m1 = Matchers.getInstance().getMatcher();
         assertEquals(CompositeMatchers.ClassicGumtree.class, m1.getClass());
+        Matcher m2 = Matchers.getInstance().getMatcher("lcs");
+        assertEquals(LcsMatcher.class, m2.getClass());
     }
 }
