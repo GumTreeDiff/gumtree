@@ -22,6 +22,8 @@ package com.github.gumtreediff.test;
 
 import java.util.List;
 
+import com.github.gumtreediff.gen.SyntaxException;
+import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.tree.Tree;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,9 @@ public class TestTree {
         assertEquals("c", root.getChild("0.0").getLabel());
         assertEquals("d", root.getChild("0.1").getLabel());
         assertEquals("e", root.getChild("1").getLabel());
+        assertThrows(IllegalArgumentException.class, () -> {
+            root.getChild("toto");
+        });
     }
 
     @Test
@@ -68,6 +73,7 @@ public class TestTree {
         ITree t1 = new Tree(TypeSet.type("foo"));
         assertTrue(t1.isLeaf());
         assertTrue(t1.isRoot());
+        assertEquals(-1, t1.positionInParent());
         assertEquals(0, t1.getChildren().size());
         ITree t2 = new Tree(TypeSet.type("foo"));
         t1.addChild(t2);
@@ -81,6 +87,10 @@ public class TestTree {
         assertEquals(t1, t3.getParent());
         assertEquals(2, t1.getChildren().size());
         assertEquals(t3, t1.getChild(1));
+        assertEquals(1, t3.positionInParent());
+        assertEquals(1, t1.getChildPosition(t3));
+        ITree t4 = new Tree(TypeSet.type("foo"));
+        assertEquals(-1, t1.getChildPosition(t4));
     }
 
     @Test
