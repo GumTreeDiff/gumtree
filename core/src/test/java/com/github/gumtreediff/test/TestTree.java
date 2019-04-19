@@ -91,6 +91,11 @@ public class TestTree {
         assertEquals(1, t1.getChildPosition(t3));
         ITree t4 = new Tree(TypeSet.type("foo"));
         assertEquals(-1, t1.getChildPosition(t4));
+        t4.setParentAndUpdateChildren(t2);
+        assertNotEquals(t1, t4.getParent());
+        assertEquals(t2, t4.getParent());
+        assertEquals(-1, t1.getChildPosition(t4));
+        assertEquals(0, t2.getChildPosition(t4));
     }
 
     @Test
