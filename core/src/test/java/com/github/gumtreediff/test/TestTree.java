@@ -31,7 +31,6 @@ import com.github.gumtreediff.tree.ITree;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTree {
-
     @Test
     public void testChildUrl() {
         ITree root = TreeLoader.getDummySrc();
@@ -112,4 +111,28 @@ public class TestTree {
         assertTrue(tree.isIsomorphicTo(copy));
     }
 
+    @Test
+    public void testTypesAndLabels() {
+        ITree t1 = new Tree(TypeSet.type("foo"));
+        ITree t2 = new Tree(TypeSet.type("foo"));
+        assertTrue(t1.hasSameType(t2));
+        assertTrue(t1.hasSameTypeAndLabel(t2));
+        ITree t3 = new Tree(TypeSet.type("bar"));
+        assertFalse(t1.hasSameType(t3));
+        ITree t4 = new Tree(TypeSet.type("foo"), "hello");
+        assertTrue(t1.hasSameType(t4));
+        assertFalse(t1.hasSameTypeAndLabel(t4));
+    }
+
+    @Test
+    public void testToString() {
+        ITree t1 = new Tree(TypeSet.type("foo"));
+        assertEquals("foo [0,0]", t1.toString());
+        ITree t2 = new Tree(TypeSet.type("foo"), "hello");
+        assertEquals("foo: hello [0,0]", t2.toString());
+        ITree t3 = new Tree(TypeSet.type("foo"), "hello");
+        t3.setPos(1);
+        t3.setLength(2);
+        assertEquals("foo: hello [1,3]", t3.toString());
+    }
 }

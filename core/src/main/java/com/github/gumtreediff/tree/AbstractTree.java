@@ -26,50 +26,11 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public abstract class AbstractTree implements ITree {
-    private static final Pattern urlPattern = Pattern.compile("\\d+(\\.\\d+)*");
-
     protected ITree parent;
 
     protected List<ITree> children;
 
     protected TreeMetrics metrics;
-
-    @Override
-    public int getChildPosition(ITree child) {
-        return getChildren().indexOf(child);
-    }
-
-    @Override
-    public ITree getChild(int position) {
-        return getChildren().get(position);
-    }
-
-    @Override
-    public ITree getChild(String url) {
-        if (!urlPattern.matcher(url).matches())
-            throw new IllegalArgumentException("Wrong URL format : " + url);
-
-        List<String> path = new LinkedList<>(Arrays.asList(url.split("\\.")));
-        ITree current = this;
-        while (path.size() > 0) {
-            int next = Integer.parseInt(path.remove(0));
-            current = current.getChild(next);
-        }
-
-        return current;
-    }
-
-    @Override
-    public List<ITree> getDescendants() {
-        List<ITree> trees = TreeUtils.preOrder(this);
-        trees.remove(0);
-        return trees;
-    }
-
-    @Override
-    public boolean hasLabel() {
-        return !NO_LABEL.equals(getLabel());
-    }
 
     @Override
     public ITree getParent() {
@@ -79,98 +40,6 @@ public abstract class AbstractTree implements ITree {
     @Override
     public void setParent(ITree parent) {
         this.parent = parent;
-    }
-
-    @Override
-    public List<ITree> getParents() {
-        List<ITree> parents = new ArrayList<>();
-        if (getParent() == null)
-            return parents;
-        else {
-            parents.add(getParent());
-            parents.addAll(getParent().getParents());
-        }
-        return parents;
-    }
-
-    @Override
-    public boolean isIsomorphicTo(ITree tree) {
-        if (!hasSameTypeAndLabel(tree))
-            return false;
-
-        if (getChildren().size() != tree.getChildren().size())
-            return false;
-
-        for (int i = 0; i < getChildren().size(); i++)  {
-            boolean isChildrenIsomophic = getChild(i).isIsomorphicTo(tree.getChild(i));
-            if (!isChildrenIsomophic)
-                return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean hasSameType(ITree t) {
-        return getType() == t.getType();
-    }
-
-    @Override
-    public boolean isLeaf() {
-        return getChildren().size() == 0;
-    }
-
-    @Override
-    public boolean isRoot() {
-        return getParent() == null;
-    }
-
-    @Override
-    public boolean hasSameTypeAndLabel(ITree t) {
-        if (!hasSameType(t))
-            return false;
-        else if (!getLabel().equals(t.getLabel()))
-            return false;
-        return true;
-    }
-
-    @Override
-    public Iterable<ITree> preOrder() {
-        return new Iterable<ITree>() {
-            @Override
-            public Iterator<ITree> iterator() {
-                return TreeUtils.preOrderIterator(AbstractTree.this);
-            }
-        };
-    }
-
-    @Override
-    public Iterable<ITree> postOrder() {
-        return new Iterable<ITree>() {
-            @Override
-            public Iterator<ITree> iterator() {
-                return TreeUtils.postOrderIterator(AbstractTree.this);
-            }
-        };
-    }
-
-    @Override
-    public Iterable<ITree> breadthFirst() {
-        return new Iterable<ITree>() {
-            @Override
-            public Iterator<ITree> iterator() {
-                return TreeUtils.breadthFirstIterator(AbstractTree.this);
-            }
-        };
-    }
-
-    @Override
-    public int positionInParent() {
-        ITree p = getParent();
-        if (p == null)
-            return -1;
-        else
-            return p.getChildren().indexOf(this);
     }
 
     @Override
