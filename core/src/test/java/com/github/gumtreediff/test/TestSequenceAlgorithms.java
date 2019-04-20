@@ -21,7 +21,9 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TypeSet;
+import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,6 +75,17 @@ public class TestSequenceAlgorithms {
         assertArrayEquals(new int[]{2, 2}, idx.get(1));
         assertArrayEquals(new int[]{4, 3}, idx.get(2));
         assertArrayEquals(new int[]{5, 4}, idx.get(3));
+    }
+
+    @Test
+    public void testITreeLcssIsomorphism() {
+        Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
+        ITree t1 = trees.first.getRoot();
+        ITree t2 = trees.second.getRoot();
+        List<int[]> idx =
+                SequenceAlgorithms.longestCommonSubsequenceWithIsomorphism(t1.getChildren(), t2.getChildren());
+        assertEquals(1, idx.size());
+        assertArrayEquals(new int[] {1, 0}, idx.get(0));
     }
 
     @Test

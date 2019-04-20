@@ -33,7 +33,7 @@ public final class SequenceAlgorithms {
      * Returns the longest common subsequence between two strings.
      *
      * @return a list of size 2 int arrays that corresponds
-     * to match of index in sequence 1 to index in sequence 2.
+     *     to match of index in sequence 1 to index in sequence 2.
      */
     public static List<int[]> longestCommonSubsequence(String s0, String s1) {
         int[][] lengths = new int[s0.length() + 1][s1.length() + 1];
@@ -50,7 +50,7 @@ public final class SequenceAlgorithms {
     /**
      * Returns the hunks of the longest common subsequence between s1 and s2.
      * @return the hunks as a list of int arrays of size 4 with start index and end index of sequence 1
-     * and corresponding start index and end index in sequence 2.
+     *     and corresponding start index and end index in sequence 2.
      */
     public static List<int[]> hunks(String s0, String s1) {
         List<int[]> lcs = longestCommonSubsequence(s0 ,s1);
@@ -102,11 +102,11 @@ public final class SequenceAlgorithms {
 
     /**
      * Returns the longest common subsequence between the two list of nodes. This version use
-     * type and label to ensure equality.
+     *     type and label to ensure equality.
      *
      * @see ITree#hasSameTypeAndLabel(ITree)
      * @return a list of size 2 int arrays that corresponds
-     * to match of index in sequence 1 to index in sequence 2.
+     *     to match of index in sequence 1 to index in sequence 2.
      */
     public static List<int[]> longestCommonSubsequenceWithTypeAndLabel(List<ITree> s0, List<ITree> s1) {
         int[][] lengths = new int[s0.size() + 1][s1.size() + 1];
@@ -122,11 +122,11 @@ public final class SequenceAlgorithms {
 
     /**
      * Returns the longest common subsequence between the two list of nodes. This version use
-     * isomorphism to ensure equality.
+     *     isomorphism to ensure equality.
      *
      * @see ITree#isIsomorphicTo(ITree)
      * @return a list of size 2 int arrays that corresponds
-     * to match of index in sequence 1 to index in sequence 2.
+     *     to match of index in sequence 1 to index in sequence 2.
      */
     public static List<int[]> longestCommonSubsequenceWithIsomorphism(List<ITree> s0, List<ITree> s1) {
         int[][] lengths = new int[s0.size() + 1][s1.size() + 1];

@@ -44,7 +44,8 @@ public final class ParentsMappingComparator extends AbstractMappingComparator {
     protected double parentsJaccardSimilarity(ITree src, ITree dst) {
         List<ITree> srcParents = src.getParents();
         List<ITree> dstParents = dst.getParents();
-        double numerator = (double) SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(srcParents, dstParents).size();
+        double numerator =
+                (double) SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(srcParents, dstParents).size();
         double denominator = (double) srcParents.size() + (double) dstParents.size() - numerator;
         return numerator / denominator;
     }
