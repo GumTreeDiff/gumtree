@@ -20,11 +20,8 @@
 
 package com.github.gumtreediff.matchers;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.github.gumtreediff.tree.ITree;
 
@@ -103,6 +100,16 @@ public class MultiMappingStore implements Iterable<Mapping> {
 
     public boolean isDstUnique(ITree dst) {
         return dstToSrcs.get(dst).size() == 1;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        for (ITree t : srcToDsts.keySet()) {
+            String l = srcToDsts.get(t).stream().map(Object::toString).collect(Collectors.joining(", "));
+            b.append(String.format("%s -> %s", t.toString(), l)).append('\n');
+        }
+        return b.toString();
     }
 
     @Override

@@ -77,6 +77,7 @@ public class TestMappingStore {
         assertTrue(ms.isSrcUnique(t3));
         assertTrue(ms.isDstUnique(t4));
         ms.addMapping(t1, t4);
+        System.out.println(ms);
         assertEquals(3, ms.size());
         assertTrue(ms.has(t1, t4));
         assertFalse(ms.isSrcUnique(t1));
