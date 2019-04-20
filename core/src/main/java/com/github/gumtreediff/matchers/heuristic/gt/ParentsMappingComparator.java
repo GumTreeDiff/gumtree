@@ -22,7 +22,7 @@ package com.github.gumtreediff.matchers.heuristic.gt;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.utils.StringAlgorithms;
+import com.github.gumtreediff.utils.SequenceAlgorithms;
 
 import java.util.*;
 
@@ -44,7 +44,7 @@ public final class ParentsMappingComparator extends AbstractMappingComparator {
     protected double parentsJaccardSimilarity(ITree src, ITree dst) {
         List<ITree> srcParents = src.getParents();
         List<ITree> dstParents = dst.getParents();
-        double numerator = (double) StringAlgorithms.lcss(srcParents, dstParents).size();
+        double numerator = (double) SequenceAlgorithms.lcss(srcParents, dstParents).size();
         double denominator = (double) srcParents.size() + (double) dstParents.size() - numerator;
         return numerator / denominator;
     }

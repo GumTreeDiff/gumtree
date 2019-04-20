@@ -22,26 +22,26 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TypeSet;
-import com.github.gumtreediff.utils.StringAlgorithms;
+import com.github.gumtreediff.utils.SequenceAlgorithms;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class TestStringAlgorithms {
+public class TestSequenceAlgorithms {
     @Test
     public void testStringLcss() {
         String s1 = "abcdefg";
         String s2 = "agcefd";
-        List<int[]> idx = StringAlgorithms.lcss(s1, s2);
+        List<int[]> idx = SequenceAlgorithms.lcss(s1, s2);
         assertEquals(4, idx.size());
         assertArrayEquals(new int[]{0, 0}, idx.get(0));
         assertArrayEquals(new int[]{2, 2}, idx.get(1));
         assertArrayEquals(new int[]{4, 3}, idx.get(2));
         assertArrayEquals(new int[]{5, 4}, idx.get(3));
 
-        List<int[]> hunks = StringAlgorithms.hunks(s1, s2);
+        List<int[]> hunks = SequenceAlgorithms.hunks(s1, s2);
         assertEquals(3, hunks.size());
         assertArrayEquals(new int[]{0, 1, 0, 1}, hunks.get(0));
         assertArrayEquals(new int[]{2, 3, 2, 3}, hunks.get(1));
@@ -67,7 +67,7 @@ public class TestStringAlgorithms {
                 new Tree(TypeSet.type("f")),
                 new Tree(TypeSet.type("d"))
         });
-        List<int[]> idx = StringAlgorithms.lcss(l1, l2);
+        List<int[]> idx = SequenceAlgorithms.lcss(l1, l2);
         assertEquals(4, idx.size());
         assertArrayEquals(new int[]{0, 0}, idx.get(0));
         assertArrayEquals(new int[]{2, 2}, idx.get(1));
@@ -79,7 +79,7 @@ public class TestStringAlgorithms {
     public void testLcs() {
         String s1 = "abcdefg";
         String s2 = "agcefd";
-        String lcs = StringAlgorithms.lcs(s1, s2);
+        String lcs = SequenceAlgorithms.lcs(s1, s2);
         assertEquals("ef", lcs);
     }
 }

@@ -26,8 +26,8 @@ import java.util.List;
 
 import com.github.gumtreediff.tree.ITree;
 
-public final class StringAlgorithms {
-    private StringAlgorithms() {}
+public final class SequenceAlgorithms {
+    private SequenceAlgorithms() {}
 
     public static List<int[]> lcss(String s0, String s1) {
         int[][] lengths = new int[s0.length() + 1][s1.length() + 1];

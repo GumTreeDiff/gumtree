@@ -23,9 +23,8 @@ package com.github.gumtreediff.matchers.heuristic.gt;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
-import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.utils.StringAlgorithms;
+import com.github.gumtreediff.utils.SequenceAlgorithms;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -113,7 +112,7 @@ public class SimpleBottomUpMatcher implements Matcher {
             List<ITree> srcChildren = src.getChildren();
             List<ITree> dstChildren = dst.getChildren();
 
-            List<int[]> lcs = StringAlgorithms.lcss(srcChildren, dstChildren);
+            List<int[]> lcs = SequenceAlgorithms.lcss(srcChildren, dstChildren);
             for (int[] x : lcs) {
 
                 ITree t1 = srcChildren.get(x[0]);

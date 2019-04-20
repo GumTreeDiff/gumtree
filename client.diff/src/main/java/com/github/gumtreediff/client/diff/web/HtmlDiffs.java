@@ -22,14 +22,11 @@ package com.github.gumtreediff.client.diff.web;
 
 import com.github.gumtreediff.actions.OnlyRootsClassifier;
 import com.github.gumtreediff.actions.TreeClassifier;
-import com.github.gumtreediff.utils.StringAlgorithms;
+import com.github.gumtreediff.utils.SequenceAlgorithms;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
-import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.TObjectIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.io.*;
@@ -88,7 +85,7 @@ public final class HtmlDiffs {
                 ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 ltags.addTags(t.getPos(), String.format(
                                 SRC_MV_SPAN, "token upd", mId++, tooltip(src, t)), t.getEndPos(), END_SPAN);
-                List<int[]> hunks = StringAlgorithms.hunks(t.getLabel(), mappings.getDstForSrc(t).getLabel());
+                List<int[]> hunks = SequenceAlgorithms.hunks(t.getLabel(), mappings.getDstForSrc(t).getLabel());
                 for (int[] hunk: hunks)
                     ltags.addTags(t.getPos() + hunk[0], UPD_SPAN, t.getPos() + hunk[1], END_SPAN);
 
@@ -113,7 +110,7 @@ public final class HtmlDiffs {
                 rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 rtags.addTags(t.getPos(), String.format(
                                 DST_MV_SPAN, "token upd", dId, tooltip(dst, t)), t.getEndPos(), END_SPAN);
-                List<int[]> hunks = StringAlgorithms.hunks(mappings.getSrcForDst(t).getLabel(), t.getLabel());
+                List<int[]> hunks = SequenceAlgorithms.hunks(mappings.getSrcForDst(t).getLabel(), t.getLabel());
                 for (int[] hunk: hunks)
                     rtags.addTags(t.getPos() + hunk[2], UPD_SPAN, t.getPos() + hunk[3], END_SPAN);
             }

@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.matchers.heuristic;
 
-import com.github.gumtreediff.utils.StringAlgorithms;
+import com.github.gumtreediff.utils.SequenceAlgorithms;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Register;
@@ -53,7 +53,7 @@ public class LcsMatcher implements Matcher {
         public void match() {
             List<ITree> srcSeq = TreeUtils.preOrder(src);
             List<ITree> dstSeq = TreeUtils.preOrder(dst);
-            List<int[]> lcs = StringAlgorithms.lcss(srcSeq, dstSeq);
+            List<int[]> lcs = SequenceAlgorithms.lcss(srcSeq, dstSeq);
             for (int[] x : lcs) {
                 ITree t1 = srcSeq.get(x[0]);
                 ITree t2 = dstSeq.get(x[1]);
