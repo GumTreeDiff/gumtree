@@ -112,7 +112,7 @@ public class SimpleBottomUpMatcher implements Matcher {
             List<ITree> srcChildren = src.getChildren();
             List<ITree> dstChildren = dst.getChildren();
 
-            List<int[]> lcs = SequenceAlgorithms.lcss(srcChildren, dstChildren);
+            List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(srcChildren, dstChildren);
             for (int[] x : lcs) {
 
                 ITree t1 = srcChildren.get(x[0]);

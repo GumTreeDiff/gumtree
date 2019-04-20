@@ -35,7 +35,7 @@ public class TestAlgorithms {
     public void testLcss() {
         // Exemple coming from:
         // http://www.geeksforgeeks.org/dynamic-programming-set-4-longest-common-subsequence/
-        List<int[]> indexes = SequenceAlgorithms.lcss("ABCDGH", "AEDFHR");
+        List<int[]> indexes = SequenceAlgorithms.longestCommonSubsequence("ABCDGH", "AEDFHR");
         assertThat(indexes.size(), is(3));
         assertThat(indexes, hasItem(new int[] {0, 0}));
         assertThat(indexes, hasItem(new int[] {3, 2}));
@@ -44,7 +44,7 @@ public class TestAlgorithms {
 
     @Test
     public void testLcs() {
-        String lcs = SequenceAlgorithms.lcs("FUTUR", "CHUTE");
+        String lcs = SequenceAlgorithms.longestCommonSequence("FUTUR", "CHUTE");
         assertThat(lcs, is("UT"));
     }
 

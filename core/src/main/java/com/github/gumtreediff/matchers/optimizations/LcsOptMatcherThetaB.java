@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This implements the lcs optimization Theta B.
+ * This implements the longestCommonSequence optimization Theta B.
  *
  */
 
@@ -183,7 +183,7 @@ public class LcsOptMatcherThetaB implements Matcher {
         }
 
         /**
-         * Compare two nodes to test lcs condition.
+         * Compare two nodes to test longestCommonSequence condition.
          *
          * @param node1           the node1
          * @param node2           the node2

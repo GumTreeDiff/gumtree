@@ -29,7 +29,7 @@ import com.github.gumtreediff.tree.TreeUtils;
 
 import java.util.List;
 
-@Register(id = "lcs")
+@Register(id = "longestCommonSequence")
 public class LcsMatcher implements Matcher {
 
     @Override
@@ -53,7 +53,7 @@ public class LcsMatcher implements Matcher {
         public void match() {
             List<ITree> srcSeq = TreeUtils.preOrder(src);
             List<ITree> dstSeq = TreeUtils.preOrder(dst);
-            List<int[]> lcs = SequenceAlgorithms.lcss(srcSeq, dstSeq);
+            List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(srcSeq, dstSeq);
             for (int[] x : lcs) {
                 ITree t1 = srcSeq.get(x[0]);
                 ITree t2 = dstSeq.get(x[1]);

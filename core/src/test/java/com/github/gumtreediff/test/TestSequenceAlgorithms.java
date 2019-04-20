@@ -34,7 +34,7 @@ public class TestSequenceAlgorithms {
     public void testStringLcss() {
         String s1 = "abcdefg";
         String s2 = "agcefd";
-        List<int[]> idx = SequenceAlgorithms.lcss(s1, s2);
+        List<int[]> idx = SequenceAlgorithms.longestCommonSubsequence(s1, s2);
         assertEquals(4, idx.size());
         assertArrayEquals(new int[]{0, 0}, idx.get(0));
         assertArrayEquals(new int[]{2, 2}, idx.get(1));
@@ -67,7 +67,7 @@ public class TestSequenceAlgorithms {
                 new Tree(TypeSet.type("f")),
                 new Tree(TypeSet.type("d"))
         });
-        List<int[]> idx = SequenceAlgorithms.lcss(l1, l2);
+        List<int[]> idx = SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(l1, l2);
         assertEquals(4, idx.size());
         assertArrayEquals(new int[]{0, 0}, idx.get(0));
         assertArrayEquals(new int[]{2, 2}, idx.get(1));
@@ -79,7 +79,7 @@ public class TestSequenceAlgorithms {
     public void testLcs() {
         String s1 = "abcdefg";
         String s2 = "agcefd";
-        String lcs = SequenceAlgorithms.lcs(s1, s2);
+        String lcs = SequenceAlgorithms.longestCommonSequence(s1, s2);
         assertEquals("ef", lcs);
     }
 }

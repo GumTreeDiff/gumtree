@@ -32,7 +32,7 @@ public class TestRegistry {
     public void testMatcherRegistry() {
         Matcher m1 = Matchers.getInstance().getMatcher();
         assertEquals(CompositeMatchers.ClassicGumtree.class, m1.getClass());
-        Matcher m2 = Matchers.getInstance().getMatcher("lcs");
+        Matcher m2 = Matchers.getInstance().getMatcher("longestCommonSequence");
         assertEquals(LcsMatcher.class, m2.getClass());
     }
 }
