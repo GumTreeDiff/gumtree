@@ -108,6 +108,11 @@ public class TreeLoader {
         return new Pair<>(load("/cd_v0.xml"), load("/cd_v1.xml"));
     }
 
+    public static Pair<ITree, ITree> getBottomUpPair() {
+        return new Pair<>(load("/bottom_up_v0.xml").getRoot(),
+                load("/bottom_up_v1.xml").getRoot());
+    }
+
     /*
      *  a
      *    b

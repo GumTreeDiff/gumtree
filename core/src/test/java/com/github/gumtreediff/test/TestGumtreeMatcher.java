@@ -20,7 +20,10 @@
 
 package com.github.gumtreediff.test;
 
+import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.utils.Pair;
@@ -52,7 +55,46 @@ public class TestGumtreeMatcher {
     }
 
     @Test
-    public void testSimThreshold() {
-        //TODO needs a better test case.
+    public void testSimAndSizeThreshold() {
+        Pair<ITree, ITree> trees = TreeLoader.getBottomUpPair();
+        ITree t1 = trees.first;
+        ITree t2 = trees.second;
+        MappingStore ms = new MappingStore(t1, t2);
+        ms.addMapping(t1.getChild("0.2.0"), t2.getChild("0.2.0"));
+        ms.addMapping(t1.getChild("0.2.1"), t2.getChild("0.2.1"));
+        ms.addMapping(t1.getChild("0.2.2"), t2.getChild("0.2.2"));
+        ms.addMapping(t1.getChild("0.2.3"), t2.getChild("0.2.3"));
+
+        AbstractBottomUpMatcher.SIM_THRESHOLD = 1.0;
+        AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
+        GreedyBottomUpMatcher matcher = new GreedyBottomUpMatcher();
+        MappingStore ms1 = matcher.match(t1, t2, new MappingStore(ms));
+
+        assertEquals(5, ms1.size());
+        for (Mapping m : ms)
+            assertTrue(ms1.has(m.first, m.second));
+        assertTrue(ms1.has(t1, t2));
+
+        AbstractBottomUpMatcher.SIM_THRESHOLD = 0.5;
+        AbstractBottomUpMatcher.SIZE_THRESHOLD = 0;
+        MappingStore ms2 = matcher.match(t1, t2, new MappingStore(ms));
+        assertEquals(7, ms2.size());
+        for (Mapping m : ms)
+            assertTrue(ms2.has(m.first, m.second));
+        assertTrue(ms2.has(t1, t2));
+        assertTrue(ms2.has(t1.getChild(0), t2.getChild(0)));
+        assertTrue(ms2.has(t1.getChild("0.2"), t2.getChild("0.2")));
+
+        AbstractBottomUpMatcher.SIM_THRESHOLD = 0.5;
+        AbstractBottomUpMatcher.SIZE_THRESHOLD = 10;
+        MappingStore ms3 = matcher.match(t1, t2, new MappingStore(ms));
+        assertEquals(9, ms3.size());
+        for (Mapping m : ms)
+            assertTrue(ms3.has(m.first, m.second));
+        assertTrue(ms3.has(t1, t2));
+        assertTrue(ms3.has(t1.getChild(0), t2.getChild(0)));
+        assertTrue(ms3.has(t1.getChild("0.0"), t2.getChild("0.0")));
+        assertTrue(ms3.has(t1.getChild("0.1"), t2.getChild("0.1")));
+        assertTrue(ms3.has(t1.getChild("0.2"), t2.getChild("0.2")));
     }
 }

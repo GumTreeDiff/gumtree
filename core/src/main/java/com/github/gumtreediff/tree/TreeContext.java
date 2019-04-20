@@ -54,7 +54,11 @@ public class TreeContext {
         return new Tree(type, label);
     }
 
-    public ITree createTree(ITree... trees) {
+    public ITree createTree(Type type) {
+        return new Tree(type);
+    }
+
+    public ITree createFakeTree(ITree... trees) {
         return new FakeTree(trees);
     }
 

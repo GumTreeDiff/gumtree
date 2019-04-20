@@ -55,19 +55,17 @@ public class TestTreeIoUtils {
         c.setParentAndUpdateChildren(b);
         ITree d = tc.createTree(TYPE_3, "d");
         d.setParentAndUpdateChildren(b);
-        ITree e = tc.createTree(TYPE_2, null);
+        ITree e = tc.createTree(TYPE_2);
         e.setParentAndUpdateChildren(a);
-        // Refresh metrics is called because it is automatically called in fromXML
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         TreeIoUtils.toXml(tc).writeTo(bos);
+        System.out.println(bos.toString());
         TreeContext tca = TreeIoUtils.fromXml().generateFrom().string(bos.toString());
         ITree ca = tca.getRoot();
 
         assertTrue(a.isIsomorphicTo(ca));
-        assertTrue(ca.getType() == TYPE_0);
-        assertTrue(ca.getLabel().equals("a"));
     }
 
     @Test
