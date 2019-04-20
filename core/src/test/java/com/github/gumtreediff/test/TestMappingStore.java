@@ -21,6 +21,7 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TypeSet;
@@ -56,5 +57,37 @@ public class TestMappingStore {
         assertEquals(2, ms.size());
         assertTrue(ms.has(t1, t2));
         assertTrue(ms.has(t3, t4));
+    }
+
+    @Test
+    public void testMultiMappingStore() {
+        MultiMappingStore ms = new MultiMappingStore();
+        ITree t1 = new Tree(TypeSet.type("foo"));
+        ITree t2 = new Tree(TypeSet.type("foo"));
+        ms.addMapping(t1, t2);
+        assertEquals(1, ms.size());
+        assertTrue(ms.has(t1, t2));
+        assertTrue(ms.isSrcUnique(t1));
+        assertTrue(ms.isDstUnique(t2));
+        ITree t3 = new Tree(TypeSet.type("foo"));
+        ITree t4 = new Tree(TypeSet.type("foo"));
+        ms.addMapping(t3, t4);
+        assertEquals(2, ms.size());
+        assertTrue(ms.has(t3, t4));
+        assertTrue(ms.isSrcUnique(t3));
+        assertTrue(ms.isDstUnique(t4));
+        ms.addMapping(t1, t4);
+        assertEquals(3, ms.size());
+        assertTrue(ms.has(t1, t4));
+        assertFalse(ms.isSrcUnique(t1));
+        assertFalse(ms.isDstUnique(t4));
+        assertTrue(ms.isSrcUnique(t3));
+        assertTrue(ms.isDstUnique(t2));
+        ms.removeMapping(t1, t4);
+        assertEquals(2, ms.size());
+        assertTrue(ms.isSrcUnique(t1));
+        assertTrue(ms.isDstUnique(t2));
+        assertTrue(ms.isSrcUnique(t3));
+        assertTrue(ms.isDstUnique(t4));
     }
 }

@@ -209,7 +209,7 @@ public class HungarianAlgorithm {
     }
 
     /*
-     * @return the first unmatched worker or {@link #dim} if none.
+     * @return the first unmatched worker or {@addMapping #dim} if none.
      */
     protected int fetchUnmatchedWorker() {
         int w;

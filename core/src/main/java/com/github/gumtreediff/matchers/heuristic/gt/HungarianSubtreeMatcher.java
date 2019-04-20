@@ -44,16 +44,16 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
         public void filterMappings(MultiMappingStore multiMappings) {
             List<MultiMappingStore> ambiguousList = new ArrayList<>();
             Set<ITree> ignored = new HashSet<>();
-            for (ITree src : multiMappings.getSrcs())
+            for (ITree src : multiMappings.allMappedSrcs())
                 if (multiMappings.isSrcUnique(src))
-                    mappings.addMappingRecursively(src, multiMappings.getDst(src).iterator().next());
+                    mappings.addMappingRecursively(src, multiMappings.getDsts(src).iterator().next());
                 else if (!ignored.contains(src)) {
                     MultiMappingStore ambiguous = new MultiMappingStore();
-                    Set<ITree> adsts = multiMappings.getDst(src);
-                    Set<ITree> asrcs = multiMappings.getSrc(multiMappings.getDst(src).iterator().next());
+                    Set<ITree> adsts = multiMappings.getDsts(src);
+                    Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
                     for (ITree asrc : asrcs)
                         for (ITree adst : adsts)
-                            ambiguous.link(asrc, adst);
+                            ambiguous.addMapping(asrc, adst);
                     ambiguousList.add(ambiguous);
                     ignored.addAll(asrcs);
                 }
@@ -62,8 +62,8 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
 
             for (MultiMappingStore ambiguous : ambiguousList) {
                 System.out.println("hungarian try.");
-                List<ITree> lstSrcs = new ArrayList<>(ambiguous.getSrcs());
-                List<ITree> lstDsts = new ArrayList<>(ambiguous.getDsts());
+                List<ITree> lstSrcs = new ArrayList<>(ambiguous.allMappedSrcs());
+                List<ITree> lstDsts = new ArrayList<>(ambiguous.allMappedDsts());
                 double[][] matrix = new double[lstSrcs.size()][lstDsts.size()];
                 for (int i = 0; i < lstSrcs.size(); i++)
                     for (int j = 0; j < lstDsts.size(); j++)
@@ -92,11 +92,11 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
 
             public int impact(MultiMappingStore m) {
                 int impact = 0;
-                for (ITree src : m.getSrcs()) {
+                for (ITree src : m.allMappedSrcs()) {
                     int pSize = src.getParents().size();
                     if (pSize > impact) impact = pSize;
                 }
-                for (ITree src : m.getDsts()) {
+                for (ITree src : m.allMappedDsts()) {
                     int pSize = src.getParents().size();
                     if (pSize > impact) impact = pSize;
                 }

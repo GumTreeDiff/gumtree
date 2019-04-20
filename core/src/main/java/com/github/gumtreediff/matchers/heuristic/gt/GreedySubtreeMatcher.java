@@ -45,12 +45,12 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher implements Matc
             // Select unique mappings first and extract ambiguous mappings.
             List<Mapping> ambiguousList = new ArrayList<>();
             Set<ITree> ignored = new HashSet<>();
-            for (ITree src : multiMappings.getSrcs()) {
+            for (ITree src : multiMappings.allMappedSrcs()) {
                 if (multiMappings.isSrcUnique(src))
-                    mappings.addMappingRecursively(src, multiMappings.getDst(src).iterator().next());
+                    mappings.addMappingRecursively(src, multiMappings.getDsts(src).iterator().next());
                 else if (!ignored.contains(src)) {
-                    Set<ITree> adsts = multiMappings.getDst(src);
-                    Set<ITree> asrcs = multiMappings.getSrc(multiMappings.getDst(src).iterator().next());
+                    Set<ITree> adsts = multiMappings.getDsts(src);
+                    Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
                     for (ITree asrc : asrcs)
                         for (ITree adst : adsts)
                             ambiguousList.add(new Mapping(asrc, adst));

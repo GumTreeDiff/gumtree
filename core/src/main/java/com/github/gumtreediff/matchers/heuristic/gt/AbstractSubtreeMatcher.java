@@ -75,7 +75,7 @@ public abstract class AbstractSubtreeMatcher {
                         ITree dst = currentHeightDstTrees.get(j);
 
                         if (src.isIsomorphicTo(dst)) {
-                            multiMappings.link(src, dst);
+                            multiMappings.addMapping(src, dst);
                             marksForSrcTrees[i] = true;
                             marksForDstTrees[j] = true;
                         }
