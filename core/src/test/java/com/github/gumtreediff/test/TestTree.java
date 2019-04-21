@@ -137,6 +137,27 @@ public class TestTree {
     }
 
     @Test
+    public void testImmutable() {
+        ITree tree = TreeLoader.getDummySrc();
+        ITree immutable = new ImmutableTree(tree);
+        assertTrue(tree.isIsomorphicTo(immutable));
+        assertEquals(immutable, immutable.getChild(0).getParent());
+        assertThrows(UnsupportedOperationException.class, () -> immutable.setLabel("foo"));
+        assertThrows(UnsupportedOperationException.class, () -> immutable.setLength(12));
+        assertThrows(UnsupportedOperationException.class, () -> immutable.setPos(12));
+        assertThrows(UnsupportedOperationException.class,
+                () -> immutable.setType(TypeSet.type("foo")));
+        assertThrows(UnsupportedOperationException.class, () -> immutable.setMetadata("foo", null));
+        assertThrows(UnsupportedOperationException.class, () -> immutable.getChildren().remove(0));
+        assertThrows(UnsupportedOperationException.class, () -> immutable.getChild(0).setLabel("foo"));
+        ITree immutableCpy = immutable.deepCopy();
+        assertTrue(immutableCpy.isIsomorphicTo(immutable));
+        assertDoesNotThrow(() -> immutableCpy.setLabel("foo"));
+        assertDoesNotThrow(() -> immutableCpy.getChildren().remove(0));
+        assertFalse(immutableCpy.isIsomorphicTo(immutable));
+    }
+
+    @Test
     public void testTypesAndLabels() {
         ITree t1 = new Tree(TypeSet.type("foo"));
         ITree t2 = new Tree(TypeSet.type("foo"));
