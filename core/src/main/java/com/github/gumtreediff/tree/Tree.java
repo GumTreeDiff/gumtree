@@ -56,14 +56,15 @@ public class Tree extends AbstractTree implements ITree {
         this.children = new ArrayList<>();
     }
 
-    // Only used for cloning ...
-    protected Tree(Tree other) {
-        this.type = other.type;
+    /**
+     * Copy constructor for copy.
+     */
+    protected Tree(ITree other) {
+        this.type = other.getType();
         this.label = other.getLabel();
         this.pos = other.getPos();
         this.length = other.getLength();
         this.children = new ArrayList<>();
-        this.metadata = other.metadata;
     }
 
     @Override
