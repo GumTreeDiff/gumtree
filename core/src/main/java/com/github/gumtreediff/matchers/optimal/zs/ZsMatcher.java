@@ -28,7 +28,6 @@ import org.simmetrics.StringMetrics;
 import java.util.*;
 
 public class ZsMatcher implements Matcher {
-
     @Override
     public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
         Implementation impl = new Implementation(src, dst, mappings);
@@ -63,12 +62,9 @@ public class ZsMatcher implements Matcher {
             treeDist = new double[zsSrc.nodeCount + 1][zsDst.nodeCount + 1];
             forestDist = new double[zsSrc.nodeCount + 1][zsDst.nodeCount + 1];
 
-            for (int i = 1; i < zsSrc.kr.length; i++) {
-                for (int j = 1; j < zsDst.kr.length; j++) {
+            for (int i = 1; i < zsSrc.kr.length; i++)
+                for (int j = 1; j < zsDst.kr.length; j++)
                     forestDist(zsSrc.kr[i], zsDst.kr[j]);
-
-                }
-            }
 
             return treeDist;
         }
@@ -88,7 +84,8 @@ public class ZsMatcher implements Matcher {
                                 forestDist[di][dj - 1] + costIns),
                                 forestDist[di - 1][dj - 1] + costUpd);
                         treeDist[di][dj] = forestDist[di][dj];
-                    } else {
+                    }
+                    else {
                         forestDist[di][dj] = Math.min(Math.min(forestDist[di - 1][dj] + costDel,
                                 forestDist[di][dj - 1] + costIns),
                                 forestDist[zsSrc.lld(di) - 1][zsDst.lld(dj) - 1]
@@ -132,11 +129,13 @@ public class ZsMatcher implements Matcher {
                             && (forestDist[row - 1][col] + 1D == forestDist[row][col])) {
                         // node with postorderID row is deleted from ted1
                         row--;
-                    } else if ((col > firstCol)
+                    }
+                    else if ((col > firstCol)
                             && (forestDist[row][col - 1] + 1D == forestDist[row][col])) {
                         // node with postorderID col is inserted into ted2
                         col--;
-                    } else {
+                    }
+                    else {
                         // node with postorderID row in ted1 is renamed to node col
                         // in ted2
                         if ((zsSrc.lld(row) - 1 == zsSrc.lld(lastRow) - 1)
@@ -150,7 +149,8 @@ public class ZsMatcher implements Matcher {
                                 throw new RuntimeException("Should not map incompatible nodes.");
                             row--;
                             col--;
-                        } else {
+                        }
+                        else {
                             // pop subtree pair
                             treePairs.addFirst(new int[] {row, col});
                             // continue with forest to the left of the popped
@@ -184,9 +184,6 @@ public class ZsMatcher implements Matcher {
     }
 
     private static final class ZsTree {
-
-        private int start; // internal array position of leafmost leaf descendant of the root node
-
         private int nodeCount; // number of nodes
 
         private int leafCount;
@@ -198,11 +195,10 @@ public class ZsMatcher implements Matcher {
         private int[] kr;
 
         private ZsTree(ITree t) {
-            this.start = 0;
             this.nodeCount = t.getMetrics().size;
             this.leafCount = 0;
-            this.llds = new int[start + nodeCount];
-            this.labels = new ITree[start + nodeCount];
+            this.llds = new int[nodeCount];
+            this.labels = new ITree[nodeCount];
 
             int idx = 1;
             Map<ITree,Integer> tmpData = new HashMap<>();
@@ -219,13 +215,13 @@ public class ZsMatcher implements Matcher {
         }
 
         public void setITree(int i, ITree tree) {
-            labels[i + start - 1] = tree;
+            labels[i - 1] = tree;
             if (nodeCount < i)
                 nodeCount = i;
         }
 
         public void setLld(int i, int lld) {
-            llds[i + start - 1] = lld + start - 1;
+            llds[i - 1] = lld - 1;
             if (nodeCount < i)
                 nodeCount = i;
         }
@@ -235,11 +231,11 @@ public class ZsMatcher implements Matcher {
         }
 
         public int lld(int i) {
-            return llds[i + start - 1] - start + 1;
+            return llds[i - 1] + 1;
         }
 
         public ITree tree(int i) {
-            return labels[i + start - 1];
+            return labels[i - 1];
         }
 
         public void setKeyRoots() {

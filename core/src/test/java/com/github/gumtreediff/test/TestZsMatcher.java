@@ -41,10 +41,10 @@ public class TestZsMatcher {
         MappingStore mappings = new ZsMatcher().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src, dst.getChild(0)));
-        assertTrue(mappings.has(src.getChild(0), dst.getChild(0).getChild(0)));
-        assertTrue(mappings.has(src.getChild(1), dst.getChild(0).getChild(1)));
-        assertTrue(mappings.has(src.getChild(1).getChild(0), dst.getChild(0).getChild(1).getChild(0)));
-        assertTrue(mappings.has(src.getChild(1).getChild(2), dst.getChild(0).getChild(1).getChild(2)));
+        assertTrue(mappings.has(src.getChild(0), dst.getChild("0.0")));
+        assertTrue(mappings.has(src.getChild(1), dst.getChild("0.1")));
+        assertTrue(mappings.has(src.getChild("1.0"), dst.getChild("0.1.0")));
+        assertTrue(mappings.has(src.getChild("1.2"), dst.getChild("0.1.2")));
     }
 
     @Test
@@ -56,10 +56,10 @@ public class TestZsMatcher {
         MappingStore mappings = new ZsMatcher().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src, dst));
-        assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
-        assertTrue(mappings.has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
-        assertTrue(mappings.has(src.getChild(0).getChild(1), dst.getChild(1).getChild(0)));
-        assertTrue(mappings.has(src.getChild(0).getChild(2), dst.getChild(2)));
+        assertTrue(mappings.has(src.getChild("0.0"), dst.getChild(0)));
+        assertTrue(mappings.has(src.getChild("0.0.0"), dst.getChild("0.0")));
+        assertTrue(mappings.has(src.getChild("0.1"), dst.getChild("1.0")));
+        assertTrue(mappings.has(src.getChild("0.2"), dst.getChild(2)));
     }
 
 }
