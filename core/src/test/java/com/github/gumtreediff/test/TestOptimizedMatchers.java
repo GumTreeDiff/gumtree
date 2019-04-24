@@ -20,9 +20,8 @@
 
 package com.github.gumtreediff.test;
 
+import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.OptimizedVersions;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
@@ -38,7 +37,7 @@ public class TestOptimizedMatchers {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        MappingStore mappings = new OptimizedVersions.Rtedacdef().match(src, dst);
+        MappingStore mappings = new CompositeMatchers.Rtedacdef().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src, dst));
         assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
@@ -52,7 +51,7 @@ public class TestOptimizedMatchers {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        MappingStore mappings = new OptimizedVersions.CdabcdefPar().match(src, dst);
+        MappingStore mappings = new CompositeMatchers.CdabcdefPar().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
         assertTrue(mappings.has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
@@ -66,7 +65,7 @@ public class TestOptimizedMatchers {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        MappingStore mappings = new OptimizedVersions.Rtedacdef().match(src, dst);
+        MappingStore mappings = new CompositeMatchers.Rtedacdef().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src, dst));
         assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));

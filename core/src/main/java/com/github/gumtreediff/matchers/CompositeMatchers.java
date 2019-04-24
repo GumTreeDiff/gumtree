@@ -23,20 +23,35 @@ package com.github.gumtreediff.matchers;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
+import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerParallelLeavesMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.*;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
+import com.github.gumtreediff.matchers.optimal.rted.RtedMatcher;
+import com.github.gumtreediff.matchers.optimizations.*;
 import com.github.gumtreediff.tree.ITree;
 
 public class CompositeMatchers {
+    public static class CompositeMatcher implements Matcher {
+        protected final Matcher[] matchers;
+
+        public CompositeMatcher(Matcher... matchers) {
+            this.matchers = matchers;
+        }
+
+        @Override
+        public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+            for (Matcher matcher : matchers)
+                mappings = matcher.match(src, dst, mappings);
+
+            return mappings;
+        }
+    }
 
     @Register(id = "gumtree", defaultMatcher = true, priority = Registry.Priority.HIGH)
     public static class ClassicGumtree extends CompositeMatcher {
 
         public ClassicGumtree() {
-            super(new Matcher[] {
-                    new GreedySubtreeMatcher(),
-                    new GreedyBottomUpMatcher()
-            });
+            super(new GreedySubtreeMatcher(), new GreedyBottomUpMatcher());
         }
     }
 
@@ -44,53 +59,91 @@ public class CompositeMatchers {
     public static class SimpleGumtree extends CompositeMatcher {
 
         public SimpleGumtree() {
-            super(new Matcher[] {
-                    new GreedySubtreeMatcher(),
-                    new SimpleBottomUpMatcher()
-            });
-        }
-    }
-
-    @Register(id = "gumtree-topdown", defaultMatcher = true, priority = Registry.Priority.HIGH)
-    public static class GumtreeTopDown extends CompositeMatcher {
-
-        public GumtreeTopDown() {
-            super(new Matcher[] {
-                    new GreedySubtreeMatcher()
-            });
+            super(new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
         }
     }
 
     @Register(id = "gumtree-complete")
     public static class CompleteGumtreeMatcher extends CompositeMatcher {
-
         public CompleteGumtreeMatcher() {
-            super(new Matcher[] {
-                    new CliqueSubtreeMatcher(),
-                    new CompleteBottomUpMatcher()
-            });
+            super(new CliqueSubtreeMatcher(), new CompleteBottomUpMatcher());
         }
     }
 
     @Register(id = "change-distiller")
     public static class ChangeDistiller extends CompositeMatcher {
-
         public ChangeDistiller() {
-            super(new Matcher[] {
-                    new ChangeDistillerLeavesMatcher(),
-                    new ChangeDistillerBottomUpMatcher()
-            });
+            super(new ChangeDistillerLeavesMatcher(), new ChangeDistillerBottomUpMatcher());
         }
     }
 
     @Register(id = "xy")
     public static class XyMatcher extends CompositeMatcher {
-
         public XyMatcher() {
-            super(new Matcher[] {
-                    new GreedySubtreeMatcher(),
-                    new XyBottomUpMatcher()
-            });
+            super(new GreedySubtreeMatcher(), new XyBottomUpMatcher());
+        }
+    }
+
+    @Register(id = "cdabcdefseq")
+    public static class CdabcdefSeq extends CompositeMatcher {
+        public CdabcdefSeq() {
+            super(new IdenticalSubtreeMatcherThetaA(),
+                    new ChangeDistillerLeavesMatcher(),
+                    new ChangeDistillerBottomUpMatcher(),
+                    new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(),
+                    new LeafMoveMatcherThetaE(),
+                    new CrossMoveMatcherThetaF());
+        }
+    }
+
+    @Register(id = "cdabcdefpar")
+    public static class CdabcdefPar extends CompositeMatcher {
+        /**
+         * Instantiates the parallel ChangeDistiller version with Theta A-F.
+         */
+        public CdabcdefPar() {
+            super(new IdenticalSubtreeMatcherThetaA(),
+                    new ChangeDistillerParallelLeavesMatcher(),
+                    new ChangeDistillerBottomUpMatcher(),
+                    new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(),
+                    new LeafMoveMatcherThetaE(),
+                    new CrossMoveMatcherThetaF());
+        }
+    }
+
+    @Register(id = "gtbcdef")
+    public static class Gtbcdef extends CompositeMatcher {
+        /**
+         * Instantiates GumTree with Theta B-F.
+         */
+        public Gtbcdef() {
+            super(new GreedySubtreeMatcher(),
+                    new GreedyBottomUpMatcher(),
+                    new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(),
+                    new LeafMoveMatcherThetaE(),
+                    new CrossMoveMatcherThetaF());
+        }
+    }
+
+    @Register(id = "rtedacdef")
+    public static class Rtedacdef extends CompositeMatcher {
+        /**
+         * Instantiates RTED with Theta A-F.
+         */
+        public Rtedacdef() {
+            super(new IdenticalSubtreeMatcherThetaA(),
+                    new RtedMatcher(),
+                    new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(),
+                    new LeafMoveMatcherThetaE(),
+                    new CrossMoveMatcherThetaF());
         }
     }
 }
