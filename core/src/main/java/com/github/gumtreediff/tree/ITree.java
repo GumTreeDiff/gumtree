@@ -160,9 +160,7 @@ public interface ITree {
      */
     default List<ITree> getParents() {
         List<ITree> parents = new ArrayList<>();
-        if (getParent() == null)
-            return parents;
-        else {
+        if (getParent() != null) {
             parents.add(getParent());
             parents.addAll(getParent().getParents());
         }
