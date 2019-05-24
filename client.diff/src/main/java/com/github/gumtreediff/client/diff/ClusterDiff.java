@@ -20,11 +20,12 @@
 package com.github.gumtreediff.client.diff;
 
 import com.github.gumtreediff.actions.ActionClusterFinder;
-import com.github.gumtreediff.actions.ActionGenerator;
+import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.EditScript;
+import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 
 import java.util.List;
 import java.util.Set;
@@ -39,10 +40,8 @@ public class ClusterDiff extends AbstractDiffClient<AbstractDiffClient.Options> 
 
     @Override
     public void run() {
-        MappingStore m = matchTrees();
-        ActionGenerator g = new ActionGenerator(m);
-        g.generate();
-        List<Action> actions = g.getActions();
+        MappingStore ms = matchTrees();
+        EditScript actions = new ChawatheScriptGenerator().computeActions(ms);
         ActionClusterFinder f = new ActionClusterFinder(getSrcTreeContext(), getDstTreeContext(), actions);
         for (Set<Action> cluster: f.getClusters()) {
             System.out.println("New cluster:");

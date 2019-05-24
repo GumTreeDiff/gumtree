@@ -20,13 +20,13 @@
 
 package com.github.gumtreediff.client.diff;
 
-import com.github.gumtreediff.actions.ActionGenerator;
+import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.io.ActionsIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
@@ -95,13 +95,11 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
 
     @Override
     public void run() {
-        MappingStore m = matchTrees();
-        ActionGenerator g = new ActionGenerator(m);
-        g.generate();
-        List<Action> actions = g.getActions();
+        MappingStore ms = matchTrees();
+        EditScript actions = new ChawatheScriptGenerator().computeActions(ms);
         try {
             ActionsIoUtils.ActionSerializer serializer = opts.format.getSerializer(
-                    getSrcTreeContext(), actions, m);
+                    getSrcTreeContext(), actions, ms);
             if (opts.output == null)
                 serializer.writeTo(System.out);
             else
@@ -114,27 +112,27 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
     enum OutputFormat { // TODO make a registry for that also ?
         TEXT {
             @Override
-            ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, List<Action> actions, MappingStore mappings)
+            ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, EditScript actions, MappingStore mappings)
                     throws IOException {
                 return ActionsIoUtils.toText(sctx, actions, mappings);
             }
         },
         XML {
             @Override
-            ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, List<Action> actions, MappingStore mappings)
+            ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, EditScript actions, MappingStore mappings)
                     throws IOException {
                 return ActionsIoUtils.toXml(sctx, actions, mappings);
             }
         },
         JSON {
             @Override
-            ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, List<Action> actions, MappingStore mappings)
+            ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, EditScript actions, MappingStore mappings)
                     throws IOException {
                 return ActionsIoUtils.toJson(sctx, actions, mappings);
             }
         };
 
-        abstract ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, List<Action> actions,
+        abstract ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, EditScript actions,
                                                                MappingStore mappings) throws IOException;
     }
 }

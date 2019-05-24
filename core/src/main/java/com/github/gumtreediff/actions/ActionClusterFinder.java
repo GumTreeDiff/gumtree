@@ -37,13 +37,13 @@ public class ActionClusterFinder {
 
     private TreeContext dst;
 
-    private List<Action> actions;
+    private EditScript actions;
 
     private DirectedGraph<Action, DefaultEdge> graph;
 
     private List<Set<Action>> clusters;
 
-    public ActionClusterFinder(TreeContext src, TreeContext dst, List<Action> actions) {
+    public ActionClusterFinder(TreeContext src, TreeContext dst, EditScript actions) {
         this.src = src;
         this.dst = dst;
         this.actions = actions;

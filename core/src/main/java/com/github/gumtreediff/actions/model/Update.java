@@ -48,4 +48,12 @@ public class Update extends Action {
                 node.getLabel(),
                 getValue());
     }
+
+    public boolean equals(Object o) {
+        if (!(super.equals(o)))
+            return false;
+
+        Update a = (Update) o;
+        return value == a.value;
+    }
 }

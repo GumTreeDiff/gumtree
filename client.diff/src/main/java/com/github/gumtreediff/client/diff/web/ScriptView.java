@@ -20,7 +20,8 @@
 
 package com.github.gumtreediff.client.diff.web;
 
-import com.github.gumtreediff.actions.ActionGenerator;
+import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.io.ActionsIoUtils;
@@ -51,7 +52,7 @@ public class ScriptView implements Renderable {
 
     private File fDst;
 
-    private List<Action> script;
+    private EditScript script;
 
     public ScriptView(File fSrc, File fDst) throws IOException {
         this.fSrc = fSrc;
@@ -60,9 +61,7 @@ public class ScriptView implements Renderable {
         dst = Generators.getInstance().getTree(fDst.getAbsolutePath());
         Matcher matcher = Matchers.getInstance().getMatcher();
         mappings = matcher.match(src.getRoot(), dst.getRoot());
-        ActionGenerator g = new ActionGenerator(mappings);
-        g.generate();
-        this.script = g.getActions();
+        this.script = new ChawatheScriptGenerator().computeActions(mappings);
     }
 
     @Override
@@ -76,7 +75,7 @@ public class ScriptView implements Renderable {
                         .div(class_("row"))
                             .div(class_("col-lg-12"))
                                 .h3()
-                                    .write("Script ")
+                                    .write("EditScript ")
                                     .small().content(String.format("%s -> %s", fSrc.getName(), fDst.getName()))
                                 ._h3()
                                 .pre().content(ActionsIoUtils.toText(src, this.script, mappings).toString())

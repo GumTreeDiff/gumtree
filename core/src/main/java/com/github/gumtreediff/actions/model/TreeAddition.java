@@ -47,7 +47,15 @@ public abstract class TreeAddition extends TreeAction {
         return String.format("===\n%s\n---\n%s\nto\n%s\nat %d",
                 getName(),
                 node.toTreeString(),
-                parent.toString(),
+                (parent != null) ? parent.toString() : "root",
                 pos);
+    }
+
+    public boolean equals(Object o) {
+        if (!(super.equals(o)))
+            return false;
+
+        TreeAddition a = (TreeAddition) o;
+        return parent == a.parent && pos == a.pos;
     }
 }

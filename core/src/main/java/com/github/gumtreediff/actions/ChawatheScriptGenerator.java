@@ -14,8 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
- * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
 package com.github.gumtreediff.actions;
@@ -29,7 +28,7 @@ import com.github.gumtreediff.tree.TreeUtils;
 
 import java.util.*;
 
-public class ActionGenerator {
+public class ChawatheScriptGenerator implements EditScriptGenerator {
     private ITree origSrc;
 
     private ITree cpySrc;
@@ -44,15 +43,20 @@ public class ActionGenerator {
 
     private Set<ITree> srcInOrder;
 
-    private List<Action> actions;
+    private EditScript actions;
 
     private Map<ITree, ITree> origToCopy;
 
     private Map<ITree, ITree> copyToOrig;
 
-    public static boolean REMOVE_MOVES_AND_UPDATES = Boolean.valueOf(System.getProperty("gt.ag.nomove", "false"));
+    @Override
+    public EditScript computeActions(MappingStore ms) {
+        initWith(ms);
+        generate();
+        return actions;
+    }
 
-    public ActionGenerator(MappingStore ms) {
+    public void initWith(MappingStore ms) {
         this.origSrc = ms.src;
         this.cpySrc = this.origSrc.deepCopy();
         this.origDst = ms.dst;
@@ -72,17 +76,13 @@ public class ActionGenerator {
             cpyMappings.addMapping(origToCopy.get(m.first), m.second);
     }
 
-    public List<Action> getActions() {
-        return actions;
-    }
-
-    public List<Action> generate() {
+    public EditScript generate() {
         ITree srcFakeRoot = new FakeTree(cpySrc);
         ITree dstFakeRoot = new FakeTree(origDst);
         cpySrc.setParent(srcFakeRoot);
         origDst.setParent(dstFakeRoot);
 
-        actions = new ArrayList<>();
+        actions = new EditScript();
         dstInOrder = new HashSet<>();
         srcInOrder = new HashSet<>();
 
@@ -133,84 +133,7 @@ public class ActionGenerator {
             if (!cpyMappings.isSrcMapped(w))
                 actions.add(new Delete(copyToOrig.get(w)));
 
-        if (REMOVE_MOVES_AND_UPDATES)
-            actions = removeMovesAndUpdates();
-
-        simplify();
-
         return actions;
-    }
-
-    private List<Action> removeMovesAndUpdates() {
-        List<Action> actionsCpy = new ArrayList<>(actions.size());
-        for (Action a: actions) {
-            if (a instanceof Update) {
-                ITree src = a.getNode();
-                ITree dst = origMappings.getDstForSrc(src);
-                actionsCpy.add(new Insert(
-                        dst,
-                        dst.getParent(),
-                        dst.positionInParent()));
-                actionsCpy.add(new Delete(a.getNode()));
-            }
-            else if (a instanceof Move) {
-                Move m = (Move) a;
-                ITree src = a.getNode();
-                ITree dst = origMappings.getDstForSrc(src);
-                actionsCpy.add(new TreeInsert(
-                        dst,
-                        dst.getParent(),
-                        m.getPosition()));
-                actionsCpy.add(new TreeDelete(a.getNode()));
-            }
-            else
-                actionsCpy.add(a);
-        }
-
-        return actionsCpy;
-    }
-
-    private void simplify() {
-        Map<ITree, Action> addedTrees = new HashMap<>();
-        Map<ITree, Action> deletedTrees = new HashMap<>();
-
-        for (Action a: actions)
-            if (a instanceof Insert)
-                addedTrees.put(a.getNode(), a);
-            else if (a instanceof Delete)
-                deletedTrees.put(a.getNode(), a);
-
-
-        for (ITree t : addedTrees.keySet()) {
-            if (addedTrees.keySet().contains(t.getParent()) && addedTrees.keySet().containsAll(t.getDescendants()))
-                actions.remove(addedTrees.get(t));
-            else {
-                if (t.getChildren().size() > 0 && addedTrees.keySet().containsAll(t.getDescendants())) {
-                    Insert originalAction = (Insert) addedTrees.get(t);
-                    TreeInsert ti = new TreeInsert(originalAction.getNode(),
-                            originalAction.getParent(), originalAction.getPosition());
-                    int index = actions.lastIndexOf(originalAction);
-                    actions.add(index, ti);
-                    actions.remove(index +  1);
-                }
-
-            }
-        }
-
-        for (ITree t : deletedTrees.keySet()) {
-            if (deletedTrees.keySet().contains(t.getParent()) && deletedTrees.keySet().containsAll(t.getDescendants()))
-                actions.remove(deletedTrees.get(t));
-            else {
-                if (t.getChildren().size() > 0 && deletedTrees.keySet().containsAll(t.getDescendants())) {
-                    Delete originalAction = (Delete) deletedTrees.get(t);
-                    TreeDelete ti = new TreeDelete(originalAction.getNode());
-                    int index = actions.lastIndexOf(originalAction);
-                    actions.add(index, ti);
-                    actions.remove(index +  1);
-                }
-
-            }
-        }
     }
 
     private void alignChildren(ITree w, ITree x) {

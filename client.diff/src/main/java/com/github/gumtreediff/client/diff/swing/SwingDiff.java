@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
- * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
 package com.github.gumtreediff.client.diff.swing;
 
+import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
 import com.github.gumtreediff.client.diff.swing.MappingsPanel;
@@ -43,7 +44,9 @@ public final class SwingDiff extends AbstractDiffClient<AbstractDiffClient.Optio
             public void run() {
                 JFrame frame = new JFrame("GumTree");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.add(new MappingsPanel(opts.src, opts.dst, getSrcTreeContext(), getDstTreeContext(), mappings));
+                Diff diff = new Diff(getSrcTreeContext(), getDstTreeContext(), mappings,
+                        new ChawatheScriptGenerator().computeActions(mappings));
+                frame.add(new MappingsPanel(opts.src, opts.dst, diff));
                 frame.pack();
                 frame.setVisible(true);
             }

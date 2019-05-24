@@ -50,4 +50,12 @@ public abstract class Addition extends Action {
                 (parent != null) ? parent.toString() : "root",
                 pos);
     }
+
+    public boolean equals(Object o) {
+        if (!(super.equals(o)))
+            return false;
+
+        Addition a = (Addition) o;
+        return parent == a.parent && pos == a.pos;
+    }
 }

@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.io;
 
+import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.io.TreeIoUtils.AbstractSerializer;
 import com.github.gumtreediff.matchers.Mapping;
@@ -40,7 +41,7 @@ public final class ActionsIoUtils {
     private ActionsIoUtils() {
     }
 
-    public static ActionSerializer toText(TreeContext sctx, List<Action> actions,
+    public static ActionSerializer toText(TreeContext sctx, EditScript actions,
                                           MappingStore mappings) throws IOException {
         return new ActionSerializer(sctx, mappings, actions) {
 
@@ -51,7 +52,7 @@ public final class ActionsIoUtils {
         };
     }
 
-    public static ActionSerializer toXml(TreeContext sctx, List<Action> actions,
+    public static ActionSerializer toXml(TreeContext sctx, EditScript actions,
                                          MappingStore mappings) throws IOException {
         return new ActionSerializer(sctx, mappings, actions) {
 
@@ -62,7 +63,7 @@ public final class ActionsIoUtils {
         };
     }
 
-    public static ActionSerializer toJson(TreeContext sctx, List<Action> actions,
+    public static ActionSerializer toJson(TreeContext sctx, EditScript actions,
                                               MappingStore mappings) throws IOException {
         return new ActionSerializer(sctx, mappings, actions) {
 
@@ -76,9 +77,9 @@ public final class ActionsIoUtils {
     public abstract static class ActionSerializer extends AbstractSerializer {
         final TreeContext context;
         final MappingStore mappings;
-        final List<Action> actions;
+        final EditScript actions;
 
-        ActionSerializer(TreeContext context, MappingStore mappings, List<Action> actions) {
+        ActionSerializer(TreeContext context, MappingStore mappings, EditScript actions) {
             this.context = context;
             this.mappings = mappings;
             this.actions = actions;

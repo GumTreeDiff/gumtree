@@ -21,9 +21,10 @@
 	<tree type="0" label="a">
 		<tree type="0" label="b" />
 		<tree type="0" label="c">
-			<tree type="0" label="y" />
-			<tree type="1" label="e" />
+			<tree type="0" label="d" />
+			<tree type="1" label="y" />
 			<tree type="0" label="f" />
+			<tree type="0" label="r2"/>
 		</tree>
 	</tree>
 </tree>

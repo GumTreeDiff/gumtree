@@ -14,24 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
- * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
 package com.github.gumtreediff.actions;
 
+import com.github.gumtreediff.tree.ITree;
+
 import java.util.HashSet;
-import java.util.List;
+
 import java.util.Set;
 
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.matchers.Mapping;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
-
-public abstract class TreeClassifier {
+public abstract class AbstractITreeClassifier implements ITreeClassifier {
+    protected final Diff diff;
 
     protected final Set<ITree> srcUpdTrees = new HashSet<>();
 
@@ -45,42 +40,34 @@ public abstract class TreeClassifier {
 
     protected final Set<ITree> dstAddTrees = new HashSet<>();
 
-    protected final MappingStore mappings;
-
-    protected final List<Action> actions;
-
-    public TreeClassifier(MappingStore mappings) {
-        this.mappings = new MappingStore(mappings); // FIXME Why a copy ?
-        ActionGenerator g = new ActionGenerator(mappings);
-        g.generate();
-        this.actions = g.getActions();
+    public AbstractITreeClassifier(Diff diff) {
+        this.diff = diff;
         classify();
     }
 
-    public abstract void classify();
+    protected abstract void classify();
 
-    public Set<ITree> getSrcUpdTrees() {
+    public Set<ITree> getUpdatedSrcs() {
         return srcUpdTrees;
     }
 
-    public Set<ITree> getDstUpdTrees() {
+    public Set<ITree> getUpdatedDsts() {
         return dstUpdTrees;
     }
 
-    public Set<ITree> getSrcMvTrees() {
+    public Set<ITree> getMovedSrcs() {
         return srcMvTrees;
     }
 
-    public Set<ITree> getDstMvTrees() {
+    public Set<ITree> getMovedDsts() {
         return dstMvTrees;
     }
 
-    public Set<ITree> getSrcDelTrees() {
+    public Set<ITree> getDeletedSrcs() {
         return srcDelTrees;
     }
 
-    public Set<ITree> getDstAddTrees() {
+    public Set<ITree> getInsertedDsts() {
         return dstAddTrees;
     }
-
 }

@@ -40,4 +40,15 @@ public abstract class Action {
     }
 
     public abstract String getName();
+
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (o == null)
+            return false;
+        if (o.getClass() != this.getClass())
+            return false;
+
+        return node == ((Action) o).node;
+    }
 }

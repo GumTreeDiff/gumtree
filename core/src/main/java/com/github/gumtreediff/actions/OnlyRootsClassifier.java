@@ -20,35 +20,53 @@
 
 package com.github.gumtreediff.actions;
 
-import java.util.List;
-import java.util.Set;
-
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.ITree;
 
-public class OnlyRootsClassifier extends TreeClassifier {
-    public OnlyRootsClassifier(MappingStore m) {
-        super(m);
+import java.util.HashSet;
+import java.util.Set;
+
+public class OnlyRootsClassifier extends AbstractITreeClassifier {
+    public OnlyRootsClassifier(Diff diff) {
+        super(diff);
     }
 
     @Override
     public void classify() {
-        for (Action a: actions) {
-            if (a instanceof Delete || a instanceof TreeDelete)
+        Set<ITree> insertedDsts = new HashSet<>();
+        for (Action a: diff.editScript)
+            if (a instanceof Insert)
+                insertedDsts.add(a.getNode());
+
+        Set<ITree> deletedSrcs = new HashSet<>();
+        for (Action a: diff.editScript)
+            if (a instanceof Delete)
+                deletedSrcs.add(a.getNode());
+
+        for (Action a: diff.editScript) {
+            if (a instanceof TreeDelete)
                 srcDelTrees.add(a.getNode());
-            else if (a instanceof Insert || a instanceof TreeInsert )
+            else if (a instanceof Delete) {
+                if (deletedSrcs.containsAll(a.getNode().getDescendants())
+                        && !deletedSrcs.contains(a.getNode().getParent()))
+                    srcDelTrees.add(a.getNode());
+            }
+            else if (a instanceof Insert) {
+                if (insertedDsts.containsAll(a.getNode().getDescendants())
+                        && !insertedDsts.contains(a.getNode().getParent()))
+                    dstAddTrees.add(a.getNode());
+            }
+            else if (a instanceof TreeInsert )
                 dstAddTrees.add(a.getNode());
             else if (a instanceof Update) {
                 srcUpdTrees.add(a.getNode());
-                dstUpdTrees.add(mappings.getDstForSrc(a.getNode()));
+                dstUpdTrees.add(diff.mappings.getDstForSrc(a.getNode()));
             }
             else if (a instanceof Move) {
                 srcMvTrees.add(a.getNode());
-                dstMvTrees.add(mappings.getDstForSrc(a.getNode()));
+                dstMvTrees.add(diff.mappings.getDstForSrc(a.getNode()));
             }
         }
     }

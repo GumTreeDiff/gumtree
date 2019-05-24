@@ -22,7 +22,6 @@ package com.github.gumtreediff.actions.model;
 import com.github.gumtreediff.tree.ITree;
 
 public class TreeInsert extends TreeAddition {
-
     public TreeInsert(ITree node, ITree parent, int pos) {
         super(node, parent, pos);
     }

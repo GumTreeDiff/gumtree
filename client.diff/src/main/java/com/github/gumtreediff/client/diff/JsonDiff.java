@@ -20,14 +20,12 @@
 
 package com.github.gumtreediff.client.diff;
 
-import com.github.gumtreediff.actions.ActionGenerator;
+import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.io.ActionsIoUtils;
-import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 
 import java.util.List;
 
@@ -46,12 +44,10 @@ public class JsonDiff extends AbstractDiffClient<AbstractDiffClient.Options> {
 
     @Override
     public void run() {
-        MappingStore m = matchTrees();
-        ActionGenerator g = new ActionGenerator(m);
-        g.generate();
-        List<Action> actions = g.getActions();
+        MappingStore ms = matchTrees();
+        EditScript actions = new ChawatheScriptGenerator().computeActions(ms);
         try {
-            ActionsIoUtils.toJson(getSrcTreeContext(), actions, m).writeTo(System.out);
+            ActionsIoUtils.toJson(getSrcTreeContext(), actions, ms).writeTo(System.out);
         } catch (Exception e) {
             e.printStackTrace();
         }

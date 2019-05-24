@@ -42,10 +42,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
-import com.github.gumtreediff.actions.TreeClassifier;
+import com.github.gumtreediff.actions.Diff;
+import com.github.gumtreediff.actions.ITreeClassifier;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.actions.AllNodesClassifier;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -55,7 +55,7 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 
     private TreeContext src;
     private TreeContext dst;
-    private TreeClassifier classifyTrees;
+    private ITreeClassifier classifyTrees;
     private MappingStore mappings;
 
     private TreePanel panSrc;
@@ -69,12 +69,12 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
     //private static final Color MIS_COLOR = new Color(0, 0, 128);
     private static final Color MV_COLOR = new Color(128, 0, 128);
 
-    public MappingsPanel(String srcPath, String dstPath, TreeContext src, TreeContext dst, MappingStore m)  {
+    public MappingsPanel(String srcPath, String dstPath, Diff diff)  {
         super(new GridLayout(1, 0));
         this.src = src;
         this.dst = dst;
-        this.classifyTrees = new AllNodesClassifier(m);
-        this.mappings = new MappingStore(m);
+        this.classifyTrees = diff.createAllNodeClassifier();
+        this.mappings = diff.mappings;
         this.panSrc = new TreePanel(this.src, new MappingsCellRenderer(true));
         this.panSrc.getJTree().addTreeSelectionListener(this);
         this.panDst = new TreePanel(this.dst, new MappingsCellRenderer(false));
@@ -123,12 +123,12 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
     }
 
     private void openNodes() {
-        for (ITree t: classifyTrees.getSrcDelTrees()) openNode(panSrc, t);
-        for (ITree t: classifyTrees.getDstAddTrees()) openNode(panDst, t);
-        for (ITree t: classifyTrees.getSrcUpdTrees()) openNode(panSrc, t);
-        for (ITree t: classifyTrees.getDstUpdTrees()) openNode(panDst, t);
-        for (ITree t: classifyTrees.getSrcMvTrees()) openNode(panSrc, t);
-        for (ITree t: classifyTrees.getDstMvTrees()) openNode(panDst, t);
+        for (ITree t: classifyTrees.getDeletedSrcs()) openNode(panSrc, t);
+        for (ITree t: classifyTrees.getInsertedDsts()) openNode(panDst, t);
+        for (ITree t: classifyTrees.getUpdatedSrcs()) openNode(panSrc, t);
+        for (ITree t: classifyTrees.getUpdatedDsts()) openNode(panDst, t);
+        for (ITree t: classifyTrees.getMovedSrcs()) openNode(panSrc, t);
+        for (ITree t: classifyTrees.getMovedDsts()) openNode(panDst, t);
         panSrc.getJTree().scrollPathToVisible(new TreePath(panSrc.getTrees().get(src.getRoot()).getPath()));
         panDst.getJTree().scrollPathToVisible(new TreePath(panDst.getTrees().get(dst.getRoot()).getPath()));
     }
@@ -209,12 +209,12 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
                                                       boolean leaf, int row, boolean hasFocus) {
             super.getTreeCellRendererComponent(jtree, value, selected, expanded, leaf, row, hasFocus);
             ITree tree = (ITree) ((DefaultMutableTreeNode) value).getUserObject();
-            if (isSrc && classifyTrees.getSrcDelTrees().contains(tree)) setForeground(DEL_COLOR);
-            else if (!isSrc && classifyTrees.getDstAddTrees().contains(tree)) setForeground(ADD_COLOR);
-            else if (isSrc && classifyTrees.getSrcUpdTrees().contains(tree)) setForeground(UPD_COLOR);
-            else if (!isSrc && classifyTrees.getDstUpdTrees().contains(tree)) setForeground(UPD_COLOR);
-            else if (isSrc && classifyTrees.getSrcMvTrees().contains(tree)) setForeground(MV_COLOR);
-            else if (!isSrc && classifyTrees.getDstMvTrees().contains(tree)) setForeground(MV_COLOR);
+            if (isSrc && classifyTrees.getDeletedSrcs().contains(tree)) setForeground(DEL_COLOR);
+            else if (!isSrc && classifyTrees.getInsertedDsts().contains(tree)) setForeground(ADD_COLOR);
+            else if (isSrc && classifyTrees.getUpdatedSrcs().contains(tree)) setForeground(UPD_COLOR);
+            else if (!isSrc && classifyTrees.getUpdatedDsts().contains(tree)) setForeground(UPD_COLOR);
+            else if (isSrc && classifyTrees.getMovedSrcs().contains(tree)) setForeground(MV_COLOR);
+            else if (!isSrc && classifyTrees.getMovedDsts().contains(tree)) setForeground(MV_COLOR);
             return this;
         }
     }

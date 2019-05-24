@@ -19,15 +19,14 @@
 
 package com.github.gumtree.dist;
 
-import com.github.gumtreediff.actions.ActionGenerator;
+import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.client.Run;
-import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.io.ActionsIoUtils;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.*;
@@ -76,8 +75,7 @@ public class ActionsCollector {
             TreeContext src = TreeIoUtils.fromXml().generateFrom().file(path.toString());
             TreeContext dst = TreeIoUtils.fromXml().generateFrom().file(otherPath.toString());
             MappingStore mappings = new CompositeMatchers.ClassicGumtree().match(src.getRoot(), dst.getRoot());
-            ActionGenerator g = new ActionGenerator(mappings);
-            List<Action> actions = g.generate();
+            EditScript actions = new ChawatheScriptGenerator().computeActions(mappings);
 
             String res = Paths.get(OUTPUT_DIR, outputPath.getFileName().toString()).toString();
             ActionsIoUtils.toText(src, actions, mappings).writeTo(new FileWriter(res));
@@ -98,8 +96,7 @@ public class ActionsCollector {
             TreeContext src = TreeIoUtils.fromXml().generateFrom().file(path.toString());
             TreeContext dst = TreeIoUtils.fromXml().generateFrom().file(otherPath.toString());
             MappingStore mappings = new CompositeMatchers.ClassicGumtree().match(src.getRoot(), dst.getRoot());
-            ActionGenerator g = new ActionGenerator(mappings);
-            List<Action> actions = g.generate();
+            EditScript actions = new ChawatheScriptGenerator().computeActions(mappings);
             StringWriter w = new StringWriter();
             ActionsIoUtils.toText(src, actions, mappings).writeTo(w);
             Path refPath = Paths.get(path.toString().replace("_v0_","_actions_"));

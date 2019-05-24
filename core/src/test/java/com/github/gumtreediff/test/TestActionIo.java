@@ -20,7 +20,8 @@
 
 package com.github.gumtreediff.test;
 
-import com.github.gumtreediff.actions.ActionGenerator;
+import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.io.ActionsIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
@@ -40,7 +41,7 @@ public class TestActionIo {
     private ITree src;
     private ITree dst;
     private MappingStore ms;
-    private List<Action> actions;
+    private EditScript actions;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -56,7 +57,7 @@ public class TestActionIo {
         ms.addMapping(src.getChild("0.0"), dst.getChild("1.0.0"));
         ms.addMapping(src.getChild(4), dst.getChild(3));
         ms.addMapping(src.getChild("4.0"), dst.getChild("3.0.0.0"));
-        actions = new ActionGenerator(ms).generate();
+        actions = new ChawatheScriptGenerator().computeActions(ms);
     }
 
     @Test

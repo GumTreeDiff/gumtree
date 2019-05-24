@@ -20,26 +20,20 @@
 
 package com.github.gumtreediff.actions;
 
-import java.util.List;
-import java.util.Set;
-
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.actions.model.Update;
-import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.TreeContext;
 
-public class AllNodesClassifier extends TreeClassifier {
-    public AllNodesClassifier(MappingStore m) {
-        super(m);
+public class AllNodesClassifier extends AbstractITreeClassifier {
+    public AllNodesClassifier(Diff diff) {
+        super(diff);
     }
 
     @Override
     public void classify() {
-        for (Action a: actions) {
+        for (Action a: diff.editScript) {
             if (a instanceof Delete)
                 srcDelTrees.add(a.getNode());
             else if (a instanceof TreeDelete) {
@@ -54,13 +48,13 @@ public class AllNodesClassifier extends TreeClassifier {
             }
             else if (a instanceof Update) {
                 srcUpdTrees.add(a.getNode());
-                dstUpdTrees.add(mappings.getDstForSrc(a.getNode()));
+                dstUpdTrees.add(diff.mappings.getDstForSrc(a.getNode()));
             }
             else if (a instanceof Move) {
                 srcMvTrees.add(a.getNode());
                 srcMvTrees.addAll(a.getNode().getDescendants());
-                dstMvTrees.add(mappings.getDstForSrc(a.getNode()));
-                dstMvTrees.addAll(mappings.getDstForSrc(a.getNode()).getDescendants());
+                dstMvTrees.add(diff.mappings.getDstForSrc(a.getNode()));
+                dstMvTrees.addAll(diff.mappings.getDstForSrc(a.getNode()).getDescendants());
             }
         }
     }

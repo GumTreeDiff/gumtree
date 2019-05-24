@@ -17,12 +17,10 @@
  * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.actions.model;
+package com.github.gumtreediff.actions;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.matchers.MappingStore;
 
-public abstract class TreeAction extends Action {
-    public TreeAction(ITree node) {
-        super(node);
-    }
+public interface EditScriptGenerator {
+    EditScript computeActions(MappingStore ms);
 }

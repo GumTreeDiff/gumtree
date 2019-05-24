@@ -39,12 +39,13 @@ public class TestZsMatcher {
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
         MappingStore mappings = new ZsMatcher().match(src, dst);
-        assertEquals(5, mappings.size());
+        assertEquals(6, mappings.size());
         assertTrue(mappings.has(src, dst.getChild(0)));
         assertTrue(mappings.has(src.getChild(0), dst.getChild("0.0")));
         assertTrue(mappings.has(src.getChild(1), dst.getChild("0.1")));
         assertTrue(mappings.has(src.getChild("1.0"), dst.getChild("0.1.0")));
         assertTrue(mappings.has(src.getChild("1.2"), dst.getChild("0.1.2")));
+        assertTrue(mappings.has(src.getChild("1.3"), dst.getChild("0.1.3")));
     }
 
     @Test

@@ -17,12 +17,32 @@
  * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.actions.model;
+package com.github.gumtreediff.actions;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.tree.TreeContext;
 
-public abstract class TreeAction extends Action {
-    public TreeAction(ITree node) {
-        super(node);
+public class Diff {
+    public final TreeContext src;
+
+    public final TreeContext dst;
+
+    public final MappingStore mappings;
+
+    public final EditScript editScript;
+
+    public Diff(TreeContext src, TreeContext dst, MappingStore mappings, EditScript editScript) {
+        this.src = src;
+        this.dst = dst;
+        this.mappings = mappings;
+        this.editScript = editScript;
+    }
+
+    public ITreeClassifier createAllNodeClassifier() {
+        return new AllNodesClassifier(this);
+    }
+
+    public ITreeClassifier createRootNodesClassifier() {
+        return new OnlyRootsClassifier(this);
     }
 }

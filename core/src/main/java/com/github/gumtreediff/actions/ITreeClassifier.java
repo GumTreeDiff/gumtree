@@ -17,12 +17,22 @@
  * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.actions.model;
+package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.tree.ITree;
 
-public abstract class TreeAction extends Action {
-    public TreeAction(ITree node) {
-        super(node);
-    }
+import java.util.Set;
+
+public interface ITreeClassifier {
+    Set<ITree> getUpdatedSrcs();
+
+    Set<ITree> getDeletedSrcs();
+
+    Set<ITree> getMovedSrcs();
+
+    Set<ITree> getUpdatedDsts();
+
+    Set<ITree> getInsertedDsts();
+
+    Set<ITree> getMovedDsts();
 }
