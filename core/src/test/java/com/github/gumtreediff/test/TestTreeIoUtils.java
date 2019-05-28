@@ -46,17 +46,18 @@ public class TestTreeIoUtils {
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         TreeIoUtils.toXml(tc).writeTo(bos);
-        assertEquals("<?xml version=\"1.0\" ?>\n" +
-                "<root>\n" +
-                "  <context></context>\n" +
-                "  <tree type=\"TYPE_0\" label=\"a\" pos=\"0\" length=\"0\">\n" +
-                "    <tree type=\"TYPE_1\" label=\"b\" pos=\"0\" length=\"0\">\n" +
-                "      <tree type=\"TYPE_3\" label=\"c\" pos=\"0\" length=\"0\"></tree>\n" +
-                "      <tree type=\"TYPE_3\" label=\"d\" pos=\"0\" length=\"0\"></tree>\n" +
-                "    </tree>\n" +
-                "    <tree type=\"TYPE_2\" pos=\"0\" length=\"0\"></tree>\n" +
-                "  </tree>\n" +
-                "</root>\n", bos.toString());
+        System.out.println(bos);
+        assertEquals("<?xml version=\"1.0\" ?>\n"
+                     + "<root>\n"
+                     + "  <context></context>\n"
+                     + "  <tree type=\"TYPE_0\" label=\"a\" pos=\"0\" length=\"0\">\n"
+                     + "    <tree type=\"TYPE_1\" label=\"b\" pos=\"0\" length=\"0\">\n"
+                     + "      <tree type=\"TYPE_3\" label=\"c\" pos=\"0\" length=\"0\"></tree>\n"
+                     + "      <tree type=\"TYPE_3\" label=\"d\" pos=\"0\" length=\"0\"></tree>\n"
+                     + "    </tree>\n"
+                     + "    <tree type=\"TYPE_2\" pos=\"0\" length=\"0\"></tree>\n"
+                     + "  </tree>\n"
+                     + "</root>\n", bos.toString());
         TreeContext tca = TreeIoUtils.fromXml().generateFrom().string(bos.toString());
         assertTrue(tc.getRoot().isIsomorphicTo(tca.getRoot()));
     }
@@ -78,38 +79,36 @@ public class TestTreeIoUtils {
     @Test
     public void testPrintTextTree() throws Exception {
         TreeContext tc = getTreeContext();
-
-        assertEquals("TYPE_0: a [0,0]\n" +
-                "    TYPE_1: b [0,0]\n" +
-                "        TYPE_3: c [0,0]\n" +
-                "        TYPE_3: d [0,0]\n" +
-                "    TYPE_2 [0,0]", tc.toString());
-
-        assertEquals("TYPE_0: a [0,0]\n" +
-                "    TYPE_1: b [0,0]\n" +
-                "        TYPE_3: c [0,0]\n" +
-                "        TYPE_3: d [0,0]\n" +
-                "    TYPE_2 [0,0]", tc.getRoot().toTreeString());
-
-        assertEquals("TYPE_1: b [0,0]\n" +
-                "    TYPE_3: c [0,0]\n" +
-                "    TYPE_3: d [0,0]", tc.getRoot().getChild(0).toTreeString());
+        System.out.println(tc.toString());
+        assertEquals("TYPE_0: a [0,0]\n"
+                     + "    TYPE_1: b [0,0]\n"
+                     + "        TYPE_3: c [0,0]\n"
+                     + "        TYPE_3: d [0,0]\n"
+                     + "    TYPE_2 [0,0]", tc.toString());
+        assertEquals("TYPE_0: a [0,0]\n"
+                     + "    TYPE_1: b [0,0]\n"
+                     + "        TYPE_3: c [0,0]\n"
+                     + "        TYPE_3: d [0,0]\n"
+                     + "    TYPE_2 [0,0]", tc.getRoot().toTreeString());
+        assertEquals("TYPE_1: b [0,0]\n"
+                     + "    TYPE_3: c [0,0]\n"
+                     + "    TYPE_3: d [0,0]", tc.getRoot().getChild(0).toTreeString());
     }
 
     @Test
     public void testDotFormatter() {
         TreeContext tc = getTreeContext();
-        assertEquals("digraph G {\n" +
-                "\tid_0 [label=\"TYPE_0: a [0,0]\"];\n" +
-                "\tid_1 [label=\"TYPE_1: b [0,0]\"];\n" +
-                "\tid_0 -> id_1;\n" +
-                "\tid_2 [label=\"TYPE_3: c [0,0]\"];\n" +
-                "\tid_1 -> id_2;\n" +
-                "\tid_3 [label=\"TYPE_3: d [0,0]\"];\n" +
-                "\tid_1 -> id_3;\n" +
-                "\tid_4 [label=\"TYPE_2 [0,0]\"];\n" +
-                "\tid_0 -> id_4;\n" +
-                "}", TreeIoUtils.toDot(tc).toString());
+        assertEquals("digraph G {\n"
+                     + "\tid_0 [label=\"TYPE_0: a [0,0]\"];\n"
+                     + "\tid_1 [label=\"TYPE_1: b [0,0]\"];\n"
+                     + "\tid_0 -> id_1;\n"
+                     + "\tid_2 [label=\"TYPE_3: c [0,0]\"];\n"
+                     + "\tid_1 -> id_2;\n"
+                     + "\tid_3 [label=\"TYPE_3: d [0,0]\"];\n"
+                     + "\tid_1 -> id_3;\n"
+                     + "\tid_4 [label=\"TYPE_2 [0,0]\"];\n"
+                     + "\tid_0 -> id_4;\n"
+                     + "}", TreeIoUtils.toDot(tc).toString());
     }
 
     private static TreeContext getTreeContext() {
