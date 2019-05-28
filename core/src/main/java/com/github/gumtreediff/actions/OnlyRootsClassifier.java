@@ -49,13 +49,13 @@ public class OnlyRootsClassifier extends AbstractITreeClassifier {
             if (a instanceof TreeDelete)
                 srcDelTrees.add(a.getNode());
             else if (a instanceof Delete) {
-                if (deletedSrcs.containsAll(a.getNode().getDescendants())
-                        && !deletedSrcs.contains(a.getNode().getParent()))
+                if (!(deletedSrcs.containsAll(a.getNode().getDescendants())
+                        && deletedSrcs.contains(a.getNode().getParent())))
                     srcDelTrees.add(a.getNode());
             }
             else if (a instanceof Insert) {
-                if (insertedDsts.containsAll(a.getNode().getDescendants())
-                        && !insertedDsts.contains(a.getNode().getParent()))
+                if (!(insertedDsts.containsAll(a.getNode().getDescendants())
+                        && insertedDsts.contains(a.getNode().getParent())))
                     dstAddTrees.add(a.getNode());
             }
             else if (a instanceof TreeInsert )
