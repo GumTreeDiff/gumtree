@@ -39,7 +39,7 @@ public class TreeContext {
 
     @Override
     public String toString() {
-        return TreeIoUtils.toLisp(this).toString();
+        return TreeIoUtils.toText(this).toString();
     }
 
     public void setRoot(ITree root) {

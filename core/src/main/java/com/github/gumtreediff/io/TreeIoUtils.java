@@ -627,7 +627,7 @@ public final class TreeIoUtils {
         }
 
         private static String generateId() {
-            return "id_" + String.valueOf(idCounter.getAndIncrement());
+            return "id_" + idCounter.getAndIncrement();
         }
     }
 

@@ -30,13 +30,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
-import java.util.ListIterator;
 
 import java.io.ByteArrayOutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 public class TestTreeIoUtils {
     private static final Type TYPE_0 = type("TYPE_0");
     private static final Type TYPE_1 = type("TYPE_1");
@@ -45,27 +42,23 @@ public class TestTreeIoUtils {
 
     @Test
     public void testSerializeTree() throws Exception {
-        TreeContext tc = new TreeContext();
-        ITree a = tc.createTree(TYPE_0, "a");
-        tc.setRoot(a);
-
-        ITree b = tc.createTree(TYPE_1, "b");
-        b.setParentAndUpdateChildren(a);
-        ITree c = tc.createTree(TYPE_3, "c");
-        c.setParentAndUpdateChildren(b);
-        ITree d = tc.createTree(TYPE_3, "d");
-        d.setParentAndUpdateChildren(b);
-        ITree e = tc.createTree(TYPE_2);
-        e.setParentAndUpdateChildren(a);
+        TreeContext tc = getTreeContext();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
         TreeIoUtils.toXml(tc).writeTo(bos);
-        System.out.println(bos.toString());
+        assertEquals("<?xml version=\"1.0\" ?>\n" +
+                "<root>\n" +
+                "  <context></context>\n" +
+                "  <tree type=\"TYPE_0\" label=\"a\" pos=\"0\" length=\"0\">\n" +
+                "    <tree type=\"TYPE_1\" label=\"b\" pos=\"0\" length=\"0\">\n" +
+                "      <tree type=\"TYPE_3\" label=\"c\" pos=\"0\" length=\"0\"></tree>\n" +
+                "      <tree type=\"TYPE_3\" label=\"d\" pos=\"0\" length=\"0\"></tree>\n" +
+                "    </tree>\n" +
+                "    <tree type=\"TYPE_2\" pos=\"0\" length=\"0\"></tree>\n" +
+                "  </tree>\n" +
+                "</root>\n", bos.toString());
         TreeContext tca = TreeIoUtils.fromXml().generateFrom().string(bos.toString());
-        ITree ca = tca.getRoot();
-
-        assertTrue(a.isIsomorphicTo(ca));
+        assertTrue(tc.getRoot().isIsomorphicTo(tca.getRoot()));
     }
 
     @Test
@@ -84,6 +77,42 @@ public class TestTreeIoUtils {
 
     @Test
     public void testPrintTextTree() throws Exception {
+        TreeContext tc = getTreeContext();
+
+        assertEquals("TYPE_0: a [0,0]\n" +
+                "    TYPE_1: b [0,0]\n" +
+                "        TYPE_3: c [0,0]\n" +
+                "        TYPE_3: d [0,0]\n" +
+                "    TYPE_2 [0,0]", tc.toString());
+
+        assertEquals("TYPE_0: a [0,0]\n" +
+                "    TYPE_1: b [0,0]\n" +
+                "        TYPE_3: c [0,0]\n" +
+                "        TYPE_3: d [0,0]\n" +
+                "    TYPE_2 [0,0]", tc.getRoot().toTreeString());
+
+        assertEquals("TYPE_1: b [0,0]\n" +
+                "    TYPE_3: c [0,0]\n" +
+                "    TYPE_3: d [0,0]", tc.getRoot().getChild(0).toTreeString());
+    }
+
+    @Test
+    public void testDotFormatter() {
+        TreeContext tc = getTreeContext();
+        assertEquals("digraph G {\n" +
+                "\tid_0 [label=\"TYPE_0: a [0,0]\"];\n" +
+                "\tid_1 [label=\"TYPE_1: b [0,0]\"];\n" +
+                "\tid_0 -> id_1;\n" +
+                "\tid_2 [label=\"TYPE_3: c [0,0]\"];\n" +
+                "\tid_1 -> id_2;\n" +
+                "\tid_3 [label=\"TYPE_3: d [0,0]\"];\n" +
+                "\tid_1 -> id_3;\n" +
+                "\tid_4 [label=\"TYPE_2 [0,0]\"];\n" +
+                "\tid_0 -> id_4;\n" +
+                "}", TreeIoUtils.toDot(tc).toString());
+    }
+
+    private static TreeContext getTreeContext() {
         TreeContext tc = new TreeContext();
         ITree a = tc.createTree(TYPE_0, "a");
         tc.setRoot(a);
@@ -94,37 +123,9 @@ public class TestTreeIoUtils {
         c.setParentAndUpdateChildren(b);
         ITree d = tc.createTree(TYPE_3, "d");
         d.setParentAndUpdateChildren(b);
-        ITree e = tc.createTree(TYPE_2, null);
+        ITree e = tc.createTree(TYPE_2);
         e.setParentAndUpdateChildren(a);
-        // Refresh metrics is called because it is automatically called in fromXML
 
-        System.out.println("*****************");
-        System.out.println(a.toTreeString());
-        System.out.println("-----------------");
-        System.out.println(b.toTreeString());
-    }
-
-    @Test
-    public void testDotFormatter() {
-        TreeContext context = new TreeContext();
-        ITree big = TreeLoader.getDummyBig();
-        context.setRoot(big);
-        System.out.println(TreeIoUtils.toDot(context));
-    }
-
-    @Test
-    public void testLoadBigTree() {
-        ITree big = TreeLoader.getDummyBig();
-        assertEquals("a", big.getLabel());
-        compareList(big.getChildren(), "b", "e", "f");
-    }
-
-    void compareList(List<ITree> lst, String... expected) {
-        ListIterator<ITree> it = lst.listIterator();
-        for (String e: expected) {
-            ITree n = it.next();
-            assertEquals(e, n.getLabel());
-        }
-        assertFalse(it.hasNext());
+        return tc;
     }
 }
