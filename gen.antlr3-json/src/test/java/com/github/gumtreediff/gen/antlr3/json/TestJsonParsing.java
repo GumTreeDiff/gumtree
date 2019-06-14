@@ -23,11 +23,14 @@ package com.github.gumtreediff.gen.antlr3.json;
 import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.gumtreediff.matchers.CompositeMatchers;
+import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.*;
 import org.junit.jupiter.api.Test;
 
-public class TestJsonParsing {
+import java.io.IOException;
 
+public class TestJsonParsing {
     public static final Type ARRAY = type(JSONParser.tokenNames[JSONParser.ARRAY]);
 
     @Test
@@ -39,5 +42,4 @@ public class TestJsonParsing {
         assertEquals(ARRAY, tree.getType());
         assertEquals(37, tree.getMetrics().size);
     }
-
 }

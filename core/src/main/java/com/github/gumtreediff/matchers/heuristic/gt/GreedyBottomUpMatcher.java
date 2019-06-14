@@ -56,7 +56,6 @@ public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher implements Ma
                     List<ITree> candidates = getDstCandidates(t);
                     ITree best = null;
                     double max = -1D;
-
                     for (ITree cand : candidates) {
                         double sim = SimilarityMetrics.diceSimilarity(t, cand, mappings);
                         if (sim > max && sim >= SIM_THRESHOLD) {

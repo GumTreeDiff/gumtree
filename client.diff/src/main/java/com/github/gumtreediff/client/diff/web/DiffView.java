@@ -20,11 +20,10 @@
 
 package com.github.gumtreediff.client.diff.web;
 
-import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.Diff;
+import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.TreeContext;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
@@ -44,12 +43,11 @@ public class DiffView implements Renderable {
 
     private File fDst;
 
-    public DiffView(File fSrc, File fDst, TreeContext src, TreeContext dst) throws IOException {
+    public DiffView(File fSrc, File fDst, TreeContext src, TreeContext dst, Matcher matcher, EditScriptGenerator scriptGenerator) throws IOException {
         this.fSrc = fSrc;
         this.fDst = fDst;
-        Matcher matcher = Matchers.getInstance().getMatcher();
         MappingStore mappings = matcher.match(src.getRoot(), dst.getRoot());
-        Diff diff = new Diff(src, dst, mappings, new ChawatheScriptGenerator().computeActions(mappings));
+        Diff diff = new Diff(src, dst, mappings, scriptGenerator.computeActions(mappings));
         diffs = new HtmlDiffs(fSrc, fDst, diff);
         diffs.produce();
     }

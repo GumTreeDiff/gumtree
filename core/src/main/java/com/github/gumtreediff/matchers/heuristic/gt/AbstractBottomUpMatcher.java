@@ -51,8 +51,8 @@ public abstract class AbstractBottomUpMatcher {
         protected List<ITree> getDstCandidates(ITree src) {
             List<ITree> seeds = new ArrayList<>();
             for (ITree c : src.getDescendants()) {
-                ITree m = mappings.getDstForSrc(c);
-                if (m != null) seeds.add(m);
+                if (mappings.isSrcMapped(c))
+                    seeds.add(mappings.getDstForSrc(c));
             }
             List<ITree> candidates = new ArrayList<>();
             Set<ITree> visited = new HashSet<>();
@@ -62,7 +62,7 @@ public abstract class AbstractBottomUpMatcher {
                     if (visited.contains(parent))
                         break;
                     visited.add(parent);
-                    if (parent.getType() == src.getType() && !mappings.isDstMapped(parent) && !parent.isRoot())
+                    if (parent.getType() == src.getType() && !(mappings.isDstMapped(parent) || parent.isRoot()))
                         candidates.add(parent);
                     seed = parent;
                 }

@@ -67,11 +67,6 @@ public class SimpleBottomUpMatcher implements Matcher {
                     for (ITree cand : candidates) {
                         double sim = SimilarityMetrics.jaccardSimilarity(t, cand, mappings);
                         if (sim > max && sim >= SIM_THRESHOLD) {
-                            if (t.getMetrics().depth == cand.getMetrics().depth) {
-                                lastChanceMatch(t, best);
-                                mappings.addMapping(t, best);
-                                return;
-                            }
                             max = sim;
                             best = cand;
                         }
@@ -89,7 +84,8 @@ public class SimpleBottomUpMatcher implements Matcher {
             List<ITree> seeds = new ArrayList<>();
             for (ITree c : src.getDescendants()) {
                 ITree m = mappings.getDstForSrc(c);
-                if (m != null) seeds.add(m);
+                if (m != null)
+                    seeds.add(m);
             }
             List<ITree> candidates = new ArrayList<>();
             Set<ITree> visited = new HashSet<>();
@@ -114,7 +110,6 @@ public class SimpleBottomUpMatcher implements Matcher {
 
             List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(srcChildren, dstChildren);
             for (int[] x : lcs) {
-
                 ITree t1 = srcChildren.get(x[0]);
                 ITree t2 = dstChildren.get(x[1]);
                 if (mappings.isMappingAllowed(t1, t2))

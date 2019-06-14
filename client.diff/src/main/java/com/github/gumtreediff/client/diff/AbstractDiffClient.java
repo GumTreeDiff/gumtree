@@ -30,7 +30,6 @@ import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 
 public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> extends Client {
 
@@ -97,6 +96,14 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
     ///////////////////
     // TODO after this line it should be rewrote in a better way
     private Matcher matcher;
+
+    protected Matcher getMatcher() {
+        Matchers matchers = Matchers.getInstance();
+        matcher = (opts.matcher == null)
+                ? matchers.getMatcher()
+                : matchers.getMatcher(opts.matcher);
+        return matcher;
+    }
 
     protected MappingStore matchTrees() {
         Matchers matchers = Matchers.getInstance();

@@ -21,6 +21,7 @@
 package com.github.gumtreediff.gen.js;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

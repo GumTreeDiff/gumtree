@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.client.diff.web;
 
+import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
@@ -105,7 +106,9 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
             Renderable view = new DiffView(pair.first, pair.second,
                     this.getTreeContext(pair.first.getAbsolutePath()),
-                    this.getTreeContext(pair.second.getAbsolutePath()));
+                    this.getTreeContext(pair.second.getAbsolutePath()),
+                    getMatcher(),
+                    new ChawatheScriptGenerator());
             return render(view);
         });
         get("/mergely/:id", (request, response) -> {
