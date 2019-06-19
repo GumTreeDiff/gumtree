@@ -32,6 +32,11 @@ public class SimilarityMetrics {
         return (double) numberOfCommonDescendants(src, dst, mappings) / (double) max;
     }
 
+    public static double overlapSimilarity(ITree src, ITree dst, MappingStore mappings) {
+        int min = Math.min(src.getDescendants().size(), dst.getDescendants().size());
+        return (double) numberOfCommonDescendants(src, dst, mappings) / (double) min;
+    }
+
     public static double diceSimilarity(ITree src, ITree dst, MappingStore mappings) {
         double commonDescendants = (double) numberOfCommonDescendants(src, dst, mappings);
         return (2D * commonDescendants)

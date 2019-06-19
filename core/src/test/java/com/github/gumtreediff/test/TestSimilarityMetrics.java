@@ -22,6 +22,8 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.TypeSet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,31 +31,34 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSimilarityMetrics {
     @Test
     public void testDiceSimilarity() {
-        ITree t1 = TreeLoader.getDummySrc();
-        ITree t2 = TreeLoader.getDummySrc();
-        MappingStore ms = new MappingStore(t1, t2);
-        ms.addMappingRecursively(t1.getChild(0), t2.getChild(0));
-        double expectedDice = (2.0 * 3.0) / (4.0 + 4.0);
-        assertEquals(expectedDice, SimilarityMetrics.diceSimilarity(t1, t2, ms));
+        MappingStore ms = getTestData();
+        assertEquals(2D / 3D, SimilarityMetrics.diceSimilarity(ms.src, ms.dst, ms));
     }
 
     @Test
     public void testJaccardSimilarity() {
-        ITree t1 = TreeLoader.getDummySrc();
-        ITree t2 = TreeLoader.getDummySrc();
-        MappingStore ms = new MappingStore(t1, t2);
-        ms.addMappingRecursively(t1.getChild(0), t2.getChild(0));
-        double expectedJaccard = (3.0) / (5.0);
-        assertEquals(expectedJaccard, SimilarityMetrics.jaccardSimilarity(t1, t2, ms));
+        MappingStore ms = getTestData();
+        assertEquals(0.5D, SimilarityMetrics.jaccardSimilarity(ms.src, ms.dst, ms));
     }
 
     @Test
-    public void testChawatheimilarity() {
+    public void testChawatheSimilarity() {
+        MappingStore ms = getTestData();
+        assertEquals(0.6D, SimilarityMetrics.chawatheSimilarity(ms.src, ms.dst, ms));
+    }
+
+    @Test
+    public void testOverlapSimilarity() {
+        MappingStore ms = getTestData();
+        assertEquals(0.75D, SimilarityMetrics.overlapSimilarity(ms.src, ms.dst, ms));
+    }
+
+    private static MappingStore getTestData() {
         ITree t1 = TreeLoader.getDummySrc();
         ITree t2 = TreeLoader.getDummySrc();
+        t2.addChild(new Tree(TypeSet.type("x"), "x"));
         MappingStore ms = new MappingStore(t1, t2);
         ms.addMappingRecursively(t1.getChild(0), t2.getChild(0));
-        double expectedChawathe = (3.0) / (4.0);
-        assertEquals(expectedChawathe, SimilarityMetrics.chawatheSimilarity(t1, t2, ms));
+        return ms;
     }
 }

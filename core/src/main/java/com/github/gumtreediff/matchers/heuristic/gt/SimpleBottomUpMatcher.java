@@ -66,7 +66,7 @@ public class SimpleBottomUpMatcher implements Matcher {
                     double max = -1D;
 
                     for (ITree cand : candidates) {
-                        double sim = SimilarityMetrics.jaccardSimilarity(t, cand, mappings);
+                        double sim = SimilarityMetrics.overlapSimilarity(t, cand, mappings);
                         if (sim > max && sim >= SIM_THRESHOLD) {
                             max = sim;
                             best = cand;
