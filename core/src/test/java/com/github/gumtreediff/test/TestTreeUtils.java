@@ -108,6 +108,22 @@ public class TestTreeUtils {
     }
 
     @Test
+    public void testHashValue() {
+        ITree t0 = TreeLoader.getDummySrc();
+        ITree t1 = TreeLoader.getDummySrc();
+        ITree t2 = t1.deepCopy();
+        t2.setLabel("foo");
+        ITree t3 = t2.deepCopy();
+        t3.addChild(new Tree(TypeSet.type("foo")));
+        assertEquals(t0.getMetrics().hash, t1.getMetrics().hash);
+        assertNotEquals(t0.getMetrics().hash, t2.getMetrics().hash);
+        assertNotEquals(t0.getMetrics().hash, t3.getMetrics().hash);
+        assertEquals(t0.getMetrics().structureHash, t1.getMetrics().structureHash);
+        assertEquals(t0.getMetrics().structureHash, t2.getMetrics().structureHash);
+        assertNotEquals(t0.getMetrics().structureHash, t3.getMetrics().structureHash);
+    }
+
+    @Test
     public void testHeight() {
         ITree root = TreeLoader.getDummySrc();
         assertEquals(2, root.getMetrics().height); // depth of a

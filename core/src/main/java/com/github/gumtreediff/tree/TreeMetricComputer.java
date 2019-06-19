@@ -27,6 +27,45 @@ public class TreeMetricComputer extends TreeVisitor.InnerNodesAndLeavesVisitor {
     public static final String LEAVE = "leave";
     public static final int BASE = 33;
 
+    int currentDepth = 0;
+    int currentPosition = 0;
+
+    @Override
+    public void startInnerNode(ITree tree) {
+        currentDepth++;
+    }
+
+    @Override
+    public void visitLeave(ITree tree) {
+        tree.setMetrics(new TreeMetrics(1, 0, leafHash(tree), leafStructureHash(tree), currentDepth, currentPosition));
+        currentPosition++;
+    }
+
+    @Override
+    public void endInnerNode(ITree tree) {
+        currentDepth--;
+        int sumSize = 0;
+        int maxHeight = 0;
+        int currentHash = 0;
+        int currentStructureHash = 0;
+        for (ITree child : tree.getChildren()) {
+            TreeMetrics metrics = child.getMetrics();
+            int exponent = 2 * sumSize + 1;
+            currentHash += metrics.hash * hashFactor(exponent);
+            currentStructureHash += metrics.structureHash * hashFactor(exponent);
+            sumSize += metrics.size;
+            if (metrics.height > maxHeight)
+                maxHeight = metrics.height;
+        }
+        tree.setMetrics(new TreeMetrics(
+                sumSize + 1,
+                maxHeight + 1,
+                innerNodeHash(tree, 2 * sumSize + 1, currentHash),
+                innerNodeStructureHash(tree, 2 * sumSize + 1, currentStructureHash),
+                currentDepth, currentPosition));
+        currentPosition++;
+    }
+
     private static int hashFactor(int exponent) {
         return fastExponentiation(BASE, exponent);
     }
@@ -46,49 +85,23 @@ public class TreeMetricComputer extends TreeVisitor.InnerNodesAndLeavesVisitor {
         return result;
     }
 
-    int currentDepth = 0;
-    int currentPosition = 0;
-
-    @Override
-    public void startInnerNode(ITree tree) {
-        currentDepth++;
-    }
-
-    @Override
-    public void visitLeave(ITree tree) {
-        tree.setMetrics(new TreeMetrics(1, 0, leafHash(tree), currentDepth, currentPosition));
-        currentPosition++;
-    }
-
-    @Override
-    public void endInnerNode(ITree tree) {
-        currentDepth--;
-        int sumSize = 0;
-        int maxHeight = 0;
-        int currentHash = 0;
-        for (ITree child : tree.getChildren()) {
-            TreeMetrics metrics = child.getMetrics();
-            int exponent = 2 * sumSize + 1;
-            currentHash += metrics.hash * hashFactor(exponent);
-            sumSize += metrics.size;
-            if (metrics.height > maxHeight)
-                maxHeight = metrics.height;
-        }
-        tree.setMetrics(new TreeMetrics(
-                sumSize + 1,
-                maxHeight + 1,
-                innerNodeHash(tree, 2 * sumSize + 1, currentHash),
-                currentDepth, currentPosition));
-        currentPosition++;
-    }
-
-    private int innerNodeHash(ITree tree, int size, int middleHash) {
+    private static int innerNodeHash(ITree tree, int size, int middleHash) {
         return Objects.hash(tree.getType(), tree.getLabel(), ENTER)
                 + middleHash
                 + Objects.hash(tree.getType(), tree.getLabel(), LEAVE) * hashFactor(size);
     }
 
-    private int leafHash(ITree tree) {
+    private static int innerNodeStructureHash(ITree tree, int size, int middleHash) {
+        return Objects.hash(tree.getType(), ENTER)
+               + middleHash
+               + Objects.hash(tree.getType(), LEAVE) * hashFactor(size);
+    }
+
+    private static int leafHash(ITree tree) {
         return innerNodeHash(tree, 1, 0);
+    }
+
+    private static int leafStructureHash(ITree tree) {
+        return innerNodeStructureHash(tree, 1, 0);
     }
 }

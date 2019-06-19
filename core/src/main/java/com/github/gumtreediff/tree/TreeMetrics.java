@@ -27,14 +27,17 @@ public class TreeMetrics {
 
     public final int hash;
 
+    public final int structureHash;
+
     public final int depth;
 
     public final int position;
 
-    public TreeMetrics(int size, int height, int hash, int depth, int position) {
+    public TreeMetrics(int size, int height, int hash, int structureHash, int depth, int position) {
         this.size = size;
         this.height = height;
         this.hash = hash;
+        this.structureHash = structureHash;
         this.depth = depth;
         this.position = position;
     }
