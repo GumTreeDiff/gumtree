@@ -112,6 +112,22 @@ public class MappingStore implements Iterable<Mapping> {
         return !(isSrcMapped(src) || isDstMapped(dst));
     }
 
+    public boolean areSrcsUnmapped(Collection<ITree> srcs) {
+        for (ITree src : srcs)
+            if (isSrcMapped(src))
+                return false;
+
+        return true;
+    }
+
+    public boolean areDstsUnmapped(Collection<ITree> dsts) {
+        for (ITree dst : dsts)
+            if (isDstMapped(dst))
+                return false;
+
+        return true;
+    }
+
     public boolean has(ITree src, ITree dst) {
         return srcToDst.get(src) == dst;
     }

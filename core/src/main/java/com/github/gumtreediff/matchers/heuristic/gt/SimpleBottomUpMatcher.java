@@ -24,6 +24,7 @@ import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeUtils;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
 
 import java.util.ArrayList;
@@ -108,12 +109,13 @@ public class SimpleBottomUpMatcher implements Matcher {
             List<ITree> srcChildren = src.getChildren();
             List<ITree> dstChildren = dst.getChildren();
 
-            List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(srcChildren, dstChildren);
+            List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithIsostructure(srcChildren, dstChildren);
             for (int[] x : lcs) {
                 ITree t1 = srcChildren.get(x[0]);
                 ITree t2 = dstChildren.get(x[1]);
-                if (mappings.isMappingAllowed(t1, t2))
-                    mappings.addMapping(t1, t2);
+                if (mappings.areSrcsUnmapped(TreeUtils.preOrder(t1))
+                        && mappings.areDstsUnmapped(TreeUtils.preOrder(t2)))
+                    mappings.addMappingRecursively(t1, t2);
             }
         }
     }

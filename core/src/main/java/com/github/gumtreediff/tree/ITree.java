@@ -279,6 +279,27 @@ public interface ITree {
     }
 
     /**
+     * Indicates whether or not this node and its descendants are isostructural (isomorphism without labels) to the node
+     * given in parameter and its descendants (which must not be null).
+     * This test fails fast.
+     */
+    default boolean isIsoStructuralTo(ITree tree) {
+        if (this.getType() != tree.getType())
+            return false;
+
+        if (getChildren().size() != tree.getChildren().size())
+            return false;
+
+        for (int i = 0; i < getChildren().size(); i++)  {
+            boolean isChildrenStructural = getChild(i).isIsoStructuralTo(tree.getChild(i));
+            if (!isChildrenStructural)
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Returns a string description of the node as well as its descendants.
      */
     String toTreeString();

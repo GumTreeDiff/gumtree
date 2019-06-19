@@ -130,6 +130,21 @@ public class TestTree {
     }
 
     @Test
+    public void testIsostructure() {
+        ITree root = TreeLoader.getDummySrc();
+        ITree rootCpy = TreeLoader.getDummySrc();
+        assertTrue(root.isIsoStructuralTo(rootCpy));
+        rootCpy.getChild("0.0").setLabel("foo");
+        assertTrue(root.isIsoStructuralTo(rootCpy));
+        root.getChild("0.0").setLabel("foo");
+        assertTrue(root.isIsoStructuralTo(rootCpy));
+        root.addChild(new FakeTree());
+        assertFalse(root.isIsoStructuralTo(rootCpy));
+        rootCpy.addChild(new FakeTree());
+        assertTrue(root.isIsoStructuralTo(rootCpy));
+    }
+
+    @Test
     public void testIsClone() {
         ITree tree = TreeLoader.getDummySrc();
         ITree copy = tree.deepCopy();
