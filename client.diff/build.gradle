@@ -2,9 +2,9 @@ description = 'GumTree diff client'
 
 dependencies {
 	implementation project(':client')
-	implementation 'com.sparkjava:spark-core:2.7.1'
+	implementation 'com.sparkjava:spark-core:2.8.0'
+	implementation 'org.slf4j:slf4j-simple:1.7.21'
 	implementation 'net.sf.trove4j:trove4j:3.0.3'
-	implementation 'org.slf4j:slf4j-nop:1.7.25'
 	// exclude servlet-api 2.0 because it causes a bug with spark-core
 	implementation('org.rendersnake:rendersnake:1.9.0') {
 		exclude group: 'javax.servlet', module: 'servlet-api'
