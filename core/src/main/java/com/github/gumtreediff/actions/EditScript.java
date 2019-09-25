@@ -60,6 +60,10 @@ public class EditScript implements Iterable<Action> {
         return actions.remove(index);
     }
 
+    public List<Action> asList() {
+        return actions;
+    }
+
     public int lastIndexOf(Action action) {
         return actions.lastIndexOf(action);
     }
