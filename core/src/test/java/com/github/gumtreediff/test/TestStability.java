@@ -95,8 +95,6 @@ public class TestStability {
         tree15.addChild(tree12);
         tree15.addChild(tree14);
 
-        ITree tree16 = generateTree("Identifier", "update");
-
         ITree tree17 = generateTree("Identifier", "value");
         ITree tree18 = generateTree("Identifier", "str");
         ITree tree19 = generateTree("Annotation");
@@ -105,6 +103,7 @@ public class TestStability {
 
         ITree tree20 = generateTree("Function");
         tree20.addChild(tree15);
+        ITree tree16 = generateTree("Identifier", "update");
         tree20.addChild(tree16);
         tree20.addChild(tree19);
 
@@ -156,7 +155,7 @@ public class TestStability {
         tree39.addChild(tree33);
         tree39.addChild(tree38);
 
-        ITree tree40 = generateTree("Identifier", "update");
+
 
         ITree tree41 = generateTree("Identifier", "value");
         ITree tree42 = generateTree("Identifier", "str");
@@ -166,6 +165,7 @@ public class TestStability {
 
         ITree tree44 = generateTree("Function");
         tree44.addChild(tree39);
+        ITree tree40 = generateTree("Identifier", "update");
         tree44.addChild(tree40);
         tree44.addChild(tree43);
 
