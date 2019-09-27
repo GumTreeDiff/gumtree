@@ -120,7 +120,9 @@ public abstract class AbstractSubtreeMatcher {
                 if (!(srcIgnored.contains(mapping.first) || dstIgnored.contains(mapping.second))) {
                     mappings.addMappingRecursively(mapping.first, mapping.second);
                     srcIgnored.add(mapping.first);
+                    srcIgnored.addAll(mapping.first.getDescendants());
                     dstIgnored.add(mapping.second);
+                    dstIgnored.addAll(mapping.second.getDescendants());
                 }
             }
         }

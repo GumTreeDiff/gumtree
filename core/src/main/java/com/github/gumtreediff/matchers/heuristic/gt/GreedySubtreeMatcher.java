@@ -46,9 +46,16 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher implements Matc
             List<Mapping> ambiguousList = new ArrayList<>();
             Set<ITree> ignored = new HashSet<>();
             for (ITree src : multiMappings.allMappedSrcs()) {
-                if (multiMappings.isSrcUnique(src))
-                    mappings.addMappingRecursively(src, multiMappings.getDsts(src).iterator().next());
-                else if (!ignored.contains(src)) {
+                boolean isMappingUnique = false;
+                if (multiMappings.isSrcUnique(src)) {
+                    ITree dst = multiMappings.getDsts(src).iterator().next();
+                    if (multiMappings.isDstUnique(dst)) {
+                        mappings.addMappingRecursively(src, dst);
+                        isMappingUnique = true;
+                    }
+                }
+
+                if (!(ignored.contains(src) && isMappingUnique)) {
                     Set<ITree> adsts = multiMappings.getDsts(src);
                     Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
                     for (ITree asrc : asrcs)

@@ -50,10 +50,10 @@ public class MultiMappingStore implements Iterable<Mapping> {
 
     public void addMapping(ITree src, ITree dst) {
         if (!srcToDsts.containsKey(src))
-            srcToDsts.put(src, new HashSet<ITree>());
+            srcToDsts.put(src, new HashSet<>());
         srcToDsts.get(src).add(dst);
         if (!dstToSrcs.containsKey(dst))
-            dstToSrcs.put(dst, new HashSet<ITree>());
+            dstToSrcs.put(dst, new HashSet<>());
         dstToSrcs.get(dst).add(src);
     }
 
@@ -95,11 +95,11 @@ public class MultiMappingStore implements Iterable<Mapping> {
     }
 
     public boolean isSrcUnique(ITree src) {
-        return srcToDsts.get(src).size() == 1;
+        return getDsts(src).size() == 1;
     }
 
     public boolean isDstUnique(ITree dst) {
-        return dstToSrcs.get(dst).size() == 1;
+        return getSrcs(dst).size() == 1;
     }
 
     @Override
