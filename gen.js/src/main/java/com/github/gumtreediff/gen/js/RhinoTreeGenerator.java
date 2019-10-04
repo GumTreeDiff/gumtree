@@ -25,6 +25,7 @@ import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
 import org.mozilla.javascript.CompilerEnvirons;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
@@ -34,19 +35,19 @@ import java.io.Reader;
 
 @Register(id = "js-rhino", accept = "\\.js$", priority = Registry.Priority.MAXIMUM)
 public class RhinoTreeGenerator extends TreeGenerator {
-
     @Override
     public TreeContext generate(Reader r) throws IOException {
         CompilerEnvirons env = new CompilerEnvirons();
         env.setRecordingLocalJsDocComments(true);
         env.setAllowSharpComments(true);
         env.setRecordingComments(true);
+        env.setLanguageVersion(Context.VERSION_ES6);
         Parser p = new Parser(env);
         try {
             AstRoot root = p.parse(r, null, 1);
             RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
             root.visitAll(visitor);
-            return visitor.getTree(root);
+            return visitor.getTreeContext();
         }
         catch (EvaluatorException e) {
             String message = String.format("Syntax error: %s at line %d, column %d",

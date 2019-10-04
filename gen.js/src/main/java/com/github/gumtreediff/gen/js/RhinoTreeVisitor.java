@@ -32,7 +32,6 @@ import com.github.gumtreediff.tree.TreeContext;
 import static com.github.gumtreediff.tree.TypeSet.type;
 
 public class RhinoTreeVisitor implements NodeVisitor {
-
     private Map<AstNode, ITree> trees;
     private TreeContext context;
 
@@ -43,7 +42,7 @@ public class RhinoTreeVisitor implements NodeVisitor {
         context.setRoot(tree);
     }
 
-    public TreeContext getTree(AstNode root) {
+    public TreeContext getTreeContext() {
         return context;
     }
 
@@ -81,5 +80,4 @@ public class RhinoTreeVisitor implements NodeVisitor {
         trees.put(node, t);
         return t;
     }
-
 }

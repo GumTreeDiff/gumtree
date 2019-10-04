@@ -1,5 +1,5 @@
 description = 'GumTree tree generator for JavaScript code (Rhino based).'
 
 dependencies {
-	implementation 'org.mozilla:rhino:1.7.10'
+	implementation 'org.mozilla:rhino:1.7.11'
 }
