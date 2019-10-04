@@ -53,8 +53,11 @@ public class CssTreeGenerator extends TreeGenerator {
         p.setCustomErrorHandler(null);
         p.setBrowserCompliantMode(false);
         try {
-            CascadingStyleSheet sheet = CSSHandler.readCascadingStyleSheetFromNode(ECSSVersion.LATEST,
-                    p.styleSheet(), CSSReader.getDefaultInterpretErrorHandler());
+            CascadingStyleSheet sheet = CSSHandler.readCascadingStyleSheetFromNode(
+                    ECSSVersion.LATEST,
+                    CSSReader.getDefaultInterpretErrorHandler(),
+                    true,
+                    p.styleSheet());
             GtCssVisitor v = new GtCssVisitor(sheet, lr);
             CSSVisitor.visitCSS(sheet, v);
             return v.getTreeContext();

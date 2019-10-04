@@ -1,6 +1,5 @@
 description = 'GumTree tree generator for CSS code based on ph-css.'
 
 dependencies {
-	implementation 'net.sf.trove4j:trove4j:3.0.3'
-	implementation 'com.helger:ph-css:6.1.2'
+	implementation 'com.helger:ph-css:6.2.0'
 }

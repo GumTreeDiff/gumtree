@@ -36,13 +36,9 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 
 public class GtCssVisitor implements ICSSVisitor {
-
     private TreeContext ctx;
-
     private ArrayDeque<ITree> trees;
-
     private LineReader lr;
-
     private ICSSWriterSettings settings;
 
     private CascadingStyleSheet sheet;
@@ -77,8 +73,7 @@ public class GtCssVisitor implements ICSSVisitor {
     }
 
     @Override
-    public void begin() {
-    }
+    public void begin() {}
 
     @Override
     public void onImport(@Nonnull CSSImportRule i) {
@@ -89,9 +84,7 @@ public class GtCssVisitor implements ICSSVisitor {
     }
 
     @Override
-    public void onNamespace(@Nonnull CSSNamespaceRule n) {
-
-    }
+    public void onNamespace(@Nonnull CSSNamespaceRule n) {}
 
     @Override
     public void onDeclaration(@Nonnull CSSDeclaration d) {
@@ -133,92 +126,56 @@ public class GtCssVisitor implements ICSSVisitor {
     }
 
     @Override
-    public void onBeginPageRule(@Nonnull CSSPageRule aPageRule) {
-
-    }
+    public void onBeginPageRule(@Nonnull CSSPageRule aPageRule) {}
 
     @Override
-    public void onBeginPageMarginBlock(@Nonnull CSSPageMarginBlock aPageMarginBlock) {
-
-    }
+    public void onBeginPageMarginBlock(@Nonnull CSSPageMarginBlock aPageMarginBlock) {}
 
     @Override
-    public void onEndPageMarginBlock(@Nonnull CSSPageMarginBlock aPageMarginBlock) {
-
-    }
+    public void onEndPageMarginBlock(@Nonnull CSSPageMarginBlock aPageMarginBlock) {}
 
     @Override
-    public void onEndPageRule(@Nonnull CSSPageRule aPageRule) {
-
-    }
+    public void onEndPageRule(@Nonnull CSSPageRule aPageRule) {}
 
     @Override
-    public void onBeginFontFaceRule(@Nonnull CSSFontFaceRule aFontFaceRule) {
-
-    }
+    public void onBeginFontFaceRule(@Nonnull CSSFontFaceRule aFontFaceRule) {}
 
     @Override
-    public void onEndFontFaceRule(@Nonnull CSSFontFaceRule aFontFaceRule) {
-
-    }
+    public void onEndFontFaceRule(@Nonnull CSSFontFaceRule aFontFaceRule) {}
 
     @Override
-    public void onBeginMediaRule(@Nonnull CSSMediaRule aMediaRule) {
-
-    }
+    public void onBeginMediaRule(@Nonnull CSSMediaRule aMediaRule) {}
 
     @Override
-    public void onEndMediaRule(@Nonnull CSSMediaRule aMediaRule) {
-
-    }
+    public void onEndMediaRule(@Nonnull CSSMediaRule aMediaRule) {}
 
     @Override
-    public void onBeginKeyframesRule(@Nonnull CSSKeyframesRule aKeyframesRule) {
-
-    }
+    public void onBeginKeyframesRule(@Nonnull CSSKeyframesRule aKeyframesRule) {}
 
     @Override
-    public void onBeginKeyframesBlock(@Nonnull CSSKeyframesBlock aKeyframesBlock) {
-
-    }
+    public void onBeginKeyframesBlock(@Nonnull CSSKeyframesBlock aKeyframesBlock) {}
 
     @Override
-    public void onEndKeyframesBlock(@Nonnull CSSKeyframesBlock aKeyframesBlock) {
-
-    }
+    public void onEndKeyframesBlock(@Nonnull CSSKeyframesBlock aKeyframesBlock) {}
 
     @Override
-    public void onEndKeyframesRule(@Nonnull CSSKeyframesRule aKeyframesRule) {
-
-    }
+    public void onEndKeyframesRule(@Nonnull CSSKeyframesRule aKeyframesRule) {}
 
     @Override
-    public void onBeginViewportRule(@Nonnull CSSViewportRule aViewportRule) {
-
-    }
+    public void onBeginViewportRule(@Nonnull CSSViewportRule aViewportRule) {}
 
     @Override
-    public void onEndViewportRule(@Nonnull CSSViewportRule aViewportRule) {
-
-    }
+    public void onEndViewportRule(@Nonnull CSSViewportRule aViewportRule) {}
 
     @Override
-    public void onBeginSupportsRule(@Nonnull CSSSupportsRule aSupportsRule) {
-
-    }
+    public void onBeginSupportsRule(@Nonnull CSSSupportsRule aSupportsRule) {}
 
     @Override
-    public void onEndSupportsRule(@Nonnull CSSSupportsRule aSupportsRule) {
-
-    }
+    public void onEndSupportsRule(@Nonnull CSSSupportsRule aSupportsRule) {}
 
     @Override
-    public void onUnknownRule(@Nonnull CSSUnknownRule aUnknownRule) {
-
-    }
+    public void onUnknownRule(@Nonnull CSSUnknownRule aUnknownRule) {}
 
     @Override
-    public void end() {
-
-    }
+    public void end() {}
 }
