@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestJdtGenerator {
-
     private static final Type COMPILATION_UNIT = AbstractJdtVisitor.nodeAsSymbol(ASTNode.COMPILATION_UNIT);
 
     @Test
@@ -134,5 +133,4 @@ public class TestJdtGenerator {
         TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
         System.out.println(ct2.getRoot().toTreeString());
     }
-
 }
