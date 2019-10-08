@@ -55,7 +55,7 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher implements Matc
                     }
                 }
 
-                if (!(ignored.contains(src) && isMappingUnique)) {
+                if (!(ignored.contains(src) || isMappingUnique)) {
                     Set<ITree> adsts = multiMappings.getDsts(src);
                     Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
                     for (ITree asrc : asrcs)
