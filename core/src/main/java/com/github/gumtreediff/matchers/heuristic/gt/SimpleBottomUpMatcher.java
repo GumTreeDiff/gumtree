@@ -25,16 +25,14 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
+import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class SimpleBottomUpMatcher implements Matcher {
     public static final double SIM_THRESHOLD =
-            Double.parseDouble(System.getProperty("gt.bum.smt", "0.5"));
+            Double.parseDouble(System.getProperty("gt.bum.smt", "0.4"));
 
     @Override
     public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
@@ -64,10 +62,12 @@ public class SimpleBottomUpMatcher implements Matcher {
                     List<ITree> candidates = getDstCandidates(t);
                     ITree best = null;
                     double max = -1D;
+                    int tSize = t.getDescendants().size();
 
                     for (ITree cand : candidates) {
-                        double sim = SimilarityMetrics.overlapSimilarity(t, cand, mappings);
-                        if (sim > max && sim >= SIM_THRESHOLD) {
+                        double threshold = 1D / (1D + Math.log(cand.getDescendants().size() + tSize));
+                        double sim = SimilarityMetrics.chawatheSimilarity(t, cand, mappings);
+                        if (sim > max && sim >= threshold) {
                             max = sim;
                             best = cand;
                         }
@@ -106,6 +106,30 @@ public class SimpleBottomUpMatcher implements Matcher {
         }
 
         protected void lastChanceMatch(ITree src, ITree dst) {
+            lcsEqualMatching(src, dst);
+            lcsStructureMatching(src, dst);
+            if (src.isRoot() && dst.isRoot())
+                histogramMatching(src, dst);
+            else if (!(src.isRoot() || dst.isRoot()))
+                if (src.getParent().getType() == dst.getParent().getType())
+                    histogramMatching(src, dst);
+        }
+
+        protected void lcsEqualMatching(ITree src, ITree dst) {
+            List<ITree> srcChildren = src.getChildren();
+            List<ITree> dstChildren = dst.getChildren();
+
+            List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithIsomorphism(srcChildren, dstChildren);
+            for (int[] x : lcs) {
+                ITree t1 = srcChildren.get(x[0]);
+                ITree t2 = dstChildren.get(x[1]);
+                if (mappings.areSrcsUnmapped(TreeUtils.preOrder(t1))
+                        && mappings.areDstsUnmapped(TreeUtils.preOrder(t2)))
+                    mappings.addMappingRecursively(t1, t2);
+            }
+        }
+
+        protected void lcsStructureMatching(ITree src, ITree dst) {
             List<ITree> srcChildren = src.getChildren();
             List<ITree> dstChildren = dst.getChildren();
 
@@ -116,6 +140,36 @@ public class SimpleBottomUpMatcher implements Matcher {
                 if (mappings.areSrcsUnmapped(TreeUtils.preOrder(t1))
                         && mappings.areDstsUnmapped(TreeUtils.preOrder(t2)))
                     mappings.addMappingRecursively(t1, t2);
+            }
+        }
+
+        protected void histogramMatching(ITree src, ITree dst) {
+            List<ITree> srcChildren = src.getChildren();
+            List<ITree> dstChildren = dst.getChildren();
+
+            Map<Type, List<ITree>> srcHistogram = new HashMap<>();
+            for (ITree c: srcChildren) {
+                if (!srcHistogram.containsKey(c.getType()))
+                    srcHistogram.put(c.getType(), new ArrayList<>());
+                srcHistogram.get(c.getType()).add(c);
+            }
+
+            Map<Type, List<ITree>> dstHistogram = new HashMap<>();
+            for (ITree c: dstChildren) {
+                if (!dstHistogram.containsKey(c.getType()))
+                    dstHistogram.put(c.getType(), new ArrayList<>());
+                dstHistogram.get(c.getType()).add(c);
+            }
+
+            for (Type t : srcHistogram.keySet()) {
+                if (dstHistogram.containsKey(t) && srcHistogram.get(t).size() == 1 && dstHistogram.get(t).size() == 1) {
+                    ITree t1 = srcHistogram.get(t).get(0);
+                    ITree t2 = dstHistogram.get(t).get(0);
+                    if (mappings.areBothUnmapped(t1 ,t2)) {
+                        mappings.addMapping(t1 ,t2);
+                        lastChanceMatch(t1, t2);
+                    }
+                }
             }
         }
     }
