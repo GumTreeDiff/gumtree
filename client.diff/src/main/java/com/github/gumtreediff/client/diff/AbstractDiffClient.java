@@ -30,6 +30,8 @@ import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> extends Client {
 
@@ -90,6 +92,15 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
 
         if (Option.Verbose.verbose) {
             opts.dump(System.out);
+        }
+
+        if (!Files.exists(Paths.get(opts.src))) {
+            System.err.println("Error loading file or folder " + opts.src);
+            System.exit(1);
+        }
+        if (!Files.exists(Paths.get(opts.dst))) {
+            System.err.println("Error loading file or folder " + opts.dst);
+            System.exit(1);
         }
     }
 
