@@ -40,7 +40,7 @@ public class TestSrcmlCsGenerator {
                 + "}\n"
                 + "}";
         ITree t = new SrcmlCsTreeGenerator().generateFrom().string(input).getRoot();
-        assertEquals(34, t.getMetrics().size);
+        assertEquals(35, t.getMetrics().size);
     }
 
 }

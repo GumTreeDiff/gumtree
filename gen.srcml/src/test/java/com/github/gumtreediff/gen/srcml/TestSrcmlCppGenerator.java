@@ -47,7 +47,7 @@ public class TestSrcmlCppGenerator {
                 + "}\n"
                 + "}";
         ITree t = new SrcmlCppTreeGenerator().generateFrom().string(input).getRoot();
-        assertEquals(148, t.getMetrics().size);
+        assertEquals(151, t.getMetrics().size);
     }
 
 }
