@@ -24,6 +24,10 @@ subprojects {
     sourceCompatibility = '1.9'
     targetCompatibility = '1.9'
 
+    compileJava {
+        options.compilerArgs << '-Xlint:deprecation'
+    }
+
     apply plugin: 'checkstyle'
     checkstyle {
         toolVersion = '8.18'
