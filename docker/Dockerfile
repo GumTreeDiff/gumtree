@@ -13,7 +13,7 @@ WORKDIR /opt
 RUN git clone https://github.com/GumTreeDiff/cgum.git --depth 1
 WORKDIR /opt/cgum
 RUN make \
-	&& ln -s /pt/cgum/cgum /usr/bin/cgum
+	&& ln -s /opt/cgum/cgum /usr/bin/cgum
 
 # install pythonparser
 WORKDIR /opt
@@ -26,7 +26,7 @@ WORKDIR /opt
 RUN git clone -b develop https://github.com/GumTreeDiff/gumtree.git --depth 1
 WORKDIR /opt/gumtree
 RUN export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8 \
-    && ./gradlew build -x check \
+    && ./gradlew build \
 	&& ln -s /opt/gumtree/dist/build/install/gumtree/bin/gumtree /usr/bin/gumtree
 
 # define volume diff to make available files to diff
