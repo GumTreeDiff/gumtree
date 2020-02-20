@@ -10,7 +10,7 @@ after_success:
   - ./gradlew coveralls uploadArchives
 language: java
 jdk:
-  - oraclejdk9
+  - openjdk11
 deploy:
   provider: releases
   skip_cleanup: true
