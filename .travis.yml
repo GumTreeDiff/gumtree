@@ -1,9 +1,8 @@
 sudo: required
-dist: trusty
+dist: bionic
 before_install: ./.travis_native_dependencies.sh
 before_script:
   - pip2.7 install --upgrade --ignore-installed --user jsontree asttokens
-  - export PATH=$PWD/srcML-src/bin:$PATH
   - export PATH=$PWD/cgum:$PATH
   - export PATH=$PWD/pythonparser:$PATH
 script: ./gradlew check
