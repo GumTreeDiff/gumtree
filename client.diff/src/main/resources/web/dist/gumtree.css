@@ -53,43 +53,20 @@
 	padding: 0;
 }
 
-.container {
-  margin-right: auto;
-  margin-left: auto;
-  width: 100%;
-} 
-
-.scrollable {
-	overflow: scroll;
-}
-
-.no-overflow {
-	overflow: hidden;
-}
-
-body, html {
-	height: 100%;
-	margin: 0px;
-	padding: 0px;
-}
-
 div {
 	margin: 0px;
 	padding: 0px;
 }
 
-.max-height {
-	height: 100%;
-}
-
-.pre {
+.pre-scrollable {
 	margin: 0px;
 	padding: 0px;
 	font-size: 10pt;
 	color: black;
+	max-height: 90vh;
 	background-color: white;
-	border-color: black;
-	font-family: "Inconsolata", "Consolas", "Liberation Sans Regular", "DejaVu Sans Mono", monospace;
+	border: 1px solid black;
+	font-family: "Hack, Inconsolata", "Consolas", "Liberation Sans Regular", "DejaVu Sans Mono", monospace;
 }
 
 .tooltip-inner {

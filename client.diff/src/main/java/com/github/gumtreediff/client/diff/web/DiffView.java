@@ -64,17 +64,16 @@ public class DiffView implements Renderable {
                         .render(new MenuBar())
                     ._div()
                     .div(class_("row"))
-                        .div(class_("col-lg-6 max-height"))
+                        .div(class_("col-6"))
                             .h5().content(fSrc.getName())
-                            .pre(class_("pre max-height")).content(diffs.getSrcDiff(), false)
+                            .pre(class_("pre-scrollable")).content(diffs.getSrcDiff(), false)
                         ._div()
-                        .div(class_("col-lg-6 max-height"))
+                        .div(class_("col-6"))
                             .h5().content(fDst.getName())
-                            .pre(class_("pre max-height")).content(diffs.getDstDiff(), false)
+                            .pre(class_("pre-scrollable")).content(diffs.getDstDiff(), false)
                         ._div()
                     ._div()
                 ._div()
-                .render(new BootstrapFooterView())
                 .macros().javascript("/dist/diff.js")
             ._body()
         ._html();
@@ -85,17 +84,17 @@ public class DiffView implements Renderable {
         @Override
         public void renderOn(HtmlCanvas html) throws IOException {
             html
-            .div(class_("col-lg-12"))
-                .div(class_("btn-toolbar pull-right"))
+            .div(class_("col"))
+                .div(class_("btn-toolbar justify-content-end"))
                     .div(class_("btn-group"))
-                        .a(class_("btn btn-default btn-xs").id("legend").href("#").add("data-toggle", "popover")
+                        .a(class_("btn btn-primary btn-sm").id("legend").href("#").add("data-toggle", "popover")
                                 .add("data-html", "true").add("data-placement", "bottom")
                                 .add("data-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br>"
                                         + "<span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br>"
                                         + "<span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br>"
                                         + "<span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>", false)
                                 .add("data-original-title", "Legend").title("Legend").role("button")).content("Legend")
-                        .a(class_("btn btn-default btn-xs").id("shortcuts").href("#").add("data-toggle", "popover")
+                        .a(class_("btn btn-primary btn-sm").id("shortcuts").href("#").add("data-toggle", "popover")
                                 .add("data-html", "true").add("data-placement", "bottom")
                                 .add("data-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br>"
                                         + "<b>t</b> top<br><b>b</b> bottom", false)
@@ -103,7 +102,7 @@ public class DiffView implements Renderable {
                             .content("Shortcuts")
                     ._div()
                     .div(class_("btn-group"))
-                        .a(class_("btn btn-default btn-xs btn-danger").href("/quit")).content("Quit")
+                        .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
                     ._div()
                 ._div()
             ._div();

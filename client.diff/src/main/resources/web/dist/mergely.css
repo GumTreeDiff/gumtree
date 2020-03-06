@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2016 by Jamie Peabody, http://www.mergely.com
- * All rights reserved.
- * Version: 3.4.3 2016-09-07
- */
-
 /* required */
 .mergely-column textarea { width: 80px; height: 200px; }
 .mergely-column { float: left; }
@@ -12,6 +6,8 @@
 
 /* resizeable */
 .mergely-resizer { width: 100%; height: 100%; }
+.mergely-full-screen-0 { position: absolute; top: 0; bottom: 0; left: 0; right: 0; overflow: hidden; }
+.mergely-full-screen-8 { position: absolute; top: 8px; bottom: 8px; left: 8px; right: 8px; overflow: hidden; }
 
 /* style configuration */
 .mergely-column { border: 1px solid #ccc; }
@@ -23,12 +19,12 @@
 .mergely.a.lhs.start.end,
 .mergely.a.rhs.end { border-bottom: 1px solid #a3d1ff; }
 .mergely.a.rhs { background-color: #ddeeff; }
-.mergely.a.lhs.start.end.first { border-bottom: 0; border-top: 1px solid #a3d1ff; }
+.mergely.a.lhs.start.end.first { border-bottom-width: 0; border-top: 1px solid #a3d1ff; }
 
 .mergely.d.lhs { background-color: #ffe9e9; }
 .mergely.d.lhs.end,
 .mergely.d.rhs.start.end { border-bottom: 1px solid #f8e8e8; }
-.mergely.d.rhs.start.end.first { border-bottom: 0; border-top: 1px solid #f8e8e8; }
+.mergely.d.rhs.start.end.first { border-bottom-width: 0; border-top: 1px solid #f8e8e8; }
 .mergely.d.lhs.start { border-top: 1px solid #f8e8e8; }
 
 .mergely.c.lhs,
@@ -44,7 +40,12 @@
 .mergely.current.start { border-top: 1px solid #000 !important; }
 .mergely.current.end { border-bottom: 1px solid #000 !important; }
 .mergely.current.lhs.a.start.end,
-.mergely.current.rhs.d.start.end { border-top: 0 !important; }
+.mergely.current.rhs.d.start.end { border-top-width: 0 !important; }
+
+.mergely.current.lhs.a.start.end.empty,
+.mergely.current.rhs.d.start.end.empty { border-top-width: 1px !important; border-bottom-width: 0px !important; }
+
 .mergely.current.CodeMirror-linenumber { color: #F9F9F9; font-weight: bold; background-color: #777; }
 .CodeMirror-linenumber { cursor: pointer; }
 .CodeMirror-code { color: #717171; }
+span.CodeMirror-selectedtext { background: none !important; }

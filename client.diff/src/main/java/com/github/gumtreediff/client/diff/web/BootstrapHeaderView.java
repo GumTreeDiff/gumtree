@@ -36,8 +36,11 @@ public class BootstrapHeaderView implements Renderable {
             .meta(charset("utf8"))
             .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
             .title().content("GumTree")
-            .macros().stylesheet("/dist/bootstrap.min.css")
+            .macros().stylesheet("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
             .macros().stylesheet("/dist/gumtree.css")
+            .macros().javascript("https://code.jquery.com/jquery-3.4.1.slim.min.js")
+            .macros().javascript("https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js")
+            .macros().javascript("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js")
         ._head();
     }
 

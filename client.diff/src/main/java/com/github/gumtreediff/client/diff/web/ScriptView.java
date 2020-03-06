@@ -82,7 +82,6 @@ public class ScriptView implements Renderable {
                             ._div()
                         ._div()
                     ._div()
-                    .render(new BootstrapFooterView())
                     .macros().javascript("/dist/script.js")
                 ._body()
             ._html();
