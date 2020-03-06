@@ -1,18 +1,19 @@
 # Changelog of GumTree
 
-## v2.1.3
+## v2.1.3 (Ficus)
 * Fix position problem in javaparser generator
 * Fix method invocation handling in jdt generator
 * Webdiff command is compatible with -g option
+* Update bootstrap and mergely version in webdiff
 * TreeInsert and TreeDelete actions added
 
-## v2.1.2
+## v2.1.2 (Elm)
 * New dockerfile to run GumTree
 * Python tree generator
 * JavaParser tree generator
 * Several minor bugfixes
 
-## v2.1.1
+## v2.1.1 (Dogwood)
 * New integration with antlr4 grammars
 * Add matlab grammar
 
