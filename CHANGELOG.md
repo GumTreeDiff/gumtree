@@ -4,7 +4,8 @@
 * Fix position problem in javaparser generator
 * Fix method invocation handling in jdt generator
 * Webdiff command is compatible with -g option
-* Update bootstrap and mergely version in webdiff
+* Update to bootstrap v4
+* Update mergely
 * TreeInsert and TreeDelete actions added
 
 ## v2.1.2 (Elm)
