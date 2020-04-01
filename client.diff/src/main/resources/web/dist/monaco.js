@@ -22,6 +22,8 @@ function getEditorOptions(text) {
     return {
         value: text,
         readOnly: true,
+        lineDecorationsWidth: 0,
+        glyphMargin: false,
         minimap: {
             enabled: false,
         },
