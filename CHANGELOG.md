@@ -1,12 +1,13 @@
 # Changelog of GumTree
 
-## v2.1.3 (Ficus)
+## v3.0.0 (Ficus)
 * Fix position problem in javaparser generator
 * Fix method invocation handling in jdt generator
 * Webdiff command is compatible with -g option
-* Update to bootstrap v4
-* Update mergely
+* Update vanilla diff viewer to bootstrap v4
+* Update mergely diff viewer to newest version of mergely
 * TreeInsert and TreeDelete actions added
+* Add brand new monaco-based diff viewer
 
 ## v2.1.2 (Elm)
 * New dockerfile to run GumTree

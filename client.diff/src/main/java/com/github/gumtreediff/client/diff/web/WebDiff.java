@@ -94,26 +94,42 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
             if (comparator.isDirMode())
                 response.redirect("/list");
             else
-                response.redirect("/diff/0");
+                response.redirect("/vanilla-diff/0");
             return "";
         });
         get("/list", (request, response) -> {
-            Renderable view = new DirectoryComparatorView(comparator);
+            Renderable view = new DirectoryDiffView(comparator);
             return render(view);
         });
-        get("/diff/:id", (request, response) -> {
+        get("/vanilla-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new DiffView(pair.first, pair.second,
+            Renderable view = new VanillaDiffView(pair.first, pair.second,
                     this.getTreeContext(pair.first.getAbsolutePath()),
                     this.getTreeContext(pair.second.getAbsolutePath()),
                     getMatcher(),
                     new ChawatheScriptGenerator());
             return render(view);
         });
-        get("/mergely/:id", (request, response) -> {
+        get("/monaco-diff/:id", (request, response) -> {
+            int id = Integer.parseInt(request.params(":id"));
+            Pair<File, File> pair = comparator.getModifiedFiles().get(id);
+            Renderable view = new MonacoDiffView(pair.first, pair.second,
+                    this.getTreeContext(pair.first.getAbsolutePath()),
+                    this.getTreeContext(pair.second.getAbsolutePath()),
+                    getMatcher(),
+                    new ChawatheScriptGenerator(), id);
+            return render(view);
+        });
+        get("/mergely-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Renderable view = new MergelyView(id);
+            return render(view);
+        });
+        get("/raw-diff/:id", (request, response) -> {
+            int id = Integer.parseInt(request.params(":id"));
+            Pair<File, File> pair = comparator.getModifiedFiles().get(id);
+            Renderable view = new TextDiffView(pair.first, pair.second);
             return render(view);
         });
         get("/left/:id", (request, response) -> {
@@ -125,12 +141,6 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
             return readFile(pair.second.getAbsolutePath(), Charset.defaultCharset());
-        });
-        get("/script/:id", (request, response) -> {
-            int id = Integer.parseInt(request.params(":id"));
-            Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new ScriptView(pair.first, pair.second);
-            return render(view);
         });
         get("/quit", (request, response) -> {
             System.exit(0);

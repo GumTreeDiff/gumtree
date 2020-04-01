@@ -34,11 +34,11 @@ import java.util.Set;
 
 import static org.rendersnake.HtmlAttributesFactory.*;
 
-public class DirectoryComparatorView implements Renderable {
+public class DirectoryDiffView implements Renderable {
 
     private DirectoryComparator comparator;
 
-    public DirectoryComparatorView(DirectoryComparator comparator) throws IOException {
+    public DirectoryDiffView(DirectoryComparator comparator) throws IOException {
         this.comparator = comparator;
     }
 
@@ -76,7 +76,7 @@ public class DirectoryComparatorView implements Renderable {
                                 ._div()
                                 .div(class_("card-body"))
                                     .render_if(new AddedOrDeletedFiles(
-                comparator.getDeletedFiles(), comparator.getSrc(), "danger"),
+                comparator.getDeletedFiles(), comparator.getSrc(), "table-danger"),
                 comparator.getDeletedFiles().size() > 0)
                                 ._div()
                             ._div()
@@ -91,7 +91,7 @@ public class DirectoryComparatorView implements Renderable {
                                 ._div()
                                 .div(class_("card-body"))
                                     .render_if(new AddedOrDeletedFiles(
-                comparator.getAddedFiles(), comparator.getDst(), "success"),
+                comparator.getAddedFiles(), comparator.getDst(), "table-success"),
                 comparator.getAddedFiles().size() > 0)
                                 ._div()
                             ._div()
@@ -123,11 +123,13 @@ public class DirectoryComparatorView implements Renderable {
                 .tr()
                     .td().content(comparator.getSrc().relativize(file.first.toPath()).toString())
                     .td(class_("text-right"))
-                        .a(class_("btn btn-primary btn-sm").href("/diff/" + id)).content("diff")
+                        .a(class_("btn btn-primary btn-sm").href("/monaco-diff/" + id)).content("monaco")
                         .write(" ")
-                        .a(class_("btn btn-primary btn-sm").href("/mergely/" + id)).content("mergely")
+                        .a(class_("btn btn-primary btn-sm").href("/vanilla-diff/" + id)).content("classic")
                         .write(" ")
-                        .a(class_("btn btn-primary btn-sm").href("/script/" + id)).content("script")
+                        .a(class_("btn btn-primary btn-sm").href("/mergely-diff/" + id)).content("mergely")
+                        .write(" ")
+                        .a(class_("btn btn-primary btn-sm").href("/raw-diff/" + id)).content("raw")
                     ._td()
                 ._tr();
                 id++;

@@ -22,7 +22,6 @@ package com.github.gumtreediff.client.diff.web;
 
 import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.io.ActionsIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
@@ -35,12 +34,11 @@ import org.rendersnake.Renderable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static org.rendersnake.HtmlAttributesFactory.class_;
 import static org.rendersnake.HtmlAttributesFactory.lang;
 
-public class ScriptView implements Renderable {
+public class TextDiffView implements Renderable {
 
     private final MappingStore mappings;
 
@@ -54,7 +52,7 @@ public class ScriptView implements Renderable {
 
     private EditScript script;
 
-    public ScriptView(File fSrc, File fDst) throws IOException {
+    public TextDiffView(File fSrc, File fDst) throws IOException {
         this.fSrc = fSrc;
         this.fDst = fDst;
         src = Generators.getInstance().getTree(fSrc.getAbsolutePath());

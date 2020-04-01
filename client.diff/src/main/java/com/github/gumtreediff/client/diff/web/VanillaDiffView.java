@@ -35,20 +35,20 @@ import java.io.IOException;
 import static org.rendersnake.HtmlAttributesFactory.class_;
 import static org.rendersnake.HtmlAttributesFactory.lang;
 
-public class DiffView implements Renderable {
+public class VanillaDiffView implements Renderable {
 
-    private HtmlDiffs diffs;
+    private VanillaDiffHtmlBuilder diffs;
 
     private File fSrc;
 
     private File fDst;
 
-    public DiffView(File fSrc, File fDst, TreeContext src, TreeContext dst, Matcher matcher, EditScriptGenerator scriptGenerator) throws IOException {
+    public VanillaDiffView(File fSrc, File fDst, TreeContext src, TreeContext dst, Matcher matcher, EditScriptGenerator scriptGenerator) throws IOException {
         this.fSrc = fSrc;
         this.fDst = fDst;
         MappingStore mappings = matcher.match(src.getRoot(), dst.getRoot());
         Diff diff = new Diff(src, dst, mappings, scriptGenerator.computeActions(mappings));
-        diffs = new HtmlDiffs(fSrc, fDst, diff);
+        diffs = new VanillaDiffHtmlBuilder(fSrc, fDst, diff);
         diffs.produce();
     }
 

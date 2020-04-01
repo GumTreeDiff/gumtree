@@ -20,15 +20,10 @@
 
 package com.github.gumtreediff.client.diff.web;
 
-import com.github.gumtreediff.gen.Generators;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.Matchers;
-import com.github.gumtreediff.tree.TreeContext;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
 
-import java.io.File;
 import java.io.IOException;
 
 import static org.rendersnake.HtmlAttributesFactory.*;
@@ -66,6 +61,7 @@ public class MergelyView implements Renderable {
                 .macros().script("lhs_url = \"/left/" + id + "\";")
                 .macros().script("rhs_url = \"/right/" + id + "\";")
                 .macros().javascript("/dist/launch-mergely.js")
+                .macros().javascript("/dist/script.js")
             ._body()
         ._html();
     }
