@@ -18,6 +18,20 @@ Compared to classical code differencing tools, it has two important particularit
 * it works on a tree structure rather than a text structure,
 * it can detect moved or renamed elements in addition of deleted and inserted elements.
 
+## Documentation
+
+To use GumTree, you can start by consulting the [Getting Started](https://github.com/GumTreeDiff/gumtree/wiki/Getting-Started) page from our [wiki](https://github.com/GumTreeDiff/gumtree/wiki).
+
+## Screenshots
+
+### The directory diff viewer
+
+![Directory comparator view](https://github.com/GumTreeDiff/gumtree/raw/develop/doc/screenshots/screenshot-0.png)
+
+### The file diff viewer
+
+![Diff view](https://github.com/GumTreeDiff/gumtree/raw/develop/doc/screenshots/screenshot-1.png)
+
 ## Supported languages
 
 We already deal with a wide range of languages: C, Java, JavaScript, Python, R, Ruby. Click [here](https://github.com/GumTreeDiff/gumtree/wiki/Languages) for more details about the language we support.
@@ -44,7 +58,3 @@ We are researchers, therefore if you use GumTree in an academic work we would be
   doi       = {10.1145/2642937.2642982}
 }
 ```
-
-## Documentation
-
-To use GumTree, you can start by consulting the [Getting Started](https://github.com/GumTreeDiff/gumtree/wiki/Getting-Started) page from our [wiki](https://github.com/GumTreeDiff/gumtree/wiki).
