@@ -19,10 +19,19 @@ A sample command line is `docker run -v /my/original-folder:/diff/left -v /my/mo
 
 ## Git integration
 
+### Mac OS
+
 You can easily integrate GumTree's container with Git by adding the following configuration into the `$HOME/.gitconfig` file.
 ```
 [difftool "gumtree-docker"]
 	cmd = docker run -v /private/$LOCAL:/diff/left -v /private/$REMOTE:/diff/right -p 4567:4567 jrfaller/gumtree webdiff left/ right/
+```
+### Linux (Windows?)
+
+You can easily integrate GumTree's container with Git by adding the following configuration into the `$HOME/.gitconfig` file.
+```
+[difftool "gumtree-docker"]
+	cmd = docker run -v $LOCAL:/diff/left -v $REMOTE:/diff/right -p 4567:4567 jrfaller/gumtree webdiff left/ right/
 ```
 
 ## Debug
