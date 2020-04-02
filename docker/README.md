@@ -26,7 +26,7 @@ You can easily integrate GumTree's container with Git by adding the following co
 [difftool "gumtree-docker"]
 	cmd = docker run -v /private/$LOCAL:/diff/left -v /private/$REMOTE:/diff/right -p 4567:4567 jrfaller/gumtree webdiff left/ right/
 ```
-### Linux (Windows?)
+### Linux - Windows
 
 You can easily integrate GumTree's container with Git by adding the following configuration into the `$HOME/.gitconfig` file.
 ```
