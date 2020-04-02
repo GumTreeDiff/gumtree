@@ -9,7 +9,7 @@ allprojects {
 
     group = 'com.github.gumt' +
             'reediff'
-    version = '2.1.3-SNAPSHOT'
+    version = '3.0.0-beta1-SNAPSHOT'
 
     repositories {
         mavenCentral()
