@@ -33,7 +33,14 @@ You can easily integrate GumTree's container with Git by adding the following co
 [difftool "gumtree-docker"]
 	cmd = docker run -v $LOCAL:/diff/left -v $REMOTE:/diff/right -p 4567:4567 jrfaller/gumtree webdiff left/ right/
 ```
+### Usage
 
+You can invoke GumTree's from git by running the command `git difftool -d -t gumtree-docker`. We recommend putting an alias in the alias section of `$HOME/.gitconfig` such as:
+
+```
+[alias]
+	gd = difftool -d -t gumtree-docker
+```
 ## Debug
 
 If you want to debug GumTree container use the following command line: `docker run -v -v /my/original-folder:/diff/left -v /my/modified-folder:/diff/right -p 4567:4567 --entrypoint "/bin/bash" -it jrfaller/gumtree`.
