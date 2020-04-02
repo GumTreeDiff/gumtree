@@ -57,11 +57,11 @@ public class MonacoDiffView implements Renderable {
     html
         .render(DocType.HTML5)
         .html(lang("en"))
-            .render(new BootstrapHeaderView())
+            .render(new Header())
             .body()
                 .div(class_("container-fluid"))
                     .div(class_("row"))
-                        .render(new MenuBarView())
+                        .render(new MenuBar())
                     ._div()
                     .div(class_("row"))
                         .div(class_("col-6"))
@@ -79,7 +79,7 @@ public class MonacoDiffView implements Renderable {
                                  + ", mappings: " + getMappingsJsConfig() + "};")
                 .macros().javascript("/monaco/min/vs/loader.js")
                 .macros().javascript("/dist/monaco.js")
-                .macros().javascript("/dist/script.js")
+                .macros().javascript("/dist/shortcuts.js")
             ._body()
         ._html();
     }
@@ -148,5 +148,52 @@ public class MonacoDiffView implements Renderable {
     private static String tooltip(ITree t) {
         return (t.getParent() != null)
                 ? t.getParent().getType() + "/" + t.getType() : t.getType().toString();
+    }
+
+    private static class MenuBar implements Renderable {
+
+        @Override
+        public void renderOn(HtmlCanvas html) throws IOException {
+            html
+            .div(class_("col"))
+                .div(class_("btn-toolbar justify-content-end"))
+                    .div(class_("btn-group"))
+                        .a(class_("btn btn-primary btn-sm").id("legend").href("#").add("data-toggle", "popover")
+                                .add("data-html", "true").add("data-placement", "bottom")
+                                .add("data-content", "<span class=&quot;deleted&quot;>&nbsp;&nbsp;</span> deleted<br>"
+                                        + "<span class=&quot;inserted&quot;>&nbsp;&nbsp;</span> inserted<br>"
+                                        + "<span class=&quot;moved&quot;>&nbsp;&nbsp;</span> moved<br>"
+                                        + "<span class=&quot;updated&quot;>&nbsp;&nbsp;</span> updated<br>", false)
+                                .add("data-original-title", "Legend").title("Legend").role("button")).content("Legend")
+                        .a(class_("btn btn-primary btn-sm").id("shortcuts").href("#").add("data-toggle", "popover")
+                                .add("data-html", "true").add("data-placement", "bottom")
+                                .add("data-content", "<b>q</b> quit<br><b>l</b> list<br>"
+                                        + "<b>t</b> top<br><b>b</b> bottom", false)
+                                .add("data-original-title", "Shortcuts").title("Shortcuts").role("button"))
+                            .content("Shortcuts")
+                    ._div()
+                    .div(class_("btn-group"))
+                        .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
+                    ._div()
+                ._div()
+            ._div();
+        }
+    }
+
+    private static class Header implements Renderable {
+        @Override
+        public void renderOn(HtmlCanvas html) throws IOException {
+            html
+                .head()
+                    .meta(charset("utf8"))
+                    .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
+                    .title().content("GumTree")
+                    .macros().stylesheet("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
+                    .macros().stylesheet("/dist/monaco.css")
+                    .macros().javascript("https://code.jquery.com/jquery-3.4.1.min.js")
+                    .macros().javascript("https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js")
+                    .macros().javascript("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js")
+                ._head();
+        }
     }
 }

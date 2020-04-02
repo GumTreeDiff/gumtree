@@ -1,0 +1,15 @@
+.deleted {
+	background-color: IndianRed;
+}
+
+.inserted {
+	background-color: MediumSeaGreen;
+}
+
+.moved {
+	background-color: Plum;
+}
+
+.updated {
+	background-color: GoldenRod;
+}

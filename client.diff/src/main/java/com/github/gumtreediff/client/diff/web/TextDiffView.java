@@ -20,13 +20,11 @@
 
 package com.github.gumtreediff.client.diff.web;
 
-import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.gen.Generators;
+import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.io.ActionsIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.TreeContext;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
@@ -35,16 +33,15 @@ import org.rendersnake.Renderable;
 import java.io.File;
 import java.io.IOException;
 
-import static org.rendersnake.HtmlAttributesFactory.class_;
-import static org.rendersnake.HtmlAttributesFactory.lang;
+import static org.rendersnake.HtmlAttributesFactory.*;
 
 public class TextDiffView implements Renderable {
 
     private final MappingStore mappings;
 
-    private final TreeContext src;
+    private TreeContext src;
 
-    private final TreeContext dst;
+    private TreeContext dst;
 
     private File fSrc;
 
@@ -52,14 +49,13 @@ public class TextDiffView implements Renderable {
 
     private EditScript script;
 
-    public TextDiffView(File fSrc, File fDst) throws IOException {
+    public TextDiffView(File fSrc, File fDst, TreeContext src, TreeContext dst, Matcher matcher, EditScriptGenerator scriptGenerator) throws IOException {
         this.fSrc = fSrc;
         this.fDst = fDst;
-        src = Generators.getInstance().getTree(fSrc.getAbsolutePath());
-        dst = Generators.getInstance().getTree(fDst.getAbsolutePath());
-        Matcher matcher = Matchers.getInstance().getMatcher();
-        mappings = matcher.match(src.getRoot(), dst.getRoot());
-        this.script = new ChawatheScriptGenerator().computeActions(mappings);
+        this.src = src;
+        this.dst = dst;
+        this.mappings = matcher.match(src.getRoot(), dst.getRoot());
+        this.script = scriptGenerator.computeActions(mappings);
     }
 
     @Override
@@ -67,22 +63,54 @@ public class TextDiffView implements Renderable {
         html
             .render(DocType.HTML5)
             .html(lang("en"))
-                .render(new BootstrapHeaderView())
+                .render(new Header())
                 .body()
                     .div(class_("container"))
                         .div(class_("row"))
+                            .render(new MenuBar())
+                        ._div()
+                        .div(class_("row"))
                             .div(class_("col-lg-12"))
                                 .h3()
-                                    .write("EditScript ")
+                                    .write("Raw edit script ")
                                     .small().content(String.format("%s -> %s", fSrc.getName(), fDst.getName()))
                                 ._h3()
-                                .pre().content(ActionsIoUtils.toText(src, this.script, mappings).toString())
+                                .pre(class_("border p-2")).content(ActionsIoUtils.toText(src, script, mappings).toString())
                             ._div()
                         ._div()
                     ._div()
-                    .macros().javascript("/dist/script.js")
                 ._body()
             ._html();
     }
 
+    private static class Header implements Renderable {
+        @Override
+        public void renderOn(HtmlCanvas html) throws IOException {
+             html
+                     .head()
+                        .meta(charset("utf8"))
+                        .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
+                        .title().content("GumTree")
+                        .macros().stylesheet("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
+                        .macros().javascript("https://code.jquery.com/jquery-3.4.1.min.js")
+                        .macros().javascript("https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js")
+                        .macros().javascript("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js")
+                        .macros().javascript("/dist/shortcuts.js")
+                     ._head();
+        }
+    }
+
+    private static class MenuBar implements Renderable {
+        @Override
+        public void renderOn(HtmlCanvas html) throws IOException {
+            html
+                    .div(class_("col"))
+                        .div(class_("btn-toolbar justify-content-end"))
+                            .div(class_("btn-group"))
+                                .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
+                            ._div()
+                        ._div()
+                    ._div();
+        }
+    }
 }

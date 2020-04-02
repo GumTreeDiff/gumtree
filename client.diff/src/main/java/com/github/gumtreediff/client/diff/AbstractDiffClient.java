@@ -126,6 +126,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
     }
 
     protected TreeContext getSrcTreeContext() {
+        //TODO ensure this cache is useful
         if (src == null)
             src = getTreeContext(opts.src);
         return src;

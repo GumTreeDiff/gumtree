@@ -19,7 +19,11 @@
  */
 
 $(function(){
-    $("#infos").popover();
+//    $("#infos").popover(); //TODO really needed?
+
+    $("#legend").popover();
+
+    $("#shortcuts").popover();
 
     $("body").keypress(function (event) {
         switch (event.which) {

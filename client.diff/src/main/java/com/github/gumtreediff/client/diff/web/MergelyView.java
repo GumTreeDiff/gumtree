@@ -32,7 +32,7 @@ public class MergelyView implements Renderable {
 
     private int id;
 
-    public MergelyView(int id) throws IOException {
+    public MergelyView(int id) {
         this.id = id;
     }
 
@@ -41,28 +41,32 @@ public class MergelyView implements Renderable {
         html
         .render(DocType.HTML5)
         .html(lang("en"))
-            .head()
-                .meta(charset("utf8"))
-                .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
-                .title().content("GumTree")
-                .macros().javascript("https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
-                .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js")
-                .macros().stylesheet("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.css")
-                .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/search/searchcursor.min.js")
-                .macros().javascript("/dist/mergely.js")
-                .macros().stylesheet("/dist/mergely.css")
-            ._head()
-            .body()
-                .div(class_("mergely-full-screen-8"))
-                    .div(class_("mergely-resizer"))
-                        .div(id("mergely"))._div()
+                .render(new Header())
+                .body()
+                    .div(class_("mergely-full-screen-8"))
+                        .div(class_("mergely-resizer"))
+                            .div(id("mergely"))._div()
+                        ._div()
                     ._div()
-                ._div()
-                .macros().script("lhs_url = \"/left/" + id + "\";")
-                .macros().script("rhs_url = \"/right/" + id + "\";")
-                .macros().javascript("/dist/launch-mergely.js")
-                .macros().javascript("/dist/script.js")
-            ._body()
+                    .macros().script("lhs_url = \"/left/" + id + "\";")
+                    .macros().script("rhs_url = \"/right/" + id + "\";")
+                    .macros().javascript("/dist/launch-mergely.js")
+                ._body()
         ._html();
+    }
+
+    private static class Header implements Renderable {
+        @Override
+        public void renderOn(HtmlCanvas html) throws IOException {
+            html
+                    .head()
+                        .macros().javascript("https://code.jquery.com/jquery-3.4.1.min.js")
+                        .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js")
+                        .macros().stylesheet("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.css")
+                        .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/search/searchcursor.min.js")
+                        .macros().javascript("/dist/mergely.js")
+                        .macros().stylesheet("/dist/mergely.css")
+                    ._head();
+        }
     }
 }

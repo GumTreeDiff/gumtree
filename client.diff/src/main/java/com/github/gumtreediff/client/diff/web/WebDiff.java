@@ -129,7 +129,11 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         get("/raw-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new TextDiffView(pair.first, pair.second);
+            Renderable view = new TextDiffView(pair.first, pair.second,
+                    this.getTreeContext(pair.first.getAbsolutePath()),
+                    this.getTreeContext(pair.second.getAbsolutePath()),
+                    getMatcher(),
+                    new ChawatheScriptGenerator());
             return render(view);
         });
         get("/left/:id", (request, response) -> {

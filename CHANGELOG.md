@@ -1,13 +1,17 @@
 # Changelog of GumTree
 
-## v3.0.0 (Ficus)
+## v3.0.0-beta1 (Ficus)
 * Fix position problem in javaparser generator
 * Fix method invocation handling in jdt generator
-* Webdiff command is compatible with -g option
+* Add shortcuts and menubar to all webdiff views except mergely 
+* Webdiff directory comparator only displays tree-diff buttons for files where parser are availables
+* Webdiff command is compatible with -g option (except from the directory comparator)
 * Update vanilla diff viewer to bootstrap v4
 * Update mergely diff viewer to newest version of mergely
 * TreeInsert and TreeDelete actions added
 * Add brand new monaco-based diff viewer
+* Improved docker container that can be integrated with git
+* Update rhino and ph-css parsers
 
 ## v2.1.2 (Elm)
 * New dockerfile to run GumTree

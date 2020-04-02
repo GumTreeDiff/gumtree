@@ -48,22 +48,6 @@
 	background-color: Gold;
 }
 
-.deleted {
-	background-color: IndianRed;
-}
-
-.inserted {
-	background-color: MediumSeaGreen;
-}
-
-.moved {
-	background-color: Lavender;
-}
-
-.updated {
-	background-color: Plum;
-}
-
 .marker {
 	margin: 0;
 	padding: 0;

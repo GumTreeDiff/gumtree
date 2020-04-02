@@ -56,28 +56,11 @@ function isSrc(eltId) {
 }
 
 $(function() {
-    $("#legend").popover();
-
-    $("#shortcuts").popover();
-
-    // shortcuts
     $("body").keypress(function (event) {
         switch(event.which) {
             case 110:
                 var mapping = nextMapping();
                 $('html, body').animate({scrollTop: $(mapping).offset().top - 200}, 100);
-                break;
-            case 116:
-                $('html, body').animate({scrollTop: 0}, 100);
-                break;
-            case 98:
-                $("html, body").animate({ scrollTop: $(document).height() }, 100);
-                break;
-            case 113:
-                window.location = "/quit";
-                break;
-            case 108:
-                window.location = "/list";
                 break;
         }
     });

@@ -32,8 +32,7 @@ import org.rendersnake.Renderable;
 import java.io.File;
 import java.io.IOException;
 
-import static org.rendersnake.HtmlAttributesFactory.class_;
-import static org.rendersnake.HtmlAttributesFactory.lang;
+import static org.rendersnake.HtmlAttributesFactory.*;
 
 public class VanillaDiffView implements Renderable {
 
@@ -57,7 +56,7 @@ public class VanillaDiffView implements Renderable {
         html
         .render(DocType.HTML5)
         .html(lang("en"))
-            .render(new BootstrapHeaderView())
+            .render(new Header())
             .body()
                 .div(class_("container-fluid"))
                     .div(class_("row"))
@@ -74,13 +73,11 @@ public class VanillaDiffView implements Renderable {
                         ._div()
                     ._div()
                 ._div()
-                .macros().javascript("/dist/diff.js")
             ._body()
         ._html();
     }
 
     private static class MenuBar implements Renderable {
-
         @Override
         public void renderOn(HtmlCanvas html) throws IOException {
             html
@@ -106,6 +103,25 @@ public class VanillaDiffView implements Renderable {
                     ._div()
                 ._div()
             ._div();
+        }
+    }
+
+    private static class Header implements Renderable {
+        @Override
+        public void renderOn(HtmlCanvas html) throws IOException {
+             html
+                     .head()
+                        .meta(charset("utf8"))
+                        .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
+                        .title().content("GumTree")
+                        .macros().stylesheet("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
+                        .macros().stylesheet("/dist/vanilla.css")
+                        .macros().javascript("https://code.jquery.com/jquery-3.4.1.min.js")
+                        .macros().javascript("https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js")
+                        .macros().javascript("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js")
+                        .macros().javascript("/dist/shortcuts.js")
+                        .macros().javascript("/dist/vanilla.js")
+                     ._head();
         }
     }
 }

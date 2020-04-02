@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.client.diff.web;
 
+import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.io.DirectoryComparator;
 import org.rendersnake.DocType;
@@ -35,7 +36,6 @@ import java.util.Set;
 import static org.rendersnake.HtmlAttributesFactory.*;
 
 public class DirectoryDiffView implements Renderable {
-
     private DirectoryComparator comparator;
 
     public DirectoryDiffView(DirectoryComparator comparator) throws IOException {
@@ -47,9 +47,12 @@ public class DirectoryDiffView implements Renderable {
         html
         .render(DocType.HTML5)
         .html(lang("en"))
-            .render(new BootstrapHeaderView())
+            .render(new Header())
             .body()
                 .div(class_("container-fluid"))
+                    .div(class_("row"))
+                        .render(new MenuBar())
+                    ._div()
                     .div(class_("row"))
                         .div(class_("col"))
                             .div(class_("card mt-3 mb-3"))
@@ -98,13 +101,11 @@ public class DirectoryDiffView implements Renderable {
                         ._div()
                     ._div()
                 ._div()
-                .macros().javascript("/dist/list.js")
             ._body()
         ._html();
     }
 
     private class ModifiedFiles implements Renderable {
-
         private List<Pair<File, File>> files;
 
         private ModifiedFiles(List<Pair<File, File>> files) {
@@ -123,13 +124,13 @@ public class DirectoryDiffView implements Renderable {
                 .tr()
                     .td().content(comparator.getSrc().relativize(file.first.toPath()).toString())
                     .td(class_("text-right"))
-                        .a(class_("btn btn-primary btn-sm").href("/monaco-diff/" + id)).content("monaco")
-                        .write(" ")
-                        .a(class_("btn btn-primary btn-sm").href("/vanilla-diff/" + id)).content("classic")
-                        .write(" ")
-                        .a(class_("btn btn-primary btn-sm").href("/mergely-diff/" + id)).content("mergely")
-                        .write(" ")
-                        .a(class_("btn btn-primary btn-sm").href("/raw-diff/" + id)).content("raw")
+                        //TODO: integrate this with the -g option
+                        .if_(Generators.getInstance().hasGeneratorForFile(file.first.getAbsolutePath()))
+                            .a(class_("btn btn-primary btn-sm mx-1").href("/monaco-diff/" + id)).content("monaco")
+                            .a(class_("btn btn-primary btn-sm mx-1").href("/vanilla-diff/" + id)).content("classic")
+                        ._if()
+                        .a(class_("btn btn-primary btn-sm mx-1").href("/mergely-diff/" + id)).content("mergely")
+                        .a(class_("btn btn-primary btn-sm mx-1").href("/raw-diff/" + id)).content("raw")
                     ._td()
                 ._tr();
                 id++;
@@ -138,11 +139,9 @@ public class DirectoryDiffView implements Renderable {
                 ._tbody()
                 ._table();
         }
-
     }
 
     private static class AddedOrDeletedFiles implements Renderable {
-
         private Set<File> files;
 
         private Path root;
@@ -172,4 +171,34 @@ public class DirectoryDiffView implements Renderable {
         }
     }
 
+    private static class Header implements Renderable {
+        @Override
+        public void renderOn(HtmlCanvas html) throws IOException {
+             html
+                     .head()
+                        .meta(charset("utf8"))
+                        .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
+                        .title().content("GumTree")
+                        .macros().stylesheet("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
+                        .macros().javascript("https://code.jquery.com/jquery-3.4.1.min.js")
+                        .macros().javascript("https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js")
+                        .macros().javascript("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js")
+                        .macros().javascript("/dist/shortcuts.js")
+                     ._head();
+        }
+    }
+
+    private static class MenuBar implements Renderable {
+        @Override
+        public void renderOn(HtmlCanvas html) throws IOException {
+            html
+            .div(class_("col"))
+                .div(class_("btn-toolbar justify-content-end"))
+                    .div(class_("btn-group"))
+                        .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
+                    ._div()
+                ._div()
+            ._div();
+        }
+    }
 }

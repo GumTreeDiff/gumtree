@@ -43,6 +43,14 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
         return p.generateFrom().file(file);
     }
 
+    public boolean hasGeneratorForFile(String file) throws UnsupportedOperationException, IOException {
+        TreeGenerator p = get(file);
+        if (p == null)
+            return false;
+        else
+            return true;
+    }
+
     public TreeContext getTree(String generator, String file) throws UnsupportedOperationException, IOException {
         for (Entry e : entries)
             if (e.id.equals(generator))
