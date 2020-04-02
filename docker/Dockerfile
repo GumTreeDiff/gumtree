@@ -30,9 +30,11 @@ RUN export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8 \
 	&& ln -s /opt/gumtree/dist/build/install/gumtree/bin/gumtree /usr/bin/gumtree
 
 # define volume diff to make available files to diff
-RUN mkdir /diff
+RUN mkdir -p /diff/left
+RUN mkdir -p /diff/right
 WORKDIR /diff
-VOLUME /diff
+VOLUME /diff/left
+VOLUME /diff/right
 
 # expose port 4567 for webdiff
 EXPOSE 4567
