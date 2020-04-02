@@ -1,6 +1,7 @@
 # Changelog of GumTree
 
 ## v3.0.0-beta1 (Ficus)
+* Integrated monaco native diff editor
 * Fix position problem in javaparser generator
 * Fix method invocation handling in jdt generator
 * Add shortcuts and menubar to all webdiff views except mergely 

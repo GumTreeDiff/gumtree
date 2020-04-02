@@ -121,6 +121,12 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
                     new ChawatheScriptGenerator(), id);
             return render(view);
         });
+        get("/monaco-native-diff/:id", (request, response) -> {
+            int id = Integer.parseInt(request.params(":id"));
+            Pair<File, File> pair = comparator.getModifiedFiles().get(id);
+            Renderable view = new MonacoNativeDiffView(pair.first, pair.second, id);
+            return render(view);
+        });
         get("/mergely-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Renderable view = new MergelyView(id);

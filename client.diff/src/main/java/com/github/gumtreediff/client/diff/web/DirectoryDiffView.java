@@ -129,6 +129,7 @@ public class DirectoryDiffView implements Renderable {
                             .a(class_("btn btn-primary btn-sm mx-1").href("/monaco-diff/" + id)).content("monaco")
                             .a(class_("btn btn-primary btn-sm mx-1").href("/vanilla-diff/" + id)).content("classic")
                         ._if()
+                        .a(class_("btn btn-primary btn-sm mx-1").href("/monaco-native-diff/" + id)).content("monaco-native")
                         .a(class_("btn btn-primary btn-sm mx-1").href("/mergely-diff/" + id)).content("mergely")
                         .a(class_("btn btn-primary btn-sm mx-1").href("/raw-diff/" + id)).content("raw")
                     ._td()
