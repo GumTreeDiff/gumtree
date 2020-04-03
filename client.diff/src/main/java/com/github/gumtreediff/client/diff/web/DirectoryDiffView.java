@@ -123,15 +123,19 @@ public class DirectoryDiffView implements Renderable {
                 tbody
                 .tr()
                     .td().content(comparator.getSrc().relativize(file.first.toPath()).toString())
-                    .td(class_("text-right"))
-                        //TODO: integrate this with the -g option
-                        .if_(Generators.getInstance().hasGeneratorForFile(file.first.getAbsolutePath()))
-                            .a(class_("btn btn-primary btn-sm mx-1").href("/monaco-diff/" + id)).content("monaco")
-                            .a(class_("btn btn-primary btn-sm mx-1").href("/vanilla-diff/" + id)).content("classic")
-                        ._if()
-                        .a(class_("btn btn-primary btn-sm mx-1").href("/monaco-native-diff/" + id)).content("monaco-native")
-                        .a(class_("btn btn-primary btn-sm mx-1").href("/mergely-diff/" + id)).content("mergely")
-                        .a(class_("btn btn-primary btn-sm mx-1").href("/raw-diff/" + id)).content("raw")
+                    .td()
+                        .div(class_("btn-toolbar justify-content-end"))
+                            .div(class_("btn-group"))
+                                //TODO: integrate this with the -g option
+                                .if_(Generators.getInstance().hasGeneratorForFile(file.first.getAbsolutePath()))
+                                    .a(class_("btn btn-primary btn-sm").href("/monaco-diff/" + id)).content("monaco")
+                                    .a(class_("btn btn-primary btn-sm").href("/vanilla-diff/" + id)).content("classic")
+                                ._if()
+                                .a(class_("btn btn-primary btn-sm").href("/monaco-native-diff/" + id)).content("monaco-native")
+                                .a(class_("btn btn-primary btn-sm").href("/mergely-diff/" + id)).content("mergely")
+                                .a(class_("btn btn-primary btn-sm").href("/raw-diff/" + id)).content("raw")
+                            ._div()
+                        ._div()
                     ._td()
                 ._tr();
                 id++;
