@@ -57,46 +57,38 @@ public class DirectoryDiffView implements Renderable {
                         .div(class_("col"))
                             .div(class_("card mt-3 mb-3"))
                                 .div(class_("card-header"))
-                                    .h4(class_("card-title"))
+                                    .h4(class_("card-title mb-0"))
                                         .write("Modified files ")
                                         .span(class_("badge badge-secondary")).content(comparator.getModifiedFiles().size())
                                     ._h4()
                                 ._div()
-                                .div(class_("card-body"))
-                                    .render_if(new ModifiedFiles(comparator.getModifiedFiles()), comparator.getModifiedFiles().size() > 0)
-                                ._div()
+                                .render_if(new ModifiedFiles(comparator.getModifiedFiles()), comparator.getModifiedFiles().size() > 0)
                             ._div()
                         ._div()
                     ._div()
                     .div(class_("row"))
                         .div(class_("col"))
                             .div(class_("card"))
-                                .div(class_("card-header"))
-                                    .h4(class_("card-title"))
+                                .div(class_("card-header bg-danger"))
+                                    .h4(class_("card-title mb-0"))
                                         .write("Deleted files ")
                                         .span(class_("badge badge-secondary")).content(comparator.getDeletedFiles().size())
                                     ._h4()
                                 ._div()
-                                .div(class_("card-body"))
-                                    .render_if(new AddedOrDeletedFiles(
-                comparator.getDeletedFiles(), comparator.getSrc(), "table-danger"),
+                                .render_if(new AddedOrDeletedFiles(comparator.getDeletedFiles(), comparator.getSrc()),
                 comparator.getDeletedFiles().size() > 0)
-                                ._div()
                             ._div()
                         ._div()
                         .div(class_("col"))
                             .div(class_("card"))
-                                .div(class_("card-header"))
-                                    .h4(class_("card-title"))
+                                .div(class_("card-header bg-success"))
+                                    .h4(class_("card-title mb-0"))
                                         .write("Added files ")
                                         .span(class_("badge badge-secondary")).content(comparator.getAddedFiles().size())
                                     ._h4()
                                 ._div()
-                                .div(class_("card-body"))
-                                    .render_if(new AddedOrDeletedFiles(
-                comparator.getAddedFiles(), comparator.getDst(), "table-success"),
+                                .render_if(new AddedOrDeletedFiles(comparator.getAddedFiles(), comparator.getDst()),
                 comparator.getAddedFiles().size() > 0)
-                                ._div()
                             ._div()
                         ._div()
                     ._div()
@@ -115,7 +107,7 @@ public class DirectoryDiffView implements Renderable {
         @Override
         public void renderOn(HtmlCanvas html) throws IOException {
             HtmlCanvas tbody = html
-            .table(class_("table table-striped table-condensed"))
+            .table(class_("table card-table table-striped table-condensed mb-0"))
                 .tbody();
 
             int id = 0;
@@ -148,26 +140,22 @@ public class DirectoryDiffView implements Renderable {
 
     private static class AddedOrDeletedFiles implements Renderable {
         private Set<File> files;
-
         private Path root;
 
-        private String tdClass;
-
-        private AddedOrDeletedFiles(Set<File> files, Path root, String tdClass) {
+        private AddedOrDeletedFiles(Set<File> files, Path root) {
             this.files = files;
             this.root = root;
-            this.tdClass = tdClass;
         }
 
         @Override
         public void renderOn(HtmlCanvas html) throws IOException {
             HtmlCanvas tbody = html
-            .table(class_("table table-condensed"))
+            .table(class_("table card-table table-striped table-condensed mb-0"))
                 .tbody();
             for (File file : files) {
                 tbody
                     .tr()
-                        .td(class_(tdClass)).content(root.relativize(file.toPath()).toString())
+                        .td().content(root.relativize(file.toPath()).toString())
                     ._tr();
             }
                 tbody
