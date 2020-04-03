@@ -13,7 +13,7 @@ Now you can use GumTree container. You need to:
 * bind the "modified" folder folder to the `/diff/right` volume of the container,
 * bind the `4567` port to be able to use webdiff
 
-A sample command line is `docker run -v /my/original-folder:/diff/left -v /my/modified-folder:/diff/right -p 4567:4567 jrfaller/gumtree webdiff left/ right/`. You can consult the diff at the URL `http://localhost:4567`. Of course, all other GumTree's commands are available.
+A sample command line is `docker run -v /my/original-folder:/diff/left -v /my/modified-folder:/diff/right -p 4567:4567 gumtreediff/gumtree webdiff left/ right/`. You can consult the diff at the URL `http://localhost:4567`. Of course, all other GumTree's commands are available.
 
 **Beware, the paths inputs to GumTree's commands are relative to the `/diff` path inside the container.** 
 
