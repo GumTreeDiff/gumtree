@@ -2,9 +2,9 @@
 
 ## Installation
 
-First you need to build the container. Go to the `docker` folder and compile the image: `docker build . -t jrfaller/gumtree`.
+First you need to build the container. Go to the `docker` folder and compile the image: `docker build . -t gumtreediff/gumtree`.
 
-You can also directly pull a version from Docker Hub via the command `docker pull jrfaller/gumtree`.
+You can also directly pull a version from Docker Hub via the command `docker pull gumtreediff/gumtree`.
 
 ## Usage
 
@@ -19,19 +19,19 @@ A sample command line is `docker run -v /my/original-folder:/diff/left -v /my/mo
 
 ## Git integration
 
+You can easily integrate GumTree's container with Git by adding the following configuration into the `$HOME/.gitconfig` file.
+
 ### Mac OS
 
-You can easily integrate GumTree's container with Git by adding the following configuration into the `$HOME/.gitconfig` file.
 ```
 [difftool "gumtree-docker"]
-	cmd = docker run -v /private/$LOCAL:/diff/left -v /private/$REMOTE:/diff/right -p 4567:4567 jrfaller/gumtree webdiff left/ right/
+	cmd = docker run -v /private/$LOCAL:/diff/left -v /private/$REMOTE:/diff/right -p 4567:4567 gumtreediff/gumtree webdiff left/ right/
 ```
 ### Linux - Windows
 
-You can easily integrate GumTree's container with Git by adding the following configuration into the `$HOME/.gitconfig` file.
 ```
 [difftool "gumtree-docker"]
-	cmd = docker run -v $LOCAL:/diff/left -v $REMOTE:/diff/right -p 4567:4567 jrfaller/gumtree webdiff left/ right/
+	cmd = docker run -v $LOCAL:/diff/left -v $REMOTE:/diff/right -p 4567:4567 gumtreediff/gumtree webdiff left/ right/
 ```
 ### Usage
 
@@ -43,4 +43,4 @@ You can invoke GumTree's from git by running the command `git difftool -d -t gum
 ```
 ## Debug
 
-If you want to debug GumTree container use the following command line: `docker run -v -v /my/original-folder:/diff/left -v /my/modified-folder:/diff/right -p 4567:4567 --entrypoint "/bin/bash" -it jrfaller/gumtree`.
+If you want to debug GumTree container use the following command line: `docker run -v -v /my/original-folder:/diff/left -v /my/modified-folder:/diff/right -p 4567:4567 --entrypoint "/bin/bash" -it gumtreediff/gumtree`.
