@@ -9,8 +9,8 @@ You can also compile the image on your machine. Go to the root GumTree's folder 
 ## Usage
 
 To use GumTree's image, You need to:
-* bind the "original" folder folder to the `/diff/left` volume of the container
-* bind the "modified" folder folder to the `/diff/right` volume of the container,
+* bind the "original" folder to the `/diff/left` volume of the container
+* bind the "modified" folder to the `/diff/right` volume of the container,
 * bind the `4567` port to be able to use webdiff
 
 The classical way to run a container is the command `docker run -v /my/original-folder:/diff/left -v /my/modified-folder:/diff/right -p 4567:4567 gumtreediff/gumtree webdiff left/ right/`. You can consult the diff at the URL `http://localhost:4567`. Of course, all other GumTree's commands are available.
