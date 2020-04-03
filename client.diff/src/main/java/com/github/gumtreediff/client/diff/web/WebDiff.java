@@ -39,7 +39,7 @@ import java.nio.file.Paths;
 
 import static spark.Spark.*;
 
-@Register(description = "a web diff client", options = WebDiff.Options.class, priority = Registry.Priority.HIGH)
+@Register(description = "Web diff client", options = WebDiff.Options.class, priority = Registry.Priority.HIGH)
 public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
     public static final String JQUERY_JS_URL = "https://code.jquery.com/jquery-3.4.1.min.js";
     public static final String BOOTSTRAP_CSS_URL = "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css";
@@ -50,9 +50,8 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         super(args);
     }
 
-    static class Options extends AbstractDiffClient.Options {
-        protected int defaultPort = Integer.parseInt(System.getProperty("gt.webdiff.port", "4567"));
-        boolean stdin = true;
+    public static class Options extends AbstractDiffClient.Options {
+        public int defaultPort = Integer.parseInt(System.getProperty("gt.webdiff.port", "4567"));
 
         @Override
         public Option[] values() {
@@ -65,12 +64,6 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
                                 defaultPort = p;
                             else
                                 System.err.printf("Invalid port number (%s), using %d\n", args[0], defaultPort);
-                        }
-                    },
-                    new Option("--no-stdin", String.format("Do not listen to stdin"), 0) {
-                        @Override
-                        protected void process(String name, String[] args) {
-                            stdin = false;
                         }
                     }
             );

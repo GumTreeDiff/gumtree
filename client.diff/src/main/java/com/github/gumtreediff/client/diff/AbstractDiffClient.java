@@ -34,15 +34,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> extends Client {
-
     protected final O opts;
-    public static final String SYNTAX = "Syntax: diff [options] baseFile destFile";
+    public static final String SYNTAX = "Syntax: [options] srcFile dstFile";
     private TreeContext src;
     private TreeContext dst;
 
     public static class Options implements Option.Context {
         public String matcher;
-        public String generator = null;
+        public String treeGenerator;
         public String src;
         public String dst;
 
@@ -55,10 +54,10 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
                             matcher = args[0];
                         }
                     },
-                    new Option("-g", "Generator to use.", 1) {
+                    new Option("-g", "Tree generator to use.", 1) {
                         @Override
                         protected void process(String name, String[] args) {
-                            generator = args[0];
+                            treeGenerator = args[0];
                         }
                     },
                     new Option.Help(this) {
@@ -72,8 +71,8 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
         }
 
         void dump(PrintStream out) {
-            out.printf("Current path: %s\n", System.getProperty("user.dir"));
-            out.printf("Diff: %s %s\n", src, dst);
+            out.printf("Active path: %s\n", System.getProperty("user.dir"));
+            out.printf("Diffed paths: %s %s\n", src, dst);
         }
     }
 
@@ -85,7 +84,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
         args = Option.processCommandLine(args, opts);
 
         if (args.length < 2)
-            throw new Option.OptionException("arguments required." + SYNTAX, opts);
+            throw new Option.OptionException("Two arguments are required. " + SYNTAX, opts);
 
         opts.src = args[0];
         opts.dst = args[1];
@@ -94,14 +93,14 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
             opts.dump(System.out);
         }
 
-        if (!Files.exists(Paths.get(opts.src))) {
-            System.err.println("Error loading file or folder " + opts.src);
-            System.exit(1);
-        }
-        if (!Files.exists(Paths.get(opts.dst))) {
-            System.err.println("Error loading file or folder " + opts.dst);
-            System.exit(1);
-        }
+        if (opts.treeGenerator != null && Generators.getInstance().find(opts.treeGenerator) == null)
+            throw new Option.OptionException("Error loading tree generator: " + opts.treeGenerator);
+
+        if (!Files.exists(Paths.get(opts.src)))
+            throw new Option.OptionException("Error loading file or folder: " + opts.src);
+
+        if (!Files.exists(Paths.get(opts.dst)))
+            throw new Option.OptionException("Error loading file or folder: " + opts.dst);
     }
 
     ///////////////////
@@ -141,10 +140,10 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
     protected TreeContext getTreeContext(String file) {
         try {
             TreeContext t;
-            if (opts.generator == null)
+            if (opts.treeGenerator == null)
                 t = Generators.getInstance().getTree(file);
             else
-                t = Generators.getInstance().getTree(opts.generator, file);
+                t = Generators.getInstance().getTree(opts.treeGenerator, file);
             return t;
         } catch (IOException e) {
             e.printStackTrace();

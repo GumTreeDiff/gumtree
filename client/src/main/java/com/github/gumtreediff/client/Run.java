@@ -75,16 +75,18 @@ public class Run {
 
     public static void startClient(String name, Registry.Factory<? extends Client> client, String[] args) {
         try {
-            Client inst = client.newInstance(new Object[]{args});
+            Client inst = client.newInstance(new Object[]{ args });
             try {
                 inst.run();
             } catch (Exception e) {
-                System.err.printf("** Error while running client %s: %s\n", name, e);
+                System.err.printf("Error while running client '%s'.\n", name);
+                e.printStackTrace();
             }
         } catch (InvocationTargetException e) {
-            System.err.printf("** Error while parsing option for %s:\n%s\n", name, e.getCause());
+            System.err.printf("Error while parsing arguments of client '%s'.\n", name);
+            e.printStackTrace();
         } catch (InstantiationException | IllegalAccessException e) {
-            System.err.printf("Can't instantiate client: '%s'\n%s\n", name, e);
+            System.err.printf("Can't instantiate client '%s'.", name);
             e.printStackTrace();
         }
     }

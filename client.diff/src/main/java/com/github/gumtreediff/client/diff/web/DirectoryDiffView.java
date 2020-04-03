@@ -158,9 +158,9 @@ public class DirectoryDiffView implements Renderable {
                         .td().content(root.relativize(file.toPath()).toString())
                     ._tr();
             }
-                tbody
-                    ._tbody()
-                ._table();
+            tbody
+                ._tbody()
+            ._table();
         }
     }
 
