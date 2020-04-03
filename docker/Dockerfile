@@ -18,15 +18,13 @@ RUN make \
 # install pythonparser
 WORKDIR /opt
 RUN git clone https://github.com/GumTreeDiff/pythonparser.git --depth 1
-WORKDIR /opt/pythonparser
 RUN ln -s /opt/pythonparser/pythonparser /usr/bin/pythonparser
 
 # install gumtree
-WORKDIR /opt
-RUN git clone -b develop https://github.com/GumTreeDiff/gumtree.git --depth 1
+COPY . /opt/gumtree
 WORKDIR /opt/gumtree
 RUN export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8 \
-    && ./gradlew build \
+	&& ./gradlew build \
 	&& ln -s /opt/gumtree/dist/build/install/gumtree/bin/gumtree /usr/bin/gumtree
 
 # define volume diff to make available files to diff
