@@ -41,6 +41,10 @@ import static spark.Spark.*;
 
 @Register(description = "a web diff client", options = WebDiff.Options.class, priority = Registry.Priority.HIGH)
 public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
+    public final static String JQUERY_JS_URL = "https://code.jquery.com/jquery-3.4.1.min.js";
+    public final static String BOOTSTRAP_CSS_URL = "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css";
+    public final static String BOOTSTRAP_JS_URL = "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js";
+    public final static String POPPER_JS_URL = " https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js";
 
     public WebDiff(String[] args) {
         super(args);
@@ -129,7 +133,7 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         });
         get("/mergely-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
-            Renderable view = new MergelyView(id);
+            Renderable view = new MergelyDiffView(id);
             return render(view);
         });
         get("/raw-diff/:id", (request, response) -> {

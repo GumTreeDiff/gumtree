@@ -28,11 +28,11 @@ import java.io.IOException;
 
 import static org.rendersnake.HtmlAttributesFactory.*;
 
-public class MergelyView implements Renderable {
+public class MergelyDiffView implements Renderable {
 
     private int id;
 
-    public MergelyView(int id) {
+    public MergelyDiffView(int id) {
         this.id = id;
     }
 
@@ -60,7 +60,7 @@ public class MergelyView implements Renderable {
         public void renderOn(HtmlCanvas html) throws IOException {
             html
                     .head()
-                        .macros().javascript("https://code.jquery.com/jquery-3.4.1.min.js")
+                        .macros().javascript(WebDiff.JQUERY_JS_URL)
                         .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js")
                         .macros().stylesheet("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.css")
                         .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/search/searchcursor.min.js")

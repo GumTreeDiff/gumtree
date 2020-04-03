@@ -157,7 +157,7 @@ public class MonacoDiffView implements Renderable {
             html
             .div(class_("col"))
                 .div(class_("btn-toolbar justify-content-end"))
-                    .div(class_("btn-group"))
+                    .div(class_("btn-group mr-2"))
                         .a(class_("btn btn-primary btn-sm").id("legend").href("#").add("data-toggle", "popover")
                                 .add("data-html", "true").add("data-placement", "bottom")
                                 .add("data-content", "<span class=&quot;deleted&quot;>&nbsp;&nbsp;</span> deleted<br>"
@@ -173,6 +173,7 @@ public class MonacoDiffView implements Renderable {
                             .content("Shortcuts")
                     ._div()
                     .div(class_("btn-group"))
+                        .a(class_("btn btn-default btn-sm btn-primary").href("/list")).content("Back")
                         .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
                     ._div()
                 ._div()

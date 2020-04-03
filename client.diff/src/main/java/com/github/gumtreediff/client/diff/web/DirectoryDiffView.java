@@ -180,10 +180,10 @@ public class DirectoryDiffView implements Renderable {
                         .meta(charset("utf8"))
                         .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
                         .title().content("GumTree")
-                        .macros().stylesheet("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
-                        .macros().javascript("https://code.jquery.com/jquery-3.4.1.min.js")
-                        .macros().javascript("https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js")
-                        .macros().javascript("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js")
+                        .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
+                        .macros().javascript(WebDiff.JQUERY_JS_URL)
+                        .macros().javascript(WebDiff.POPPER_JS_URL)
+                        .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
                         .macros().javascript("/dist/shortcuts.js")
                      ._head();
         }
