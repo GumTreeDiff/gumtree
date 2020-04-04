@@ -30,12 +30,22 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
 
     private static Generators registry;
 
+    /**
+     * Return the tree generators registry instance (singleton pattern)
+     */
     public static final Generators getInstance() {
         if (registry == null)
             registry = new Generators();
         return registry;
     }
 
+    /**
+     * Automatically search a tree generator for the given file path, and use it
+     * to parse it
+     * @param file the file path
+     * @return the TreeContext of the file
+     * @throws UnsupportedOperationException if no suitable generator is found
+     */
     public TreeContext getTree(String file) throws UnsupportedOperationException, IOException {
         TreeGenerator p = get(file);
         if (p == null)
@@ -43,19 +53,32 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
         return p.generateFrom().file(file);
     }
 
-    public boolean hasGeneratorForFile(String file) throws UnsupportedOperationException, IOException {
+    /**
+     * Use the tree generator with the supplied name to parse the file at the given path
+     * to parse it
+     * @param generator the tree generator's name. if null, fallbacks to @see getTree(String)
+     * @throws UnsupportedOperationException if no suitable generator is found
+     */
+    public TreeContext getTree(String file, String generator) throws UnsupportedOperationException, IOException {
+        if (generator == null)
+            return getTree(file);
+
+        for (Entry e : entries)
+            if (e.id.equals(generator))
+                return e.instantiate(null).generateFrom().file(file);
+
+        throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
+    }
+
+    /**
+     * Indicate whether or not the given file path has a related tree generator
+     */
+    public boolean hasGeneratorForFile(String file) {
         TreeGenerator p = get(file);
         if (p == null)
             return false;
         else
             return true;
-    }
-
-    public TreeContext getTree(String generator, String file) throws UnsupportedOperationException, IOException {
-        for (Entry e : entries)
-            if (e.id.equals(generator))
-                return e.instantiate(null).generateFrom().file(file);
-        throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
     }
 
     @Override

@@ -20,12 +20,8 @@
 
 package com.github.gumtreediff.client.diff.web;
 
-import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.actions.EditScriptGenerator;
+import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.io.ActionsIoUtils;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.TreeContext;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
@@ -36,26 +32,15 @@ import java.io.IOException;
 import static org.rendersnake.HtmlAttributesFactory.*;
 
 public class TextDiffView implements Renderable {
+    private File srcFile;
+    private File dstFile;
 
-    private final MappingStore mappings;
+    private Diff diff;
 
-    private TreeContext src;
-
-    private TreeContext dst;
-
-    private File fSrc;
-
-    private File fDst;
-
-    private EditScript script;
-
-    public TextDiffView(File fSrc, File fDst, TreeContext src, TreeContext dst, Matcher matcher, EditScriptGenerator scriptGenerator) throws IOException {
-        this.fSrc = fSrc;
-        this.fDst = fDst;
-        this.src = src;
-        this.dst = dst;
-        this.mappings = matcher.match(src.getRoot(), dst.getRoot());
-        this.script = scriptGenerator.computeActions(mappings);
+    public TextDiffView(File srcFile, File dstFile, Diff diff) {
+        this.srcFile = srcFile;
+        this.dstFile = dstFile;
+        this.diff = diff;
     }
 
     @Override
@@ -73,9 +58,9 @@ public class TextDiffView implements Renderable {
                             .div(class_("col-lg-12"))
                                 .h3()
                                     .write("Raw edit script ")
-                                    .small().content(String.format("%s -> %s", fSrc.getName(), fDst.getName()))
+                                    .small().content(String.format("%s -> %s", srcFile.getName(), dstFile.getName()))
                                 ._h3()
-                                .pre(class_("border p-2")).content(ActionsIoUtils.toText(src, script, mappings).toString())
+                                .pre(class_("border p-2")).content(ActionsIoUtils.toText(diff.src, diff.editScript, diff.mappings).toString())
                             ._div()
                         ._div()
                     ._div()

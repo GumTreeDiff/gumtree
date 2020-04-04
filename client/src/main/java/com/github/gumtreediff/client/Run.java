@@ -99,10 +99,10 @@ public class Run {
 
         Registry.Factory<? extends Client> client;
         if (args.length == 0) {
-            System.err.println("** No command given.");
+            System.err.println("No command given.");
             displayHelp(System.err, opts);
         } else if ((client = Clients.getInstance().getFactory(args[0])) == null) {
-            System.err.printf("** Unknown sub-command '%s'.\n", args[0]);
+            System.err.printf("Unknown sub-command '%s'.\n", args[0]);
             displayHelp(System.err, opts);
         } else {
             String[] a = new String[args.length - 1];

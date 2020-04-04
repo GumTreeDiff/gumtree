@@ -20,12 +20,8 @@
 package com.github.gumtreediff.client.diff.web;
 
 import com.github.gumtreediff.actions.Diff;
-import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.actions.ITreeClassifier;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
@@ -36,20 +32,18 @@ import java.io.IOException;
 import static org.rendersnake.HtmlAttributesFactory.*;
 
 public class MonacoDiffView implements Renderable {
-    private File fSrc;
-    private File fDst;
-
-    private int id;
+    private File srcFile;
+    private File dstFile;
 
     private Diff diff;
 
-    public MonacoDiffView(File fSrc, File fDst, TreeContext src, TreeContext dst,
-                          Matcher matcher, EditScriptGenerator scriptGenerator, int id) {
-        this.fSrc = fSrc;
-        this.fDst = fDst;
+    private int id;
+
+    public MonacoDiffView(File fSrc, File fDst, Diff diff, int id) {
+        this.srcFile = fSrc;
+        this.dstFile = fDst;
+        this.diff = diff;
         this.id = id;
-        MappingStore mappings = matcher.match(src.getRoot(), dst.getRoot());
-        this.diff = new Diff(src, dst, mappings, scriptGenerator.computeActions(mappings));
     }
 
     @Override
@@ -65,11 +59,11 @@ public class MonacoDiffView implements Renderable {
                     ._div()
                     .div(class_("row"))
                         .div(class_("col-6"))
-                            .h5().content(fSrc.getName())
+                            .h5().content(srcFile.getName())
                             .div(id("left-container").style("width:100%;height:600px;border:1px solid grey"))._div()
                         ._div()
                         .div(class_("col-6"))
-                            .h5().content(fDst.getName())
+                            .h5().content(dstFile.getName())
                             .div(id("right-container").style("width:100%;height:600px;border:1px solid grey"))._div()
                         ._div()
                     ._div()

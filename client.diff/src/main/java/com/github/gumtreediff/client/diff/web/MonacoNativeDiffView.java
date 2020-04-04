@@ -29,14 +29,14 @@ import java.io.IOException;
 import static org.rendersnake.HtmlAttributesFactory.*;
 
 public class MonacoNativeDiffView implements Renderable {
-    private File fSrc;
-    private File fDst;
+    private File srcFile;
+    private File dstFile;
 
     private int id;
 
-    public MonacoNativeDiffView(File fSrc, File fDst, int id) {
-        this.fSrc = fSrc;
-        this.fDst = fDst;
+    public MonacoNativeDiffView(File srcFile, File dstFile, int id) {
+        this.srcFile = srcFile;
+        this.dstFile = dstFile;
         this.id = id;
     }
 

@@ -19,13 +19,13 @@
 
 package com.github.gumtreediff.client.diff.swing;
 
-import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
-import com.github.gumtreediff.matchers.MappingStore;
 
 import javax.swing.*;
+
+import java.io.IOException;
 
 @Register(description = "A swing diff client", options = AbstractDiffClient.Options.class)
 public final class SwingDiff extends AbstractDiffClient<AbstractDiffClient.Options> {
@@ -35,19 +35,14 @@ public final class SwingDiff extends AbstractDiffClient<AbstractDiffClient.Optio
     }
 
     @Override
-    public void run() {
-        final MappingStore mappings = matchTrees();
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame("GumTree");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                Diff diff = new Diff(getSrcTreeContext(), getDstTreeContext(), mappings,
-                        new ChawatheScriptGenerator().computeActions(mappings));
-                frame.add(new MappingsPanel(opts.src, opts.dst, diff));
-                frame.pack();
-                frame.setVisible(true);
-            }
+    public void run() throws IOException {
+        Diff diff = getDiff();
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("GumTree");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.add(new MappingsPanel(opts.src, opts.dst, diff));
+            frame.pack();
+            frame.setVisible(true);
         });
     }
 

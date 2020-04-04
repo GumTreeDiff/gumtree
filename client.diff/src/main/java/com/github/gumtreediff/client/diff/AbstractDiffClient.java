@@ -20,6 +20,9 @@
 
 package com.github.gumtreediff.client.diff;
 
+import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.Diff;
+import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Client;
 import com.github.gumtreediff.gen.Generators;
@@ -36,8 +39,6 @@ import java.nio.file.Paths;
 public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> extends Client {
     protected final O opts;
     public static final String SYNTAX = "Syntax: [options] srcFile dstFile";
-    private TreeContext src;
-    private TreeContext dst;
 
     public static class Options implements Option.Context {
         public String matcher;
@@ -103,51 +104,31 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
             throw new Option.OptionException("Error loading file or folder: " + opts.dst);
     }
 
-    ///////////////////
-    // TODO after this line it should be rewrote in a better way
-    private Matcher matcher;
+    protected Diff getDiff() throws IOException {
+        return getDiff(opts.src, opts.dst);
+    }
+
+    protected Diff getDiff(String src, String dst) throws IOException {
+        TreeContext srcCtx = getTreeContext(src);
+        TreeContext dstCtx = getTreeContext(dst);
+        MappingStore mappings = getMatcher().match(srcCtx.getRoot(), dstCtx.getRoot());
+        EditScript editScript = new ChawatheScriptGenerator().computeActions(mappings);
+        return new Diff(srcCtx, dstCtx, mappings, editScript);
+    }
 
     protected Matcher getMatcher() {
-        Matchers matchers = Matchers.getInstance();
-        matcher = (opts.matcher == null)
-                ? matchers.getMatcher()
-                : matchers.getMatcher(opts.matcher);
-        return matcher;
+        return Matchers.getInstance().getMatcherWithFallback(opts.matcher);
     }
 
-    protected MappingStore matchTrees() {
-        Matchers matchers = Matchers.getInstance();
-        // FIXME here was a kind of cache ... no clue why
-        matcher = (opts.matcher == null)
-                ? matchers.getMatcher()
-                : matchers.getMatcher(opts.matcher);
-        return matcher.match(getSrcTreeContext().getRoot(), getDstTreeContext().getRoot());
+    protected TreeContext getSrcTreeContext() throws IOException {
+        return getTreeContext(opts.src);
     }
 
-    protected TreeContext getSrcTreeContext() {
-        //TODO ensure this cache is useful
-        if (src == null)
-            src = getTreeContext(opts.src);
-        return src;
+    protected TreeContext getDstTreeContext() throws IOException {
+        return getTreeContext(opts.dst);
     }
 
-    protected TreeContext getDstTreeContext() {
-        if (dst == null)
-            dst = getTreeContext(opts.dst);
-        return dst;
-    }
-
-    protected TreeContext getTreeContext(String file) {
-        try {
-            TreeContext t;
-            if (opts.treeGenerator == null)
-                t = Generators.getInstance().getTree(file);
-            else
-                t = Generators.getInstance().getTree(opts.treeGenerator, file);
-            return t;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected TreeContext getTreeContext(String file) throws IOException {
+        return Generators.getInstance().getTree(file, opts.treeGenerator);
     }
 }

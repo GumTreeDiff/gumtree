@@ -56,6 +56,17 @@ public class Matchers extends Registry<String, Matcher, Register> {
         return get(id);
     }
 
+    public Matcher getMatcherWithFallback(String id) {
+        if (id == null)
+            return getMatcher();
+
+        Matcher matcher = get(id);
+        if (matcher != null)
+            return matcher;
+        else
+            return getMatcher();
+    }
+
     public Matcher getMatcher() {
         return defaultMatcherFactory.instantiate(new Object[]{});
     }

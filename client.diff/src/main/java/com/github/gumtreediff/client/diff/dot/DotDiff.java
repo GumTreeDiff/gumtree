@@ -20,6 +20,7 @@
 
 package com.github.gumtreediff.client.diff.dot;
 
+import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
 import com.github.gumtreediff.matchers.Mapping;
@@ -39,17 +40,17 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
 
     @Override
     public void run() throws Exception {
-        final MappingStore mappings = matchTrees();
         StringWriter writer = new StringWriter();
         writer.write("digraph G {\n");
         writer.write("node [style=filled];\n");
         writer.write("subgraph cluster_src {\n");
-        writeTree(getSrcTreeContext(), writer, mappings);
+        Diff diff = getDiff();
+        writeTree(diff.src, writer, diff.mappings);
         writer.write("}\n");
         writer.write("subgraph cluster_dst {\n");
-        writeTree(getDstTreeContext(), writer, mappings);
+        writeTree(diff.dst, writer, diff.mappings);
         writer.write("}\n");
-        for (Mapping m: mappings) {
+        for (Mapping m: diff.mappings) {
             writer.write(String.format("%s -> %s [style=dashed]\n;",
                     getDotId(getSrcTreeContext(), m.first), getDotId(getDstTreeContext(), m.second)));
         }
@@ -63,7 +64,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
             if (mappings.isSrcMapped(tree) || mappings.isDstMapped(tree))
                 fillColor = "blue";
             writer.write(String.format("%s [label=\"%s\", color=%s];\n",
-                    getDotId(context, tree), getDotLabel(context, tree), fillColor));
+                    getDotId(context, tree), getDotLabel(tree), fillColor));
             if (tree.getParent() != null)
                 writer.write(String.format("%s -> %s;\n",
                         getDotId(context, tree.getParent()), getDotId(context, tree)));
@@ -75,7 +76,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
         return "n_" + context.hashCode() + "_" + tree.hashCode();
     }
 
-    private String getDotLabel(TreeContext context, ITree tree) {
+    private String getDotLabel(ITree tree) {
         String label = tree.toString();
         if (label.contains("\"") || label.contains("\\s"))
             label = label

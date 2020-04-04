@@ -127,34 +127,20 @@ public class Serializer extends Client {
     }
 
     @Override
-    public void run() throws IOException {
+    public void run() throws Exception {
         final boolean multiple = opts.files.length > 1;
         if (multiple && opts.output != null)
             Files.createDirectories(FileSystems.getDefault().getPath(opts.output));
 
         for (String file : opts.files) {
-            try {
-                TreeContext tc = getTreeContext(file);
-                opts.format.getSerializer(tc).writeTo(opts.output == null
-                        ? System.out
-                        : new FileOutputStream(opts.output));
-            } catch (Exception e) {
-                System.err.println(e);
-            }
+            TreeContext tc = getTreeContext(file);
+            opts.format.getSerializer(tc).writeTo(opts.output == null
+                    ? System.out
+                    : new FileOutputStream(opts.output));
         }
     }
 
-    private TreeContext getTreeContext(String file) {
-        try {
-            TreeContext t;
-            if (opts.generator == null)
-                t = Generators.getInstance().getTree(file);
-            else
-                t = Generators.getInstance().getTree(opts.generator, file);
-            return t;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    private TreeContext getTreeContext(String file) throws IOException {
+        return Generators.getInstance().getTree(file, opts.generator);
     }
 }

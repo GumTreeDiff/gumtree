@@ -21,10 +21,6 @@
 package com.github.gumtreediff.client.diff.web;
 
 import com.github.gumtreediff.actions.Diff;
-import com.github.gumtreediff.actions.EditScriptGenerator;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.TreeContext;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
@@ -35,20 +31,19 @@ import java.io.IOException;
 import static org.rendersnake.HtmlAttributesFactory.*;
 
 public class VanillaDiffView implements Renderable {
+    private VanillaDiffHtmlBuilder rawHtmlDiff;
 
-    private VanillaDiffHtmlBuilder diffs;
+    private File srcFile;
+    private File dstFile;
 
-    private File fSrc;
+    private Diff diff;
 
-    private File fDst;
-
-    public VanillaDiffView(File fSrc, File fDst, TreeContext src, TreeContext dst, Matcher matcher, EditScriptGenerator scriptGenerator) throws IOException {
-        this.fSrc = fSrc;
-        this.fDst = fDst;
-        MappingStore mappings = matcher.match(src.getRoot(), dst.getRoot());
-        Diff diff = new Diff(src, dst, mappings, scriptGenerator.computeActions(mappings));
-        diffs = new VanillaDiffHtmlBuilder(fSrc, fDst, diff);
-        diffs.produce();
+    public VanillaDiffView(File srcFile, File dstFile, Diff diff) throws IOException {
+        this.srcFile = srcFile;
+        this.dstFile = dstFile;
+        this.diff = diff;
+        rawHtmlDiff = new VanillaDiffHtmlBuilder(srcFile, dstFile, diff);
+        rawHtmlDiff.produce();
     }
 
     @Override
@@ -64,12 +59,12 @@ public class VanillaDiffView implements Renderable {
                     ._div()
                     .div(class_("row"))
                         .div(class_("col"))
-                            .h5().content(fSrc.getName())
-                            .pre(class_("pre-scrollable")).content(diffs.getSrcDiff(), false)
+                            .h5().content(srcFile.getName())
+                            .pre(class_("pre-scrollable")).content(rawHtmlDiff.getSrcDiff(), false)
                         ._div()
                         .div(class_("col"))
-                            .h5().content(fDst.getName())
-                            .pre(class_("pre-scrollable")).content(diffs.getDstDiff(), false)
+                            .h5().content(dstFile.getName())
+                            .pre(class_("pre-scrollable")).content(rawHtmlDiff.getDstDiff(), false)
                         ._div()
                     ._div()
                 ._div()

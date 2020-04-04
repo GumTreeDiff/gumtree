@@ -28,7 +28,7 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collection;
 
-@Register(description = "List things (matchers, generators, properties, ...)")
+@Register(description = "List matchers, generators, clients and properties")
 public class List extends Client {
 
     public static final String SYNTAX = "Syntax: list " + Arrays.toString(Listable.values());
@@ -86,12 +86,18 @@ public class List extends Client {
         abstract Collection<?> list();
     }
 
-    // This list is generated using (manually) list_properties (it is only an heuristic), some properties may be missing
     public static final String[] properties = new String[] {
-            "gumtree.client.experimental (com.github.gumtreediff.client.Run)",
-            "gumtree.client.web.port (com.github.gumtreediff.client.diff.WebDiff)",
-            "gumtree.generator.experimental (com.github.gumtreediff.gen.TreeGeneratorRegistry)",
-            "line.separator (com.github.gumtreediff.io.IndentingXMLStreamWriter)",
-            "user.dir (com.github.gumtreediff.client.diff.AbstractDiffClient)"
+            "gt.pp.path: PythonParser path",
+            "gt.webdiff.port: TCP port for webdiff client",
+            "gt.xym.sim: XY bottum-up matcher similarity threshold",
+            "gt.cgum.path: CGum path",
+            "gt.cd.ssim1: Change Distiller similarity threshold for small subtrees",
+            "gt.cd.ssim2: Change Distiller similarity threshold for big subtrees",
+            "gt.cd.ml: Change Distiller maximum number of leaves",
+            "gt.cd.lsim: Change Distiller label similarity threshold",
+            "gt.bum.szt: GumTree maximum subtree size for optimal algorithm",
+            "gt.bum.smt: GumTree similarity threshold",
+            "gt.stm.mh: GumTree minimum height for subtrees",
+            "gt.srcml.path: srcML path"
     };
 }

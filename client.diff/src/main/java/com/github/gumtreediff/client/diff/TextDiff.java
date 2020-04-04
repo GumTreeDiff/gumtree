@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client.diff;
 
-import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
@@ -98,10 +98,9 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
 
     @Override
     public void run() throws Exception {
-        MappingStore ms = matchTrees();
-        EditScript actions = new ChawatheScriptGenerator().computeActions(ms);
+        Diff diff = getDiff();
         ActionsIoUtils.ActionSerializer serializer = opts.format.getSerializer(
-                getSrcTreeContext(), actions, ms);
+                diff.src, diff.editScript, diff.mappings);
         if (opts.output == null)
             serializer.writeTo(System.out);
         else

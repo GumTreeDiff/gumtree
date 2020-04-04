@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client.diff.web;
 
-import com.github.gumtreediff.actions.ChawatheScriptGenerator;
+import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
@@ -101,21 +101,15 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         get("/vanilla-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new VanillaDiffView(pair.first, pair.second,
-                    this.getTreeContext(pair.first.getAbsolutePath()),
-                    this.getTreeContext(pair.second.getAbsolutePath()),
-                    getMatcher(),
-                    new ChawatheScriptGenerator());
+            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
+            Renderable view = new VanillaDiffView(pair.first, pair.second, diff);
             return render(view);
         });
         get("/monaco-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new MonacoDiffView(pair.first, pair.second,
-                    this.getTreeContext(pair.first.getAbsolutePath()),
-                    this.getTreeContext(pair.second.getAbsolutePath()),
-                    getMatcher(),
-                    new ChawatheScriptGenerator(), id);
+            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
+            Renderable view = new MonacoDiffView(pair.first, pair.second, diff, id);
             return render(view);
         });
         get("/monaco-native-diff/:id", (request, response) -> {
@@ -132,11 +126,8 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         get("/raw-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new TextDiffView(pair.first, pair.second,
-                    this.getTreeContext(pair.first.getAbsolutePath()),
-                    this.getTreeContext(pair.second.getAbsolutePath()),
-                    getMatcher(),
-                    new ChawatheScriptGenerator());
+            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
+            Renderable view = new TextDiffView(pair.first, pair.second, diff);
             return render(view);
         });
         get("/left/:id", (request, response) -> {
@@ -155,13 +146,9 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         });
     }
 
-    private static String render(Renderable r) {
+    private static String render(Renderable r) throws IOException {
         HtmlCanvas c = new HtmlCanvas();
-        try {
-            r.renderOn(c);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        r.renderOn(c);
         return c.toHtml();
     }
 
