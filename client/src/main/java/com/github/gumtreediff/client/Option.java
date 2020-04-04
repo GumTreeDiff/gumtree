@@ -42,13 +42,21 @@ public abstract class Option {
     public static class OptionException extends RuntimeException {
         final Context context;
 
-        public OptionException(String msg, Context ctx) {
-            super(msg);
-            context = ctx;
+        public OptionException(String message, Context context) {
+            this(message, context, null);
         }
 
-        public OptionException(String msg) {
-            this(msg, null);
+        public OptionException(String message) {
+            this(message, null, null);
+        }
+
+        public OptionException(String message, Throwable cause) {
+            this(message, null, cause);
+        }
+
+        public OptionException(String message, Context context, Throwable cause) {
+            super(message, cause);
+            this.context = context;
         }
 
         public Context getContext() {

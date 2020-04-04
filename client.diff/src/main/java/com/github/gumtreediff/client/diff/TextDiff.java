@@ -22,7 +22,6 @@ package com.github.gumtreediff.client.diff;
 
 import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.io.ActionsIoUtils;
@@ -31,15 +30,19 @@ import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 
-@Register(name = "diff", description = "Dump actions in our textual format",
+@Register(name = "textdiff", description = "Dump actions in a textual format",
         options = AbstractDiffClient.Options.class)
 public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
-
     public TextDiff(String[] args) {
         super(args);
+        if (!Files.isRegularFile(Paths.get(opts.src)))
+            throw new Option.OptionException("Source must be a file: " + opts.src, opts);
+        if (!Files.isRegularFile(Paths.get(opts.dst)))
+            throw new Option.OptionException("Destination must be a file: " + opts.dst, opts);
 
         if (opts.format == null) {
             opts.format = OutputFormat.TEXT;
@@ -65,9 +68,8 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
                             try {
                                 format = OutputFormat.valueOf(args[0].toUpperCase());
                             } catch (IllegalArgumentException e) {
-                                System.err.printf("No such format '%s', available formats are: %s\n",
-                                        args[0].toUpperCase(), Arrays.toString(OutputFormat.values()));
-                                System.exit(-1);
+                                throw new Option.OptionException(String.format("No such format '%s', available formats are: %s\n",
+                                        args[0].toUpperCase(), Arrays.toString(OutputFormat.values())), e);
                             }
                         }
                     },
@@ -84,7 +86,7 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
         void dump(PrintStream out) {
             super.dump(out);
             out.printf("format: %s\n", format);
-            out.printf("output file: %s\n", output == null ? "<Stdout>" : output);
+            out.printf("output file: %s\n", output == null ? "<stdout>" : output);
         }
     }
 
@@ -94,7 +96,7 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
     }
 
     @Override
-    public void run() {
+    public void run() throws IOException {
         MappingStore ms = matchTrees();
         EditScript actions = new ChawatheScriptGenerator().computeActions(ms);
         try {
@@ -105,11 +107,11 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
             else
                 serializer.writeTo(opts.output);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
 
-    enum OutputFormat { // TODO make a registry for that also ?
+    enum OutputFormat {
         TEXT {
             @Override
             ActionsIoUtils.ActionSerializer getSerializer(TreeContext sctx, EditScript actions, MappingStore mappings)
