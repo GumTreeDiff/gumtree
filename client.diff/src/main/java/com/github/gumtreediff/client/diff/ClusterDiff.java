@@ -22,12 +22,10 @@ package com.github.gumtreediff.client.diff;
 import com.github.gumtreediff.actions.ActionClusterFinder;
 import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.matchers.MappingStore;
 
-import java.util.List;
 import java.util.Set;
 
 @Register(name = "cluster", description = "Extract action clusters",

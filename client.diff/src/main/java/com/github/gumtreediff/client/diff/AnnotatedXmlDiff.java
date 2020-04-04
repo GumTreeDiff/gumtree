@@ -23,11 +23,8 @@ package com.github.gumtreediff.client.diff;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
-import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 
 @Register(name = "axmldiff", description = "Dump annotated xml tree",
         priority = Registry.Priority.LOW, options = AbstractDiffClient.Options.class)
@@ -66,15 +63,11 @@ public class AnnotatedXmlDiff extends AbstractDiffClient<AnnotatedXmlDiff.Option
     }
 
     @Override
-    public void run() {
+    public void run() throws Exception {
         MappingStore m = matchTrees();
-        try {
-            TreeIoUtils.toAnnotatedXml((opts.isSrc)
+        TreeIoUtils.toAnnotatedXml((opts.isSrc)
                             ? getSrcTreeContext()
                             : getDstTreeContext(), opts.isSrc, m
-            ).writeTo(System.out);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ).writeTo(System.out);
     }
 }

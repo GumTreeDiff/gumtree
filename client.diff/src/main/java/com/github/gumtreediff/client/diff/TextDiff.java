@@ -68,7 +68,8 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
                             try {
                                 format = OutputFormat.valueOf(args[0].toUpperCase());
                             } catch (IllegalArgumentException e) {
-                                throw new Option.OptionException(String.format("No such format '%s', available formats are: %s\n",
+                                throw new Option.OptionException(String.format(
+                                        "No such format '%s', available formats are: %s\n",
                                         args[0].toUpperCase(), Arrays.toString(OutputFormat.values())), e);
                             }
                         }
@@ -96,19 +97,15 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
     }
 
     @Override
-    public void run() throws IOException {
+    public void run() throws Exception {
         MappingStore ms = matchTrees();
         EditScript actions = new ChawatheScriptGenerator().computeActions(ms);
-        try {
-            ActionsIoUtils.ActionSerializer serializer = opts.format.getSerializer(
-                    getSrcTreeContext(), actions, ms);
-            if (opts.output == null)
-                serializer.writeTo(System.out);
-            else
-                serializer.writeTo(opts.output);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
+        ActionsIoUtils.ActionSerializer serializer = opts.format.getSerializer(
+                getSrcTreeContext(), actions, ms);
+        if (opts.output == null)
+            serializer.writeTo(System.out);
+        else
+            serializer.writeTo(opts.output);
     }
 
     enum OutputFormat {

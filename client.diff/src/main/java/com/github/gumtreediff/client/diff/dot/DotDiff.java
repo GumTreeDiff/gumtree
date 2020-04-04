@@ -24,7 +24,6 @@ import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -39,28 +38,23 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
     }
 
     @Override
-    public void run() {
+    public void run() throws Exception {
         final MappingStore mappings = matchTrees();
-        try {
-            StringWriter writer = new StringWriter();
-            writer.write("digraph G {\n");
-            writer.write("node [style=filled];\n");
-            writer.write("subgraph cluster_src {\n");
-            writeTree(getSrcTreeContext(), writer, mappings);
-            writer.write("}\n");
-            writer.write("subgraph cluster_dst {\n");
-            writeTree(getDstTreeContext(), writer, mappings);
-            writer.write("}\n");
-            for (Mapping m: mappings) {
-                writer.write(String.format("%s -> %s [style=dashed]\n;",
-                        getDotId(getSrcTreeContext(), m.first), getDotId(getDstTreeContext(), m.second)));
-            }
-            writer.write("}\n");
-            System.out.println(writer.toString());
+        StringWriter writer = new StringWriter();
+        writer.write("digraph G {\n");
+        writer.write("node [style=filled];\n");
+        writer.write("subgraph cluster_src {\n");
+        writeTree(getSrcTreeContext(), writer, mappings);
+        writer.write("}\n");
+        writer.write("subgraph cluster_dst {\n");
+        writeTree(getDstTreeContext(), writer, mappings);
+        writer.write("}\n");
+        for (Mapping m: mappings) {
+            writer.write(String.format("%s -> %s [style=dashed]\n;",
+                    getDotId(getSrcTreeContext(), m.first), getDotId(getDstTreeContext(), m.second)));
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        writer.write("}\n");
+        System.out.println(writer.toString());
     }
 
     private void writeTree(TreeContext context, Writer writer, MappingStore mappings) throws Exception {
