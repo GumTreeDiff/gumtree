@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.web;
+package com.github.gumtreediff.client.diff.webdiff;
 
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;

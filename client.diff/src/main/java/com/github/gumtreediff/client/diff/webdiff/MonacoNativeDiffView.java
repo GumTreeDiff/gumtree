@@ -17,7 +17,7 @@
  * Copyright 2020 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.web;
+package com.github.gumtreediff.client.diff.webdiff;
 
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;

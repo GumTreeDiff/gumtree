@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.dot;
+package com.github.gumtreediff.client.diff.dotdiff;
 
 import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Register;

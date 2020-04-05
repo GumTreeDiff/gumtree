@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.swing;
+package com.github.gumtreediff.client.diff.swingdiff;
 
 import java.awt.Color;
 import java.awt.Component;

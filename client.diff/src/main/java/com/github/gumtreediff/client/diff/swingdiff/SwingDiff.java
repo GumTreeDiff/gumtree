@@ -17,7 +17,7 @@
  * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.swing;
+package com.github.gumtreediff.client.diff.swingdiff;
 
 import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Register;

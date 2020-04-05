@@ -17,7 +17,7 @@
  * Copyright 2020 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.web;
+package com.github.gumtreediff.client.diff.webdiff;
 
 import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.actions.ITreeClassifier;

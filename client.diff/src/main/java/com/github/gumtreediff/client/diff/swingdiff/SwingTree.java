@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.swing;
+package com.github.gumtreediff.client.diff.swingdiff;
 
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.tree.TreeContext;
