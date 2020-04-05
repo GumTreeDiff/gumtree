@@ -55,7 +55,7 @@ public class TextDiffView implements Renderable {
                             .render(new MenuBar())
                         ._div()
                         .div(class_("row"))
-                            .div(class_("col-lg-12"))
+                            .div(class_("col"))
                                 .h3()
                                     .write("Raw edit script ")
                                     .small().content(String.format("%s -> %s", srcFile.getName(), dstFile.getName()))

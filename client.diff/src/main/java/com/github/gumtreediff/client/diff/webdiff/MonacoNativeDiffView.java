@@ -53,6 +53,7 @@ public class MonacoNativeDiffView implements Renderable {
                     ._div()
                     .div(class_("row"))
                         .div(class_("col"))
+                            .h5().content(srcFile.getName() + " -> " + dstFile.getName())
                             .div(id("container").style("width:100%;height:600px;border:1px solid grey"))._div()
                         ._div()
                     ._div()
