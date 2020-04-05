@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client.diff.swing;
 
-import com.github.gumtreediff.gen.Generators;
+import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.tree.TreeContext;
 
 import javax.swing.*;
@@ -29,7 +29,7 @@ import java.io.IOException;
 public final class SwingTree {
 
     public static void main(String[] args) throws IOException {
-        final TreeContext t = Generators.getInstance().getTree(args[0]);
+        final TreeContext t = TreeGenerators.getInstance().getTree(args[0]);
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

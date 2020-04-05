@@ -20,16 +20,10 @@
 
 package com.github.gumtreediff.client.diff;
 
-import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.Diff;
-import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Client;
-import com.github.gumtreediff.gen.Generators;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.Matchers;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.gen.TreeGenerators;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -94,7 +88,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
             opts.dump(System.out);
         }
 
-        if (opts.treeGenerator != null && Generators.getInstance().find(opts.treeGenerator) == null)
+        if (opts.treeGenerator != null && TreeGenerators.getInstance().find(opts.treeGenerator) == null)
             throw new Option.OptionException("Error loading tree generator: " + opts.treeGenerator);
 
         if (!Files.exists(Paths.get(opts.src)))
@@ -109,26 +103,6 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
     }
 
     protected Diff getDiff(String src, String dst) throws IOException {
-        TreeContext srcCtx = getTreeContext(src);
-        TreeContext dstCtx = getTreeContext(dst);
-        MappingStore mappings = getMatcher().match(srcCtx.getRoot(), dstCtx.getRoot());
-        EditScript editScript = new ChawatheScriptGenerator().computeActions(mappings);
-        return new Diff(srcCtx, dstCtx, mappings, editScript);
-    }
-
-    protected Matcher getMatcher() {
-        return Matchers.getInstance().getMatcherWithFallback(opts.matcher);
-    }
-
-    protected TreeContext getSrcTreeContext() throws IOException {
-        return getTreeContext(opts.src);
-    }
-
-    protected TreeContext getDstTreeContext() throws IOException {
-        return getTreeContext(opts.dst);
-    }
-
-    protected TreeContext getTreeContext(String file) throws IOException {
-        return Generators.getInstance().getTree(file, opts.treeGenerator);
+        return Diff.compute(src, dst, opts.treeGenerator, opts.matcher);
     }
 }

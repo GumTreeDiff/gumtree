@@ -52,7 +52,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
         writer.write("}\n");
         for (Mapping m: diff.mappings) {
             writer.write(String.format("%s -> %s [style=dashed]\n;",
-                    getDotId(getSrcTreeContext(), m.first), getDotId(getDstTreeContext(), m.second)));
+                    getDotId(diff.src, m.first), getDotId(diff.dst, m.second)));
         }
         writer.write("}\n");
         System.out.println(writer.toString());

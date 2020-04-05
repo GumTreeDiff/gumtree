@@ -20,13 +20,9 @@
 package com.github.gumtreediff.client.diff;
 
 import com.github.gumtreediff.actions.ActionClusterFinder;
-import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.Diff;
-import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.client.Register;
-import com.github.gumtreediff.matchers.MappingStore;
-import org.eclipse.jetty.util.IO;
 
 import java.io.IOException;
 import java.util.Set;
@@ -42,7 +38,7 @@ public class ClusterDiff extends AbstractDiffClient<AbstractDiffClient.Options> 
     @Override
     public void run() throws IOException {
         Diff diff = getDiff();
-        ActionClusterFinder f = new ActionClusterFinder(diff.src, diff.dst, diff.editScript);
+        ActionClusterFinder f = new ActionClusterFinder(diff.editScript);
         for (Set<Action> cluster: f.getClusters()) {
             System.out.println("New cluster:");
             System.out.println(f.getClusterLabel(cluster));

@@ -21,6 +21,12 @@ package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.matchers.MappingStore;
 
+/**
+ * Interface for script generators that compute edit scripts from mappings.
+ *
+ * @see MappingStore
+ * @see EditScript
+ */
 public interface EditScriptGenerator {
-    EditScript computeActions(MappingStore ms);
+    EditScript computeActions(MappingStore mappings);
 }

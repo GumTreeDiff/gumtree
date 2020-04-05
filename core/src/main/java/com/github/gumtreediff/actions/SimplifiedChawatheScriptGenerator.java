@@ -26,6 +26,12 @@ import com.github.gumtreediff.tree.ITree;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A script generator, based upon the Chawathe algorithm,
+ * that makes use of deleted and inserted subtrees actions.
+ *
+ * @see ChawatheScriptGenerator
+ */
 public class SimplifiedChawatheScriptGenerator implements EditScriptGenerator {
     private EditScript actions;
 

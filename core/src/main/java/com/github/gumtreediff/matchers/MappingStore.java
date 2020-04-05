@@ -24,6 +24,9 @@ import java.util.*;
 
 import com.github.gumtreediff.tree.ITree;
 
+/**
+ * Stores the mappings between the nodes of a src and dst trees.
+ */
 public class MappingStore implements Iterable<Mapping> {
     public final ITree src;
     public final ITree dst;

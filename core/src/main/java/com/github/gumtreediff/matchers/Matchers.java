@@ -22,8 +22,10 @@ package com.github.gumtreediff.matchers;
 
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
-import com.github.gumtreediff.tree.ITree;
 
+/**
+ * Registry of matchers, using a singleton pattern.
+ */
 public class Matchers extends Registry<String, Matcher, Register> {
 
     private static Matchers registry;

@@ -21,18 +21,14 @@
 package com.github.gumtreediff.client;
 
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.gen.Generators;
-import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.io.TreeIoUtils.TreeSerializer;
+import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Register(name = "parse", description = "Parse file and dump result")
 public class Serializer extends Client {
@@ -141,6 +137,6 @@ public class Serializer extends Client {
     }
 
     private TreeContext getTreeContext(String file) throws IOException {
-        return Generators.getInstance().getTree(file, opts.generator);
+        return TreeGenerators.getInstance().getTree(file, opts.generator);
     }
 }

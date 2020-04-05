@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client;
 
-import com.github.gumtreediff.gen.Generators;
+import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.matchers.Matchers;
 
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class List extends Client {
         GENERATORS {
             @Override
             Collection<?> list() {
-                return Generators.getInstance().getEntries();
+                return TreeGenerators.getInstance().getEntries();
             }
         },
         PROPERTIES {

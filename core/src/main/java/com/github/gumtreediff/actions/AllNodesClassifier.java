@@ -26,6 +26,9 @@ import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.matchers.MappingStore;
 
+/**
+ * Partition all moved, inserted, updated or deleted nodes.
+ */
 public class AllNodesClassifier extends AbstractITreeClassifier {
     public AllNodesClassifier(Diff diff) {
         super(diff);

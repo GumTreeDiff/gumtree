@@ -22,12 +22,14 @@ package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Partition only root (of a complete subtree) moved, inserted, updated or deleted nodes.
+ */
 public class OnlyRootsClassifier extends AbstractITreeClassifier {
     public OnlyRootsClassifier(Diff diff) {
         super(diff);

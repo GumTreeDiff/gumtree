@@ -20,33 +20,20 @@
 package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.actions.model.*;
-import com.github.gumtreediff.tree.TreeContext;
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
 
 import java.util.List;
 import java.util.Set;
 
 public class ActionClusterFinder {
-
-    private TreeContext src;
-
-    private TreeContext dst;
-
-    private EditScript actions;
-
     private DirectedGraph<Action, DefaultEdge> graph;
 
     private List<Set<Action>> clusters;
 
-    public ActionClusterFinder(TreeContext src, TreeContext dst, EditScript actions) {
-        this.src = src;
-        this.dst = dst;
-        this.actions = actions;
+    public ActionClusterFinder(EditScript actions) {
         graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         for (Action a: actions)

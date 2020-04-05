@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client.diff.web;
 
-import com.github.gumtreediff.gen.Generators;
+import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.io.DirectoryComparator;
 import org.rendersnake.DocType;
@@ -119,7 +119,7 @@ public class DirectoryDiffView implements Renderable {
                         .div(class_("btn-toolbar justify-content-end"))
                             .div(class_("btn-group"))
                                 //TODO: integrate this with the -g option
-                                .if_(Generators.getInstance().hasGeneratorForFile(file.first.getAbsolutePath()))
+                                .if_(TreeGenerators.getInstance().hasGeneratorForFile(file.first.getAbsolutePath()))
                                     .a(class_("btn btn-primary btn-sm").href("/monaco-diff/" + id)).content("monaco")
                                     .a(class_("btn btn-primary btn-sm").href("/vanilla-diff/" + id)).content("classic")
                                 ._if()

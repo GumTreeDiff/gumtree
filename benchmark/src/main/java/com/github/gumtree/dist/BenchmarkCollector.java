@@ -20,7 +20,7 @@
 package com.github.gumtree.dist;
 
 import com.github.gumtreediff.client.Run;
-import com.github.gumtreediff.gen.Generators;
+import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -68,7 +68,7 @@ public class BenchmarkCollector {
 
     private static TreeContext getTreeContext(String file) {
         try {
-            TreeContext t = Generators.getInstance().getTree(file);
+            TreeContext t = TreeGenerators.getInstance().getTree(file);
             return t;
         } catch (IOException e) {
             e.printStackTrace();

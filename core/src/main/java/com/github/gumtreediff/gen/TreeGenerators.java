@@ -26,16 +26,19 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-public class Generators extends Registry<String, TreeGenerator, Register> {
+/**
+ * Registry of tree generators, using a singleton pattern.
+ */
+public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
 
-    private static Generators registry;
+    private static TreeGenerators registry;
 
     /**
      * Return the tree generators registry instance (singleton pattern)
      */
-    public static final Generators getInstance() {
+    public static TreeGenerators getInstance() {
         if (registry == null)
-            registry = new Generators();
+            registry = new TreeGenerators();
         return registry;
     }
 
@@ -74,11 +77,7 @@ public class Generators extends Registry<String, TreeGenerator, Register> {
      * Indicate whether or not the given file path has a related tree generator
      */
     public boolean hasGeneratorForFile(String file) {
-        TreeGenerator p = get(file);
-        if (p == null)
-            return false;
-        else
-            return true;
+        return get(file) != null;
     }
 
     @Override

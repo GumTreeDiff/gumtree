@@ -45,7 +45,6 @@ import javax.swing.tree.TreePath;
 import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.actions.ITreeClassifier;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.actions.AllNodesClassifier;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -66,7 +65,6 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
     private static final Color DEL_COLOR = new Color(190, 0, 0);
     private static final Color ADD_COLOR = new Color(0, 158, 0);
     private static final Color UPD_COLOR = new Color(189, 162, 0);
-    //private static final Color MIS_COLOR = new Color(0, 0, 128);
     private static final Color MV_COLOR = new Color(128, 0, 128);
 
     public MappingsPanel(String srcPath, String dstPath, Diff diff)  {
@@ -143,11 +141,11 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         JTree jtree = (JTree) e.getSource();
         if (jtree.getSelectionPath() == null) return;
         ITree sel = (ITree) ((DefaultMutableTreeNode) jtree.getLastSelectedPathComponent()).getUserObject();
-        JTextArea selJTextArea = null;
+        JTextArea selJTextArea;
         boolean isMapped = false;
         ITree match = null;
-        TreePanel matchTreePanel = null;
-        JTextArea matchJTextArea = null;
+        TreePanel matchTreePanel;
+        JTextArea matchJTextArea;
 
         if (jtree == panSrc.getJTree()) {
             selJTextArea = txtSrc;

@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client;
 
-import com.github.gumtreediff.gen.Generators;
+import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.TreeGenerator;
 import org.atteo.classindex.ClassIndex;
@@ -55,7 +55,7 @@ public class Run {
                     com.github.gumtreediff.gen.Register a =
                             gen.getAnnotation(com.github.gumtreediff.gen.Register.class);
                     if (a != null)
-                        Generators.getInstance().install(gen, a);
+                        TreeGenerators.getInstance().install(gen, a);
                 });
     }
 

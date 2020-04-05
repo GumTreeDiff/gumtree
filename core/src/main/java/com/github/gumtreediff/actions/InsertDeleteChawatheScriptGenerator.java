@@ -23,6 +23,12 @@ import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 
+/**
+ * A script generator, based upon the simplified Chawathe script generator,
+ * that replaces moved and updated nodes by inserted and deleted nodes.
+ *
+ * @see SimplifiedChawatheScriptGenerator
+ */
 public class InsertDeleteChawatheScriptGenerator implements EditScriptGenerator {
     private EditScript actions;
     private MappingStore origMappings;

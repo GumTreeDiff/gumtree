@@ -29,9 +29,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * An abstract class for tree generators that produce tree contexts from a input stream.
+ * @see TreeContext
+ */
 @IndexSubclasses
 public abstract class TreeGenerator {
-
     protected abstract TreeContext generate(Reader r) throws IOException;
 
     protected TreeContext generateTree(Reader r) throws IOException {

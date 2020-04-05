@@ -23,10 +23,11 @@ package com.github.gumtreediff.matchers;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.utils.Pair;
 
+/**
+ * A mapping between a src and a dst tree.
+ */
 public class Mapping extends Pair<ITree, ITree> {
-
     public Mapping(ITree a, ITree b) {
         super(a, b);
     }
-
 }

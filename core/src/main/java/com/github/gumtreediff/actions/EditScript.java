@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Class representing edit scripts: sequence of edit actions.
+ *
+ * @see Action
+ */
 public class EditScript implements Iterable<Action> {
     private List<Action> actions;
 

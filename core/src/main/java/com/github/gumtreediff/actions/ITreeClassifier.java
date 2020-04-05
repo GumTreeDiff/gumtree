@@ -23,6 +23,11 @@ import com.github.gumtreediff.tree.ITree;
 
 import java.util.Set;
 
+/**
+ * An interface to partition the nodes of a tree into sets of updated, deleted, moved,
+ * and updated nodes.
+ * @see ITree
+ */
 public interface ITreeClassifier {
     Set<ITree> getUpdatedSrcs();
 

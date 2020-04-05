@@ -19,23 +19,39 @@
 
 package com.github.gumtreediff.actions;
 
+import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.TreeContext;
+
+import java.io.IOException;
 
 public class Diff {
     public final TreeContext src;
-
     public final TreeContext dst;
-
     public final MappingStore mappings;
-
     public final EditScript editScript;
 
-    public Diff(TreeContext src, TreeContext dst, MappingStore mappings, EditScript editScript) {
+    public Diff(TreeContext src, TreeContext dst,
+                MappingStore mappings, EditScript editScript) {
         this.src = src;
         this.dst = dst;
         this.mappings = mappings;
         this.editScript = editScript;
+    }
+
+    public static Diff compute(String srcFile, String dstFile,
+                               String treeGenerator, String matcher) throws IOException {
+        TreeContext src = TreeGenerators.getInstance().getTree(srcFile, treeGenerator);
+        TreeContext dst = TreeGenerators.getInstance().getTree(dstFile, treeGenerator);
+        MappingStore mappings = Matchers.getInstance()
+                .getMatcherWithFallback(matcher).match(src.getRoot(), dst.getRoot());
+        EditScript editScript = new SimplifiedChawatheScriptGenerator().computeActions(mappings);
+        return new Diff(src, dst, mappings, editScript);
+    }
+
+    public static Diff compute(String srcFile, String dstFile) throws IOException {
+        return compute(srcFile, dstFile, null, null);
     }
 
     public ITreeClassifier createAllNodeClassifier() {

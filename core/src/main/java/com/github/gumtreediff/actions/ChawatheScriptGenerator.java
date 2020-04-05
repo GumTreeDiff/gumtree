@@ -28,6 +28,9 @@ import com.github.gumtreediff.tree.TreeUtils;
 
 import java.util.*;
 
+/**
+ * An edit script generator based upon Chawathe algorithm.
+ */
 public class ChawatheScriptGenerator implements EditScriptGenerator {
     private ITree origSrc;
 
@@ -90,7 +93,7 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
 
         List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
         for (ITree x: bfsDst) {
-            ITree w = null;
+            ITree w;
             ITree y = x.getParent();
             ITree z = cpyMappings.getSrcForDst(y);
 
