@@ -1,8 +1,10 @@
 FROM ubuntu:bionic
 
-# installs all required packages
+# installs all required packages and sets locale
 RUN apt-get update \
 	&& apt-get install -y openjdk-11-jdk wget git gdebi-core ocaml ocaml-native-compilers camlp4 build-essential m4 zip python-pip
+
+ENV LANG C.UTF-8
 
 RUN wget http://131.123.42.38/lmcrs/v1.0.0/srcml_1.0.0-1_ubuntu18.04.deb \
 	&& gdebi srcml_1.0.0-1_ubuntu18.04.deb -n \
@@ -21,8 +23,7 @@ RUN git clone https://github.com/GumTreeDiff/pythonparser.git --depth 1 \
 
 # install gumtree
 COPY . /opt/gumtree
-RUN export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8 \
-	&& /opt/gumtree/gradlew -p /opt/gumtree build \
+RUN /opt/gumtree/gradlew -p /opt/gumtree build \
 	&& ln -s /opt/gumtree/dist/build/install/gumtree/bin/gumtree /usr/bin/gumtree
 
 # define volume diff to make available files to diff
