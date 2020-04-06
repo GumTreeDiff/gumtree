@@ -41,6 +41,9 @@ You can invoke GumTree's from git by running the command `git difftool -d -t gum
 [alias]
 	gd = difftool -d -t gumtree-docker
 ```
+
+You can then use the command `git gd`.
+
 ## Debug
 
 If you want to debug GumTree's image use the following command line: `docker run -v /my/original-folder:/diff/left -v /my/modified-folder:/diff/right -p 4567:4567 --entrypoint "/bin/bash" -it gumtreediff/gumtree`.
