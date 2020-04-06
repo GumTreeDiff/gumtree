@@ -23,8 +23,6 @@ package com.github.gumtreediff.gen.jdt;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
-import com.github.gumtreediff.gen.TreeGenerator;
-import com.github.gumtreediff.tree.TreeContext;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.compiler.IScanner;
@@ -35,7 +33,6 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.IllegalFormatException;
 import java.util.Map;
 
 public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
