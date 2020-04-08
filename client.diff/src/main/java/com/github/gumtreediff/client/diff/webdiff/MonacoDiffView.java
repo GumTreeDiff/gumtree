@@ -68,7 +68,7 @@ public class MonacoDiffView implements Renderable {
                         ._div()
                     ._div()
                 ._div()
-                .macros().script("config = { left: " + getLeftJsConfig()
+                .macros().script("config = { file: \"" + srcFile.getName() + "\", left: " + getLeftJsConfig()
                                  + ", right: " + getRightJsConfig()
                                  + ", mappings: " + getMappingsJsConfig() + "};")
                 .macros().javascript("/monaco/min/vs/loader.js")

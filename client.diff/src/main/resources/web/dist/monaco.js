@@ -22,12 +22,37 @@ function getEditorOptions(text) {
     return {
         value: text,
         readOnly: true,
+        language: getLanguage(),
         lineDecorationsWidth: 0,
         glyphMargin: false,
         minimap: {
             enabled: false,
         },
     };
+}
+
+function getLanguage() {
+    let extension = config.file.split('.').pop().toLowerCase();
+    if (extension == "java")
+        return "java";
+    else if (extension == "js")
+        return "javascript";
+    else if (extension == "rb")
+        return "ruby";
+    else if (extension == "css")
+        return "css";
+    else if (extension == "py")
+        return "python";
+    else if (extension == "cs")
+        return "csharp";
+    else if (extension == "r")
+        return "r";
+    else if (extension == "php")
+        return "php";
+    else if (extension == "c" || extension == "h" || extension == "cpp")
+        return "cpp";
+    else
+        return undefined;
 }
 
 function getEditColor(edit) {
