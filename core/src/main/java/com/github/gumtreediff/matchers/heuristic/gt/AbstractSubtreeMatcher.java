@@ -20,188 +20,202 @@
 
 package com.github.gumtreediff.matchers.heuristic.gt;
 
-import com.github.gumtreediff.matchers.*;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.MultiMappingStore;
-import com.github.gumtreediff.tree.ITree;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public abstract class AbstractSubtreeMatcher {
+import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.Mapping;
+import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.MultiMappingStore;
+import com.github.gumtreediff.matchers.SimilarityMetrics;
+import com.github.gumtreediff.tree.ITree;
 
-    public static int MIN_HEIGHT = Integer.parseInt(
-            System.getProperty("gt.stm.mh", System.getProperty("gumtree.match.gt.minh", "2"))
-    );
+public abstract class AbstractSubtreeMatcher implements Configurable {
 
-    protected abstract static class Implementation {
-        protected final ITree src;
-        protected final ITree dst;
-        protected final MappingStore mappings;
+	public static int MIN_HEIGHT;
 
-        public Implementation(ITree src, ITree dst, MappingStore mappings) {
-            this.src = src;
-            this.dst = dst;
-            this.mappings = mappings;
-        }
+	public AbstractSubtreeMatcher() {
+		configure();
+	}
 
-        private void popLarger(PriorityTreeList srcTrees, PriorityTreeList dstTrees) {
-            if (srcTrees.peekHeight() > dstTrees.peekHeight())
-                srcTrees.open();
-            else
-                dstTrees.open();
-        }
+	@Override
+	public void configure() {
+		MIN_HEIGHT = GumTreeProperties.getPropertyInteger("gt.stm.mh");
+	}
 
-        public void match() {
-            MultiMappingStore multiMappings = new MultiMappingStore();
+	protected abstract static class Implementation {
+		protected final ITree src;
+		protected final ITree dst;
+		protected final MappingStore mappings;
 
-            PriorityTreeList srcTrees = new PriorityTreeList(src);
-            PriorityTreeList dstTrees = new PriorityTreeList(dst);
+		public Implementation(ITree src, ITree dst, MappingStore mappings) {
+			this.src = src;
+			this.dst = dst;
+			this.mappings = mappings;
+		}
 
-            while (srcTrees.peekHeight() != -1 && dstTrees.peekHeight() != -1) {
-                while (srcTrees.peekHeight() != dstTrees.peekHeight())
-                    popLarger(srcTrees, dstTrees);
+		private void popLarger(PriorityTreeList srcTrees, PriorityTreeList dstTrees) {
+			if (srcTrees.peekHeight() > dstTrees.peekHeight())
+				srcTrees.open();
+			else
+				dstTrees.open();
+		}
 
-                List<ITree> currentHeightSrcTrees = srcTrees.pop();
-                List<ITree> currentHeightDstTrees = dstTrees.pop();
+		public void match() {
+			MultiMappingStore multiMappings = new MultiMappingStore();
 
-                boolean[] marksForSrcTrees = new boolean[currentHeightSrcTrees.size()];
-                boolean[] marksForDstTrees = new boolean[currentHeightDstTrees.size()];
+			PriorityTreeList srcTrees = new PriorityTreeList(src);
+			PriorityTreeList dstTrees = new PriorityTreeList(dst);
 
-                for (int i = 0; i < currentHeightSrcTrees.size(); i++) {
-                    for (int j = 0; j < currentHeightDstTrees.size(); j++) {
-                        ITree src = currentHeightSrcTrees.get(i);
-                        ITree dst = currentHeightDstTrees.get(j);
+			while (srcTrees.peekHeight() != -1 && dstTrees.peekHeight() != -1) {
+				while (srcTrees.peekHeight() != dstTrees.peekHeight())
+					popLarger(srcTrees, dstTrees);
 
-                        if (src.isIsomorphicTo(dst)) {
-                            multiMappings.addMapping(src, dst);
-                            marksForSrcTrees[i] = true;
-                            marksForDstTrees[j] = true;
-                        }
-                    }
-                }
+				List<ITree> currentHeightSrcTrees = srcTrees.pop();
+				List<ITree> currentHeightDstTrees = dstTrees.pop();
 
-                for (int i = 0; i < marksForSrcTrees.length; i++)
-                    if (marksForSrcTrees[i] == false)
-                        srcTrees.open(currentHeightSrcTrees.get(i));
-                for (int j = 0; j < marksForDstTrees.length; j++)
-                    if (marksForDstTrees[j] == false)
-                        dstTrees.open(currentHeightDstTrees.get(j));
-                srcTrees.updateHeight();
-                dstTrees.updateHeight();
-            }
+				boolean[] marksForSrcTrees = new boolean[currentHeightSrcTrees.size()];
+				boolean[] marksForDstTrees = new boolean[currentHeightDstTrees.size()];
 
-            filterMappings(multiMappings);
-        }
+				for (int i = 0; i < currentHeightSrcTrees.size(); i++) {
+					for (int j = 0; j < currentHeightDstTrees.size(); j++) {
+						ITree src = currentHeightSrcTrees.get(i);
+						ITree dst = currentHeightDstTrees.get(j);
 
-        public abstract void filterMappings(MultiMappingStore multiMappings);
+						if (src.isIsomorphicTo(dst)) {
+							multiMappings.addMapping(src, dst);
+							marksForSrcTrees[i] = true;
+							marksForDstTrees[j] = true;
+						}
+					}
+				}
 
-        protected double sim(ITree src, ITree dst) {
-            double jaccard = SimilarityMetrics.jaccardSimilarity(src.getParent(), dst.getParent(), mappings);
-            int posSrc = (src.isRoot()) ? 0 : src.getParent().getChildPosition(src);
-            int posDst = (dst.isRoot()) ? 0 : dst.getParent().getChildPosition(dst);
-            int maxSrcPos = (src.isRoot()) ? 1 : src.getParent().getChildren().size();
-            int maxDstPos = (dst.isRoot()) ? 1 : dst.getParent().getChildren().size();
-            int maxPosDiff = Math.max(maxSrcPos, maxDstPos);
-            double pos = 1D - ((double) Math.abs(posSrc - posDst) / (double) maxPosDiff);
-            double po = 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position)
-                    / (double) this.getMaxTreeSize());
-            return 100 * jaccard + 10 * pos + po;
-        }
+				for (int i = 0; i < marksForSrcTrees.length; i++)
+					if (marksForSrcTrees[i] == false)
+						srcTrees.open(currentHeightSrcTrees.get(i));
+				for (int j = 0; j < marksForDstTrees.length; j++)
+					if (marksForDstTrees[j] == false)
+						dstTrees.open(currentHeightDstTrees.get(j));
+				srcTrees.updateHeight();
+				dstTrees.updateHeight();
+			}
 
-        protected int getMaxTreeSize() {
-            return Math.max(src.getMetrics().size, dst.getMetrics().size);
-        }
+			filterMappings(multiMappings);
+		}
 
-        protected void retainBestMapping(List<Mapping> mappingList, Set<ITree> srcIgnored, Set<ITree> dstIgnored) {
-            while (mappingList.size() > 0) {
-                Mapping mapping = mappingList.remove(0);
-                if (!(srcIgnored.contains(mapping.first) || dstIgnored.contains(mapping.second))) {
-                    mappings.addMappingRecursively(mapping.first, mapping.second);
-                    srcIgnored.add(mapping.first);
-                    srcIgnored.addAll(mapping.first.getDescendants());
-                    dstIgnored.add(mapping.second);
-                    dstIgnored.addAll(mapping.second.getDescendants());
-                }
-            }
-        }
+		public abstract void filterMappings(MultiMappingStore multiMappings);
 
-        private static class PriorityTreeList {
-            private List<ITree>[] trees;
+		protected double sim(ITree src, ITree dst) {
+			double jaccard = SimilarityMetrics.jaccardSimilarity(src.getParent(), dst.getParent(), mappings);
+			int posSrc = (src.isRoot()) ? 0 : src.getParent().getChildPosition(src);
+			int posDst = (dst.isRoot()) ? 0 : dst.getParent().getChildPosition(dst);
+			int maxSrcPos = (src.isRoot()) ? 1 : src.getParent().getChildren().size();
+			int maxDstPos = (dst.isRoot()) ? 1 : dst.getParent().getChildren().size();
+			int maxPosDiff = Math.max(maxSrcPos, maxDstPos);
+			double pos = 1D - ((double) Math.abs(posSrc - posDst) / (double) maxPosDiff);
+			double po = 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position)
+					/ (double) this.getMaxTreeSize());
+			return 100 * jaccard + 10 * pos + po;
+		}
 
-            private int maxHeight;
+		protected int getMaxTreeSize() {
+			return Math.max(src.getMetrics().size, dst.getMetrics().size);
+		}
 
-            private int currentIdx;
+		protected void retainBestMapping(List<Mapping> mappingList, Set<ITree> srcIgnored, Set<ITree> dstIgnored) {
+			while (mappingList.size() > 0) {
+				Mapping mapping = mappingList.remove(0);
+				if (!(srcIgnored.contains(mapping.first) || dstIgnored.contains(mapping.second))) {
+					mappings.addMappingRecursively(mapping.first, mapping.second);
+					srcIgnored.add(mapping.first);
+					srcIgnored.addAll(mapping.first.getDescendants());
+					dstIgnored.add(mapping.second);
+					dstIgnored.addAll(mapping.second.getDescendants());
+				}
+			}
+		}
 
-            @SuppressWarnings("unchecked")
-            public PriorityTreeList(ITree tree) {
-                int listSize = tree.getMetrics().height - MIN_HEIGHT + 1;
-                if (listSize < 0)
-                    listSize = 0;
-                if (listSize == 0)
-                    currentIdx = -1;
-                trees = (List<ITree>[]) new ArrayList[listSize];
-                maxHeight = tree.getMetrics().height;
-                addTree(tree);
-            }
+		private static class PriorityTreeList {
+			private List<ITree>[] trees;
 
-            private int idx(ITree tree) {
-                return idx(tree.getMetrics().height);
-            }
+			private int maxHeight;
 
-            private int idx(int height) {
-                return maxHeight - height;
-            }
+			private int currentIdx;
 
-            private int height(int idx) {
-                return maxHeight - idx;
-            }
+			@SuppressWarnings("unchecked")
+			public PriorityTreeList(ITree tree) {
+				int listSize = tree.getMetrics().height - MIN_HEIGHT + 1;
+				if (listSize < 0)
+					listSize = 0;
+				if (listSize == 0)
+					currentIdx = -1;
+				trees = (List<ITree>[]) new ArrayList[listSize];
+				maxHeight = tree.getMetrics().height;
+				addTree(tree);
+			}
 
-            private void addTree(ITree tree) {
-                if (tree.getMetrics().height >= MIN_HEIGHT) {
-                    int idx = idx(tree);
-                    if (trees[idx] == null) trees[idx] = new ArrayList<>();
-                    trees[idx].add(tree);
-                }
-            }
+			private int idx(ITree tree) {
+				return idx(tree.getMetrics().height);
+			}
 
-            public List<ITree> open() {
-                List<ITree> pop = pop();
-                if (pop != null) {
-                    for (ITree tree : pop) open(tree);
-                    updateHeight();
-                    return pop;
-                } else return null;
-            }
+			private int idx(int height) {
+				return maxHeight - height;
+			}
 
-            public List<ITree> pop() {
-                if (currentIdx == -1)
-                    return null;
-                else {
-                    List<ITree> pop = trees[currentIdx];
-                    trees[currentIdx] = null;
-                    return pop;
-                }
-            }
+			private int height(int idx) {
+				return maxHeight - idx;
+			}
 
-            public void open(ITree tree) {
-                for (ITree c : tree.getChildren()) addTree(c);
-            }
+			private void addTree(ITree tree) {
+				if (tree.getMetrics().height >= MIN_HEIGHT) {
+					int idx = idx(tree);
+					if (trees[idx] == null)
+						trees[idx] = new ArrayList<>();
+					trees[idx].add(tree);
+				}
+			}
 
-            public int peekHeight() {
-                return (currentIdx == -1) ? -1 : height(currentIdx);
-            }
+			public List<ITree> open() {
+				List<ITree> pop = pop();
+				if (pop != null) {
+					for (ITree tree : pop)
+						open(tree);
+					updateHeight();
+					return pop;
+				} else
+					return null;
+			}
 
-            public void updateHeight() {
-                currentIdx = -1;
-                for (int i = 0; i < trees.length; i++) {
-                    if (trees[i] != null) {
-                        currentIdx = i;
-                        break;
-                    }
-                }
-            }
-        }
-    }
+			public List<ITree> pop() {
+				if (currentIdx == -1)
+					return null;
+				else {
+					List<ITree> pop = trees[currentIdx];
+					trees[currentIdx] = null;
+					return pop;
+				}
+			}
+
+			public void open(ITree tree) {
+				for (ITree c : tree.getChildren())
+					addTree(c);
+			}
+
+			public int peekHeight() {
+				return (currentIdx == -1) ? -1 : height(currentIdx);
+			}
+
+			public void updateHeight() {
+				currentIdx = -1;
+				for (int i = 0; i < trees.length; i++) {
+					if (trees[i] != null) {
+						currentIdx = i;
+						break;
+					}
+				}
+			}
+		}
+	}
 }

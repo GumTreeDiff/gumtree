@@ -20,87 +20,106 @@
 
 package com.github.gumtreediff.matchers.heuristic.cd;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.simmetrics.StringMetrics;
+
+import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
-import org.simmetrics.StringMetrics;
 
-import java.util.*;
+public class ChangeDistillerLeavesMatcher implements Matcher, Configurable {
 
-public class ChangeDistillerLeavesMatcher implements Matcher {
+	public static double LABEL_SIM_THRESHOLD;
 
-    public static final double LABEL_SIM_THRESHOLD = Double.parseDouble(System.getProperty("gt.cd.lsim", "0.5"));
+	public ChangeDistillerLeavesMatcher() {
+		configure();
+	}
 
-    @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        Implementation impl = new Implementation(src, dst, mappings);
-        impl.match();
-        return impl.mappings;
-    }
+	@Override
+	public void configure() {
+		LABEL_SIM_THRESHOLD = GumTreeProperties.getPropertyDouble("gt.cd.lsim");
 
-    private static class Implementation {
-        private final ITree src;
-        private final ITree dst;
-        private final MappingStore mappings;
+	}
 
-        public Implementation(ITree src, ITree dst, MappingStore mappings) {
-            this.src = src;
-            this.dst = dst;
-            this.mappings = mappings;
-        }
+	@Override
+	public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+		Implementation impl = new Implementation(src, dst, mappings);
+		impl.match();
+		return impl.mappings;
+	}
 
-        public void match() {
-            List<Mapping> leavesMappings = new ArrayList<>();
-            List<ITree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
-            for (Iterator<ITree> srcLeaves = TreeUtils.leafIterator(
-                    TreeUtils.postOrderIterator(src)); srcLeaves.hasNext(); ) {
-                ITree srcLeaf = srcLeaves.next();
-                for (ITree dstLeaf : dstLeaves) {
-                    if (mappings.isMappingAllowed(srcLeaf, dstLeaf)) {
-                        double sim = StringMetrics.qGramsDistance().compare(srcLeaf.getLabel(), dstLeaf.getLabel());
-                        if (sim > LABEL_SIM_THRESHOLD)
-                            leavesMappings.add(new Mapping(srcLeaf, dstLeaf));
-                    }
-                }
-            }
+	private static class Implementation {
+		private final ITree src;
+		private final ITree dst;
+		private final MappingStore mappings;
 
-            Set<ITree> ignoredSrcTrees = new HashSet<>();
-            Set<ITree> ignoredDstTrees = new HashSet<>();
-            Collections.sort(leavesMappings, new LeafMappingComparator());
-            while (leavesMappings.size() > 0) {
-                Mapping bestMapping = leavesMappings.remove(0);
-                if (!(ignoredSrcTrees.contains(bestMapping.first)
-                        || ignoredDstTrees.contains(bestMapping.second))) {
-                    mappings.addMapping(bestMapping.first, bestMapping.second);
-                    ignoredSrcTrees.add(bestMapping.first);
-                    ignoredDstTrees.add(bestMapping.second);
-                }
-            }
-        }
+		public Implementation(ITree src, ITree dst, MappingStore mappings) {
+			this.src = src;
+			this.dst = dst;
+			this.mappings = mappings;
+		}
 
-        public List<ITree> retainLeaves(List<ITree> trees) {
-            Iterator<ITree> treeIterator = trees.iterator();
-            while (treeIterator.hasNext()) {
-                ITree tree = treeIterator.next();
-                if (!tree.isLeaf())
-                    treeIterator.remove();
-            }
-            return trees;
-        }
-    }
+		public void match() {
+			List<Mapping> leavesMappings = new ArrayList<>();
+			List<ITree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
+			for (Iterator<ITree> srcLeaves = TreeUtils.leafIterator(TreeUtils.postOrderIterator(src)); srcLeaves
+					.hasNext();) {
+				ITree srcLeaf = srcLeaves.next();
+				for (ITree dstLeaf : dstLeaves) {
+					if (mappings.isMappingAllowed(srcLeaf, dstLeaf)) {
+						double sim = StringMetrics.qGramsDistance().compare(srcLeaf.getLabel(), dstLeaf.getLabel());
+						if (sim > LABEL_SIM_THRESHOLD)
+							leavesMappings.add(new Mapping(srcLeaf, dstLeaf));
+					}
+				}
+			}
 
-    private static class LeafMappingComparator implements Comparator<Mapping> {
+			Set<ITree> ignoredSrcTrees = new HashSet<>();
+			Set<ITree> ignoredDstTrees = new HashSet<>();
+			Collections.sort(leavesMappings, new LeafMappingComparator());
+			while (leavesMappings.size() > 0) {
+				Mapping bestMapping = leavesMappings.remove(0);
+				if (!(ignoredSrcTrees.contains(bestMapping.first) || ignoredDstTrees.contains(bestMapping.second))) {
+					mappings.addMapping(bestMapping.first, bestMapping.second);
+					ignoredSrcTrees.add(bestMapping.first);
+					ignoredDstTrees.add(bestMapping.second);
+				}
+			}
+		}
 
-        @Override
-        public int compare(Mapping m1, Mapping m2) {
-            return Double.compare(sim(m1), sim(m2));
-        }
+		public List<ITree> retainLeaves(List<ITree> trees) {
+			Iterator<ITree> treeIterator = trees.iterator();
+			while (treeIterator.hasNext()) {
+				ITree tree = treeIterator.next();
+				if (!tree.isLeaf())
+					treeIterator.remove();
+			}
+			return trees;
+		}
+	}
 
-        public double sim(Mapping m) {
-            return StringMetrics.qGramsDistance().compare(m.first.getLabel(), m.second.getLabel());
-        }
+	private static class LeafMappingComparator implements Comparator<Mapping> {
 
-    }
+		@Override
+		public int compare(Mapping m1, Mapping m2) {
+			return Double.compare(sim(m1), sim(m2));
+		}
+
+		public double sim(Mapping m) {
+			return StringMetrics.qGramsDistance().compare(m.first.getLabel(), m.second.getLabel());
+		}
+
+	}
+
 }
