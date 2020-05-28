@@ -41,12 +41,12 @@ public class SimpleBottomUpMatcher implements Matcher, Configurable {
     public static double SIM_THRESHOLD;
 
     public SimpleBottomUpMatcher() {
-        configure();
+        configure(GumTreeProperties.getGlobalProperties());
     }
 
     @Override
-    public void configure() {
-        SIM_THRESHOLD = GumTreeProperties.getPropertyDouble("gt.bum.smt.sbup");
+    public void configure(GumTreeProperties properties) {
+        SIM_THRESHOLD = properties.getPropertyDouble("gt.bum.smt.sbup");
     }
 
     @Override

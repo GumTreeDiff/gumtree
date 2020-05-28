@@ -43,12 +43,12 @@ public class ChangeDistillerLeavesMatcher implements Matcher, Configurable {
     public static double LABEL_SIM_THRESHOLD;
 
     public ChangeDistillerLeavesMatcher() {
-        configure();
+        configure(GumTreeProperties.getGlobalProperties());
     }
 
     @Override
-    public void configure() {
-        LABEL_SIM_THRESHOLD = GumTreeProperties.getPropertyDouble("gt.cd.lsim");
+    public void configure(GumTreeProperties properties) {
+        LABEL_SIM_THRESHOLD = properties.getPropertyDouble("gt.cd.lsim");
 
     }
 

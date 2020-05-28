@@ -39,16 +39,16 @@ public class ChangeDistillerBottomUpMatcher implements Matcher, Configurable {
     public static int MAX_NUMBER_OF_LEAVES;
 
     public ChangeDistillerBottomUpMatcher() {
-        configure();
+        configure(GumTreeProperties.getGlobalProperties());
     }
 
     @Override
-    public void configure() {
-        STRUCT_SIM_THRESHOLD_1 = GumTreeProperties.getPropertyDouble("gt.cd.ssim1");
+    public void configure(GumTreeProperties properties) {
+        STRUCT_SIM_THRESHOLD_1 = properties.getPropertyDouble("gt.cd.ssim1");
 
-        STRUCT_SIM_THRESHOLD_2 = GumTreeProperties.getPropertyDouble("gt.cd.ssim2");
+        STRUCT_SIM_THRESHOLD_2 = properties.getPropertyDouble("gt.cd.ssim2");
 
-        MAX_NUMBER_OF_LEAVES = GumTreeProperties.getPropertyInteger("gt.cd.ml");
+        MAX_NUMBER_OF_LEAVES = properties.getPropertyInteger("gt.cd.ml");
 
     }
 

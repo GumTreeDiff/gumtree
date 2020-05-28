@@ -24,16 +24,37 @@ import java.util.Properties;
 
 public class GumTreeProperties {
 
-    public static Properties properties;
+
+    /**
+     * Stores the properties
+     */
+    private Properties properties;
+
+    /**
+     * Store the default properties.
+     */
+    protected static GumTreeProperties globalProperties = null;
 
     static {
-        reset();
+
+        globalProperties = new GumTreeProperties();
+        globalProperties.loadDefaultValues();
+
     }
 
-    public static void reset() {
+    public GumTreeProperties() {
+        properties = new Properties();
+    }
+
+    public GumTreeProperties(Properties properties) {
+        this.properties = properties;
+    }
+
+    public void loadDefaultValues() {
         InputStream propFile;
         try {
-            properties = new Properties();
+            properties.clear();
+
             propFile = GumTreeProperties.class.getClassLoader().getResourceAsStream("config-gumtree.properties");
 
             properties.load(propFile);
@@ -42,24 +63,32 @@ public class GumTreeProperties {
         }
     }
 
-    public static void setProperty(String key, String value) {
+    public void setProperty(String key, String value) {
         properties.setProperty(key, value);
     }
 
-    public static String getProperty(String key) {
+    public String getProperty(String key) {
         return properties.getProperty(key);
     }
 
-    public static Integer getPropertyInteger(String key) {
+    public Integer getPropertyInteger(String key) {
         return Integer.valueOf(properties.getProperty(key));
     }
 
-    public static Boolean getPropertyBoolean(String key) {
+    public Boolean getPropertyBoolean(String key) {
         return Boolean.valueOf(properties.getProperty(key));
     }
 
-    public static Double getPropertyDouble(String key) {
+    public Double getPropertyDouble(String key) {
         return Double.valueOf(properties.getProperty(key));
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public static GumTreeProperties getGlobalProperties() {
+        return globalProperties;
     }
 
 }

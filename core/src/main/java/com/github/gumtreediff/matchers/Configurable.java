@@ -21,6 +21,9 @@ package com.github.gumtreediff.matchers;
 
 public interface Configurable {
 
-    public void configure();
+    public default void configure(GumTreeProperties properties) {
+    }
+
+    ;
 
 }

@@ -48,12 +48,12 @@ public class XyBottomUpMatcher implements Matcher, Configurable {
     public static double SIM_THRESHOLD;
 
     public XyBottomUpMatcher() {
-        configure();
+        configure(GumTreeProperties.getGlobalProperties());
     }
 
     @Override
-    public void configure() {
-        SIM_THRESHOLD = GumTreeProperties.getPropertyDouble("gt.xym.sim");
+    public void configure(GumTreeProperties properties) {
+        SIM_THRESHOLD = properties.getPropertyDouble("gt.xym.sim");
     }
 
     @Override

@@ -39,59 +39,72 @@ class TestGumTreeProperties {
 
     @BeforeEach
     public void setup() {
-        GumTreeProperties.reset();
+        GumTreeProperties.getGlobalProperties().loadDefaultValues();
     }
 
     @Test
     void testDefaultValue() {
-        assertNotNull(GumTreeProperties.getProperty("gt.xym.sim"));
-        assertEquals("0.5", GumTreeProperties.getProperty("gt.xym.sim"));
-        assertEquals(0.5, GumTreeProperties.getPropertyDouble("gt.xym.sim"), 0);
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.xym.sim"));
+        assertEquals("0.5", GumTreeProperties.getGlobalProperties().getProperty("gt.xym.sim"));
+        assertEquals(0.5, GumTreeProperties.getGlobalProperties().getPropertyDouble("gt.xym.sim"), 0);
     }
 
     @Test
     void testBottomUpMatcher() {
 
-        assertNotNull(GumTreeProperties.getProperty("gt.xym.sim"));
-        assertEquals("0.5", GumTreeProperties.getProperty("gt.xym.sim"));
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.xym.sim"));
+        assertEquals("0.5", GumTreeProperties.getGlobalProperties().getProperty("gt.xym.sim"));
 
         XyBottomUpMatcher xm = new XyBottomUpMatcher();
-        assertEquals(GumTreeProperties.getPropertyDouble("gt.xym.sim"), xm.SIM_THRESHOLD, 0);
+        assertEquals(GumTreeProperties.getGlobalProperties().getPropertyDouble("gt.xym.sim"), xm.SIM_THRESHOLD, 0);
 
         Double newth = 0.99;
-        GumTreeProperties.setProperty("gt.xym.sim", newth.toString());
-        xm.configure();
+        GumTreeProperties.getGlobalProperties().setProperty("gt.xym.sim", newth.toString());
+        xm.configure(GumTreeProperties.getGlobalProperties());
+        assertEquals(newth, xm.SIM_THRESHOLD, 0);
+
+        Double localth = 0.88;
+        GumTreeProperties customProperties = new GumTreeProperties();
+        customProperties.setProperty("gt.xym.sim", localth.toString());
+        xm.configure(customProperties);
+        assertEquals(localth, xm.SIM_THRESHOLD, 0);
+
+        GumTreeProperties inheritProperties =
+                new GumTreeProperties(GumTreeProperties.getGlobalProperties().getProperties());
+        xm.configure(inheritProperties);
         assertEquals(newth, xm.SIM_THRESHOLD, 0);
     }
 
     @Test
     void testChangeDistillerBottomUpMatcher() {
 
-        assertNotNull(GumTreeProperties.getProperty("gt.cd.ssim1"));
-        assertEquals("0.6", GumTreeProperties.getProperty("gt.cd.ssim1"));
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.cd.ssim1"));
+        assertEquals("0.6", GumTreeProperties.getGlobalProperties().getProperty("gt.cd.ssim1"));
 
-        assertNotNull(GumTreeProperties.getProperty("gt.cd.ssim1"));
-        assertEquals("0.4", GumTreeProperties.getProperty("gt.cd.ssim2"));
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.cd.ssim1"));
+        assertEquals("0.4", GumTreeProperties.getGlobalProperties().getProperty("gt.cd.ssim2"));
 
         ChangeDistillerBottomUpMatcher xm = new ChangeDistillerBottomUpMatcher();
-        assertEquals(GumTreeProperties.getPropertyDouble("gt.cd.ssim1"), xm.STRUCT_SIM_THRESHOLD_1, 0);
-        assertEquals(GumTreeProperties.getPropertyDouble("gt.cd.ssim2"), xm.STRUCT_SIM_THRESHOLD_2, 0);
+        assertEquals(GumTreeProperties.getGlobalProperties().getPropertyDouble("gt.cd.ssim1"),
+                xm.STRUCT_SIM_THRESHOLD_1, 0);
+        assertEquals(GumTreeProperties.getGlobalProperties().getPropertyDouble("gt.cd.ssim2"),
+                xm.STRUCT_SIM_THRESHOLD_2, 0);
 
         Double newth = 0.99;
-        GumTreeProperties.setProperty("gt.cd.ssim1", newth.toString());
-        GumTreeProperties.setProperty("gt.cd.ssim2", newth.toString());
-        xm.configure();
+        GumTreeProperties.getGlobalProperties().setProperty("gt.cd.ssim1", newth.toString());
+        GumTreeProperties.getGlobalProperties().setProperty("gt.cd.ssim2", newth.toString());
+        xm.configure(GumTreeProperties.getGlobalProperties());
         assertEquals(newth, xm.STRUCT_SIM_THRESHOLD_1, 0);
         assertEquals(newth, xm.STRUCT_SIM_THRESHOLD_2, 0);
 
-        assertNotNull(GumTreeProperties.getProperty("gt.cd.ml"));
-        assertEquals("4", GumTreeProperties.getProperty("gt.cd.ml"));
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.cd.ml"));
+        assertEquals("4", GumTreeProperties.getGlobalProperties().getProperty("gt.cd.ml"));
 
-        assertEquals(GumTreeProperties.getPropertyInteger("gt.cd.ml"), xm.MAX_NUMBER_OF_LEAVES);
+        assertEquals(GumTreeProperties.getGlobalProperties().getPropertyInteger("gt.cd.ml"), xm.MAX_NUMBER_OF_LEAVES);
 
         final Integer nl = 10;
-        GumTreeProperties.setProperty("gt.cd.ml", nl.toString());
-        xm.configure();
+        GumTreeProperties.getGlobalProperties().setProperty("gt.cd.ml", nl.toString());
+        xm.configure(GumTreeProperties.getGlobalProperties());
         assertEquals(nl, xm.MAX_NUMBER_OF_LEAVES);
 
     }
@@ -99,40 +112,41 @@ class TestGumTreeProperties {
     @Test
     void testChangeDistillerLeavesMatcher() {
 
-        assertNotNull(GumTreeProperties.getProperty("gt.cd.lsim"));
-        assertEquals("0.5", GumTreeProperties.getProperty("gt.cd.lsim"));
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.cd.lsim"));
+        assertEquals("0.5", GumTreeProperties.getGlobalProperties().getProperty("gt.cd.lsim"));
 
         ChangeDistillerLeavesMatcher xm = new ChangeDistillerLeavesMatcher();
-        assertEquals(GumTreeProperties.getPropertyDouble("gt.cd.lsim"), xm.LABEL_SIM_THRESHOLD, 0);
+        assertEquals(GumTreeProperties.getGlobalProperties().getPropertyDouble("gt.cd.lsim"), xm.LABEL_SIM_THRESHOLD,
+                0);
 
         final Double newth = 0.99;
-        GumTreeProperties.setProperty("gt.cd.lsim", newth.toString());
-        xm.configure();
+        GumTreeProperties.getGlobalProperties().setProperty("gt.cd.lsim", newth.toString());
+        xm.configure(GumTreeProperties.getGlobalProperties());
         assertEquals(newth, xm.LABEL_SIM_THRESHOLD, 0);
     }
 
     @Test
     void testAbstractBottomUpMatcher() {
 
-        assertNotNull(GumTreeProperties.getProperty("gt.bum.smt"));
-        assertEquals("0.5", GumTreeProperties.getProperty("gt.bum.smt"));
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.bum.smt"));
+        assertEquals("0.5", GumTreeProperties.getGlobalProperties().getProperty("gt.bum.smt"));
 
         AbstractBottomUpMatcher xm = new CompleteBottomUpMatcher();
-        assertEquals(GumTreeProperties.getPropertyDouble("gt.bum.smt"), xm.SIM_THRESHOLD, 0);
+        assertEquals(GumTreeProperties.getGlobalProperties().getPropertyDouble("gt.bum.smt"), xm.SIM_THRESHOLD, 0);
 
         final Double newth = 0.99;
-        GumTreeProperties.setProperty("gt.bum.smt", newth.toString());
-        xm.configure();
+        GumTreeProperties.getGlobalProperties().setProperty("gt.bum.smt", newth.toString());
+        xm.configure(GumTreeProperties.getGlobalProperties());
         assertEquals(newth, xm.SIM_THRESHOLD, 0);
 
-        assertNotNull(GumTreeProperties.getProperty("gt.bum.szt"));
-        assertEquals("1000", GumTreeProperties.getProperty("gt.bum.szt"));
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.bum.szt"));
+        assertEquals("1000", GumTreeProperties.getGlobalProperties().getProperty("gt.bum.szt"));
 
-        assertEquals(GumTreeProperties.getPropertyInteger("gt.bum.szt"), xm.SIZE_THRESHOLD);
+        assertEquals(GumTreeProperties.getGlobalProperties().getPropertyInteger("gt.bum.szt"), xm.SIZE_THRESHOLD);
 
         final Integer nl = 10;
-        GumTreeProperties.setProperty("gt.bum.szt", nl.toString());
-        xm.configure();
+        GumTreeProperties.getGlobalProperties().setProperty("gt.bum.szt", nl.toString());
+        xm.configure(GumTreeProperties.getGlobalProperties());
         assertEquals(nl, xm.SIZE_THRESHOLD);
 
     }
@@ -142,14 +156,14 @@ class TestGumTreeProperties {
 
         AbstractSubtreeMatcher xm = new GreedySubtreeMatcher();
 
-        assertNotNull(GumTreeProperties.getProperty("gt.stm.mh"));
-        assertEquals("2", GumTreeProperties.getProperty("gt.stm.mh"));
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.stm.mh"));
+        assertEquals("2", GumTreeProperties.getGlobalProperties().getProperty("gt.stm.mh"));
 
-        assertEquals(GumTreeProperties.getPropertyInteger("gt.stm.mh"), xm.MIN_HEIGHT);
+        assertEquals(GumTreeProperties.getGlobalProperties().getPropertyInteger("gt.stm.mh"), xm.MIN_HEIGHT);
 
         final Integer nl = 10;
-        GumTreeProperties.setProperty("gt.stm.mh", nl.toString());
-        xm.configure();
+        GumTreeProperties.getGlobalProperties().setProperty("gt.stm.mh", nl.toString());
+        xm.configure(GumTreeProperties.getGlobalProperties());
         assertEquals(nl, xm.MIN_HEIGHT);
 
     }
@@ -159,14 +173,14 @@ class TestGumTreeProperties {
 
         SimpleBottomUpMatcher xm = new SimpleBottomUpMatcher();
 
-        assertNotNull(GumTreeProperties.getProperty("gt.bum.smt.sbup"));
-        assertEquals("0.4", GumTreeProperties.getProperty("gt.bum.smt.sbup"));
+        assertNotNull(GumTreeProperties.getGlobalProperties().getProperty("gt.bum.smt.sbup"));
+        assertEquals("0.4", GumTreeProperties.getGlobalProperties().getProperty("gt.bum.smt.sbup"));
 
-        assertEquals(GumTreeProperties.getPropertyDouble("gt.bum.smt.sbup"), xm.SIM_THRESHOLD, 0);
+        assertEquals(GumTreeProperties.getGlobalProperties().getPropertyDouble("gt.bum.smt.sbup"), xm.SIM_THRESHOLD, 0);
 
         final Double newth = 0.99;
-        GumTreeProperties.setProperty("gt.bum.smt.sbup", newth.toString());
-        xm.configure();
+        GumTreeProperties.getGlobalProperties().setProperty("gt.bum.smt.sbup", newth.toString());
+        xm.configure(GumTreeProperties.getGlobalProperties());
         assertEquals(newth, xm.SIM_THRESHOLD, 0);
 
     }

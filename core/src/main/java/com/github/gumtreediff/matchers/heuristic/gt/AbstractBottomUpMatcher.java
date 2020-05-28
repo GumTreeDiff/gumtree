@@ -38,13 +38,14 @@ public abstract class AbstractBottomUpMatcher implements Configurable {
     public static double SIM_THRESHOLD;
 
     public AbstractBottomUpMatcher() {
-        configure();
+        configure(GumTreeProperties.getGlobalProperties());
+
     }
 
     @Override
-    public void configure() {
-        SIZE_THRESHOLD = GumTreeProperties.getPropertyInteger("gt.bum.szt");
-        SIM_THRESHOLD = GumTreeProperties.getPropertyDouble("gt.bum.smt");
+    public void configure(GumTreeProperties properties) {
+        SIZE_THRESHOLD = properties.getPropertyInteger("gt.bum.szt");
+        SIM_THRESHOLD = properties.getPropertyDouble("gt.bum.smt");
     }
 
     protected abstract static class Implementation {

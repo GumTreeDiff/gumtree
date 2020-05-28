@@ -37,12 +37,12 @@ public abstract class AbstractSubtreeMatcher implements Configurable {
     public static int MIN_HEIGHT;
 
     public AbstractSubtreeMatcher() {
-        configure();
+        configure(GumTreeProperties.getGlobalProperties());
     }
 
     @Override
-    public void configure() {
-        MIN_HEIGHT = GumTreeProperties.getPropertyInteger("gt.stm.mh");
+    public void configure(GumTreeProperties properties) {
+        MIN_HEIGHT = properties.getPropertyInteger("gt.stm.mh");
     }
 
     protected abstract static class Implementation {
