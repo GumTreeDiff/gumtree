@@ -45,7 +45,7 @@ import com.github.gumtreediff.tree.Type;
  */
 public class XyBottomUpMatcher implements Matcher, Configurable {
 
-    public static double SIM_THRESHOLD;
+    protected double simThreshold;
 
     public XyBottomUpMatcher() {
         configure(GumTreeProperties.getGlobalProperties());
@@ -53,96 +53,88 @@ public class XyBottomUpMatcher implements Matcher, Configurable {
 
     @Override
     public void configure(GumTreeProperties properties) {
-        SIM_THRESHOLD = properties.getPropertyDouble("gt.xym.sim");
+        simThreshold = properties.getPropertyDouble("gt.xym.sim");
     }
 
     @Override
     public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        Implementation impl = new Implementation(src, dst, mappings);
-        impl.match();
-        return impl.mappings;
+
+        for (ITree iSrc : src.postOrder()) {
+            if (iSrc.isRoot()) {
+                mappings.addMapping(iSrc, dst);
+                lastChanceMatch(mappings, iSrc, dst);
+            } else if (!(mappings.isSrcMapped(iSrc) || iSrc.isLeaf())) {
+                Set<ITree> candidates = getDstCandidates(mappings, iSrc);
+                ITree best = null;
+                double max = -1D;
+
+                for (ITree cand : candidates) {
+                    double sim = SimilarityMetrics.jaccardSimilarity(iSrc, cand, mappings);
+                    if (sim > max && sim >= simThreshold) {
+                        max = sim;
+                        best = cand;
+                    }
+                }
+
+                if (best != null) {
+                    lastChanceMatch(mappings, iSrc, best);
+                    mappings.addMapping(iSrc, best);
+                }
+            }
+        }
+        return mappings;
     }
 
-    private static class Implementation {
-        private final ITree src;
-        private final ITree dst;
-        private final MappingStore mappings;
-
-        public Implementation(ITree src, ITree dst, MappingStore mappings) {
-            this.src = src;
-            this.dst = dst;
-            this.mappings = mappings;
+    private Set<ITree> getDstCandidates(MappingStore mappings, ITree src) {
+        Set<ITree> seeds = new HashSet<>();
+        for (ITree c : src.getDescendants()) {
+            ITree m = mappings.getDstForSrc(c);
+            if (m != null)
+                seeds.add(m);
         }
-
-        public void match() {
-            for (ITree src : this.src.postOrder()) {
-                if (src.isRoot()) {
-                    mappings.addMapping(src, this.dst);
-                    lastChanceMatch(src, this.dst);
-                } else if (!(mappings.isSrcMapped(src) || src.isLeaf())) {
-                    Set<ITree> candidates = getDstCandidates(src);
-                    ITree best = null;
-                    double max = -1D;
-
-                    for (ITree cand : candidates) {
-                        double sim = SimilarityMetrics.jaccardSimilarity(src, cand, mappings);
-                        if (sim > max && sim >= SIM_THRESHOLD) {
-                            max = sim;
-                            best = cand;
-                        }
-                    }
-
-                    if (best != null) {
-                        lastChanceMatch(src, best);
-                        mappings.addMapping(src, best);
-                    }
-                }
+        Set<ITree> candidates = new HashSet<>();
+        Set<ITree> visited = new HashSet<>();
+        for (ITree seed : seeds) {
+            while (seed.getParent() != null) {
+                ITree parent = seed.getParent();
+                if (visited.contains(parent))
+                    break;
+                visited.add(parent);
+                if (parent.getType() == src.getType() && !mappings.isDstMapped(parent))
+                    candidates.add(parent);
+                seed = parent;
             }
         }
 
-        private Set<ITree> getDstCandidates(ITree src) {
-            Set<ITree> seeds = new HashSet<>();
-            for (ITree c : src.getDescendants()) {
-                ITree m = mappings.getDstForSrc(c);
-                if (m != null)
-                    seeds.add(m);
-            }
-            Set<ITree> candidates = new HashSet<>();
-            Set<ITree> visited = new HashSet<>();
-            for (ITree seed : seeds) {
-                while (seed.getParent() != null) {
-                    ITree parent = seed.getParent();
-                    if (visited.contains(parent))
-                        break;
-                    visited.add(parent);
-                    if (parent.getType() == src.getType() && !mappings.isDstMapped(parent))
-                        candidates.add(parent);
-                    seed = parent;
-                }
-            }
+        return candidates;
+    }
 
-            return candidates;
+    private void lastChanceMatch(MappingStore mappings, ITree src, ITree dst) {
+        Map<Type, List<ITree>> srcKinds = new HashMap<>();
+        Map<Type, List<ITree>> dstKinds = new HashMap<>();
+        for (ITree c : src.getChildren()) {
+            if (!srcKinds.containsKey(c.getType()))
+                srcKinds.put(c.getType(), new ArrayList<>());
+            srcKinds.get(c.getType()).add(c);
+        }
+        for (ITree c : dst.getChildren()) {
+            if (!dstKinds.containsKey(c.getType()))
+                dstKinds.put(c.getType(), new ArrayList<>());
+            dstKinds.get(c.getType()).add(c);
         }
 
-        private void lastChanceMatch(ITree src, ITree dst) {
-            Map<Type, List<ITree>> srcKinds = new HashMap<>();
-            Map<Type, List<ITree>> dstKinds = new HashMap<>();
-            for (ITree c : src.getChildren()) {
-                if (!srcKinds.containsKey(c.getType()))
-                    srcKinds.put(c.getType(), new ArrayList<>());
-                srcKinds.get(c.getType()).add(c);
-            }
-            for (ITree c : dst.getChildren()) {
-                if (!dstKinds.containsKey(c.getType()))
-                    dstKinds.put(c.getType(), new ArrayList<>());
-                dstKinds.get(c.getType()).add(c);
-            }
+        for (Type t : srcKinds.keySet())
+            if (dstKinds.get(t) != null && srcKinds.get(t).size() == dstKinds.get(t).size()
+                    && srcKinds.get(t).size() == 1)
+                mappings.addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));
+    }
 
-            for (Type t : srcKinds.keySet())
-                if (dstKinds.get(t) != null && srcKinds.get(t).size() == dstKinds.get(t).size()
-                        && srcKinds.get(t).size() == 1)
-                    mappings.addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));
-        }
+    public double getSim_threshold() {
+        return simThreshold;
+    }
+
+    public void setSim_threshold(double simThreshold) {
+        this.simThreshold = simThreshold;
     }
 
 }

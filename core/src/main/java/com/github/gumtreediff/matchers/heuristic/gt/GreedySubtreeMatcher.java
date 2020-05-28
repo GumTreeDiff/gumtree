@@ -20,59 +20,49 @@
 
 package com.github.gumtreediff.matchers.heuristic.gt;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.github.gumtreediff.matchers.Mapping;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.ITree;
 
-import java.util.*;
-
-public class GreedySubtreeMatcher extends AbstractSubtreeMatcher implements Matcher {
+public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        GreedySubtreeMatcher.Implementation impl =  new GreedySubtreeMatcher.Implementation(src, dst, mappings);
-        impl.match();
-        return impl.mappings;
-    }
-
-    protected static class Implementation extends AbstractSubtreeMatcher.Implementation {
-        public Implementation(ITree src, ITree dst, MappingStore mappings) {
-            super(src, dst, mappings);
-        }
-
-        public void filterMappings(MultiMappingStore multiMappings) {
-            // Select unique mappings first and extract ambiguous mappings.
-            List<Mapping> ambiguousList = new ArrayList<>();
-            Set<ITree> ignored = new HashSet<>();
-            for (ITree src : multiMappings.allMappedSrcs()) {
-                boolean isMappingUnique = false;
-                if (multiMappings.isSrcUnique(src)) {
-                    ITree dst = multiMappings.getDsts(src).iterator().next();
-                    if (multiMappings.isDstUnique(dst)) {
-                        mappings.addMappingRecursively(src, dst);
-                        isMappingUnique = true;
-                    }
-                }
-
-                if (!(ignored.contains(src) || isMappingUnique)) {
-                    Set<ITree> adsts = multiMappings.getDsts(src);
-                    Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
-                    for (ITree asrc : asrcs)
-                        for (ITree adst : adsts)
-                            ambiguousList.add(new Mapping(asrc, adst));
-                    ignored.addAll(asrcs);
+    public void filterMappings(MultiMappingStore multiMappings) {
+        // Select unique mappings first and extract ambiguous mappings.
+        List<Mapping> ambiguousList = new ArrayList<>();
+        Set<ITree> ignored = new HashSet<>();
+        for (ITree src : multiMappings.allMappedSrcs()) {
+            boolean isMappingUnique = false;
+            if (multiMappings.isSrcUnique(src)) {
+                ITree dst = multiMappings.getDsts(src).iterator().next();
+                if (multiMappings.isDstUnique(dst)) {
+                    mappings.addMappingRecursively(src, dst);
+                    isMappingUnique = true;
                 }
             }
 
-            // Rank the mappings by score.
-            Set<ITree> srcIgnored = new HashSet<>();
-            Set<ITree> dstIgnored = new HashSet<>();
-            Collections.sort(ambiguousList,
-                    new SiblingsMappingComparator(ambiguousList, mappings, getMaxTreeSize()));
-
-            // Select the best ambiguous mappings
-            retainBestMapping(ambiguousList, srcIgnored, dstIgnored);
+            if (!(ignored.contains(src) || isMappingUnique)) {
+                Set<ITree> adsts = multiMappings.getDsts(src);
+                Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
+                for (ITree asrc : asrcs)
+                    for (ITree adst : adsts)
+                        ambiguousList.add(new Mapping(asrc, adst));
+                ignored.addAll(asrcs);
+            }
         }
+
+        // Rank the mappings by score.
+        Set<ITree> srcIgnored = new HashSet<>();
+        Set<ITree> dstIgnored = new HashSet<>();
+        Collections.sort(ambiguousList, new SiblingsMappingComparator(ambiguousList, mappings, getMaxTreeSize()));
+
+        // Select the best ambiguous mappings
+        retainBestMapping(ambiguousList, srcIgnored, dstIgnored);
     }
+
 }

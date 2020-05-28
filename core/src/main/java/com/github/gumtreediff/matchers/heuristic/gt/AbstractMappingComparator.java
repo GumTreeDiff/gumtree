@@ -19,14 +19,14 @@
 
 package com.github.gumtreediff.matchers.heuristic.gt;
 
-import com.github.gumtreediff.matchers.Mapping;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.github.gumtreediff.matchers.Mapping;
+import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.tree.ITree;
 
 public abstract class AbstractMappingComparator implements Comparator<Mapping> {
     protected List<Mapping> ambiguousMappings;
@@ -37,8 +37,7 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
 
     protected MappingStore mappings;
 
-    public AbstractMappingComparator(List<Mapping> ambiguousMappings,
-                                     MappingStore mappings, int maxTreeSize) {
+    public AbstractMappingComparator(List<Mapping> ambiguousMappings, MappingStore mappings, int maxTreeSize) {
         this.maxTreeSize = maxTreeSize;
         this.mappings = mappings;
         this.ambiguousMappings = ambiguousMappings;
@@ -62,15 +61,14 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
     protected double posInParentSimilarity(ITree src, ITree dst) {
         int posSrc = (src.isRoot()) ? 0 : src.getParent().getChildPosition(src);
         int posDst = (dst.isRoot()) ? 0 : dst.getParent().getChildPosition(dst);
-        int maxSrcPos =  (src.isRoot()) ? 1 : src.getParent().getChildren().size();
-        int maxDstPos =  (dst.isRoot()) ? 1 : dst.getParent().getChildren().size();
+        int maxSrcPos = (src.isRoot()) ? 1 : src.getParent().getChildren().size();
+        int maxDstPos = (dst.isRoot()) ? 1 : dst.getParent().getChildren().size();
         int maxPosDiff = Math.max(maxSrcPos, maxDstPos);
         return 1D - ((double) Math.abs(posSrc - posDst) / (double) maxPosDiff);
     }
 
     protected double numberingSimilarity(ITree src, ITree dst) {
-        return 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position)
-                / (double) maxTreeSize);
+        return 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position) / (double) maxTreeSize);
     }
 
 }

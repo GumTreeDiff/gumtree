@@ -32,11 +32,11 @@ import com.github.gumtreediff.tree.TreeUtils;
 
 public class ChangeDistillerBottomUpMatcher implements Matcher, Configurable {
 
-    public static double STRUCT_SIM_THRESHOLD_1;
+    protected double struct_sim_threshold_1;
 
-    public static double STRUCT_SIM_THRESHOLD_2;
+    protected double struct_sim_threshold_2;
 
-    public static int MAX_NUMBER_OF_LEAVES;
+    protected int max_number_of_leaves;
 
     public ChangeDistillerBottomUpMatcher() {
         configure(GumTreeProperties.getGlobalProperties());
@@ -44,58 +44,65 @@ public class ChangeDistillerBottomUpMatcher implements Matcher, Configurable {
 
     @Override
     public void configure(GumTreeProperties properties) {
-        STRUCT_SIM_THRESHOLD_1 = properties.getPropertyDouble("gt.cd.ssim1");
+        struct_sim_threshold_1 = properties.getPropertyDouble("gt.cd.ssim1");
 
-        STRUCT_SIM_THRESHOLD_2 = properties.getPropertyDouble("gt.cd.ssim2");
+        struct_sim_threshold_2 = properties.getPropertyDouble("gt.cd.ssim2");
 
-        MAX_NUMBER_OF_LEAVES = properties.getPropertyInteger("gt.cd.ml");
+        max_number_of_leaves = properties.getPropertyInteger("gt.cd.ml");
 
     }
 
     @Override
     public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        Implementation impl = new Implementation(src, dst, mappings);
-        impl.match();
-        return impl.mappings;
-    }
-
-    private static class Implementation {
-        private final ITree src;
-        private final ITree dst;
-        private final MappingStore mappings;
-
-        public Implementation(ITree src, ITree dst, MappingStore mappings) {
-            this.src = src;
-            this.dst = dst;
-            this.mappings = mappings;
-        }
-
-        public void match() {
-            List<ITree> dstTrees = TreeUtils.postOrder(this.dst);
-            for (ITree currentSrcTree : this.src.postOrder()) {
-                int numberOfLeaves = numberOfLeaves(currentSrcTree);
-                for (ITree currentDstTree : dstTrees) {
-                    if (mappings.isMappingAllowed(currentSrcTree, currentDstTree)
-                            && !(currentSrcTree.isLeaf() || currentDstTree.isLeaf())) {
-                        double similarity = SimilarityMetrics.chawatheSimilarity(currentSrcTree, currentDstTree,
-                                mappings);
-                        if ((numberOfLeaves > MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_1)
-                                || (numberOfLeaves <= MAX_NUMBER_OF_LEAVES && similarity >= STRUCT_SIM_THRESHOLD_2)) {
-                            mappings.addMapping(currentSrcTree, currentDstTree);
-                            break;
-                        }
+        List<ITree> dstTrees = TreeUtils.postOrder(dst);
+        for (ITree currentSrcTree : src.postOrder()) {
+            int numberOfLeaves = numberOfLeaves(currentSrcTree);
+            for (ITree currentDstTree : dstTrees) {
+                if (mappings.isMappingAllowed(currentSrcTree, currentDstTree)
+                        && !(currentSrcTree.isLeaf() || currentDstTree.isLeaf())) {
+                    double similarity = SimilarityMetrics.chawatheSimilarity(currentSrcTree, currentDstTree, mappings);
+                    if ((numberOfLeaves > max_number_of_leaves && similarity >= struct_sim_threshold_1)
+                            || (numberOfLeaves <= max_number_of_leaves && similarity >= struct_sim_threshold_2)) {
+                        mappings.addMapping(currentSrcTree, currentDstTree);
+                        break;
                     }
                 }
             }
         }
 
-        private int numberOfLeaves(ITree root) {
-            int numberOfLeaves = 0;
-            for (ITree tree : root.getDescendants())
-                if (tree.isLeaf())
-                    numberOfLeaves++;
-            return numberOfLeaves;
-        }
+        return mappings;
+    }
+
+    private int numberOfLeaves(ITree root) {
+        int numberOfLeaves = 0;
+        for (ITree tree : root.getDescendants())
+            if (tree.isLeaf())
+                numberOfLeaves++;
+        return numberOfLeaves;
+    }
+
+    public double getStruct_sim_threshold_1() {
+        return struct_sim_threshold_1;
+    }
+
+    public void setStruct_sim_threshold_1(double structSimThreshold1) {
+        this.struct_sim_threshold_1 = structSimThreshold1;
+    }
+
+    public double getStruct_sim_threshold_2() {
+        return struct_sim_threshold_2;
+    }
+
+    public void setStruct_sim_threshold_2(double structSimThreshold2) {
+        this.struct_sim_threshold_2 = structSimThreshold2;
+    }
+
+    public int getMax_number_of_leaves() {
+        return max_number_of_leaves;
+    }
+
+    public void setMax_number_of_leaves(int maxNumberOfLeaves) {
+        this.max_number_of_leaves = maxNumberOfLeaves;
     }
 
 }

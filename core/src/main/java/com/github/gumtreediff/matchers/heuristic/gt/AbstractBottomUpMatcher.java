@@ -33,67 +33,70 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.optimal.zs.ZsMatcher;
 import com.github.gumtreediff.tree.ITree;
 
-public abstract class AbstractBottomUpMatcher implements Configurable {
-    public static int SIZE_THRESHOLD;
-    public static double SIM_THRESHOLD;
+public abstract class AbstractBottomUpMatcher implements Matcher, Configurable {
+    protected int size_threshold;
+    protected double sim_threshold;
 
     public AbstractBottomUpMatcher() {
         configure(GumTreeProperties.getGlobalProperties());
-
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        SIZE_THRESHOLD = properties.getPropertyInteger("gt.bum.szt");
-        SIM_THRESHOLD = properties.getPropertyDouble("gt.bum.smt");
+        size_threshold = properties.getPropertyInteger("gt.bum.szt");
+        sim_threshold = properties.getPropertyDouble("gt.bum.smt");
     }
 
-    protected abstract static class Implementation {
-        protected final ITree src;
-        protected final ITree dst;
-        protected final MappingStore mappings;
-
-        public Implementation(ITree src, ITree dst, MappingStore mappings) {
-            this.src = src;
-            this.dst = dst;
-            this.mappings = mappings;
+    protected List<ITree> getDstCandidates(MappingStore mappings, ITree src) {
+        List<ITree> seeds = new ArrayList<>();
+        for (ITree c : src.getDescendants()) {
+            if (mappings.isSrcMapped(c))
+                seeds.add(mappings.getDstForSrc(c));
+        }
+        List<ITree> candidates = new ArrayList<>();
+        Set<ITree> visited = new HashSet<>();
+        for (ITree seed : seeds) {
+            while (seed.getParent() != null) {
+                ITree parent = seed.getParent();
+                if (visited.contains(parent))
+                    break;
+                visited.add(parent);
+                if (parent.getType() == src.getType() && !(mappings.isDstMapped(parent) || parent.isRoot()))
+                    candidates.add(parent);
+                seed = parent;
+            }
         }
 
-        protected List<ITree> getDstCandidates(ITree src) {
-            List<ITree> seeds = new ArrayList<>();
-            for (ITree c : src.getDescendants()) {
-                if (mappings.isSrcMapped(c))
-                    seeds.add(mappings.getDstForSrc(c));
-            }
-            List<ITree> candidates = new ArrayList<>();
-            Set<ITree> visited = new HashSet<>();
-            for (ITree seed : seeds) {
-                while (seed.getParent() != null) {
-                    ITree parent = seed.getParent();
-                    if (visited.contains(parent))
-                        break;
-                    visited.add(parent);
-                    if (parent.getType() == src.getType() && !(mappings.isDstMapped(parent) || parent.isRoot()))
-                        candidates.add(parent);
-                    seed = parent;
-                }
-            }
+        return candidates;
+    }
 
-            return candidates;
-        }
-
-        protected void lastChanceMatch(ITree src, ITree dst) {
-            if (src.getMetrics().size < AbstractBottomUpMatcher.SIZE_THRESHOLD
-                    || dst.getMetrics().size < AbstractBottomUpMatcher.SIZE_THRESHOLD) {
-                Matcher m = new ZsMatcher();
-                MappingStore zsMappings = m.match(src, dst, new MappingStore(src, dst));
-                for (Mapping candidate : zsMappings) {
-                    ITree srcCand = candidate.first;
-                    ITree dstCand = candidate.second;
-                    if (mappings.isMappingAllowed(srcCand, dstCand))
-                        mappings.addMapping(srcCand, dstCand);
-                }
+    protected void lastChanceMatch(MappingStore mappings, ITree src, ITree dst) {
+        if (src.getMetrics().size < size_threshold || dst.getMetrics().size < size_threshold) {
+            Matcher m = new ZsMatcher();
+            MappingStore zsMappings = m.match(src, dst, new MappingStore(src, dst));
+            for (Mapping candidate : zsMappings) {
+                ITree srcCand = candidate.first;
+                ITree dstCand = candidate.second;
+                if (mappings.isMappingAllowed(srcCand, dstCand))
+                    mappings.addMapping(srcCand, dstCand);
             }
         }
     }
+
+    public int getSize_threshold() {
+        return size_threshold;
+    }
+
+    public void setSize_threshold(int sizeThreshold) {
+        this.size_threshold = sizeThreshold;
+    }
+
+    public double getSim_threshold() {
+        return sim_threshold;
+    }
+
+    public void setSim_threshold(double simThreshold) {
+        this.sim_threshold = simThreshold;
+    }
+
 }
