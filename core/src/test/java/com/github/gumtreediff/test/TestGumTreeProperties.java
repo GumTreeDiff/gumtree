@@ -20,8 +20,10 @@
 package com.github.gumtreediff.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Set;
 
@@ -43,23 +45,23 @@ class TestGumTreeProperties {
     @Test
     void testBottomUpMatcher() {
 
-        XyBottomUpMatcher xm = new XyBottomUpMatcher();
+        XyBottomUpMatcher matcher = new XyBottomUpMatcher();
         double originalValue = 0.5;
-        assertEquals(originalValue, xm.getSim_threshold());
+        assertEquals(originalValue, matcher.getSim_threshold());
 
         final double localth = 0.888888;
         GumTreeProperties customProperties = new GumTreeProperties();
         customProperties.put(ConfigurationOptions.GT_XYM_SIM, localth);
-        xm.configure(customProperties);
-        assertEquals(localth, xm.getSim_threshold(), 0);
+        matcher.configure(customProperties);
+        assertEquals(localth, matcher.getSim_threshold(), 0);
 
         GumTreeProperties noPropertyProperties = new GumTreeProperties();
         // No value inside
 
-        xm.configure(noPropertyProperties);
-        assertEquals(originalValue, xm.getSim_threshold(), 0);
+        matcher.configure(noPropertyProperties);
+        assertEquals(originalValue, matcher.getSim_threshold(), 0);
 
-        Set<ConfigurationOptions> options = xm.getApplicableOptions();
+        Set<ConfigurationOptions> options = matcher.getApplicableOptions();
         assertEquals(1, options.size());
         assertTrue(options.contains(ConfigurationOptions.GT_XYM_SIM));
     }
@@ -68,7 +70,7 @@ class TestGumTreeProperties {
     void testChangeDistillerBottomUpMatcher() {
 
         //
-        ChangeDistillerBottomUpMatcher xm = new ChangeDistillerBottomUpMatcher();
+        ChangeDistillerBottomUpMatcher matcher = new ChangeDistillerBottomUpMatcher();
 
         Double anotherValue = 0.9999;
         GumTreeProperties properties = new GumTreeProperties();
@@ -76,23 +78,22 @@ class TestGumTreeProperties {
         properties.put(ConfigurationOptions.GT_CD_SSIM1, anotherValue);
         properties.put(ConfigurationOptions.GT_CD_SSIM2, anotherValue);
 
-        assertNotEquals(anotherValue, xm.getStruct_sim_threshold_1());
-        assertNotEquals(anotherValue, xm.getStruct_sim_threshold_2());
+        assertNotEquals(anotherValue, matcher.getStruct_sim_threshold_1());
+        assertNotEquals(anotherValue, matcher.getStruct_sim_threshold_2());
 
-        int defaultNL = xm.getMax_number_of_leaves();
-        xm.configure(properties);
-        assertEquals(defaultNL, xm.getMax_number_of_leaves(), 0);
-        assertEquals(anotherValue, xm.getStruct_sim_threshold_1(), 0);
-        assertEquals(anotherValue, xm.getStruct_sim_threshold_2(), 0);
-
+        int defaultNL = matcher.getMax_number_of_leaves();
+        matcher.configure(properties);
+        assertEquals(defaultNL, matcher.getMax_number_of_leaves(), 0);
+        assertEquals(anotherValue, matcher.getStruct_sim_threshold_1(), 0);
+        assertEquals(anotherValue, matcher.getStruct_sim_threshold_2(), 0);
 
         int newNl = 1111;
         GumTreeProperties properties2 = new GumTreeProperties();
         properties2.put(ConfigurationOptions.GT_CD_ML, newNl);
-        xm.configure(properties2);
-        assertEquals(newNl, xm.getMax_number_of_leaves());
+        matcher.configure(properties2);
+        assertEquals(newNl, matcher.getMax_number_of_leaves());
 
-        Set<ConfigurationOptions> options = xm.getApplicableOptions();
+        Set<ConfigurationOptions> options = matcher.getApplicableOptions();
         assertEquals(3, options.size());
         assertTrue(options.contains(ConfigurationOptions.GT_CD_SSIM1));
         assertTrue(options.contains(ConfigurationOptions.GT_CD_SSIM2));
@@ -102,17 +103,17 @@ class TestGumTreeProperties {
     @Test
     void testChangeDistillerLeavesMatcher() {
 
-        ChangeDistillerLeavesMatcher xm = new ChangeDistillerLeavesMatcher();
+        ChangeDistillerLeavesMatcher matcher = new ChangeDistillerLeavesMatcher();
 
         GumTreeProperties properties = new GumTreeProperties();
 
         final Double anotherValue = 0.99999;
 
         properties.put(ConfigurationOptions.GT_CD_LSIM, anotherValue);
-        xm.configure(properties);
-        assertEquals(anotherValue, xm.getLabel_sim_threshold(), 0);
+        matcher.configure(properties);
+        assertEquals(anotherValue, matcher.getLabel_sim_threshold(), 0);
 
-        Set<ConfigurationOptions> options = xm.getApplicableOptions();
+        Set<ConfigurationOptions> options = matcher.getApplicableOptions();
         assertEquals(1, options.size());
         assertTrue(options.contains(ConfigurationOptions.GT_CD_LSIM));
     }
@@ -120,20 +121,20 @@ class TestGumTreeProperties {
     @Test
     void testAbstractBottomUpMatcher() {
 
-        AbstractBottomUpMatcher xm = new CompleteBottomUpMatcher();
+        AbstractBottomUpMatcher matcher = new CompleteBottomUpMatcher();
 
         GumTreeProperties properties = new GumTreeProperties();
         final Double anotherValue = 0.99;
         properties.put(ConfigurationOptions.GT_BUM_SMT, anotherValue);
-        xm.configure(properties);
-        assertEquals(anotherValue, xm.getSim_threshold(), 0);
+        matcher.configure(properties);
+        assertEquals(anotherValue, matcher.getSim_threshold(), 0);
 
         final Integer nl = 1000;
         properties.put(ConfigurationOptions.GT_BUM_SZT, nl);
-        xm.configure(properties);
-        assertEquals(nl, xm.getSize_threshold());
+        matcher.configure(properties);
+        assertEquals(nl, matcher.getSize_threshold());
 
-        Set<ConfigurationOptions> options = xm.getApplicableOptions();
+        Set<ConfigurationOptions> options = matcher.getApplicableOptions();
         assertEquals(2, options.size());
         assertTrue(options.contains(ConfigurationOptions.GT_BUM_SMT));
         assertTrue(options.contains(ConfigurationOptions.GT_BUM_SZT));
@@ -142,16 +143,16 @@ class TestGumTreeProperties {
     @Test
     void testAbstractSubtreeMatcher() {
 
-        AbstractSubtreeMatcher xm = new GreedySubtreeMatcher();
+        AbstractSubtreeMatcher matcher = new GreedySubtreeMatcher();
 
         GumTreeProperties properties = new GumTreeProperties();
 
         final Integer nl = 10;
         properties.put(ConfigurationOptions.GT_STM_MH, nl);
-        xm.configure(properties);
-        assertEquals(nl, xm.getMin_height());
+        matcher.configure(properties);
+        assertEquals(nl, matcher.getMin_height());
 
-        Set<ConfigurationOptions> options = xm.getApplicableOptions();
+        Set<ConfigurationOptions> options = matcher.getApplicableOptions();
         assertEquals(1, options.size());
         assertTrue(options.contains(ConfigurationOptions.GT_STM_MH));
 
@@ -160,18 +161,46 @@ class TestGumTreeProperties {
     @Test
     void testSimpleBottomUpMatcher() {
 
-        SimpleBottomUpMatcher xm = new SimpleBottomUpMatcher();
+        SimpleBottomUpMatcher matcher = new SimpleBottomUpMatcher();
 
         GumTreeProperties properties = new GumTreeProperties();
 
         final Double anotherValue = 0.99;
         properties.put(ConfigurationOptions.GT_BUM_SMT_SBUP, anotherValue.toString());
-        xm.configure(properties);
-        assertEquals(anotherValue, xm.getSim_threshold(), 0);
+        matcher.configure(properties);
+        assertEquals(anotherValue, matcher.getSim_threshold(), 0);
 
-        Set<ConfigurationOptions> options = xm.getApplicableOptions();
+        Set<ConfigurationOptions> options = matcher.getApplicableOptions();
         assertEquals(1, options.size());
         assertTrue(options.contains(ConfigurationOptions.GT_BUM_SMT_SBUP));
+
+    }
+
+    @Test
+    void testValidOptionMatcher() throws Exception {
+
+        SimpleBottomUpMatcher matcher = new SimpleBottomUpMatcher();
+
+        final Double anotherValue = 0.999;
+        matcher.setOption(ConfigurationOptions.GT_BUM_SMT_SBUP, anotherValue);
+
+        assertEquals(anotherValue, matcher.getSim_threshold(), 0);
+
+        Set<ConfigurationOptions> options = matcher.getApplicableOptions();
+        assertEquals(1, options.size());
+        assertTrue(options.contains(ConfigurationOptions.GT_BUM_SMT_SBUP));
+
+        ConfigurationOptions anotherOption = ConfigurationOptions.GT_STM_MH;
+        assertFalse(options.contains(anotherOption));
+
+        matcher = new SimpleBottomUpMatcher();
+        final Double originalValue = matcher.getSim_threshold();
+        try {
+            matcher.setOption(anotherOption, anotherValue);
+            fail("Expected one exception: Option not allowed");
+        } catch (Exception e) {
+            assertEquals(originalValue, matcher.getSim_threshold());
+        }
 
     }
 

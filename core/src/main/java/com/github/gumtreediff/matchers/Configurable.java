@@ -31,4 +31,15 @@ public interface Configurable {
     public default Set<ConfigurationOptions> getApplicableOptions() {
         return Sets.newHashSet();
     }
+
+    public default void setOption(ConfigurationOptions option, Object value) throws Exception {
+        if (!getApplicableOptions().contains(option))
+            throw new Exception(
+                    "Option " + option.name() + " is not allowed. Applicable options are: " + getApplicableOptions());
+
+        GumTreeProperties properties = new GumTreeProperties();
+        properties.put(option, value);
+        configure(properties);
+
+    }
 }
