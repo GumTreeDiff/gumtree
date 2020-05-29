@@ -19,76 +19,90 @@
  */
 package com.github.gumtreediff.matchers;
 
-import java.io.InputStream;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GumTreeProperties {
 
+    Map<String, Object> properties = new HashMap<>();
 
-    /**
-     * Stores the properties
-     */
-    private Properties properties;
-
-    /**
-     * Store the default properties.
-     */
-    protected static GumTreeProperties globalProperties = null;
-
-    static {
-
-        globalProperties = new GumTreeProperties();
-        globalProperties.loadDefaultValues();
-
-    }
-
-    public GumTreeProperties() {
-        properties = new Properties();
-    }
-
-    public GumTreeProperties(Properties properties) {
-        this.properties = properties;
-    }
-
-    public void loadDefaultValues() {
-        InputStream propFile;
-        try {
-            properties.clear();
-
-            propFile = GumTreeProperties.class.getClassLoader().getResourceAsStream("config-gumtree.properties");
-
-            properties.load(propFile);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public void put(ConfigurationOptions option, Object value) {
+        if (option != null) {
+            this.properties.put(option.name(), value);
         }
     }
 
-    public void setProperty(String key, String value) {
-        properties.setProperty(key, value);
+    public Object get(ConfigurationOptions option) {
+        if (option != null) {
+            return this.properties.get(option.name());
+        } else {
+            return null;
+        }
     }
 
-    public String getProperty(String key) {
-        return properties.getProperty(key);
+    /**
+     * Adds a default value in the properties if there is not a property name passed
+     * as argument
+     *
+     * @param propertyName name of the property to check
+     * @param value        value to put in properties if the name does not exist.
+     * @return
+     */
+    private Object setIfNotPresent(String propertyName, Object value) {
+
+        if (!properties.containsKey(propertyName)) {
+            properties.put(propertyName, value);
+            return value;
+        }
+        return properties.get(propertyName);
     }
 
-    public Integer getPropertyInteger(String key) {
-        return Integer.valueOf(properties.getProperty(key));
+    public String tryConfigure(ConfigurationOptions propertyName, String value) {
+        return tryConfigure(propertyName.name(), value);
     }
 
-    public Boolean getPropertyBoolean(String key) {
-        return Boolean.valueOf(properties.getProperty(key));
+    private String tryConfigure(String propertyName, String value) {
+        Object property = setIfNotPresent(propertyName, value);
+        if (property != null) {
+            return property.toString();
+        }
+
+        return value;
     }
 
-    public Double getPropertyDouble(String key) {
-        return Double.valueOf(properties.getProperty(key));
+    public int tryConfigure(ConfigurationOptions propertyName, int value) {
+        return tryConfigure(propertyName.name(), value);
     }
 
-    public Properties getProperties() {
-        return properties;
+    private int tryConfigure(String propertyName, int value) {
+
+        Object property = setIfNotPresent(propertyName, value);
+        if (property != null) {
+            try {
+                return Integer.parseInt(property.toString());
+
+            } catch (Exception e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
+        return value;
     }
 
-    public static GumTreeProperties getGlobalProperties() {
-        return globalProperties;
+    public double tryConfigure(ConfigurationOptions propertyName, double value) {
+        return tryConfigure(propertyName.name(), value);
+    }
+
+    public double tryConfigure(String propertyName, double value) {
+        Object property = setIfNotPresent(propertyName, value);
+        if (property != null) {
+            try {
+                return Double.parseDouble(property.toString());
+
+            } catch (Exception e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
+        return value;
     }
 
 }

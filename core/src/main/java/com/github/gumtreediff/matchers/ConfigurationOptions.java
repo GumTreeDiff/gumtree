@@ -14,21 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011-2016 Jean-Rémy Falleri <jr.falleri@gmail.com>
- * Copyright 2011-2016 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 package com.github.gumtreediff.matchers;
 
-import java.util.Set;
-
-import com.google.common.collect.Sets;
-
-public interface Configurable {
-
-    public default void configure(GumTreeProperties properties) {
-    }
-
-    public default Set<ConfigurationOptions> getApplicableOptions() {
-        return Sets.newHashSet();
-    }
+public enum ConfigurationOptions {
+    GT_BUM_SMT, GT_BUM_SMT_SBUP, GT_BUM_SZT, GT_CD_LSIM, GT_CD_ML, GT_CD_SSIM1, GT_CD_SSIM2, GT_STM_MH, GT_XYM_SIM,
+    GUMTREE_MATCH_GT_MINH;
 }

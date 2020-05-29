@@ -28,12 +28,14 @@ import java.util.Map;
 import java.util.Set;
 
 import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Type;
+import com.google.common.collect.Sets;
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source
@@ -45,15 +47,17 @@ import com.github.gumtreediff.tree.Type;
  */
 public class XyBottomUpMatcher implements Matcher, Configurable {
 
-    protected double simThreshold;
+    private static final double SIM_THRESHOLD = 0.5;
+
+    protected double simThreshold = SIM_THRESHOLD;
 
     public XyBottomUpMatcher() {
-        configure(GumTreeProperties.getGlobalProperties());
+
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        simThreshold = properties.getPropertyDouble("gt.xym.sim");
+        simThreshold = properties.tryConfigure(ConfigurationOptions.GT_XYM_SIM, SIM_THRESHOLD);
     }
 
     @Override
@@ -137,4 +141,9 @@ public class XyBottomUpMatcher implements Matcher, Configurable {
         this.simThreshold = simThreshold;
     }
 
+    @Override
+    public Set<ConfigurationOptions> getApplicableOptions() {
+
+        return Sets.newHashSet(ConfigurationOptions.GT_XYM_SIM);
+    }
 }

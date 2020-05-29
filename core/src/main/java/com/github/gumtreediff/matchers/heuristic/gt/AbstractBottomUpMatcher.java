@@ -26,25 +26,31 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.optimal.zs.ZsMatcher;
 import com.github.gumtreediff.tree.ITree;
+import com.google.common.collect.Sets;
 
 public abstract class AbstractBottomUpMatcher implements Matcher, Configurable {
-    protected int size_threshold;
-    protected double sim_threshold;
+
+    private static final int SIZE_THRESHOLD = 1000;
+    private static final double SIM_THRESHOLD = 0.5;
+
+    protected int size_threshold = SIZE_THRESHOLD;
+    protected double sim_threshold = SIM_THRESHOLD;
 
     public AbstractBottomUpMatcher() {
-        configure(GumTreeProperties.getGlobalProperties());
+
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        size_threshold = properties.getPropertyInteger("gt.bum.szt");
-        sim_threshold = properties.getPropertyDouble("gt.bum.smt");
+        size_threshold = properties.tryConfigure(ConfigurationOptions.GT_BUM_SZT, size_threshold);
+        sim_threshold = properties.tryConfigure(ConfigurationOptions.GT_BUM_SMT, sim_threshold);
     }
 
     protected List<ITree> getDstCandidates(MappingStore mappings, ITree src) {
@@ -99,4 +105,9 @@ public abstract class AbstractBottomUpMatcher implements Matcher, Configurable {
         this.sim_threshold = simThreshold;
     }
 
+    @Override
+    public Set<ConfigurationOptions> getApplicableOptions() {
+
+        return Sets.newHashSet(ConfigurationOptions.GT_BUM_SZT, ConfigurationOptions.GT_BUM_SMT);
+    }
 }

@@ -31,24 +31,28 @@ import java.util.Set;
 import org.simmetrics.StringMetrics;
 
 import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
+import com.google.common.collect.Sets;
 
 public class ChangeDistillerLeavesMatcher implements Matcher, Configurable {
 
-    protected double label_sim_threshold;
+    private static final double LABEL_SIM_THRESHOLD = 0.5;
+
+    protected double label_sim_threshold = LABEL_SIM_THRESHOLD;
 
     public ChangeDistillerLeavesMatcher() {
-        configure(GumTreeProperties.getGlobalProperties());
+
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        label_sim_threshold = properties.getPropertyDouble("gt.cd.lsim");
+        label_sim_threshold = properties.tryConfigure(ConfigurationOptions.GT_CD_LSIM, label_sim_threshold);
 
     }
 
@@ -111,5 +115,11 @@ public class ChangeDistillerLeavesMatcher implements Matcher, Configurable {
 
     public void setLabel_sim_threshold(double labelSimThreshold) {
         this.label_sim_threshold = labelSimThreshold;
+    }
+
+    @Override
+    public Set<ConfigurationOptions> getApplicableOptions() {
+
+        return Sets.newHashSet(ConfigurationOptions.GT_CD_LSIM);
     }
 }

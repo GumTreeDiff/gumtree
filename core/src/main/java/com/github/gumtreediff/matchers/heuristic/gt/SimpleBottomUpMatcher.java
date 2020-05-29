@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
@@ -36,17 +37,21 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
+import com.google.common.collect.Sets;
 
 public class SimpleBottomUpMatcher implements Matcher, Configurable {
-    protected double sim_threshold;
+
+    private static final double SIM_THRESHOLD = 0.4;
+
+    protected double sim_threshold = SIM_THRESHOLD;
 
     public SimpleBottomUpMatcher() {
-        configure(GumTreeProperties.getGlobalProperties());
+
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        sim_threshold = properties.getPropertyDouble("gt.bum.smt.sbup");
+        sim_threshold = properties.tryConfigure(ConfigurationOptions.GT_BUM_SMT_SBUP, sim_threshold);
     }
 
     @Override
@@ -177,6 +182,12 @@ public class SimpleBottomUpMatcher implements Matcher, Configurable {
 
     public void setSim_threshold(double simThreshold) {
         this.sim_threshold = simThreshold;
+    }
+
+    @Override
+    public Set<ConfigurationOptions> getApplicableOptions() {
+
+        return Sets.newHashSet(ConfigurationOptions.GT_BUM_SMT_SBUP);
     }
 
 }

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
@@ -32,22 +33,24 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
+import com.google.common.collect.Sets;
 
 public abstract class AbstractSubtreeMatcher implements Matcher, Configurable {
+    private static final int MIN_HEIGHT = 2;
 
-    protected int min_height;
+    protected int min_height = MIN_HEIGHT;
 
     protected ITree src;
     protected ITree dst;
     protected MappingStore mappings;
 
     public AbstractSubtreeMatcher() {
-        configure(GumTreeProperties.getGlobalProperties());
+
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        min_height = properties.getPropertyInteger("gt.stm.mh");
+        min_height = properties.tryConfigure(ConfigurationOptions.GT_STM_MH, min_height);
     }
 
     @Override
@@ -232,4 +235,11 @@ public abstract class AbstractSubtreeMatcher implements Matcher, Configurable {
     public void setMin_height(int minHeight) {
         this.min_height = minHeight;
     }
+
+    @Override
+    public Set<ConfigurationOptions> getApplicableOptions() {
+
+        return Sets.newHashSet(ConfigurationOptions.GT_STM_MH);
+    }
+
 }

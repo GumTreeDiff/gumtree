@@ -21,34 +21,43 @@
 package com.github.gumtreediff.matchers.heuristic.cd;
 
 import java.util.List;
+import java.util.Set;
 
 import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
+import com.google.common.collect.Sets;
 
 public class ChangeDistillerBottomUpMatcher implements Matcher, Configurable {
 
-    protected double struct_sim_threshold_1;
+    private static final double STRUCT_SIM_THRESHOLD_1 = 0.6;
 
-    protected double struct_sim_threshold_2;
+    private static final double STRUCT_SIM_THRESHOLD_2 = 0.4;
 
-    protected int max_number_of_leaves;
+    private static final int MAX_NUMBER_OF_LEAVES = 4;
+
+    protected double struct_sim_threshold_1 = STRUCT_SIM_THRESHOLD_1;
+
+    protected double struct_sim_threshold_2 = STRUCT_SIM_THRESHOLD_1;
+
+    protected int max_number_of_leaves = MAX_NUMBER_OF_LEAVES;
 
     public ChangeDistillerBottomUpMatcher() {
-        configure(GumTreeProperties.getGlobalProperties());
+
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        struct_sim_threshold_1 = properties.getPropertyDouble("gt.cd.ssim1");
+        struct_sim_threshold_1 = properties.tryConfigure(ConfigurationOptions.GT_CD_SSIM1, STRUCT_SIM_THRESHOLD_1);
 
-        struct_sim_threshold_2 = properties.getPropertyDouble("gt.cd.ssim2");
+        struct_sim_threshold_2 = properties.tryConfigure(ConfigurationOptions.GT_CD_SSIM2, STRUCT_SIM_THRESHOLD_2);
 
-        max_number_of_leaves = properties.getPropertyInteger("gt.cd.ml");
+        max_number_of_leaves = properties.tryConfigure(ConfigurationOptions.GT_CD_ML, MAX_NUMBER_OF_LEAVES);
 
     }
 
@@ -105,4 +114,10 @@ public class ChangeDistillerBottomUpMatcher implements Matcher, Configurable {
         this.max_number_of_leaves = maxNumberOfLeaves;
     }
 
+    @Override
+    public Set<ConfigurationOptions> getApplicableOptions() {
+
+        return Sets.newHashSet(ConfigurationOptions.GT_CD_SSIM1, ConfigurationOptions.GT_CD_SSIM2,
+                ConfigurationOptions.GT_CD_ML);
+    }
 }
