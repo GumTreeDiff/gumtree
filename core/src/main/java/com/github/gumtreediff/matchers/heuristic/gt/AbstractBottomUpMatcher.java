@@ -37,11 +37,11 @@ import com.google.common.collect.Sets;
 
 public abstract class AbstractBottomUpMatcher implements Matcher, Configurable {
 
-    private static final int SIZE_THRESHOLD = 1000;
-    private static final double SIM_THRESHOLD = 0.5;
+    private static final int DEFAULT_SIZE_THRESHOLD = 1000;
+    private static final double DEFAULT_SIM_THRESHOLD = 0.5;
 
-    protected int size_threshold = SIZE_THRESHOLD;
-    protected double sim_threshold = SIM_THRESHOLD;
+    protected int size_threshold = DEFAULT_SIZE_THRESHOLD;
+    protected double sim_threshold = DEFAULT_SIM_THRESHOLD;
 
     public AbstractBottomUpMatcher() {
 

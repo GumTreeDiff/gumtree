@@ -50,9 +50,9 @@ import com.google.common.collect.Sets;
  * Parallel variant of the ChangeDistiller leaves matcher.
  */
 public class ChangeDistillerParallelLeavesMatcher implements Matcher, Configurable {
-    private static final double LABEL_SIM_THRESHOLD = 0.5;
+    private static final double DEFAULT_LABEL_SIM_THRESHOLD = 0.5;
 
-    protected double label_sim_threshold = LABEL_SIM_THRESHOLD;
+    protected double label_sim_threshold = DEFAULT_LABEL_SIM_THRESHOLD;
 
     public ChangeDistillerParallelLeavesMatcher() {
 

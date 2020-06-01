@@ -47,9 +47,9 @@ import com.google.common.collect.Sets;
  */
 public class XyBottomUpMatcher implements Matcher, Configurable {
 
-    private static final double SIM_THRESHOLD = 0.5;
+    private static final double DEFAULT_SIM_THRESHOLD = 0.5;
 
-    protected double simThreshold = SIM_THRESHOLD;
+    protected double simThreshold = DEFAULT_SIM_THRESHOLD;
 
     public XyBottomUpMatcher() {
 
@@ -57,7 +57,7 @@ public class XyBottomUpMatcher implements Matcher, Configurable {
 
     @Override
     public void configure(GumTreeProperties properties) {
-        simThreshold = properties.tryConfigure(ConfigurationOptions.GT_XYM_SIM, SIM_THRESHOLD);
+        simThreshold = properties.tryConfigure(ConfigurationOptions.GT_XYM_SIM, DEFAULT_SIM_THRESHOLD);
     }
 
     @Override

@@ -35,17 +35,17 @@ import com.google.common.collect.Sets;
 
 public class ChangeDistillerBottomUpMatcher implements Matcher, Configurable {
 
-    private static final double STRUCT_SIM_THRESHOLD_1 = 0.6;
+    private static final double DEFAULT_STRUCT_SIM_THRESHOLD_1 = 0.6;
 
-    private static final double STRUCT_SIM_THRESHOLD_2 = 0.4;
+    private static final double DEFAULT_STRUCT_SIM_THRESHOLD_2 = 0.4;
 
-    private static final int MAX_NUMBER_OF_LEAVES = 4;
+    private static final int DEFAULT_MAX_NUMBER_OF_LEAVES = 4;
 
-    protected double struct_sim_threshold_1 = STRUCT_SIM_THRESHOLD_1;
+    protected double struct_sim_threshold_1 = DEFAULT_STRUCT_SIM_THRESHOLD_1;
 
-    protected double struct_sim_threshold_2 = STRUCT_SIM_THRESHOLD_1;
+    protected double struct_sim_threshold_2 = DEFAULT_STRUCT_SIM_THRESHOLD_1;
 
-    protected int max_number_of_leaves = MAX_NUMBER_OF_LEAVES;
+    protected int max_number_of_leaves = DEFAULT_MAX_NUMBER_OF_LEAVES;
 
     public ChangeDistillerBottomUpMatcher() {
 
@@ -53,11 +53,13 @@ public class ChangeDistillerBottomUpMatcher implements Matcher, Configurable {
 
     @Override
     public void configure(GumTreeProperties properties) {
-        struct_sim_threshold_1 = properties.tryConfigure(ConfigurationOptions.GT_CD_SSIM1, STRUCT_SIM_THRESHOLD_1);
+        struct_sim_threshold_1 = properties.tryConfigure(ConfigurationOptions.GT_CD_SSIM1,
+                DEFAULT_STRUCT_SIM_THRESHOLD_1);
 
-        struct_sim_threshold_2 = properties.tryConfigure(ConfigurationOptions.GT_CD_SSIM2, STRUCT_SIM_THRESHOLD_2);
+        struct_sim_threshold_2 = properties.tryConfigure(ConfigurationOptions.GT_CD_SSIM2,
+                DEFAULT_STRUCT_SIM_THRESHOLD_2);
 
-        max_number_of_leaves = properties.tryConfigure(ConfigurationOptions.GT_CD_ML, MAX_NUMBER_OF_LEAVES);
+        max_number_of_leaves = properties.tryConfigure(ConfigurationOptions.GT_CD_ML, DEFAULT_MAX_NUMBER_OF_LEAVES);
 
     }
 

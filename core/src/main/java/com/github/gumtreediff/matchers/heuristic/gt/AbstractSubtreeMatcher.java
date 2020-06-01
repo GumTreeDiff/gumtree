@@ -36,9 +36,9 @@ import com.github.gumtreediff.tree.ITree;
 import com.google.common.collect.Sets;
 
 public abstract class AbstractSubtreeMatcher implements Matcher, Configurable {
-    private static final int MIN_HEIGHT = 2;
+    private static final int DEFAULT_MIN_HEIGHT = 2;
 
-    protected int min_height = MIN_HEIGHT;
+    protected int min_height = DEFAULT_MIN_HEIGHT;
 
     protected ITree src;
     protected ITree dst;

@@ -41,9 +41,9 @@ import com.google.common.collect.Sets;
 
 public class SimpleBottomUpMatcher implements Matcher, Configurable {
 
-    private static final double SIM_THRESHOLD = 0.4;
+    private static final double DEFAULT_SIM_THRESHOLD = 0.4;
 
-    protected double sim_threshold = SIM_THRESHOLD;
+    protected double sim_threshold = DEFAULT_SIM_THRESHOLD;
 
     public SimpleBottomUpMatcher() {
 
