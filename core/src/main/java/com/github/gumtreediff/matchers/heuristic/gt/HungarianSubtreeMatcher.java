@@ -20,88 +20,84 @@
 
 package com.github.gumtreediff.matchers.heuristic.gt;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.utils.HungarianAlgorithm;
-import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.ITree;
-
-import java.util.*;
+import com.github.gumtreediff.utils.HungarianAlgorithm;
 
 public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements Matcher {
+
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        HungarianSubtreeMatcher.Implementation impl =  new HungarianSubtreeMatcher.Implementation(src, dst, mappings);
-        impl.match();
-        return impl.mappings;
-    }
-
-    protected static class Implementation extends AbstractSubtreeMatcher.Implementation {
-        public Implementation(ITree src, ITree dst, MappingStore mappings) {
-            super(src, dst, mappings);
-        }
-
-        public void filterMappings(MultiMappingStore multiMappings) {
-            List<MultiMappingStore> ambiguousList = new ArrayList<>();
-            Set<ITree> ignored = new HashSet<>();
-            for (ITree src : multiMappings.allMappedSrcs())
-                if (multiMappings.isSrcUnique(src))
-                    mappings.addMappingRecursively(src, multiMappings.getDsts(src).iterator().next());
-                else if (!ignored.contains(src)) {
-                    MultiMappingStore ambiguous = new MultiMappingStore();
-                    Set<ITree> adsts = multiMappings.getDsts(src);
-                    Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
-                    for (ITree asrc : asrcs)
-                        for (ITree adst : adsts)
-                            ambiguous.addMapping(asrc, adst);
-                    ambiguousList.add(ambiguous);
-                    ignored.addAll(asrcs);
-                }
-
-            Collections.sort(ambiguousList, new MultiMappingComparator());
-
-            for (MultiMappingStore ambiguous : ambiguousList) {
-                System.out.println("hungarian try.");
-                List<ITree> lstSrcs = new ArrayList<>(ambiguous.allMappedSrcs());
-                List<ITree> lstDsts = new ArrayList<>(ambiguous.allMappedDsts());
-                double[][] matrix = new double[lstSrcs.size()][lstDsts.size()];
-                for (int i = 0; i < lstSrcs.size(); i++)
-                    for (int j = 0; j < lstDsts.size(); j++)
-                        matrix[i][j] = cost(lstSrcs.get(i), lstDsts.get(j));
-
-                HungarianAlgorithm hgAlg = new HungarianAlgorithm(matrix);
-                int[] solutions = hgAlg.execute();
-                for (int i = 0; i < solutions.length; i++) {
-                    int dstIdx = solutions[i];
-                    if (dstIdx != -1)
-                        mappings.addMappingRecursively(lstSrcs.get(i), lstDsts.get(dstIdx));
-                }
-            }
-        }
-
-        private double cost(ITree src, ITree dst) {
-            return 111D - sim(src, dst);
-        }
-
-        private static class MultiMappingComparator implements Comparator<MultiMappingStore> {
-
-            @Override
-            public int compare(MultiMappingStore m1, MultiMappingStore m2) {
-                return Integer.compare(impact(m1), impact(m2));
+    public void filterMappings(MultiMappingStore multiMappings) {
+        List<MultiMappingStore> ambiguousList = new ArrayList<>();
+        Set<ITree> ignored = new HashSet<>();
+        for (ITree src : multiMappings.allMappedSrcs())
+            if (multiMappings.isSrcUnique(src))
+                mappings.addMappingRecursively(src, multiMappings.getDsts(src).iterator().next());
+            else if (!ignored.contains(src)) {
+                MultiMappingStore ambiguous = new MultiMappingStore();
+                Set<ITree> adsts = multiMappings.getDsts(src);
+                Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
+                for (ITree asrc : asrcs)
+                    for (ITree adst : adsts)
+                        ambiguous.addMapping(asrc, adst);
+                ambiguousList.add(ambiguous);
+                ignored.addAll(asrcs);
             }
 
-            public int impact(MultiMappingStore m) {
-                int impact = 0;
-                for (ITree src : m.allMappedSrcs()) {
-                    int pSize = src.getParents().size();
-                    if (pSize > impact) impact = pSize;
-                }
-                for (ITree src : m.allMappedDsts()) {
-                    int pSize = src.getParents().size();
-                    if (pSize > impact) impact = pSize;
-                }
-                return impact;
+        Collections.sort(ambiguousList, new MultiMappingComparator());
+
+        for (MultiMappingStore ambiguous : ambiguousList) {
+            System.out.println("hungarian try.");
+            List<ITree> lstSrcs = new ArrayList<>(ambiguous.allMappedSrcs());
+            List<ITree> lstDsts = new ArrayList<>(ambiguous.allMappedDsts());
+            double[][] matrix = new double[lstSrcs.size()][lstDsts.size()];
+            for (int i = 0; i < lstSrcs.size(); i++)
+                for (int j = 0; j < lstDsts.size(); j++)
+                    matrix[i][j] = cost(lstSrcs.get(i), lstDsts.get(j));
+
+            HungarianAlgorithm hgAlg = new HungarianAlgorithm(matrix);
+            int[] solutions = hgAlg.execute();
+            for (int i = 0; i < solutions.length; i++) {
+                int dstIdx = solutions[i];
+                if (dstIdx != -1)
+                    mappings.addMappingRecursively(lstSrcs.get(i), lstDsts.get(dstIdx));
             }
         }
     }
+
+    private double cost(ITree src, ITree dst) {
+        return 111D - sim(src, dst);
+    }
+
+    private static class MultiMappingComparator implements Comparator<MultiMappingStore> {
+
+        @Override
+        public int compare(MultiMappingStore m1, MultiMappingStore m2) {
+            return Integer.compare(impact(m1), impact(m2));
+        }
+
+        public int impact(MultiMappingStore m) {
+            int impact = 0;
+            for (ITree src : m.allMappedSrcs()) {
+                int pSize = src.getParents().size();
+                if (pSize > impact)
+                    impact = pSize;
+            }
+            for (ITree src : m.allMappedDsts()) {
+                int pSize = src.getParents().size();
+                if (pSize > impact)
+                    impact = pSize;
+            }
+            return impact;
+        }
+    }
+
 }
