@@ -177,7 +177,7 @@ class TestGumTreeProperties {
     }
 
     @Test
-    void testValidOptionMatcher() throws Exception {
+    void testValidOptionMatcher() {
 
         SimpleBottomUpMatcher matcher = new SimpleBottomUpMatcher();
 

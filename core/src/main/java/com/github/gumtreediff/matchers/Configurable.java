@@ -32,9 +32,9 @@ public interface Configurable {
         return Sets.newHashSet();
     }
 
-    public default void setOption(ConfigurationOptions option, Object value) throws Exception {
+    public default void setOption(ConfigurationOptions option, Object value) {
         if (!getApplicableOptions().contains(option))
-            throw new Exception(
+            throw new RuntimeException(
                     "Option " + option.name() + " is not allowed. Applicable options are: " + getApplicableOptions());
 
         GumTreeProperties properties = new GumTreeProperties();
