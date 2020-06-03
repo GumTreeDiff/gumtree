@@ -20,18 +20,30 @@
 
 package com.github.gumtreediff.matchers;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerParallelLeavesMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.*;
-import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.CliqueSubtreeMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.SimpleBottomUpMatcher;
 import com.github.gumtreediff.matchers.optimal.rted.RtedMatcher;
-import com.github.gumtreediff.matchers.optimizations.*;
+import com.github.gumtreediff.matchers.optimizations.CrossMoveMatcherThetaF;
+import com.github.gumtreediff.matchers.optimizations.IdenticalSubtreeMatcherThetaA;
+import com.github.gumtreediff.matchers.optimizations.InnerNodesMatcherThetaD;
+import com.github.gumtreediff.matchers.optimizations.LcsOptMatcherThetaB;
+import com.github.gumtreediff.matchers.optimizations.LeafMoveMatcherThetaE;
+import com.github.gumtreediff.matchers.optimizations.UnmappedLeavesMatcherThetaC;
 import com.github.gumtreediff.tree.ITree;
 
 public class CompositeMatchers {
-    public static class CompositeMatcher implements Matcher {
+    public static class CompositeMatcher implements ConfigurableMatcher {
         protected final Matcher[] matchers;
 
         public CompositeMatcher(Matcher... matchers) {
@@ -44,6 +56,19 @@ public class CompositeMatchers {
                 mappings = matcher.match(src, dst, mappings);
 
             return mappings;
+        }
+
+        @Override
+        public void configure(GumTreeProperties properties) {
+            for (Matcher matcher : matchers) {
+                if (matcher instanceof Configurable) {
+                    ((Configurable) matcher).configure(properties);
+                }
+            }
+        }
+
+        public List<Matcher> matchers() {
+            return Arrays.asList(matchers);
         }
     }
 
@@ -87,14 +112,9 @@ public class CompositeMatchers {
     @Register(id = "cdabcdefseq")
     public static class CdabcdefSeq extends CompositeMatcher {
         public CdabcdefSeq() {
-            super(new IdenticalSubtreeMatcherThetaA(),
-                    new ChangeDistillerLeavesMatcher(),
-                    new ChangeDistillerBottomUpMatcher(),
-                    new LcsOptMatcherThetaB(),
-                    new UnmappedLeavesMatcherThetaC(),
-                    new InnerNodesMatcherThetaD(),
-                    new LeafMoveMatcherThetaE(),
-                    new CrossMoveMatcherThetaF());
+            super(new IdenticalSubtreeMatcherThetaA(), new ChangeDistillerLeavesMatcher(),
+                    new ChangeDistillerBottomUpMatcher(), new LcsOptMatcherThetaB(), new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(), new LeafMoveMatcherThetaE(), new CrossMoveMatcherThetaF());
         }
     }
 
@@ -104,14 +124,9 @@ public class CompositeMatchers {
          * Instantiates the parallel ChangeDistiller version with Theta A-F.
          */
         public CdabcdefPar() {
-            super(new IdenticalSubtreeMatcherThetaA(),
-                    new ChangeDistillerParallelLeavesMatcher(),
-                    new ChangeDistillerBottomUpMatcher(),
-                    new LcsOptMatcherThetaB(),
-                    new UnmappedLeavesMatcherThetaC(),
-                    new InnerNodesMatcherThetaD(),
-                    new LeafMoveMatcherThetaE(),
-                    new CrossMoveMatcherThetaF());
+            super(new IdenticalSubtreeMatcherThetaA(), new ChangeDistillerParallelLeavesMatcher(),
+                    new ChangeDistillerBottomUpMatcher(), new LcsOptMatcherThetaB(), new UnmappedLeavesMatcherThetaC(),
+                    new InnerNodesMatcherThetaD(), new LeafMoveMatcherThetaE(), new CrossMoveMatcherThetaF());
         }
     }
 
@@ -121,12 +136,8 @@ public class CompositeMatchers {
          * Instantiates GumTree with Theta B-F.
          */
         public Gtbcdef() {
-            super(new GreedySubtreeMatcher(),
-                    new GreedyBottomUpMatcher(),
-                    new LcsOptMatcherThetaB(),
-                    new UnmappedLeavesMatcherThetaC(),
-                    new InnerNodesMatcherThetaD(),
-                    new LeafMoveMatcherThetaE(),
+            super(new GreedySubtreeMatcher(), new GreedyBottomUpMatcher(), new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(), new InnerNodesMatcherThetaD(), new LeafMoveMatcherThetaE(),
                     new CrossMoveMatcherThetaF());
         }
     }
@@ -137,12 +148,8 @@ public class CompositeMatchers {
          * Instantiates RTED with Theta A-F.
          */
         public Rtedacdef() {
-            super(new IdenticalSubtreeMatcherThetaA(),
-                    new RtedMatcher(),
-                    new LcsOptMatcherThetaB(),
-                    new UnmappedLeavesMatcherThetaC(),
-                    new InnerNodesMatcherThetaD(),
-                    new LeafMoveMatcherThetaE(),
+            super(new IdenticalSubtreeMatcherThetaA(), new RtedMatcher(), new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(), new InnerNodesMatcherThetaD(), new LeafMoveMatcherThetaE(),
                     new CrossMoveMatcherThetaF());
         }
     }

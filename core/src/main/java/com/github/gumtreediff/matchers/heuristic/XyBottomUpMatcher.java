@@ -27,11 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Type;
@@ -45,7 +44,7 @@ import com.google.common.collect.Sets;
  * are mapped a exact ZS algorithm is applied to look to possibly forgotten
  * nodes.
  */
-public class XyBottomUpMatcher implements Matcher, Configurable {
+public class XyBottomUpMatcher implements ConfigurableMatcher {
 
     private static final double DEFAULT_SIM_THRESHOLD = 0.5;
 

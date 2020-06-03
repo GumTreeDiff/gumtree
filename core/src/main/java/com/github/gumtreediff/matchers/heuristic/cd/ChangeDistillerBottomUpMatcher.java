@@ -23,17 +23,16 @@ package com.github.gumtreediff.matchers.heuristic.cd;
 import java.util.List;
 import java.util.Set;
 
-import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.google.common.collect.Sets;
 
-public class ChangeDistillerBottomUpMatcher implements Matcher, Configurable {
+public class ChangeDistillerBottomUpMatcher implements ConfigurableMatcher {
 
     private static final double DEFAULT_STRUCT_SIM_THRESHOLD_1 = 0.6;
 

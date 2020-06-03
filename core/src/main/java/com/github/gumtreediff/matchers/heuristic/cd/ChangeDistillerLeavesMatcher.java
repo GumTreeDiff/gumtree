@@ -30,17 +30,16 @@ import java.util.Set;
 
 import org.simmetrics.StringMetrics;
 
-import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.google.common.collect.Sets;
 
-public class ChangeDistillerLeavesMatcher implements Matcher, Configurable {
+public class ChangeDistillerLeavesMatcher implements ConfigurableMatcher {
 
     private static final double DEFAULT_LABEL_SIM_THRESHOLD = 0.5;
 

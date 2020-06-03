@@ -36,12 +36,11 @@ import java.util.concurrent.TimeUnit;
 
 import org.simmetrics.StringMetrics;
 
-import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.google.common.collect.Sets;
@@ -49,7 +48,7 @@ import com.google.common.collect.Sets;
 /**
  * Parallel variant of the ChangeDistiller leaves matcher.
  */
-public class ChangeDistillerParallelLeavesMatcher implements Matcher, Configurable {
+public class ChangeDistillerParallelLeavesMatcher implements ConfigurableMatcher {
     private static final double DEFAULT_LABEL_SIM_THRESHOLD = 0.5;
 
     protected double label_sim_threshold = DEFAULT_LABEL_SIM_THRESHOLD;

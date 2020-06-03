@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
@@ -35,7 +35,7 @@ import com.github.gumtreediff.matchers.optimal.zs.ZsMatcher;
 import com.github.gumtreediff.tree.ITree;
 import com.google.common.collect.Sets;
 
-public abstract class AbstractBottomUpMatcher implements Matcher, Configurable {
+public abstract class AbstractBottomUpMatcher implements ConfigurableMatcher {
 
     private static final int DEFAULT_SIZE_THRESHOLD = 1000;
     private static final double DEFAULT_SIM_THRESHOLD = 0.5;

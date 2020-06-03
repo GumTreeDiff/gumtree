@@ -24,18 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.google.common.collect.Sets;
 
-public abstract class AbstractSubtreeMatcher implements Matcher, Configurable {
+public abstract class AbstractSubtreeMatcher implements ConfigurableMatcher {
     private static final int DEFAULT_MIN_HEIGHT = 2;
 
     protected int min_height = DEFAULT_MIN_HEIGHT;
