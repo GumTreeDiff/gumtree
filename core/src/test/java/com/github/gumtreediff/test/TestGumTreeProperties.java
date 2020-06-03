@@ -25,18 +25,25 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
+import com.github.gumtreediff.matchers.CompositeMatchers;
+import com.github.gumtreediff.matchers.CompositeMatchers.CompositeMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.AbstractSubtreeMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.SimpleBottomUpMatcher;
 
@@ -201,6 +208,49 @@ class TestGumTreeProperties {
         } catch (Exception e) {
             assertEquals(originalValue, matcher.getSim_threshold());
         }
+
+    }
+
+    @Test
+    public void testCompositeMatcher() {
+
+        CompositeMatcher composite = new CompositeMatchers.ClassicGumtree();
+        List<Matcher> matchers = composite.matchers();
+
+        Stream<Matcher> greedyMatchers = matchers.stream().filter(e -> e instanceof GreedySubtreeMatcher);
+        Optional<GreedySubtreeMatcher> opGreedySubTree = greedyMatchers.map(obj -> (GreedySubtreeMatcher) obj)
+                .findAny();
+
+        assertTrue(opGreedySubTree.isPresent());
+
+        int newMHvalue = 99999;
+        assertNotEquals(newMHvalue, opGreedySubTree.get().getMin_height());
+
+        GumTreeProperties properties = new GumTreeProperties();
+        properties.put(ConfigurationOptions.GT_STM_MH, newMHvalue);
+
+        composite.configure(properties);
+
+        assertEquals(newMHvalue, opGreedySubTree.get().getMin_height());
+
+        Stream<Matcher> greedyBottomMatchers = matchers.stream().filter(e -> e instanceof GreedyBottomUpMatcher);
+
+        Optional<GreedyBottomUpMatcher> opGreedyBottomUp = greedyBottomMatchers.map(obj -> (GreedyBottomUpMatcher) obj)
+                .findAny();
+
+        assertTrue(opGreedyBottomUp.isPresent());
+
+        final int newSizeThrvalue = 989898;
+        assertNotEquals(newSizeThrvalue, opGreedyBottomUp.get().getSize_threshold());
+
+        properties.put(ConfigurationOptions.GT_BUM_SZT, newSizeThrvalue);
+
+        double originalSimThr = opGreedyBottomUp.get().getSim_threshold();
+
+        composite.configure(properties);
+
+        assertEquals(newSizeThrvalue, opGreedyBottomUp.get().getSize_threshold());
+        assertEquals(originalSimThr, opGreedyBottomUp.get().getSim_threshold());
 
     }
 

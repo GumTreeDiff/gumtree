@@ -27,11 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.github.gumtreediff.matchers.Configurable;
+import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
@@ -39,7 +38,7 @@ import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
 import com.google.common.collect.Sets;
 
-public class SimpleBottomUpMatcher implements Matcher, Configurable {
+public class SimpleBottomUpMatcher implements ConfigurableMatcher {
 
     private static final double DEFAULT_SIM_THRESHOLD = 0.4;
 

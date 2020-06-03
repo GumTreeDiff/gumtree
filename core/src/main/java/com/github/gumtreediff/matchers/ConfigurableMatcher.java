@@ -14,28 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
- * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2011-2016 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2011-2016 Floréal Morandat <florealm@gmail.com>
  */
-
 package com.github.gumtreediff.matchers;
 
-import org.atteo.classindex.IndexSubclasses;
+public interface ConfigurableMatcher extends Matcher, Configurable {
 
-import com.github.gumtreediff.tree.ITree;
-
-/**
- * Interface for matchers that produce mappings between the nodes of a src and
- * dst tree.
- *
- * @see MappingStore
- * @see ITree
- */
-@IndexSubclasses
-public interface Matcher {
-    MappingStore match(ITree src, ITree dst, MappingStore mappings);
-
-    default MappingStore match(ITree src, ITree dst) {
-        return match(src, dst, new MappingStore(src, dst));
-    }
 }
