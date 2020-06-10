@@ -21,7 +21,6 @@
 package com.github.gumtreediff.matchers;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,6 +45,10 @@ import com.github.gumtreediff.matchers.optimizations.UnmappedLeavesMatcherThetaC
 import com.github.gumtreediff.tree.ITree;
 import com.google.common.collect.Sets;
 
+/**
+ * A class defining the CompositeMatcher class, which is a pipeline of matchers.
+ * Using this class, several matchers are then defined.
+ */
 public class CompositeMatchers {
     public static class CompositeMatcher implements ConfigurableMatcher {
         protected final Matcher[] matchers;
@@ -78,31 +81,32 @@ public class CompositeMatchers {
         @Override
         public Set<ConfigurationOptions> getApplicableOptions() {
             Set<ConfigurationOptions> allOptions = Sets.newHashSet();
-            for (Matcher matcher : matchers) {
-                if (matcher instanceof Configurable) {
+            for (Matcher matcher : matchers)
+                if (matcher instanceof Configurable)
                     allOptions.addAll(((Configurable) matcher).getApplicableOptions());
-                }
-
-            }
 
             return allOptions;
         }
-
     }
 
     @Register(id = "gumtree", defaultMatcher = true, priority = Registry.Priority.HIGH)
     public static class ClassicGumtree extends CompositeMatcher {
-
         public ClassicGumtree() {
             super(new GreedySubtreeMatcher(), new GreedyBottomUpMatcher());
         }
     }
 
-    @Register(id = "gumtree-simple", defaultMatcher = true, priority = Registry.Priority.HIGH)
+    @Register(id = "gumtree-simple")
     public static class SimpleGumtree extends CompositeMatcher {
-
         public SimpleGumtree() {
             super(new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
+        }
+    }
+
+    @Register(id = "gumtree-simple-id")
+    public static class SimpleIdGumtree extends CompositeMatcher {
+        public SimpleIdGumtree() {
+            super(new IdMatcher(), new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
         }
     }
 
