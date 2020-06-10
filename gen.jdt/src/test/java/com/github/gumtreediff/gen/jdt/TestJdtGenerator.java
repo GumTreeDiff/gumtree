@@ -133,4 +133,14 @@ public class TestJdtGenerator {
         TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
         System.out.println(ct2.getRoot().toTreeString());
     }
+
+    @Test
+    public void testIds() throws IOException {
+        String input = "class Foo { String a; void foo(int a, String b) {}; void bar() { } }";
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        assertEquals(ct.getRoot().getChild(0).getMetadata("id"), "Type Foo");
+        assertEquals(ct.getRoot().getChild("0.2").getMetadata("id"), "Field a");
+        assertEquals(ct.getRoot().getChild("0.3").getMetadata("id"), "Method foo( int String)");
+        assertEquals(ct.getRoot().getChild("0.4").getMetadata("id"), "Method bar()");
+    }
 }

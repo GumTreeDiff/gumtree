@@ -80,7 +80,9 @@ public class SimpleBottomUpMatcher implements ConfigurableMatcher {
                     lastChanceMatch(mappings, t, best);
                     mappings.addMapping(t, best);
                 }
-            }
+            } else if (mappings.isSrcMapped(t) && mappings.hasUnmappedSrcChildren(t)
+                       && mappings.hasUnmappedDstChildren(mappings.getDstForSrc(t)))
+                lastChanceMatch(mappings, t, mappings.getDstForSrc(t));
         }
         return mappings;
     }

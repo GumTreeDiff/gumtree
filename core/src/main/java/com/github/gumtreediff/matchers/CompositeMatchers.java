@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.matchers.heuristic.IdMatcher;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
@@ -84,7 +85,7 @@ public class CompositeMatchers {
     public static class SimpleGumtree extends CompositeMatcher {
 
         public SimpleGumtree() {
-            super(new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
+            super(new IdMatcher(), new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
         }
     }
 

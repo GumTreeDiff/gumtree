@@ -59,7 +59,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
 
     public boolean visit(MethodInvocation i)  {
         if (i.getExpression() !=  null) {
-            push(METHOD_INVOCATION_RECEIVER, "", i.getExpression().getStartPosition(),
+            push(i, METHOD_INVOCATION_RECEIVER, "", i.getExpression().getStartPosition(),
                     i.getExpression().getLength());
             i.getExpression().accept(this);
             popNode();
@@ -70,7 +70,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             int startPos = ((ASTNode) i.arguments().get(0)).getStartPosition();
             int length = ((ASTNode) i.arguments().get(i.arguments().size() - 1)).getStartPosition()
                     + ((ASTNode) i.arguments().get(i.arguments().size() - 1)).getLength() -  startPos;
-            push(METHOD_INVOCATION_ARGUMENTS,"", startPos , length);
+            push(i, METHOD_INVOCATION_ARGUMENTS,"", startPos , length);
             for (Object o : i.arguments()) {
                 ((ASTNode) o).accept(this);
 

@@ -22,11 +22,13 @@ package com.github.gumtreediff.gen.jdt;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 
 import com.github.gumtreediff.gen.jdt.cd.EntityType;
 import com.github.gumtreediff.tree.*;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTVisitor;
+import com.github.gumtreediff.tree.Type;
+import org.eclipse.jdt.core.Signature;
+import org.eclipse.jdt.core.dom.*;
 
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
@@ -48,15 +50,15 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
     }
 
     protected void pushNode(ASTNode n, String label) {
-        push(nodeAsSymbol(n), label, n.getStartPosition(), n.getLength());
+        push(n, nodeAsSymbol(n), label, n.getStartPosition(), n.getLength());
     }
 
     protected void pushFakeNode(EntityType n, int startPosition, int length) {
         Type type = type(n.name()); // FIXME is that consistent with AbstractJDTVisitor.type
-        push(type,"", startPosition, length);
+        push(null, type,"", startPosition, length);
     }
 
-    protected void push(Type type, String label, int startPosition, int length) {
+    protected void push(ASTNode n, Type type, String label, int startPosition, int length) {
         ITree t = context.createTree(type, label);
         t.setPos(startPosition);
         t.setLength(length);
@@ -68,7 +70,38 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
             t.setParentAndUpdateChildren(parent);
         }
 
+        if (n instanceof TypeDeclaration)
+            t.setMetadata("id", getId((TypeDeclaration) n));
+        else if (n instanceof MethodDeclaration)
+            t.setMetadata("id", getId((MethodDeclaration) n));
+        else if (n instanceof FieldDeclaration)
+            t.setMetadata("id", getId((FieldDeclaration) n));
+        else if (n instanceof EnumDeclaration)
+            t.setMetadata("id", getId((EnumDeclaration) n));
+
         trees.push(t);
+    }
+
+    private String getId(TypeDeclaration d) {
+        return "Type " + d.getName();
+    }
+
+    private String getId(EnumDeclaration d) {
+        return "Enum " + d.getName();
+    }
+
+    private String getId(MethodDeclaration d) {
+        StringBuilder b = new StringBuilder();
+        b.append("Method ");
+        b.append(d.getName() + "(");
+        for (SingleVariableDeclaration v : (List<SingleVariableDeclaration>) d.parameters())
+            b.append(" " + v.getType().toString());
+        b.append(")");
+        return b.toString();
+    }
+
+    private String getId(FieldDeclaration d) {
+        return "Field " + ((VariableDeclarationFragment) d.fragments().get(0)).getName();
     }
 
     protected ITree getCurrentParent() {

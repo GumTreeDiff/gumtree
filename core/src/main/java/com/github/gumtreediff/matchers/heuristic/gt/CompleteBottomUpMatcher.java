@@ -39,7 +39,6 @@ import com.github.gumtreediff.tree.ITree;
 public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher implements Matcher {
     @Override
     public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-
         for (ITree t : src.postOrder()) {
             if (t.isRoot()) {
                 mappings.addMapping(t, dst);
@@ -73,5 +72,4 @@ public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher implements 
         }
         return mappings;
     }
-
 }
