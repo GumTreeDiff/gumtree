@@ -65,7 +65,9 @@ public class JavaParserVisitor extends TreeVisitor {
     @Override
     public void process(Node node) {
         String label = "";
-        if (node instanceof SimpleName)
+        if (node instanceof Name)
+            label = ((Name) node).getIdentifier(); //FIXME: might be better to flatten name hierarchies.
+        else if (node instanceof SimpleName)
             label = ((SimpleName) node).getIdentifier();
         else if (node instanceof StringLiteralExpr)
             label = ((StringLiteralExpr) node).asString();
@@ -77,6 +79,7 @@ public class JavaParserVisitor extends TreeVisitor {
             label = ((PrimitiveType) node).asString();
         else if (node instanceof Modifier)
             label = ((Modifier) node).getKeyword().asString();
+
         pushNode(node, label);
     }
 

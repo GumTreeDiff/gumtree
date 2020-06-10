@@ -42,8 +42,8 @@ public class TestJavaParserGenerator {
 
     static Stream<Arguments> provideStringAndExpectedLength() {
         return Stream.of(
-                arguments(COMPILATION_UNIT, 9,
-                        "public class Foo { public int foo; }"),
+                arguments(COMPILATION_UNIT, 12,
+                        "package foo.bar; public class Foo { public int foo; }"),
                 arguments(COMPILATION_UNIT, 37, // Java 5
                         "public class Foo<A> { public List<A> foo; public void foo() "
                                 + "{ for (A f : foo) { System.out.println(f); } } }"),
