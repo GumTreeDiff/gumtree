@@ -22,6 +22,7 @@ package com.github.gumtreediff.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -251,6 +252,21 @@ class TestGumTreeProperties {
 
         assertEquals(newSizeThrvalue, opGreedyBottomUp.get().getSize_threshold());
         assertEquals(originalSimThr, opGreedyBottomUp.get().getSim_threshold());
+
+        assertNotNull(composite.getApplicableOptions());
+        assertFalse(composite.getApplicableOptions().isEmpty());
+
+        int optionsFromGreedySubMatcher = opGreedySubTree.get().getApplicableOptions().size();
+        assertEquals(1, optionsFromGreedySubMatcher);
+
+        int optionsFromGreedyBottomUpMatcher = opGreedyBottomUp.get().getApplicableOptions().size();
+        assertEquals(2, optionsFromGreedyBottomUpMatcher);
+
+        assertEquals((optionsFromGreedySubMatcher + optionsFromGreedyBottomUpMatcher),
+                composite.getApplicableOptions().size());
+
+        assertTrue(composite.getApplicableOptions().containsAll(opGreedySubTree.get().getApplicableOptions()));
+        assertTrue(composite.getApplicableOptions().containsAll(opGreedyBottomUp.get().getApplicableOptions()));
 
     }
 
