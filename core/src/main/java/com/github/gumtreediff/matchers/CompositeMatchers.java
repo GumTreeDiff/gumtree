@@ -21,7 +21,9 @@
 package com.github.gumtreediff.matchers;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
@@ -41,6 +43,7 @@ import com.github.gumtreediff.matchers.optimizations.LcsOptMatcherThetaB;
 import com.github.gumtreediff.matchers.optimizations.LeafMoveMatcherThetaE;
 import com.github.gumtreediff.matchers.optimizations.UnmappedLeavesMatcherThetaC;
 import com.github.gumtreediff.tree.ITree;
+import com.google.common.collect.Sets;
 
 public class CompositeMatchers {
     public static class CompositeMatcher implements ConfigurableMatcher {
@@ -70,6 +73,20 @@ public class CompositeMatchers {
         public List<Matcher> matchers() {
             return Arrays.asList(matchers);
         }
+
+        @Override
+        public Set<ConfigurationOptions> getApplicableOptions() {
+            Set<ConfigurationOptions> allOptions = Sets.newHashSet();
+            for (Matcher matcher : matchers) {
+                if (matcher instanceof Configurable) {
+                    allOptions.addAll(((Configurable) matcher).getApplicableOptions());
+                }
+
+            }
+
+            return allOptions;
+        }
+
     }
 
     @Register(id = "gumtree", defaultMatcher = true, priority = Registry.Priority.HIGH)
