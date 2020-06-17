@@ -126,7 +126,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
             double[] sims2 = simMap.get(m2);
             for (int i = 0; i < sims1.length; i++) {
                 if (sims1[i] != sims2[i])
-                    return -1 * Double.compare(sims2[i], sims2[i]);
+                    return -1 * Double.compare(sims1[i], sims2[i]); //FIXME: ensure the order is correct
             }
             return 0;
         }
