@@ -44,6 +44,10 @@ public class Matchers extends Registry<String, Matcher, Register> {
         install(CompositeMatchers.ChangeDistiller.class);
         install(CompositeMatchers.XyMatcher.class);
         install(LcsMatcher.class);
+        install(CompositeMatchers.ClassicGumtreeTheta.class);
+        install(CompositeMatchers.Theta.class);
+        install(CompositeMatchers.ChangeDistillerTheta.class);
+        install(CompositeMatchers.SimpleIdGumtreeTheta.class);
     }
 
     private void install(Class<? extends Matcher> clazz) {

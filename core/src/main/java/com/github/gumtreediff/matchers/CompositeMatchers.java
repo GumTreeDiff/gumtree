@@ -131,45 +131,57 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "cdabcdefseq")
-    public static class CdabcdefSeq extends CompositeMatcher {
-        public CdabcdefSeq() {
+    @Register(id = "theta")
+    public static class Theta extends CompositeMatcher {
+        public Theta() {
             super(new IdenticalSubtreeMatcherThetaA(), new ChangeDistillerLeavesMatcher(),
                     new ChangeDistillerBottomUpMatcher(), new LcsOptMatcherThetaB(), new UnmappedLeavesMatcherThetaC(),
                     new InnerNodesMatcherThetaD(), new LeafMoveMatcherThetaE(), new CrossMoveMatcherThetaF());
         }
     }
 
-    @Register(id = "cdabcdefpar")
-    public static class CdabcdefPar extends CompositeMatcher {
+    @Register(id = "change-distiller-theta")
+    public static class ChangeDistillerTheta extends CompositeMatcher {
         /**
          * Instantiates the parallel ChangeDistiller version with Theta A-F.
          */
-        public CdabcdefPar() {
+        public ChangeDistillerTheta() {
             super(new IdenticalSubtreeMatcherThetaA(), new ChangeDistillerParallelLeavesMatcher(),
                     new ChangeDistillerBottomUpMatcher(), new LcsOptMatcherThetaB(), new UnmappedLeavesMatcherThetaC(),
                     new InnerNodesMatcherThetaD(), new LeafMoveMatcherThetaE(), new CrossMoveMatcherThetaF());
         }
     }
 
-    @Register(id = "gtbcdef")
-    public static class Gtbcdef extends CompositeMatcher {
+    @Register(id = "classic-gumtree-theta")
+    public static class ClassicGumtreeTheta extends CompositeMatcher {
         /**
          * Instantiates GumTree with Theta B-F.
          */
-        public Gtbcdef() {
+        public ClassicGumtreeTheta() {
             super(new GreedySubtreeMatcher(), new GreedyBottomUpMatcher(), new LcsOptMatcherThetaB(),
                     new UnmappedLeavesMatcherThetaC(), new InnerNodesMatcherThetaD(), new LeafMoveMatcherThetaE(),
                     new CrossMoveMatcherThetaF());
         }
     }
 
-    @Register(id = "rtedacdef")
-    public static class Rtedacdef extends CompositeMatcher {
+    @Register(id = "gumtree-simple-id-theta")
+    public static class SimpleIdGumtreeTheta extends CompositeMatcher {
+        /**
+         * Instantiates GumTree with Theta B-F.
+         */
+        public SimpleIdGumtreeTheta() {
+            super(new IdMatcher(), new GreedySubtreeMatcher(), new SimpleBottomUpMatcher(), new LcsOptMatcherThetaB(),
+                    new UnmappedLeavesMatcherThetaC(), new InnerNodesMatcherThetaD(), new LeafMoveMatcherThetaE(),
+                    new CrossMoveMatcherThetaF());
+        }
+    }
+
+    @Register(id = "rted-theta")
+    public static class RtedTheta extends CompositeMatcher {
         /**
          * Instantiates RTED with Theta A-F.
          */
-        public Rtedacdef() {
+        public RtedTheta() {
             super(new IdenticalSubtreeMatcherThetaA(), new RtedMatcher(), new LcsOptMatcherThetaB(),
                     new UnmappedLeavesMatcherThetaC(), new InnerNodesMatcherThetaD(), new LeafMoveMatcherThetaE(),
                     new CrossMoveMatcherThetaF());

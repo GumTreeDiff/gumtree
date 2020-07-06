@@ -15,6 +15,7 @@
 * Update jdt, rhino and ph-css parsers
 * Fix varargs representation in JDT
 * Fix index problem in Chawathe's edit script generator
+* Theta matchers are now installed by default
 
 ## v2.1.2 (Elm)
 * New dockerfile to run GumTree

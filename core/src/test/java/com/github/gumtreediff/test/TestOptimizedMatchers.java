@@ -33,11 +33,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestOptimizedMatchers {
 
     @Test
-    public void testRtedabcdefMatcher() {
+    public void testRtedThetaMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        MappingStore mappings = new CompositeMatchers.Rtedacdef().match(src, dst);
+        MappingStore mappings = new CompositeMatchers.RtedTheta().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src, dst));
         assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
@@ -47,11 +47,11 @@ public class TestOptimizedMatchers {
     }
     
     @Test
-    public void testCdabcdefParMatcher() {
+    public void testChangeDistillerThetaParMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        MappingStore mappings = new CompositeMatchers.CdabcdefPar().match(src, dst);
+        MappingStore mappings = new CompositeMatchers.ChangeDistillerTheta().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
         assertTrue(mappings.has(src.getChild(0).getChild(0).getChild(0), dst.getChild(0).getChild(0)));
@@ -61,11 +61,11 @@ public class TestOptimizedMatchers {
     }
     
     @Test
-    public void testGtbcdefMatcher() {
+    public void testClassicGumtreeThetaMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
         ITree src = trees.first.getRoot();
         ITree dst = trees.second.getRoot();
-        MappingStore mappings = new CompositeMatchers.Rtedacdef().match(src, dst);
+        MappingStore mappings = new CompositeMatchers.ClassicGumtreeTheta().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src, dst));
         assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
