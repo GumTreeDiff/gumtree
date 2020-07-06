@@ -23,6 +23,8 @@ package com.github.gumtreediff.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.TypeSet;
 import org.junit.jupiter.api.Test;
 
 import com.github.gumtreediff.matchers.GumTreeProperties;
@@ -56,6 +58,40 @@ public class TestGumtreeMatcher {
         assertTrue(ms1.has(t1.getChild(1), t2.getChild(0)));
         assertTrue(ms1.has(t1.getChild("1.0"), t2.getChild("0.0")));
         assertTrue(ms1.has(t1.getChild("1.1"), t2.getChild("0.1")));
+    }
+
+    @Test
+    public void testSiblingMappingComparator() {
+        ITree t1 = new Tree(TypeSet.type("root"));
+        ITree a11 = new Tree(TypeSet.type("a"));
+        t1.addChild(a11);
+        ITree a12 = new Tree(TypeSet.type("a"));
+        t1.addChild(a12);
+        ITree a13 = new Tree(TypeSet.type("a"));
+        t1.addChild(a13);
+        // root
+        //     a
+        //     a
+        //     a
+
+        ITree t2 = new Tree(TypeSet.type("root"));
+        ITree a21 = new Tree(TypeSet.type("a"));
+        t2.addChild(a21);
+        ITree a22 = new Tree(TypeSet.type("a"));
+        t2.addChild(a22);
+        ITree a23 = new Tree(TypeSet.type("a"));
+        t2.addChild(a23);
+        // root
+        //     a
+        //     a
+        //     a
+
+        GreedySubtreeMatcher matcher = new GreedySubtreeMatcher();
+        matcher.setMin_height(0);
+        MappingStore ms = matcher.match(t1, t2);
+        assertTrue(ms.has(a11, a21));
+        assertTrue(ms.has(a12, a22));
+        assertTrue(ms.has(a13, a23));
     }
 
     @Test
