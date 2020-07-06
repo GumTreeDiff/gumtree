@@ -91,7 +91,7 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
             if (comparator.isDirMode())
                 response.redirect("/list");
             else
-                response.redirect("/vanilla-diff/0");
+                response.redirect("/monaco-diff/0");
             return "";
         });
         get("/list", (request, response) -> {
