@@ -12,7 +12,9 @@
 * TreeInsert and TreeDelete actions added
 * Add brand new monaco-based diff viewer
 * Improved docker container that can be integrated with git
-* Update rhino and ph-css parsers
+* Update jdt, rhino and ph-css parsers
+* Fix varargs representation in JDT
+* Fix index problem in Chawathe's edit script generator
 
 ## v2.1.2 (Elm)
 * New dockerfile to run GumTree
