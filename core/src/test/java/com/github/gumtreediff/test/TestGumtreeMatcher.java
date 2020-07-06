@@ -61,7 +61,7 @@ public class TestGumtreeMatcher {
     }
 
     @Test
-    public void testSiblingMappingComparator() {
+    public void testSiblingsMappingComparatorPosInParent() {
         ITree t1 = new Tree(TypeSet.type("root"));
         ITree a11 = new Tree(TypeSet.type("a"));
         t1.addChild(a11);
@@ -79,10 +79,7 @@ public class TestGumtreeMatcher {
         t2.addChild(a21);
         ITree a22 = new Tree(TypeSet.type("a"));
         t2.addChild(a22);
-        ITree a23 = new Tree(TypeSet.type("a"));
-        t2.addChild(a23);
         // root
-        //     a
         //     a
         //     a
 
@@ -91,7 +88,45 @@ public class TestGumtreeMatcher {
         MappingStore ms = matcher.match(t1, t2);
         assertTrue(ms.has(a11, a21));
         assertTrue(ms.has(a12, a22));
-        assertTrue(ms.has(a13, a23));
+    }
+
+    @Test
+    public void testSiblingsMappingComparatorPosInTree() {
+        ITree t1 = new Tree(TypeSet.type("root"));
+        ITree a11 = new Tree(TypeSet.type("a"));
+        t1.addChild(a11);
+        ITree b11 = new Tree(TypeSet.type("b"));
+        a11.addChild(b11);
+        ITree a12 = new Tree(TypeSet.type("a"));
+        t1.addChild(a12);
+        ITree b12 = new Tree(TypeSet.type("b"));
+        a12.addChild(b12);
+        // root
+        //     a
+        //       b
+        //     a
+        //       b
+
+        ITree t2 = new Tree(TypeSet.type("root"));
+        ITree a21 = new Tree(TypeSet.type("c"));
+        t2.addChild(a21);
+        ITree b21 = new Tree(TypeSet.type("b"));
+        a21.addChild(b21);
+        ITree a22 = new Tree(TypeSet.type("c"));
+        t2.addChild(a22);
+        ITree b22 = new Tree(TypeSet.type("b"));
+        a22.addChild(b22);
+        // root
+        //     c
+        //       b
+        //     c
+        //       b
+
+        GreedySubtreeMatcher matcher = new GreedySubtreeMatcher();
+        matcher.setMin_height(0);
+        MappingStore ms = matcher.match(t1, t2);
+        assertTrue(ms.has(b11, b21));
+        assertTrue(ms.has(b12, b22));
     }
 
     @Test
