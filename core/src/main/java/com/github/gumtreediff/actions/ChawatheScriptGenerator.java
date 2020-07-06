@@ -162,18 +162,15 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
             dstInOrder.add(m.second);
         }
 
-        for (ITree a : s1) {
-            for (ITree b: s2 ) {
-                if (origMappings.has(a, b)) {
+        for (ITree b: s2 ) { // iterate through s2 first, to ensure left-to-right insertions
+            for (ITree a : s1) {
+                if (cpyMappings.has(a, b)) {
                     if (!lcs.contains(new Mapping(a, b))) {
-                        int k = findPos(b);
+                        a.getParent().getChildren().remove(a); // remove this node directly.
+                        int k = findPos(b); // find insert position AFTER removing node from old place.
                         Action mv = new Move(copyToOrig.get(a), copyToOrig.get(w), k);
                         actions.add(mv);
-                        int oldk = a.positionInParent();
                         w.getChildren().add(k, a);
-                        if (k  < oldk ) // FIXME this is an ugly way to patch the index
-                            oldk ++;
-                        a.getParent().getChildren().remove(oldk);
                         a.setParent(w);
                         srcInOrder.add(a);
                         dstInOrder.add(b);

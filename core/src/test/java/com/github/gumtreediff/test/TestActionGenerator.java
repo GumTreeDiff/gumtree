@@ -191,4 +191,36 @@ public class TestActionGenerator {
                 new Insert(dst.getChild("0.1.1"), src.getChild(1), 1)
         ));
     }
+
+    @Test
+    void testAlignChildren() {
+        ITree t1 = new Tree(TypeSet.type("root"));
+        ITree a1 = new Tree(TypeSet.type("a"));
+        t1.addChild(a1);
+        ITree b1 = new Tree(TypeSet.type("b"));
+        t1.addChild(b1);
+        System.out.println(t1.toTreeString());
+        // root [0,0]
+        //     a [0,0]
+        //     b [0,0]
+
+        ITree t2 = new Tree(TypeSet.type("root"));
+        ITree b2 = new Tree(TypeSet.type("b"));
+        t2.addChild(b2);
+        ITree a2 = new Tree(TypeSet.type("a"));
+        t2.addChild(a2);
+        System.out.println(t2.toTreeString());
+        // root [0,0]
+        //     b [0,0]
+        //     a [0,0]
+
+        MappingStore mp = new MappingStore(t1, t2);
+        mp.addMapping(t1, t2);
+        mp.addMapping(a1, a2);
+        mp.addMapping(b1, b2);
+
+        EditScript actions =  new ChawatheScriptGenerator().computeActions(mp);
+
+        assertEquals(1, actions.size());
+    }
 }
