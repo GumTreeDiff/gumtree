@@ -119,8 +119,7 @@ public class TestActionGenerator {
         ITree dst = new Tree(TypeSet.type("bar"), "");
         MappingStore ms = new MappingStore(src, dst);
         EditScript actions = new SimplifiedChawatheScriptGenerator().computeActions(ms);
-        for (Action a : actions)
-            System.out.println(a.toString());
+        assertEquals(2, actions.size());
     }
 
     @Test
@@ -140,8 +139,7 @@ public class TestActionGenerator {
 
         EditScript actions = new InsertDeleteChawatheScriptGenerator().computeActions(ms);
 
-        for (Action a : actions)
-            System.out.println(a.toString());
+        assertEquals(12, actions.size());
     }
 
     @Test
@@ -199,7 +197,6 @@ public class TestActionGenerator {
         t1.addChild(a1);
         ITree b1 = new Tree(TypeSet.type("b"));
         t1.addChild(b1);
-        System.out.println(t1.toTreeString());
         // root [0,0]
         //     a [0,0]
         //     b [0,0]
@@ -209,7 +206,6 @@ public class TestActionGenerator {
         t2.addChild(b2);
         ITree a2 = new Tree(TypeSet.type("a"));
         t2.addChild(a2);
-        System.out.println(t2.toTreeString());
         // root [0,0]
         //     b [0,0]
         //     a [0,0]

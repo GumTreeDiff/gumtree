@@ -33,16 +33,13 @@ import java.util.Map;
  * @see ChawatheScriptGenerator
  */
 public class SimplifiedChawatheScriptGenerator implements EditScriptGenerator {
-    private EditScript actions;
-
     @Override
     public EditScript computeActions(MappingStore ms) {
-        this.actions = new ChawatheScriptGenerator().computeActions(ms);
-        simplify();
-        return actions;
+        EditScript actions = new ChawatheScriptGenerator().computeActions(ms);
+        return simplify(actions);
     }
 
-    private void simplify() {
+    private static EditScript simplify(EditScript actions) {
         Map<ITree, Action> addedTrees = new HashMap<>();
         Map<ITree, Action> deletedTrees = new HashMap<>();
 
@@ -65,7 +62,6 @@ public class SimplifiedChawatheScriptGenerator implements EditScriptGenerator {
                     actions.add(index, ti);
                     actions.remove(index +  1);
                 }
-
             }
         }
 
@@ -80,8 +76,9 @@ public class SimplifiedChawatheScriptGenerator implements EditScriptGenerator {
                     actions.add(index, ti);
                     actions.remove(index +  1);
                 }
-
             }
         }
+
+        return actions;
     }
 }
