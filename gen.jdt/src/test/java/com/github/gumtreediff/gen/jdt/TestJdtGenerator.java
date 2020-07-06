@@ -23,7 +23,6 @@ package com.github.gumtreediff.gen.jdt;
 import java.io.IOException;
 
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.*;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.junit.jupiter.api.Test;
@@ -52,22 +51,32 @@ public class TestJdtGenerator {
 
     @Test
     public void testMethodInvocation() throws IOException {
-        String input = "class Main {\n"
+        String leftInput = "class Main {\n"
                 + "    public static void foo() {\n"
                 + "        a(b);\n"
                 + "    }\n"
                 + "}\n";
-        TreeContext ctx = new JdtTreeGenerator().generateFrom().string(input);
-        String o1 = TreeIoUtils.toLisp(ctx).toString();
-
-        input = "class Main {\n"
+        TreeContext leftCtx = new JdtTreeGenerator().generateFrom().string(leftInput);
+        String rightInput = "class Main {\n"
                 + "    public static void foo() {\n"
                 + "        a.b();\n"
                 + "    }\n"
                 + "}";
-        ctx = new JdtTreeGenerator().generateFrom().string(input);
-        String o2 = TreeIoUtils.toLisp(ctx).toString();
-        assertNotEquals(o1, o2);
+        TreeContext rightCtx = new JdtTreeGenerator().generateFrom().string(rightInput);
+        assertFalse(rightCtx.getRoot().isIsomorphicTo(leftCtx.getRoot()));
+    }
+
+    @Test
+    public void testVarargs() throws IOException {
+        String leftInput = "class Main {\n"
+                       + "    public foo(String a) {}\n"
+                       + "}\n";
+        TreeContext leftCtx = new JdtTreeGenerator().generateFrom().string(leftInput);
+        String rightInput = "class Main {\n"
+                       + "    public foo(String... a) {}\n"
+                       + "}\n";
+        TreeContext rightCtx = new JdtTreeGenerator().generateFrom().string(rightInput);
+        assertFalse(rightCtx.getRoot().isIsomorphicTo(leftCtx.getRoot()));
     }
 
     @Test
@@ -82,56 +91,62 @@ public class TestJdtGenerator {
     public void badSyntax() throws IOException {
         String input = "public clas Foo {}";
         assertThrows(SyntaxException.class, () -> {
-            TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+            new JdtTreeGenerator().generateFrom().string(input);
         });
     }
 
     @Test
     public void testTypeDefinition() throws IOException {
-        String input1 = "public class Foo {}";
-        String input2 = "public interface Foo {}";
-        TreeContext ct1 = new JdtTreeGenerator().generateFrom().string(input1);
-        TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
-        assertNotEquals(ct1.getRoot().getMetrics().hash, ct2.getRoot().getMetrics().hash);
+        String leftInput = "public class Foo {}";
+        String rightInput = "public interface Foo {}";
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().string(leftInput);
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().string(rightInput);
+        assertFalse(leftContext.getRoot().isIsomorphicTo(rightContext.getRoot()));
     }
 
     @Test
     public void testInfixOperator() throws IOException {
-        String input = "class Foo { int i = 3 + 3}";
-        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toTreeString());
+        String leftInput = "class Foo { int i = 3 + 3; }";
+        String rightInput = "class Foo { int i = 3 - 3; }";
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().string(leftInput);
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().string(rightInput);
+        assertFalse(leftContext.getRoot().isIsomorphicTo(rightContext.getRoot()));
     }
 
     @Test
     public void testAssignment() throws IOException {
-        String input = "class Foo { void foo() { s.foo  = 12; } }";
-        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toTreeString());
+        String leftInput = "class Foo { void foo() { int i = 12; } }";
+        String rightInput = "class Foo { void foo() { int i += 12; } }";
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().string(leftInput);
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().string(rightInput);
+        assertFalse(leftContext.getRoot().isIsomorphicTo(rightContext.getRoot()));
     }
 
     @Test
     public void testPrefixExpression() throws IOException {
-        String input = "class Foo { void foo() { ++s.i; } }";
-        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toTreeString());
+        String leftInput = "class Foo { void foo() { ++i; } }";
+        String rightInput = "class Foo { void foo() { --i; } }";
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().string(leftInput);
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().string(rightInput);
+        assertFalse(leftContext.getRoot().isIsomorphicTo(rightContext.getRoot()));
     }
 
     @Test
     public void testPostfixExpression() throws IOException {
-        String input = "class Foo { void foo() { s.i++; } }";
-        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        System.out.println(ct.getRoot().toTreeString());
+        String leftInput = "class Foo { void foo() { i++; } }";
+        String rightInput = "class Foo { void foo() { i--; } }";
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().string(leftInput);
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().string(rightInput);
+        assertFalse(leftContext.getRoot().isIsomorphicTo(rightContext.getRoot()));
     }
 
     @Test
     public void testArrayCreation() throws IOException {
-        String input1 = "class Foo { void foo() { int[][] t = new int[12][]; } }";
-        TreeContext ct1 = new JdtTreeGenerator().generateFrom().string(input1);
-        System.out.println(ct1.getRoot().toTreeString());
-
-        String input2 = "class Foo { void foo() { int[][] t = new int[][12]; } }";
-        TreeContext ct2 = new JdtTreeGenerator().generateFrom().string(input2);
-        System.out.println(ct2.getRoot().toTreeString());
+        String leftInput = "class Foo { int[][] tab = new int[12][]; }";
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().string(leftInput);
+        String rightInput = "class Foo { int[][] tab = new int[12][12]; }";
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().string(rightInput);
+        assertFalse(leftContext.getRoot().isIsomorphicTo(rightContext.getRoot()));
     }
 
     @Test

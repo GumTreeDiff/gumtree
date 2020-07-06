@@ -117,6 +117,21 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     @Override
+    public boolean visit(SingleVariableDeclaration d) {
+        if (d.isVarargs()) {
+            pushNode(d, "");
+            pushNode(d.getType(), type("VARARGS_TYPE"), d.getStartPosition(),
+                    d.getName().getStartPosition() - 1 - d.getStartPosition());
+            d.getType().accept(this);
+            popNode();
+            d.getName().accept(this);
+            return false;
+        }
+        else
+            return true;
+    }
+
+    @Override
     public void postVisit(ASTNode n) {
         if (n instanceof TypeDeclaration)
             handlePostVisit((TypeDeclaration) n);

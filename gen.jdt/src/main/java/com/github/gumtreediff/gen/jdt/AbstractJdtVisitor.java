@@ -53,6 +53,10 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
         push(n, nodeAsSymbol(n), label, n.getStartPosition(), n.getLength());
     }
 
+    protected void pushNode(ASTNode n, Type type, int pos, int length) {
+        push(n, type, "", pos, length);
+    }
+
     protected void pushFakeNode(EntityType n, int startPosition, int length) {
         Type type = type(n.name()); // FIXME is that consistent with AbstractJDTVisitor.type
         push(null, type,"", startPosition, length);
