@@ -21,29 +21,40 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.utils.HungarianAlgorithm;
 import com.github.gumtreediff.utils.StringAlgorithms;
+
+import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestAlgorithms {
 
     @Test
     public void testLcss() {
-        // Exemple coming from:
+    	List<int[]> expected = new ArrayList<int[]>();
+    	expected.add(new int[] {0, 0});
+    	expected.add(new int[] {3, 2});
+    	expected.add(new int[] {5, 4});
+    	
+    	// Exemple coming from:
         // http://www.geeksforgeeks.org/dynamic-programming-set-4-longest-common-subsequence/
         List<int[]> indexes = StringAlgorithms.lcss("ABCDGH", "AEDFHR");
-        assertThat(indexes.size(), is(3));
-        assertThat(indexes, hasItem(new int[] {0, 0}));
-        assertThat(indexes, hasItem(new int[] {3, 2}));
-        assertThat(indexes, hasItem(new int[] {5, 4}));
+        
+        assertArrayEquals(expected.toArray(), indexes.toArray());
     }
 
     @Test
     public void testLcs() {
         String lcs = StringAlgorithms.lcs("FUTUR", "CHUTE");
-        assertThat(lcs, is("UT"));
+        String expected = "UT";
+        assertEquals(expected, lcs);        
     }
 
     @Test
@@ -55,9 +66,8 @@ public class TestAlgorithms {
         costMatrix[2] = new double[] {3F, 3F, 2F};
         HungarianAlgorithm a = new HungarianAlgorithm(costMatrix);
         int[] result = a.execute();
-        assertThat(result[0], is(0));
-        assertThat(result[1], is(1));
-        assertThat(result[2], is(2));
+        int[] expected = {0, 1, 2};
+        Assert.assertArrayEquals(expected, result);        
     }
 
 }
