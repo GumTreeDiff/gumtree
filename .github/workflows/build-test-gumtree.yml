@@ -12,7 +12,7 @@ jobs:
     container: debian:buster-slim
     steps:
     - name: install dependencies
-    - run: |
+      run: |
         mkdir /usr/share/man/man1/
         apt-get update
         apt-get install -y --no-install-recommends openjdk-11-jdk wget git gdebi-core ocaml ocaml-native-compilers camlp4 build-essential m4 zip python-pip ca-certificates p11-kit
@@ -26,8 +26,8 @@ jobs:
         git clone https://github.com/GumTreeDiff/pythonparser.git --depth 1 /opt/pythonparser
         ln -s /opt/pythonparser/pythonparser /usr/bin/pythonparser
     - name: checkout gumtree
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
     - name: build gumtree
-    - run: ./gradlew build
+      run: ./gradlew build
     
       
