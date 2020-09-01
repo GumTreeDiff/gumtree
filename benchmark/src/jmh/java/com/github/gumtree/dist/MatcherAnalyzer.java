@@ -54,4 +54,9 @@ public class MatcherAnalyzer {
         new CompositeMatchers.ClassicGumtree().match(d.src, d.dst);
     }
 
+    @Benchmark
+    public void testSimpleGumtree(TreeData d) {
+        new CompositeMatchers.SimpleGumtree().match(d.src, d.dst);
+    }
+
 }

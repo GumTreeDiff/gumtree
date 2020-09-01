@@ -39,6 +39,7 @@ def getGitHash = { ->
 }
 
 jmh {
+    duplicateClassesStrategy = 'warn'
     fork = 0
     warmupIterations = 1
     iterations = 2
