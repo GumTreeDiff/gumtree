@@ -28,7 +28,7 @@ jobs:
       uses: actions/checkout@v2
     - name: build gumtree
       env:
-        LANG: C.UTF8
+        JAVA_TOOL_OPTIONS: -Dfile:encoding=UTF8
       run: ./gradlew build
     
       
