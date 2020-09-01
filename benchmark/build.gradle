@@ -26,16 +26,16 @@ if (project.hasProperty('trees')) {
 }
 
 def getGitHash = { ->
-  try {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-      commandLine 'git', 'describe', '--dirty=+', '--tags'
-      standardOutput = stdout
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-parse', '--short', 'HEAD'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    } catch (all) {
+        return '0000000'
     }
-    return stdout.toString().trim()
-  } catch (all) {
-    return '0000000'
-  }
 }
 
 jmh {
