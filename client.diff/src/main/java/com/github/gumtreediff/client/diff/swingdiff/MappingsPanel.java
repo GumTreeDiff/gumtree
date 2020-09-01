@@ -94,14 +94,15 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         add(split);
 
         try {
+            //FIXME a checkstyle issue induced the strange indentation
             txtSrc
-                .getUI()
-                .getEditorKit(txtSrc)
-                .read(new StringReader(readFileAsString(srcPath)), txtSrc.getDocument(), 0);
+                    .getUI()
+                    .getEditorKit(txtSrc)
+                    .read(new StringReader(readFileAsString(srcPath)), txtSrc.getDocument(), 0);
             txtDst
-                .getUI()
-                .getEditorKit(txtDst)
-                .read(new StringReader(readFileAsString(dstPath)), txtDst.getDocument(), 0);
+                    .getUI()
+                    .getEditorKit(txtDst)
+                    .read(new StringReader(readFileAsString(dstPath)), txtDst.getDocument(), 0);
         } catch (IOException | BadLocationException e) {
             e.printStackTrace();
         }

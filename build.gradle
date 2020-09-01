@@ -1,14 +1,13 @@
 
 plugins {
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.6.3'
+    id 'com.github.kt3k.coveralls' version '2.8.4'
 }
 
 allprojects {
     apply plugin: 'idea'
 
-    group = 'com.github.gumt' +
-            'reediff'
+    group = 'com.github.gumtreediff'
     version = '3.0.0-beta1-SNAPSHOT'
 
     repositories {
@@ -30,7 +29,7 @@ subprojects {
 
     apply plugin: 'checkstyle'
     checkstyle {
-        toolVersion = '8.18'
+        toolVersion = '8.36'
         configFile = rootProject.file('gumtree_checkstyle.xml')
         configProperties = [suppressionFile: "${rootProject.file('checkstyle_ignore.xml')}"]
         ignoreFailures = false
@@ -134,84 +133,31 @@ tasks.coveralls {
     onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
 }
 
+configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
+    apply plugin: "maven-publish"
+
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/GumTreeDiff/gumtree")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                }
+            }
+        }
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
+            }
+        }
+    }
+}
+
 evaluationDependsOnChildren()
 
 configure(subprojects) {
     if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
         it.test.enabled = false
-}
-
-if (project.hasProperty('mvn')) {
-    configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
-        apply plugin: 'maven'
-        apply plugin: 'signing'
-
-        task javadocJar(type: Jar) {
-            classifier = 'javadoc'
-            from javadoc
-        }
-
-        task sourcesJar(type: Jar) {
-            classifier = 'sources'
-            from sourceSets.main.allSource
-        }
-
-        artifacts {
-            archives javadocJar, sourcesJar
-        }
-
-        signing {
-            sign configurations.archives
-        }
-
-        uploadArchives {
-            repositories {
-                mavenDeployer {
-                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                        authentication(userName: ossrhUsername, password: ossrhPassword)
-                    }
-
-                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                        authentication(userName: ossrhUsername, password: ossrhPassword)
-                    }
-
-                    pom.project {
-                        name "GumTree ${subproject.name}"
-                        description subproject.description
-                        url 'https://github.com/GumTreeDiff/gumtree/'
-                        packaging 'jar'
-
-                        scm {
-                            connection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
-                            developerConnection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
-                            url 'https://github.com/GumTreeDiff/gumtree/'
-                        }
-
-                        licenses {
-                            license {
-                                name 'GNU Lesser General Public License v3.0'
-                                url 'https://www.gnu.org/copyleft/lesser.html'
-                            }
-                        }
-
-                        developers {
-                            developer {
-                                id 'jre'
-                                name 'Jean-Rémy Falleri'
-                                email 'jr.falleri@gmail.com'
-                            }
-
-                            developer {
-                                id 'flop'
-                                name 'Floréal Morandat'
-                                email 'florealm@gmail.com'
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
