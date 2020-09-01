@@ -30,5 +30,11 @@ jobs:
       uses: actions/checkout@v2
     - name: build gumtree
       run: ./gradlew build
-    
-      
+    - name: generate jacoco report
+      run: ./gradlew jacocoRootReport
+    - name: upload coverage report
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-report
+        path: build/reports/jacoco/jacocoRootReport/html/
+
