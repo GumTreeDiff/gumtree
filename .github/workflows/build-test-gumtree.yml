@@ -39,6 +39,7 @@ jobs:
         path: build/reports/jacoco/jacocoRootReport/html/
     - name: generate jmh benchmark
       run: |
+        pip install numpy pandas plotnine
         ./gradlew :benchmark:jmh
         ./gradlew :benchmark:jmhPlot
     - name: upload jmh report
