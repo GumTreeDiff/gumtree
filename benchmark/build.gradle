@@ -41,9 +41,10 @@ def getGitHash = { ->
 jmh {
     duplicateClassesStrategy = 'warn'
     fork = 0
-    warmupIterations = 1
-    iterations = 2
-    benchmarkMode = ['AverageTime']
+    warmupIterations = 0
+    iterations = 1
+    jmhVersion = '1.25.1'
+    benchmarkMode = ['SingleShotTime']
     benchmarkParameters = [
       'refPath' : new File("${project.projectDir}/src/jmh/resources/").listFiles()
         .collect { it.getAbsolutePath() }
@@ -54,8 +55,8 @@ jmh {
     resultFormat = 'CSV'
 }
 
-task jmhPlot(type: Exec, dependsOn: 'jmh') {
-    commandLine "R", "-f", "${project.projectDir}/src/main/r/plotBenchmark.R", "${project.buildDir}/reports/jmh/"
+task jmhPlot(type: Exec) {
+    commandLine "python", "${project.projectDir}/src/main/python/plotBench.py", "${project.buildDir}/reports/jmh/"
 }
 
 dependencies {

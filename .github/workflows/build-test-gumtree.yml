@@ -38,7 +38,9 @@ jobs:
         name: coverage-report
         path: build/reports/jacoco/jacocoRootReport/html/
     - name: generate jmh benchmark
-      run: ./gradlew :benchmark:jmh
+      run: |
+        ./gradlew :benchmark:jmh
+        ./gradlew :benchmark:jmhPlot
     - name: upload jmh report
       uses: actions/upload-artifact@v2
       with:
