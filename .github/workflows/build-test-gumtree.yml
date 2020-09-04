@@ -9,13 +9,13 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    container: debian:buster-slim
+    container: python:3-slim-buster
     steps:
     - name: install dependencies
       run: |
         mkdir /usr/share/man/man1/
         apt-get update
-        apt-get install -y --no-install-recommends openjdk-11-jdk wget git gdebi-core ocaml ocaml-native-compilers camlp4 build-essential m4 zip python-pip ca-certificates p11-kit python-dev python-tk python-setuptools
+        apt-get install -y --no-install-recommends openjdk-11-jdk wget git gdebi-core ocaml ocaml-native-compilers camlp4 build-essential m4 zip python-pip ca-certificates p11-kit
         echo "::set-env name=LANG::C.UTF-8"
         echo "::set-env name=LC_ALL::C.UTF-8"
         wget http://131.123.42.38/lmcrs/v1.0.0/srcml_1.0.0-1_ubuntu18.04.deb
