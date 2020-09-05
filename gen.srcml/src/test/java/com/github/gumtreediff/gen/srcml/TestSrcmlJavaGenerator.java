@@ -37,7 +37,23 @@ public class TestSrcmlJavaGenerator {
                 + "}";
         TreeContext ctx = new SrcmlJavaTreeGenerator().generateFrom().string(input);
         ITree t = ctx.getRoot();
+        System.out.println(t.toTreeString());
         assertEquals(34, t.getMetrics().size);
+    }
+
+    @Test
+    public void testPosition() throws IOException {
+        String input = "public class HelloWorld {\n"
+                       + "public static void main(String[] args) {\n"
+                       + "System.out.println(\"Hello, World\");\n"
+                       + "}\n"
+                       + "}";
+        TreeContext ctx = new SrcmlJavaTreeGenerator().generateFrom().string(input);
+        ITree tree = ctx.getRoot();
+        ITree publicNode = tree.getChild("0.0");
+        assertEquals(0, publicNode.getPos());
+        assertEquals(6, publicNode.getEndPos());
+        assertEquals(34, tree.getMetrics().size);
     }
 
 }

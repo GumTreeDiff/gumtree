@@ -35,12 +35,11 @@ import java.util.*;
 import static com.github.gumtreediff.tree.TypeSet.type;
 
 public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGenerator {
-
     private static final String SRCML_CMD = System.getProperty("gt.srcml.path", "srcml");
 
-    private static final QName LINE = new  QName("http://www.srcML.org/srcML/position", "line", "pos");
+    private static final QName POS_START = new  QName("http://www.srcML.org/srcML/position", "start", "pos");
 
-    private static final QName COLUMN = new  QName("http://www.srcML.org/srcML/position", "column", "pos");
+    private static final QName POS_END = new  QName("http://www.srcML.org/srcML/position", "end", "pos");
 
     private LineReader lr;
 
@@ -135,19 +134,24 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
     }
 
     private void setPos(ITree t, StartElement e) {
-        if (e.getAttributeByName(LINE) != null) {
-            int line = Integer.parseInt(e.getAttributeByName(LINE).getValue());
-            int column = Integer.parseInt(e.getAttributeByName(COLUMN).getValue());
+        if (e.getAttributeByName(POS_START) != null) {
+            String posStr = e.getAttributeByName(POS_START).getValue();
+            String[] chunks = posStr.split(":");
+            int line = Integer.parseInt(chunks[0]);
+            int column = Integer.parseInt(chunks[1]);
             t.setPos(lr.positionFor(line, column));
+            setLength(t, e);
         }
     }
 
     private void setLength(ITree t, StartElement e) {
         if (t.getPos() == -1)
             return;
-        if (e.getAttributeByName(LINE) != null) {
-            int line = Integer.parseInt(e.getAttributeByName(LINE).getValue());
-            int column = Integer.parseInt(e.getAttributeByName(COLUMN).getValue());
+        if ( e.getAttributeByName(POS_END) != null) {
+            String posStr = e.getAttributeByName(POS_END).getValue();
+            String[] chunks = posStr.split(":");
+            int line = Integer.parseInt(chunks[0]);
+            int column = Integer.parseInt(chunks[1]);
             t.setLength(lr.positionFor(line, column) - t.getPos() + 1);
         }
     }
