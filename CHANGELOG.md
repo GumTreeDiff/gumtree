@@ -1,5 +1,13 @@
 # Changelog of GumTree
 
+## v3.0.0-beta2 (Ficus)
+* Fix missing positions in srcML parser
+* Switched from Travis to Github actions for the CI
+* Changed benchmark to use SingleShot mode
+* Update visualisation of benchmark to use python instead of R
+* Fixed benchmark timestamps to work in CI
+* Integrated jmh benchmark in the CI
+
 ## v3.0.0-beta1 (Ficus)
 * Integrated monaco native diff editor
 * Fix position problem in javaparser generator
