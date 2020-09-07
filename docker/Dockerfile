@@ -16,15 +16,13 @@ RUN wget http://131.123.42.38/lmcrs/v1.0.0/srcml_1.0.0-1_ubuntu18.04.deb \
 	&& gdebi srcml_1.0.0-1_ubuntu18.04.deb -n \
 	&& pip install jsontree asttokens
 
-WORKDIR /opt
-
 # Install cgum
-RUN git clone https://github.com/GumTreeDiff/cgum.git --depth 1 \
+RUN git clone https://github.com/GumTreeDiff/cgum.git /opt/cgum --depth 1 \
     && make -C /opt/cgum \
 	&& ln -s /opt/cgum/cgum /usr/bin/cgum
 
 # Install pythonparser
-RUN git clone https://github.com/GumTreeDiff/pythonparser.git --depth 1 \
+RUN git clone https://github.com/GumTreeDiff/pythonparser.git /opt/pythonparser --depth 1 \
     && ln -s /opt/pythonparser/pythonparser /usr/bin/pythonparser
 
 # Install gumtree
