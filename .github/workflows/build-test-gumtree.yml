@@ -10,6 +10,7 @@ jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
     container: gumtreediff/gumtree:latest
+    if: ${{ github.event_name == 'pull_request' || !contains(github.event.head_commit.message, '[no ci]') }}
     steps:
       - name: checkout gumtree
         uses: actions/checkout@v2
@@ -30,7 +31,7 @@ jobs:
           name: jmh-report
           path: benchmark/build/reports/jmh/
       - name: upload snapshot package
-        if: ${{ github.event_name == 'push'}}
+        if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[snapshot]') }}
         run: ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
