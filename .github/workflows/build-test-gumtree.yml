@@ -32,5 +32,5 @@ jobs:
       - name: upload snapshot package
         if: ${{ github.event_name == 'push'}}
         run: ./gradlew publish
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
