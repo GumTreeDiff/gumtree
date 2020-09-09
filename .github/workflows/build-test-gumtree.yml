@@ -1,4 +1,4 @@
-name: Build and Test GumTree
+name: Build, Test and Deploy Develop GumTree
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ develop ]
 
 jobs:
-  build-test:
+  build-test-deploy:
     runs-on: ubuntu-latest
     container: gumtreediff/gumtree:latest
     steps:
@@ -29,3 +29,8 @@ jobs:
         with:
           name: jmh-report
           path: benchmark/build/reports/jmh/
+      - name: upload snapshot package
+        if: ${{ github.event_name == 'push'}}
+        run: ./gradlew publish
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
