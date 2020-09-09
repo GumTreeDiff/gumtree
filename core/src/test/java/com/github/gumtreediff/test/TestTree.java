@@ -40,7 +40,6 @@ public class TestTree {
         assertEquals(2, firstLeafTrees.size());
     }
 
-
     @Test
     public void testChildUrl() {
         ITree root = TreeLoader.getDummySrc();
