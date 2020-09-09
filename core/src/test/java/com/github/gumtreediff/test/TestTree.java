@@ -30,6 +30,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTree {
     @Test
+    public void testTreesBetweenPositions() {
+        ITree root = TreeLoader.getDummySrc();
+        List<ITree> treesOutside = root.getTreesBetweenPositions(100, 200);
+        assertEquals(0, treesOutside.size());
+        List<ITree> allTrees = root.getTreesBetweenPositions(0, 100);
+        assertEquals(5, allTrees.size());
+        List<ITree> firstLeafTrees = root.getTreesBetweenPositions(0, 10);
+        assertEquals(2, firstLeafTrees.size());
+    }
+
+
+    @Test
     public void testChildUrl() {
         ITree root = TreeLoader.getDummySrc();
         assertEquals("b", root.getChild("0").getLabel());

@@ -89,6 +89,21 @@ public interface ITree {
     }
 
     /**
+     * Return trees contained in a text positions interval
+     * @param position the begin position
+     * @param endPosition the end position (must be greater than position)
+     * @return
+     */
+    default List<ITree> getTreesBetweenPositions(int position, int endPosition) {
+        List<ITree> trees = new ArrayList<>();
+        for (ITree t: this.preOrder()) {
+            if (t.getPos() >= position && t.getEndPos() <= endPosition)
+                trees.add(t);
+        }
+        return trees;
+    }
+
+    /**
      * Returns the child node at the given URL.
      * @param url the URL, such as <code>0.1.2</code>
      */
