@@ -7,7 +7,7 @@ before_script:
   - export PATH=$PWD/pythonparser:$PATH
 script: ./gradlew check
 after_success:
-  - ./gradlew coveralls uploadArchives
+  - ./gradlew -Djdk.tls.client.protocols="TLSv1,TLSv1.1,TLSv1.2" coveralls uploadArchives
 language: java
 jdk:
   - openjdk11
