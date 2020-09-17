@@ -20,8 +20,8 @@ ext.isRelease = !project.version.endsWith("SNAPSHOT")
 
 subprojects {
     apply plugin: 'java'
-    sourceCompatibility = '1.9'
-    targetCompatibility = '1.9'
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
 
     compileJava {
         options.compilerArgs << '-Xlint:deprecation'
@@ -130,7 +130,6 @@ tasks.coveralls {
     description = 'Uploads the aggregated coverage report to Coveralls'
 
     dependsOn jacocoRootReport
-    onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
 }
 
 configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
