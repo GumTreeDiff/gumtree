@@ -1,12 +1,13 @@
 FROM ubuntu:focal
 
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=GMT
+
 # Install all required packages
-# Start with a fix to get the openjdk-11-jdk package to be installed on buster
-RUN mkdir /usr/share/man/man1/ \
-    && apt-get update \
+RUN apt-get update \
 	&& apt-get install -y --no-install-recommends default-jdk wget git gdebi-core \
-	    ocaml ocaml-native-compilers camlp4 build-essential m4 zip python3-pip \
-	    ca-certificates p11-kit
+	    build-essential ocaml libnum-ocaml-dev python3-pip \
+	    tzdata ca-certificates p11-kit
 
 # Set locale
 ENV LANG C.UTF-8
