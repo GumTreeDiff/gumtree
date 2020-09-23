@@ -19,10 +19,13 @@
 
 package com.github.gumtreediff.gen.python;
 
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -34,7 +37,15 @@ public class TestPythonTreeGenerator {
         String input = "import sys\nimport json as json\n";
         TreeContext ctx = new PythonTreeGenerator().generateFrom().string(input);
         ITree t = ctx.getRoot();
-        assertEquals(6, t.getMetrics().size);
+        assertEquals(9, t.getMetrics().size);
+    }
+
+    @Test
+    public void testBadSyntax() throws IOException {
+        String input = "impot sys";
+        assertThrows(SyntaxException.class, () -> {
+            new PythonTreeGenerator().generateFrom().string(input);
+        });
     }
 
 }
