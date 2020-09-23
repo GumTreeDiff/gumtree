@@ -7,6 +7,9 @@
 * Update visualisation of benchmark to use python instead of R
 * Fixed benchmark timestamps to work in CI
 * Integrated jmh benchmark in the CI
+* New parso-based python 3 compatible parser, replace the old pythonparser
+* Docker image is now based upon ubuntu focal LTS
+* Update of dependencies (ph-css, monaco-editor, rhino, javaparser, jdt, srcml)
 
 ## v3.0.0-beta1 (Ficus)
 * Integrated monaco native diff editor
