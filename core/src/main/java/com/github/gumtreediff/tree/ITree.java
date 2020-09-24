@@ -144,7 +144,6 @@ public interface ITree {
         return results;
     }
 
-
     /**
      * @return all the descendants (children, children of children, etc.) of the tree, using a pre-order.
      *
