@@ -128,6 +128,10 @@ public class TreeLoader {
         return load("/Dummy_v1.xml").getRoot();
     }
 
+    public static ITree getSubtreeSrc() {
+        return load("/subtree.xml").getRoot();
+    }
+
     public static ITree getDummyBig() {
         return load("/Dummy_big.xml").getRoot();
     }

@@ -30,6 +30,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTree {
     @Test
+    public void testSearchSubtree() {
+        ITree root = TreeLoader.getSubtreeSrc();
+        ITree subtree = new Tree(TypeSet.type("a"));
+        subtree.addChild(new Tree(TypeSet.type("b")));
+        subtree.addChild(new Tree(TypeSet.type("c"), "foo"));
+        List<ITree> results = root.searchSubtree(subtree);
+        assertEquals(2, results.size());
+        assertTrue(results.get(0).isIsomorphicTo(subtree));
+
+        results = root.searchSubtree(root);
+        assertEquals(1, results.size());
+        assertTrue(results.get(0).isIsomorphicTo(root));
+
+        ITree otherSubtree = new Tree(TypeSet.type("a"));
+        otherSubtree.addChild(new Tree(TypeSet.type("b")));
+        results = root.searchSubtree(otherSubtree);
+        assertEquals(0, results.size());
+    }
+
+    @Test
     public void testTreesBetweenPositions() {
         ITree root = TreeLoader.getDummySrc();
         List<ITree> treesOutside = root.getTreesBetweenPositions(100, 200);

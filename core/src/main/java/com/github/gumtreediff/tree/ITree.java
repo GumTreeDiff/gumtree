@@ -134,6 +134,17 @@ public interface ITree {
         return getChildren().isEmpty();
     }
 
+    default List<ITree> searchSubtree(ITree subtree) {
+        List<ITree> results = new ArrayList<>();
+        for (ITree candidate : this.preOrder()) {
+            if (candidate.getMetrics().hash == subtree.getMetrics().hash)
+                if (candidate.isIsomorphicTo(subtree))
+                    results.add(candidate);
+        }
+        return results;
+    }
+
+
     /**
      * @return all the descendants (children, children of children, etc.) of the tree, using a pre-order.
      *

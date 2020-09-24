@@ -22,24 +22,21 @@ package com.github.gumtreediff.tree;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 
 public class Tree extends AbstractTree implements ITree {
-
     private Type type;
 
     private String label;
 
-    // Begin position of the tree in terms of absolute character index and length
     private int pos;
     private int length;
-    // End position
 
     private AssociationMap metadata;
 
     /**
-     * Constructs a new node. If you need type labels corresponding to the integer
+     * Constructs a new node with an empty label.
+     * @param type the type of the node
      * @see TreeContext#createTree(Type, String)
      */
     public Tree(Type type) {
@@ -47,8 +44,12 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     /**
-     * Constructs a new node. If you need type labels corresponding to the integer
+     * Constructs a new node with a given label.
+     * @param type the type of the node
+     * @param label the label. If null, it will be replaced by an empty string.
+     *              Note that the label will be interned.
      * @see TreeContext#createTree(Type, String)
+     * @see String#intern()
      */
     public Tree(Type type, String label) {
         this.type = type;
@@ -57,7 +58,9 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     /**
-     * Copy constructor for copy.
+     * Construct a node using a given node as the model. It copies only
+     * the local attributes of the given node, and not its parent and children.
+     * @param other the model node, must be not null.
      */
     protected Tree(ITree other) {
         this.type = other.getType();
@@ -97,7 +100,7 @@ public class Tree extends AbstractTree implements ITree {
 
     @Override
     public void setLabel(String label) {
-        this.label = label;
+        this.label = (label == null) ? NO_LABEL : label.intern();
     }
 
     @Override
