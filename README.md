@@ -2,8 +2,7 @@
 
 ## Status
 
-* Master branch: ![Build Status](https://travis-ci.org/GumTreeDiff/gumtree.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/GumTreeDiff/gumtree/badge.svg?branch=master)](https://coveralls.io/github/GumTreeDiff/gumtree?branch=master)
-* Develop branch: ![Build Status](https://travis-ci.org/GumTreeDiff/gumtree.svg?branch=develop) [![Coverage Status](https://coveralls.io/repos/github/GumTreeDiff/gumtree/badge.svg?branch=develop)](https://coveralls.io/github/GumTreeDiff/gumtree?branch=develop)
+* Develop branch: ![Build and Test GumTree](https://github.com/GumTreeDiff/gumtree/workflows/Build,%20Test%20and%20Deploy%20Develop%20GumTree/badge.svg?branch=develop)
 
 ## Description
 
