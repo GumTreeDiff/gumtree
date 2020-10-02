@@ -22,10 +22,7 @@ package com.github.gumtreediff.io;
 
 import com.github.gumtreediff.utils.Pair;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -36,14 +33,6 @@ import java.util.Set;
 public class DirectoryComparator {
 
     private Path src;
-
-    public Path getSrc() {
-        return src;
-    }
-
-    public Path getDst() {
-        return dst;
-    }
 
     private Path dst;
 
@@ -56,28 +45,34 @@ public class DirectoryComparator {
     private boolean dirMode = true;
 
     public DirectoryComparator(String src, String dst) {
+        this.src = Paths.get(src);
+        this.dst = Paths.get(dst);
+
+        if (!Files.exists(this.src))
+            throw new IllegalArgumentException("File " + this.src + " does not exist.");
+        if (!Files.exists(this.dst))
+            throw new IllegalArgumentException("File " + this.dst + " does not exist.");
+        if ((Files.isDirectory(this.src) && Files.isRegularFile(this.dst))
+                || (Files.isRegularFile(this.src) && Files.isDirectory(this.dst)))
+            throw new IllegalArgumentException("File " + this.src + " and " + this.dst
+                + "are not of the same type (file and folder).");
+
         modifiedFiles = new ArrayList<>();
         addedFiles = new HashSet<>();
         deletedFiles =  new HashSet<>();
-        this.src = Paths.get(src);
-        this.dst = Paths.get(dst);
-        if (!Files.exists(this.src) || !Files.exists(this.dst))
-            throw new RuntimeException();
-        else {
-            if (!Files.isDirectory(this.src) && !Files.isDirectory(this.dst)) {
-                this.modifiedFiles.add(new Pair<>(this.src.toFile(), this.dst.toFile()));
-                this.src = this.src.getParent();
-                this.dst = this.dst.getParent();
-                this.dirMode = false;
-            } else if (!(Files.isDirectory(this.src) && Files.isDirectory(this.dst))) {
-                throw new RuntimeException();
-            }
 
+        if (!(Files.isDirectory(this.src) || Files.isDirectory(this.dst))) {
+            this.modifiedFiles.add(new Pair<>(this.src.toFile(), this.dst.toFile()));
+            this.src = this.src.getParent();
+            this.dst = this.dst.getParent();
+            this.dirMode = false;
         }
     }
 
     public void compare() {
-        if (!dirMode) return;
+        if (!dirMode)
+            return;
+
         AllFilesVisitor vSrc = new AllFilesVisitor(src);
         AllFilesVisitor vDst = new AllFilesVisitor(dst);
         try {
@@ -87,12 +82,14 @@ public class DirectoryComparator {
             Set<String> addedFiles = new HashSet<>();
             addedFiles.addAll(vDst.files);
             addedFiles.removeAll(vSrc.files);
-            for (String file : addedFiles) this.addedFiles.add(toDstFile(file));
+            for (String file : addedFiles)
+                this.addedFiles.add(toDstFile(file));
 
             Set<String> deletedFiles = new HashSet<>();
             deletedFiles.addAll(vSrc.files);
             deletedFiles.removeAll(vDst.files);
-            for (String file : deletedFiles) this.deletedFiles.add(toSrcFile(file));
+            for (String file : deletedFiles)
+                this.deletedFiles.add(toSrcFile(file));
 
             Set<String> commonFiles = new HashSet<>();
             commonFiles.addAll(vSrc.files);
@@ -100,10 +97,18 @@ public class DirectoryComparator {
 
             for (String file : commonFiles)
                 if (hasChanged(file, file))
-                    modifiedFiles.add(new Pair<File, File>(toSrcFile(file), toDstFile(file)));
+                    modifiedFiles.add(new Pair<>(toSrcFile(file), toDstFile(file)));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Path getSrc() {
+        return src;
+    }
+
+    public Path getDst() {
+        return dst;
     }
 
     public boolean isDirMode() {
@@ -135,10 +140,11 @@ public class DirectoryComparator {
         File f2 = toDstFile(s2);
         long l1 = Files.size(f1.toPath());
         long l2 = Files.size(f2.toPath());
-        if (l1 != l2) return true;
+        if (l1 != l2)
+            return true;
         else {
-            try (DataInputStream dis1 = new DataInputStream(new FileInputStream(f1));
-                    DataInputStream dis2 = new DataInputStream(new FileInputStream(f2))) {
+            try (InputStream dis1 = new BufferedInputStream(new FileInputStream(f1));
+                    InputStream dis2 = new BufferedInputStream(new FileInputStream(f2))) {
                 int c1, c2;
                 while ((c1 = dis1.read()) != -1) {
                     c2 = dis2.read();
@@ -161,7 +167,7 @@ public class DirectoryComparator {
         }
 
         @Override
-        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if (!file.getFileName().startsWith("."))
                 files.add(root.relativize(file).toString());
             return FileVisitResult.CONTINUE;
