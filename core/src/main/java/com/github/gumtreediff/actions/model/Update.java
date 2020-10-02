@@ -54,6 +54,6 @@ public class Update extends Action {
             return false;
 
         Update a = (Update) o;
-        return value == a.value;
+        return value.equals(a.value);
     }
 }

@@ -47,10 +47,9 @@ public class TestClassicGumtreeStability {
     @Test
     public void testStability() {
         EditScript previousScript = null;
-
+        ITree src = getSrcTree();
+        ITree dst = getDstTree();
         for (int i = 0; i < 20; i++ ) {
-            ITree src = getSrcTree();
-            ITree dst = getDstTree();
             Matcher matcher = new CompositeMatchers.ClassicGumtree();
             MappingStore mappingStore = matcher.match(src, dst);
             ChawatheScriptGenerator scriptGenerator = new ChawatheScriptGenerator();
@@ -59,7 +58,7 @@ public class TestClassicGumtreeStability {
                 previousScript = currentScript;
             }
             else {
-                assertThat(previousScript.size(), equalTo(currentScript.size()));
+                assertIterableEquals(previousScript, currentScript);
                 previousScript = currentScript;
             }
         }
