@@ -31,7 +31,7 @@ public class LineReader extends Reader {
 
     private int currentPos = 0;
 
-    private ArrayList<Integer> lines = new ArrayList<>(Arrays.asList(0));
+    private ArrayList<Integer> lines = new ArrayList<>(Arrays.asList(-1));
 
     public LineReader(Reader parent) {
         reader = parent;
@@ -52,7 +52,7 @@ public class LineReader extends Reader {
         if (lines.size() < line)
             return -1;
 
-        return lines.get(line - 1) + column - 1;
+        return lines.get(line - 1) + column;
     }
 
     // public int[] positionFor(int offset) { // TODO write this method
