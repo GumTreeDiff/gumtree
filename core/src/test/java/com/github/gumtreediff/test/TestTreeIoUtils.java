@@ -76,8 +76,8 @@ public class TestTreeIoUtils {
             targetString += (char) intValueOfChar;
         }
         lr.close();
-        assertEquals(3, lr.positionFor(2, 1));
-        assertEquals(7, lr.positionFor(3, 1));
+        assertEquals(4, lr.positionFor(2, 1));
+        assertEquals(8, lr.positionFor(3, 1));
         assertEquals(-1, lr.positionFor(5, 1));
     }
 
