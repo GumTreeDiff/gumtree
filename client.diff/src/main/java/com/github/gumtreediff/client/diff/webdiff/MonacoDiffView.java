@@ -134,6 +134,7 @@ public class MonacoDiffView implements Renderable {
         b.append("{")
                 .append("from: ").append(t.getPos())
                 .append(",").append("to: ").append(t.getEndPos()).append(",")
+                .append("index: ").append(t.getMetrics().depth).append(",")
                 .append("kind: ").append("\"" + kind + "\"").append(",")
                 .append("tooltip: ").append("\"" + tooltip(t) + "\"").append(",")
                 .append("}").append(",");

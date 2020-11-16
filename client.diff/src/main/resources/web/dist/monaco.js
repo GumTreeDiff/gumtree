@@ -68,6 +68,7 @@ function getDecoration(range, pos, endPos) {
         range: new monaco.Range(pos.lineNumber, pos.column, endPos.lineNumber, endPos.column),
         options: {
             className: range.kind,
+            zIndex: range.index,
             hoverMessage: {
                 value: range.tooltip,
             },
@@ -111,7 +112,8 @@ require(['vs/editor/editor.main'], function() {
                 if (allDecorations.length > 1)  {
                     for (let i = 1; i < allDecorations.length; i = i + 1) {
                         const candidateRange = allDecorations[i].range;
-                        if (activatedRange.containsRange(candidateRange)) activatedRange = candidateRange;
+                        if (activatedRange.containsRange(candidateRange))
+                            activatedRange = candidateRange;
                     }
                 }
                 const mapping = config.mappings.find(mapping => mapping[0].equalsRange(activatedRange))
