@@ -80,6 +80,9 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOption
         void dump(PrintStream out) {
             out.printf("Active path: %s\n", System.getProperty("user.dir"));
             out.printf("Diffed paths: %s %s\n", srcPath, dstPath);
+            out.printf("Tree generator id: %s\n", treeGeneratorId);
+            out.printf("Matcher id: %s\n", matcherId);
+            out.printf("Properties: %s\n", properties.toString());
         }
     }
 

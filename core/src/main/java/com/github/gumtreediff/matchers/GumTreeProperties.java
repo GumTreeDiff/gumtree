@@ -21,6 +21,7 @@ package com.github.gumtreediff.matchers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GumTreeProperties {
     Map<String, Object> properties = new HashMap<>();
@@ -97,5 +98,11 @@ public class GumTreeProperties {
             }
         }
         return value;
+    }
+
+    public String toString() {
+        return properties.keySet().stream()
+                .map(key -> key + "=" + properties.get(key))
+                .collect(Collectors.joining(", ", "{", "}"));
     }
 }
