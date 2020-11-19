@@ -27,6 +27,8 @@ import org.atteo.classindex.ClassIndex;
 
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Run {
 
@@ -90,9 +92,9 @@ public class Run {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] origArgs) {
         Options opts = new Options();
-        args = Option.processCommandLine(args, opts);
+        String[] args = Option.processCommandLine(origArgs, opts);
 
         initClients();
 
@@ -104,9 +106,13 @@ public class Run {
             System.err.printf("Unknown sub-command '%s'.\n", args[0]);
             displayHelp(System.err, opts);
         } else {
-            String[] a = new String[args.length - 1];
-            System.arraycopy(args, 1, a, 0, a.length);
-            startClient(args[0], client, a);
+            var clientArgs = new ArrayList<>(Arrays.asList(args));
+            clientArgs.remove(0);
+            if (Arrays.asList(origArgs).contains("--help"))
+                clientArgs.add("--help");
+            String[] finalArgs = new String[clientArgs.size()];
+            clientArgs.toArray(finalArgs);
+            startClient(origArgs[0], client, finalArgs);
         }
     }
 
@@ -131,7 +137,6 @@ public class Run {
         @Override
         public void process(String name, String[] args) {
             displayHelp(System.out, context);
-            System.exit(0);
         }
     }
 }

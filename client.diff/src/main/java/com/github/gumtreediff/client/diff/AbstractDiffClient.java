@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOptions> extends Client {
     protected final O opts;
@@ -59,7 +60,8 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOption
                             treeGeneratorId = args[0];
                         }
                     },
-                    new Option("-M", "Add a matcher property (-M property value). Available: ", 2) {
+                    new Option("-M", "Add a matcher property (-M property value). Available: "
+                            + Arrays.toString(ConfigurationOptions.values()) + ".", 2) {
                         @Override
                         protected void process(String name, String[] args) {
                             properties.put(ConfigurationOptions.valueOf(args[0]), args[1]);

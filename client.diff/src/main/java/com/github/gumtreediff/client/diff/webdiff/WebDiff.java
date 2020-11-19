@@ -51,19 +51,20 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
     }
 
     public static class WebDiffOptions extends AbstractDiffClient.DiffOptions {
-        public int defaultPort = Integer.parseInt(System.getProperty("gt.webdiff.port", "4567"));
+        public static final int DEFAULT_PORT = 4567;
+        public int port = DEFAULT_PORT;
 
         @Override
         public Option[] values() {
             return Option.Context.addValue(super.values(),
-                    new Option("--port", String.format("Set server port (default to %d).", defaultPort), 1) {
+                    new Option("--port", String.format("Set server port (default to %d).", DEFAULT_PORT), 1) {
                         @Override
                         protected void process(String name, String[] args) {
                             int p = Integer.parseInt(args[0]);
                             if (p > 0)
-                                defaultPort = p;
+                                port = p;
                             else
-                                System.err.printf("Invalid port number (%s), using %d.\n", args[0], defaultPort);
+                                System.err.printf("Invalid port number (%s), using %d.\n", args[0], port);
                         }
                     }
             );
@@ -79,9 +80,9 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
     public void run() {
         DirectoryComparator comparator = new DirectoryComparator(opts.srcPath, opts.dstPath);
         comparator.compare();
-        configureSpark(comparator, opts.defaultPort);
+        configureSpark(comparator, opts.port);
         Spark.awaitInitialization();
-        System.out.println(String.format("Starting server: %s:%d", "http://127.0.0.1", opts.defaultPort));
+        System.out.println(String.format("Starting server: %s:%d.", "http://127.0.0.1", opts.port));
     }
 
     public void configureSpark(final DirectoryComparator comparator, int port) {
