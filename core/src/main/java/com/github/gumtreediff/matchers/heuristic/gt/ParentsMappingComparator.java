@@ -21,7 +21,7 @@ package com.github.gumtreediff.matchers.heuristic.gt;
 
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
 
 import java.util.*;
@@ -36,14 +36,14 @@ public final class ParentsMappingComparator extends AbstractMappingComparator {
     }
 
     @Override
-    protected double similarity(ITree src, ITree dst) {
+    protected double similarity(Tree src, Tree dst) {
         return 100D * parentsJaccardSimilarity(src, dst)
                 + 10D * posInParentSimilarity(src, dst) + numberingSimilarity(src , dst);
     }
 
-    protected double parentsJaccardSimilarity(ITree src, ITree dst) {
-        List<ITree> srcParents = src.getParents();
-        List<ITree> dstParents = dst.getParents();
+    protected double parentsJaccardSimilarity(Tree src, Tree dst) {
+        List<Tree> srcParents = src.getParents();
+        List<Tree> dstParents = dst.getParents();
         double numerator =
                 (double) SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(srcParents, dstParents).size();
         double denominator = (double) srcParents.size() + (double) dstParents.size() - numerator;

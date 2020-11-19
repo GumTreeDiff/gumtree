@@ -23,7 +23,7 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.optimal.zs.ZsMatcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
@@ -32,12 +32,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestZsMatcher {
-
     @Test
     public void testWithCustomExample() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsCustomPair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore mappings = new ZsMatcher().match(src, dst);
         assertEquals(6, mappings.size());
         assertTrue(mappings.has(src, dst.getChild(0)));
@@ -51,8 +50,8 @@ public class TestZsMatcher {
     @Test
     public void testWithSlideExample() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         Matcher matcher = new ZsMatcher();
         MappingStore mappings = new ZsMatcher().match(src, dst);
         assertEquals(5, mappings.size());
@@ -62,5 +61,4 @@ public class TestZsMatcher {
         assertTrue(mappings.has(src.getChild("0.1"), dst.getChild("1.0")));
         assertTrue(mappings.has(src.getChild("0.2"), dst.getChild(2)));
     }
-
 }

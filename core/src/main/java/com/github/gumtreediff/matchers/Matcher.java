@@ -22,20 +22,20 @@ package com.github.gumtreediff.matchers;
 
 import org.atteo.classindex.IndexSubclasses;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 /**
  * Interface for matchers that produce mappings between the nodes of a src and
  * dst tree.
  *
  * @see MappingStore
- * @see ITree
+ * @see Tree
  */
 @IndexSubclasses
-public interface Matcher {
-    MappingStore match(ITree src, ITree dst, MappingStore mappings);
+public interface Matcher extends Configurable {
+    MappingStore match(Tree src, Tree dst, MappingStore mappings);
 
-    default MappingStore match(ITree src, ITree dst) {
+    default MappingStore match(Tree src, Tree dst) {
         return match(src, dst, new MappingStore(src, dst));
     }
 }

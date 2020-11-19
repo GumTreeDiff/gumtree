@@ -34,15 +34,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-@Register(name = "textdiff", description = "Dump actions in a textual format",
-        options = AbstractDiffClient.Options.class)
-public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
+@Register(name = "textdiff", description = "Dump actions in a textual format.",
+        options = TextDiff.TextDiffOptions.class)
+public class TextDiff extends AbstractDiffClient<TextDiff.TextDiffOptions> {
     public TextDiff(String[] args) {
         super(args);
-        if (!Files.isRegularFile(Paths.get(opts.src)))
-            throw new Option.OptionException("Source must be a file: " + opts.src, opts);
-        if (!Files.isRegularFile(Paths.get(opts.dst)))
-            throw new Option.OptionException("Destination must be a file: " + opts.dst, opts);
+        if (!Files.isRegularFile(Paths.get(opts.srcPath)))
+            throw new Option.OptionException("Source must be a file: " + opts.srcPath, opts);
+        if (!Files.isRegularFile(Paths.get(opts.dstPath)))
+            throw new Option.OptionException("Destination must be a file: " + opts.dstPath, opts);
 
         if (opts.format == null) {
             opts.format = OutputFormat.TEXT;
@@ -55,7 +55,7 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
         }
     }
 
-    public static class Options extends AbstractDiffClient.Options {
+    public static class TextDiffOptions extends AbstractDiffClient.DiffOptions {
         protected OutputFormat format;
         protected String output;
 
@@ -92,8 +92,8 @@ public class TextDiff extends AbstractDiffClient<TextDiff.Options> {
     }
 
     @Override
-    protected Options newOptions() {
-        return new Options();
+    protected TextDiffOptions newOptions() {
+        return new TextDiffOptions();
     }
 
     @Override

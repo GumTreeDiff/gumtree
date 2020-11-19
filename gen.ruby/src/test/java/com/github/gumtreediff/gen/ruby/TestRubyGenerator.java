@@ -36,7 +36,7 @@ public class TestRubyGenerator {
 
     @Test
     public void testFileParsing() throws IOException {
-        ITree tree = new RubyTreeGenerator().generateFrom()
+        Tree tree = new RubyTreeGenerator().generateFrom()
                 .charset("UTF-8").stream(getClass().getResourceAsStream("/sample.rb")).getRoot();
         assertEquals(ROOT_NODE, tree.getType());
         assertEquals(1726, tree.getMetrics().size);
@@ -45,14 +45,14 @@ public class TestRubyGenerator {
     @Test
     public void testSimpleSyntax() throws IOException {
         String input = "module Foo; puts \"Hello world!\"; end;";
-        ITree t = new RubyTreeGenerator().generateFrom().string(input).getRoot();
+        Tree t = new RubyTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(ROOT_NODE, t.getType());
     }
 
     @Test
     public void testRuby2Syntax() throws IOException {
         String input = "{ foo: true }";
-        ITree t = new RubyTreeGenerator().generateFrom().string(input).getRoot();
+        Tree t = new RubyTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(ROOT_NODE, t.getType());
     }
 
@@ -60,7 +60,7 @@ public class TestRubyGenerator {
     public void testPosition() throws IOException {
         String input = "module Baz\nclass Foo\n\tdef foo(bar)\n\t\tputs bar\n\tend\nend\nend";
         TreeContext ctx = new RubyTreeGenerator().generateFrom().string(input);
-        ITree root = ctx.getRoot();
+        Tree root = ctx.getRoot();
     }
 
     @Test

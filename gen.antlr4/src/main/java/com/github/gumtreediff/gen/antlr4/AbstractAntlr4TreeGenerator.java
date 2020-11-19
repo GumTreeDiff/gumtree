@@ -27,7 +27,7 @@ import java.util.Deque;
 import java.util.Map;
 
 import com.github.gumtreediff.gen.TreeGenerator;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -41,7 +41,7 @@ import static com.github.gumtreediff.tree.TypeSet.type;
 
 public abstract class AbstractAntlr4TreeGenerator extends TreeGenerator {
 
-    private Deque<ITree> trees = new ArrayDeque<>();
+    private Deque<Tree> trees = new ArrayDeque<>();
 
     protected static Map<Integer, Integer> chars;
 
@@ -95,9 +95,9 @@ public abstract class AbstractAntlr4TreeGenerator extends TreeGenerator {
 
         String label = pt.getText();
         if (type.name.equals(label)) // FIXME
-            label = ITree.NO_LABEL;
+            label = Tree.NO_LABEL;
 
-        ITree t = context.createTree(type, label);
+        Tree t = context.createTree(type, label);
 
 //        int start = startPos(pt.getSourceInterval().a);
 //        int stop = stopPos(pt.getSourceInterval().b);

@@ -21,7 +21,7 @@ package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +40,8 @@ public class SimplifiedChawatheScriptGenerator implements EditScriptGenerator {
     }
 
     private static EditScript simplify(EditScript actions) {
-        Map<ITree, Action> addedTrees = new HashMap<>();
-        Map<ITree, Action> deletedTrees = new HashMap<>();
+        Map<Tree, Action> addedTrees = new HashMap<>();
+        Map<Tree, Action> deletedTrees = new HashMap<>();
 
         for (Action a: actions)
             if (a instanceof Insert)
@@ -50,7 +50,7 @@ public class SimplifiedChawatheScriptGenerator implements EditScriptGenerator {
                 deletedTrees.put(a.getNode(), a);
 
 
-        for (ITree t : addedTrees.keySet()) {
+        for (Tree t : addedTrees.keySet()) {
             if (addedTrees.keySet().contains(t.getParent()) && addedTrees.keySet().containsAll(t.getDescendants()))
                 actions.remove(addedTrees.get(t));
             else {
@@ -65,7 +65,7 @@ public class SimplifiedChawatheScriptGenerator implements EditScriptGenerator {
             }
         }
 
-        for (ITree t : deletedTrees.keySet()) {
+        for (Tree t : deletedTrees.keySet()) {
             if (deletedTrees.keySet().contains(t.getParent()) && deletedTrees.keySet().containsAll(t.getDescendants()))
                 actions.remove(deletedTrees.get(t));
             else {

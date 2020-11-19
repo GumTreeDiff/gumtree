@@ -20,7 +20,7 @@
 package com.github.gumtreediff.gen.python;
 
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,7 +36,7 @@ public class TestPythonTreeGenerator {
     public void testSimple() throws IOException {
         String input = "import sys\nimport json as json\n";
         TreeContext ctx = new PythonTreeGenerator().generateFrom().string(input);
-        ITree t = ctx.getRoot();
+        Tree t = ctx.getRoot();
         assertEquals(9, t.getMetrics().size);
     }
 

@@ -23,7 +23,7 @@ package com.github.gumtreediff.gen.jdt;
 
 
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.Type;
 import org.eclipse.jdt.core.compiler.IScanner;
 import org.eclipse.jdt.core.compiler.ITerminalSymbols;
@@ -150,22 +150,22 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     private void handlePostVisit(ArrayCreation c) {
-        ITree t = this.trees.peek();
+        Tree t = this.trees.peek();
         if (t.getChild(1).getType() == ARRAY_INITIALIZER)
             return;
         for (int i = 1; i < t.getChild(0).getChildren().size(); i++) {
-            ITree dim = t.getChild(0).getChild(i);
+            Tree dim = t.getChild(0).getChild(i);
             if (t.getChildren().size() < 2)
                 break;
-            ITree expr = t.getChildren().remove(1);
+            Tree expr = t.getChildren().remove(1);
             dim.addChild(expr);
         }
     }
 
     private void handlePostVisit(PostfixExpression e) {
-        ITree t = this.trees.peek();
+        Tree t = this.trees.peek();
         String label  = e.getOperator().toString();
-        ITree s = context.createTree(POSTFIX_EXPRESSION_OPERATOR, label);
+        Tree s = context.createTree(POSTFIX_EXPRESSION_OPERATOR, label);
         PosAndLength pl = searchPostfixExpressionPosition(e);
         s.setPos(pl.pos);
         s.setLength(pl.length);
@@ -174,7 +174,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     private PosAndLength searchPostfixExpressionPosition(PostfixExpression e) {
-        ITree t = this.trees.peek();
+        Tree t = this.trees.peek();
         scanner.resetTo(t.getChild(0).getEndPos(), t.getEndPos());
         int pos = 0;
         int length = 0;
@@ -194,9 +194,9 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     private void handlePostVisit(PrefixExpression e) {
-        ITree t = this.trees.peek();
+        Tree t = this.trees.peek();
         String label  = e.getOperator().toString();
-        ITree s = context.createTree(PREFIX_EXPRESSION_OPERATOR, label);
+        Tree s = context.createTree(PREFIX_EXPRESSION_OPERATOR, label);
         PosAndLength pl = searchPrefixExpressionPosition(e);
         s.setPos(pl.pos);
         s.setLength(pl.length);
@@ -205,7 +205,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     private PosAndLength searchPrefixExpressionPosition(PrefixExpression e) {
-        ITree t = this.trees.peek();
+        Tree t = this.trees.peek();
         scanner.resetTo(t.getPos(), t.getChild(0).getPos());
         int pos = 0;
         int length = 0;
@@ -225,9 +225,9 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     private void handlePostVisit(Assignment a) {
-        ITree t = this.trees.peek();
+        Tree t = this.trees.peek();
         String label  = a.getOperator().toString();
-        ITree s = context.createTree(ASSIGNMENT_OPERATOR, label);
+        Tree s = context.createTree(ASSIGNMENT_OPERATOR, label);
         PosAndLength pl = searchAssignmentOperatorPosition(a);
         s.setPos(pl.pos);
         s.setLength(pl.length);
@@ -236,7 +236,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     private PosAndLength searchAssignmentOperatorPosition(Assignment a) {
-        ITree t = this.trees.peek();
+        Tree t = this.trees.peek();
         scanner.resetTo(t.getChild(0).getEndPos(), t.getChild(1).getPos());
         int pos = 0;
         int length = 0;
@@ -256,9 +256,9 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     private void handlePostVisit(InfixExpression e) {
-        ITree t = this.trees.peek();
+        Tree t = this.trees.peek();
         String label  = e.getOperator().toString();
-        ITree s = context.createTree(INFIX_EXPRESSION_OPERATOR, label);
+        Tree s = context.createTree(INFIX_EXPRESSION_OPERATOR, label);
         PosAndLength pl = searchInfixOperatorPosition(e);
         s.setPos(pl.pos);
         s.setLength(pl.length);
@@ -267,7 +267,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     }
 
     private PosAndLength searchInfixOperatorPosition(InfixExpression e) {
-        ITree t = this.trees.peek();
+        Tree t = this.trees.peek();
         scanner.resetTo(t.getChild(0).getEndPos(), t.getChild(1).getPos());
         int pos = 0;
         int length = 0;
@@ -291,13 +291,13 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         if (d.isInterface())
             label = "interface";
 
-        ITree s = context.createTree(TYPE_DECLARATION_KIND, label);
+        Tree s = context.createTree(TYPE_DECLARATION_KIND, label);
         PosAndLength pl = searchTypeDeclarationKindPosition(d);
         s.setPos(pl.pos);
         s.setLength(pl.length);
         int index = 0;
-        ITree t = this.trees.peek();
-        for (ITree c : t.getChildren()) {
+        Tree t = this.trees.peek();
+        for (Tree c : t.getChildren()) {
             if (c.getType() != SIMPLE_NAME)
                 index++;
             else

@@ -23,7 +23,7 @@ package com.github.gumtreediff.tree;
 import java.util.*;
 
 public class FakeTree extends AbstractTree {
-    public FakeTree(ITree... trees) {
+    public FakeTree(Tree... trees) {
         children = new ArrayList<>(trees.length);
         children.addAll(Arrays.asList(trees));
     }
@@ -33,9 +33,9 @@ public class FakeTree extends AbstractTree {
     }
 
     @Override
-    public ITree deepCopy() {
-        ITree copy = new FakeTree();
-        for (ITree child : getChildren())
+    public Tree deepCopy() {
+        Tree copy = new FakeTree();
+        for (Tree child : getChildren())
             copy.addChild(child.deepCopy());
         return copy;
     }

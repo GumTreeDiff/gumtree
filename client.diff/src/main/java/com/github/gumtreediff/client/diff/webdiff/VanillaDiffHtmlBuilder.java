@@ -21,9 +21,9 @@
 package com.github.gumtreediff.client.diff.webdiff;
 
 import com.github.gumtreediff.actions.Diff;
-import com.github.gumtreediff.actions.ITreeClassifier;
+import com.github.gumtreediff.actions.TreeClassifier;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
@@ -62,14 +62,14 @@ public final class VanillaDiffHtmlBuilder {
     }
 
     public void produce() throws IOException {
-        ITreeClassifier c = diff.createRootNodesClassifier();
-        TObjectIntMap<ITree> mappingIds = new TObjectIntHashMap<>();
+        TreeClassifier c = diff.createRootNodesClassifier();
+        TObjectIntMap<Tree> mappingIds = new TObjectIntHashMap<>();
 
         int uId = 1;
         int mId = 1;
 
         TagIndex ltags = new TagIndex();
-        for (ITree t: diff.src.getRoot().preOrder()) {
+        for (Tree t: diff.src.getRoot().preOrder()) {
             if (c.getMovedSrcs().contains(t)) {
                 mappingIds.put(diff.mappings.getDstForSrc(t), mId);
                 ltags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
@@ -94,7 +94,7 @@ public final class VanillaDiffHtmlBuilder {
         }
 
         TagIndex rtags = new TagIndex();
-        for (ITree t: diff.dst.getRoot().preOrder()) {
+        for (Tree t: diff.dst.getRoot().preOrder()) {
             if (c.getMovedDsts().contains(t)) {
                 int dId = mappingIds.get(t);
                 rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
@@ -157,7 +157,7 @@ public final class VanillaDiffHtmlBuilder {
         return dstDiff;
     }
 
-    private static String tooltip(TreeContext ctx, ITree t) {
+    private static String tooltip(TreeContext ctx, Tree t) {
         return (t.getParent() != null)
                 ? t.getParent().getType() + "/" + t.getType() : t.getType().toString();
     }

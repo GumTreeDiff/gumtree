@@ -20,10 +20,10 @@
 
 package com.github.gumtreediff.actions.model;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public class Insert extends Addition {
-    public Insert(ITree node, ITree parent, int pos) {
+    public Insert(Tree node, Tree parent, int pos) {
         super(node, parent, pos);
     }
 

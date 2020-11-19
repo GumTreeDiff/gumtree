@@ -37,16 +37,16 @@ public final class TreeUtils {
      * Returns a list of every subtrees and the tree ordered using a pre-order.
      * @param tree a Tree.
      */
-    public static List<ITree> preOrder(ITree tree) {
-        List<ITree> trees = new ArrayList<>();
+    public static List<Tree> preOrder(Tree tree) {
+        List<Tree> trees = new ArrayList<>();
         preOrder(tree, trees);
         return trees;
     }
 
-    private static void preOrder(ITree tree, List<ITree> trees) {
+    private static void preOrder(Tree tree, List<Tree> trees) {
         trees.add(tree);
         if (!tree.isLeaf())
-            for (ITree c: tree.getChildren())
+            for (Tree c: tree.getChildren())
                 preOrder(c, trees);
     }
 
@@ -54,21 +54,21 @@ public final class TreeUtils {
      * Returns a list of every subtrees and the tree ordered using a breadth-first order.
      * @param tree a Tree.
      */
-    public static List<ITree> breadthFirst(ITree tree) {
-        List<ITree> trees = new ArrayList<>();
-        List<ITree> currents = new ArrayList<>();
+    public static List<Tree> breadthFirst(Tree tree) {
+        List<Tree> trees = new ArrayList<>();
+        List<Tree> currents = new ArrayList<>();
         currents.add(tree);
         while (currents.size() > 0) {
-            ITree c = currents.remove(0);
+            Tree c = currents.remove(0);
             trees.add(c);
             currents.addAll(c.getChildren());
         }
         return trees;
     }
 
-    public static Iterator<ITree> breadthFirstIterator(final ITree tree) {
-        return new Iterator<ITree>() {
-            Deque<Iterator<ITree>> fifo = new ArrayDeque<>();
+    public static Iterator<Tree> breadthFirstIterator(final Tree tree) {
+        return new Iterator<Tree>() {
+            Deque<Iterator<Tree>> fifo = new ArrayDeque<>();
 
             {
                 addLasts(new FakeTree(tree));
@@ -80,11 +80,11 @@ public final class TreeUtils {
             }
 
             @Override
-            public ITree next() {
+            public Tree next() {
                 while (!fifo.isEmpty()) {
-                    Iterator<ITree> it = fifo.getFirst();
+                    Iterator<Tree> it = fifo.getFirst();
                     if (it.hasNext()) {
-                        ITree item = it.next();
+                        Tree item = it.next();
                         if (!it.hasNext())
                             fifo.removeFirst();
                         addLasts(item);
@@ -94,8 +94,8 @@ public final class TreeUtils {
                 throw new NoSuchElementException();
             }
 
-            private void addLasts(ITree item) {
-                List<ITree> children = item.getChildren();
+            private void addLasts(Tree item) {
+                List<Tree> children = item.getChildren();
                 if (!children.isEmpty())
                     fifo.addLast(children.iterator());
             }
@@ -111,22 +111,22 @@ public final class TreeUtils {
      * Returns a list of every subtrees and the tree ordered using a post-order.
      * @param tree a Tree.
      */
-    public static List<ITree> postOrder(ITree tree) {
-        List<ITree> trees = new ArrayList<>();
+    public static List<Tree> postOrder(Tree tree) {
+        List<Tree> trees = new ArrayList<>();
         postOrder(tree, trees);
         return trees;
     }
 
-    private static void postOrder(ITree tree, List<ITree> trees) {
+    private static void postOrder(Tree tree, List<Tree> trees) {
         if (!tree.isLeaf())
-            for (ITree c: tree.getChildren())
+            for (Tree c: tree.getChildren())
                 postOrder(c, trees);
         trees.add(tree);
     }
 
-    public static Iterator<ITree> postOrderIterator(final ITree tree) {
-        return new Iterator<ITree>() {
-            Deque<Pair<ITree, Iterator<ITree>>> stack = new ArrayDeque<>();
+    public static Iterator<Tree> postOrderIterator(final Tree tree) {
+        return new Iterator<Tree>() {
+            Deque<Pair<Tree, Iterator<Tree>>> stack = new ArrayDeque<>();
             {
                 push(tree);
             }
@@ -137,23 +137,23 @@ public final class TreeUtils {
             }
 
             @Override
-            public ITree next() {
+            public Tree next() {
                 if (stack.isEmpty())
                     throw new NoSuchElementException();
                 return selectNextChild(stack.peek().second);
             }
 
-            ITree selectNextChild(Iterator<ITree> it) {
+            Tree selectNextChild(Iterator<Tree> it) {
                 if (!it.hasNext())
                     return stack.pop().first;
-                ITree item = it.next();
+                Tree item = it.next();
                 if (item.isLeaf())
                     return item;
                 return selectNextChild(push(item));
             }
 
-            private Iterator<ITree> push(ITree item) {
-                Iterator<ITree> it = item.getChildren().iterator();
+            private Iterator<Tree> push(Tree item) {
+                Iterator<Tree> it = item.getChildren().iterator();
                 stack.push(new Pair<>(item, it));
                 return it;
             }
@@ -165,9 +165,9 @@ public final class TreeUtils {
         };
     }
 
-    public static Iterator<ITree> preOrderIterator(ITree tree) {
-        return new Iterator<ITree>() {
-            Deque<Iterator<ITree>> stack = new ArrayDeque<>();
+    public static Iterator<Tree> preOrderIterator(Tree tree) {
+        return new Iterator<Tree>() {
+            Deque<Iterator<Tree>> stack = new ArrayDeque<>();
             {
                 push(new FakeTree(tree));
             }
@@ -178,11 +178,11 @@ public final class TreeUtils {
             }
 
             @Override
-            public ITree next() {
-                Iterator<ITree> it = stack.peek();
+            public Tree next() {
+                Iterator<Tree> it = stack.peek();
                 if (it == null)
                     throw new NoSuchElementException();
-                ITree t = it.next();
+                Tree t = it.next();
                 while (it != null && !it.hasNext()) {
                     stack.pop();
                     it = stack.peek();
@@ -191,7 +191,7 @@ public final class TreeUtils {
                 return t;
             }
 
-            private void push(ITree tree) {
+            private void push(Tree tree) {
                 if (!tree.isLeaf())
                     stack.push(tree.getChildren().iterator());
             }
@@ -203,17 +203,17 @@ public final class TreeUtils {
         };
     }
 
-    public static Iterator<ITree> leafIterator(final Iterator<ITree> it) {
-        return new Iterator<ITree>() {
-            ITree current = it.hasNext() ? it.next() : null;
+    public static Iterator<Tree> leafIterator(final Iterator<Tree> it) {
+        return new Iterator<Tree>() {
+            Tree current = it.hasNext() ? it.next() : null;
             @Override
             public boolean hasNext() {
                 return current != null;
             }
 
             @Override
-            public ITree next() {
-                ITree val = current;
+            public Tree next() {
+                Tree val = current;
                 while (it.hasNext()) {
                     current = it.next();
                     if (current.isLeaf())

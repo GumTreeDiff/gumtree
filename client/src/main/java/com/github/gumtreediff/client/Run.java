@@ -34,13 +34,12 @@ public class Run {
         @Override
         public Option[] values() {
             return new Option[]{
-                    new Option("-c", "Set global property (-c property value). "
-                            + "Properties do not need to be prefixed by gumtree.", 2) {
+                    new Option("-C", "Set system property (-c property value). ",
+                            2) {
 
                         @Override
                         protected void process(String name, String[] args) {
-                            String key = args[0].startsWith("gt.") ? args[0] : "gt." + args[0];
-                            System.setProperty(key, args[1]);
+                            System.setProperty(args[0], args[1]);
                         }
                     },
                     new Option.Verbose(),

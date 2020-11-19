@@ -24,35 +24,45 @@ import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Client;
 import com.github.gumtreediff.gen.TreeGenerators;
+import com.github.gumtreediff.matchers.ConfigurationOptions;
+import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.Matchers;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> extends Client {
+public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOptions> extends Client {
     protected final O opts;
     public static final String SYNTAX = "Syntax: [options] srcFile dstFile";
 
-    public static class Options implements Option.Context {
-        public String matcher;
-        public String treeGenerator;
-        public String src;
-        public String dst;
+    public static class DiffOptions implements Option.Context {
+        public String matcherId;
+        public String treeGeneratorId;
+        public String srcPath;
+        public String dstPath;
+        public GumTreeProperties properties = new GumTreeProperties();
 
         @Override
         public Option[] values() {
             return new Option[] {
-                    new Option("-m", "Matcher to use.", 1) {
+                    new Option("-m", "Id of the matcher to use.", 1) {
                         @Override
                         protected void process(String name, String[] args) {
-                            matcher = args[0];
+                            matcherId = args[0];
                         }
                     },
-                    new Option("-g", "Tree generator to use.", 1) {
+                    new Option("-g", "Id of the tree generator to use.", 1) {
                         @Override
                         protected void process(String name, String[] args) {
-                            treeGenerator = args[0];
+                            treeGeneratorId = args[0];
+                        }
+                    },
+                    new Option("-M", "Add a matcher property (-M property value). Available: ", 2) {
+                        @Override
+                        protected void process(String name, String[] args) {
+                            properties.put(ConfigurationOptions.valueOf(args[0]), args[1]);
                         }
                     },
                     new Option.Help(this) {
@@ -67,7 +77,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
 
         void dump(PrintStream out) {
             out.printf("Active path: %s\n", System.getProperty("user.dir"));
-            out.printf("Diffed paths: %s %s\n", src, dst);
+            out.printf("Diffed paths: %s %s\n", srcPath, dstPath);
         }
     }
 
@@ -81,28 +91,31 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
         if (args.length < 2)
             throw new Option.OptionException("Two arguments are required. " + SYNTAX, opts);
 
-        opts.src = args[0];
-        opts.dst = args[1];
+        opts.srcPath = args[0];
+        opts.dstPath = args[1];
 
         if (Option.Verbose.verbose) {
             opts.dump(System.out);
         }
 
-        if (opts.treeGenerator != null && TreeGenerators.getInstance().find(opts.treeGenerator) == null)
-            throw new Option.OptionException("Error loading tree generator: " + opts.treeGenerator);
+        if (opts.matcherId != null && Matchers.getInstance().findById(opts.matcherId) == null)
+            throw new Option.OptionException("Error loading matcher: " + opts.matcherId);
 
-        if (!Files.exists(Paths.get(opts.src)))
-            throw new Option.OptionException("Error loading file or folder: " + opts.src);
+        if (opts.treeGeneratorId != null && TreeGenerators.getInstance().findById(opts.treeGeneratorId) == null)
+            throw new Option.OptionException("Error loading tree generator: " + opts.treeGeneratorId);
 
-        if (!Files.exists(Paths.get(opts.dst)))
-            throw new Option.OptionException("Error loading file or folder: " + opts.dst);
+        if (!Files.exists(Paths.get(opts.srcPath)))
+            throw new Option.OptionException("Error loading file or folder: " + opts.srcPath);
+
+        if (!Files.exists(Paths.get(opts.dstPath)))
+            throw new Option.OptionException("Error loading file or folder: " + opts.dstPath);
     }
 
     protected Diff getDiff() throws IOException {
-        return getDiff(opts.src, opts.dst);
+        return getDiff(opts.srcPath, opts.dstPath);
     }
 
     protected Diff getDiff(String src, String dst) throws IOException {
-        return Diff.compute(src, dst, opts.treeGenerator, opts.matcher);
+        return Diff.compute(src, dst, opts.treeGeneratorId, opts.matcherId, opts.properties);
     }
 }

@@ -29,7 +29,7 @@ import java.util.Set;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 
 /**
@@ -38,12 +38,12 @@ import com.github.gumtreediff.tree.TreeUtils;
 
 public class LcsOptMatcherThetaB implements Matcher {
 
-    private ITree src;
-    private ITree dst;
+    private Tree src;
+    private Tree dst;
     private MappingStore mappings;
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
         this.src = src;
         this.dst = dst;
         this.mappings = mappings;
@@ -52,34 +52,34 @@ public class LcsOptMatcherThetaB implements Matcher {
     }
 
     private void advancedLcsMatching() {
-        List<ITree> allNodesSrc = TreeUtils.preOrder(src);
-        List<ITree> allNodesDst = TreeUtils.preOrder(dst);
-        Set<ITree> unmatchedNodes1 = new HashSet<>();
-        Set<ITree> unmatchedNodes2 = new HashSet<>();
-        for (ITree node : allNodesSrc) {
+        List<Tree> allNodesSrc = TreeUtils.preOrder(src);
+        List<Tree> allNodesDst = TreeUtils.preOrder(dst);
+        Set<Tree> unmatchedNodes1 = new HashSet<>();
+        Set<Tree> unmatchedNodes2 = new HashSet<>();
+        for (Tree node : allNodesSrc) {
             if (!mappings.isSrcMapped(node)) {
                 unmatchedNodes1.add(node);
             }
         }
-        for (ITree node : allNodesDst) {
+        for (Tree node : allNodesDst) {
             if (!mappings.isDstMapped(node)) {
                 unmatchedNodes2.add(node);
             }
         }
         if (unmatchedNodes1.size() > 0 && unmatchedNodes2.size() > 0) {
-            ArrayList<ITree> workList = new ArrayList<>();
+            ArrayList<Tree> workList = new ArrayList<>();
             getUnmatchedNodeListInPostOrder(src, workList);
-            HashSet<ITree> checkedParent = new HashSet<>();
-            for (ITree node : workList) {
+            HashSet<Tree> checkedParent = new HashSet<>();
+            for (Tree node : workList) {
                 if (!unmatchedNodes1.contains(node)) {
                     continue;
                 }
-                ITree parent = node.getParent();
+                Tree parent = node.getParent();
                 if (parent == null) {
                     continue;
                 }
 
-                ITree partner = null;
+                Tree partner = null;
                 if (parent == src) {
                     partner = dst;
                 } else {
@@ -96,8 +96,8 @@ public class LcsOptMatcherThetaB implements Matcher {
                         continue;
                     }
                     checkedParent.add(parent);
-                    ArrayList<ITree> list1 = new ArrayList<>();
-                    ArrayList<ITree> list2 = new ArrayList<>();
+                    ArrayList<Tree> list1 = new ArrayList<>();
+                    ArrayList<Tree> list2 = new ArrayList<>();
                     getNodeListInPostOrder(parent, list1);
                     getNodeListInPostOrder(partner, list2);
                     List<Mapping> lcsMatch = lcs(list1, list2, unmatchedNodes1, unmatchedNodes2);
@@ -113,8 +113,8 @@ public class LcsOptMatcherThetaB implements Matcher {
         }
     }
 
-    private void backtrack(ArrayList<ITree> list1, ArrayList<ITree> list2, LinkedList<Mapping> resultList,
-                           int[][] matrix, int ipar, int jpar, Set<ITree> unmatchedNodes1, Set<ITree> unmatchedNodes2) {
+    private void backtrack(ArrayList<Tree> list1, ArrayList<Tree> list2, LinkedList<Mapping> resultList,
+                           int[][] matrix, int ipar, int jpar, Set<Tree> unmatchedNodes1, Set<Tree> unmatchedNodes2) {
         assert (ipar >= 0);
         assert (jpar >= 0);
         while (ipar > 0 && jpar > 0) {
@@ -131,18 +131,18 @@ public class LcsOptMatcherThetaB implements Matcher {
         }
     }
 
-    private void getNodeListInPostOrder(ITree tree, ArrayList<ITree> nodes) {
+    private void getNodeListInPostOrder(Tree tree, ArrayList<Tree> nodes) {
         if (tree != null) {
-            for (ITree child : tree.getChildren()) {
+            for (Tree child : tree.getChildren()) {
                 getNodeListInPostOrder(child, nodes);
             }
             nodes.add(tree);
         }
     }
 
-    private void getUnmatchedNodeListInPostOrder(ITree tree, ArrayList<ITree> nodes) {
+    private void getUnmatchedNodeListInPostOrder(Tree tree, ArrayList<Tree> nodes) {
         if (tree != null) {
-            for (ITree child : tree.getChildren()) {
+            for (Tree child : tree.getChildren()) {
                 getNodeListInPostOrder(child, nodes);
             }
             if (!mappings.isSrcMapped(tree) && !mappings.isDstMapped(tree)) {
@@ -151,8 +151,8 @@ public class LcsOptMatcherThetaB implements Matcher {
         }
     }
 
-    private List<Mapping> lcs(ArrayList<ITree> list1, ArrayList<ITree> list2, Set<ITree> unmatchedNodes1,
-                              Set<ITree> unmatchedNodes2) {
+    private List<Mapping> lcs(ArrayList<Tree> list1, ArrayList<Tree> list2, Set<Tree> unmatchedNodes1,
+                              Set<Tree> unmatchedNodes2) {
         int[][] matrix = new int[list1.size() + 1][list2.size() + 1];
         for (int i = 1; i < list1.size() + 1; i++) {
             for (int j = 1; j < list2.size() + 1; j++) {
@@ -177,7 +177,7 @@ public class LcsOptMatcherThetaB implements Matcher {
      * @param unmatchedNodes2 the unmatched nodes2
      * @return true, if successful
      */
-    public boolean testCondition(ITree node1, ITree node2, Set<ITree> unmatchedNodes1, Set<ITree> unmatchedNodes2) {
+    public boolean testCondition(Tree node1, Tree node2, Set<Tree> unmatchedNodes1, Set<Tree> unmatchedNodes2) {
         if (node1.getType() != node2.getType()) {
             return false;
         }

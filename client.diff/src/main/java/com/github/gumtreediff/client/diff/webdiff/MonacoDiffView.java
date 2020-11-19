@@ -20,8 +20,8 @@
 package com.github.gumtreediff.client.diff.webdiff;
 
 import com.github.gumtreediff.actions.Diff;
-import com.github.gumtreediff.actions.ITreeClassifier;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.actions.TreeClassifier;
+import com.github.gumtreediff.tree.Tree;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
@@ -79,12 +79,12 @@ public class MonacoDiffView implements Renderable {
     }
 
     private String getLeftJsConfig() {
-        ITreeClassifier c = diff.createRootNodesClassifier();
+        TreeClassifier c = diff.createRootNodesClassifier();
         StringBuilder b = new StringBuilder();
         b.append("{");
         b.append("url:").append("\"/left/" + id + "\"").append(",");
         b.append("ranges: [");
-        for (ITree t: diff.src.getRoot().preOrder()) {
+        for (Tree t: diff.src.getRoot().preOrder()) {
             if (c.getMovedSrcs().contains(t))
                 appendRange(b, t, "moved");
             if (c.getUpdatedSrcs().contains(t))
@@ -98,12 +98,12 @@ public class MonacoDiffView implements Renderable {
     }
 
     private String getRightJsConfig() {
-        ITreeClassifier c = diff.createRootNodesClassifier();
+        TreeClassifier c = diff.createRootNodesClassifier();
         StringBuilder b = new StringBuilder();
         b.append("{");
         b.append("url:").append("\"/right/" + id + "\"").append(",");
         b.append("ranges: [");
-        for (ITree t: diff.dst.getRoot().preOrder()) {
+        for (Tree t: diff.dst.getRoot().preOrder()) {
             if (c.getMovedDsts().contains(t))
                 appendRange(b, t, "moved");
             if (c.getUpdatedDsts().contains(t))
@@ -117,12 +117,12 @@ public class MonacoDiffView implements Renderable {
     }
 
     private String getMappingsJsConfig() {
-        ITreeClassifier c = diff.createRootNodesClassifier();
+        TreeClassifier c = diff.createRootNodesClassifier();
         StringBuilder b = new StringBuilder();
         b.append("[");
-        for (ITree t: diff.src.getRoot().preOrder()) {
+        for (Tree t: diff.src.getRoot().preOrder()) {
             if (c.getMovedSrcs().contains(t) || c.getUpdatedSrcs().contains(t)) {
-                ITree d = diff.mappings.getDstForSrc(t);
+                Tree d = diff.mappings.getDstForSrc(t);
                 b.append(String.format("[%s, %s, %s, %s], ", t.getPos(), t.getEndPos(), d.getPos(), d.getEndPos()));
             }
         }
@@ -130,7 +130,7 @@ public class MonacoDiffView implements Renderable {
         return b.toString();
     }
 
-    private void appendRange(StringBuilder b, ITree t, String kind) {
+    private void appendRange(StringBuilder b, Tree t, String kind) {
         b.append("{")
                 .append("from: ").append(t.getPos())
                 .append(",").append("to: ").append(t.getEndPos()).append(",")
@@ -140,7 +140,7 @@ public class MonacoDiffView implements Renderable {
                 .append("}").append(",");
     }
 
-    private static String tooltip(ITree t) {
+    private static String tooltip(Tree t) {
         return (t.getParent() != null)
                 ? t.getParent().getType() + "/" + t.getType() : t.getType().toString();
     }

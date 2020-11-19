@@ -15,7 +15,7 @@
 
 package com.github.gumtreediff.matchers.optimal.rted;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 import java.util.*;
 
@@ -27,7 +27,7 @@ import java.util.*;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class InfoTree {
-    private ITree inputTree;
+    private Tree inputTree;
 
     private static final byte LEFT = 0;
     private static final byte RIGHT = 1;
@@ -95,7 +95,7 @@ public class InfoTree {
      * @param aInputTree an LblTree object
      * @param aLd  a LabelDictionary object
      */
-    public InfoTree(ITree aInputTree, LabelDictionary aLd) {
+    public InfoTree(Tree aInputTree, LabelDictionary aLd) {
         this.inputTree = aInputTree;
         treeSize = inputTree.getMetrics().size;
         this.info = new int[16][treeSize];
@@ -202,7 +202,7 @@ public class InfoTree {
      * @param postorder
      * @return 
      */
-	private int gatherInfo(ITree aT, int postorder) {
+	private int gatherInfo(Tree aT, int postorder) {
         int currentSize = 0;
         int childrenCount = 0;
         int descSizes = 0;
@@ -230,7 +230,7 @@ public class InfoTree {
         for (Enumeration<?> e = Collections.enumeration(aT.getChildren()); e.hasMoreElements();) {
             childrenCount++;
 
-            postorder = gatherInfo((ITree) e.nextElement(), postorder);
+            postorder = gatherInfo((Tree) e.nextElement(), postorder);
 
             childrenPostorders.add(postorder);
             

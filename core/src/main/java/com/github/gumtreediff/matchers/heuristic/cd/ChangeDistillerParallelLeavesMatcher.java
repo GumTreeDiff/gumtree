@@ -41,7 +41,7 @@ import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.google.common.collect.Sets;
 
@@ -50,24 +50,20 @@ import com.google.common.collect.Sets;
  */
 public class ChangeDistillerParallelLeavesMatcher implements ConfigurableMatcher {
     private static final double DEFAULT_LABEL_SIM_THRESHOLD = 0.5;
-
-    protected double label_sim_threshold = DEFAULT_LABEL_SIM_THRESHOLD;
+    protected double labelSimThreshold = DEFAULT_LABEL_SIM_THRESHOLD;
 
     public ChangeDistillerParallelLeavesMatcher() {
-
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        label_sim_threshold = properties.tryConfigure(ConfigurationOptions.GT_CD_LSIM, label_sim_threshold);
-
+        labelSimThreshold = properties.tryConfigure(ConfigurationOptions.cd_labsim, labelSimThreshold);
     }
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-
-        List<ITree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
-        List<ITree> srcLeaves = retainLeaves(TreeUtils.postOrder(src));
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
+        List<Tree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
+        List<Tree> srcLeaves = retainLeaves(TreeUtils.postOrder(src));
 
         List<Mapping> leafMappings = new LinkedList<>();
         HashMap<Mapping, Double> simMap = new HashMap<>();
@@ -96,8 +92,8 @@ public class ChangeDistillerParallelLeavesMatcher implements ConfigurableMatcher
             e.printStackTrace();
         }
 
-        Set<ITree> srcIgnored = new HashSet<>();
-        Set<ITree> dstIgnored = new HashSet<>();
+        Set<Tree> srcIgnored = new HashSet<>();
+        Set<Tree> dstIgnored = new HashSet<>();
         Collections.sort(leafMappings, new LeafMappingComparator(simMap));
         while (leafMappings.size() > 0) {
             Mapping best = leafMappings.remove(0);
@@ -124,14 +120,14 @@ public class ChangeDistillerParallelLeavesMatcher implements ConfigurableMatcher
 
         HashMap<String, Double> cacheResults = new HashMap<>();
         private int cores;
-        private List<ITree> dstLeaves;
+        private List<Tree> dstLeaves;
         List<Mapping> leafMappings = new LinkedList<>();
         HashMap<Mapping, Double> simMap = new HashMap<>();
-        private List<ITree> srcLeaves;
+        private List<Tree> srcLeaves;
         private int start;
         private MappingStore mappings;
 
-        public ChangeDistillerLeavesMatcherCallable(List<ITree> srcLeaves, List<ITree> dstLeaves, int cores, int start,
+        public ChangeDistillerLeavesMatcherCallable(List<Tree> srcLeaves, List<Tree> dstLeaves, int cores, int start,
                                                     MappingStore mappings) {
             this.srcLeaves = srcLeaves;
             this.dstLeaves = dstLeaves;
@@ -143,8 +139,8 @@ public class ChangeDistillerParallelLeavesMatcher implements ConfigurableMatcher
         @Override
         public ChangeDistillerCallableResult call() throws Exception {
             for (int i = start; i < srcLeaves.size(); i += cores) {
-                ITree srcLeaf = srcLeaves.get(i);
-                for (ITree dstLeaf : dstLeaves) {
+                Tree srcLeaf = srcLeaves.get(i);
+                for (Tree dstLeaf : dstLeaves) {
                     if (mappings.isMappingAllowed(srcLeaf, dstLeaf)) {
                         double sim = 0f;
                         // TODO: Use a unique string instead of @@
@@ -154,7 +150,7 @@ public class ChangeDistillerParallelLeavesMatcher implements ConfigurableMatcher
                             sim = StringMetrics.qGramsDistance().compare(srcLeaf.getLabel(), dstLeaf.getLabel());
                             cacheResults.put(srcLeaf.getLabel() + "@@" + dstLeaf.getLabel(), sim);
                         }
-                        if (sim > label_sim_threshold) {
+                        if (sim > labelSimThreshold) {
                             Mapping mapping = new Mapping(srcLeaf, dstLeaf);
                             leafMappings.add(new Mapping(srcLeaf, dstLeaf));
                             simMap.put(mapping, sim);
@@ -186,10 +182,10 @@ public class ChangeDistillerParallelLeavesMatcher implements ConfigurableMatcher
 
     }
 
-    private static List<ITree> retainLeaves(List<ITree> trees) {
-        Iterator<ITree> tit = trees.iterator();
+    private static List<Tree> retainLeaves(List<Tree> trees) {
+        Iterator<Tree> tit = trees.iterator();
         while (tit.hasNext()) {
-            ITree tree = tit.next();
+            Tree tree = tit.next();
             if (!tree.isLeaf()) {
                 tit.remove();
             }
@@ -197,18 +193,16 @@ public class ChangeDistillerParallelLeavesMatcher implements ConfigurableMatcher
         return trees;
     }
 
-    public double getLabel_sim_threshold() {
-        return label_sim_threshold;
+    public double getLabelSimThreshold() {
+        return labelSimThreshold;
     }
 
-    public void setLabel_sim_threshold(double labelSimThreshold) {
-        this.label_sim_threshold = labelSimThreshold;
+    public void setLabelSimThreshold(double labelSimThreshold) {
+        this.labelSimThreshold = labelSimThreshold;
     }
 
     @Override
     public Set<ConfigurationOptions> getApplicableOptions() {
-
-        return Sets.newHashSet(ConfigurationOptions.GT_BUM_SZT, ConfigurationOptions.GT_BUM_SMT);
+        return Sets.newHashSet(ConfigurationOptions.cd_labsim);
     }
-
 }

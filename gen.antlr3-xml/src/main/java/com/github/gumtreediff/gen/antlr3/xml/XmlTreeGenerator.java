@@ -22,7 +22,7 @@ package com.github.gumtreediff.gen.antlr3.xml;
 
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.antlr3.AbstractAntlr3TreeGenerator;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
 import org.antlr.runtime.*;
@@ -40,9 +40,9 @@ public class XmlTreeGenerator extends AbstractAntlr3TreeGenerator<XMLLexer, XMLP
     @Override
     public TreeContext generate(Reader file) throws IOException {
         TreeContext ctx = super.generate(file);
-        ITree t = ctx.getRoot();
+        Tree t = ctx.getRoot();
 
-        for (ITree c: t.preOrder()) { // Prune top level empty pcdata
+        for (Tree c: t.preOrder()) { // Prune top level empty pcdata
             if (c.getType() == PCDATA && c.getLabel().trim().equals("") ) {
                 c.setParentAndUpdateChildren(null);
             }

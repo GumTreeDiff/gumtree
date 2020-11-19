@@ -30,7 +30,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.Arrays;
 
-@Register(name = "parse", description = "Parse file and dump result")
+@Register(name = "parse", description = "Parse file and dump result.")
 public class Serializer extends Client {
 
     public static final String SYNTAX = "Syntax: parse [options] file ...";

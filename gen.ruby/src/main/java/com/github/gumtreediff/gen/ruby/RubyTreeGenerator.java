@@ -24,7 +24,7 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerator;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
 import org.jrubyparser.CompatVersion;
@@ -57,10 +57,10 @@ public class RubyTreeGenerator extends TreeGenerator {
         }
     }
 
-    private TreeContext extractTreeContext(TreeContext treeContext, Node node, ITree parent) {
+    private TreeContext extractTreeContext(TreeContext treeContext, Node node, Tree parent) {
         Type type = type(node.getNodeType().name());
         String label = extractLabel(node);
-        ITree tree = treeContext.createTree(type, label);
+        Tree tree = treeContext.createTree(type, label);
         if (parent == null)
             treeContext.setRoot(tree);
         else

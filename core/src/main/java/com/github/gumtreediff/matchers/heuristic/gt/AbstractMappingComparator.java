@@ -26,7 +26,7 @@ import java.util.Map;
 
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public abstract class AbstractMappingComparator implements Comparator<Mapping> {
     protected List<Mapping> ambiguousMappings;
@@ -56,9 +56,9 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
         return Integer.compare(m1.second.getMetrics().position, m2.second.getMetrics().position);
     }
 
-    protected abstract double similarity(ITree src, ITree dst);
+    protected abstract double similarity(Tree src, Tree dst);
 
-    protected double posInParentSimilarity(ITree src, ITree dst) {
+    protected double posInParentSimilarity(Tree src, Tree dst) {
         int posSrc = (src.isRoot()) ? 0 : src.getParent().getChildPosition(src);
         int posDst = (dst.isRoot()) ? 0 : dst.getParent().getChildPosition(dst);
         int maxSrcPos = (src.isRoot()) ? 1 : src.getParent().getChildren().size();
@@ -67,7 +67,7 @@ public abstract class AbstractMappingComparator implements Comparator<Mapping> {
         return 1D - ((double) Math.abs(posSrc - posDst) / (double) maxPosDiff);
     }
 
-    protected double numberingSimilarity(ITree src, ITree dst) {
+    protected double numberingSimilarity(Tree src, Tree dst) {
         return 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position) / (double) maxTreeSize);
     }
 

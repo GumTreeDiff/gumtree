@@ -39,8 +39,8 @@ import java.nio.file.Paths;
 
 import static spark.Spark.*;
 
-@Register(description = "Web diff client", options = WebDiff.Options.class, priority = Registry.Priority.HIGH)
-public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
+@Register(description = "Web diff client", options = WebDiff.WebDiffOptions.class, priority = Registry.Priority.HIGH)
+public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
     public static final String JQUERY_JS_URL = "https://code.jquery.com/jquery-3.4.1.min.js";
     public static final String BOOTSTRAP_CSS_URL = "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css";
     public static final String BOOTSTRAP_JS_URL = "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js";
@@ -50,20 +50,20 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         super(args);
     }
 
-    public static class Options extends AbstractDiffClient.Options {
+    public static class WebDiffOptions extends AbstractDiffClient.DiffOptions {
         public int defaultPort = Integer.parseInt(System.getProperty("gt.webdiff.port", "4567"));
 
         @Override
         public Option[] values() {
             return Option.Context.addValue(super.values(),
-                    new Option("--port", String.format("set server port (default to %d)", defaultPort), 1) {
+                    new Option("--port", String.format("Set server port (default to %d).", defaultPort), 1) {
                         @Override
                         protected void process(String name, String[] args) {
                             int p = Integer.parseInt(args[0]);
                             if (p > 0)
                                 defaultPort = p;
                             else
-                                System.err.printf("Invalid port number (%s), using %d\n", args[0], defaultPort);
+                                System.err.printf("Invalid port number (%s), using %d.\n", args[0], defaultPort);
                         }
                     }
             );
@@ -71,13 +71,13 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
     }
 
     @Override
-    protected Options newOptions() {
-        return new Options();
+    protected WebDiffOptions newOptions() {
+        return new WebDiffOptions();
     }
 
     @Override
     public void run() {
-        DirectoryComparator comparator = new DirectoryComparator(opts.src, opts.dst);
+        DirectoryComparator comparator = new DirectoryComparator(opts.srcPath, opts.dstPath);
         comparator.compare();
         configureSpark(comparator, opts.defaultPort);
         Spark.awaitInitialization();

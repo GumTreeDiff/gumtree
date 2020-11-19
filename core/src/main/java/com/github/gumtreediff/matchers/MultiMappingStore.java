@@ -23,11 +23,11 @@ package com.github.gumtreediff.matchers;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public class MultiMappingStore implements Iterable<Mapping> {
-    private Map<ITree, Set<ITree>> srcToDsts;
-    private Map<ITree, Set<ITree>> dstToSrcs;
+    private Map<Tree, Set<Tree>> srcToDsts;
+    private Map<Tree, Set<Tree>> dstToSrcs;
 
     public MultiMappingStore(Set<Mapping> mappings) {
         this();
@@ -42,13 +42,13 @@ public class MultiMappingStore implements Iterable<Mapping> {
 
     public Set<Mapping> getMappings() {
         Set<Mapping> mappings = new HashSet<>();
-        for (ITree src : srcToDsts.keySet())
-            for (ITree dst: srcToDsts.get(src))
+        for (Tree src : srcToDsts.keySet())
+            for (Tree dst: srcToDsts.get(src))
                 mappings.add(new Mapping(src, dst));
         return mappings;
     }
 
-    public void addMapping(ITree src, ITree dst) {
+    public void addMapping(Tree src, Tree dst) {
         if (!srcToDsts.containsKey(src))
             srcToDsts.put(src, new HashSet<>());
         srcToDsts.get(src).add(dst);
@@ -57,7 +57,7 @@ public class MultiMappingStore implements Iterable<Mapping> {
         dstToSrcs.get(dst).add(src);
     }
 
-    public void removeMapping(ITree src, ITree dst) {
+    public void removeMapping(Tree src, Tree dst) {
         srcToDsts.get(src).remove(dst);
         dstToSrcs.get(dst).remove(src);
     }
@@ -66,46 +66,46 @@ public class MultiMappingStore implements Iterable<Mapping> {
         return getMappings().size();
     }
 
-    public Set<ITree> getDsts(ITree src) {
+    public Set<Tree> getDsts(Tree src) {
         return srcToDsts.get(src);
     }
 
-    public Set<ITree> getSrcs(ITree dst) {
+    public Set<Tree> getSrcs(Tree dst) {
         return dstToSrcs.get(dst);
     }
 
-    public Set<ITree> allMappedSrcs() {
+    public Set<Tree> allMappedSrcs() {
         return srcToDsts.keySet();
     }
 
-    public Set<ITree> allMappedDsts() {
+    public Set<Tree> allMappedDsts() {
         return dstToSrcs.keySet();
     }
 
-    public boolean hasSrc(ITree src) {
+    public boolean hasSrc(Tree src) {
         return srcToDsts.containsKey(src);
     }
 
-    public boolean hasDst(ITree dst) {
+    public boolean hasDst(Tree dst) {
         return dstToSrcs.containsKey(dst);
     }
 
-    public boolean has(ITree src, ITree dst) {
+    public boolean has(Tree src, Tree dst) {
         return srcToDsts.get(src).contains(dst);
     }
 
-    public boolean isSrcUnique(ITree src) {
+    public boolean isSrcUnique(Tree src) {
         return getDsts(src).size() == 1;
     }
 
-    public boolean isDstUnique(ITree dst) {
+    public boolean isDstUnique(Tree dst) {
         return getSrcs(dst).size() == 1;
     }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-        for (ITree t : srcToDsts.keySet()) {
+        for (Tree t : srcToDsts.keySet()) {
             String l = srcToDsts.get(t).stream().map(Object::toString).collect(Collectors.joining(", "));
             b.append(String.format("%s -> %s", t.toString(), l)).append('\n');
         }

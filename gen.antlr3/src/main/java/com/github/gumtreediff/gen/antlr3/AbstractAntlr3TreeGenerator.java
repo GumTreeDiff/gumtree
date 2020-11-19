@@ -34,12 +34,12 @@ import org.antlr.runtime.*;
 import org.antlr.runtime.tree.CommonTree;
 
 import com.github.gumtreediff.gen.TreeGenerator;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Parser> extends TreeGenerator {
 
-    private Deque<ITree> trees = new ArrayDeque<>();
+    private Deque<Tree> trees = new ArrayDeque<>();
 
     protected static Map<Integer, Integer> chars;
 
@@ -101,9 +101,9 @@ public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Par
         Type tokenName = getTokenName(type);
         String label = ct.getText();
         if (tokenName.name.equals(label)) // FIXME
-            label = ITree.NO_LABEL;
+            label = Tree.NO_LABEL;
 
-        ITree t = context.createTree(tokenName, label);
+        Tree t = context.createTree(tokenName, label);
 
         int start = startPos(ct.getTokenStartIndex());
         int stop = stopPos(ct.getTokenStopIndex());

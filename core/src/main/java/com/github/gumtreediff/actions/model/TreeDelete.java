@@ -19,10 +19,10 @@
 
 package com.github.gumtreediff.actions.model;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public class TreeDelete extends TreeAction {
-    public TreeDelete(ITree node) {
+    public TreeDelete(Tree node) {
         super(node);
     }
 

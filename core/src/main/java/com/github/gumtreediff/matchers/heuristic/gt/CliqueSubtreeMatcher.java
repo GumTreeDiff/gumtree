@@ -31,7 +31,7 @@ import java.util.Set;
 
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MultiMappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -40,7 +40,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
     @Override
     public void filterMappings(MultiMappingStore multiMappings) {
-        TIntObjectHashMap<Pair<List<ITree>, List<ITree>>> cliques = new TIntObjectHashMap<>();
+        TIntObjectHashMap<Pair<List<Tree>, List<Tree>>> cliques = new TIntObjectHashMap<>();
         for (Mapping m : multiMappings) {
             int hash = m.first.getMetrics().hash;
             if (!cliques.containsKey(hash))
@@ -49,10 +49,10 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
             cliques.get(hash).second.add(m.second);
         }
 
-        List<Pair<List<ITree>, List<ITree>>> ccliques = new ArrayList<>();
+        List<Pair<List<Tree>, List<Tree>>> ccliques = new ArrayList<>();
 
         for (int hash : cliques.keys()) {
-            Pair<List<ITree>, List<ITree>> clique = cliques.get(hash);
+            Pair<List<Tree>, List<Tree>> clique = cliques.get(hash);
             if (clique.first.size() == 1 && clique.second.size() == 1) {
                 mappings.addMappingRecursively(clique.first.get(0), clique.second.get(0));
                 cliques.remove(hash);
@@ -62,27 +62,27 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
         Collections.sort(ccliques, new CliqueComparator());
 
-        for (Pair<List<ITree>, List<ITree>> clique : ccliques) {
+        for (Pair<List<Tree>, List<Tree>> clique : ccliques) {
             List<Mapping> cliqueAsMappings = fromClique(clique);
             Collections.sort(cliqueAsMappings, new MappingComparator(cliqueAsMappings));
-            Set<ITree> srcIgnored = new HashSet<>();
-            Set<ITree> dstIgnored = new HashSet<>();
+            Set<Tree> srcIgnored = new HashSet<>();
+            Set<Tree> dstIgnored = new HashSet<>();
             retainBestMapping(cliqueAsMappings, srcIgnored, dstIgnored);
         }
     }
 
-    private List<Mapping> fromClique(Pair<List<ITree>, List<ITree>> clique) {
+    private List<Mapping> fromClique(Pair<List<Tree>, List<Tree>> clique) {
         List<Mapping> cliqueAsMappings = new ArrayList<Mapping>();
-        for (ITree src : clique.first)
-            for (ITree dst : clique.first)
+        for (Tree src : clique.first)
+            for (Tree dst : clique.first)
                 cliqueAsMappings.add(new Mapping(src, dst));
         return cliqueAsMappings;
     }
 
-    private class CliqueComparator implements Comparator<Pair<List<ITree>, List<ITree>>> {
+    private class CliqueComparator implements Comparator<Pair<List<Tree>, List<Tree>>> {
 
         @Override
-        public int compare(Pair<List<ITree>, List<ITree>> l1, Pair<List<ITree>, List<ITree>> l2) {
+        public int compare(Pair<List<Tree>, List<Tree>> l1, Pair<List<Tree>, List<Tree>> l2) {
             int minDepth1 = minDepth(l1);
             int minDepth2 = minDepth(l2);
             if (minDepth1 != minDepth2)
@@ -94,18 +94,18 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
             }
         }
 
-        private int minDepth(Pair<List<ITree>, List<ITree>> trees) {
+        private int minDepth(Pair<List<Tree>, List<Tree>> trees) {
             int depth = Integer.MAX_VALUE;
-            for (ITree t : trees.first)
+            for (Tree t : trees.first)
                 if (depth > t.getMetrics().depth)
                     depth = t.getMetrics().depth;
-            for (ITree t : trees.second)
+            for (Tree t : trees.second)
                 if (depth > t.getMetrics().depth)
                     depth = t.getMetrics().depth;
             return depth;
         }
 
-        private int size(Pair<List<ITree>, List<ITree>> trees) {
+        private int size(Pair<List<Tree>, List<Tree>> trees) {
             return trees.first.size() + trees.second.size();
         }
 
@@ -131,11 +131,11 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
             return 0;
         }
 
-        private Map<ITree, List<ITree>> srcDescendants = new HashMap<>();
+        private Map<Tree, List<Tree>> srcDescendants = new HashMap<>();
 
-        private Map<ITree, Set<ITree>> dstDescendants = new HashMap<>();
+        private Map<Tree, Set<Tree>> dstDescendants = new HashMap<>();
 
-        protected int numberOfCommonDescendants(ITree src, ITree dst) {
+        protected int numberOfCommonDescendants(Tree src, Tree dst) {
             if (!srcDescendants.containsKey(src))
                 srcDescendants.put(src, src.getDescendants());
             if (!dstDescendants.containsKey(dst))
@@ -143,8 +143,8 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
             int common = 0;
 
-            for (ITree t : srcDescendants.get(src)) {
-                ITree m = mappings.getDstForSrc(t);
+            for (Tree t : srcDescendants.get(src)) {
+                Tree m = mappings.getDstForSrc(t);
                 if (m != null && dstDescendants.get(dst).contains(m))
                     common++;
             }
@@ -152,7 +152,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
             return common;
         }
 
-        protected double[] sims(ITree src, ITree dst) {
+        protected double[] sims(Tree src, Tree dst) {
             double[] sims = new double[4];
             sims[0] = jaccardSimilarity(src.getParent(), dst.getParent());
             sims[1] = src.positionInParent() - dst.positionInParent();
@@ -161,7 +161,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
             return sims;
         }
 
-        protected double jaccardSimilarity(ITree src, ITree dst) {
+        protected double jaccardSimilarity(Tree src, Tree dst) {
             double num = (double) numberOfCommonDescendants(src, dst);
             double den = (double) srcDescendants.get(src).size() + (double) dstDescendants.get(dst).size() - num;
             return num / den;

@@ -23,21 +23,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GumTreeProperties {
-
     Map<String, Object> properties = new HashMap<>();
 
     public void put(ConfigurationOptions option, Object value) {
-        if (option != null) {
+        if (option != null)
             this.properties.put(option.name(), value);
-        }
     }
 
     public Object get(ConfigurationOptions option) {
-        if (option != null) {
+        if (option != null)
             return this.properties.get(option.name());
-        } else {
+        else
             return null;
-        }
     }
 
     /**
@@ -49,7 +46,6 @@ public class GumTreeProperties {
      * @return
      */
     private Object setIfNotPresent(String propertyName, Object value) {
-
         if (!properties.containsKey(propertyName)) {
             properties.put(propertyName, value);
             return value;
@@ -63,9 +59,8 @@ public class GumTreeProperties {
 
     private String tryConfigure(String propertyName, String value) {
         Object property = setIfNotPresent(propertyName, value);
-        if (property != null) {
+        if (property != null)
             return property.toString();
-        }
 
         return value;
     }
@@ -75,13 +70,12 @@ public class GumTreeProperties {
     }
 
     private int tryConfigure(String propertyName, int value) {
-
         Object property = setIfNotPresent(propertyName, value);
         if (property != null) {
             try {
                 return Integer.parseInt(property.toString());
-
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 throw new IllegalArgumentException(e);
             }
         }
@@ -97,12 +91,11 @@ public class GumTreeProperties {
         if (property != null) {
             try {
                 return Double.parseDouble(property.toString());
-
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 throw new IllegalArgumentException(e);
             }
         }
         return value;
     }
-
 }

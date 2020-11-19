@@ -22,7 +22,7 @@ package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,12 +37,12 @@ public class OnlyRootsClassifier extends AbstractITreeClassifier {
 
     @Override
     public void classify() {
-        Set<ITree> insertedDsts = new HashSet<>();
+        Set<Tree> insertedDsts = new HashSet<>();
         for (Action a: diff.editScript)
             if (a instanceof Insert)
                 insertedDsts.add(a.getNode());
 
-        Set<ITree> deletedSrcs = new HashSet<>();
+        Set<Tree> deletedSrcs = new HashSet<>();
         for (Action a: diff.editScript)
             if (a instanceof Delete)
                 deletedSrcs.add(a.getNode());

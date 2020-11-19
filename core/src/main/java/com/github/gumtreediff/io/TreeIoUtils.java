@@ -67,7 +67,7 @@ public final class TreeIoUtils {
         return toXml(ctx, ctx.getRoot());
     }
 
-    public static TreeSerializer toXml(TreeContext ctx, ITree root) {
+    public static TreeSerializer toXml(TreeContext ctx, Tree root) {
         return new TreeSerializer(ctx, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
@@ -81,7 +81,7 @@ public final class TreeIoUtils {
         return toAnnotatedXml(ctx, ctx.getRoot(), isSrc, m);
     }
 
-    public static TreeSerializer toAnnotatedXml(TreeContext ctx, ITree root, boolean isSrc, MappingStore m) {
+    public static TreeSerializer toAnnotatedXml(TreeContext ctx, Tree root, boolean isSrc, MappingStore m) {
         return new TreeSerializer(ctx, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
@@ -95,7 +95,7 @@ public final class TreeIoUtils {
         return toCompactXml(ctx, ctx.getRoot());
     }
 
-    public static TreeSerializer toCompactXml(TreeContext ctx, ITree root) {
+    public static TreeSerializer toCompactXml(TreeContext ctx, Tree root) {
         return new TreeSerializer(ctx, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer)
@@ -109,7 +109,7 @@ public final class TreeIoUtils {
         return toJson(ctx, ctx.getRoot());
     }
 
-    public static TreeSerializer toJson(TreeContext ctx, ITree root) {
+    public static TreeSerializer toJson(TreeContext ctx, Tree root) {
         return new TreeSerializer(ctx, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) {
@@ -122,7 +122,7 @@ public final class TreeIoUtils {
         return toLisp(ctx, ctx.getRoot());
     }
 
-    public static TreeSerializer toLisp(TreeContext ctx, ITree tree) {
+    public static TreeSerializer toLisp(TreeContext ctx, Tree tree) {
         return new TreeSerializer(ctx, tree) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializers, Writer writer) {
@@ -135,7 +135,7 @@ public final class TreeIoUtils {
         return toDot(ctx, ctx.getRoot());
     }
 
-    public static TreeSerializer toDot(TreeContext ctx, ITree root) {
+    public static TreeSerializer toDot(TreeContext ctx, Tree root) {
         return new TreeSerializer(ctx, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) {
@@ -148,7 +148,7 @@ public final class TreeIoUtils {
         return toText(ctx, ctx.getRoot());
     }
 
-    public static TreeSerializer toText(TreeContext ctx, ITree root) {
+    public static TreeSerializer toText(TreeContext ctx, Tree root) {
         return new TreeSerializer(ctx, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) {
@@ -157,7 +157,7 @@ public final class TreeIoUtils {
         };
     }
 
-    public static TreeSerializer toShortText(ITree root) {
+    public static TreeSerializer toShortText(Tree root) {
         return new TreeSerializer(null, root) {
             @Override
             protected TreeFormatter newFormatter(TreeContext ctx, MetadataSerializers serializer, Writer writer) {
@@ -203,10 +203,10 @@ public final class TreeIoUtils {
 
     public abstract static class TreeSerializer extends AbstractSerializer {
         private final TreeContext context;
-        private final ITree root;
+        private final Tree root;
         final MetadataSerializers serializers = new MetadataSerializers();
 
-        public TreeSerializer(TreeContext ctx, ITree root) {
+        public TreeSerializer(TreeContext ctx, Tree root) {
             context = ctx;
             this.root = root;
             if (ctx != null)
@@ -229,7 +229,7 @@ public final class TreeIoUtils {
             throw new FormatException(e);
         }
 
-        protected void writeTree(TreeFormatter formatter, ITree root) throws Exception {
+        protected void writeTree(TreeFormatter formatter, Tree root) throws Exception {
             formatter.startSerialization();
             if (context != null)
                 writeAttributes(formatter, context.getMetadata());
@@ -238,7 +238,7 @@ public final class TreeIoUtils {
                 TreeVisitor.visitTree(root, new TreeVisitor() {
 
                     @Override
-                    public void startTree(ITree tree) {
+                    public void startTree(Tree tree) {
                         try {
                             assert tree != null;
                             formatter.startTree(tree);
@@ -250,7 +250,7 @@ public final class TreeIoUtils {
                     }
 
                     @Override
-                    public void endTree(ITree tree) {
+                    public void endTree(Tree tree) {
                         try {
                             formatter.endTree(tree);
                         } catch (Exception e) {
@@ -290,11 +290,11 @@ public final class TreeIoUtils {
 
         void stopSerialization() throws Exception;
 
-        void startTree(ITree tree) throws Exception;
+        void startTree(Tree tree) throws Exception;
 
-        void endTreeProlog(ITree tree) throws Exception;
+        void endTreeProlog(Tree tree) throws Exception;
 
-        void endTree(ITree tree) throws Exception;
+        void endTree(Tree tree) throws Exception;
 
         void close() throws Exception;
 
@@ -342,15 +342,15 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void startTree(ITree tree) throws Exception {
+        public void startTree(Tree tree) throws Exception {
         }
 
         @Override
-        public void endTreeProlog(ITree tree) throws Exception {
+        public void endTreeProlog(Tree tree) throws Exception {
         }
 
         @Override
-        public void endTree(ITree tree) throws Exception {
+        public void endTree(Tree tree) throws Exception {
         }
 
         @Override
@@ -422,18 +422,18 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void startTree(ITree tree) throws XMLStreamException {
+        public void startTree(Tree tree) throws XMLStreamException {
             writer.writeStartElement("tree");
             writer.writeAttribute("type", tree.getType().toString());
             if (tree.hasLabel()) writer.writeAttribute("label", tree.getLabel());
-            if (ITree.NO_POS != tree.getPos()) {
+            if (Tree.NO_POS != tree.getPos()) {
                 writer.writeAttribute("pos", Integer.toString(tree.getPos()));
                 writer.writeAttribute("length", Integer.toString(tree.getLength()));
             }
         }
 
         @Override
-        public void endTree(ITree tree) throws XMLStreamException {
+        public void endTree(Tree tree) throws XMLStreamException {
             writer.writeEndElement();
         }
     }
@@ -452,16 +452,16 @@ public final class TreeIoUtils {
         }
 
         interface SearchOther {
-            ITree lookup(ITree tree);
+            Tree lookup(Tree tree);
         }
 
         @Override
-        public void startTree(ITree tree) throws XMLStreamException {
+        public void startTree(Tree tree) throws XMLStreamException {
             super.startTree(tree);
-            ITree o = searchOther.lookup(tree);
+            Tree o = searchOther.lookup(tree);
 
             if (o != null) {
-                if (ITree.NO_POS != o.getPos()) {
+                if (Tree.NO_POS != o.getPos()) {
                     writer.writeAttribute("other_pos", Integer.toString(o.getPos()));
                     writer.writeAttribute("other_length", Integer.toString(o.getLength()));
                 }
@@ -492,7 +492,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void startTree(ITree tree) throws XMLStreamException {
+        public void startTree(Tree tree) throws XMLStreamException {
             if (tree.getChildren().size() == 0)
                 writer.writeEmptyElement(tree.getType().toString());
             else
@@ -502,7 +502,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void endTree(ITree tree) throws XMLStreamException {
+        public void endTree(Tree tree) throws XMLStreamException {
             if (tree.getChildren().size() > 0)
                 writer.writeEndElement();
         }
@@ -525,14 +525,14 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void startTree(ITree tree) throws IOException {
+        public void startTree(Tree tree) throws IOException {
             if (!tree.isRoot())
                 writer.write("\n");
             for (int i = 0; i < level; i++)
                 writer.write("    ");
             level++;
 
-            String pos = (ITree.NO_POS == tree.getPos() ? "" : String.format("(%d %d)",
+            String pos = (Tree.NO_POS == tree.getPos() ? "" : String.format("(%d %d)",
                     tree.getPos(), tree.getLength()));
 
             writer.write(String.format("(%s %s (%s",
@@ -545,7 +545,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void endTreeProlog(ITree tree) throws Exception {
+        public void endTreeProlog(Tree tree) throws Exception {
             writer.append(") (");
         }
 
@@ -563,7 +563,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void endTree(ITree tree) throws IOException {
+        public void endTree(Tree tree) throws IOException {
             writer.write(")");
             level--;
         }
@@ -579,7 +579,7 @@ public final class TreeIoUtils {
 
         private static AtomicLong idCounter = new AtomicLong();
 
-        private Map<ITree, String> idForTrees = new HashMap<>();
+        private Map<Tree, String> idForTrees = new HashMap<>();
 
         protected DotFormatter(Writer w, TreeContext ctx) {
             super(ctx);
@@ -592,7 +592,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void startTree(ITree tree) throws Exception {
+        public void startTree(Tree tree) throws Exception {
             String label = getCleanLabel(tree);
             writer.write(String.format("\t%s [label=\"%s\"];\n", id(tree), label));
             if (tree.getParent() != null)
@@ -604,7 +604,7 @@ public final class TreeIoUtils {
             writer.write("}");
         }
 
-        private String getCleanLabel(ITree tree) {
+        private String getCleanLabel(Tree tree) {
             String label = tree.toString();
             if (label.contains("\"") || label.contains("\\s"))
                 label = label
@@ -616,7 +616,7 @@ public final class TreeIoUtils {
             return label;
         }
 
-        private String id(ITree t) {
+        private String id(Tree t) {
             if (idForTrees.containsKey(t))
                 return idForTrees.get(t);
             else {
@@ -641,24 +641,24 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void startTree(ITree t) throws IOException {
+        public void startTree(Tree t) throws IOException {
             writer.beginObject();
             writer.name("type").value(t.getType().toString());
             if (t.hasLabel()) writer.name("label").value(t.getLabel());
-            if (ITree.NO_POS != t.getPos()) {
+            if (Tree.NO_POS != t.getPos()) {
                 writer.name("pos").value(Integer.toString(t.getPos()));
                 writer.name("length").value(Integer.toString(t.getLength()));
             }
         }
 
         @Override
-        public void endTreeProlog(ITree tree) throws IOException {
+        public void endTreeProlog(Tree tree) throws IOException {
             writer.name("children");
             writer.beginArray();
         }
 
         @Override
-        public void endTree(ITree tree) throws IOException {
+        public void endTree(Tree tree) throws IOException {
             writer.endArray();
             writer.endObject();
         }
@@ -705,7 +705,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void startTree(ITree tree) throws IOException {
+        public void startTree(Tree tree) throws IOException {
             if (level != 0) writer.write("\n");
             indent(level, "    ");
             level++;
@@ -713,10 +713,10 @@ public final class TreeIoUtils {
             writeTree(tree);
         }
 
-        protected abstract void writeTree(ITree tree) throws IOException;
+        protected abstract void writeTree(Tree tree) throws IOException;
 
         @Override
-        public void endTree(ITree tree) throws IOException {
+        public void endTree(Tree tree) throws IOException {
             level--;
         }
     }
@@ -728,7 +728,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void writeTree(ITree tree) throws IOException {
+        public void writeTree(Tree tree) throws IOException {
             writer.write(tree.toString());
         }
     }
@@ -740,7 +740,7 @@ public final class TreeIoUtils {
         }
 
         @Override
-        public void writeTree(ITree tree) throws IOException {
+        public void writeTree(Tree tree) throws IOException {
             writer.write(tree.toString());
         }
     }
@@ -773,7 +773,7 @@ public final class TreeIoUtils {
             XMLInputFactory fact = XMLInputFactory.newInstance();
             TreeContext context = new TreeContext();
             try {
-                ArrayDeque<ITree> trees = new ArrayDeque<>();
+                ArrayDeque<Tree> trees = new ArrayDeque<>();
                 XMLEventReader r = fact.createXMLEventReader(source);
                 while (r.hasNext()) {
                     XMLEvent e = r.nextEvent();
@@ -783,7 +783,7 @@ public final class TreeIoUtils {
                             continue;
                         Type type = type(s.getAttributeByName(TYPE).getValue());
 
-                        ITree t = context.createTree(type, labelForAttribute(s, LABEL));
+                        Tree t = context.createTree(type, labelForAttribute(s, LABEL));
                         // FIXME this iterator has no type, due to the API. We have to cast it later
                         Iterator<?> it = s.getAttributes();
                         while (it.hasNext()) {
@@ -811,7 +811,7 @@ public final class TreeIoUtils {
 
         private static String labelForAttribute(StartElement s, QName attrName) {
             Attribute attr = s.getAttributeByName(attrName);
-            return attr == null ? ITree.NO_LABEL : attr.getValue();
+            return attr == null ? Tree.NO_LABEL : attr.getValue();
         }
 
         public MetadataUnserializers getUnserializers() {

@@ -20,10 +20,10 @@
 
 package com.github.gumtreediff.actions.model;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public class Delete extends Action {
-    public Delete(ITree node) {
+    public Delete(Tree node) {
         super(node);
     }
 

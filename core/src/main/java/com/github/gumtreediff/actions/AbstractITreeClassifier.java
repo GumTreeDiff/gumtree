@@ -19,26 +19,26 @@
 
 package com.github.gumtreediff.actions;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 import java.util.HashSet;
 
 import java.util.Set;
 
-public abstract class AbstractITreeClassifier implements ITreeClassifier {
+public abstract class AbstractITreeClassifier implements TreeClassifier {
     protected final Diff diff;
 
-    protected final Set<ITree> srcUpdTrees = new HashSet<>();
+    protected final Set<Tree> srcUpdTrees = new HashSet<>();
 
-    protected final Set<ITree> dstUpdTrees = new HashSet<>();
+    protected final Set<Tree> dstUpdTrees = new HashSet<>();
 
-    protected final Set<ITree> srcMvTrees = new HashSet<>();
+    protected final Set<Tree> srcMvTrees = new HashSet<>();
 
-    protected final Set<ITree> dstMvTrees = new HashSet<>();
+    protected final Set<Tree> dstMvTrees = new HashSet<>();
 
-    protected final Set<ITree> srcDelTrees = new HashSet<>();
+    protected final Set<Tree> srcDelTrees = new HashSet<>();
 
-    protected final Set<ITree> dstAddTrees = new HashSet<>();
+    protected final Set<Tree> dstAddTrees = new HashSet<>();
 
     public AbstractITreeClassifier(Diff diff) {
         this.diff = diff;
@@ -47,27 +47,27 @@ public abstract class AbstractITreeClassifier implements ITreeClassifier {
 
     protected abstract void classify();
 
-    public Set<ITree> getUpdatedSrcs() {
+    public Set<Tree> getUpdatedSrcs() {
         return srcUpdTrees;
     }
 
-    public Set<ITree> getUpdatedDsts() {
+    public Set<Tree> getUpdatedDsts() {
         return dstUpdTrees;
     }
 
-    public Set<ITree> getMovedSrcs() {
+    public Set<Tree> getMovedSrcs() {
         return srcMvTrees;
     }
 
-    public Set<ITree> getMovedDsts() {
+    public Set<Tree> getMovedDsts() {
         return dstMvTrees;
     }
 
-    public Set<ITree> getDeletedSrcs() {
+    public Set<Tree> getDeletedSrcs() {
         return srcDelTrees;
     }
 
-    public Set<ITree> getInsertedDsts() {
+    public Set<Tree> getInsertedDsts() {
         return dstAddTrees;
     }
 }

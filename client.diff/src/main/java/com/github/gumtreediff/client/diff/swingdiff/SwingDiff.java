@@ -27,8 +27,8 @@ import javax.swing.*;
 
 import java.io.IOException;
 
-@Register(description = "A swing diff client", options = AbstractDiffClient.Options.class)
-public final class SwingDiff extends AbstractDiffClient<AbstractDiffClient.Options> {
+@Register(description = "A swing diff client", options = AbstractDiffClient.DiffOptions.class)
+public final class SwingDiff extends AbstractDiffClient<AbstractDiffClient.DiffOptions> {
 
     public SwingDiff(String[] args) {
         super(args);
@@ -40,14 +40,14 @@ public final class SwingDiff extends AbstractDiffClient<AbstractDiffClient.Optio
         javax.swing.SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("GumTree");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.add(new MappingsPanel(opts.src, opts.dst, diff));
+            frame.add(new MappingsPanel(opts.srcPath, opts.dstPath, diff));
             frame.pack();
             frame.setVisible(true);
         });
     }
 
     @Override
-    protected AbstractDiffClient.Options newOptions() {
-        return new AbstractDiffClient.Options();
+    protected DiffOptions newOptions() {
+        return new DiffOptions();
     }
 }

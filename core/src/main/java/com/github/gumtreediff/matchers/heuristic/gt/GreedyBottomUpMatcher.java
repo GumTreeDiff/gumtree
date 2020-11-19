@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source
@@ -36,20 +36,20 @@ import com.github.gumtreediff.tree.ITree;
  */
 public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher {
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
 
-        for (ITree t : src.postOrder()) {
+        for (Tree t : src.postOrder()) {
             if (t.isRoot()) {
                 mappings.addMapping(t, dst);
                 lastChanceMatch(mappings, t, dst);
                 break;
             } else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
-                List<ITree> candidates = getDstCandidates(mappings, t);
-                ITree best = null;
+                List<Tree> candidates = getDstCandidates(mappings, t);
+                Tree best = null;
                 double max = -1D;
-                for (ITree cand : candidates) {
+                for (Tree cand : candidates) {
                     double sim = SimilarityMetrics.diceSimilarity(t, cand, mappings);
-                    if (sim > max && sim >= sim_threshold) {
+                    if (sim > max && sim >= simThreshold) {
                         max = sim;
                         best = cand;
                     }

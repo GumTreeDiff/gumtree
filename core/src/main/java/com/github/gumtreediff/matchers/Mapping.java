@@ -20,14 +20,14 @@
 
 package com.github.gumtreediff.matchers;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 
 /**
  * A mapping between a src and a dst tree.
  */
-public class Mapping extends Pair<ITree, ITree> {
-    public Mapping(ITree a, ITree b) {
+public class Mapping extends Pair<Tree, Tree> {
+    public Mapping(Tree a, Tree b) {
         super(a, b);
     }
 }

@@ -20,22 +20,20 @@
 
 package com.github.gumtreediff.actions.model;
 
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.Tree;
 
 public abstract class Action {
-    protected ITree node;
+    protected Tree node;
 
-    public Action(ITree node) {
+    public Action(Tree node) {
         this.node = node;
     }
 
-    public ITree getNode() {
+    public Tree getNode() {
         return node;
     }
 
-    public void setNode(ITree node) {
+    public void setNode(Tree node) {
         this.node = node;
     }
 

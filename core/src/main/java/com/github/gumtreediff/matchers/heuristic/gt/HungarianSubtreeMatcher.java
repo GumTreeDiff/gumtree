@@ -29,7 +29,7 @@ import java.util.Set;
 
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.MultiMappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.HungarianAlgorithm;
 
 public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements Matcher {
@@ -37,16 +37,16 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
     @Override
     public void filterMappings(MultiMappingStore multiMappings) {
         List<MultiMappingStore> ambiguousList = new ArrayList<>();
-        Set<ITree> ignored = new HashSet<>();
-        for (ITree src : multiMappings.allMappedSrcs())
+        Set<Tree> ignored = new HashSet<>();
+        for (Tree src : multiMappings.allMappedSrcs())
             if (multiMappings.isSrcUnique(src))
                 mappings.addMappingRecursively(src, multiMappings.getDsts(src).iterator().next());
             else if (!ignored.contains(src)) {
                 MultiMappingStore ambiguous = new MultiMappingStore();
-                Set<ITree> adsts = multiMappings.getDsts(src);
-                Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
-                for (ITree asrc : asrcs)
-                    for (ITree adst : adsts)
+                Set<Tree> adsts = multiMappings.getDsts(src);
+                Set<Tree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
+                for (Tree asrc : asrcs)
+                    for (Tree adst : adsts)
                         ambiguous.addMapping(asrc, adst);
                 ambiguousList.add(ambiguous);
                 ignored.addAll(asrcs);
@@ -56,8 +56,8 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
 
         for (MultiMappingStore ambiguous : ambiguousList) {
             System.out.println("hungarian try.");
-            List<ITree> lstSrcs = new ArrayList<>(ambiguous.allMappedSrcs());
-            List<ITree> lstDsts = new ArrayList<>(ambiguous.allMappedDsts());
+            List<Tree> lstSrcs = new ArrayList<>(ambiguous.allMappedSrcs());
+            List<Tree> lstDsts = new ArrayList<>(ambiguous.allMappedDsts());
             double[][] matrix = new double[lstSrcs.size()][lstDsts.size()];
             for (int i = 0; i < lstSrcs.size(); i++)
                 for (int j = 0; j < lstDsts.size(); j++)
@@ -73,7 +73,7 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
         }
     }
 
-    private double cost(ITree src, ITree dst) {
+    private double cost(Tree src, Tree dst) {
         return 111D - sim(src, dst);
     }
 
@@ -86,12 +86,12 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
 
         public int impact(MultiMappingStore m) {
             int impact = 0;
-            for (ITree src : m.allMappedSrcs()) {
+            for (Tree src : m.allMappedSrcs()) {
                 int pSize = src.getParents().size();
                 if (pSize > impact)
                     impact = pSize;
             }
-            for (ITree src : m.allMappedDsts()) {
+            for (Tree src : m.allMappedDsts()) {
                 int pSize = src.getParents().size();
                 if (pSize > impact)
                     impact = pSize;

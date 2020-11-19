@@ -19,7 +19,7 @@
 
 package com.github.gumtreediff.matchers;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,40 +27,40 @@ import java.util.Set;
 public class SimilarityMetrics {
     private SimilarityMetrics() {}
 
-    public static double chawatheSimilarity(ITree src, ITree dst, MappingStore mappings) {
+    public static double chawatheSimilarity(Tree src, Tree dst, MappingStore mappings) {
         int max = Math.max(src.getDescendants().size(), dst.getDescendants().size());
-        return (double) numberOfCommonDescendants(src, dst, mappings) / (double) max;
+        return (double) numberOfMappedDescendants(src, dst, mappings) / (double) max;
     }
 
-    public static double overlapSimilarity(ITree src, ITree dst, MappingStore mappings) {
+    public static double overlapSimilarity(Tree src, Tree dst, MappingStore mappings) {
         int min = Math.min(src.getDescendants().size(), dst.getDescendants().size());
-        return (double) numberOfCommonDescendants(src, dst, mappings) / (double) min;
+        return (double) numberOfMappedDescendants(src, dst, mappings) / (double) min;
     }
 
-    public static double diceSimilarity(ITree src, ITree dst, MappingStore mappings) {
-        double commonDescendants = (double) numberOfCommonDescendants(src, dst, mappings);
+    public static double diceSimilarity(Tree src, Tree dst, MappingStore mappings) {
+        double commonDescendants = numberOfMappedDescendants(src, dst, mappings);
         return (2D * commonDescendants)
                 / ((double) src.getDescendants().size() + (double) dst.getDescendants().size());
     }
 
-    public static double jaccardSimilarity(ITree src, ITree dst, MappingStore mappings) {
-        double num = (double) numberOfCommonDescendants(src, dst, mappings);
+    public static double jaccardSimilarity(Tree src, Tree dst, MappingStore mappings) {
+        double num = numberOfMappedDescendants(src, dst, mappings);
         double den = (double) src.getDescendants().size() + (double) dst.getDescendants().size() - num;
         return num / den;
     }
 
-    private static int numberOfCommonDescendants(ITree src, ITree dst, MappingStore mappings) {
-        Set<ITree> dstDescendants = new HashSet<>(dst.getDescendants());
-        int common = 0;
+    private static int numberOfMappedDescendants(Tree src, Tree dst, MappingStore mappings) {
+        Set<Tree> dstDescendants = new HashSet<>(dst.getDescendants());
+        int mappedDescendants = 0;
 
-        for (ITree t : src.getDescendants()) {
-            if (mappings.isSrcMapped(t)) {
-                ITree m = mappings.getDstForSrc(t);
-                if (dstDescendants.contains(m))
-                    common++;
+        for (var srcDescendant : src.getDescendants()) {
+            if (mappings.isSrcMapped(srcDescendant)) {
+                var dstForSrcDescendant = mappings.getDstForSrc(srcDescendant);
+                if (dstDescendants.contains(dstForSrcDescendant))
+                    mappedDescendants++;
             }
         }
 
-        return common;
+        return mappedDescendants;
     }
 }

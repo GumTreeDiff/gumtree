@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,7 +32,7 @@ public class TestCGenerator {
     @Test
     public void testSimpleSyntax() throws IOException {
         String input = "int main() { printf(\"Hello world!\"); return 0; }";
-        ITree t = new CTreeGenerator().generateFrom().string(input).getRoot();
+        Tree t = new CTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(18, t.getMetrics().size);
     }
 }

@@ -20,7 +20,7 @@
 package com.github.gumtreediff.gen.javaparser;
 
 import com.github.gumtreediff.io.LineReader;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.tree.TreeContext;
@@ -40,7 +40,7 @@ public class JavaParserVisitor extends TreeVisitor {
 
     protected TreeContext context;
 
-    private Deque<ITree> trees;
+    private Deque<Tree> trees;
 
     private LineReader reader;
 
@@ -100,14 +100,14 @@ public class JavaParserVisitor extends TreeVisitor {
     }
 
     private void push(Type type, String label, int startPosition, int length) {
-        ITree t = context.createTree(type, label);
+        Tree t = context.createTree(type, label);
         t.setPos(startPosition);
         t.setLength(length);
 
         if (trees.isEmpty())
             context.setRoot(t);
         else {
-            ITree parent = trees.peek();
+            Tree parent = trees.peek();
             t.setParentAndUpdateChildren(parent);
         }
 

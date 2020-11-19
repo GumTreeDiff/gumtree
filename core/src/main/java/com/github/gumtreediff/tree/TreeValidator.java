@@ -28,10 +28,10 @@ public class TreeValidator {
         validate(context.getRoot());
     }
 
-    private void validate(ITree root) {
-        for (ITree t : root.preOrder()) {
+    private void validate(Tree root) {
+        for (Tree t : root.preOrder()) {
             if (!t.isLeaf()) {
-                if (!t.getLabel().equals(ITree.NO_LABEL))
+                if (!t.getLabel().equals(Tree.NO_LABEL))
                     throw new TreeException(String.format("%s : %s\n%s",
                             "Inner node with label",
                             t.toString(),
@@ -51,8 +51,8 @@ public class TreeValidator {
 
                 if (t.getChildren().size() > 1) {
                     for (int i = 1; i < t.getChildren().size(); i++) {
-                        ITree b = t.getChild(i -  1);
-                        ITree c = t.getChild(i);
+                        Tree b = t.getChild(i -  1);
+                        Tree c = t.getChild(i);
                         if (c.getPos() < b.getEndPos())
                             throw new TreeException(String.format("%s : %s\n%s",
                                     "Sibling begin position before node end position",

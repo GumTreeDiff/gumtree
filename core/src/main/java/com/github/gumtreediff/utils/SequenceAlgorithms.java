@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public final class SequenceAlgorithms {
     private SequenceAlgorithms() {}
@@ -104,11 +104,11 @@ public final class SequenceAlgorithms {
      * Returns the longest common subsequence between the two list of nodes. This version use
      *     type and label to ensure equality.
      *
-     * @see ITree#hasSameTypeAndLabel(ITree)
+     * @see Tree#hasSameTypeAndLabel(Tree)
      * @return a list of size 2 int arrays that corresponds
      *     to match of index in sequence 1 to index in sequence 2.
      */
-    public static List<int[]> longestCommonSubsequenceWithTypeAndLabel(List<ITree> s0, List<ITree> s1) {
+    public static List<int[]> longestCommonSubsequenceWithTypeAndLabel(List<Tree> s0, List<Tree> s1) {
         int[][] lengths = new int[s0.size() + 1][s1.size() + 1];
         for (int i = 0; i < s0.size(); i++)
             for (int j = 0; j < s1.size(); j++)
@@ -124,11 +124,11 @@ public final class SequenceAlgorithms {
      * Returns the longest common subsequence between the two list of nodes. This version use
      *     isomorphism to ensure equality.
      *
-     * @see ITree#isIsomorphicTo(ITree)
+     * @see Tree#isIsomorphicTo(Tree)
      * @return a list of size 2 int arrays that corresponds
      *     to match of index in sequence 1 to index in sequence 2.
      */
-    public static List<int[]> longestCommonSubsequenceWithIsomorphism(List<ITree> s0, List<ITree> s1) {
+    public static List<int[]> longestCommonSubsequenceWithIsomorphism(List<Tree> s0, List<Tree> s1) {
         int[][] lengths = new int[s0.size() + 1][s1.size() + 1];
         for (int i = 0; i < s0.size(); i++)
             for (int j = 0; j < s1.size(); j++)
@@ -144,11 +144,11 @@ public final class SequenceAlgorithms {
      * Returns the longest common subsequence between the two list of nodes. This version use
      *     isomorphism to ensure equality.
      *
-     * @see ITree#isIsoStructuralTo(ITree)
+     * @see Tree#isIsoStructuralTo(Tree)
      * @return a list of size 2 int arrays that corresponds
      *     to match of index in sequence 1 to index in sequence 2.
      */
-    public static List<int[]> longestCommonSubsequenceWithIsostructure(List<ITree> s0, List<ITree> s1) {
+    public static List<int[]> longestCommonSubsequenceWithIsostructure(List<Tree> s0, List<Tree> s1) {
         int[][] lengths = new int[s0.size() + 1][s1.size() + 1];
         for (int i = 0; i < s0.size(); i++)
             for (int j = 0; j < s1.size(); j++)

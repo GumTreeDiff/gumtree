@@ -23,7 +23,7 @@ import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.FakeTree;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 
 import java.util.*;
@@ -32,25 +32,25 @@ import java.util.*;
  * An edit script generator based upon Chawathe algorithm.
  */
 public class ChawatheScriptGenerator implements EditScriptGenerator {
-    private ITree origSrc;
+    private Tree origSrc;
 
-    private ITree cpySrc;
+    private Tree cpySrc;
 
-    private ITree origDst;
+    private Tree origDst;
 
     private MappingStore origMappings;
 
     private MappingStore cpyMappings;
 
-    private Set<ITree> dstInOrder;
+    private Set<Tree> dstInOrder;
 
-    private Set<ITree> srcInOrder;
+    private Set<Tree> srcInOrder;
 
     private EditScript actions;
 
-    private Map<ITree, ITree> origToCopy;
+    private Map<Tree, Tree> origToCopy;
 
-    private Map<ITree, ITree> copyToOrig;
+    private Map<Tree, Tree> copyToOrig;
 
     @Override
     public EditScript computeActions(MappingStore ms) {
@@ -67,9 +67,9 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
 
         origToCopy = new HashMap<>();
         copyToOrig = new HashMap<>();
-        Iterator<ITree> cpyTreeIterator = TreeUtils.preOrderIterator(cpySrc);
-        for (ITree origTree: TreeUtils.preOrder(origSrc)) {
-            ITree cpyTree = cpyTreeIterator.next();
+        Iterator<Tree> cpyTreeIterator = TreeUtils.preOrderIterator(cpySrc);
+        for (Tree origTree: TreeUtils.preOrder(origSrc)) {
+            Tree cpyTree = cpyTreeIterator.next();
             origToCopy.put(origTree, cpyTree);
             copyToOrig.put(cpyTree, origTree);
         }
@@ -80,8 +80,8 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
     }
 
     public EditScript generate() {
-        ITree srcFakeRoot = new FakeTree(cpySrc);
-        ITree dstFakeRoot = new FakeTree(origDst);
+        Tree srcFakeRoot = new FakeTree(cpySrc);
+        Tree dstFakeRoot = new FakeTree(origDst);
         cpySrc.setParent(srcFakeRoot);
         origDst.setParent(dstFakeRoot);
 
@@ -91,11 +91,11 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
 
         cpyMappings.addMapping(srcFakeRoot, dstFakeRoot);
 
-        List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
-        for (ITree x: bfsDst) {
-            ITree w;
-            ITree y = x.getParent();
-            ITree z = cpyMappings.getSrcForDst(y);
+        List<Tree> bfsDst = TreeUtils.breadthFirst(origDst);
+        for (Tree x: bfsDst) {
+            Tree w;
+            Tree y = x.getParent();
+            Tree z = cpyMappings.getSrcForDst(y);
 
             if (!cpyMappings.isDstMapped(x)) {
                 int k = findPos(x);
@@ -111,7 +111,7 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
             } else {
                 w = cpyMappings.getSrcForDst(x);
                 if (!x.equals(origDst)) { // TODO => x != origDst // Case of the root
-                    ITree v = w.getParent();
+                    Tree v = w.getParent();
                     if (!w.getLabel().equals(x.getLabel())) {
                         actions.add(new Update(copyToOrig.get(w), x.getLabel()));
                         w.setLabel(x.getLabel());
@@ -132,25 +132,25 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
             alignChildren(w, x);
         }
 
-        for (ITree w : cpySrc.postOrder())
+        for (Tree w : cpySrc.postOrder())
             if (!cpyMappings.isSrcMapped(w))
                 actions.add(new Delete(copyToOrig.get(w)));
 
         return actions;
     }
 
-    private void alignChildren(ITree w, ITree x) {
+    private void alignChildren(Tree w, Tree x) {
         srcInOrder.removeAll(w.getChildren());
         dstInOrder.removeAll(x.getChildren());
 
-        List<ITree> s1 = new ArrayList<>();
-        for (ITree c: w.getChildren())
+        List<Tree> s1 = new ArrayList<>();
+        for (Tree c: w.getChildren())
             if (cpyMappings.isSrcMapped(c))
                 if (x.getChildren().contains(cpyMappings.getDstForSrc(c)))
                     s1.add(c);
 
-        List<ITree> s2 = new ArrayList<>();
-        for (ITree c: x.getChildren())
+        List<Tree> s2 = new ArrayList<>();
+        for (Tree c: x.getChildren())
             if (cpyMappings.isDstMapped(c))
                 if (w.getChildren().contains(cpyMappings.getSrcForDst(c)))
                     s2.add(c);
@@ -162,8 +162,8 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
             dstInOrder.add(m.second);
         }
 
-        for (ITree b: s2 ) { // iterate through s2 first, to ensure left-to-right insertions
-            for (ITree a : s1) {
+        for (Tree b: s2 ) { // iterate through s2 first, to ensure left-to-right insertions
+            for (Tree a : s1) {
                 if (cpyMappings.has(a, b)) {
                     if (!lcs.contains(new Mapping(a, b))) {
                         a.getParent().getChildren().remove(a); // remove this node directly.
@@ -180,11 +180,11 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
         }
     }
 
-    private int findPos(ITree x) {
-        ITree y = x.getParent();
-        List<ITree> siblings = y.getChildren();
+    private int findPos(Tree x) {
+        Tree y = x.getParent();
+        List<Tree> siblings = y.getChildren();
 
-        for (ITree c : siblings) {
+        for (Tree c : siblings) {
             if (dstInOrder.contains(c)) {
                 if (c.equals(x)) return 0;
                 else break;
@@ -192,16 +192,16 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
         }
 
         int xpos = x.positionInParent();
-        ITree v = null;
+        Tree v = null;
         for (int i = 0; i < xpos; i++) {
-            ITree c = siblings.get(i);
+            Tree c = siblings.get(i);
             if (dstInOrder.contains(c)) v = c;
         }
 
         //if (v == null) throw new RuntimeException("No rightmost sibling in order");
         if (v == null) return 0;
 
-        ITree u = cpyMappings.getSrcForDst(v);
+        Tree u = cpyMappings.getSrcForDst(v);
         // siblings = u.getParent().getChildren();
         // int upos = siblings.indexOf(u);
         int upos = u.positionInParent();
@@ -211,7 +211,7 @@ public class ChawatheScriptGenerator implements EditScriptGenerator {
         return upos + 1;
     }
 
-    private List<Mapping> lcs(List<ITree> x, List<ITree> y) {
+    private List<Mapping> lcs(List<Tree> x, List<Tree> y) {
         int m = x.size();
         int n = y.size();
         List<Mapping> lcs = new ArrayList<>();

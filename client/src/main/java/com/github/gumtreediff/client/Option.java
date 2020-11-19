@@ -135,7 +135,7 @@ public abstract class Option {
         protected final Context context;
 
         public Help(final Context ctx) {
-            super("--help", "Display help (this screen)");
+            super("--help", "Display help (this screen).");
             context = ctx;
         }
 

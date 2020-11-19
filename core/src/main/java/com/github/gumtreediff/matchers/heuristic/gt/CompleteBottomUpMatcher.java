@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 /**
  * Match the nodes using a bottom-up approach. It browse the nodes of the source
@@ -38,25 +38,25 @@ import com.github.gumtreediff.tree.ITree;
  */
 public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher implements Matcher {
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        for (ITree t : src.postOrder()) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
+        for (Tree t : src.postOrder()) {
             if (t.isRoot()) {
                 mappings.addMapping(t, dst);
                 lastChanceMatch(mappings, t, dst);
                 break;
             } else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
-                List<ITree> srcCandidates = t.getParents().stream().filter(p -> p.getType() == t.getType())
+                List<Tree> srcCandidates = t.getParents().stream().filter(p -> p.getType() == t.getType())
                         .collect(Collectors.toList());
 
-                List<ITree> dstCandidates = getDstCandidates(mappings, t);
-                ITree srcBest = null;
-                ITree dstBest = null;
+                List<Tree> dstCandidates = getDstCandidates(mappings, t);
+                Tree srcBest = null;
+                Tree dstBest = null;
                 double max = -1D;
-                for (ITree srcCand : srcCandidates) {
-                    for (ITree dstCand : dstCandidates) {
+                for (Tree srcCand : srcCandidates) {
+                    for (Tree dstCand : dstCandidates) {
 
                         double sim = SimilarityMetrics.jaccardSimilarity(srcCand, dstCand, mappings);
-                        if (sim > max && sim >= sim_threshold) {
+                        if (sim > max && sim >= simThreshold) {
                             max = sim;
                             srcBest = srcCand;
                             dstBest = dstCand;

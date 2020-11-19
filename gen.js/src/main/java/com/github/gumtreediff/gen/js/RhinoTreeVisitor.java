@@ -26,19 +26,19 @@ import java.util.Map;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.*;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
 
 public class RhinoTreeVisitor implements NodeVisitor {
-    private Map<AstNode, ITree> trees;
+    private Map<AstNode, Tree> trees;
     private TreeContext context;
 
     public RhinoTreeVisitor(AstRoot root) {
         trees = new HashMap<>();
         context = new TreeContext();
-        ITree tree = buildTree(root);
+        Tree tree = buildTree(root);
         context.setRoot(tree);
     }
 
@@ -51,8 +51,8 @@ public class RhinoTreeVisitor implements NodeVisitor {
         if (node instanceof AstRoot)
             return true;
         else {
-            ITree t = buildTree(node);
-            ITree p = trees.get(node.getParent());
+            Tree t = buildTree(node);
+            Tree p = trees.get(node.getParent());
             p.addChild(t);
 
             if (node instanceof Name) {
@@ -73,8 +73,8 @@ public class RhinoTreeVisitor implements NodeVisitor {
         }
     }
 
-    private ITree buildTree(AstNode node)  {
-        ITree t = context.createTree(type(Token.typeToName(node.getType())), ITree.NO_LABEL);
+    private Tree buildTree(AstNode node)  {
+        Tree t = context.createTree(type(Token.typeToName(node.getType())), Tree.NO_LABEL);
         t.setPos(node.getAbsolutePosition());
         t.setLength(node.getLength());
         trees.put(node, t);

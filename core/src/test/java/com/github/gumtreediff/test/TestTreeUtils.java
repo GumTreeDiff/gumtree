@@ -33,7 +33,7 @@ import static com.github.gumtreediff.tree.TreeMetricComputer.BASE;
 public class TestTreeUtils {
     @Test
     public void testPostOrderNumbering() {
-        ITree root = TreeLoader.getDummySrc();
+        Tree root = TreeLoader.getDummySrc();
         assertEquals(4, root.getMetrics().position);
         assertEquals(2, root.getChild(0).getMetrics().position);
         assertEquals(0, root.getChild("0.0").getMetrics().position);
@@ -43,7 +43,7 @@ public class TestTreeUtils {
 
     @Test
     public void testDepth() {
-        ITree root = TreeLoader.getDummySrc();
+        Tree root = TreeLoader.getDummySrc();
         System.out.println(root.toTreeString());
         assertEquals(0, root.getMetrics().depth);
         assertEquals(1, root.getChild(0).getMetrics().depth);
@@ -54,7 +54,7 @@ public class TestTreeUtils {
 
     @Test
     public void testSize() {
-        ITree root = TreeLoader.getDummySrc();
+        Tree root = TreeLoader.getDummySrc();
         System.out.println(root.toTreeString());
         assertEquals(5, root.getMetrics().size);
         assertEquals(3, root.getChild(0).getMetrics().size);
@@ -80,7 +80,7 @@ public class TestTreeUtils {
 
     @Test
     public void testHash() {
-        ITree root = TreeLoader.getDummySrc();
+        Tree root = TreeLoader.getDummySrc();
         System.out.println(root.toTreeString());
         assertEquals(
                 H_AO
@@ -109,12 +109,12 @@ public class TestTreeUtils {
 
     @Test
     public void testHashValue() {
-        ITree t0 = TreeLoader.getDummySrc();
-        ITree t1 = TreeLoader.getDummySrc();
-        ITree t2 = t1.deepCopy();
+        Tree t0 = TreeLoader.getDummySrc();
+        Tree t1 = TreeLoader.getDummySrc();
+        Tree t2 = t1.deepCopy();
         t2.setLabel("foo");
-        ITree t3 = t2.deepCopy();
-        t3.addChild(new Tree(TypeSet.type("foo")));
+        Tree t3 = t2.deepCopy();
+        t3.addChild(new DefaultTree(TypeSet.type("foo")));
         assertEquals(t0.getMetrics().hash, t1.getMetrics().hash);
         assertNotEquals(t0.getMetrics().hash, t2.getMetrics().hash);
         assertNotEquals(t0.getMetrics().hash, t3.getMetrics().hash);
@@ -125,7 +125,7 @@ public class TestTreeUtils {
 
     @Test
     public void testHeight() {
-        ITree root = TreeLoader.getDummySrc();
+        Tree root = TreeLoader.getDummySrc();
         assertEquals(2, root.getMetrics().height); // depth of a
         assertEquals(1, root.getChild(0).getMetrics().height); // depth of b
         assertEquals(0, root.getChild("0.0").getMetrics().height); // depth of c
@@ -135,41 +135,41 @@ public class TestTreeUtils {
 
     @Test
     public void testPostOrder() {
-        ITree src = TreeLoader.getDummySrc();
-        List<ITree> lst = TreeUtils.postOrder(src);
-        Iterator<ITree> it = TreeUtils.postOrderIterator(src);
+        Tree src = TreeLoader.getDummySrc();
+        List<Tree> lst = TreeUtils.postOrder(src);
+        Iterator<Tree> it = TreeUtils.postOrderIterator(src);
         compareListIterator(lst, it);
     }
 
     @Test
     public void testPostOrder2() {
-        ITree dst = TreeLoader.getDummyDst();
-        List<ITree> lst = TreeUtils.postOrder(dst);
-        Iterator<ITree> it = TreeUtils.postOrderIterator(dst);
+        Tree dst = TreeLoader.getDummyDst();
+        List<Tree> lst = TreeUtils.postOrder(dst);
+        Iterator<Tree> it = TreeUtils.postOrderIterator(dst);
         compareListIterator(lst, it);
     }
 
     @Test
     public void testPostOrder3() {
-        ITree big = TreeLoader.getDummyBig();
-        List<ITree> lst = TreeUtils.postOrder(big);
-        Iterator<ITree> it = TreeUtils.postOrderIterator(big);
+        Tree big = TreeLoader.getDummyBig();
+        List<Tree> lst = TreeUtils.postOrder(big);
+        Iterator<Tree> it = TreeUtils.postOrderIterator(big);
         compareListIterator(lst, it);
     }
 
     @Test
     public void testBfs() {
-        ITree src = TreeLoader.getDummySrc();
-        List<ITree> lst = TreeUtils.breadthFirst(src);
-        Iterator<ITree> it = TreeUtils.breadthFirstIterator(src);
+        Tree src = TreeLoader.getDummySrc();
+        List<Tree> lst = TreeUtils.breadthFirst(src);
+        Iterator<Tree> it = TreeUtils.breadthFirstIterator(src);
         compareListIterator(lst, it);
     }
 
     @Test
     public void testBfsList() {
-        ITree src = TreeLoader.getDummySrc();
-        ITree dst = TreeLoader.getDummyDst();
-        ITree big = TreeLoader.getDummyBig();
+        Tree src = TreeLoader.getDummySrc();
+        Tree dst = TreeLoader.getDummyDst();
+        Tree big = TreeLoader.getDummyBig();
         compareListIterator(TreeUtils.breadthFirstIterator(src), "a", "b", "e", "c", "d");
         compareListIterator(TreeUtils.breadthFirstIterator(dst), "a", "f", "i", "b", "j", "c", "d", "h");
         compareListIterator(TreeUtils.breadthFirstIterator(big), "a", "b", "e", "f", "c",
@@ -178,25 +178,25 @@ public class TestTreeUtils {
 
     @Test
     public void testPreOrderList() {
-        ITree src = TreeLoader.getDummySrc();
-        ITree dst = TreeLoader.getDummyDst();
-        ITree big = TreeLoader.getDummyBig();
+        Tree src = TreeLoader.getDummySrc();
+        Tree dst = TreeLoader.getDummyDst();
+        Tree big = TreeLoader.getDummyBig();
         compareListIterator(TreeUtils.preOrderIterator(src), "a", "b", "c", "d", "e");
         compareListIterator(TreeUtils.preOrderIterator(dst), "a", "f", "b", "c", "d", "h", "i", "j");
         compareListIterator(TreeUtils.preOrderIterator(big), "a", "b", "c", "d", "e",
                 "f", "g", "h", "i", "j", "k", "l", "m");
     }
 
-    void compareListIterator(List<ITree> lst, Iterator<ITree> it) {
-        for (ITree i: lst) {
+    void compareListIterator(List<Tree> lst, Iterator<Tree> it) {
+        for (Tree i: lst) {
             assertEquals(i, it.next());
         }
         assertFalse(it.hasNext());
     }
 
-    void compareListIterator(Iterator<ITree> it, String... expected) {
+    void compareListIterator(Iterator<Tree> it, String... expected) {
         for (String e: expected) {
-            ITree n = it.next();
+            Tree n = it.next();
             assertEquals(e, n.getLabel());
         }
         assertFalse(it.hasNext(),"Iterator has next");
@@ -204,25 +204,25 @@ public class TestTreeUtils {
 
     @Test
     public void testBfs2() {
-        ITree dst = TreeLoader.getDummyDst();
-        List<ITree> lst = TreeUtils.breadthFirst(dst);
-        Iterator<ITree> it = TreeUtils.breadthFirstIterator(dst);
+        Tree dst = TreeLoader.getDummyDst();
+        List<Tree> lst = TreeUtils.breadthFirst(dst);
+        Iterator<Tree> it = TreeUtils.breadthFirstIterator(dst);
         compareListIterator(lst, it);
     }
 
     @Test
     public void testBfs3() {
-        ITree big = TreeLoader.getDummySrc();
-        List<ITree> lst = TreeUtils.breadthFirst(big);
-        Iterator<ITree> it = TreeUtils.breadthFirstIterator(big);
+        Tree big = TreeLoader.getDummySrc();
+        List<Tree> lst = TreeUtils.breadthFirst(big);
+        Iterator<Tree> it = TreeUtils.breadthFirstIterator(big);
         compareListIterator(lst, it);
     }
     
     @Test
     public void testLeafIterator() {
-        ITree src = TreeLoader.getDummySrc();
-        Iterator<ITree> srcLeaves = TreeUtils.leafIterator(TreeUtils.postOrderIterator(src));
-        ITree leaf = null;
+        Tree src = TreeLoader.getDummySrc();
+        Iterator<Tree> srcLeaves = TreeUtils.leafIterator(TreeUtils.postOrderIterator(src));
+        Tree leaf = null;
         leaf = srcLeaves.next();
         leaf = srcLeaves.next();
         leaf = srcLeaves.next();

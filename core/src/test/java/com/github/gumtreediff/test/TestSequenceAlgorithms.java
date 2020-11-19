@@ -19,8 +19,8 @@
 
 package com.github.gumtreediff.test;
 
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.DefaultTree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.utils.Pair;
@@ -52,22 +52,22 @@ public class TestSequenceAlgorithms {
 
     @Test
     public void testITreeLcss() {
-        List<ITree> l1 = Arrays.asList(new Tree[] {
-                new Tree(TypeSet.type("a")),
-                new Tree(TypeSet.type("b")),
-                new Tree(TypeSet.type("c")),
-                new Tree(TypeSet.type("d")),
-                new Tree(TypeSet.type("e")),
-                new Tree(TypeSet.type("f")),
-                new Tree(TypeSet.type("g")),
+        List<Tree> l1 = Arrays.asList(new DefaultTree[] {
+                new DefaultTree(TypeSet.type("a")),
+                new DefaultTree(TypeSet.type("b")),
+                new DefaultTree(TypeSet.type("c")),
+                new DefaultTree(TypeSet.type("d")),
+                new DefaultTree(TypeSet.type("e")),
+                new DefaultTree(TypeSet.type("f")),
+                new DefaultTree(TypeSet.type("g")),
         });
-        List<ITree> l2 = Arrays.asList(new Tree[] {
-                new Tree(TypeSet.type("a")),
-                new Tree(TypeSet.type("g")),
-                new Tree(TypeSet.type("c")),
-                new Tree(TypeSet.type("e")),
-                new Tree(TypeSet.type("f")),
-                new Tree(TypeSet.type("d"))
+        List<Tree> l2 = Arrays.asList(new DefaultTree[] {
+                new DefaultTree(TypeSet.type("a")),
+                new DefaultTree(TypeSet.type("g")),
+                new DefaultTree(TypeSet.type("c")),
+                new DefaultTree(TypeSet.type("e")),
+                new DefaultTree(TypeSet.type("f")),
+                new DefaultTree(TypeSet.type("d"))
         });
         List<int[]> idx = SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(l1, l2);
         assertEquals(4, idx.size());
@@ -80,8 +80,8 @@ public class TestSequenceAlgorithms {
     @Test
     public void testITreeLcssIsomorphism() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
-        ITree t1 = trees.first.getRoot();
-        ITree t2 = trees.second.getRoot();
+        Tree t1 = trees.first.getRoot();
+        Tree t2 = trees.second.getRoot();
         List<int[]> idx =
                 SequenceAlgorithms.longestCommonSubsequenceWithIsomorphism(t1.getChildren(), t2.getChildren());
         assertEquals(1, idx.size());

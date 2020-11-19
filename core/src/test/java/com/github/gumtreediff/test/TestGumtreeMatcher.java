@@ -23,7 +23,7 @@ package com.github.gumtreediff.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.DefaultTree;
 import com.github.gumtreediff.tree.TypeSet;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +32,7 @@ import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Pair;
 
@@ -40,11 +40,11 @@ public class TestGumtreeMatcher {
     @Test
     public void testMinHeightThreshold() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();
-        ITree t1 = trees.first.getRoot();
-        ITree t2 = trees.second.getRoot();
+        Tree t1 = trees.first.getRoot();
+        Tree t2 = trees.second.getRoot();
 
         GreedySubtreeMatcher matcher = new GreedySubtreeMatcher();
-        matcher.setMin_height(0);
+        matcher.setMinPriority(0);
         MappingStore ms1 = matcher.match(t1, t2);
         assertEquals(4, ms1.size());
         assertTrue(ms1.has(t1.getChild(1), t2.getChild(0)));
@@ -52,7 +52,7 @@ public class TestGumtreeMatcher {
         assertTrue(ms1.has(t1.getChild("1.1"), t2.getChild("0.1")));
         assertTrue(ms1.has(t1.getChild(2), t2.getChild(2)));
 
-        matcher.setMin_height(1);
+        matcher.setMinPriority(1);
         MappingStore ms2 = matcher.match(t1, t2);
         assertEquals(3, ms2.size());
         assertTrue(ms1.has(t1.getChild(1), t2.getChild(0)));
@@ -62,29 +62,29 @@ public class TestGumtreeMatcher {
 
     @Test
     public void testSiblingsMappingComparatorPosInParent() {
-        ITree t1 = new Tree(TypeSet.type("root"));
-        ITree a11 = new Tree(TypeSet.type("a"));
+        Tree t1 = new DefaultTree(TypeSet.type("root"));
+        Tree a11 = new DefaultTree(TypeSet.type("a"));
         t1.addChild(a11);
-        ITree a12 = new Tree(TypeSet.type("a"));
+        Tree a12 = new DefaultTree(TypeSet.type("a"));
         t1.addChild(a12);
-        ITree a13 = new Tree(TypeSet.type("a"));
+        Tree a13 = new DefaultTree(TypeSet.type("a"));
         t1.addChild(a13);
         // root
         //     a
         //     a
         //     a
 
-        ITree t2 = new Tree(TypeSet.type("root"));
-        ITree a21 = new Tree(TypeSet.type("a"));
+        Tree t2 = new DefaultTree(TypeSet.type("root"));
+        Tree a21 = new DefaultTree(TypeSet.type("a"));
         t2.addChild(a21);
-        ITree a22 = new Tree(TypeSet.type("a"));
+        Tree a22 = new DefaultTree(TypeSet.type("a"));
         t2.addChild(a22);
         // root
         //     a
         //     a
 
         GreedySubtreeMatcher matcher = new GreedySubtreeMatcher();
-        matcher.setMin_height(0);
+        matcher.setMinPriority(0);
         MappingStore ms = matcher.match(t1, t2);
         assertTrue(ms.has(a11, a21));
         assertTrue(ms.has(a12, a22));
@@ -92,14 +92,14 @@ public class TestGumtreeMatcher {
 
     @Test
     public void testSiblingsMappingComparatorPosInTree() {
-        ITree t1 = new Tree(TypeSet.type("root"));
-        ITree a11 = new Tree(TypeSet.type("a"));
+        Tree t1 = new DefaultTree(TypeSet.type("root"));
+        Tree a11 = new DefaultTree(TypeSet.type("a"));
         t1.addChild(a11);
-        ITree b11 = new Tree(TypeSet.type("b"));
+        Tree b11 = new DefaultTree(TypeSet.type("b"));
         a11.addChild(b11);
-        ITree a12 = new Tree(TypeSet.type("a"));
+        Tree a12 = new DefaultTree(TypeSet.type("a"));
         t1.addChild(a12);
-        ITree b12 = new Tree(TypeSet.type("b"));
+        Tree b12 = new DefaultTree(TypeSet.type("b"));
         a12.addChild(b12);
         // root
         //     a
@@ -107,14 +107,14 @@ public class TestGumtreeMatcher {
         //     a
         //       b
 
-        ITree t2 = new Tree(TypeSet.type("root"));
-        ITree a21 = new Tree(TypeSet.type("c"));
+        Tree t2 = new DefaultTree(TypeSet.type("root"));
+        Tree a21 = new DefaultTree(TypeSet.type("c"));
         t2.addChild(a21);
-        ITree b21 = new Tree(TypeSet.type("b"));
+        Tree b21 = new DefaultTree(TypeSet.type("b"));
         a21.addChild(b21);
-        ITree a22 = new Tree(TypeSet.type("c"));
+        Tree a22 = new DefaultTree(TypeSet.type("c"));
         t2.addChild(a22);
-        ITree b22 = new Tree(TypeSet.type("b"));
+        Tree b22 = new DefaultTree(TypeSet.type("b"));
         a22.addChild(b22);
         // root
         //     c
@@ -123,7 +123,7 @@ public class TestGumtreeMatcher {
         //       b
 
         GreedySubtreeMatcher matcher = new GreedySubtreeMatcher();
-        matcher.setMin_height(0);
+        matcher.setMinPriority(0);
         MappingStore ms = matcher.match(t1, t2);
         assertTrue(ms.has(b11, b21));
         assertTrue(ms.has(b12, b22));
@@ -131,9 +131,9 @@ public class TestGumtreeMatcher {
 
     @Test
     public void testSimAndSizeThreshold() {
-        Pair<ITree, ITree> trees = TreeLoader.getBottomUpPair();
-        ITree t1 = trees.first;
-        ITree t2 = trees.second;
+        Pair<Tree, Tree> trees = TreeLoader.getBottomUpPair();
+        Tree t1 = trees.first;
+        Tree t2 = trees.second;
         MappingStore ms = new MappingStore(t1, t2);
         ms.addMapping(t1.getChild("0.2.0"), t2.getChild("0.2.0"));
         ms.addMapping(t1.getChild("0.2.1"), t2.getChild("0.2.1"));
@@ -143,8 +143,8 @@ public class TestGumtreeMatcher {
         GreedyBottomUpMatcher matcher = new GreedyBottomUpMatcher();
         GumTreeProperties properties = new GumTreeProperties();
 
-        matcher.setSim_threshold(1.0);
-        matcher.setSize_threshold(0);
+        matcher.setSimThreshold(1.0);
+        matcher.setSizeThreshold(0);
 
         MappingStore ms1 = matcher.match(t1, t2, new MappingStore(ms));
 
@@ -153,8 +153,8 @@ public class TestGumtreeMatcher {
             assertTrue(ms1.has(m.first, m.second));
         assertTrue(ms1.has(t1, t2));
 
-        matcher.setSim_threshold(0.5);
-        matcher.setSize_threshold(0);
+        matcher.setSimThreshold(0.5);
+        matcher.setSizeThreshold(0);
 
         MappingStore ms2 = matcher.match(t1, t2, new MappingStore(ms));
         assertEquals(7, ms2.size());
@@ -164,8 +164,8 @@ public class TestGumtreeMatcher {
         assertTrue(ms2.has(t1.getChild(0), t2.getChild(0)));
         assertTrue(ms2.has(t1.getChild("0.2"), t2.getChild("0.2")));
 
-        matcher.setSim_threshold(0.5);
-        matcher.setSize_threshold(10);
+        matcher.setSimThreshold(0.5);
+        matcher.setSizeThreshold(10);
 
         MappingStore ms3 = matcher.match(t1, t2, new MappingStore(ms));
         assertEquals(9, ms3.size());

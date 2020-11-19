@@ -31,11 +31,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestTree {
     @Test
     public void testSearchSubtree() {
-        ITree root = TreeLoader.getSubtreeSrc();
-        ITree subtree = new Tree(TypeSet.type("a"));
-        subtree.addChild(new Tree(TypeSet.type("b")));
-        subtree.addChild(new Tree(TypeSet.type("c"), "foo"));
-        List<ITree> results = root.searchSubtree(subtree);
+        Tree root = TreeLoader.getSubtreeSrc();
+        Tree subtree = new DefaultTree(TypeSet.type("a"));
+        subtree.addChild(new DefaultTree(TypeSet.type("b")));
+        subtree.addChild(new DefaultTree(TypeSet.type("c"), "foo"));
+        List<Tree> results = root.searchSubtree(subtree);
         assertEquals(2, results.size());
         assertTrue(results.get(0).isIsomorphicTo(subtree));
 
@@ -43,26 +43,26 @@ public class TestTree {
         assertEquals(1, results.size());
         assertTrue(results.get(0).isIsomorphicTo(root));
 
-        ITree otherSubtree = new Tree(TypeSet.type("a"));
-        otherSubtree.addChild(new Tree(TypeSet.type("b")));
+        Tree otherSubtree = new DefaultTree(TypeSet.type("a"));
+        otherSubtree.addChild(new DefaultTree(TypeSet.type("b")));
         results = root.searchSubtree(otherSubtree);
         assertEquals(0, results.size());
     }
 
     @Test
     public void testTreesBetweenPositions() {
-        ITree root = TreeLoader.getDummySrc();
-        List<ITree> treesOutside = root.getTreesBetweenPositions(100, 200);
+        Tree root = TreeLoader.getDummySrc();
+        List<Tree> treesOutside = root.getTreesBetweenPositions(100, 200);
         assertEquals(0, treesOutside.size());
-        List<ITree> allTrees = root.getTreesBetweenPositions(0, 100);
+        List<Tree> allTrees = root.getTreesBetweenPositions(0, 100);
         assertEquals(5, allTrees.size());
-        List<ITree> firstLeafTrees = root.getTreesBetweenPositions(0, 10);
+        List<Tree> firstLeafTrees = root.getTreesBetweenPositions(0, 10);
         assertEquals(2, firstLeafTrees.size());
     }
 
     @Test
     public void testChildUrl() {
-        ITree root = TreeLoader.getDummySrc();
+        Tree root = TreeLoader.getDummySrc();
         assertEquals("b", root.getChild("0").getLabel());
         assertEquals("c", root.getChild("0.0").getLabel());
         assertEquals("d", root.getChild("0.1").getLabel());
@@ -74,10 +74,10 @@ public class TestTree {
 
     @Test
     public void testGetParents() {
-        ITree tree = TreeLoader.getDummySrc();
-        ITree c = tree.getChild("0.0");
+        Tree tree = TreeLoader.getDummySrc();
+        Tree c = tree.getChild("0.0");
         assertEquals("c", c.getLabel());
-        List<ITree> parents = c.getParents();
+        List<Tree> parents = c.getParents();
         assertEquals(2, parents.size());
         assertEquals("b", parents.get(0).getLabel());
         assertEquals("a", parents.get(1).getLabel());
@@ -86,10 +86,10 @@ public class TestTree {
 
     @Test
     public void testGetDescendants() {
-        ITree tree = TreeLoader.getDummySrc();
-        ITree b = tree.getChild(0);
+        Tree tree = TreeLoader.getDummySrc();
+        Tree b = tree.getChild(0);
         assertEquals("b", b.getLabel());
-        List<ITree> descendants = b.getDescendants();
+        List<Tree> descendants = b.getDescendants();
         assertEquals(2, descendants.size());
         assertEquals("c", descendants.get(0).getLabel());
         assertEquals("d", descendants.get(1).getLabel());
@@ -97,18 +97,18 @@ public class TestTree {
 
     @Test
     public void testChildManipulation() {
-        ITree t1 = new Tree(TypeSet.type("foo"));
+        Tree t1 = new DefaultTree(TypeSet.type("foo"));
         assertTrue(t1.isLeaf());
         assertTrue(t1.isRoot());
         assertEquals(-1, t1.positionInParent());
         assertEquals(0, t1.getChildren().size());
-        ITree t2 = new Tree(TypeSet.type("foo"));
+        Tree t2 = new DefaultTree(TypeSet.type("foo"));
         t1.addChild(t2);
         assertFalse(t1.isLeaf());
         assertTrue(t1.isRoot());
         assertTrue(t2.isLeaf());
         assertEquals(t1, t2.getParent());
-        ITree t3 = new Tree(TypeSet.type("foo"));
+        Tree t3 = new DefaultTree(TypeSet.type("foo"));
         t3.setParentAndUpdateChildren(t1);
         assertTrue(t3.isLeaf());
         assertEquals(t1, t3.getParent());
@@ -116,7 +116,7 @@ public class TestTree {
         assertEquals(t3, t1.getChild(1));
         assertEquals(1, t3.positionInParent());
         assertEquals(1, t1.getChildPosition(t3));
-        ITree t4 = new Tree(TypeSet.type("foo"));
+        Tree t4 = new DefaultTree(TypeSet.type("foo"));
         assertEquals(-1, t1.getChildPosition(t4));
         t4.setParentAndUpdateChildren(t2);
         assertNotEquals(t1, t4.getParent());
@@ -127,19 +127,19 @@ public class TestTree {
 
     @Test
     public void testDeepCopy() {
-        ITree root = TreeLoader.getDummySrc();
-        ITree rootCpy = root.deepCopy();
+        Tree root = TreeLoader.getDummySrc();
+        Tree rootCpy = root.deepCopy();
         assertTrue(root.isIsomorphicTo(rootCpy));
-        Iterator<ITree> rootIt = TreeUtils.preOrderIterator(root);
-        for (ITree cpy : rootCpy.preOrder()) {
-            ITree t = rootIt.next();
+        Iterator<Tree> rootIt = TreeUtils.preOrderIterator(root);
+        for (Tree cpy : rootCpy.preOrder()) {
+            Tree t = rootIt.next();
             assertNotEquals(t, cpy);
         }
         
-        ITree rootWithFake = new Tree(TypeSet.type("foo"));
-        ITree fakeChild = new FakeTree();
+        Tree rootWithFake = new DefaultTree(TypeSet.type("foo"));
+        Tree fakeChild = new FakeTree();
         rootWithFake.addChild(fakeChild);
-        ITree rootWithFakeCpy = rootWithFake.deepCopy();
+        Tree rootWithFakeCpy = rootWithFake.deepCopy();
         assertTrue(rootWithFakeCpy.isIsomorphicTo(rootWithFake));
         assertNotEquals(rootWithFake, rootWithFakeCpy);
         assertNotEquals(rootWithFake.getChild(0), rootWithFakeCpy.getChild(0));
@@ -147,8 +147,8 @@ public class TestTree {
 
     @Test
     public void testIsomophism() {
-        ITree root = TreeLoader.getDummySrc();
-        ITree rootCpy = TreeLoader.getDummySrc();
+        Tree root = TreeLoader.getDummySrc();
+        Tree rootCpy = TreeLoader.getDummySrc();
         assertTrue(root.isIsomorphicTo(rootCpy));
         rootCpy.getChild("0.0").setLabel("foo");
         assertFalse(root.isIsomorphicTo(rootCpy));
@@ -162,8 +162,8 @@ public class TestTree {
 
     @Test
     public void testIsostructure() {
-        ITree root = TreeLoader.getDummySrc();
-        ITree rootCpy = TreeLoader.getDummySrc();
+        Tree root = TreeLoader.getDummySrc();
+        Tree rootCpy = TreeLoader.getDummySrc();
         assertTrue(root.isIsoStructuralTo(rootCpy));
         rootCpy.getChild("0.0").setLabel("foo");
         assertTrue(root.isIsoStructuralTo(rootCpy));
@@ -177,15 +177,15 @@ public class TestTree {
 
     @Test
     public void testIsClone() {
-        ITree tree = TreeLoader.getDummySrc();
-        ITree copy = tree.deepCopy();
+        Tree tree = TreeLoader.getDummySrc();
+        Tree copy = tree.deepCopy();
         assertTrue(tree.isIsomorphicTo(copy));
     }
 
     @Test
     public void testImmutable() {
-        ITree tree = TreeLoader.getDummySrc();
-        ITree immutable = new ImmutableTree(tree);
+        Tree tree = TreeLoader.getDummySrc();
+        Tree immutable = new ImmutableTree(tree);
         assertTrue(tree.isIsomorphicTo(immutable));
         assertEquals(immutable, immutable.getChild(0).getParent());
         assertThrows(UnsupportedOperationException.class, () -> immutable.setLabel("foo"));
@@ -196,7 +196,7 @@ public class TestTree {
         assertThrows(UnsupportedOperationException.class, () -> immutable.setMetadata("foo", null));
         assertThrows(UnsupportedOperationException.class, () -> immutable.getChildren().remove(0));
         assertThrows(UnsupportedOperationException.class, () -> immutable.getChild(0).setLabel("foo"));
-        ITree immutableCpy = immutable.deepCopy();
+        Tree immutableCpy = immutable.deepCopy();
         assertTrue(immutableCpy.isIsomorphicTo(immutable));
         assertDoesNotThrow(() -> immutableCpy.setLabel("foo"));
         assertDoesNotThrow(() -> immutableCpy.getChildren().remove(0));
@@ -205,24 +205,24 @@ public class TestTree {
 
     @Test
     public void testTypesAndLabels() {
-        ITree t1 = new Tree(TypeSet.type("foo"));
-        ITree t2 = new Tree(TypeSet.type("foo"));
+        Tree t1 = new DefaultTree(TypeSet.type("foo"));
+        Tree t2 = new DefaultTree(TypeSet.type("foo"));
         assertTrue(t1.hasSameType(t2));
         assertTrue(t1.hasSameTypeAndLabel(t2));
-        ITree t3 = new Tree(TypeSet.type("bar"));
+        Tree t3 = new DefaultTree(TypeSet.type("bar"));
         assertFalse(t1.hasSameType(t3));
-        ITree t4 = new Tree(TypeSet.type("foo"), "hello");
+        Tree t4 = new DefaultTree(TypeSet.type("foo"), "hello");
         assertTrue(t1.hasSameType(t4));
         assertFalse(t1.hasSameTypeAndLabel(t4));
     }
 
     @Test
     public void testToString() {
-        ITree t1 = new Tree(TypeSet.type("foo"));
+        Tree t1 = new DefaultTree(TypeSet.type("foo"));
         assertEquals("foo [0,0]", t1.toString());
-        ITree t2 = new Tree(TypeSet.type("foo"), "hello");
+        Tree t2 = new DefaultTree(TypeSet.type("foo"), "hello");
         assertEquals("foo: hello [0,0]", t2.toString());
-        ITree t3 = new Tree(TypeSet.type("foo"), "hello");
+        Tree t3 = new DefaultTree(TypeSet.type("foo"), "hello");
         t3.setPos(1);
         t3.setLength(2);
         assertEquals("foo: hello [1,3]", t3.toString());

@@ -20,7 +20,7 @@
 package com.github.gumtreediff.gen.css;
 
 import com.github.gumtreediff.io.LineReader;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.tree.TreeContext;
@@ -37,7 +37,7 @@ import java.util.ArrayDeque;
 
 public class GtCssVisitor implements ICSSVisitor {
     private TreeContext ctx;
-    private ArrayDeque<ITree> trees;
+    private ArrayDeque<Tree> trees;
     private LineReader lr;
     private ICSSWriterSettings settings;
 
@@ -49,7 +49,7 @@ public class GtCssVisitor implements ICSSVisitor {
         this.sheet = sheet;
         this.ctx = new TreeContext();
         this.trees = new ArrayDeque<>();
-        ITree root = this.ctx.createTree(symbol(sheet), ITree.NO_LABEL);
+        Tree root = this.ctx.createTree(symbol(sheet), Tree.NO_LABEL);
         setLocation(root, sheet);
         this.ctx.setRoot(root);
         this.trees.push(root);
@@ -59,7 +59,7 @@ public class GtCssVisitor implements ICSSVisitor {
         return ctx;
     }
 
-    private void setLocation(ITree t, ICSSSourceLocationAware a) {
+    private void setLocation(Tree t, ICSSSourceLocationAware a) {
         CSSSourceLocation l = a.getSourceLocation();
         int pos = lr.positionFor(l.getFirstTokenBeginLineNumber(), l.getFirstTokenBeginColumnNumber());
         int end = lr.positionFor(l.getLastTokenEndLineNumber(), l.getLastTokenEndColumnNumber());
@@ -78,7 +78,7 @@ public class GtCssVisitor implements ICSSVisitor {
     @Override
     public void onImport(@Nonnull CSSImportRule i) {
         //TODO add media nodes
-        ITree t = ctx.createTree(symbol(i), i.getAsCSSString(settings, 0));
+        Tree t = ctx.createTree(symbol(i), i.getAsCSSString(settings, 0));
         t.setParentAndUpdateChildren(trees.peekFirst());
         setLocation(t, i);
     }
@@ -88,11 +88,11 @@ public class GtCssVisitor implements ICSSVisitor {
 
     @Override
     public void onDeclaration(@Nonnull CSSDeclaration d) {
-        ITree t = ctx.createTree(symbol(d), d.getProperty());
+        Tree t = ctx.createTree(symbol(d), d.getProperty());
         t.setParentAndUpdateChildren(trees.peekFirst());
         setLocation(t, d);
         CSSExpression e = d.getExpression();
-        ITree c = ctx.createTree(symbol(e), e.getAsCSSString(settings, 0));
+        Tree c = ctx.createTree(symbol(e), e.getAsCSSString(settings, 0));
         c.setParentAndUpdateChildren(t);
         setLocation(c, e);
         //TODO handle expression members.
@@ -107,7 +107,7 @@ public class GtCssVisitor implements ICSSVisitor {
 
     @Override
     public void onBeginStyleRule(@Nonnull CSSStyleRule s) {
-        ITree t = ctx.createTree(symbol(s), "");
+        Tree t = ctx.createTree(symbol(s), "");
         setLocation(t, s);
         t.setParentAndUpdateChildren(trees.peekFirst());
         trees.addFirst(t);
@@ -115,7 +115,7 @@ public class GtCssVisitor implements ICSSVisitor {
 
     @Override
     public void onStyleRuleSelector(@Nonnull CSSSelector s) {
-        ITree t = ctx.createTree(symbol(s), s.getAsCSSString(settings, 0));
+        Tree t = ctx.createTree(symbol(s), s.getAsCSSString(settings, 0));
         t.setParentAndUpdateChildren(trees.peekFirst());
         setLocation(t, s);
     }

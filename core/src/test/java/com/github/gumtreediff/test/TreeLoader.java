@@ -21,7 +21,7 @@
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -108,7 +108,7 @@ public class TreeLoader {
         return new Pair<>(load("/cd_v0.xml"), load("/cd_v1.xml"));
     }
 
-    public static Pair<ITree, ITree> getBottomUpPair() {
+    public static Pair<Tree, Tree> getBottomUpPair() {
         return new Pair<>(load("/bottom_up_v0.xml").getRoot(),
                 load("/bottom_up_v1.xml").getRoot());
     }
@@ -120,19 +120,19 @@ public class TreeLoader {
      *      d
      *    e
      */
-    public static ITree getDummySrc() {
+    public static Tree getDummySrc() {
         return load("/Dummy_v0.xml").getRoot();
     }
 
-    public static ITree getDummyDst() {
+    public static Tree getDummyDst() {
         return load("/Dummy_v1.xml").getRoot();
     }
 
-    public static ITree getSubtreeSrc() {
+    public static Tree getSubtreeSrc() {
         return load("/subtree.xml").getRoot();
     }
 
-    public static ITree getDummyBig() {
+    public static Tree getDummyBig() {
         return load("/Dummy_big.xml").getRoot();
     }
 

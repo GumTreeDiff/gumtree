@@ -21,7 +21,6 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
-import com.github.gumtreediff.tree.ITree;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

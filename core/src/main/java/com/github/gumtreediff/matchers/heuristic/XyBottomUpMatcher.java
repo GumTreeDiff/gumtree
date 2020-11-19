@@ -27,12 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.github.gumtreediff.matchers.ConfigurableMatcher;
-import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumTreeProperties;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.SimilarityMetrics;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.matchers.*;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.Type;
 import com.google.common.collect.Sets;
 
@@ -40,109 +36,101 @@ import com.google.common.collect.Sets;
  * Match the nodes using a bottom-up approach. It browse the nodes of the source
  * and destination trees using a post-order traversal, testing if the two
  * selected trees might be mapped. The two trees are mapped if they are mappable
- * and have a dice coefficient greater than SIM_THRESHOLD. Whenever two trees
- * are mapped a exact ZS algorithm is applied to look to possibly forgotten
- * nodes.
+ * and have a dice coefficient greater than SIM_THRESHOLD.
  */
-public class XyBottomUpMatcher implements ConfigurableMatcher {
-
+public class XyBottomUpMatcher implements Matcher {
     private static final double DEFAULT_SIM_THRESHOLD = 0.5;
-
     protected double simThreshold = DEFAULT_SIM_THRESHOLD;
 
     public XyBottomUpMatcher() {
-
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        simThreshold = properties.tryConfigure(ConfigurationOptions.GT_XYM_SIM, DEFAULT_SIM_THRESHOLD);
+        simThreshold = properties.tryConfigure(ConfigurationOptions.xy_minsim, DEFAULT_SIM_THRESHOLD);
     }
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
+        for (var currentSrc : src.postOrder()) {
+            if (currentSrc.isRoot()) {
+                mappings.addMapping(currentSrc, dst);
+                lastChanceMatch(mappings, currentSrc, dst);
+            } else if (!(mappings.isSrcMapped(currentSrc) || currentSrc.isLeaf())) {
+                var dstCandidates = getDstCandidates(mappings, currentSrc);
+                Tree best = null;
+                var max = -1D;
 
-        for (ITree iSrc : src.postOrder()) {
-            if (iSrc.isRoot()) {
-                mappings.addMapping(iSrc, dst);
-                lastChanceMatch(mappings, iSrc, dst);
-            } else if (!(mappings.isSrcMapped(iSrc) || iSrc.isLeaf())) {
-                Set<ITree> candidates = getDstCandidates(mappings, iSrc);
-                ITree best = null;
-                double max = -1D;
-
-                for (ITree cand : candidates) {
-                    double sim = SimilarityMetrics.jaccardSimilarity(iSrc, cand, mappings);
+                for (var dstCandidate : dstCandidates) {
+                    var sim = SimilarityMetrics.jaccardSimilarity(currentSrc, dstCandidate, mappings);
                     if (sim > max && sim >= simThreshold) {
                         max = sim;
-                        best = cand;
+                        best = dstCandidate;
                     }
                 }
 
                 if (best != null) {
-                    lastChanceMatch(mappings, iSrc, best);
-                    mappings.addMapping(iSrc, best);
+                    lastChanceMatch(mappings, currentSrc, best);
+                    mappings.addMapping(currentSrc, best);
                 }
             }
         }
         return mappings;
     }
 
-    private Set<ITree> getDstCandidates(MappingStore mappings, ITree src) {
-        Set<ITree> seeds = new HashSet<>();
-        for (ITree c : src.getDescendants()) {
-            ITree m = mappings.getDstForSrc(c);
-            if (m != null)
-                seeds.add(m);
+    private Set<Tree> getDstCandidates(MappingStore mappings, Tree src) {
+        Set<Tree> mappedSrcDescendantsInDst = new HashSet<>();
+        for (var srcDescendant : src.getDescendants()) {
+            var dstMappedToSrcDescendant = mappings.getDstForSrc(srcDescendant);
+            if (dstMappedToSrcDescendant != null)
+                mappedSrcDescendantsInDst.add(dstMappedToSrcDescendant);
         }
-        Set<ITree> candidates = new HashSet<>();
-        Set<ITree> visited = new HashSet<>();
-        for (ITree seed : seeds) {
-            while (seed.getParent() != null) {
-                ITree parent = seed.getParent();
-                if (visited.contains(parent))
+        Set<Tree> dstCandidates = new HashSet<>();
+        Set<Tree> visitedDsts = new HashSet<>();
+        for (var mappedDescendant : mappedSrcDescendantsInDst) {
+            while (mappedDescendant.getParent() != null) {
+                var parent = mappedDescendant.getParent();
+                if (visitedDsts.contains(parent))
                     break;
-                visited.add(parent);
+                visitedDsts.add(parent);
                 if (parent.getType() == src.getType() && !mappings.isDstMapped(parent))
-                    candidates.add(parent);
-                seed = parent;
+                    dstCandidates.add(parent);
+                mappedDescendant = parent;
             }
         }
 
-        return candidates;
+        return dstCandidates;
     }
 
-    private void lastChanceMatch(MappingStore mappings, ITree src, ITree dst) {
-        Map<Type, List<ITree>> srcKinds = new HashMap<>();
-        Map<Type, List<ITree>> dstKinds = new HashMap<>();
-        for (ITree c : src.getChildren()) {
-            if (!srcKinds.containsKey(c.getType()))
-                srcKinds.put(c.getType(), new ArrayList<>());
-            srcKinds.get(c.getType()).add(c);
+    private void lastChanceMatch(MappingStore mappings, Tree src, Tree dst) {
+        Map<Type, List<Tree>> srcTypes = new HashMap<>();
+        Map<Type, List<Tree>> dstTypes = new HashMap<>();
+        for (var srcChild : src.getChildren()) {
+            if (!srcTypes.containsKey(srcChild.getType()))
+                srcTypes.put(srcChild.getType(), new ArrayList<>());
+            srcTypes.get(srcChild.getType()).add(srcChild);
         }
-        for (ITree c : dst.getChildren()) {
-            if (!dstKinds.containsKey(c.getType()))
-                dstKinds.put(c.getType(), new ArrayList<>());
-            dstKinds.get(c.getType()).add(c);
+        for (var dstChild : dst.getChildren()) {
+            if (!dstTypes.containsKey(dstChild.getType()))
+                dstTypes.put(dstChild.getType(), new ArrayList<>());
+            dstTypes.get(dstChild.getType()).add(dstChild);
         }
 
-        for (Type t : srcKinds.keySet())
-            if (dstKinds.get(t) != null && srcKinds.get(t).size() == dstKinds.get(t).size()
-                    && srcKinds.get(t).size() == 1)
-                mappings.addMapping(srcKinds.get(t).get(0), dstKinds.get(t).get(0));
+        for (var type : srcTypes.keySet())
+            if (srcTypes.get(type).size() == 1 && dstTypes.get(type) != null && dstTypes.get(type).size() == 1)
+                mappings.addMapping(srcTypes.get(type).get(0), dstTypes.get(type).get(0));
     }
 
-    public double getSim_threshold() {
+    public double getSimThreshold() {
         return simThreshold;
     }
 
-    public void setSim_threshold(double simThreshold) {
+    public void setSimThreshold(double simThreshold) {
         this.simThreshold = simThreshold;
     }
 
     @Override
     public Set<ConfigurationOptions> getApplicableOptions() {
-
-        return Sets.newHashSet(ConfigurationOptions.GT_XYM_SIM);
+        return Sets.newHashSet(ConfigurationOptions.xy_minsim);
     }
 }

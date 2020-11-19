@@ -60,7 +60,7 @@ public abstract class Registry<K, C, A> {
         return findEntry(key);
     }
 
-    protected Entry findById(String id) {
+    public Entry findById(String id) {
         for (Entry e: entries)
             if (e.id.equals(id))
                 return e;

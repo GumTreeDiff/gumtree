@@ -21,14 +21,9 @@
 package com.github.gumtreediff.gen.jdt.cd;
 
 import java.util.List;
-import java.util.Stack;
 
 import com.github.gumtreediff.gen.jdt.AbstractJdtVisitor;
 import org.eclipse.jdt.core.dom.*;
-
-import com.github.gumtreediff.gen.jdt.AbstractJdtVisitor;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Tree;
 
 /**
  * Combination of two ChangeDistiller's AST visitors:

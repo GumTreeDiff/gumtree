@@ -25,25 +25,25 @@ import java.util.List;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 
 public class RtedMatcher implements Matcher {
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
 
         RtedAlgorithm a = new RtedAlgorithm(1D, 1D, 1D);
         a.init(src, dst);
         a.computeOptimalStrategy();
         a.nonNormalizedTreeDist();
         ArrayDeque<int[]> arrayMappings = a.computeEditMapping();
-        List<ITree> srcs = TreeUtils.postOrder(src);
-        List<ITree> dsts = TreeUtils.postOrder(dst);
+        List<Tree> srcs = TreeUtils.postOrder(src);
+        List<Tree> dsts = TreeUtils.postOrder(dst);
         for (int[] m : arrayMappings) {
             if (m[0] != 0 && m[1] != 0) {
-                ITree srcg = srcs.get(m[0] - 1);
-                ITree dstg = dsts.get(m[1] - 1);
+                Tree srcg = srcs.get(m[0] - 1);
+                Tree dstg = dsts.get(m[1] - 1);
                 if (mappings.isMappingAllowed(srcg, dstg))
                     mappings.addMapping(srcg, dstg);
             }

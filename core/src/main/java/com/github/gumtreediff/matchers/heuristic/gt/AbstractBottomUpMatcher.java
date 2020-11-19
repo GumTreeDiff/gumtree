@@ -32,16 +32,15 @@ import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.optimal.zs.ZsMatcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.google.common.collect.Sets;
 
-public abstract class AbstractBottomUpMatcher implements ConfigurableMatcher {
-
+public abstract class AbstractBottomUpMatcher implements Matcher {
     private static final int DEFAULT_SIZE_THRESHOLD = 1000;
     private static final double DEFAULT_SIM_THRESHOLD = 0.5;
 
-    protected int size_threshold = DEFAULT_SIZE_THRESHOLD;
-    protected double sim_threshold = DEFAULT_SIM_THRESHOLD;
+    protected int sizeThreshold = DEFAULT_SIZE_THRESHOLD;
+    protected double simThreshold = DEFAULT_SIM_THRESHOLD;
 
     public AbstractBottomUpMatcher() {
 
@@ -49,21 +48,21 @@ public abstract class AbstractBottomUpMatcher implements ConfigurableMatcher {
 
     @Override
     public void configure(GumTreeProperties properties) {
-        size_threshold = properties.tryConfigure(ConfigurationOptions.GT_BUM_SZT, size_threshold);
-        sim_threshold = properties.tryConfigure(ConfigurationOptions.GT_BUM_SMT, sim_threshold);
+        sizeThreshold = properties.tryConfigure(ConfigurationOptions.bu_minsize, sizeThreshold);
+        simThreshold = properties.tryConfigure(ConfigurationOptions.bu_minsim, simThreshold);
     }
 
-    protected List<ITree> getDstCandidates(MappingStore mappings, ITree src) {
-        List<ITree> seeds = new ArrayList<>();
-        for (ITree c : src.getDescendants()) {
+    protected List<Tree> getDstCandidates(MappingStore mappings, Tree src) {
+        List<Tree> seeds = new ArrayList<>();
+        for (Tree c : src.getDescendants()) {
             if (mappings.isSrcMapped(c))
                 seeds.add(mappings.getDstForSrc(c));
         }
-        List<ITree> candidates = new ArrayList<>();
-        Set<ITree> visited = new HashSet<>();
-        for (ITree seed : seeds) {
+        List<Tree> candidates = new ArrayList<>();
+        Set<Tree> visited = new HashSet<>();
+        for (Tree seed : seeds) {
             while (seed.getParent() != null) {
-                ITree parent = seed.getParent();
+                Tree parent = seed.getParent();
                 if (visited.contains(parent))
                     break;
                 visited.add(parent);
@@ -76,38 +75,37 @@ public abstract class AbstractBottomUpMatcher implements ConfigurableMatcher {
         return candidates;
     }
 
-    protected void lastChanceMatch(MappingStore mappings, ITree src, ITree dst) {
-        if (src.getMetrics().size < size_threshold || dst.getMetrics().size < size_threshold) {
+    protected void lastChanceMatch(MappingStore mappings, Tree src, Tree dst) {
+        if (src.getMetrics().size < sizeThreshold || dst.getMetrics().size < sizeThreshold) {
             Matcher m = new ZsMatcher();
             MappingStore zsMappings = m.match(src, dst, new MappingStore(src, dst));
             for (Mapping candidate : zsMappings) {
-                ITree srcCand = candidate.first;
-                ITree dstCand = candidate.second;
+                Tree srcCand = candidate.first;
+                Tree dstCand = candidate.second;
                 if (mappings.isMappingAllowed(srcCand, dstCand))
                     mappings.addMapping(srcCand, dstCand);
             }
         }
     }
 
-    public int getSize_threshold() {
-        return size_threshold;
+    public int getSizeThreshold() {
+        return sizeThreshold;
     }
 
-    public void setSize_threshold(int sizeThreshold) {
-        this.size_threshold = sizeThreshold;
+    public void setSizeThreshold(int sizeThreshold) {
+        this.sizeThreshold = sizeThreshold;
     }
 
-    public double getSim_threshold() {
-        return sim_threshold;
+    public double getSimThreshold() {
+        return simThreshold;
     }
 
-    public void setSim_threshold(double simThreshold) {
-        this.sim_threshold = simThreshold;
+    public void setSimThreshold(double simThreshold) {
+        this.simThreshold = simThreshold;
     }
 
     @Override
     public Set<ConfigurationOptions> getApplicableOptions() {
-
-        return Sets.newHashSet(ConfigurationOptions.GT_BUM_SZT, ConfigurationOptions.GT_BUM_SMT);
+        return Sets.newHashSet(ConfigurationOptions.bu_minsize, ConfigurationOptions.bu_minsim);
     }
 }

@@ -21,9 +21,8 @@
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
@@ -36,8 +35,8 @@ public class TestCdMatcher {
     @Test
     public void testLeafMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getCdCustomPair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore mappings = new ChangeDistillerLeavesMatcher().match(src, dst);
         assertEquals(2, mappings.size());
         assertTrue(mappings.has(src.getChild(0), dst.getChild(1)));

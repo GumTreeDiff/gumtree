@@ -20,13 +20,12 @@
 
 package com.github.gumtreediff.actions.model;
 
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.Tree;
 
 public class Update extends Action {
     private String value;
 
-    public Update(ITree node, String value) {
+    public Update(Tree node, String value) {
         super(node);
         this.value = value;
     }

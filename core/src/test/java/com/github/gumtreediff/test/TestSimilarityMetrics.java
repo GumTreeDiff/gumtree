@@ -21,8 +21,8 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.DefaultTree;
 import com.github.gumtreediff.tree.TypeSet;
 import org.junit.jupiter.api.Test;
 
@@ -54,9 +54,9 @@ public class TestSimilarityMetrics {
     }
 
     private static MappingStore getTestData() {
-        ITree t1 = TreeLoader.getDummySrc();
-        ITree t2 = TreeLoader.getDummySrc();
-        t2.addChild(new Tree(TypeSet.type("x"), "x"));
+        Tree t1 = TreeLoader.getDummySrc();
+        Tree t2 = TreeLoader.getDummySrc();
+        t2.addChild(new DefaultTree(TypeSet.type("x"), "x"));
         MappingStore ms = new MappingStore(t1, t2);
         ms.addMappingRecursively(t1.getChild(0), t2.getChild(0));
         return ms;

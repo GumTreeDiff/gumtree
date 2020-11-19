@@ -25,19 +25,16 @@ import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.client.Register;
-import com.github.gumtreediff.matchers.MappingStore;
-
-import java.io.IOException;
 
 @Register(name = "axmldiff", description = "Dump annotated xml tree",
-        priority = Registry.Priority.LOW, options = AbstractDiffClient.Options.class)
-public class AnnotatedXmlDiff extends AbstractDiffClient<AnnotatedXmlDiff.Options> {
+        priority = Registry.Priority.LOW, options = AbstractDiffClient.DiffOptions.class)
+public class AnnotatedXmlDiff extends AbstractDiffClient<AnnotatedXmlDiff.AnnotatedXmlDiffOptions> {
 
     public AnnotatedXmlDiff(String[] args) {
         super(args);
     }
 
-    static class Options extends AbstractDiffClient.Options {
+    static class AnnotatedXmlDiffOptions extends AbstractDiffClient.DiffOptions {
         protected boolean isSrc = true;
 
         @Override
@@ -61,8 +58,8 @@ public class AnnotatedXmlDiff extends AbstractDiffClient<AnnotatedXmlDiff.Option
     }
 
     @Override
-    protected Options newOptions() {
-        return new Options();
+    protected AnnotatedXmlDiffOptions newOptions() {
+        return new AnnotatedXmlDiffOptions();
     }
 
     @Override

@@ -20,7 +20,9 @@
 package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.gen.TreeGenerators;
+import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -40,25 +42,31 @@ public class Diff {
         this.editScript = editScript;
     }
 
-    public static Diff compute(String srcFile, String dstFile,
-                               String treeGenerator, String matcher) throws IOException {
+    public static Diff compute(String srcFile, String dstFile, String treeGenerator,
+                               String matcher, GumTreeProperties properties) throws IOException {
         TreeContext src = TreeGenerators.getInstance().getTree(srcFile, treeGenerator);
         TreeContext dst = TreeGenerators.getInstance().getTree(dstFile, treeGenerator);
-        MappingStore mappings = Matchers.getInstance()
-                .getMatcherWithFallback(matcher).match(src.getRoot(), dst.getRoot());
+        Matcher m = Matchers.getInstance().getMatcherWithFallback(matcher);
+        m.configure(properties);
+        MappingStore mappings = m.match(src.getRoot(), dst.getRoot());
         EditScript editScript = new SimplifiedChawatheScriptGenerator().computeActions(mappings);
         return new Diff(src, dst, mappings, editScript);
+    }
+
+    public static Diff compute(String srcFile, String dstFile,
+                               String treeGenerator, String matcher) throws IOException {
+        return compute(srcFile, dstFile, treeGenerator, matcher, new GumTreeProperties());
     }
 
     public static Diff compute(String srcFile, String dstFile) throws IOException {
         return compute(srcFile, dstFile, null, null);
     }
 
-    public ITreeClassifier createAllNodeClassifier() {
+    public TreeClassifier createAllNodeClassifier() {
         return new AllNodesClassifier(this);
     }
 
-    public ITreeClassifier createRootNodesClassifier() {
+    public TreeClassifier createRootNodesClassifier() {
         return new OnlyRootsClassifier(this);
     }
 }

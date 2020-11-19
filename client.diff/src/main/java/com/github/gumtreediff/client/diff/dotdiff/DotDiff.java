@@ -25,14 +25,14 @@ import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.StringWriter;
 import java.io.Writer;
 
-@Register(description = "A dot diff client", options = AbstractDiffClient.Options.class)
-public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options> {
+@Register(description = "A dot diff client", options = AbstractDiffClient.DiffOptions.class)
+public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.DiffOptions> {
 
     public DotDiff(String[] args) {
         super(args);
@@ -59,7 +59,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
     }
 
     private void writeTree(TreeContext context, Writer writer, MappingStore mappings) throws Exception {
-        for (ITree tree : context.getRoot().preOrder()) {
+        for (Tree tree : context.getRoot().preOrder()) {
             String fillColor = "red";
             if (mappings.isSrcMapped(tree) || mappings.isDstMapped(tree))
                 fillColor = "blue";
@@ -72,11 +72,11 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
 
     }
 
-    private String getDotId(TreeContext context, ITree tree) {
+    private String getDotId(TreeContext context, Tree tree) {
         return "n_" + context.hashCode() + "_" + tree.hashCode();
     }
 
-    private String getDotLabel(ITree tree) {
+    private String getDotLabel(Tree tree) {
         String label = tree.toString();
         if (label.contains("\"") || label.contains("\\s"))
             label = label
@@ -89,7 +89,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.Options
     }
 
     @Override
-    protected Options newOptions() {
-        return new Options();
+    protected DiffOptions newOptions() {
+        return new DiffOptions();
     }
 }

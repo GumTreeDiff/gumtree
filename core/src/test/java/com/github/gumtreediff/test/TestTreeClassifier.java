@@ -21,12 +21,9 @@
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.actions.*;
-import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
-import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.utils.Pair;
 import org.junit.jupiter.api.Test;
 
@@ -36,12 +33,12 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestITreeClassifier {
+public class TestTreeClassifier {
     @Test
     public void testAllNodesClassifier() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore ms = new MappingStore(src, dst);
         ms.addMapping(src, dst);
         ms.addMapping(src.getChild(1), dst.getChild(0));
@@ -53,7 +50,7 @@ public class TestITreeClassifier {
         ms.addMapping(src.getChild("4.0"), dst.getChild("3.0.0.0"));
         EditScript actions = new SimplifiedChawatheScriptGenerator().computeActions(ms);
         Diff diff = new Diff(trees.first, trees.second, ms, actions);
-        ITreeClassifier c = diff.createAllNodeClassifier();
+        TreeClassifier c = diff.createAllNodeClassifier();
         assertThat(c.getUpdatedSrcs(), hasSize(1));
         assertThat(c.getUpdatedSrcs(), hasItems(
                 src.getChild("0.0")));
@@ -77,8 +74,8 @@ public class TestITreeClassifier {
     @Test
     public void testOnlyRootsClassifier() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore ms = new MappingStore(src, dst);
         ms.addMapping(src, dst);
         ms.addMapping(src.getChild(1), dst.getChild(0));
@@ -90,7 +87,7 @@ public class TestITreeClassifier {
         ms.addMapping(src.getChild("4.0"), dst.getChild("3.0.0.0"));
         EditScript actions = new SimplifiedChawatheScriptGenerator().computeActions(ms);
         Diff diff = new Diff(trees.first, trees.second, ms, actions);
-        ITreeClassifier c = diff.createRootNodesClassifier();
+        TreeClassifier c = diff.createRootNodesClassifier();
         assertThat(c.getUpdatedSrcs(), hasSize(1));
         assertThat(c.getUpdatedSrcs(), hasItems(
                 src.getChild("0.0")));

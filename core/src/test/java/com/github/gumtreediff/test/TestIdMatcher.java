@@ -19,14 +19,10 @@
 
 package com.github.gumtreediff.test;
 
-import com.github.gumtreediff.matchers.GumTreeProperties;
-import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.heuristic.IdMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Pair;
 import org.junit.jupiter.api.Test;
@@ -38,8 +34,8 @@ public class TestIdMatcher {
     @Test
     public void testIdMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();
-        ITree t1 = trees.first.getRoot();
-        ITree t2 = trees.second.getRoot();
+        Tree t1 = trees.first.getRoot();
+        Tree t2 = trees.second.getRoot();
         t1.setMetadata("id", "id1");
         t2.setMetadata("id", "id1");
 

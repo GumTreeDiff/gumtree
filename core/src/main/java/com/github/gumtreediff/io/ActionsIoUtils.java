@@ -25,7 +25,7 @@ import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.io.TreeIoUtils.AbstractSerializer;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.google.gson.stream.JsonWriter;
 
@@ -34,7 +34,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
 
 public final class ActionsIoUtils {
 
@@ -103,15 +102,15 @@ public final class ActionsIoUtils {
             // Write the actions
             fmt.startActions();
             for (Action a : actions) {
-                ITree src = a.getNode();
+                Tree src = a.getNode();
                 if (a instanceof Move) {
-                    ITree dst = mappings.getDstForSrc(src);
+                    Tree dst = mappings.getDstForSrc(src);
                     fmt.moveAction((Move) a, src, dst.getParent(), ((Move) a).getPosition());
                 } else if (a instanceof Update) {
-                    ITree dst = mappings.getDstForSrc(src);
+                    Tree dst = mappings.getDstForSrc(src);
                     fmt.updateAction((Update) a, src, dst);
                 } else if (a instanceof Insert) {
-                    ITree dst = a.getNode();
+                    Tree dst = a.getNode();
                     if (dst.isRoot())
                         fmt.insertRoot((Insert) a, src);
                     else
@@ -119,7 +118,7 @@ public final class ActionsIoUtils {
                 } else if (a instanceof Delete) {
                     fmt.deleteAction((Delete) a, src);
                 } else if (a instanceof TreeInsert) {
-                    ITree dst = a.getNode();
+                    Tree dst = a.getNode();
                     fmt.insertTreeAction((TreeInsert) a, src, dst.getParent(), dst.getParent().getChildPosition(dst));
                 } else if (a instanceof  TreeDelete) {
                     fmt.deleteTreeAction((TreeDelete) a, src);
@@ -140,25 +139,25 @@ public final class ActionsIoUtils {
 
         void startMatches() throws Exception;
 
-        void match(ITree srcNode, ITree destNode) throws Exception;
+        void match(Tree srcNode, Tree destNode) throws Exception;
 
         void endMatches() throws Exception;
 
         void startActions() throws Exception;
 
-        void insertRoot(Insert action, ITree node) throws Exception;
+        void insertRoot(Insert action, Tree node) throws Exception;
 
-        void insertAction(Insert action, ITree node, ITree parent, int index) throws Exception;
+        void insertAction(Insert action, Tree node, Tree parent, int index) throws Exception;
 
-        void insertTreeAction(TreeInsert action, ITree node, ITree parent, int index) throws Exception;
+        void insertTreeAction(TreeInsert action, Tree node, Tree parent, int index) throws Exception;
 
-        void moveAction(Move action, ITree src, ITree dst, int index) throws Exception;
+        void moveAction(Move action, Tree src, Tree dst, int index) throws Exception;
 
-        void updateAction(Update action, ITree src, ITree dst) throws Exception;
+        void updateAction(Update action, Tree src, Tree dst) throws Exception;
 
-        void deleteAction(Delete action, ITree node) throws Exception;
+        void deleteAction(Delete action, Tree node) throws Exception;
 
-        void deleteTreeAction(TreeDelete action, ITree node) throws Exception;
+        void deleteTreeAction(TreeDelete action, Tree node) throws Exception;
 
         void endActions() throws Exception;
     }
@@ -189,7 +188,7 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void match(ITree srcNode, ITree destNode) throws XMLStreamException {
+        public void match(Tree srcNode, Tree destNode) throws XMLStreamException {
             writer.writeEmptyElement("match");
             writer.writeAttribute("src", srcNode.toString());
             writer.writeAttribute("dest", destNode.toString());
@@ -206,21 +205,13 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void insertRoot(Insert action, ITree node) throws Exception {
+        public void insertRoot(Insert action, Tree node) throws Exception {
             start(action, node);
             end(node);
         }
 
         @Override
-        public void insertAction(Insert action, ITree node, ITree parent, int index) throws Exception {
-            start(action, node);
-            writer.writeAttribute("parent", parent.toString());
-            writer.writeAttribute("at", Integer.toString(index));
-            end(node);
-        }
-
-        @Override
-        public void insertTreeAction(TreeInsert action, ITree node, ITree parent, int index) throws Exception {
+        public void insertAction(Insert action, Tree node, Tree parent, int index) throws Exception {
             start(action, node);
             writer.writeAttribute("parent", parent.toString());
             writer.writeAttribute("at", Integer.toString(index));
@@ -228,7 +219,15 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void moveAction(Move action, ITree src, ITree dst, int index) throws XMLStreamException {
+        public void insertTreeAction(TreeInsert action, Tree node, Tree parent, int index) throws Exception {
+            start(action, node);
+            writer.writeAttribute("parent", parent.toString());
+            writer.writeAttribute("at", Integer.toString(index));
+            end(node);
+        }
+
+        @Override
+        public void moveAction(Move action, Tree src, Tree dst, int index) throws XMLStreamException {
             start(action, src);
             writer.writeAttribute("parent", dst.toString());
             writer.writeAttribute("at", Integer.toString(index));
@@ -236,20 +235,20 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void updateAction(Update action, ITree src, ITree dst) throws XMLStreamException {
+        public void updateAction(Update action, Tree src, Tree dst) throws XMLStreamException {
             start(action, src);
             writer.writeAttribute("label", dst.getLabel());
             end(src);
         }
 
         @Override
-        public void deleteAction(Delete action, ITree node) throws Exception {
+        public void deleteAction(Delete action, Tree node) throws Exception {
             start(action, node);
             end(node);
         }
 
         @Override
-        public void deleteTreeAction(TreeDelete action, ITree node) throws Exception {
+        public void deleteTreeAction(TreeDelete action, Tree node) throws Exception {
             start(action, node);
             end(node);
         }
@@ -259,12 +258,12 @@ public final class ActionsIoUtils {
             writer.writeEndElement();
         }
 
-        private void start(Action action, ITree src) throws XMLStreamException {
+        private void start(Action action, Tree src) throws XMLStreamException {
             writer.writeEmptyElement(action.getName());
             writer.writeAttribute("tree", src.toString());
         }
 
-        private void end(ITree node) throws XMLStreamException {
+        private void end(Tree node) throws XMLStreamException {
 //            writer.writeEndElement();
         }
     }
@@ -291,7 +290,7 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void match(ITree srcNode, ITree destNode) throws Exception {
+        public void match(Tree srcNode, Tree destNode) throws Exception {
             write(String.format("===\nmatch\n---\n%s\n%s", toS(srcNode), toS(destNode)));
         }
 
@@ -304,37 +303,37 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void insertRoot(Insert action, ITree node) throws Exception {
+        public void insertRoot(Insert action, Tree node) throws Exception {
             write(action.toString());
         }
 
         @Override
-        public void insertAction(Insert action, ITree node, ITree parent, int index) throws Exception {
+        public void insertAction(Insert action, Tree node, Tree parent, int index) throws Exception {
             write(action.toString());
         }
 
         @Override
-        public void insertTreeAction(TreeInsert action, ITree node, ITree parent, int index) throws Exception {
+        public void insertTreeAction(TreeInsert action, Tree node, Tree parent, int index) throws Exception {
             write(action.toString());
         }
 
         @Override
-        public void moveAction(Move action, ITree src, ITree dst, int position) throws Exception {
+        public void moveAction(Move action, Tree src, Tree dst, int position) throws Exception {
             write(action.toString());
         }
 
         @Override
-        public void updateAction(Update action, ITree src, ITree dst) throws Exception {
+        public void updateAction(Update action, Tree src, Tree dst) throws Exception {
             write(action.toString());
         }
 
         @Override
-        public void deleteAction(Delete action, ITree node) throws Exception {
+        public void deleteAction(Delete action, Tree node) throws Exception {
             write(action.toString());
         }
 
         @Override
-        public void deleteTreeAction(TreeDelete action, ITree node) throws Exception {
+        public void deleteTreeAction(TreeDelete action, Tree node) throws Exception {
             write(action.toString());
         }
 
@@ -347,7 +346,7 @@ public final class ActionsIoUtils {
             writer.append("\n");
         }
 
-        private String toS(ITree node) {
+        private String toS(Tree node) {
             return String.format("%s", node.toString());
         }
     }
@@ -377,7 +376,7 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void match(ITree srcNode, ITree destNode) throws Exception {
+        public void match(Tree srcNode, Tree destNode) throws Exception {
             writer.beginObject();
             writer.name("src").value(srcNode.toString());
             writer.name("dest").value(destNode.toString());
@@ -395,21 +394,13 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void insertRoot(Insert action, ITree node) throws IOException {
+        public void insertRoot(Insert action, Tree node) throws IOException {
             start(action, node);
             end(node);
         }
 
         @Override
-        public void insertAction(Insert action, ITree node, ITree parent, int index) throws IOException {
-            start(action, node);
-            writer.name("parent").value(parent.toString());
-            writer.name("at").value(index);
-            end(node);
-        }
-
-        @Override
-        public void insertTreeAction(TreeInsert action, ITree node, ITree parent, int index) throws IOException {
+        public void insertAction(Insert action, Tree node, Tree parent, int index) throws IOException {
             start(action, node);
             writer.name("parent").value(parent.toString());
             writer.name("at").value(index);
@@ -417,7 +408,15 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void moveAction(Move action, ITree src, ITree dst, int index) throws IOException {
+        public void insertTreeAction(TreeInsert action, Tree node, Tree parent, int index) throws IOException {
+            start(action, node);
+            writer.name("parent").value(parent.toString());
+            writer.name("at").value(index);
+            end(node);
+        }
+
+        @Override
+        public void moveAction(Move action, Tree src, Tree dst, int index) throws IOException {
             start(action, src);
             writer.name("parent").value(dst.toString());
             writer.name("at").value(index);
@@ -425,31 +424,31 @@ public final class ActionsIoUtils {
         }
 
         @Override
-        public void updateAction(Update action, ITree src, ITree dst) throws IOException {
+        public void updateAction(Update action, Tree src, Tree dst) throws IOException {
             start(action, src);
             writer.name("label").value(dst.getLabel());
             end(src);
         }
 
         @Override
-        public void deleteAction(Delete action, ITree node) throws IOException {
+        public void deleteAction(Delete action, Tree node) throws IOException {
             start(action, node);
             end(node);
         }
 
         @Override
-        public void deleteTreeAction(TreeDelete action, ITree node) throws IOException {
+        public void deleteTreeAction(TreeDelete action, Tree node) throws IOException {
             start(action, node);
             end(node);
         }
 
-        private void start(Action action, ITree src) throws IOException {
+        private void start(Action action, Tree src) throws IOException {
             writer.beginObject();
             writer.name("action").value(action.getName());
             writer.name("tree").value(src.toString());
         }
 
-        private void end(ITree node) throws IOException {
+        private void end(Tree node) throws IOException {
             writer.endObject();
         }
 

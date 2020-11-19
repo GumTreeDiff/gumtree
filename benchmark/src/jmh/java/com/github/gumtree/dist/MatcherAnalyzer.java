@@ -21,9 +21,7 @@ package com.github.gumtree.dist;
 
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.matchers.CompositeMatchers;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 import org.openjdk.jmh.annotations.*;
 
@@ -44,9 +42,9 @@ public class MatcherAnalyzer {
         @Param({})
         public String refPath;
 
-        public ITree src;
+        public Tree src;
 
-        public ITree dst;
+        public Tree dst;
     }
 
     @Benchmark

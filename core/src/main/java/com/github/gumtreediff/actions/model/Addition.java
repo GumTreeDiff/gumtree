@@ -20,21 +20,20 @@
 
 package com.github.gumtreediff.actions.model;
 
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.Tree;
 
 public abstract class Addition extends Action {
-    protected ITree parent;
+    protected Tree parent;
 
     protected int pos;
 
-    public Addition(ITree node, ITree parent, int pos) {
+    public Addition(Tree node, Tree parent, int pos) {
         super(node);
         this.parent = parent;
         this.pos = pos;
     }
 
-    public ITree getParent() {
+    public Tree getParent() {
         return parent;
     }
 

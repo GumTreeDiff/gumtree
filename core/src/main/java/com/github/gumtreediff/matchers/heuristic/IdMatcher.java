@@ -21,7 +21,7 @@ package com.github.gumtreediff.matchers.heuristic;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 
 import java.util.HashMap;
@@ -31,9 +31,9 @@ import java.util.Set;
 
 public class IdMatcher implements Matcher {
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        Map<String, Set<ITree>> srcCandidateMappings = new HashMap<>();
-        for (ITree t: TreeUtils.preOrder(src)) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
+        Map<String, Set<Tree>> srcCandidateMappings = new HashMap<>();
+        for (Tree t: TreeUtils.preOrder(src)) {
             String id = (String) t.getMetadata("id");
             if (id != null) {
                 if (!srcCandidateMappings.containsKey(id))
@@ -42,8 +42,8 @@ public class IdMatcher implements Matcher {
             }
         }
 
-        Map<String, Set<ITree>> dstCandidateMappings = new HashMap<>();
-        for (ITree t: TreeUtils.preOrder(dst)) {
+        Map<String, Set<Tree>> dstCandidateMappings = new HashMap<>();
+        for (Tree t: TreeUtils.preOrder(dst)) {
             String id = (String) t.getMetadata("id");
             if (id != null) {
                 if (!dstCandidateMappings.containsKey(id))

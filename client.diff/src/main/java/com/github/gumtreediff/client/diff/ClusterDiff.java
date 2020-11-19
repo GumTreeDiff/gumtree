@@ -28,8 +28,8 @@ import java.io.IOException;
 import java.util.Set;
 
 @Register(name = "cluster", description = "Extract action clusters",
-        options = AbstractDiffClient.Options.class)
-public class ClusterDiff extends AbstractDiffClient<AbstractDiffClient.Options> {
+        options = AbstractDiffClient.DiffOptions.class)
+public class ClusterDiff extends AbstractDiffClient<AbstractDiffClient.DiffOptions> {
 
     public ClusterDiff(String[] args) {
         super(args);
@@ -50,7 +50,7 @@ public class ClusterDiff extends AbstractDiffClient<AbstractDiffClient.Options> 
     }
 
     @Override
-    protected Options newOptions() {
-        return new Options();
+    protected DiffOptions newOptions() {
+        return new DiffOptions();
     }
 }

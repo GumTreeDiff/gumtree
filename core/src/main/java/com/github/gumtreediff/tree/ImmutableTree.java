@@ -33,11 +33,11 @@ public final class ImmutableTree extends AbstractTree {
 
     private final AssociationMap metadata;
 
-    public ImmutableTree(ITree t) {
+    public ImmutableTree(Tree t) {
         this(t, null);
     }
 
-    private ImmutableTree(ITree t, ITree parent) {
+    private ImmutableTree(Tree t, Tree parent) {
         children = Collections.unmodifiableList(
                 t.getChildren().stream().map(c -> new ImmutableTree(c, this)).collect(Collectors.toList())
         );
@@ -55,15 +55,15 @@ public final class ImmutableTree extends AbstractTree {
     }
 
     @Override
-    public ITree deepCopy() {
-        ITree copy = new Tree(this);
-        for (ITree child : getChildren())
+    public Tree deepCopy() {
+        Tree copy = new DefaultTree(this);
+        for (Tree child : getChildren())
             copy.addChild(child.deepCopy());
         return copy;
     }
 
     @Override
-    public void setParent(ITree parent) {
+    public void setParent(Tree parent) {
         throw new UnsupportedOperationException();
     }
 

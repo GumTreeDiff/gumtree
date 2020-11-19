@@ -22,20 +22,10 @@ package com.github.gumtreediff.gen.python;
 import com.github.gumtreediff.gen.ExternalProcessTreeGenerator;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
-import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
 
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.events.*;
 import java.io.*;
-import java.util.*;
-
-import static com.github.gumtreediff.tree.TypeSet.type;
 
 @Register(id = "python-pythonparser", accept = {"\\.py$"}, priority = Registry.Priority.MAXIMUM)
 public class PythonTreeGenerator extends ExternalProcessTreeGenerator {

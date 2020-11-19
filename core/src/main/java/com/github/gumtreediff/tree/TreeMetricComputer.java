@@ -31,24 +31,24 @@ public class TreeMetricComputer extends TreeVisitor.InnerNodesAndLeavesVisitor {
     int currentPosition = 0;
 
     @Override
-    public void startInnerNode(ITree tree) {
+    public void startInnerNode(Tree tree) {
         currentDepth++;
     }
 
     @Override
-    public void visitLeave(ITree tree) {
+    public void visitLeave(Tree tree) {
         tree.setMetrics(new TreeMetrics(1, 0, leafHash(tree), leafStructureHash(tree), currentDepth, currentPosition));
         currentPosition++;
     }
 
     @Override
-    public void endInnerNode(ITree tree) {
+    public void endInnerNode(Tree tree) {
         currentDepth--;
         int sumSize = 0;
         int maxHeight = 0;
         int currentHash = 0;
         int currentStructureHash = 0;
-        for (ITree child : tree.getChildren()) {
+        for (Tree child : tree.getChildren()) {
             TreeMetrics metrics = child.getMetrics();
             int exponent = 2 * sumSize + 1;
             currentHash += metrics.hash * hashFactor(exponent);
@@ -85,23 +85,23 @@ public class TreeMetricComputer extends TreeVisitor.InnerNodesAndLeavesVisitor {
         return result;
     }
 
-    private static int innerNodeHash(ITree tree, int size, int middleHash) {
+    private static int innerNodeHash(Tree tree, int size, int middleHash) {
         return Objects.hash(tree.getType(), tree.getLabel(), ENTER)
                 + middleHash
                 + Objects.hash(tree.getType(), tree.getLabel(), LEAVE) * hashFactor(size);
     }
 
-    private static int innerNodeStructureHash(ITree tree, int size, int middleHash) {
+    private static int innerNodeStructureHash(Tree tree, int size, int middleHash) {
         return Objects.hash(tree.getType(), ENTER)
                + middleHash
                + Objects.hash(tree.getType(), LEAVE) * hashFactor(size);
     }
 
-    private static int leafHash(ITree tree) {
+    private static int leafHash(Tree tree) {
         return innerNodeHash(tree, 1, 0);
     }
 
-    private static int leafStructureHash(ITree tree) {
+    private static int leafStructureHash(Tree tree) {
         return innerNodeStructureHash(tree, 1, 0);
     }
 }

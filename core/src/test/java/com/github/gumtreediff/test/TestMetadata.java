@@ -21,7 +21,7 @@
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMetadata {
-    ITree someNode;
+    Tree someNode;
     TreeContext tc;
 
     final String key = "key";

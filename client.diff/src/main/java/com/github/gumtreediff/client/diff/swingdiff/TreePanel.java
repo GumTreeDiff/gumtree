@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client.diff.swingdiff;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import javax.swing.*;
@@ -38,17 +38,17 @@ public class TreePanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private JTree jtree;
     private TreeContext tree;
-    private Map<ITree, DefaultMutableTreeNode> trees;
+    private Map<Tree, DefaultMutableTreeNode> trees;
 
     public TreePanel(final TreeContext tree, TreeCellRenderer renderer) {
         super(new GridLayout(1, 0));
         trees = new HashMap<>();
         this.tree = tree;
 
-        ITree root = tree.getRoot();
+        Tree root = tree.getRoot();
         DefaultMutableTreeNode top = new DefaultMutableTreeNode(root);
         trees.put(root, top);
-        for (ITree child: root.getChildren())
+        for (Tree child: root.getChildren())
             createNodes(top, child);
 
         jtree = new JTree(top) {
@@ -59,7 +59,7 @@ public class TreePanel extends JPanel {
                                              boolean expanded, boolean leaf, int row,
                                              boolean hasFocus) {
                 if (value != null) {
-                    ITree node = ((ITree) ((DefaultMutableTreeNode) value).getUserObject());
+                    Tree node = ((Tree) ((DefaultMutableTreeNode) value).getUserObject());
                     return node.toString();
                 }
                 return "";
@@ -83,7 +83,7 @@ public class TreePanel extends JPanel {
         return jtree;
     }
 
-    public Map<ITree, DefaultMutableTreeNode> getTrees() {
+    public Map<Tree, DefaultMutableTreeNode> getTrees() {
         return trees;
     }
 
@@ -98,11 +98,11 @@ public class TreePanel extends JPanel {
         System.out.println(nodeInfo);
     }
 
-    private void createNodes(DefaultMutableTreeNode parent, ITree tree) {
+    private void createNodes(DefaultMutableTreeNode parent, Tree tree) {
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(tree);
         trees.put(tree, node);
         parent.add(node);
-        for (ITree child: tree.getChildren())
+        for (Tree child: tree.getChildren())
             createNodes(node, child);
     }
 }

@@ -35,7 +35,7 @@ public class TestJdtGenerator {
     @Test
     public void testSimpleSyntax() throws IOException {
         String input = "public class Foo { public int foo; }";
-        ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
+        Tree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
         assertEquals(10, tree.getMetrics().size);
     }
@@ -44,7 +44,7 @@ public class TestJdtGenerator {
     public void testJava5Syntax() throws IOException {
         String input = "public class Foo<A> { public List<A> foo; public void foo() "
                 + "{ for (A f : foo) { System.out.println(f); } } }";
-        ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
+        Tree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
         assertEquals(35, tree.getMetrics().size);
     }
@@ -82,7 +82,7 @@ public class TestJdtGenerator {
     @Test
     public void testJava8Syntax() throws IOException {
         String input = "public class Foo { public void foo(){ new ArrayList<Object>().stream().forEach(a -> {}); } }";
-        ITree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
+        Tree tree = new JdtTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(COMPILATION_UNIT, tree.getType());
         assertEquals(28, tree.getMetrics().size);
     }

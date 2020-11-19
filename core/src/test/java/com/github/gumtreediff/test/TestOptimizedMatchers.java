@@ -22,7 +22,7 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
@@ -35,8 +35,8 @@ public class TestOptimizedMatchers {
     @Test
     public void testRtedThetaMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore mappings = new CompositeMatchers.RtedTheta().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src, dst));
@@ -49,8 +49,8 @@ public class TestOptimizedMatchers {
     @Test
     public void testChangeDistillerThetaParMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore mappings = new CompositeMatchers.ChangeDistillerTheta().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src.getChild(0).getChild(0), dst.getChild(0)));
@@ -63,8 +63,8 @@ public class TestOptimizedMatchers {
     @Test
     public void testClassicGumtreeThetaMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore mappings = new CompositeMatchers.ClassicGumtreeTheta().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src, dst));

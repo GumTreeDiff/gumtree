@@ -73,6 +73,10 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
         throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
     }
 
+    public boolean has(String generator) {
+        return this.findById(generator) != null;
+    }
+
     /**
      * Indicate whether or not the given file path has a related tree generator
      */

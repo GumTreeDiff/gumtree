@@ -22,8 +22,8 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.MultiMappingStore;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.DefaultTree;
 import com.github.gumtreediff.tree.TypeSet;
 
 import org.junit.jupiter.api.Test;
@@ -35,8 +35,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestMappingStore {
     @Test
     public void testMappingStore() {
-        ITree t1 = new Tree(TypeSet.type("foo"));
-        ITree t2 = new Tree(TypeSet.type("foo"));
+        Tree t1 = new DefaultTree(TypeSet.type("foo"));
+        Tree t2 = new DefaultTree(TypeSet.type("foo"));
         MappingStore ms = new MappingStore(t1, t2);
         assertEquals(0, ms.size());
         assertFalse(ms.isSrcMapped(t1));
@@ -46,10 +46,10 @@ public class TestMappingStore {
         assertTrue(ms.isSrcMapped(t1));
         assertTrue(ms.isDstMapped(t2));
         assertFalse(ms.areBothUnmapped(t1, t2));
-        ITree t3 = new Tree(TypeSet.type("foo"));
-        ITree t4 = new Tree(TypeSet.type("foo"));
-        assertFalse(ms.areSrcsUnmapped(Arrays.asList(new ITree[] {t1, t3})));
-        assertFalse(ms.areDstsUnmapped(Arrays.asList(new ITree[] {t2, t4})));
+        Tree t3 = new DefaultTree(TypeSet.type("foo"));
+        Tree t4 = new DefaultTree(TypeSet.type("foo"));
+        assertFalse(ms.areSrcsUnmapped(Arrays.asList(new Tree[] {t1, t3})));
+        assertFalse(ms.areDstsUnmapped(Arrays.asList(new Tree[] {t2, t4})));
         assertFalse(ms.areBothUnmapped(t1, t3));
         assertFalse(ms.areBothUnmapped(t3, t2));
         assertTrue(ms.areBothUnmapped(t3, t4));
@@ -58,8 +58,8 @@ public class TestMappingStore {
         assertEquals(t2, m.second);
         ms.removeMapping(t1, t2);
         assertEquals(0, ms.size());
-        assertTrue(ms.areSrcsUnmapped(Arrays.asList(new ITree[] {t1, t3})));
-        assertTrue(ms.areDstsUnmapped(Arrays.asList(new ITree[] {t2, t4})));
+        assertTrue(ms.areSrcsUnmapped(Arrays.asList(new Tree[] {t1, t3})));
+        assertTrue(ms.areDstsUnmapped(Arrays.asList(new Tree[] {t2, t4})));
         t3.setParentAndUpdateChildren(t1);
         t4.setParentAndUpdateChildren(t2);
         ms.addMappingRecursively(t1, t2);
@@ -71,15 +71,15 @@ public class TestMappingStore {
     @Test
     public void testMultiMappingStore() {
         MultiMappingStore ms = new MultiMappingStore();
-        ITree t1 = new Tree(TypeSet.type("foo"));
-        ITree t2 = new Tree(TypeSet.type("foo"));
+        Tree t1 = new DefaultTree(TypeSet.type("foo"));
+        Tree t2 = new DefaultTree(TypeSet.type("foo"));
         ms.addMapping(t1, t2);
         assertEquals(1, ms.size());
         assertTrue(ms.has(t1, t2));
         assertTrue(ms.isSrcUnique(t1));
         assertTrue(ms.isDstUnique(t2));
-        ITree t3 = new Tree(TypeSet.type("foo"));
-        ITree t4 = new Tree(TypeSet.type("foo"));
+        Tree t3 = new DefaultTree(TypeSet.type("foo"));
+        Tree t4 = new DefaultTree(TypeSet.type("foo"));
         ms.addMapping(t3, t4);
         assertEquals(2, ms.size());
         assertTrue(ms.has(t3, t4));

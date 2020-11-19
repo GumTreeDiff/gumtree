@@ -22,10 +22,9 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.io.ActionsIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -34,12 +33,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
-import java.util.List;
 
 public class TestActionIo {
     private Pair<TreeContext, TreeContext> p;
-    private ITree src;
-    private ITree dst;
+    private Tree src;
+    private Tree dst;
     private MappingStore ms;
     private EditScript actions;
 

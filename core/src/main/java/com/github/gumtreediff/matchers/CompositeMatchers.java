@@ -30,11 +30,7 @@ import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerParallelLeavesMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.CliqueSubtreeMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.SimpleBottomUpMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.*;
 import com.github.gumtreediff.matchers.optimal.rted.RtedMatcher;
 import com.github.gumtreediff.matchers.optimizations.CrossMoveMatcherThetaF;
 import com.github.gumtreediff.matchers.optimizations.IdenticalSubtreeMatcherThetaA;
@@ -42,7 +38,7 @@ import com.github.gumtreediff.matchers.optimizations.InnerNodesMatcherThetaD;
 import com.github.gumtreediff.matchers.optimizations.LcsOptMatcherThetaB;
 import com.github.gumtreediff.matchers.optimizations.LeafMoveMatcherThetaE;
 import com.github.gumtreediff.matchers.optimizations.UnmappedLeavesMatcherThetaC;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.google.common.collect.Sets;
 
 /**
@@ -58,7 +54,7 @@ public class CompositeMatchers {
         }
 
         @Override
-        public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+        public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
             for (Matcher matcher : matchers)
                 mappings = matcher.match(src, dst, mappings);
 
@@ -106,28 +102,32 @@ public class CompositeMatchers {
     @Register(id = "gumtree-simple-id")
     public static class SimpleIdGumtree extends CompositeMatcher {
         public SimpleIdGumtree() {
-            super(new IdMatcher(), new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
+            super(new IdMatcher(), new GreedySubtreeMatcher(),
+                    new SimpleBottomUpMatcher());
         }
     }
 
     @Register(id = "gumtree-complete")
     public static class CompleteGumtreeMatcher extends CompositeMatcher {
         public CompleteGumtreeMatcher() {
-            super(new CliqueSubtreeMatcher(), new CompleteBottomUpMatcher());
+            super(new CliqueSubtreeMatcher(),
+                    new CompleteBottomUpMatcher());
         }
     }
 
     @Register(id = "change-distiller")
     public static class ChangeDistiller extends CompositeMatcher {
         public ChangeDistiller() {
-            super(new ChangeDistillerLeavesMatcher(), new ChangeDistillerBottomUpMatcher());
+            super(new ChangeDistillerLeavesMatcher(),
+                    new ChangeDistillerBottomUpMatcher());
         }
     }
 
     @Register(id = "xy")
     public static class XyMatcher extends CompositeMatcher {
         public XyMatcher() {
-            super(new GreedySubtreeMatcher(), new XyBottomUpMatcher());
+            super(new GreedySubtreeMatcher(),
+                    new XyBottomUpMatcher());
         }
     }
 

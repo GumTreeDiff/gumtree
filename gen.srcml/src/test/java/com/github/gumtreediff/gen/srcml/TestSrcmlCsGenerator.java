@@ -19,7 +19,7 @@
 
 package com.github.gumtreediff.gen.srcml;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ public class TestSrcmlCsGenerator {
                 + "Console.ReadLine();\n"
                 + "}\n"
                 + "}";
-        ITree t = new SrcmlCsTreeGenerator().generateFrom().string(input).getRoot();
+        Tree t = new SrcmlCsTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(35, t.getMetrics().size);
     }
 

@@ -28,18 +28,21 @@ import java.util.Set;
 
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MultiMappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
+    public GreedySubtreeMatcher() {
+    }
+
     @Override
     public void filterMappings(MultiMappingStore multiMappings) {
         // Select unique mappings first and extract ambiguous mappings.
         List<Mapping> ambiguousList = new ArrayList<>();
-        Set<ITree> ignored = new HashSet<>();
-        for (ITree src : multiMappings.allMappedSrcs()) {
-            boolean isMappingUnique = false;
+        Set<Tree> ignored = new HashSet<>();
+        for (var src : multiMappings.allMappedSrcs()) {
+            var isMappingUnique = false;
             if (multiMappings.isSrcUnique(src)) {
-                ITree dst = multiMappings.getDsts(src).iterator().next();
+                var dst = multiMappings.getDsts(src).stream().findAny().get();
                 if (multiMappings.isDstUnique(dst)) {
                     mappings.addMappingRecursively(src, dst);
                     isMappingUnique = true;
@@ -47,18 +50,18 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
             }
 
             if (!(ignored.contains(src) || isMappingUnique)) {
-                Set<ITree> adsts = multiMappings.getDsts(src);
-                Set<ITree> asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
-                for (ITree asrc : asrcs)
-                    for (ITree adst : adsts)
+                var adsts = multiMappings.getDsts(src);
+                var asrcs = multiMappings.getSrcs(multiMappings.getDsts(src).iterator().next());
+                for (Tree asrc : asrcs)
+                    for (Tree adst : adsts)
                         ambiguousList.add(new Mapping(asrc, adst));
                 ignored.addAll(asrcs);
             }
         }
 
         // Rank the mappings by score.
-        Set<ITree> srcIgnored = new HashSet<>();
-        Set<ITree> dstIgnored = new HashSet<>();
+        Set<Tree> srcIgnored = new HashSet<>();
+        Set<Tree> dstIgnored = new HashSet<>();
         Collections.sort(ambiguousList, new SiblingsMappingComparator(ambiguousList, mappings, getMaxTreeSize()));
 
         // Select the best ambiguous mappings

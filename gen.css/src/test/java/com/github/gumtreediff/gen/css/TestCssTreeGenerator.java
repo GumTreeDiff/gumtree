@@ -20,7 +20,7 @@
 package com.github.gumtreediff.gen.css;
 
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +39,7 @@ public class TestCssTreeGenerator {
                 + "\tbackground-color: black;\n"
                 + "}");
         TreeContext ctx = new CssTreeGenerator().generateFrom().reader(r);
-        ITree tree = ctx.getRoot();
+        Tree tree = ctx.getRoot();
         assertEquals(10, tree.getMetrics().size);
     }
 

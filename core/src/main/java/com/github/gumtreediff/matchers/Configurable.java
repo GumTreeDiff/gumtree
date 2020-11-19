@@ -24,15 +24,14 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 public interface Configurable {
-
-    public default void configure(GumTreeProperties properties) {
+    default void configure(GumTreeProperties properties) {
     }
 
-    public default Set<ConfigurationOptions> getApplicableOptions() {
+    default Set<ConfigurationOptions> getApplicableOptions() {
         return Sets.newHashSet();
     }
 
-    public default void setOption(ConfigurationOptions option, Object value) {
+    default void setOption(ConfigurationOptions option, Object value) {
         if (!getApplicableOptions().contains(option))
             throw new RuntimeException(
                     "Option " + option.name() + " is not allowed. Applicable options are: " + getApplicableOptions());
@@ -40,6 +39,5 @@ public interface Configurable {
         GumTreeProperties properties = new GumTreeProperties();
         properties.put(option, value);
         configure(properties);
-
     }
 }

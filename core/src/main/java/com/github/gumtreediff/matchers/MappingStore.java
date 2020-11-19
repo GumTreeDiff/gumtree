@@ -22,17 +22,17 @@ package com.github.gumtreediff.matchers;
 
 import java.util.*;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 /**
  * Stores the mappings between the nodes of a src and dst trees.
  */
 public class MappingStore implements Iterable<Mapping> {
-    public final ITree src;
-    public final ITree dst;
+    public final Tree src;
+    public final Tree dst;
 
-    private Map<ITree, ITree> srcToDst;
-    private Map<ITree, ITree> dstToSrc;
+    private Map<Tree, Tree> srcToDst;
+    private Map<Tree, Tree> dstToSrc;
 
     public MappingStore(MappingStore ms) {
         this(ms.src, ms.dst);
@@ -40,7 +40,7 @@ public class MappingStore implements Iterable<Mapping> {
             addMapping(m.first, m.second);
     }
 
-    public MappingStore(ITree src, ITree dst) {
+    public MappingStore(Tree src, Tree dst) {
         this.src = src;
         this.dst = dst;
         srcToDst = new HashMap<>();
@@ -56,7 +56,7 @@ public class MappingStore implements Iterable<Mapping> {
 
             @Override
             public Iterator<Mapping> iterator() {
-                Iterator<ITree> it = srcToDst.keySet().iterator();
+                Iterator<Tree> it = srcToDst.keySet().iterator();
                 return new Iterator<Mapping>() {
                     @Override
                     public boolean hasNext() {
@@ -65,7 +65,7 @@ public class MappingStore implements Iterable<Mapping> {
 
                     @Override
                     public Mapping next() {
-                        ITree src = it.next();
+                        Tree src = it.next();
                         if (src == null) return null;
                         return new Mapping(src, srcToDst.get(src));
                     }
@@ -79,75 +79,75 @@ public class MappingStore implements Iterable<Mapping> {
         };
     }
 
-    public void addMapping(ITree src, ITree dst) {
+    public void addMapping(Tree src, Tree dst) {
         srcToDst.put(src, dst);
         dstToSrc.put(dst, src);
     }
 
-    public void addMappingRecursively(ITree src, ITree dst) {
+    public void addMappingRecursively(Tree src, Tree dst) {
         addMapping(src, dst);
         for (int i = 0; i < src.getChildren().size(); i++)
             addMappingRecursively(src.getChild(i), dst.getChild(i));
     }
 
-    public void removeMapping(ITree src, ITree dst) {
+    public void removeMapping(Tree src, Tree dst) {
         srcToDst.remove(src);
         dstToSrc.remove(dst);
     }
 
-    public ITree getDstForSrc(ITree src) {
+    public Tree getDstForSrc(Tree src) {
         return srcToDst.get(src);
     }
 
-    public ITree getSrcForDst(ITree dst) {
+    public Tree getSrcForDst(Tree dst) {
         return dstToSrc.get(dst);
     }
 
-    public boolean isSrcMapped(ITree src) {
+    public boolean isSrcMapped(Tree src) {
         return srcToDst.containsKey(src);
     }
 
-    public boolean isDstMapped(ITree dst) {
+    public boolean isDstMapped(Tree dst) {
         return dstToSrc.containsKey(dst);
     }
 
-    public boolean areBothUnmapped(ITree src, ITree dst) {
+    public boolean areBothUnmapped(Tree src, Tree dst) {
         return !(isSrcMapped(src) || isDstMapped(dst));
     }
 
-    public boolean areSrcsUnmapped(Collection<ITree> srcs) {
-        for (ITree src : srcs)
+    public boolean areSrcsUnmapped(Collection<Tree> srcs) {
+        for (Tree src : srcs)
             if (isSrcMapped(src))
                 return false;
 
         return true;
     }
 
-    public boolean areDstsUnmapped(Collection<ITree> dsts) {
-        for (ITree dst : dsts)
+    public boolean areDstsUnmapped(Collection<Tree> dsts) {
+        for (Tree dst : dsts)
             if (isDstMapped(dst))
                 return false;
 
         return true;
     }
 
-    public boolean hasUnmappedSrcChildren(ITree t) {
-        for (ITree c : t.getDescendants())
+    public boolean hasUnmappedSrcChildren(Tree t) {
+        for (Tree c : t.getDescendants())
             if (!isSrcMapped(c))
                 return true;
 
         return false;
     }
 
-    public boolean hasUnmappedDstChildren(ITree t) {
-        for (ITree c : t.getDescendants())
+    public boolean hasUnmappedDstChildren(Tree t) {
+        for (Tree c : t.getDescendants())
             if (!isDstMapped(c))
                 return true;
 
         return false;
     }
 
-    public boolean has(ITree src, ITree dst) {
+    public boolean has(Tree src, Tree dst) {
         return srcToDst.get(src) == dst;
     }
 
@@ -164,7 +164,7 @@ public class MappingStore implements Iterable<Mapping> {
         return b.toString();
     }
 
-    public boolean isMappingAllowed(ITree src, ITree dst) {
+    public boolean isMappingAllowed(Tree src, Tree dst) {
         return src.hasSameType(dst) && areBothUnmapped(src, dst);
     }
 }

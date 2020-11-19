@@ -25,12 +25,10 @@ import java.util.Deque;
 import java.util.List;
 
 import com.github.gumtreediff.gen.jdt.cd.EntityType;
-import com.github.gumtreediff.tree.*;
 import com.github.gumtreediff.tree.Type;
-import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.core.dom.*;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
@@ -39,7 +37,7 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
 
     protected TreeContext context = new TreeContext();
 
-    protected Deque<ITree> trees = new ArrayDeque<>();
+    protected Deque<Tree> trees = new ArrayDeque<>();
 
     public AbstractJdtVisitor() {
         super(true);
@@ -63,14 +61,14 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
     }
 
     protected void push(ASTNode n, Type type, String label, int startPosition, int length) {
-        ITree t = context.createTree(type, label);
+        Tree t = context.createTree(type, label);
         t.setPos(startPosition);
         t.setLength(length);
 
         if (trees.isEmpty())
             context.setRoot(t);
         else {
-            ITree parent = trees.peek();
+            Tree parent = trees.peek();
             t.setParentAndUpdateChildren(parent);
         }
 
@@ -108,7 +106,7 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
         return "Field " + ((VariableDeclarationFragment) d.fragments().get(0)).getName();
     }
 
-    protected ITree getCurrentParent() {
+    protected Tree getCurrentParent() {
         return trees.peek();
     }
 

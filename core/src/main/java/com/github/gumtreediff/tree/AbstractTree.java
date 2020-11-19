@@ -24,10 +24,10 @@ import com.github.gumtreediff.io.TreeIoUtils;
 
 import java.util.*;
 
-public abstract class AbstractTree implements ITree {
-    protected ITree parent;
+public abstract class AbstractTree implements Tree {
+    protected Tree parent;
 
-    protected List<ITree> children;
+    protected List<Tree> children;
 
     protected TreeMetrics metrics;
 
@@ -47,17 +47,17 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public ITree getParent() {
+    public Tree getParent() {
         return parent;
     }
 
     @Override
-    public void setParent(ITree parent) {
+    public void setParent(Tree parent) {
         this.parent = parent;
     }
 
     @Override
-    public void setParentAndUpdateChildren(ITree parent) {
+    public void setParentAndUpdateChildren(Tree parent) {
         if (this.parent != null)
             this.parent.getChildren().remove(this);
         this.parent = parent;
@@ -66,34 +66,34 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public List<ITree> getChildren() {
+    public List<Tree> getChildren() {
         return children;
     }
 
     @Override
-    public void setChildren(List<ITree> children) {
+    public void setChildren(List<Tree> children) {
         this.children = children;
-        for (ITree c : children)
+        for (Tree c : children)
             c.setParent(this);
     }
 
     @Override
-    public void addChild(ITree t) {
+    public void addChild(Tree t) {
         children.add(t);
         t.setParent(this);
     }
 
     @Override
-    public void insertChild(ITree t, int position) {
+    public void insertChild(Tree t, int position) {
         children.add(position, t);
         t.setParent(this);
     }
 
     public TreeMetrics getMetrics() {
         if (metrics == null) {
-            ITree root = this;
+            Tree root = this;
             if (!this.isRoot()) {
-                List<ITree> parents = this.getParents();
+                List<Tree> parents = this.getParents();
                 root = parents.get(parents.size() - 1);
             }
             TreeVisitor.visitTree(root, new TreeMetricComputer());

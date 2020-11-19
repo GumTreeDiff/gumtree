@@ -19,10 +19,10 @@
 
 package com.github.gumtreediff.actions.model;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public abstract class TreeAction extends Action {
-    public TreeAction(ITree node) {
+    public TreeAction(Tree node) {
         super(node);
     }
 }

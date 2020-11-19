@@ -25,7 +25,7 @@ import java.util.List;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Register;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
 
@@ -33,14 +33,14 @@ import com.github.gumtreediff.utils.SequenceAlgorithms;
 public class LcsMatcher implements Matcher {
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
 
-        List<ITree> srcSeq = TreeUtils.preOrder(src);
-        List<ITree> dstSeq = TreeUtils.preOrder(dst);
+        List<Tree> srcSeq = TreeUtils.preOrder(src);
+        List<Tree> dstSeq = TreeUtils.preOrder(dst);
         List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(srcSeq, dstSeq);
         for (int[] x : lcs) {
-            ITree t1 = srcSeq.get(x[0]);
-            ITree t2 = dstSeq.get(x[1]);
+            Tree t1 = srcSeq.get(x[0]);
+            Tree t2 = dstSeq.get(x[1]);
             mappings.addMapping(t1, t2);
         }
         return mappings;

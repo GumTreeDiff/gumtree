@@ -21,15 +21,15 @@ package com.github.gumtreediff.matchers.heuristic.gt;
 
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 import java.util.*;
 
 public final class SiblingsMappingComparator extends AbstractMappingComparator {
 
-    private Map<ITree, List<ITree>> srcDescendants = new HashMap<>();
+    private Map<Tree, List<Tree>> srcDescendants = new HashMap<>();
 
-    private Map<ITree, Set<ITree>> dstDescendants = new HashMap<>();
+    private Map<Tree, Set<Tree>> dstDescendants = new HashMap<>();
 
     public SiblingsMappingComparator(List<Mapping> ambiguousMappings, MappingStore mappings,
                                      int maxTreeSize) {
@@ -39,18 +39,18 @@ public final class SiblingsMappingComparator extends AbstractMappingComparator {
     }
 
     @Override
-    protected double similarity(ITree src, ITree dst) {
+    protected double similarity(Tree src, Tree dst) {
         return 100D * siblingsJaccardSimilarity(src.getParent(), dst.getParent())
                 +  10D * posInParentSimilarity(src, dst) + numberingSimilarity(src , dst);
     }
 
-    protected double siblingsJaccardSimilarity(ITree src, ITree dst) {
+    protected double siblingsJaccardSimilarity(Tree src, Tree dst) {
         double num = (double) numberOfCommonDescendants(src, dst);
         double den = (double) srcDescendants.get(src).size() + (double) dstDescendants.get(dst).size() - num;
         return num / den;
     }
 
-    protected int numberOfCommonDescendants(ITree src, ITree dst) {
+    protected int numberOfCommonDescendants(Tree src, Tree dst) {
         if (!srcDescendants.containsKey(src))
             srcDescendants.put(src, src.getDescendants());
         if (!dstDescendants.containsKey(dst))
@@ -58,8 +58,8 @@ public final class SiblingsMappingComparator extends AbstractMappingComparator {
 
         int common = 0;
 
-        for (ITree t: srcDescendants.get(src)) {
-            ITree m = mappings.getDstForSrc(t);
+        for (Tree t: srcDescendants.get(src)) {
+            Tree m = mappings.getDstForSrc(t);
             if (m != null && dstDescendants.get(dst).contains(m))
                 common++;
         }

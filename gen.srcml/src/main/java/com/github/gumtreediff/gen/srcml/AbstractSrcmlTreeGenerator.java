@@ -21,7 +21,7 @@ package com.github.gumtreediff.gen.srcml;
 
 import com.github.gumtreediff.gen.ExternalProcessTreeGenerator;
 import com.github.gumtreediff.io.LineReader;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -69,7 +69,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
         context = new TreeContext();
         currentLabel = new StringBuilder();
         try {
-            ArrayDeque<ITree> trees = new ArrayDeque<>();
+            ArrayDeque<Tree> trees = new ArrayDeque<>();
             XMLEventReader r = fact.createXMLEventReader(new StringReader(xml));
             while (r.hasNext()) {
                 XMLEvent ev = r.nextEvent();
@@ -79,7 +79,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                     if (type.equals(position))
                         setLength(trees.peekFirst(), s);
                     else {
-                        ITree t = context.createTree(type, "");
+                        Tree t = context.createTree(type, "");
 
                         if (trees.isEmpty()) {
                             context.setRoot(t);
@@ -112,20 +112,20 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
         return null;
     }
 
-    private boolean isLabeled(ArrayDeque<ITree> trees) {
+    private boolean isLabeled(ArrayDeque<Tree> trees) {
         return labeled.contains(trees.peekFirst().getType());
     }
 
     private void fixPos(TreeContext ctx) {
-        for (ITree t : ctx.getRoot().postOrder()) {
+        for (Tree t : ctx.getRoot().postOrder()) {
             if (!t.isLeaf()) {
-                if (t.getPos() == ITree.NO_POS || t.getLength() == ITree.NO_POS) {
-                    ITree firstChild = t.getChild(0);
+                if (t.getPos() == Tree.NO_POS || t.getLength() == Tree.NO_POS) {
+                    Tree firstChild = t.getChild(0);
                     t.setPos(firstChild.getPos());
                     if (t.getChildren().size() == 1)
                         t.setLength(firstChild.getLength());
                     else {
-                        ITree lastChild = t.getChild(t.getChildren().size() - 1);
+                        Tree lastChild = t.getChild(t.getChildren().size() - 1);
                         t.setLength(lastChild.getEndPos() - firstChild.getPos());
                     }
                 }
@@ -133,7 +133,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
         }
     }
 
-    private void setPos(ITree t, StartElement e) {
+    private void setPos(Tree t, StartElement e) {
         if (e.getAttributeByName(POS_START) != null) {
             String posStr = e.getAttributeByName(POS_START).getValue();
             String[] chunks = posStr.split(":");
@@ -144,7 +144,7 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
         }
     }
 
-    private void setLength(ITree t, StartElement e) {
+    private void setLength(Tree t, StartElement e) {
         if (t.getPos() == -1)
             return;
         if ( e.getAttributeByName(POS_END) != null) {

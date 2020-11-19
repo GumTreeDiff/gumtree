@@ -29,19 +29,19 @@ import java.util.LinkedList;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 /**
  * This implements the cross move matcher Theta F.
  */
 public class CrossMoveMatcherThetaF implements Matcher {
 
-    private ITree src;
-    private ITree dst;
+    private Tree src;
+    private Tree dst;
     private MappingStore mappings;
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
         this.src = src;
         this.dst = dst;
         this.mappings = mappings;
@@ -53,18 +53,18 @@ public class CrossMoveMatcherThetaF implements Matcher {
         LinkedList<Mapping> workList = new LinkedList<>(mappings.asSet());
         Collections.sort(workList, new BfsComparator(src, dst));
         for (Mapping pair : workList) {
-            ITree parentOld = pair.first.getParent();
-            ITree parentNew = pair.second.getParent();
+            Tree parentOld = pair.first.getParent();
+            Tree parentNew = pair.second.getParent();
             if (mappings.isSrcMapped(parentOld) && mappings.getDstForSrc(parentOld) != parentNew) {
                 if (mappings.isDstMapped(parentNew) && mappings.getSrcForDst(parentNew) != parentOld) {
-                    ITree parentOldOther = mappings.getSrcForDst(parentNew);
-                    ITree parentNewOther = mappings.getDstForSrc(parentOld);
+                    Tree parentOldOther = mappings.getSrcForDst(parentNew);
+                    Tree parentNewOther = mappings.getDstForSrc(parentOld);
                     if (parentOld.getLabel().equals(parentNewOther.getLabel())
                             && parentNew.getLabel().equals(parentOldOther.getLabel())) {
                         boolean done = false;
-                        for (ITree childOldOther : parentOldOther.getChildren()) {
+                        for (Tree childOldOther : parentOldOther.getChildren()) {
                             if (mappings.isSrcMapped(childOldOther)) {
-                                ITree childNewOther = mappings.getDstForSrc(childOldOther);
+                                Tree childNewOther = mappings.getDstForSrc(childOldOther);
                                 if (pair.first.getLabel().equals(childNewOther.getLabel())
                                         && childOldOther.getLabel().equals(pair.second.getLabel())
                                         || !(pair.first.getLabel().equals(pair.second.getLabel())
@@ -82,9 +82,9 @@ public class CrossMoveMatcherThetaF implements Matcher {
                             }
                         }
                         if (!done) {
-                            for (ITree childNewOther : parentNewOther.getChildren()) {
+                            for (Tree childNewOther : parentNewOther.getChildren()) {
                                 if (mappings.isDstMapped(childNewOther)) {
-                                    ITree childOldOther = mappings.getSrcForDst(childNewOther);
+                                    Tree childOldOther = mappings.getSrcForDst(childNewOther);
                                     if (childOldOther.getParent() == parentOldOther) {
                                         if (childNewOther.getType() == pair.second.getType()) {
                                             if (pair.first.getLabel().equals(childNewOther.getLabel())
@@ -113,13 +113,13 @@ public class CrossMoveMatcherThetaF implements Matcher {
         private HashMap<Integer, Integer> positionSrc;
         private HashMap<Integer, Integer> positionDst;
 
-        private HashMap<Integer, Integer> getHashSet(ITree tree) {
+        private HashMap<Integer, Integer> getHashSet(Tree tree) {
             HashMap<Integer, Integer> map = new HashMap<>();
-            ArrayList<ITree> list = new ArrayList<>();
-            LinkedList<ITree> workList = new LinkedList<>();
+            ArrayList<Tree> list = new ArrayList<>();
+            LinkedList<Tree> workList = new LinkedList<>();
             workList.add(tree);
             while (!workList.isEmpty()) {
-                ITree node = workList.removeFirst();
+                Tree node = workList.removeFirst();
                 list.add(node);
                 workList.addAll(node.getChildren());
             }
@@ -130,7 +130,7 @@ public class CrossMoveMatcherThetaF implements Matcher {
             return map;
         }
 
-        public BfsComparator(ITree src, ITree dst) {
+        public BfsComparator(Tree src, Tree dst) {
             positionSrc = getHashSet(src);
             positionDst = getHashSet(dst);
         }

@@ -23,7 +23,7 @@ package com.github.gumtreediff.gen.antlr3.r;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -45,7 +45,7 @@ public class TestRGenerator {
     @ParameterizedTest
     @MethodSource("provideStringAndExpectedLength")
     public void testSimpleParse(String input, String expectedRootType, int expectedSize) throws IOException {
-        ITree t = new RTreeGenerator().generateFrom().string(input).getRoot();
+        Tree t = new RTreeGenerator().generateFrom().string(input).getRoot();
         assertEquals(type(expectedRootType), t.getType());
         assertEquals(expectedSize, t.getMetrics().size);
     }

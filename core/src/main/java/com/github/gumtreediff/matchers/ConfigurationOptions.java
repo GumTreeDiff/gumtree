@@ -20,6 +20,71 @@
 package com.github.gumtreediff.matchers;
 
 public enum ConfigurationOptions {
-    GT_BUM_SMT, GT_BUM_SMT_SBUP, GT_BUM_SZT, GT_CD_LSIM, GT_CD_ML, GT_CD_SSIM1, GT_CD_SSIM2, GT_STM_MH, GT_XYM_SIM,
-    GUMTREE_MATCH_GT_MINH;
+    /**
+     * Property defining the minimum similarity threshold in bottom-up
+     * matchers to match two inner nodes. It has a double value.
+     * @see com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher
+     * @see com.github.gumtreediff.matchers.heuristic.gt.SimpleBottomUpMatcher
+     */
+    bu_minsim,
+
+    /**
+     * Property defining the minimum size threshold in bottom-up
+     * in order to have the last chance match applied. It has an integer value.
+     * @see com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher
+     */
+    bu_minsize,
+
+    /**
+     * Property defining the minimum priority threshold in subtree matchers
+     * in order to be considered for matching. Priority relates to the
+     * priority calculator (such as size or height). It has an integer value.
+     * @see com.github.gumtreediff.matchers.heuristic.gt.AbstractSubtreeMatcher
+     */
+    st_minprio,
+
+    /**
+     * Property defining the priority calculator in subtree matchers.
+     * It has an string value that can be either size or height.
+     * @see com.github.gumtreediff.matchers.heuristic.gt.AbstractSubtreeMatcher
+     */
+    st_priocalc,
+
+    /**
+     * Property defining the minimum label similarity threshold in change distiller
+     * matcher to have a match between two nodes. It has a double value.
+     * @see com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher
+     */
+    cd_labsim,
+
+    /**
+     * Property defining the maximum number of leaves threshold in change distiller
+     * bottom-up matcher to change from the structsim2 threshold to the strucsim1 threshold
+     * in order to match two nodes. It has an integer value.
+     * @see com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher
+     */
+    cd_maxleaves,
+
+    /**
+     * Property defining the minimum similarity threshold in change distiller
+     * for nodes having more than cd_maxleaves leaves
+     * in order to match two nodes. It has a double value.
+     * @see com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher
+     */
+    cd_structsim1,
+
+    /**
+     * Property defining the minimum similarity threshold in change distiller
+     * for nodes having less than (or equals to) cd_maxleaves leaves
+     * in order to match two nodes. It has a double value.
+     * @see com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher
+     */
+    cd_structsim2,
+
+    /**
+     * Property defining the minimum similarity threshold in XYDiff bottom-up matcher
+     * to match two nodes.
+     * @see com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher
+     */
+    xy_minsim,
 }

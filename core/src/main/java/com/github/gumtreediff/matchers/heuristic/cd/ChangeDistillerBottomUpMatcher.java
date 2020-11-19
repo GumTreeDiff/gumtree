@@ -28,51 +28,46 @@ import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.google.common.collect.Sets;
 
 public class ChangeDistillerBottomUpMatcher implements ConfigurableMatcher {
-
     private static final double DEFAULT_STRUCT_SIM_THRESHOLD_1 = 0.6;
+    protected double structSimThreshold1 = DEFAULT_STRUCT_SIM_THRESHOLD_1;
 
     private static final double DEFAULT_STRUCT_SIM_THRESHOLD_2 = 0.4;
+    protected double structSimThreshold2 = DEFAULT_STRUCT_SIM_THRESHOLD_1;
 
     private static final int DEFAULT_MAX_NUMBER_OF_LEAVES = 4;
-
-    protected double struct_sim_threshold_1 = DEFAULT_STRUCT_SIM_THRESHOLD_1;
-
-    protected double struct_sim_threshold_2 = DEFAULT_STRUCT_SIM_THRESHOLD_1;
-
-    protected int max_number_of_leaves = DEFAULT_MAX_NUMBER_OF_LEAVES;
+    protected int maxNumberOfLeaves = DEFAULT_MAX_NUMBER_OF_LEAVES;
 
     public ChangeDistillerBottomUpMatcher() {
-
     }
 
     @Override
     public void configure(GumTreeProperties properties) {
-        struct_sim_threshold_1 = properties.tryConfigure(ConfigurationOptions.GT_CD_SSIM1,
+        structSimThreshold1 = properties.tryConfigure(ConfigurationOptions.cd_structsim1,
                 DEFAULT_STRUCT_SIM_THRESHOLD_1);
 
-        struct_sim_threshold_2 = properties.tryConfigure(ConfigurationOptions.GT_CD_SSIM2,
+        structSimThreshold2 = properties.tryConfigure(ConfigurationOptions.cd_structsim2,
                 DEFAULT_STRUCT_SIM_THRESHOLD_2);
 
-        max_number_of_leaves = properties.tryConfigure(ConfigurationOptions.GT_CD_ML, DEFAULT_MAX_NUMBER_OF_LEAVES);
+        maxNumberOfLeaves = properties.tryConfigure(ConfigurationOptions.cd_maxleaves, DEFAULT_MAX_NUMBER_OF_LEAVES);
 
     }
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
-        List<ITree> dstTrees = TreeUtils.postOrder(dst);
-        for (ITree currentSrcTree : src.postOrder()) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
+        List<Tree> dstTrees = TreeUtils.postOrder(dst);
+        for (Tree currentSrcTree : src.postOrder()) {
             int numberOfLeaves = numberOfLeaves(currentSrcTree);
-            for (ITree currentDstTree : dstTrees) {
+            for (Tree currentDstTree : dstTrees) {
                 if (mappings.isMappingAllowed(currentSrcTree, currentDstTree)
                         && !(currentSrcTree.isLeaf() || currentDstTree.isLeaf())) {
                     double similarity = SimilarityMetrics.chawatheSimilarity(currentSrcTree, currentDstTree, mappings);
-                    if ((numberOfLeaves > max_number_of_leaves && similarity >= struct_sim_threshold_1)
-                            || (numberOfLeaves <= max_number_of_leaves && similarity >= struct_sim_threshold_2)) {
+                    if ((numberOfLeaves > maxNumberOfLeaves && similarity >= structSimThreshold1)
+                            || (numberOfLeaves <= maxNumberOfLeaves && similarity >= structSimThreshold2)) {
                         mappings.addMapping(currentSrcTree, currentDstTree);
                         break;
                     }
@@ -83,42 +78,41 @@ public class ChangeDistillerBottomUpMatcher implements ConfigurableMatcher {
         return mappings;
     }
 
-    private int numberOfLeaves(ITree root) {
+    private int numberOfLeaves(Tree root) {
         int numberOfLeaves = 0;
-        for (ITree tree : root.getDescendants())
+        for (Tree tree : root.getDescendants())
             if (tree.isLeaf())
                 numberOfLeaves++;
         return numberOfLeaves;
     }
 
-    public double getStruct_sim_threshold_1() {
-        return struct_sim_threshold_1;
+    public double getStructSimThreshold1() {
+        return structSimThreshold1;
     }
 
-    public void setStruct_sim_threshold_1(double structSimThreshold1) {
-        this.struct_sim_threshold_1 = structSimThreshold1;
+    public void setStructSimThreshold1(double structSimThreshold1) {
+        this.structSimThreshold1 = structSimThreshold1;
     }
 
-    public double getStruct_sim_threshold_2() {
-        return struct_sim_threshold_2;
+    public double getStructSimThreshold2() {
+        return structSimThreshold2;
     }
 
-    public void setStruct_sim_threshold_2(double structSimThreshold2) {
-        this.struct_sim_threshold_2 = structSimThreshold2;
+    public void setStructSimThreshold2(double structSimThreshold2) {
+        this.structSimThreshold2 = structSimThreshold2;
     }
 
-    public int getMax_number_of_leaves() {
-        return max_number_of_leaves;
+    public int getMaxNumberOfLeaves() {
+        return maxNumberOfLeaves;
     }
 
-    public void setMax_number_of_leaves(int maxNumberOfLeaves) {
-        this.max_number_of_leaves = maxNumberOfLeaves;
+    public void setMaxNumberOfLeaves(int maxNumberOfLeaves) {
+        this.maxNumberOfLeaves = maxNumberOfLeaves;
     }
 
     @Override
     public Set<ConfigurationOptions> getApplicableOptions() {
-
-        return Sets.newHashSet(ConfigurationOptions.GT_CD_SSIM1, ConfigurationOptions.GT_CD_SSIM2,
-                ConfigurationOptions.GT_CD_ML);
+        return Sets.newHashSet(ConfigurationOptions.cd_structsim1, ConfigurationOptions.cd_structsim2,
+                ConfigurationOptions.cd_maxleaves);
     }
 }

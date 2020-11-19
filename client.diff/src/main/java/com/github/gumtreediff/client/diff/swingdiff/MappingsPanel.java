@@ -43,9 +43,9 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import com.github.gumtreediff.actions.Diff;
-import com.github.gumtreediff.actions.ITreeClassifier;
+import com.github.gumtreediff.actions.TreeClassifier;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 public class MappingsPanel extends JPanel implements TreeSelectionListener {
@@ -54,7 +54,7 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
 
     private TreeContext src;
     private TreeContext dst;
-    private ITreeClassifier classifyTrees;
+    private TreeClassifier classifyTrees;
     private MappingStore mappings;
 
     private TreePanel panSrc;
@@ -122,17 +122,17 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
     }
 
     private void openNodes() {
-        for (ITree t: classifyTrees.getDeletedSrcs()) openNode(panSrc, t);
-        for (ITree t: classifyTrees.getInsertedDsts()) openNode(panDst, t);
-        for (ITree t: classifyTrees.getUpdatedSrcs()) openNode(panSrc, t);
-        for (ITree t: classifyTrees.getUpdatedDsts()) openNode(panDst, t);
-        for (ITree t: classifyTrees.getMovedSrcs()) openNode(panSrc, t);
-        for (ITree t: classifyTrees.getMovedDsts()) openNode(panDst, t);
+        for (Tree t: classifyTrees.getDeletedSrcs()) openNode(panSrc, t);
+        for (Tree t: classifyTrees.getInsertedDsts()) openNode(panDst, t);
+        for (Tree t: classifyTrees.getUpdatedSrcs()) openNode(panSrc, t);
+        for (Tree t: classifyTrees.getUpdatedDsts()) openNode(panDst, t);
+        for (Tree t: classifyTrees.getMovedSrcs()) openNode(panSrc, t);
+        for (Tree t: classifyTrees.getMovedDsts()) openNode(panDst, t);
         panSrc.getJTree().scrollPathToVisible(new TreePath(panSrc.getTrees().get(src.getRoot()).getPath()));
         panDst.getJTree().scrollPathToVisible(new TreePath(panDst.getTrees().get(dst.getRoot()).getPath()));
     }
 
-    private void openNode(TreePanel p, ITree t) {
+    private void openNode(TreePanel p, Tree t) {
         DefaultMutableTreeNode n = p.getTrees().get(t);
         p.getJTree().scrollPathToVisible(new TreePath(n.getPath()));
     }
@@ -141,10 +141,10 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
     public void valueChanged(TreeSelectionEvent e) {
         JTree jtree = (JTree) e.getSource();
         if (jtree.getSelectionPath() == null) return;
-        ITree sel = (ITree) ((DefaultMutableTreeNode) jtree.getLastSelectedPathComponent()).getUserObject();
+        Tree sel = (Tree) ((DefaultMutableTreeNode) jtree.getLastSelectedPathComponent()).getUserObject();
         JTextArea selJTextArea;
         boolean isMapped = false;
-        ITree match = null;
+        Tree match = null;
         TreePanel matchTreePanel;
         JTextArea matchJTextArea;
 
@@ -172,8 +172,8 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         }
     }
 
-    private void updateJTreeAndJTextArea(ITree sel, JTextArea selJTextArea, boolean isMapped,
-                                         ITree match, TreePanel matchTreePanel,
+    private void updateJTreeAndJTextArea(Tree sel, JTextArea selJTextArea, boolean isMapped,
+                                         Tree match, TreePanel matchTreePanel,
                                          JTextArea matchJTextArea) throws BadLocationException {
         selJTextArea.getHighlighter().removeAllHighlights();
         selJTextArea.getHighlighter().addHighlight(sel.getPos(), sel.getEndPos(), DefaultHighlighter.DefaultPainter);
@@ -207,7 +207,7 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
                                                       boolean selected, boolean expanded,
                                                       boolean leaf, int row, boolean hasFocus) {
             super.getTreeCellRendererComponent(jtree, value, selected, expanded, leaf, row, hasFocus);
-            ITree tree = (ITree) ((DefaultMutableTreeNode) value).getUserObject();
+            Tree tree = (Tree) ((DefaultMutableTreeNode) value).getUserObject();
             if (isSrc && classifyTrees.getDeletedSrcs().contains(tree)) setForeground(DEL_COLOR);
             else if (!isSrc && classifyTrees.getInsertedDsts().contains(tree)) setForeground(ADD_COLOR);
             else if (isSrc && classifyTrees.getUpdatedSrcs().contains(tree)) setForeground(UPD_COLOR);

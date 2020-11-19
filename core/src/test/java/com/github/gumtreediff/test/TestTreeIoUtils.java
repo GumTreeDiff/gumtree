@@ -22,7 +22,7 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.io.TreeIoUtils;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import static com.github.gumtreediff.tree.TypeSet.type;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.tree.TreeContext;
@@ -117,24 +117,24 @@ public class TestTreeIoUtils {
 
     private static TreeContext getTreeContext() {
         TreeContext tc = new TreeContext();
-        ITree a = tc.createTree(TYPE_0);
+        Tree a = tc.createTree(TYPE_0);
         a.setPos(0);
         a.setLength(1000);
         tc.setRoot(a);
 
-        ITree b = tc.createTree(TYPE_1);
+        Tree b = tc.createTree(TYPE_1);
         b.setPos(1);
         b.setLength(50);
         b.setParentAndUpdateChildren(a);
-        ITree c = tc.createTree(TYPE_3, "a");
+        Tree c = tc.createTree(TYPE_3, "a");
         c.setPos(11);
         c.setLength(10);
         c.setParentAndUpdateChildren(b);
-        ITree d = tc.createTree(TYPE_3, "b");
+        Tree d = tc.createTree(TYPE_3, "b");
         d.setPos(21);
         d.setLength(10);
         d.setParentAndUpdateChildren(b);
-        ITree e = tc.createTree(TYPE_2);
+        Tree e = tc.createTree(TYPE_2);
         e.setPos(51);
         e.setLength(900);
         e.setParentAndUpdateChildren(a);

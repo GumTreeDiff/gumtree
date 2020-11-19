@@ -29,7 +29,7 @@ import org.simmetrics.StringMetrics;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public class ZsMatcher implements Matcher {
 
@@ -41,7 +41,7 @@ public class ZsMatcher implements Matcher {
     private double[][] forestDist;
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
         this.zsSrc = new ZsTree(src);
         this.zsDst = new ZsTree(dst);
         this.mappings = mappings;
@@ -49,8 +49,8 @@ public class ZsMatcher implements Matcher {
         return mappings;
     }
 
-    private static ITree getFirstLeaf(ITree t) {
-        ITree current = t;
+    private static Tree getFirstLeaf(Tree t) {
+        Tree current = t;
         while (!current.isLeaf())
             current = current.getChild(0);
 
@@ -135,8 +135,8 @@ public class ZsMatcher implements Matcher {
                     if ((zsSrc.lld(row) - 1 == zsSrc.lld(lastRow) - 1)
                             && (zsDst.lld(col) - 1 == zsDst.lld(lastCol) - 1)) {
                         // if both subforests are trees, map nodes
-                        ITree tSrc = zsSrc.tree(row);
-                        ITree tDst = zsDst.tree(col);
+                        Tree tSrc = zsSrc.tree(row);
+                        Tree tDst = zsDst.tree(col);
                         if (tSrc.getType() == tDst.getType())
                             mappings.addMapping(tSrc, tDst);
                         else
@@ -157,15 +157,15 @@ public class ZsMatcher implements Matcher {
         }
     }
 
-    private double getDeletionCost(ITree n) {
+    private double getDeletionCost(Tree n) {
         return 1D;
     }
 
-    private double getInsertionCost(ITree n) {
+    private double getInsertionCost(Tree n) {
         return 1D;
     }
 
-    private double getUpdateCost(ITree n1, ITree n2) {
+    private double getUpdateCost(Tree n1, Tree n2) {
         if (n1.getType() == n2.getType())
             if ("".equals(n1.getLabel()) || "".equals(n2.getLabel()))
                 return 1D;
@@ -182,19 +182,19 @@ public class ZsMatcher implements Matcher {
 
         private int[] llds; // llds[i] stores the postorder-ID of the
         // left-most leaf descendant of the i-th node in postorder
-        private ITree[] labels; // labels[i] is the tree of the i-th node in postorder
+        private Tree[] labels; // labels[i] is the tree of the i-th node in postorder
 
         private int[] kr;
 
-        private ZsTree(ITree t) {
+        private ZsTree(Tree t) {
             this.nodeCount = t.getMetrics().size;
             this.leafCount = 0;
             this.llds = new int[nodeCount];
-            this.labels = new ITree[nodeCount];
+            this.labels = new Tree[nodeCount];
 
             int idx = 1;
-            Map<ITree, Integer> tmpData = new HashMap<>();
-            for (ITree n : t.postOrder()) {
+            Map<Tree, Integer> tmpData = new HashMap<>();
+            for (Tree n : t.postOrder()) {
                 tmpData.put(n, idx);
                 this.setITree(idx, n);
                 this.setLld(idx, tmpData.get(getFirstLeaf(n)));
@@ -206,7 +206,7 @@ public class ZsMatcher implements Matcher {
             setKeyRoots();
         }
 
-        public void setITree(int i, ITree tree) {
+        public void setITree(int i, Tree tree) {
             labels[i - 1] = tree;
             if (nodeCount < i)
                 nodeCount = i;
@@ -226,7 +226,7 @@ public class ZsMatcher implements Matcher {
             return llds[i - 1] + 1;
         }
 
-        public ITree tree(int i) {
+        public Tree tree(int i) {
             return labels[i - 1];
         }
 

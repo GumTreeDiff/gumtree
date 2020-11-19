@@ -25,7 +25,7 @@ import java.util.List;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 
 /**
@@ -33,12 +33,12 @@ import com.github.gumtreediff.tree.TreeUtils;
  */
 public class UnmappedLeavesMatcherThetaC implements Matcher {
 
-    private ITree src;
-    private ITree dst;
+    private Tree src;
+    private Tree dst;
     private MappingStore mappings;
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
         this.src = src;
         this.dst = dst;
         this.mappings = mappings;
@@ -47,33 +47,33 @@ public class UnmappedLeavesMatcherThetaC implements Matcher {
     }
 
     private void thetaC() {
-        List<ITree> allNodesSrc = TreeUtils.preOrder(src);
-        List<ITree> allNodesDst = TreeUtils.preOrder(dst);
-        List<ITree> unmatchedNodes1 = new LinkedList<>();
-        List<ITree> unmatchedNodes2 = new LinkedList<>();
+        List<Tree> allNodesSrc = TreeUtils.preOrder(src);
+        List<Tree> allNodesDst = TreeUtils.preOrder(dst);
+        List<Tree> unmatchedNodes1 = new LinkedList<>();
+        List<Tree> unmatchedNodes2 = new LinkedList<>();
 
-        for (ITree node : allNodesSrc) {
+        for (Tree node : allNodesSrc) {
             if (!mappings.isSrcMapped(node)) {
                 unmatchedNodes1.add(node);
             }
         }
-        for (ITree node : allNodesDst) {
+        for (Tree node : allNodesDst) {
             if (!mappings.isDstMapped(node)) {
                 unmatchedNodes2.add(node);
             }
         }
-        for (ITree node : unmatchedNodes1) {
+        for (Tree node : unmatchedNodes1) {
             if (node.getChildren().size() == 0) {
 
-                ITree parent = node.getParent();
+                Tree parent = node.getParent();
                 if (mappings.getDstForSrc(parent) != null) {
-                    ITree partner = mappings.getDstForSrc(parent);
+                    Tree partner = mappings.getDstForSrc(parent);
                     int pos = parent.getChildren().indexOf(node);
                     if (pos < partner.getChildren().size()) {
-                        ITree child = partner.getChildren().get(pos);
+                        Tree child = partner.getChildren().get(pos);
                         if (child.getType() == node.getType()) {
                             if (child.getLabel().equals(node.getLabel())) {
-                                ITree childPartner = mappings.getSrcForDst(child);
+                                Tree childPartner = mappings.getSrcForDst(child);
                                 if (childPartner != null) {
                                     if (!childPartner.getLabel().equals(node.getLabel())) {
                                         mappings.removeMapping(childPartner, child);
@@ -84,7 +84,7 @@ public class UnmappedLeavesMatcherThetaC implements Matcher {
 
                                 }
                             } else {
-                                ITree childPartner = mappings.getSrcForDst(child);
+                                Tree childPartner = mappings.getSrcForDst(child);
                                 if (childPartner != null) {
                                     if (mappings.getDstForSrc(childPartner.getParent()) == null) {
                                         if (!childPartner.getLabel().equals(child.getLabel())) {
@@ -100,7 +100,7 @@ public class UnmappedLeavesMatcherThetaC implements Matcher {
                             if (child.getChildren().size() == 1) {
                                 child = child.getChildren().get(0);
                                 if (child.getType() == node.getType() && child.getLabel().equals(node.getLabel())) {
-                                    ITree childPartner = mappings.getSrcForDst(child);
+                                    Tree childPartner = mappings.getSrcForDst(child);
                                     if (childPartner != null) {
                                         if (!childPartner.getLabel().equals(node.getLabel())) {
                                             mappings.removeMapping(childPartner, child);
@@ -113,10 +113,10 @@ public class UnmappedLeavesMatcherThetaC implements Matcher {
                                 }
                             } else {
                                 for (int i = 0; i < partner.getChildren().size(); i++) {
-                                    ITree possibleMatch = partner.getChildren().get(i);
+                                    Tree possibleMatch = partner.getChildren().get(i);
                                     if (possibleMatch.getType() == node.getType()
                                             && possibleMatch.getLabel().equals(node.getLabel())) {
-                                        ITree possibleMatchSrc = mappings.getSrcForDst(possibleMatch);
+                                        Tree possibleMatchSrc = mappings.getSrcForDst(possibleMatch);
                                         if (possibleMatchSrc == null) {
                                             mappings.addMapping(node, possibleMatch);
                                             break;
@@ -135,20 +135,20 @@ public class UnmappedLeavesMatcherThetaC implements Matcher {
                 }
             }
         }
-        for (ITree node : unmatchedNodes2) {
+        for (Tree node : unmatchedNodes2) {
             if (mappings.isSrcMapped(node)) {
                 continue;
             }
             if (node.getChildren().size() == 0) {
-                ITree parent = node.getParent();
+                Tree parent = node.getParent();
                 if (mappings.getSrcForDst(parent) != null) {
-                    ITree partner = mappings.getSrcForDst(parent);
+                    Tree partner = mappings.getSrcForDst(parent);
                     int pos = parent.getChildren().indexOf(node);
                     if (pos < partner.getChildren().size()) {
-                        ITree child = partner.getChildren().get(pos);
+                        Tree child = partner.getChildren().get(pos);
                         if (child.getType() == node.getType()) {
                             if (child.getLabel().equals(node.getLabel())) {
-                                ITree tree = mappings.getDstForSrc(child);
+                                Tree tree = mappings.getDstForSrc(child);
                                 if (tree != null) {
                                     if (!tree.getLabel().equals(node.getLabel())) {
                                         mappings.removeMapping(child, tree);
@@ -158,7 +158,7 @@ public class UnmappedLeavesMatcherThetaC implements Matcher {
                                     mappings.addMapping(child, node);
                                 }
                             } else {
-                                ITree childPartner = mappings.getDstForSrc(child);
+                                Tree childPartner = mappings.getDstForSrc(child);
                                 if (childPartner != null) {
                                     if (mappings.getSrcForDst(childPartner.getParent()) == null) {
                                         if (!childPartner.getLabel().equals(child.getLabel())) {
@@ -175,7 +175,7 @@ public class UnmappedLeavesMatcherThetaC implements Matcher {
                             if (child.getChildren().size() == 1) {
                                 child = child.getChildren().get(0);
                                 if (child.getType() == node.getType() && child.getLabel().equals(node.getLabel())) {
-                                    ITree childPartner = mappings.getDstForSrc(child);
+                                    Tree childPartner = mappings.getDstForSrc(child);
                                     if (childPartner != null) {
                                         if (!childPartner.getLabel().equals(node.getLabel())) {
                                             mappings.removeMapping(child, childPartner);
@@ -188,10 +188,10 @@ public class UnmappedLeavesMatcherThetaC implements Matcher {
                                 }
                             } else {
                                 for (int i = 0; i < partner.getChildren().size(); i++) {
-                                    ITree possibleMatch = partner.getChildren().get(i);
+                                    Tree possibleMatch = partner.getChildren().get(i);
                                     if (possibleMatch.getType() == node.getType()
                                             && possibleMatch.getLabel().equals(node.getLabel())) {
-                                        ITree possibleMatchDst = mappings.getDstForSrc(possibleMatch);
+                                        Tree possibleMatchDst = mappings.getDstForSrc(possibleMatch);
                                         if (possibleMatchDst == null) {
                                             mappings.addMapping(possibleMatch, node);
                                             break;
@@ -208,15 +208,15 @@ public class UnmappedLeavesMatcherThetaC implements Matcher {
                         }
                     }
                 } else if (unmatchedNodes2.contains(parent)) {
-                    ITree oldParent = parent;
+                    Tree oldParent = parent;
                     parent = parent.getParent();
                     if (mappings.getSrcForDst(parent) != null) {
-                        ITree partner = mappings.getSrcForDst(parent);
+                        Tree partner = mappings.getSrcForDst(parent);
                         int pos = parent.getChildren().indexOf(oldParent);
                         if (pos < partner.getChildren().size()) {
-                            ITree child = partner.getChildren().get(pos);
+                            Tree child = partner.getChildren().get(pos);
                             if (child.getType() == node.getType() && child.getLabel().equals(node.getLabel())) {
-                                ITree tree = mappings.getDstForSrc(child);
+                                Tree tree = mappings.getDstForSrc(child);
                                 if (tree != null) {
                                     if (!tree.getLabel().equals(node.getLabel())) {
                                         mappings.removeMapping(child, tree);

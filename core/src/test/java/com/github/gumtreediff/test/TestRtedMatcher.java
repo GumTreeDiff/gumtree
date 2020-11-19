@@ -21,9 +21,8 @@
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.optimal.rted.RtedMatcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
@@ -36,8 +35,8 @@ public class TestRtedMatcher {
     @Test
     public void testRtedMatcher() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsSlidePair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore mappings = new RtedMatcher().match(src, dst);
         assertEquals(5, mappings.size());
         assertTrue(mappings.has(src, dst));

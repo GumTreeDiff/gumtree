@@ -24,8 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.stream.Stream;
 
 import com.github.gumtreediff.gen.SyntaxException;
@@ -33,9 +31,7 @@ import com.github.gumtreediff.tree.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsSources;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 public class TestJavaParserGenerator {
     public static final String COMPILATION_UNIT = "CompilationUnit";
@@ -58,7 +54,7 @@ public class TestJavaParserGenerator {
     @ParameterizedTest
     @MethodSource("provideStringAndExpectedLength")
     public void testSimpleSyntax(String expectedRootType, int expectedSize, String input) throws IOException {
-        ITree tree = new JavaParserGenerator().generateFrom().string(input).getRoot();
+        Tree tree = new JavaParserGenerator().generateFrom().string(input).getRoot();
         assertEquals(type(expectedRootType), tree.getType());
         assertEquals(expectedSize, tree.getMetrics().size);
     }

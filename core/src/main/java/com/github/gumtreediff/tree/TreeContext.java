@@ -35,30 +35,30 @@ public class TreeContext {
 
     private final MetadataSerializers serializers = new MetadataSerializers();
 
-    private ITree root;
+    private Tree root;
 
     @Override
     public String toString() {
         return TreeIoUtils.toText(this).toString();
     }
 
-    public void setRoot(ITree root) {
+    public void setRoot(Tree root) {
         this.root = root;
     }
 
-    public ITree getRoot() {
+    public Tree getRoot() {
         return root;
     }
 
-    public ITree createTree(Type type, String label) {
-        return new Tree(type, label);
+    public Tree createTree(Type type, String label) {
+        return new DefaultTree(type, label);
     }
 
-    public ITree createTree(Type type) {
-        return new Tree(type);
+    public Tree createTree(Type type) {
+        return new DefaultTree(type);
     }
 
-    public ITree createFakeTree(ITree... trees) {
+    public Tree createFakeTree(Tree... trees) {
         return new FakeTree(trees);
     }
 
@@ -80,7 +80,7 @@ public class TreeContext {
      * @param key of metadata
      * @return the metadata or null if not found
      */
-    public Object getMetadata(ITree node, String key) {
+    public Object getMetadata(Tree node, String key) {
         Object metadata;
         if (node == null || (metadata = node.getMetadata(key)) == null)
             return getMetadata(key);
@@ -105,7 +105,7 @@ public class TreeContext {
      * @param value of the metadata
      * @return the previous value of metadata if existed or null
      */
-    public Object setMetadata(ITree node, String key, Object value) {
+    public Object setMetadata(Tree node, String key, Object value) {
         if (node == null)
             return setMetadata(key, value);
         else {
@@ -158,7 +158,7 @@ public class TreeContext {
      * Get an iterator on local and global metadata.
      * To only get local metadata, simply use : `node.getMetadata()`
      */
-    public Iterator<Entry<String, Object>> getMetadata(ITree node) {
+    public Iterator<Entry<String, Object>> getMetadata(Tree node) {
         if (node == null)
             return getMetadata();
         return new Iterator<Entry<String, Object>>() {
@@ -243,7 +243,7 @@ public class TreeContext {
 
     public static class MetadataUnserializers extends Marshallers<MetadataUnserializer> {
 
-        public void load(ITree tree, String key, String value) throws Exception {
+        public void load(Tree tree, String key, String value) throws Exception {
             MetadataUnserializer s = serializers.get(key);
             if (s != null) {
                 if (key.equals("pos"))

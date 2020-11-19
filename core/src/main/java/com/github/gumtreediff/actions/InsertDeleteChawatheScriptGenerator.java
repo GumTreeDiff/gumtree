@@ -21,7 +21,7 @@ package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 /**
  * A script generator, based upon the simplified Chawathe script generator,
@@ -44,8 +44,8 @@ public class InsertDeleteChawatheScriptGenerator implements EditScriptGenerator 
         EditScript actionsCpy = new EditScript();
         for (Action a: actions) {
             if (a instanceof Update) {
-                ITree src = a.getNode();
-                ITree dst = origMappings.getDstForSrc(src);
+                Tree src = a.getNode();
+                Tree dst = origMappings.getDstForSrc(src);
                 actionsCpy.add(new Insert(
                         dst,
                         dst.getParent(),
@@ -54,8 +54,8 @@ public class InsertDeleteChawatheScriptGenerator implements EditScriptGenerator 
             }
             else if (a instanceof Move) {
                 Move m = (Move) a;
-                ITree src = a.getNode();
-                ITree dst = origMappings.getDstForSrc(src);
+                Tree src = a.getNode();
+                Tree dst = origMappings.getDstForSrc(src);
                 actionsCpy.add(new TreeInsert(
                         dst,
                         dst.getParent(),

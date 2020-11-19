@@ -23,9 +23,9 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.actions.*;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.TypeSet;
+import com.github.gumtreediff.tree.DefaultTree;
 import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
@@ -40,8 +40,8 @@ public class TestActionGenerator {
     @Test
     public void testWithActionExample() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore ms = new MappingStore(src, dst);
         ms.addMapping(src, dst);
         ms.addMapping(src.getChild(1), dst.getChild(0));
@@ -115,8 +115,8 @@ public class TestActionGenerator {
 
     @Test
     public void testWithUnmappedRoot() {
-        ITree src = new Tree(TypeSet.type("foo"), "");
-        ITree dst = new Tree(TypeSet.type("bar"), "");
+        Tree src = new DefaultTree(TypeSet.type("foo"), "");
+        Tree dst = new DefaultTree(TypeSet.type("bar"), "");
         MappingStore ms = new MappingStore(src, dst);
         EditScript actions = new SimplifiedChawatheScriptGenerator().computeActions(ms);
         assertEquals(2, actions.size());
@@ -125,8 +125,8 @@ public class TestActionGenerator {
     @Test
     public void testWithActionExampleNoMove() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getActionPair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore ms = new MappingStore(src, dst);
         ms.addMapping(src, dst);
         ms.addMapping(src.getChild(1), dst.getChild(0));
@@ -145,8 +145,8 @@ public class TestActionGenerator {
     @Test
     public void testWithZsCustomExample() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsCustomPair();
-        ITree src = trees.first.getRoot();
-        ITree dst = trees.second.getRoot();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
         MappingStore ms = new MappingStore(src, dst);
         ms.addMapping(src, dst.getChild(0));
         ms.addMapping(src.getChild(0), dst.getChild("0.0"));
@@ -192,19 +192,19 @@ public class TestActionGenerator {
 
     @Test
     void testAlignChildren() {
-        ITree t1 = new Tree(TypeSet.type("root"));
-        ITree a1 = new Tree(TypeSet.type("a"));
+        Tree t1 = new DefaultTree(TypeSet.type("root"));
+        Tree a1 = new DefaultTree(TypeSet.type("a"));
         t1.addChild(a1);
-        ITree b1 = new Tree(TypeSet.type("b"));
+        Tree b1 = new DefaultTree(TypeSet.type("b"));
         t1.addChild(b1);
         // root [0,0]
         //     a [0,0]
         //     b [0,0]
 
-        ITree t2 = new Tree(TypeSet.type("root"));
-        ITree b2 = new Tree(TypeSet.type("b"));
+        Tree t2 = new DefaultTree(TypeSet.type("root"));
+        Tree b2 = new DefaultTree(TypeSet.type("b"));
         t2.addChild(b2);
-        ITree a2 = new Tree(TypeSet.type("a"));
+        Tree a2 = new DefaultTree(TypeSet.type("a"));
         t2.addChild(a2);
         // root [0,0]
         //     b [0,0]

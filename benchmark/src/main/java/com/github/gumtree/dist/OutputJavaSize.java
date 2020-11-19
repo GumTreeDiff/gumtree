@@ -28,9 +28,8 @@ import com.github.gumtreediff.gen.ruby.RubyTreeGenerator;
 import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
-import com.github.gumtreediff.tree.TreeValidator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -71,8 +70,8 @@ public class OutputJavaSize {
 
     public static void processFilePair(String src, String dst) {
         processedFilePairs++;
-        ITree tsrc = getTreeContext(src).getRoot();
-        ITree tdst = getTreeContext(dst).getRoot();
+        Tree tsrc = getTreeContext(src).getRoot();
+        Tree tdst = getTreeContext(dst).getRoot();
         Matcher m = new CompositeMatchers.SimpleGumtree();
         MappingStore ms = m.match(tsrc, tdst);
         EditScriptGenerator g = new SimplifiedChawatheScriptGenerator();

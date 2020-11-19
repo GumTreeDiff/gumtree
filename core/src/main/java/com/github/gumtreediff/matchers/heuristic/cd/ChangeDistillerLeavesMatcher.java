@@ -35,15 +35,14 @@ import com.github.gumtreediff.matchers.ConfigurationOptions;
 import com.github.gumtreediff.matchers.GumTreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.google.common.collect.Sets;
 
 public class ChangeDistillerLeavesMatcher implements ConfigurableMatcher {
-
     private static final double DEFAULT_LABEL_SIM_THRESHOLD = 0.5;
 
-    protected double label_sim_threshold = DEFAULT_LABEL_SIM_THRESHOLD;
+    protected double labelSimThreshold = DEFAULT_LABEL_SIM_THRESHOLD;
 
     public ChangeDistillerLeavesMatcher() {
 
@@ -51,29 +50,28 @@ public class ChangeDistillerLeavesMatcher implements ConfigurableMatcher {
 
     @Override
     public void configure(GumTreeProperties properties) {
-        label_sim_threshold = properties.tryConfigure(ConfigurationOptions.GT_CD_LSIM, label_sim_threshold);
-
+        labelSimThreshold = properties.tryConfigure(ConfigurationOptions.cd_labsim, labelSimThreshold);
     }
 
     @Override
-    public MappingStore match(ITree src, ITree dst, MappingStore mappings) {
+    public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
 
         List<Mapping> leavesMappings = new ArrayList<>();
-        List<ITree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
-        for (Iterator<ITree> srcLeaves = TreeUtils.leafIterator(TreeUtils.postOrderIterator(src)); srcLeaves
+        List<Tree> dstLeaves = retainLeaves(TreeUtils.postOrder(dst));
+        for (Iterator<Tree> srcLeaves = TreeUtils.leafIterator(TreeUtils.postOrderIterator(src)); srcLeaves
                 .hasNext(); ) {
-            ITree srcLeaf = srcLeaves.next();
-            for (ITree dstLeaf : dstLeaves) {
+            Tree srcLeaf = srcLeaves.next();
+            for (Tree dstLeaf : dstLeaves) {
                 if (mappings.isMappingAllowed(srcLeaf, dstLeaf)) {
                     double sim = StringMetrics.qGramsDistance().compare(srcLeaf.getLabel(), dstLeaf.getLabel());
-                    if (sim > label_sim_threshold)
+                    if (sim > labelSimThreshold)
                         leavesMappings.add(new Mapping(srcLeaf, dstLeaf));
                 }
             }
         }
 
-        Set<ITree> ignoredSrcTrees = new HashSet<>();
-        Set<ITree> ignoredDstTrees = new HashSet<>();
+        Set<Tree> ignoredSrcTrees = new HashSet<>();
+        Set<Tree> ignoredDstTrees = new HashSet<>();
         Collections.sort(leavesMappings, new LeafMappingComparator());
         while (leavesMappings.size() > 0) {
             Mapping bestMapping = leavesMappings.remove(0);
@@ -86,10 +84,10 @@ public class ChangeDistillerLeavesMatcher implements ConfigurableMatcher {
         return mappings;
     }
 
-    public List<ITree> retainLeaves(List<ITree> trees) {
-        Iterator<ITree> treeIterator = trees.iterator();
+    public List<Tree> retainLeaves(List<Tree> trees) {
+        Iterator<Tree> treeIterator = trees.iterator();
         while (treeIterator.hasNext()) {
-            ITree tree = treeIterator.next();
+            Tree tree = treeIterator.next();
             if (!tree.isLeaf())
                 treeIterator.remove();
         }
@@ -108,17 +106,16 @@ public class ChangeDistillerLeavesMatcher implements ConfigurableMatcher {
         }
     }
 
-    public double getLabel_sim_threshold() {
-        return label_sim_threshold;
+    public double getLabelSimThreshold() {
+        return labelSimThreshold;
     }
 
-    public void setLabel_sim_threshold(double labelSimThreshold) {
-        this.label_sim_threshold = labelSimThreshold;
+    public void setLabelSimThreshold(double labelSimThreshold) {
+        this.labelSimThreshold = labelSimThreshold;
     }
 
     @Override
     public Set<ConfigurationOptions> getApplicableOptions() {
-
-        return Sets.newHashSet(ConfigurationOptions.GT_CD_LSIM);
+        return Sets.newHashSet(ConfigurationOptions.cd_labsim);
     }
 }
