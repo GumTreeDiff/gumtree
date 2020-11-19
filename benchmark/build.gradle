@@ -50,8 +50,8 @@ jmh {
         .collect { it.getAbsolutePath() }
         .findAll { it.matches(".*_v0_.*") }
     ]
-    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human_${new Date().getTime()}_${getGitHash()}.txt")
-    resultsFile = project.file("${project.buildDir}/reports/jmh/results_${new Date().getTime()}_${getGitHash()}.csv")
+    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human_${new Date().format( 'yyyyMMddHHmmss' )}_${getGitHash()}.txt")
+    resultsFile = project.file("${project.buildDir}/reports/jmh/results_${new Date().format( 'yyyyMMddHHmmss' )}_${getGitHash()}.csv")
     resultFormat = 'CSV'
 }
 
