@@ -27,6 +27,9 @@ import org.rendersnake.Renderable;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.charset.Charset;
 
 import static org.rendersnake.HtmlAttributesFactory.*;
 
@@ -38,10 +41,13 @@ public class VanillaDiffView implements Renderable {
 
     private Diff diff;
 
-    public VanillaDiffView(File srcFile, File dstFile, Diff diff) throws IOException {
+    private boolean dump;
+
+    public VanillaDiffView(File srcFile, File dstFile, Diff diff, boolean dump) throws IOException {
         this.srcFile = srcFile;
         this.dstFile = dstFile;
         this.diff = diff;
+        this.dump = dump;
         rawHtmlDiff = new VanillaDiffHtmlBuilder(srcFile, dstFile, diff);
         rawHtmlDiff.produce();
     }
@@ -51,7 +57,7 @@ public class VanillaDiffView implements Renderable {
         html
         .render(DocType.HTML5)
         .html(lang("en"))
-            .render(new Header())
+            .render(new Header(dump))
             .body()
                 .div(class_("container-fluid"))
                     .div(class_("row"))
@@ -103,21 +109,53 @@ public class VanillaDiffView implements Renderable {
     }
 
     private static class Header implements Renderable {
+
+        private boolean dump;
+
+        public Header(boolean dump) throws IOException {
+            this.dump = dump;
+        }
+
         @Override
         public void renderOn(HtmlCanvas html) throws IOException {
-             html
-                     .head()
-                        .meta(charset("utf8"))
-                        .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
-                        .title().content("GumTree")
-                        .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
-                        .macros().stylesheet("/dist/vanilla.css")
-                        .macros().javascript(WebDiff.JQUERY_JS_URL)
-                        .macros().javascript(WebDiff.POPPER_JS_URL)
-                        .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
-                        .macros().javascript("/dist/shortcuts.js")
-                        .macros().javascript("/dist/vanilla.js")
-                     ._head();
+            if (!dump) {
+                html
+                        .head()
+                           .meta(charset("utf8"))
+                           .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
+                           .title().content("GumTree")
+                           .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
+                           .macros().stylesheet("/dist/vanilla.css")
+                           .macros().javascript(WebDiff.JQUERY_JS_URL)
+                           .macros().javascript(WebDiff.POPPER_JS_URL)
+                           .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
+                           .macros().javascript("/dist/shortcuts.js")
+                           .macros().javascript("/dist/vanilla.js")
+                        ._head();
+            }
+            else {
+                html
+                        .head()
+                           .meta(charset("utf8"))
+                           .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
+                           .title().content("GumTree")
+                           .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
+                           .style(type("text/css"))
+                           .write(readFile("/home/poski/Desktop/gumtree/client.diff/src/main/resources/web/dist/vanilla.css"))
+                           ._style()
+                           .macros().javascript(WebDiff.JQUERY_JS_URL)
+                           .macros().javascript(WebDiff.POPPER_JS_URL)
+                           .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
+                           .macros().script(readFile("/home/poski/Desktop/gumtree/client.diff/src/main/resources/web/dist/shortcuts.js"))
+                           .macros().script(readFile("/home/poski/Desktop/gumtree/client.diff/src/main/resources/web/dist/vanilla.js"))
+                        ._head();
+            }
+        }
+
+        private static String readFile(String path)  throws IOException {
+            byte[] encoded = Files.readAllBytes(Paths.get(path));
+            Charset encoding = Charset.defaultCharset();
+            return new String(encoded, encoding);
         }
     }
 }
