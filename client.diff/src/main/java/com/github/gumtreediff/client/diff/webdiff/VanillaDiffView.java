@@ -26,6 +26,9 @@ import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -141,21 +144,27 @@ public class VanillaDiffView implements Renderable {
                            .title().content("GumTree")
                            .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
                            .style(type("text/css"))
-                           .write(readFile("/home/poski/Desktop/gumtree/client.diff/src/main/resources/web/dist/vanilla.css"))
+                           .write(readFile("web/dist/vanilla.css"))
                            ._style()
                            .macros().javascript(WebDiff.JQUERY_JS_URL)
                            .macros().javascript(WebDiff.POPPER_JS_URL)
                            .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
-                           .macros().script(readFile("/home/poski/Desktop/gumtree/client.diff/src/main/resources/web/dist/shortcuts.js"))
-                           .macros().script(readFile("/home/poski/Desktop/gumtree/client.diff/src/main/resources/web/dist/vanilla.js"))
+                           .macros().script(readFile("web/dist/shortcuts.js"))
+                           .macros().script(readFile("web/dist/vanilla.js"))
                         ._head();
             }
         }
 
-        private static String readFile(String path)  throws IOException {
-            byte[] encoded = Files.readAllBytes(Paths.get(path));
-            Charset encoding = Charset.defaultCharset();
-            return new String(encoded, encoding);
+        private static String readFile(String resourceName)  throws IOException {
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            InputStream inputStream = classloader.getResourceAsStream(resourceName);
+            InputStreamReader streamReader = new InputStreamReader(inputStream, Charset.defaultCharset());
+            BufferedReader reader = new BufferedReader(streamReader);
+            String content = "";
+            for (String line; (line = reader.readLine()) != null;) {
+                content += line + "\n";
+            }
+            return content;
         }
     }
 }
