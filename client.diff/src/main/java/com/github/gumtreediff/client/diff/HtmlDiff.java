@@ -31,21 +31,38 @@ import org.rendersnake.Renderable;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Register(name = "htmldiff", description = "Dump diff as HTML in stdout",
-        options = AbstractDiffClient.DiffOptions.class)
-public class HtmlDiff extends AbstractDiffClient<AbstractDiffClient.DiffOptions> {
+        options = HtmlDiff.HtmlDiffOptions.class)
+public class HtmlDiff extends AbstractDiffClient<HtmlDiff.HtmlDiffOptions> {
 
     public HtmlDiff(String[] args) {
         super(args);
     }
 
+    public static class HtmlDiffOptions extends AbstractDiffClient.DiffOptions {
+        protected String output;
+
+        @Override
+        public Option[] values() {
+            return Option.Context.addValue(super.values(),
+                    new Option("-o", "output file", 1) {
+                        @Override
+                        protected void process(String name, String[] args) {
+                            output = args[0];
+                        }
+                    }
+            );
+        }
+    }
+
     @Override
-    protected DiffOptions newOptions() {
-        return new DiffOptions();
+    protected HtmlDiffOptions newOptions() {
+        return new HtmlDiffOptions();
     }
 
     @Override
@@ -56,6 +73,14 @@ public class HtmlDiff extends AbstractDiffClient<AbstractDiffClient.DiffOptions>
         Renderable view = new VanillaDiffView(pair.first, pair.second, diff, true);
         HtmlCanvas c = new HtmlCanvas();
         view.renderOn(c);
-        System.out.println(c.toHtml());
+        if (opts.output == null) {
+            System.out.println(c.toHtml());
+        }
+        else {
+            File htmlOutput = new File(opts.output);
+            FileWriter writer = new FileWriter(htmlOutput);
+            writer.write(c.toHtml());
+            writer.close();
+        }
     }
 }
