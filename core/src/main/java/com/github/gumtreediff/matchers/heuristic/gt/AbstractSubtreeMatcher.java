@@ -64,6 +64,9 @@ public abstract class AbstractSubtreeMatcher implements Matcher {
 
         while (!(srcTrees.isEmpty() || dstTrees.isEmpty())) {
             PriorityTreeQueue.synchronize(srcTrees, dstTrees);
+            if (srcTrees.isEmpty() || dstTrees.isEmpty())
+                break;
+
             var currentPrioritySrcTrees = srcTrees.pop();
             var currentPriorityDstTrees = dstTrees.pop();
 
@@ -86,19 +89,6 @@ public abstract class AbstractSubtreeMatcher implements Matcher {
     }
 
     public abstract void filterMappings(MultiMappingStore multiMappings);
-
-    protected double sim(Tree src, Tree dst) {
-        var jaccard = SimilarityMetrics.jaccardSimilarity(src.getParent(), dst.getParent(), mappings);
-        int posSrc = (src.isRoot()) ? 0 : src.getParent().getChildPosition(src);
-        int posDst = (dst.isRoot()) ? 0 : dst.getParent().getChildPosition(dst);
-        int maxSrcPos = (src.isRoot()) ? 1 : src.getParent().getChildren().size();
-        int maxDstPos = (dst.isRoot()) ? 1 : dst.getParent().getChildren().size();
-        int maxPosDiff = Math.max(maxSrcPos, maxDstPos);
-        double pos = 1D - ((double) Math.abs(posSrc - posDst) / (double) maxPosDiff);
-        double po = 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position)
-                / (double) this.getMaxTreeSize());
-        return 100 * jaccard + 10 * pos + po;
-    }
 
     protected int getMaxTreeSize() {
         return Math.max(src.getMetrics().size, dst.getMetrics().size);
