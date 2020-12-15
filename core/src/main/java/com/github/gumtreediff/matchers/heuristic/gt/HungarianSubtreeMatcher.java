@@ -29,6 +29,7 @@ import java.util.Set;
 
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.MultiMappingStore;
+import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.HungarianAlgorithm;
 
@@ -55,7 +56,6 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
         Collections.sort(ambiguousList, new MultiMappingComparator());
 
         for (MultiMappingStore ambiguous : ambiguousList) {
-            System.out.println("hungarian try.");
             List<Tree> lstSrcs = new ArrayList<>(ambiguous.allMappedSrcs());
             List<Tree> lstDsts = new ArrayList<>(ambiguous.allMappedDsts());
             double[][] matrix = new double[lstSrcs.size()][lstDsts.size()];
@@ -75,6 +75,19 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
 
     private double cost(Tree src, Tree dst) {
         return 111D - sim(src, dst);
+    }
+
+    protected double sim(Tree src, Tree dst) {
+        var jaccard = SimilarityMetrics.jaccardSimilarity(src.getParent(), dst.getParent(), mappings);
+        int posSrc = (src.isRoot()) ? 0 : src.getParent().getChildPosition(src);
+        int posDst = (dst.isRoot()) ? 0 : dst.getParent().getChildPosition(dst);
+        int maxSrcPos = (src.isRoot()) ? 1 : src.getParent().getChildren().size();
+        int maxDstPos = (dst.isRoot()) ? 1 : dst.getParent().getChildren().size();
+        int maxPosDiff = Math.max(maxSrcPos, maxDstPos);
+        double pos = 1D - ((double) Math.abs(posSrc - posDst) / (double) maxPosDiff);
+        double po = 1D - ((double) Math.abs(src.getMetrics().position - dst.getMetrics().position)
+                / (double) this.getMaxTreeSize());
+        return 100 * jaccard + 10 * pos + po;
     }
 
     private static class MultiMappingComparator implements Comparator<MultiMappingStore> {
