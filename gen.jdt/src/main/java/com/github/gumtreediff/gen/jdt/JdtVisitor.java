@@ -38,7 +38,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private static final Type METHOD_INVOCATION_RECEIVER = type("METHOD_INVOCATION_RECEIVER");
     private static final Type METHOD_INVOCATION_ARGUMENTS = type("METHOD_INVOCATION_ARGUMENTS");
     private static final Type TYPE_DECLARATION_KIND = type("TYPE_DECLARATION_KIND");
-    private static final Type ASSIGNMENT_OPERATOR = type("ASSIGNEMENT_OPERATOR");
+    private static final Type ASSIGNMENT_OPERATOR = type("ASSIGNMENT_OPERATOR");
     private static final Type PREFIX_EXPRESSION_OPERATOR = type("PREFIX_EXPRESSION_OPERATOR");
     private static final Type POSTFIX_EXPRESSION_OPERATOR = type("POSTFIX_EXPRESSION_OPERATOR");
 
