@@ -64,6 +64,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
         for (Pair<List<Tree>, List<Tree>> clique : ccliques) {
             List<Mapping> cliqueAsMappings = fromClique(clique);
+            // FIXME use FullMappingComparator
             Collections.sort(cliqueAsMappings, new MappingComparator(cliqueAsMappings));
             Set<Tree> srcIgnored = new HashSet<>();
             Set<Tree> dstIgnored = new HashSet<>();

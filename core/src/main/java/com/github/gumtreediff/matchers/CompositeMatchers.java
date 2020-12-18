@@ -63,11 +63,8 @@ public class CompositeMatchers {
 
         @Override
         public void configure(GumTreeProperties properties) {
-            for (Matcher matcher : matchers) {
-                if (matcher instanceof Configurable) {
-                    ((Configurable) matcher).configure(properties);
-                }
-            }
+            for (Matcher matcher : matchers)
+                    matcher.configure(properties);
         }
 
         public List<Matcher> matchers() {
@@ -78,8 +75,7 @@ public class CompositeMatchers {
         public Set<ConfigurationOptions> getApplicableOptions() {
             Set<ConfigurationOptions> allOptions = Sets.newHashSet();
             for (Matcher matcher : matchers)
-                if (matcher instanceof Configurable)
-                    allOptions.addAll(((Configurable) matcher).getApplicableOptions());
+                allOptions.addAll(matcher.getApplicableOptions());
 
             return allOptions;
         }

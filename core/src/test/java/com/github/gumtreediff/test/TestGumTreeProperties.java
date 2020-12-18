@@ -158,47 +158,6 @@ class TestGumTreeProperties {
     }
 
     @Test
-    void testSimpleBottomUpMatcher() {
-        SimpleBottomUpMatcher matcher = new SimpleBottomUpMatcher();
-        GumTreeProperties properties = new GumTreeProperties();
-        final Double anotherValue = 0.99;
-
-        properties.put(ConfigurationOptions.bu_minsim, anotherValue.toString());
-        matcher.configure(properties);
-        assertEquals(anotherValue, matcher.getSimThreshold(), 0);
-
-        Set<ConfigurationOptions> options = matcher.getApplicableOptions();
-        assertEquals(1, options.size());
-        assertTrue(options.contains(ConfigurationOptions.bu_minsim));
-    }
-
-    @Test
-    void testValidOptionMatcher() {
-        SimpleBottomUpMatcher matcher = new SimpleBottomUpMatcher();
-        final Double anotherValue = 0.999;
-
-        matcher.setOption(ConfigurationOptions.bu_minsim, anotherValue);
-
-        assertEquals(anotherValue, matcher.getSimThreshold(), 0);
-
-        Set<ConfigurationOptions> options = matcher.getApplicableOptions();
-        assertEquals(1, options.size());
-        assertTrue(options.contains(ConfigurationOptions.bu_minsim));
-
-        ConfigurationOptions anotherOption = ConfigurationOptions.st_minprio;
-        assertFalse(options.contains(anotherOption));
-
-        matcher = new SimpleBottomUpMatcher();
-        final Double originalValue = matcher.getSimThreshold();
-        try {
-            matcher.setOption(anotherOption, anotherValue);
-            fail("Expected one exception: Option not allowed");
-        } catch (Exception e) {
-            assertEquals(originalValue, matcher.getSimThreshold());
-        }
-    }
-
-    @Test
     public void testCompositeMatcher() {
         CompositeMatcher composite = new CompositeMatchers.ClassicGumtree();
         List<Matcher> matchers = composite.matchers();

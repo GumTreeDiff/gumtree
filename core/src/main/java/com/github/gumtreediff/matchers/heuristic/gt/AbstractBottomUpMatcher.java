@@ -43,7 +43,6 @@ public abstract class AbstractBottomUpMatcher implements Matcher {
     protected double simThreshold = DEFAULT_SIM_THRESHOLD;
 
     public AbstractBottomUpMatcher() {
-
     }
 
     @Override

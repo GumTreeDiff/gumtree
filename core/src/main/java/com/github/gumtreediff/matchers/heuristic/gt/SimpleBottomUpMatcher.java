@@ -27,51 +27,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.github.gumtreediff.matchers.ConfigurableMatcher;
-import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumTreeProperties;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.SimilarityMetrics;
+import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
-import com.google.common.collect.Sets;
 
-public class SimpleBottomUpMatcher implements ConfigurableMatcher {
-
-    private static final double DEFAULT_SIM_THRESHOLD = 0.4;
-
-    protected double sim_threshold = DEFAULT_SIM_THRESHOLD;
-
+public class SimpleBottomUpMatcher implements Matcher {
     public SimpleBottomUpMatcher() {
     }
 
     @Override
-    public void configure(GumTreeProperties properties) {
-        sim_threshold = properties.tryConfigure(ConfigurationOptions.bu_minsim, sim_threshold);
-    }
-
-    @Override
     public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
-
         for (Tree t : src.postOrder()) {
             if (t.isRoot()) {
                 mappings.addMapping(t, dst);
                 lastChanceMatch(mappings, t, dst);
                 break;
-            } else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
+            }
+            else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
                 List<Tree> candidates = getDstCandidates(mappings, t);
                 Tree best = null;
-                double max = -1D;
-                int tSize = t.getDescendants().size();
+                var max = -1D;
+                var tSize = t.getDescendants().size();
 
-                for (Tree cand : candidates) {
-                    double threshold = 1D / (1D + Math.log(cand.getDescendants().size() + tSize));
-                    double sim = SimilarityMetrics.chawatheSimilarity(t, cand, mappings);
+                for (var candidate : candidates) {
+                    var threshold = 1D / (1D + Math.log(candidate.getDescendants().size() + tSize));
+                    var sim = SimilarityMetrics.chawatheSimilarity(t, candidate, mappings);
                     if (sim > max && sim >= threshold) {
                         max = sim;
-                        best = cand;
+                        best = candidate;
                     }
                 }
 
@@ -79,7 +64,8 @@ public class SimpleBottomUpMatcher implements ConfigurableMatcher {
                     lastChanceMatch(mappings, t, best);
                     mappings.addMapping(t, best);
                 }
-            } else if (mappings.isSrcMapped(t) && mappings.hasUnmappedSrcChildren(t)
+            }
+            else if (mappings.isSrcMapped(t) && mappings.hasUnmappedSrcChildren(t)
                        && mappings.hasUnmappedDstChildren(mappings.getDstForSrc(t)))
                 lastChanceMatch(mappings, t, mappings.getDstForSrc(t));
         }
@@ -95,9 +81,9 @@ public class SimpleBottomUpMatcher implements ConfigurableMatcher {
         }
         List<Tree> candidates = new ArrayList<>();
         Set<Tree> visited = new HashSet<>();
-        for (Tree seed : seeds) {
+        for (var seed : seeds) {
             while (seed.getParent() != null) {
-                Tree parent = seed.getParent();
+                var parent = seed.getParent();
                 if (visited.contains(parent))
                     break;
                 visited.add(parent);
@@ -126,8 +112,8 @@ public class SimpleBottomUpMatcher implements ConfigurableMatcher {
 
         List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithIsomorphism(srcChildren, dstChildren);
         for (int[] x : lcs) {
-            Tree t1 = srcChildren.get(x[0]);
-            Tree t2 = dstChildren.get(x[1]);
+            var t1 = srcChildren.get(x[0]);
+            var t2 = dstChildren.get(x[1]);
             if (mappings.areSrcsUnmapped(TreeUtils.preOrder(t1)) && mappings.areDstsUnmapped(TreeUtils.preOrder(t2)))
                 mappings.addMappingRecursively(t1, t2);
         }
@@ -139,8 +125,8 @@ public class SimpleBottomUpMatcher implements ConfigurableMatcher {
 
         List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithIsostructure(srcChildren, dstChildren);
         for (int[] x : lcs) {
-            Tree t1 = srcChildren.get(x[0]);
-            Tree t2 = dstChildren.get(x[1]);
+            var t1 = srcChildren.get(x[0]);
+            var t2 = dstChildren.get(x[1]);
             if (mappings.areSrcsUnmapped(TreeUtils.preOrder(t1)) && mappings.areDstsUnmapped(TreeUtils.preOrder(t2)))
                 mappings.addMappingRecursively(t1, t2);
         }
@@ -151,14 +137,14 @@ public class SimpleBottomUpMatcher implements ConfigurableMatcher {
         List<Tree> dstChildren = dst.getChildren();
 
         Map<Type, List<Tree>> srcHistogram = new HashMap<>();
-        for (Tree c : srcChildren) {
+        for (var c : srcChildren) {
             if (!srcHistogram.containsKey(c.getType()))
                 srcHistogram.put(c.getType(), new ArrayList<>());
             srcHistogram.get(c.getType()).add(c);
         }
 
         Map<Type, List<Tree>> dstHistogram = new HashMap<>();
-        for (Tree c : dstChildren) {
+        for (var c : dstChildren) {
             if (!dstHistogram.containsKey(c.getType()))
                 dstHistogram.put(c.getType(), new ArrayList<>());
             dstHistogram.get(c.getType()).add(c);
@@ -166,26 +152,13 @@ public class SimpleBottomUpMatcher implements ConfigurableMatcher {
 
         for (Type t : srcHistogram.keySet()) {
             if (dstHistogram.containsKey(t) && srcHistogram.get(t).size() == 1 && dstHistogram.get(t).size() == 1) {
-                Tree t1 = srcHistogram.get(t).get(0);
-                Tree t2 = dstHistogram.get(t).get(0);
+                var t1 = srcHistogram.get(t).get(0);
+                var t2 = dstHistogram.get(t).get(0);
                 if (mappings.areBothUnmapped(t1, t2)) {
                     mappings.addMapping(t1, t2);
                     lastChanceMatch(mappings, t1, t2);
                 }
             }
         }
-    }
-
-    public double getSimThreshold() {
-        return sim_threshold;
-    }
-
-    public void setSimThreshold(double simThreshold) {
-        this.sim_threshold = simThreshold;
-    }
-
-    @Override
-    public Set<ConfigurationOptions> getApplicableOptions() {
-        return Sets.newHashSet(ConfigurationOptions.bu_minsim);
     }
 }

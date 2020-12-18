@@ -31,10 +31,8 @@ import com.github.gumtreediff.utils.SequenceAlgorithms;
 
 @Register(id = "longestCommonSequence")
 public class LcsMatcher implements Matcher {
-
     @Override
     public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
-
         List<Tree> srcSeq = TreeUtils.preOrder(src);
         List<Tree> dstSeq = TreeUtils.preOrder(dst);
         List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(srcSeq, dstSeq);
@@ -45,5 +43,4 @@ public class LcsMatcher implements Matcher {
         }
         return mappings;
     }
-
 }

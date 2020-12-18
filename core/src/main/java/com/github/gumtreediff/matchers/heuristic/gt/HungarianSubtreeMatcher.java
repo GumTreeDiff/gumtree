@@ -33,8 +33,7 @@ import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.HungarianAlgorithm;
 
-public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements Matcher {
-
+public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher {
     @Override
     public void filterMappings(MultiMappingStore multiMappings) {
         List<MultiMappingStore> ambiguousList = new ArrayList<>();
@@ -91,7 +90,6 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
     }
 
     private static class MultiMappingComparator implements Comparator<MultiMappingStore> {
-
         @Override
         public int compare(MultiMappingStore m1, MultiMappingStore m2) {
             return Integer.compare(impact(m1), impact(m2));
@@ -104,13 +102,14 @@ public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher implements M
                 if (pSize > impact)
                     impact = pSize;
             }
+
             for (Tree src : m.allMappedDsts()) {
                 int pSize = src.getParents().size();
                 if (pSize > impact)
                     impact = pSize;
             }
+
             return impact;
         }
     }
-
 }

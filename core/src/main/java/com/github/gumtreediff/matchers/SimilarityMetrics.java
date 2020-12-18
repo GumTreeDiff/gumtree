@@ -38,15 +38,23 @@ public class SimilarityMetrics {
     }
 
     public static double diceSimilarity(Tree src, Tree dst, MappingStore mappings) {
-        double commonDescendants = numberOfMappedDescendants(src, dst, mappings);
-        return (2D * commonDescendants)
-                / ((double) src.getDescendants().size() + (double) dst.getDescendants().size());
+        return diceCoefficient(numberOfMappedDescendants(src, dst, mappings),
+                src.getDescendants().size(), dst.getDescendants().size());
     }
 
     public static double jaccardSimilarity(Tree src, Tree dst, MappingStore mappings) {
-        double num = numberOfMappedDescendants(src, dst, mappings);
-        double den = (double) src.getDescendants().size() + (double) dst.getDescendants().size() - num;
-        return num / den;
+        return jaccardIndex(numberOfMappedDescendants(src, dst, mappings),
+                src.getDescendants().size(), dst.getDescendants().size());
+    }
+
+    public static double diceCoefficient(int commonElementsNb, int leftElementsNb, int rightElementsNb) {
+        return 2D * commonElementsNb / (leftElementsNb + rightElementsNb);
+    }
+
+    public static double jaccardIndex(int commonElementsNb, int leftElementsNb, int rightElementsNb) {
+        double denominator = (leftElementsNb + rightElementsNb - commonElementsNb);
+        double res = commonElementsNb / denominator;
+        return res;
     }
 
     private static int numberOfMappedDescendants(Tree src, Tree dst, MappingStore mappings) {

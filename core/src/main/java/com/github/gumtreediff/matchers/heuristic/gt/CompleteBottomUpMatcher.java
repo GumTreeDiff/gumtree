@@ -24,19 +24,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.Tree;
 
 /**
- * Match the nodes using a bottom-up approach. It browse the nodes of the source
- * and destination trees using a post-order traversal, testing if the two
- * selected trees might be mapped. The two trees are mapped if they are mappable
- * and have a dice coefficient greater than SIM_THRESHOLD. Whenever two trees
- * are mapped a exact ZS algorithm is applied to look to possibly forgotten
+ * Match the nodes using a bottom-up approach. It browses the nodes of the source
+ * and destination trees using a post-order traversal, testing if two
+ * selected nodes might be mapped. The two nodes are mapped if they are mappable
+ * and have a similarity greater than SIM_THRESHOLD. Whenever two trees
+ * are mapped, an optimal TED algorithm is applied to look for possibly forgotten
  * nodes.
  */
-public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher implements Matcher {
+public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher {
     @Override
     public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
         for (Tree t : src.postOrder()) {
@@ -44,17 +43,16 @@ public class CompleteBottomUpMatcher extends AbstractBottomUpMatcher implements 
                 mappings.addMapping(t, dst);
                 lastChanceMatch(mappings, t, dst);
                 break;
-            } else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
+            }
+            else if (!(mappings.isSrcMapped(t) || t.isLeaf())) {
                 List<Tree> srcCandidates = t.getParents().stream().filter(p -> p.getType() == t.getType())
                         .collect(Collectors.toList());
-
                 List<Tree> dstCandidates = getDstCandidates(mappings, t);
                 Tree srcBest = null;
                 Tree dstBest = null;
                 double max = -1D;
                 for (Tree srcCand : srcCandidates) {
                     for (Tree dstCand : dstCandidates) {
-
                         double sim = SimilarityMetrics.jaccardSimilarity(srcCand, dstCand, mappings);
                         if (sim > max && sim >= simThreshold) {
                             max = sim;
