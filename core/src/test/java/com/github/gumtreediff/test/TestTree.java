@@ -20,11 +20,14 @@
 
 package com.github.gumtreediff.test;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.github.gumtreediff.tree.*;
 import org.junit.jupiter.api.Test;
+
+import javax.lang.model.type.ArrayType;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -117,12 +120,21 @@ public class TestTree {
         assertEquals(1, t3.positionInParent());
         assertEquals(1, t1.getChildPosition(t3));
         Tree t4 = new DefaultTree(TypeSet.type("foo"));
-        assertEquals(-1, t1.getChildPosition(t4));
+        t4.setParent(t1);
         t4.setParentAndUpdateChildren(t2);
         assertNotEquals(t1, t4.getParent());
         assertEquals(t2, t4.getParent());
         assertEquals(-1, t1.getChildPosition(t4));
         assertEquals(0, t2.getChildPosition(t4));
+        List<Tree> children = new ArrayList<>();
+        children.add(t3);
+        children.add(t4);
+        t2.setChildren(children);
+        assertEquals(2, t2.getChildren().size());
+        assertTrue(t2.getChildren().contains(t3));
+        assertTrue(t2.getChildren().contains(t4));
+        assertEquals(t2, t3.getParent());
+        assertEquals(t2, t4.getParent());
     }
 
     @Test
@@ -185,8 +197,10 @@ public class TestTree {
     @Test
     public void testImmutable() {
         Tree tree = TreeLoader.getDummySrc();
+        tree.setMetadata("foo", "bar");
         Tree immutable = new ImmutableTree(tree);
         assertTrue(tree.isIsomorphicTo(immutable));
+        assertEquals("bar", immutable.getMetadata("foo"));
         assertEquals(immutable, immutable.getChild(0).getParent());
         assertThrows(UnsupportedOperationException.class, () -> immutable.setLabel("foo"));
         assertThrows(UnsupportedOperationException.class, () -> immutable.setLength(12));
@@ -196,6 +210,7 @@ public class TestTree {
         assertThrows(UnsupportedOperationException.class, () -> immutable.setMetadata("foo", null));
         assertThrows(UnsupportedOperationException.class, () -> immutable.getChildren().remove(0));
         assertThrows(UnsupportedOperationException.class, () -> immutable.getChild(0).setLabel("foo"));
+        assertThrows(UnsupportedOperationException.class, () -> immutable.getChild(0).setParent(null));
         Tree immutableCpy = immutable.deepCopy();
         assertTrue(immutableCpy.isIsomorphicTo(immutable));
         assertDoesNotThrow(() -> immutableCpy.setLabel("foo"));
@@ -204,16 +219,30 @@ public class TestTree {
     }
 
     @Test
+    public void testFakeTree() {
+        Tree fake = new FakeTree();
+        assertEquals(Tree.NO_LABEL, fake.getLabel());
+        assertEquals(Type.NO_TYPE, fake.getType());
+        assertThrows(UnsupportedOperationException.class, () -> fake.setLabel("foo"));
+        assertThrows(UnsupportedOperationException.class, () -> fake.setPos(0));
+        assertThrows(UnsupportedOperationException.class, () -> fake.setLength(0));
+        assertThrows(UnsupportedOperationException.class, () -> fake.setMetadata("foo", "bar"));
+        assertThrows(UnsupportedOperationException.class, () -> fake.setType(Type.NO_TYPE));
+    }
+
+    @Test
     public void testTypesAndLabels() {
         Tree t1 = new DefaultTree(TypeSet.type("foo"));
         Tree t2 = new DefaultTree(TypeSet.type("foo"));
         assertTrue(t1.hasSameType(t2));
+        assertFalse(t1.getType().isEmpty());
         assertTrue(t1.hasSameTypeAndLabel(t2));
         Tree t3 = new DefaultTree(TypeSet.type("bar"));
         assertFalse(t1.hasSameType(t3));
         Tree t4 = new DefaultTree(TypeSet.type("foo"), "hello");
         assertTrue(t1.hasSameType(t4));
         assertFalse(t1.hasSameTypeAndLabel(t4));
+        assertTrue(Type.NO_TYPE.isEmpty());
     }
 
     @Test

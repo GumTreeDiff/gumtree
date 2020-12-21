@@ -103,7 +103,7 @@ public class FakeTree extends AbstractTree {
      */
     @Override
     public Object setMetadata(String key, Object value) {
-        return null;
+        throw unsupportedOperation();
     }
 
     /**
