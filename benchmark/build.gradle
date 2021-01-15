@@ -21,13 +21,18 @@ task plotResults(type: Exec) {
     commandLine "python3", "${project.projectDir}/src/main/python/plotDefects4J.py", "${project.buildDir}/reports/defects4j.csv"
 }
 
-task testRegressions(type: Exec) {
+task testSizeRegressions(type: Exec) {
     dependsOn computeResults
-    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv"
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
+}
+
+task testRuntimeRegressions(type: Exec) {
+    dependsOn computeResults
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "runtime"
 }
 
 task runBenchmark() {
-    dependsOn plotResults, testRegressions
+    dependsOn plotResults, testSizeRegressions, testRuntimeRegressions
 }
 
-build.finalizedBy runBenchmark
+build.finalizedBy testSizeRegressions
