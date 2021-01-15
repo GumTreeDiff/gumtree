@@ -20,7 +20,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: defects4j-report
-          path: build/reports/defects4j*
+          path: benchmark/build/reports/defects4j*
       - name: generate jacoco report
         run: ./gradlew jacocoRootReport
       - name: upload coverage report
