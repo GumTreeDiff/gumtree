@@ -1,75 +1,33 @@
 plugins {
-    id "me.champeau.gradle.jmh" version "0.5.0"
+    id 'application'
+}
+
+dependencies {
+    implementation project(':core')
+    implementation project(':gen.jdt')
 }
 
 uploadArchives.enabled = false
 jar.enabled = false
 
-task checkActions(type: JavaExec) {
+task computeResults(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.github.gumtree.dist.ActionsCollector'
-    args 'check'
+    main = 'com.github.gumtree.benchmark.Defects4JLauncher'
+    args "${project.projectDir}/defects4j", "${project.buildDir}/reports/defects4j.csv"
 }
 
-task collectActions(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.github.gumtree.dist.ActionsCollector'
-    args 'collect'
+task plotResults(type: Exec) {
+    dependsOn computeResults
+    commandLine "python3", "${project.projectDir}/src/main/python/plotDefects4J.py", "${project.buildDir}/reports/defects4j.csv"
 }
 
-if (project.hasProperty('trees')) {
-    task collectTrees(type: JavaExec) {
-        classpath = sourceSets.main.runtimeClasspath
-        main = 'com.github.gumtree.dist.BenchmarkCollector'
-        args trees
-    }
+task testRegressions(type: Exec) {
+    dependsOn computeResults
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv"
 }
 
-def getGitHash = { ->
-    try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
-            commandLine 'git', 'rev-parse', '--short', 'HEAD'
-            standardOutput = stdout
-        }
-        return stdout.toString().trim()
-    } catch (all) {
-        return '0000000'
-    }
+task runBenchmark() {
+    dependsOn plotResults, testRegressions
 }
 
-jmh {
-    duplicateClassesStrategy = 'warn'
-    fork = 0
-    warmupIterations = 0
-    iterations = 1
-    jmhVersion = '1.25.1'
-    benchmarkMode = ['SingleShotTime']
-    benchmarkParameters = [
-      'refPath' : new File("${project.projectDir}/src/jmh/resources/").listFiles()
-        .collect { it.getAbsolutePath() }
-        .findAll { it.matches(".*_v0_.*") }
-    ]
-    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human_${new Date().format( 'yyyyMMddHHmmss' )}_${getGitHash()}.txt")
-    resultsFile = project.file("${project.buildDir}/reports/jmh/results_${new Date().format( 'yyyyMMddHHmmss' )}_${getGitHash()}.csv")
-    resultFormat = 'CSV'
-}
-
-task jmhPlot(type: Exec) {
-    commandLine "python", "${project.projectDir}/src/main/python/plotBench.py", "${project.buildDir}/reports/jmh/"
-}
-
-dependencies {
-    implementation project(':client')
-    implementation project(':client.diff')
-    implementation project(':gen.antlr3')
-    implementation project(':gen.antlr3-antlr')
-    implementation project(':gen.antlr3-json')
-    implementation project(':gen.antlr3-php')
-    implementation project(':gen.antlr3-r')
-    implementation project(':gen.antlr3-xml')
-    implementation project(':gen.c')
-    implementation project(':gen.jdt')
-    implementation project(':gen.js')
-    implementation project(':gen.ruby')
-}
+build.finalizedBy runBenchmark
