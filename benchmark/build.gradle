@@ -35,4 +35,4 @@ task runBenchmark() {
     dependsOn plotResults, testSizeRegressions, testRuntimeRegressions
 }
 
-build.finalizedBy testSizeRegressions
+build.finalizedBy plotResults, testSizeRegressions
