@@ -2,7 +2,7 @@ description = 'GumTree core module.'
 
 dependencies {
 	implementation 'com.github.mpkorstanje:simmetrics-core:3.2.3'
-	implementation 'net.sf.trove4j:trove4j:3.0.3'
+	implementation 'it.unimi.dsi:fastutil:8.3.1'
 	implementation 'com.google.code.gson:gson:2.8.2'
 	implementation 'org.jgrapht:jgrapht-core:1.0.1'
 }

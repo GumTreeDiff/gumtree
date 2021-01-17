@@ -25,8 +25,8 @@ import com.github.gumtreediff.actions.TreeClassifier;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
-import gnu.trove.map.TObjectIntMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -63,7 +63,7 @@ public final class VanillaDiffHtmlBuilder {
 
     public void produce() throws IOException {
         TreeClassifier c = diff.createRootNodesClassifier();
-        TObjectIntMap<Tree> mappingIds = new TObjectIntHashMap<>();
+        Object2IntMap<Tree> mappingIds = new Object2IntOpenHashMap<>();
 
         int uId = 1;
         int mId = 1;
@@ -96,13 +96,13 @@ public final class VanillaDiffHtmlBuilder {
         TagIndex rtags = new TagIndex();
         for (Tree t: diff.dst.getRoot().preOrder()) {
             if (c.getMovedDsts().contains(t)) {
-                int dId = mappingIds.get(t);
+                int dId = mappingIds.getInt(t);
                 rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 rtags.addTags(t.getPos(), String.format(
                                 DST_MV_SPAN, "token mv", dId, tooltip(diff.dst, t)), t.getEndPos(), END_SPAN);
             }
             if (c.getUpdatedDsts().contains(t)) {
-                int dId = mappingIds.get(t);
+                int dId = mappingIds.getInt(t);
                 rtags.addStartTag(t.getPos(), String.format(ID_SPAN, uId++));
                 rtags.addTags(t.getPos(), String.format(
                                 DST_MV_SPAN, "token upd", dId, tooltip(diff.dst, t)), t.getEndPos(), END_SPAN);
