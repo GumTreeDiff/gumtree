@@ -34,13 +34,13 @@ import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
     @Override
     public void filterMappings(MultiMappingStore multiMappings) {
-        TIntObjectHashMap<Pair<List<Tree>, List<Tree>>> cliques = new TIntObjectHashMap<>();
+        Int2ObjectOpenHashMap<Pair<List<Tree>, List<Tree>>> cliques = new Int2ObjectOpenHashMap<>();
         for (Mapping m : multiMappings) {
             int hash = m.first.getMetrics().hash;
             if (!cliques.containsKey(hash))
@@ -51,7 +51,7 @@ public class CliqueSubtreeMatcher extends AbstractSubtreeMatcher {
 
         List<Pair<List<Tree>, List<Tree>>> ccliques = new ArrayList<>();
 
-        for (int hash : cliques.keys()) {
+        for (int hash : cliques.keySet()) {
             Pair<List<Tree>, List<Tree>> clique = cliques.get(hash);
             if (clique.first.size() == 1 && clique.second.size() == 1) {
                 mappings.addMappingRecursively(clique.first.get(0), clique.second.get(0));
