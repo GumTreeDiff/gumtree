@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation project(':core')
     implementation project(':gen.jdt')
 }
 

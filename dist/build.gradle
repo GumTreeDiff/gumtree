@@ -1,15 +1,28 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
+		classpath "org.codehaus.plexus:plexus-utils:3.3.0"
+	}
+}
+
+import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
+import org.codehaus.plexus.util.IOUtil
+
 plugins {
+	id 'com.github.johnrengelman.shadow' version '6.1.0'
 	id 'application'
 }
 
-mainClassName = 'com.github.gumtreediff.client.Run'
-applicationName = 'gumtree'
-archivesBaseName = 'gumtree'
-jar.enabled = false
-uploadArchives.enabled = false
-distTar.enabled = false
-
-description = 'GumTree distribution.'
+class NoNewlineTransformer extends AppendingTransformer {
+	void transform(TransformerContext context) {
+		IOUtil.copy(context.is, data)
+		context.is.close()
+	}
+}
 
 dependencies {
 	implementation project(':client')
@@ -30,4 +43,49 @@ dependencies {
 	implementation project(':gen.srcml')
 }
 
-build.finalizedBy installDist
+description = 'GumTree distribution.'
+
+shadowJar {
+
+	archiveBaseName.set('gumtree')
+	archiveClassifier.set('')
+	archiveVersion.set('')
+	transform(NoNewlineTransformer.class) {
+		resource = 'META-INF/annotations/com.github.gumtreediff.client.Register'
+	}
+	transform(NoNewlineTransformer.class) {
+		resource = 'META-INF/annotations/com.github.gumtreediff.gen.Register'
+	}
+	transform(NoNewlineTransformer.class) {
+		resource = 'META-INF/annotations/com.github.gumtreediff.matchers.Register'
+	}
+	transform(NoNewlineTransformer.class) {
+		resource = 'META-INF/services/com.github.gumtreediff.client.Client'
+	}
+	transform(NoNewlineTransformer.class) {
+		resource = 'META-INF/services/com.github.gumtreediff.gen.TreeGenerator'
+	}
+	transform(NoNewlineTransformer.class) {
+		resource = 'META-INF/services/com.github.gumtreediff.matchers.Matcher'
+	}
+}
+
+distributions {
+	shadow {
+		distributionBaseName = 'gumtree'
+	}
+}
+
+mainClassName = 'com.github.gumtreediff.client.Run'
+applicationName = 'gumtree'
+archivesBaseName = 'gumtree'
+shadowDistZip.enabled = true
+distTar.enabled = false
+distZip.enabled = false
+startScripts.enabled = false
+shadowDistTar.enabled = false
+
+jar.enabled = false
+uploadArchives.enabled = false
+
+build.finalizedBy installShadowDist
