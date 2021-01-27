@@ -1,17 +1,12 @@
 # Changelog of GumTree
 
-## v3.0.0-beta2 (Ficus)
+## v3.0.0 (Ficus)
 * Fix missing positions in srcML parser
 * Switched from Travis to Github actions for the CI
-* Changed benchmark to use SingleShot mode
-* Update visualisation of benchmark to use python instead of R
-* Fixed benchmark timestamps to work in CI
-* Integrated jmh benchmark in the CI
+* Reworked benchmark to use defects4j and test for runtime and size regressions
 * New parso-based python 3 compatible parser, replace the old pythonparser
 * Docker image is now based upon ubuntu focal LTS
 * Update of dependencies (ph-css, monaco-editor, rhino, javaparser, jdt, srcml)
-
-## v3.0.0-beta1 (Ficus)
 * Integrated monaco native diff editor
 * Fix position problem in javaparser generator
 * Fix method invocation handling in jdt generator
