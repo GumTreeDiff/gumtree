@@ -24,17 +24,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import com.github.gumtreediff.matchers.*;
+import com.github.gumtreediff.matchers.ConfigurationOptions;
+import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.Mapping;
+import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.Tree;
 import com.google.common.collect.Sets;
 
 public abstract class AbstractSubtreeMatcher implements Matcher {
-    private static final int DEFAULT_MIN_PRIORITY = 2;
+    private static final int DEFAULT_MIN_PRIORITY = 1;
     protected int minPriority = DEFAULT_MIN_PRIORITY;
 
     private static final String DEFAULT_PRIORITY_CALCULATOR = "height";
-    protected Function<Tree, Integer> priorityCalculator = PriorityTreeQueue.getPriorityCalculator(
-            DEFAULT_PRIORITY_CALCULATOR);
+    protected Function<Tree, Integer> priorityCalculator = PriorityTreeQueue
+            .getPriorityCalculator(DEFAULT_PRIORITY_CALCULATOR);
 
     protected Tree src;
     protected Tree dst;
@@ -57,10 +62,8 @@ public abstract class AbstractSubtreeMatcher implements Matcher {
         this.mappings = mappings;
 
         var multiMappings = new MultiMappingStore();
-        PriorityTreeQueue srcTrees = new DefaultPriorityTreeQueue(src, this.minPriority,
-                this.priorityCalculator);
-        PriorityTreeQueue dstTrees = new DefaultPriorityTreeQueue(dst, this.minPriority,
-                this.priorityCalculator);
+        PriorityTreeQueue srcTrees = new DefaultPriorityTreeQueue(src, this.minPriority, this.priorityCalculator);
+        PriorityTreeQueue dstTrees = new DefaultPriorityTreeQueue(dst, this.minPriority, this.priorityCalculator);
 
         while (!(srcTrees.isEmpty() || dstTrees.isEmpty())) {
             PriorityTreeQueue.synchronize(srcTrees, dstTrees);
@@ -117,8 +120,7 @@ public abstract class AbstractSubtreeMatcher implements Matcher {
 
     @Override
     public Set<ConfigurationOptions> getApplicableOptions() {
-        return Sets.newHashSet(ConfigurationOptions.st_priocalc,
-                ConfigurationOptions.st_minprio);
+        return Sets.newHashSet(ConfigurationOptions.st_priocalc, ConfigurationOptions.st_minprio);
     }
 
 }
