@@ -103,7 +103,7 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
             Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
-            Renderable view = new VanillaDiffView(pair.first, pair.second, diff);
+            Renderable view = new VanillaDiffView(pair.first, pair.second, diff, false);
             return render(view);
         });
         get("/monaco-diff/:id", (request, response) -> {
