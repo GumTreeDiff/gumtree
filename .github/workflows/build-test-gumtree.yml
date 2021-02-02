@@ -3,6 +3,8 @@ name: Build, Test and Deploy GumTree
 on:
   push:
     branches: [ main ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ main ]
 
@@ -14,6 +16,10 @@ jobs:
     steps:
       - name: checkout gumtree
         uses: actions/checkout@v2
+      - name: retrieve gumtree version
+        id: version
+        run: echo "::set-output name=version::$(cat build.gradle | grep "version =" | cut -f 2 -d "'")"
+        shell: bash
       - name: build gumtree
         run: ./gradlew build
       - name: upload defects4j results
@@ -29,7 +35,19 @@ jobs:
           name: coverage-report
           path: build/reports/jacoco/jacocoRootReport/html/
       - name: upload snapshot package
-        if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[snapshot]') }}
+        if: ${{ github.event_name == 'push' && contains(steps.version.outputs.version, 'SNAPSHOT') }}
         run: ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload release package
+        if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
+        run: ./gradlew publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: create github release
+        if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dist/build/distributions/gumtree*.zip"
+          bodyFile: "CHANGELOG.md"
+          token: ${{ secrets.GITHUB_TOKEN }}
