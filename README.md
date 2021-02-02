@@ -25,11 +25,11 @@ To use GumTree, you can start by consulting the [Getting Started](https://github
 
 ### The directory diff viewer
 
-![Directory comparator view](https://github.com/GumTreeDiff/gumtree/raw/develop/doc/screenshots/screenshot-0.png)
+![Directory comparator view](https://github.com/GumTreeDiff/gumtree/raw/main/doc/screenshots/screenshot-0.png)
 
 ### The file diff viewer
 
-![Diff view](https://github.com/GumTreeDiff/gumtree/raw/develop/doc/screenshots/screenshot-1.png)
+![Diff view](https://github.com/GumTreeDiff/gumtree/raw/main/doc/screenshots/screenshot-1.png)
 
 ## Supported languages
 
