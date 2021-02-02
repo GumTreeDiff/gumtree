@@ -2,7 +2,7 @@
 
 ## Status
 
-* Develop branch: ![Build and Test GumTree](https://github.com/GumTreeDiff/gumtree/workflows/Build,%20Test%20and%20Deploy%20Develop%20GumTree/badge.svg?branch=develop)
+![Build and Test GumTree](https://github.com/GumTreeDiff/gumtree/workflows/Build,%20Test%20and%20Deploy%20Develop%20GumTree/badge.svg?branch=main)
 
 ## Description
 
