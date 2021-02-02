@@ -7,6 +7,9 @@ on:
       - 'v*'
   pull_request:
     branches: [ main ]
+  schedule:
+    - cron: '59 23 * * SUN'
+  workflow_dispatch:
 
 jobs:
   build-test-deploy:
@@ -35,7 +38,7 @@ jobs:
           name: coverage-report
           path: build/reports/jacoco/jacocoRootReport/html/
       - name: upload snapshot package
-        if: ${{ github.event_name == 'push' && contains(steps.version.outputs.version, 'SNAPSHOT') }}
+        if: ${{ github.event_name == 'schedule' && contains(steps.version.outputs.version, 'SNAPSHOT') }}
         run: ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
