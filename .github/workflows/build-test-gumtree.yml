@@ -1,4 +1,4 @@
-name: Build, Test and Deploy Develop GumTree
+name: Build, Test and Deploy GumTree
 
 on:
   push:
