@@ -2,9 +2,9 @@ name: Build, Test and Deploy Develop GumTree
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ develop ]
+    branches: [ main ]
 
 jobs:
   build-test-deploy:
