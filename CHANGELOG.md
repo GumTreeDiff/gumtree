@@ -1,5 +1,8 @@
 # Changelog of GumTree
 
+## v3.0.0
+* New static html diff client (htmldiff) thanks to algomaster99
+
 ## v3.0.0-beta1
 * Fix missing positions in srcML parser
 * Switched from Travis to Github actions for the CI
