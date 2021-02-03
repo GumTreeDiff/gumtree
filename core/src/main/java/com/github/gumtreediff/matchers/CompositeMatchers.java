@@ -81,21 +81,21 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "gumtree", defaultMatcher = true, priority = Registry.Priority.HIGH)
+    @Register(id = "gumtree", priority = Registry.Priority.MAXIMUM)
     public static class ClassicGumtree extends CompositeMatcher {
         public ClassicGumtree() {
             super(new GreedySubtreeMatcher(), new GreedyBottomUpMatcher());
         }
     }
 
-    @Register(id = "gumtree-simple")
+    @Register(id = "gumtree-simple", priority = Registry.Priority.HIGH)
     public static class SimpleGumtree extends CompositeMatcher {
         public SimpleGumtree() {
             super(new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
         }
     }
 
-    @Register(id = "gumtree-simple-id")
+    @Register(id = "gumtree-simple-id", priority = Registry.Priority.HIGH)
     public static class SimpleIdGumtree extends CompositeMatcher {
         public SimpleIdGumtree() {
             super(new IdMatcher(), new GreedySubtreeMatcher(),
