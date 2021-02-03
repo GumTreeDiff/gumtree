@@ -62,9 +62,7 @@ public class TestMetadata {
         assertEquals(v2, someNode.setMetadata(key, null));
         assertNull(someNode.setMetadata(key, v2));
     }
-
-
-
+    
     @Test
     public void testLocalIterator() throws Exception {
         String[] keys = {key, v1, v2, v3};

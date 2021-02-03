@@ -26,7 +26,6 @@ package com.github.gumtreediff.tree;
  * 2. A child node test position must be contained in the position of its parent
  * 3. The text position of a given node should be strictly greater than
  *    the position of its preceding sibling (if any).
- *
  * An instantiated tree validator should be stateless and can then be reused
  * to validate several ASTs.
  */
