@@ -36,7 +36,7 @@ public class TreeMetricComputer extends TreeVisitor.InnerNodesAndLeavesVisitor {
     }
 
     @Override
-    public void visitLeave(Tree tree) {
+    public void visitLeaf(Tree tree) {
         tree.setMetrics(new TreeMetrics(1, 0, leafHash(tree), leafStructureHash(tree), currentDepth, currentPosition));
         currentPosition++;
     }
