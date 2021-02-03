@@ -187,7 +187,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             }
         }
         catch (InvalidInputException ex) {
-            throw new SyntaxException(ex.getMessage(), ex);
+            throw new SyntaxException(null, null, ex);
         }
 
         return new PosAndLength(pos, length);
@@ -218,7 +218,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             }
         }
         catch (InvalidInputException ex) {
-            throw new SyntaxException(ex.getMessage(), ex);
+            throw new SyntaxException(null, null, ex);
         }
 
         return new PosAndLength(pos, length);
@@ -248,8 +248,8 @@ public class JdtVisitor  extends AbstractJdtVisitor {
                 break;
             }
         }
-        catch (InvalidInputException ex) {
-            throw new SyntaxException(ex.getMessage(), ex);
+        catch (InvalidInputException e) {
+            throw new SyntaxException(null, null, e);
         }
 
         return new PosAndLength(pos, length);
@@ -280,7 +280,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             }
         }
         catch (InvalidInputException ex) {
-            throw new SyntaxException(ex.getMessage(), ex);
+            throw new SyntaxException(null, null, ex);
         }
 
         return new PosAndLength(pos, length);
@@ -326,7 +326,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             }
         }
         catch (InvalidInputException e) {
-            throw new SyntaxException(e.getMessage(), e);
+            throw new SyntaxException(null, null, e);
         }
         return new PosAndLength(pos, length);
     }

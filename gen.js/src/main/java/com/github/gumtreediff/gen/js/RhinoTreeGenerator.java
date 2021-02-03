@@ -50,9 +50,7 @@ public class RhinoTreeGenerator extends TreeGenerator {
             return visitor.getTreeContext();
         }
         catch (EvaluatorException e) {
-            String message = String.format("Syntax error: %s at line %d, column %d",
-                    e.getMessage(),  e.lineNumber(), e.columnNumber());
-            throw new SyntaxException(message, e);
+            throw new SyntaxException(this, r, e);
         }
     }
 }

@@ -51,7 +51,7 @@ public interface Configurable {
     /**
      * Modify the provided option to the provided value. Raise an exception
      * if the provided option is not in the set of applicable options.
-     * 
+     *
      * @see #getApplicableOptions()
      */
     default void setOption(ConfigurationOptions option, Object value) {

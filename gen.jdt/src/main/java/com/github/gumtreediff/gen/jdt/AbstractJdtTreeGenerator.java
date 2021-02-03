@@ -36,7 +36,6 @@ import java.io.Reader;
 import java.util.Map;
 
 public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
-
     private static char[] readerToCharArray(Reader r) throws IOException {
         StringBuilder fileData = new StringBuilder();
         try (BufferedReader br = new BufferedReader(r)) {
@@ -69,7 +68,7 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         AbstractJdtVisitor v = createVisitor(scanner);
         ASTNode node = parser.createAST(null);
         if ((node.getFlags() & ASTNode.MALFORMED) != 0) // bitwise flag to check if the node has a syntax error
-            throw new SyntaxException(this, r);
+            throw new SyntaxException(this, r, null);
         node.accept(v);
         return v.getTreeContext();
     }

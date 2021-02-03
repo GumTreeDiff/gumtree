@@ -47,7 +47,7 @@ public class JavaParserGenerator extends TreeGenerator {
             return v.getTreeContext();
         }
         catch (ParseProblemException e) {
-            throw new SyntaxException(e.getMessage(), e);
+            throw new SyntaxException(this, r, e);
         }
     }
 }

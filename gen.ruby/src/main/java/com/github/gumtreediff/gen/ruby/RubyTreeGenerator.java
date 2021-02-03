@@ -50,10 +50,7 @@ public class RubyTreeGenerator extends TreeGenerator {
             return extractTreeContext(new TreeContext(), n, null);
         }
         catch (org.jrubyparser.lexer.SyntaxException e) {
-            throw new SyntaxException(
-                    String.format("Syntax exception: %s at %s", e.getMessage(), e.getPosition()),
-                    e
-            );
+            throw new SyntaxException(this, r, e);
         }
     }
 

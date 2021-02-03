@@ -38,7 +38,6 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Parser> extends TreeGenerator {
-
     private Deque<Tree> trees = new ArrayDeque<>();
 
     protected static Map<Integer, Integer> chars;
@@ -81,8 +80,9 @@ public abstract class AbstractAntlr3TreeGenerator<L extends Lexer, P extends Par
             TreeContext context = new TreeContext();
             buildTree(context, ct);
             return context;
-        } catch (RecognitionException e) {
-            throw new SyntaxException(this, r);
+        }
+        catch (RecognitionException e) {
+            throw new SyntaxException(this, r, e);
         }
     }
 

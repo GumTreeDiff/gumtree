@@ -40,7 +40,7 @@ public abstract class ExternalProcessTreeGenerator extends TreeGenerator {
                 buf.append(line + System.lineSeparator());
             p.waitFor();
             if (p.exitValue() != 0)
-                throw new SyntaxException(this, r);
+                throw new SyntaxException(this, r, null);
             r.close();
             p.destroy();
             return buf.toString();
