@@ -28,5 +28,8 @@ import com.github.gumtreediff.matchers.MappingStore;
  * @see EditScript
  */
 public interface EditScriptGenerator {
+    /**
+     * Compute and return the edit script for the provided mappings.
+     */
     EditScript computeActions(MappingStore mappings);
 }
