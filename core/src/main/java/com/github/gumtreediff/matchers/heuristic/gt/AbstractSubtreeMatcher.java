@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
@@ -49,7 +49,7 @@ public abstract class AbstractSubtreeMatcher implements Matcher {
     }
 
     @Override
-    public void configure(GumTreeProperties properties) {
+    public void configure(GumtreeProperties properties) {
         this.minPriority = properties.tryConfigure(ConfigurationOptions.st_minprio, minPriority);
         this.priorityCalculator = PriorityTreeQueue.getPriorityCalculator(
                 properties.tryConfigure(ConfigurationOptions.st_priocalc, DEFAULT_PRIORITY_CALCULATOR));

@@ -27,7 +27,7 @@ import com.github.gumtreediff.tree.DefaultTree;
 import com.github.gumtreediff.tree.TypeSet;
 import org.junit.jupiter.api.Test;
 
-import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
@@ -141,7 +141,7 @@ public class TestGumtreeMatcher {
         ms.addMapping(t1.getChild("0.2.3"), t2.getChild("0.2.3"));
 
         GreedyBottomUpMatcher matcher = new GreedyBottomUpMatcher();
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
 
         matcher.setSimThreshold(1.0);
         matcher.setSizeThreshold(0);

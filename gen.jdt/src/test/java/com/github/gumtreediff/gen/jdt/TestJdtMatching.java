@@ -38,7 +38,7 @@ import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.CompositeMatchers.ClassicGumtree;
 import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
@@ -99,9 +99,9 @@ public class TestJdtMatching {
 
         ClassicGumtree matcher = new CompositeMatchers.ClassicGumtree();
 
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
 
-        properties = new GumTreeProperties();
+        properties = new GumtreeProperties();
         // Using min = 1, the imports and package declaration are mapped.
         properties.tryConfigure(ConfigurationOptions.st_minprio, 1);
 
@@ -153,7 +153,7 @@ public class TestJdtMatching {
         TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
         assertFalse(leftContext.getRoot().isIsomorphicTo(rightContext.getRoot()));
 
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
         // Using min = 1, the imports and package declaration are mapped.
         properties.tryConfigure(ConfigurationOptions.st_minprio, 1);
         properties.tryConfigure(ConfigurationOptions.bu_minsize, 3000);
@@ -342,7 +342,7 @@ public class TestJdtMatching {
         SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
 
         ConfigurableMatcher configurableMatcher = (ConfigurableMatcher) matcher;
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
         // With 1001 fails
         properties.tryConfigure(ConfigurationOptions.bu_minsize, 1002);
 
@@ -378,7 +378,7 @@ public class TestJdtMatching {
         SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
 
         ConfigurableMatcher configurableMatcher = (ConfigurableMatcher) matcher;
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
         // Let's try with Min height = 1:
 
         properties.tryConfigure(ConfigurationOptions.st_minprio, 1);
@@ -410,7 +410,7 @@ public class TestJdtMatching {
         assertTrue(mappingsFromGreedy.isSrcMapped(leftContext.getRoot().getChild(0)));
 
         // Now check unmapped when Min = 2 (Default)
-        properties = new GumTreeProperties();
+        properties = new GumtreeProperties();
         properties.tryConfigure(ConfigurationOptions.st_minprio, 2);
         assertEquals(2, properties.get(ConfigurationOptions.st_minprio));
         greedyMatcher.configure(properties);

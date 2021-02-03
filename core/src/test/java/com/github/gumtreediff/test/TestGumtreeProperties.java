@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.CompositeMatchers.CompositeMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
@@ -46,9 +46,8 @@ import com.github.gumtreediff.matchers.heuristic.gt.AbstractSubtreeMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.SimpleBottomUpMatcher;
 
-class TestGumTreeProperties {
+class TestGumtreeProperties {
     @Test
     void testBottomUpMatcher() {
         XyBottomUpMatcher matcher = new XyBottomUpMatcher();
@@ -56,12 +55,12 @@ class TestGumTreeProperties {
         assertEquals(originalValue, matcher.getSimThreshold());
 
         final double localth = 0.888888;
-        GumTreeProperties customProperties = new GumTreeProperties();
+        GumtreeProperties customProperties = new GumtreeProperties();
         customProperties.put(ConfigurationOptions.xy_minsim, localth);
         matcher.configure(customProperties);
         assertEquals(localth, matcher.getSimThreshold(), 0);
 
-        GumTreeProperties noPropertyProperties = new GumTreeProperties();
+        GumtreeProperties noPropertyProperties = new GumtreeProperties();
 
         matcher.configure(noPropertyProperties);
         assertEquals(originalValue, matcher.getSimThreshold(), 0);
@@ -78,7 +77,7 @@ class TestGumTreeProperties {
         ChangeDistillerBottomUpMatcher matcher = new ChangeDistillerBottomUpMatcher();
 
         Double anotherValue = 0.9999;
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
 
         properties.put(ConfigurationOptions.cd_structsim1, anotherValue);
         properties.put(ConfigurationOptions.cd_structsim2, anotherValue);
@@ -93,7 +92,7 @@ class TestGumTreeProperties {
         assertEquals(anotherValue, matcher.getStructSimThreshold2(), 0);
 
         int newNl = 1111;
-        GumTreeProperties properties2 = new GumTreeProperties();
+        GumtreeProperties properties2 = new GumtreeProperties();
         properties2.put(ConfigurationOptions.cd_maxleaves, newNl);
         matcher.configure(properties2);
         assertEquals(newNl, matcher.getMaxNumberOfLeaves());
@@ -108,7 +107,7 @@ class TestGumTreeProperties {
     @Test
     void testChangeDistillerLeavesMatcher() {
         ChangeDistillerLeavesMatcher matcher = new ChangeDistillerLeavesMatcher();
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
         final Double anotherValue = 0.99999;
 
         properties.put(ConfigurationOptions.cd_labsim, anotherValue);
@@ -123,7 +122,7 @@ class TestGumTreeProperties {
     @Test
     void testAbstractBottomUpMatcher() {
         AbstractBottomUpMatcher matcher = new CompleteBottomUpMatcher();
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
         final Double anotherValue = 0.99;
 
         properties.put(ConfigurationOptions.bu_minsim, anotherValue);
@@ -144,7 +143,7 @@ class TestGumTreeProperties {
     @Test
     void testAbstractSubtreeMatcher() {
         AbstractSubtreeMatcher matcher = new GreedySubtreeMatcher();
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
         final Integer nl = 10;
 
         properties.put(ConfigurationOptions.st_minprio, nl);
@@ -171,7 +170,7 @@ class TestGumTreeProperties {
         int newMHvalue = 99999;
         assertNotEquals(newMHvalue, opGreedySubTree.get().getMinPriority());
 
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
         properties.put(ConfigurationOptions.st_minprio, newMHvalue);
 
         composite.configure(properties);

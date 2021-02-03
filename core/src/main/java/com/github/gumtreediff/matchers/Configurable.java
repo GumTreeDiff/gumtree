@@ -23,20 +23,43 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
+/**
+ * Interface for configurable gumtree objects, mainly matchers.
+ * Options are furnished via a dedicated GumtreeProperties object as
+ * key - values.
+ * The list of existing keys is in a dedicated enum.
+ *
+ * @see ConfigurationOptions
+ * @see GumtreeProperties
+ */
 public interface Configurable {
-    default void configure(GumTreeProperties properties) {
+    /**
+     * Default configure method that does nothing.
+     * Has to be overriden by subclasses to make use of the
+     * data inside of the provided GumTreeProperties object.
+     */
+    default void configure(GumtreeProperties properties) {
     }
 
+    /**
+     * Return the list of options applicable to the objects.
+     */
     default Set<ConfigurationOptions> getApplicableOptions() {
         return Sets.newHashSet();
     }
 
+    /**
+     * Modify the provided option to the provided value. Raise an exception
+     * if the provided option is not in the set of applicable options.
+     * 
+     * @see #getApplicableOptions()
+     */
     default void setOption(ConfigurationOptions option, Object value) {
         if (!getApplicableOptions().contains(option))
-            throw new RuntimeException(
+            throw new IllegalArgumentException(
                     "Option " + option.name() + " is not allowed. Applicable options are: " + getApplicableOptions());
 
-        GumTreeProperties properties = new GumTreeProperties();
+        GumtreeProperties properties = new GumtreeProperties();
         properties.put(option, value);
         configure(properties);
     }

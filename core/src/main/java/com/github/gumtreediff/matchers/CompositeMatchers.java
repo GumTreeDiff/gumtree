@@ -62,7 +62,7 @@ public class CompositeMatchers {
         }
 
         @Override
-        public void configure(GumTreeProperties properties) {
+        public void configure(GumtreeProperties properties) {
             for (Matcher matcher : matchers)
                     matcher.configure(properties);
         }

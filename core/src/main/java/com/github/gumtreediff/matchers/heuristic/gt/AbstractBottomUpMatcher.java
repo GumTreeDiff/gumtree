@@ -25,9 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
@@ -46,7 +45,7 @@ public abstract class AbstractBottomUpMatcher implements Matcher {
     }
 
     @Override
-    public void configure(GumTreeProperties properties) {
+    public void configure(GumtreeProperties properties) {
         sizeThreshold = properties.tryConfigure(ConfigurationOptions.bu_minsize, sizeThreshold);
         simThreshold = properties.tryConfigure(ConfigurationOptions.bu_minsim, simThreshold);
     }

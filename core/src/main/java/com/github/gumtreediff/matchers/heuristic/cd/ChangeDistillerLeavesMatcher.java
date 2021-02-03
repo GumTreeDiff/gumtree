@@ -32,7 +32,7 @@ import org.simmetrics.StringMetrics;
 
 import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.Tree;
@@ -49,7 +49,7 @@ public class ChangeDistillerLeavesMatcher implements ConfigurableMatcher {
     }
 
     @Override
-    public void configure(GumTreeProperties properties) {
+    public void configure(GumtreeProperties properties) {
         labelSimThreshold = properties.tryConfigure(ConfigurationOptions.cd_labsim, labelSimThreshold);
     }
 

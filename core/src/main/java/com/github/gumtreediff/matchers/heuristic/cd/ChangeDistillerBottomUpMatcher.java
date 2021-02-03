@@ -25,7 +25,7 @@ import java.util.Set;
 
 import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.Tree;
@@ -46,7 +46,7 @@ public class ChangeDistillerBottomUpMatcher implements ConfigurableMatcher {
     }
 
     @Override
-    public void configure(GumTreeProperties properties) {
+    public void configure(GumtreeProperties properties) {
         structSimThreshold1 = properties.tryConfigure(ConfigurationOptions.cd_structsim1,
                 DEFAULT_STRUCT_SIM_THRESHOLD_1);
 

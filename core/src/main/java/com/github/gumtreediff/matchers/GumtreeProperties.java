@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class GumTreeProperties {
+public class GumtreeProperties {
     Map<String, Object> properties = new HashMap<>();
 
     public void put(ConfigurationOptions option, Object value) {

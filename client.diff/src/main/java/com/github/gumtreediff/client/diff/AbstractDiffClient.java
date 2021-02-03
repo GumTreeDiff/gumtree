@@ -25,7 +25,7 @@ import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Client;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.Matchers;
 
 import java.io.IOException;
@@ -43,7 +43,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOption
         public String treeGeneratorId;
         public String srcPath;
         public String dstPath;
-        public GumTreeProperties properties = new GumTreeProperties();
+        public GumtreeProperties properties = new GumtreeProperties();
 
         @Override
         public Option[] values() {

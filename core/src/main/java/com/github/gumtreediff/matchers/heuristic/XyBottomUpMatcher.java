@@ -46,7 +46,7 @@ public class XyBottomUpMatcher implements Matcher {
     }
 
     @Override
-    public void configure(GumTreeProperties properties) {
+    public void configure(GumtreeProperties properties) {
         simThreshold = properties.tryConfigure(ConfigurationOptions.xy_minsim, DEFAULT_SIM_THRESHOLD);
     }
 

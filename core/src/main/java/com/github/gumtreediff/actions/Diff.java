@@ -20,7 +20,7 @@
 package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.gen.TreeGenerators;
-import com.github.gumtreediff.matchers.GumTreeProperties;
+import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
@@ -43,7 +43,7 @@ public class Diff {
     }
 
     public static Diff compute(String srcFile, String dstFile, String treeGenerator,
-                               String matcher, GumTreeProperties properties) throws IOException {
+                               String matcher, GumtreeProperties properties) throws IOException {
         TreeContext src = TreeGenerators.getInstance().getTree(srcFile, treeGenerator);
         TreeContext dst = TreeGenerators.getInstance().getTree(dstFile, treeGenerator);
         Matcher m = Matchers.getInstance().getMatcherWithFallback(matcher);
@@ -55,7 +55,7 @@ public class Diff {
 
     public static Diff compute(String srcFile, String dstFile,
                                String treeGenerator, String matcher) throws IOException {
-        return compute(srcFile, dstFile, treeGenerator, matcher, new GumTreeProperties());
+        return compute(srcFile, dstFile, treeGenerator, matcher, new GumtreeProperties());
     }
 
     public static Diff compute(String srcFile, String dstFile) throws IOException {
