@@ -243,6 +243,7 @@ public class TestTree {
         assertTrue(t1.hasSameType(t4));
         assertFalse(t1.hasSameTypeAndLabel(t4));
         assertTrue(Type.NO_TYPE.isEmpty());
+        assertTrue(TypeSet.type(null).isEmpty());
     }
 
     @Test
