@@ -63,30 +63,7 @@ public class TestMetadata {
         assertNull(someNode.setMetadata(key, v2));
     }
 
-    @Test
-    public void testGlobalPutNode() throws Exception {
-        assertNull(someNode.getMetadata(key));
-        assertNull(tc.setMetadata(key, v1));
-        assertEquals(v1, tc.getMetadata(key));
-        assertEquals(v1, tc.getMetadata(someNode, key));
 
-        assertEquals(v1, tc.setMetadata(key, v2));
-        assertEquals(v2, tc.getMetadata(key));
-        assertEquals(v2, tc.getMetadata(null, key));
-        assertEquals(v2, tc.setMetadata(someNode, key, v1));
-        assertEquals(v1, tc.getMetadata(someNode, key));
-        assertEquals(v2, tc.getMetadata(key));
-        assertEquals(v1, tc.setMetadata(someNode, key, null));
-        assertEquals(v2, tc.getMetadata(someNode, key));
-        assertEquals(v2, tc.setMetadata(someNode, key, v1));
-        assertEquals(v1, someNode.setMetadata(key, null));
-        assertEquals(v2, tc.getMetadata(someNode, key));
-        assertEquals(v2, tc.setMetadata(null, key, v1));
-        assertEquals(v1, tc.setMetadata(someNode, key, v2));
-        assertEquals(v2, tc.getMetadata(someNode, key));
-        assertEquals(v1, tc.getMetadata(null, key));
-        assertEquals(v1, tc.getMetadata(key));
-    }
 
     @Test
     public void testLocalIterator() throws Exception {
@@ -114,14 +91,16 @@ public class TestMetadata {
 
     @Test
     public void testGlobalIterator() throws Exception {
-        final String v4 = "lastkey";
-        String[] keys = {key, v1, v2, v3, v4};
-        Integer[] values = {0, 1, 2, 3, 4};
-        populate(keys, values, keys.length - 1);
-
-        tc.setMetadata(key, 5);
-        tc.setMetadata(v4, 4);
-        checkIterator(keys, values, tc.getMetadata(someNode));
+        TreeContext ctx = new TreeContext();
+        Object res1 = ctx.setMetadata("foo", "bar");
+        assertEquals("bar", ctx.getMetadata("foo"));
+        assertNull(res1);
+        Object res2 = ctx.setMetadata("foo", "baz");
+        assertEquals("baz", ctx.getMetadata("foo"));
+        assertEquals("bar", res2);
+        ctx.setMetadata("null", null);
+        assertNull(ctx.getMetadata("null"));
+        assertNull(ctx.getMetadata("unknown"));
     }
 
     private void populate(String[] keys, Integer[] values, int size) {

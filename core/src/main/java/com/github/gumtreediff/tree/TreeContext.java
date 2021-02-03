@@ -29,8 +29,12 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
+/**
+ * The tree context class contains an AST together with its context (key - value metadata).
+ *
+ * @see Tree
+ */
 public class TreeContext {
-
     private final Map<String, Object> metadata = new HashMap<>();
 
     private final MetadataSerializers serializers = new MetadataSerializers();
@@ -42,31 +46,48 @@ public class TreeContext {
         return TreeIoUtils.toText(this).toString();
     }
 
+    /**
+     * Set the AST of the TreeContext.
+     */
     public void setRoot(Tree root) {
         this.root = root;
     }
 
+    /**
+     * Return the AST of the TreeContext.
+     */
     public Tree getRoot() {
         return root;
     }
 
+    /**
+     * Utility method to create a default tree with a given type and label.
+     * @see DefaultTree#DefaultTree(Type, String)
+     */
     public Tree createTree(Type type, String label) {
         return new DefaultTree(type, label);
     }
 
+    /**
+     * Utility method to create a default tree with a given type.
+     * @see DefaultTree#DefaultTree(Type)
+     */
     public Tree createTree(Type type) {
         return new DefaultTree(type);
     }
 
+    /**
+     * Utility method to create a fake tree with the given children.
+     * @see FakeTree#FakeTree(Tree...)
+     */
     public Tree createFakeTree(Tree... trees) {
         return new FakeTree(trees);
     }
 
     /**
-     * Get a global metadata.
+     * Get the AST metadata with the given key.
      * There is no way to know if the metadata is really null or does not exists.
      *
-     * @param key of metadata
      * @return the metadata or null if not found
      */
     public Object getMetadata(String key) {
@@ -74,57 +95,23 @@ public class TreeContext {
     }
 
     /**
-     * Get a local metadata, if available. Otherwise get a global metadata.
-     * There is no way to know if the metadata is really null or does not exists.
+     * Store an AST metadata with the given key and value.
      *
-     * @param key of metadata
-     * @return the metadata or null if not found
-     */
-    public Object getMetadata(Tree node, String key) {
-        Object metadata;
-        if (node == null || (metadata = node.getMetadata(key)) == null)
-            return getMetadata(key);
-        return metadata;
-    }
-
-    /**
-     * Store a global metadata.
-     *
-     * @param key   of the metadata
-     * @param value of the metadata
-     * @return the previous value of metadata if existed or null
+     * @return the previous value of metadata if existing or null
      */
     public Object setMetadata(String key, Object value) {
         return metadata.put(key, value);
     }
 
     /**
-     * Store a local metadata
-     *
-     * @param key   of the metadata
-     * @param value of the metadata
-     * @return the previous value of metadata if existed or null
-     */
-    public Object setMetadata(Tree node, String key, Object value) {
-        if (node == null)
-            return setMetadata(key, value);
-        else {
-            Object res = node.setMetadata(key, value);
-            if (res == null)
-                return getMetadata(key);
-            return res;
-        }
-    }
-
-    /**
-     * Get an iterator on global metadata only
+     * Get an iterator on the AST metadata.
      */
     public Iterator<Entry<String, Object>> getMetadata() {
         return metadata.entrySet().iterator();
     }
 
     /**
-     * Get serializers for this tree context
+     * Get the metadata serializers for this tree context.
      */
     public MetadataSerializers getSerializers() {
         return serializers;
@@ -144,64 +131,6 @@ public class TreeContext {
         for (String n : name)
             serializers.add(n, x -> x.toString());
         return this;
-    }
-
-    public TreeContext deriveTree() { // FIXME Should we refactor TreeContext class to allow shared metadata etc ...
-        TreeContext newContext = new TreeContext();
-        newContext.setRoot(getRoot().deepCopy());
-        newContext.metadata.putAll(metadata);
-        newContext.serializers.addAll(serializers);
-        return newContext;
-    }
-
-    /**
-     * Get an iterator on local and global metadata.
-     * To only get local metadata, simply use : `node.getMetadata()`
-     */
-    public Iterator<Entry<String, Object>> getMetadata(Tree node) {
-        if (node == null)
-            return getMetadata();
-        return new Iterator<Entry<String, Object>>() {
-            final Iterator<Entry<String, Object>> localIterator = node.getMetadata();
-            final Iterator<Entry<String, Object>> globalIterator = getMetadata();
-            final Set<String> seenKeys = new HashSet<>();
-
-            Iterator<Entry<String, Object>> currentIterator = localIterator;
-            Entry<String, Object> nextEntry;
-
-            {
-                next();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return nextEntry != null;
-            }
-
-            @Override
-            public Entry<String, Object> next() {
-                Entry<String, Object> n = nextEntry;
-                if (currentIterator == localIterator) {
-                    if (localIterator.hasNext()) {
-                        nextEntry = localIterator.next();
-                        seenKeys.add(nextEntry.getKey());
-                        return n;
-                    } else {
-                        currentIterator = globalIterator;
-                    }
-                }
-                nextEntry = null;
-                while (globalIterator.hasNext()) {
-                    Entry<String, Object> e = globalIterator.next();
-                    if (!(seenKeys.contains(e.getKey()) || (e.getValue() == null))) {
-                        nextEntry = e;
-                        seenKeys.add(nextEntry.getKey());
-                        break;
-                    }
-                }
-                return n;
-            }
-        };
     }
 
     public static class Marshallers<E> {
@@ -233,7 +162,6 @@ public class TreeContext {
     }
 
     public static class MetadataSerializers extends Marshallers<MetadataSerializer> {
-
         public void serialize(TreeFormatter formatter, String key, Object value) throws Exception {
             MetadataSerializer s = serializers.get(key);
             if (s != null)
@@ -242,7 +170,6 @@ public class TreeContext {
     }
 
     public static class MetadataUnserializers extends Marshallers<MetadataUnserializer> {
-
         public void load(Tree tree, String key, String value) throws Exception {
             MetadataUnserializer s = serializers.get(key);
             if (s != null) {
