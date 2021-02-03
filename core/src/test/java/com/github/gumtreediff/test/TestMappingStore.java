@@ -41,6 +41,8 @@ public class TestMappingStore {
         assertEquals(0, ms.size());
         assertFalse(ms.isSrcMapped(t1));
         assertFalse(ms.isDstMapped(t2));
+        assertNull(ms.getDstForSrc(t1));
+        assertNull(ms.getSrcForDst(t2));
         ms.addMapping(t1, t2);
         assertEquals(1, ms.size());
         assertTrue(ms.isSrcMapped(t1));
