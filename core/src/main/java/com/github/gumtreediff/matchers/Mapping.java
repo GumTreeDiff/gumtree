@@ -24,7 +24,9 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.Pair;
 
 /**
- * A mapping between a src and a dst tree.
+ * An immutable pair of trees.
+ *
+ * @see Pair
  */
 public class Mapping extends Pair<Tree, Tree> {
     public Mapping(Tree a, Tree b) {

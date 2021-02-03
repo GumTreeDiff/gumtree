@@ -20,12 +20,25 @@
 
 package com.github.gumtreediff.utils;
 
+/**
+ * A class to store immutable pairs of objects.
+ * @param <T1> the type of the first object.
+ * @param <T2> the type of the second object.
+ */
 public class Pair<T1, T2> {
-
+    /**
+     * The first object.
+     */
     public final T1 first;
 
+    /**
+     * The second object.
+     */
     public final T2 second;
 
+    /**
+     * Instantiate a pair between the given left and right objects.
+     */
     public Pair(T1 a, T2 b) {
         this.first = a;
         this.second = b;
@@ -53,5 +66,4 @@ public class Pair<T1, T2> {
     public String toString() {
         return String.format("%s -> %s", first.toString(), second.toString());
     }
-
 }
