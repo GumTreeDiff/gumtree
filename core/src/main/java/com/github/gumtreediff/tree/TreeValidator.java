@@ -19,10 +19,26 @@
 
 package com.github.gumtreediff.tree;
 
+/**
+ * Class dedicated to check the constraints on the ASTs.
+ * The checked constraints are:
+ * 1. Only leaves may have a label
+ * 2. A child node test position must be contained in the position of its parent
+ * 3. The text position of a given node should be strictly greater than
+ *    the position of its preceding sibling (if any).
+ *
+ * An instantiated tree validator should be stateless and can then be reused
+ * to validate several ASTs.
+ */
 public class TreeValidator {
 
     private TreeContext context;
 
+    /**
+     * Launch the validation on the tree contained in the provided context.
+     * In case of violation of a constraint, an runtime exception is raised.
+     * @see TreeException
+     */
     public void validate(TreeContext context) {
         this.context = context;
         validate(context.getRoot());
@@ -66,6 +82,9 @@ public class TreeValidator {
 
     }
 
+    /**
+     * Exception class for errors w.r.t. to AST constraints.
+     */
     public static class TreeException extends RuntimeException {
         public TreeException(String message) {
             super(message);
