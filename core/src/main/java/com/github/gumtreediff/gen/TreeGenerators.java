@@ -34,7 +34,7 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
     private static TreeGenerators registry;
 
     /**
-     * Return the tree generators registry instance (singleton pattern)
+     * Return the tree generators registry instance (singleton pattern).
      */
     public static TreeGenerators getInstance() {
         if (registry == null)
@@ -43,10 +43,9 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
     }
 
     /**
-     * Automatically search a tree generator for the given file path, and use it
-     * to parse it
-     * @param file the file path
-     * @return the TreeContext of the file
+     * Search a tree generator for the provided file path (based on the file extension), and use it
+     * to produce a TreeContext containing the AST.
+     *
      * @throws UnsupportedOperationException if no suitable generator is found
      */
     public TreeContext getTree(String file) throws UnsupportedOperationException, IOException {
@@ -57,8 +56,9 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
     }
 
     /**
-     * Use the tree generator with the supplied name to parse the file at the given path
-     * to parse it
+     * Search the tree generator with the provided name , and use it
+     * to produce a TreeContext containing the AST.
+     *
      * @param generator the tree generator's name. if null, fallbacks to @see getTree(String)
      * @throws UnsupportedOperationException if no suitable generator is found
      */
@@ -73,12 +73,15 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
         throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
     }
 
+    /**
+     * Return whether or not a generator with the provided name exists.
+     */
     public boolean has(String generator) {
         return this.findById(generator) != null;
     }
 
     /**
-     * Indicate whether or not the given file path has a related tree generator
+     * Indicate whether or not the provided file path has a related tree generator
      */
     public boolean hasGeneratorForFile(String file) {
         return get(file) != null;
