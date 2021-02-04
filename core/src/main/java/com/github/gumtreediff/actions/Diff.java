@@ -28,12 +28,34 @@ import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
 
+/**
+ * Class to facilitate the computation of diffs between ASTs.
+ */
 public class Diff {
+    /**
+     * The source AST in its context.
+     */
     public final TreeContext src;
+
+    /**
+     * The destination AST in its context.
+     */
     public final TreeContext dst;
+
+    /**
+     * The mappings between the two ASTs.
+     */
     public final MappingStore mappings;
+
+    /**
+     * The edit script between the two ASTs.
+     */
     public final EditScript editScript;
 
+    /**
+     * Instantiate a diff object with the provided source and destination
+     * ASTs, the provided mappings, and the provided editScript.
+     */
     public Diff(TreeContext src, TreeContext dst,
                 MappingStore mappings, EditScript editScript) {
         this.src = src;
@@ -42,6 +64,16 @@ public class Diff {
         this.editScript = editScript;
     }
 
+    /**
+     * Compute and return a diff.
+     * @param srcFile The path to the source file.
+     * @param dstFile The path to the destination file.
+     * @param treeGenerator The id of the tree generator to use.
+     * @param matcher The id of the the matcher to use.
+     * @param properties The set of options.
+     * @throws IOException an IO exception is raised in case of IO problems related to the source
+     * or destination file.
+     */
     public static Diff compute(String srcFile, String dstFile, String treeGenerator,
                                String matcher, GumtreeProperties properties) throws IOException {
         TreeContext src = TreeGenerators.getInstance().getTree(srcFile, treeGenerator);
@@ -53,19 +85,45 @@ public class Diff {
         return new Diff(src, dst, mappings, editScript);
     }
 
+    /**
+     * Compute and return a diff.
+     * @param srcFile The path to the source file.
+     * @param dstFile The path to the destination file.
+     * @param treeGenerator The id of the tree generator to use.
+     * @param matcher The id of the the matcher to use.
+     * @throws IOException an IO exception is raised in case of IO problems related to the source
+     * or destination file.
+     */
     public static Diff compute(String srcFile, String dstFile,
                                String treeGenerator, String matcher) throws IOException {
         return compute(srcFile, dstFile, treeGenerator, matcher, new GumtreeProperties());
     }
 
+    /**
+     * Compute and return a diff, using the default matcher and tree generators automatically
+     * retrieved according to the file extensions.
+     * @param srcFile The path to the source file.
+     * @param dstFile The path to the destination file.
+     * @throws IOException an IO exception is raised in case of IO problems related to the source
+     * or destination file.
+     */
     public static Diff compute(String srcFile, String dstFile) throws IOException {
         return compute(srcFile, dstFile, null, null);
     }
 
+    /**
+     * Compute and return a all node classifier that indicates which node have
+     * been added/deleted/updated/moved.
+     */
     public TreeClassifier createAllNodeClassifier() {
         return new AllNodesClassifier(this);
     }
 
+    /**
+     * Compute and return a root node classifier that indicates which node have
+     * been added/deleted/updated/moved. Only the root note is marked when a whole
+     * subtree has been subject to a same operation.
+     */
     public TreeClassifier createRootNodesClassifier() {
         return new OnlyRootsClassifier(this);
     }

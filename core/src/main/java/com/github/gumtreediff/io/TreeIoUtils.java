@@ -49,9 +49,13 @@ import java.util.regex.Pattern;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
 
+/**
+ * Class providing static utility IO methods.
+ * This class is not designed to be instantiated.
+ */
 public final class TreeIoUtils {
     private TreeIoUtils() {
-    } // Forbids instantiation of TreeIOUtils
+    }
 
     public static TreeGenerator fromXml() {
         return new XmlInternalGenerator();

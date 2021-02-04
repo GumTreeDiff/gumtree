@@ -29,6 +29,10 @@ import java.util.NoSuchElementException;
 
 import com.github.gumtreediff.utils.Pair;
 
+/**
+ * Class providing static utility tree methods.
+ * This class is not designed to be instantiated.
+ */
 public final class TreeUtils {
     private TreeUtils() {
     }
@@ -66,6 +70,10 @@ public final class TreeUtils {
         return trees;
     }
 
+    /**
+     * Return an iterator on the provided tree that will processes the node
+     * in a breadth-first fashion.
+     */
     public static Iterator<Tree> breadthFirstIterator(final Tree tree) {
         return new Iterator<Tree>() {
             Deque<Iterator<Tree>> fifo = new ArrayDeque<>();
@@ -124,6 +132,10 @@ public final class TreeUtils {
         trees.add(tree);
     }
 
+    /**
+     * Return an iterator on the provided tree that will process the node
+     * in a post-order fashion.
+     */
     public static Iterator<Tree> postOrderIterator(final Tree tree) {
         return new Iterator<Tree>() {
             Deque<Pair<Tree, Iterator<Tree>>> stack = new ArrayDeque<>();
@@ -165,6 +177,10 @@ public final class TreeUtils {
         };
     }
 
+    /**
+     * Return an iterator on the provided tree that will process the node
+     * in a pre-order fashion.
+     */
     public static Iterator<Tree> preOrderIterator(Tree tree) {
         return new Iterator<Tree>() {
             Deque<Iterator<Tree>> stack = new ArrayDeque<>();
