@@ -72,7 +72,7 @@ public class Diff {
      * @param matcher The id of the the matcher to use.
      * @param properties The set of options.
      * @throws IOException an IO exception is raised in case of IO problems related to the source
-     * or destination file.
+     *     or destination file.
      */
     public static Diff compute(String srcFile, String dstFile, String treeGenerator,
                                String matcher, GumtreeProperties properties) throws IOException {
@@ -92,7 +92,7 @@ public class Diff {
      * @param treeGenerator The id of the tree generator to use.
      * @param matcher The id of the the matcher to use.
      * @throws IOException an IO exception is raised in case of IO problems related to the source
-     * or destination file.
+     *     or destination file.
      */
     public static Diff compute(String srcFile, String dstFile,
                                String treeGenerator, String matcher) throws IOException {
@@ -105,7 +105,7 @@ public class Diff {
      * @param srcFile The path to the source file.
      * @param dstFile The path to the destination file.
      * @throws IOException an IO exception is raised in case of IO problems related to the source
-     * or destination file.
+     *     or destination file.
      */
     public static Diff compute(String srcFile, String dstFile) throws IOException {
         return compute(srcFile, dstFile, null, null);
