@@ -23,6 +23,8 @@ function getEditorOptions(text) {
         value: text,
         readOnly: true,
         language: getLanguage(),
+        automaticLayout: true,
+        scrollBeyondLastLine: false,
         lineDecorationsWidth: 0,
         glyphMargin: false,
         minimap: {
