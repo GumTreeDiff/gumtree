@@ -2,7 +2,6 @@
 
 import sys
 import pandas as pd
-from plotnine import *
 from scipy.stats import mannwhitneyu
 
 def main():
