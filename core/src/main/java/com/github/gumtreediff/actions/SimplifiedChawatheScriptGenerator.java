@@ -51,7 +51,8 @@ public class SimplifiedChawatheScriptGenerator implements EditScriptGenerator {
 
 
         for (Tree t : addedTrees.keySet()) {
-            if (addedTrees.keySet().contains(t.getParent()) && addedTrees.keySet().containsAll(t.getDescendants()))
+            if (addedTrees.keySet().contains(t.getParent())
+                    && addedTrees.keySet().containsAll(t.getParent().getDescendants()))
                 actions.remove(addedTrees.get(t));
             else {
                 if (t.getChildren().size() > 0 && addedTrees.keySet().containsAll(t.getDescendants())) {
@@ -66,7 +67,8 @@ public class SimplifiedChawatheScriptGenerator implements EditScriptGenerator {
         }
 
         for (Tree t : deletedTrees.keySet()) {
-            if (deletedTrees.keySet().contains(t.getParent()) && deletedTrees.keySet().containsAll(t.getDescendants()))
+            if (deletedTrees.keySet().contains(t.getParent())
+                    && deletedTrees.keySet().containsAll(t.getParent().getDescendants()))
                 actions.remove(deletedTrees.get(t));
             else {
                 if (t.getChildren().size() > 0 && deletedTrees.keySet().containsAll(t.getDescendants())) {
