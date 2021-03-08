@@ -76,9 +76,18 @@ public class TestTreeIoUtils {
             targetString += (char) intValueOfChar;
         }
         lr.close();
+        
+        // (line, column) to offset
         assertEquals(4, lr.positionFor(2, 1));
         assertEquals(8, lr.positionFor(3, 1));
         assertEquals(-1, lr.positionFor(5, 1));
+        
+        // offset to (line, column)
+        assertArrayEquals(new int[] { 2, 1 }, lr.positionFor(4));
+        assertArrayEquals(new int[] { 3, 1 }, lr.positionFor(8));
+        assertArrayEquals(new int[] { 1, 3 }, lr.positionFor(2));
+        assertArrayEquals(new int[] { 2, 3 }, lr.positionFor(6));
+        assertArrayEquals(new int[] { 3, 2 }, lr.positionFor(9));
     }
 
     @Test
