@@ -42,10 +42,11 @@ public class LineReader extends Reader {
      */
     private ArrayList<Integer> lines = new ArrayList<>(Arrays.asList(-1));
 
+    
     /**
      * Instantiate a new LineReader
      * 
-     * @param parent
+     * @param parent reader
      */
     public LineReader(Reader parent) {
         reader = parent;
