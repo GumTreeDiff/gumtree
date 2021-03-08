@@ -26,78 +26,78 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class LineReader extends Reader {
-	
+
 	/**
 	 * Parent reader
 	 */
 	private Reader reader;
-	
+
 	/**
 	 * Current offset position of the reader
 	 */
 	private int currentPos = 0;
-	
+
 	/**
 	 * Array with the stream offsets of each line
 	 */
 	private ArrayList<Integer> lines = new ArrayList<>(Arrays.asList(-1));
 
-    
-    /**
-     * Instantiate a new LineReader
-     * @param parent
-     */
-    public LineReader(Reader parent) {
-    	reader = parent;
-    }
 
-    @Override
-    public int read(char[] cbuf, int off, int len) throws IOException {
-        int r = reader.read(cbuf, off, len);
-        for (int i = 0; i < len; i ++)
-            if (cbuf[off + i] == '\n')
-                lines.add(currentPos + i);
-        currentPos += len;
-        return r;
-    }
+	/**
+	 * Instantiate a new LineReader
+	 * @param parent
+	 */
+	public LineReader(Reader parent) {
+		reader = parent;
+	}
 
-    @Override
-    public void close() throws IOException {
-        reader.close();
-    }
-    
-    /**
-     * Converts a position given as a (line, column) into an offset.
-     * @param line in the associated stream
-     * @param column in the associated stream
-     * @return position as offset in the stream
-     */
-    public int positionFor(int line, int column) {
-        if (lines.size() < line)
-            return -1;
+	@Override
+	public int read(char[] cbuf, int off, int len) throws IOException {
+		int r = reader.read(cbuf, off, len);
+		for (int i = 0; i < len; i ++)
+			if (cbuf[off + i] == '\n')
+				lines.add(currentPos + i);
+		currentPos += len;
+		return r;
+	}
 
-        return lines.get(line - 1) + column; // Line and column starts at 1
-    }
+	@Override
+	public void close() throws IOException {
+		reader.close();
+	}
 
-    /**
-     * Converts a position given as an offset into a (line, column) array.
-     * @param offset in the associated stream
-     * @return position as (line, column) in the stream
-     */
-    public int[] positionFor(int offset) { 
-    	int line = Arrays.binarySearch(lines.toArray(), offset);
-    	int off;
+	/**
+	 * Converts a position given as a (line, column) into an offset.
+	 * @param line in the associated stream
+	 * @param column in the associated stream
+	 * @return position as offset in the stream
+	 */
+	public int positionFor(int line, int column) {
+		if (lines.size() < line)
+			return -1;
 
-    	if (line < 0) {
-    		line = -(line) - 1;        // If the offset is not in the lines array
-    		off = lines.get(line - 1); // Get offset of previous line
-    	}
-    	else {
-    		off = lines.get(line) - 1; // Get offset of current line - 1
-    	}
-    	
-    	int column = offset - off;
-    	return new int[] { line, column }; // Line and column starts at 1
-    }
-    
+		return lines.get(line - 1) + column; // Line and column starts at 1
+	}
+
+	/**
+	 * Converts a position given as an offset into a (line, column) array.
+	 * @param offset in the associated stream
+	 * @return position as (line, column) in the stream
+	 */
+	public int[] positionFor(int offset) { 
+		int line = Arrays.binarySearch(lines.toArray(), offset);
+		int off;
+
+		if (line < 0) {
+			line = -(line) - 1;        // If the offset is not in the lines array
+			off = lines.get(line - 1); // Get offset of previous line
+		}
+		else {
+			off = lines.get(line) - 1; // Get offset of current line - 1
+		}
+
+		int column = offset - off;
+		return new int[] { line, column }; // Line and column starts at 1
+	}
+
 }
