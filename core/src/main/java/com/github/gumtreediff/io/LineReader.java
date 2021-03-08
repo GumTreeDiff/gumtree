@@ -20,21 +20,35 @@
 
 package com.github.gumtreediff.io;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class LineReader extends Reader {
-    private Reader reader;
+	
+	/**
+	 * Parent reader
+	 */
+	private Reader reader;
+	
+	/**
+	 * Current offset position of the reader
+	 */
+	private int currentPos = 0;
+	
+	/**
+	 * Array with the stream offsets of each line
+	 */
+	private ArrayList<Integer> lines = new ArrayList<>(Arrays.asList(-1));
 
-    private int currentPos = 0;
-
-    private ArrayList<Integer> lines = new ArrayList<>(Arrays.asList(-1));
-
+    
+    /**
+     * Instantiate a new LineReader
+     * @param parent
+     */
     public LineReader(Reader parent) {
-        reader = parent;
+    	reader = parent;
     }
 
     @Override
@@ -47,20 +61,43 @@ public class LineReader extends Reader {
         return r;
     }
 
-    // Line and column starts at 1
-    public int positionFor(int line, int column) {
-        if (lines.size() < line)
-            return -1;
-
-        return lines.get(line - 1) + column;
-    }
-
-    // public int[] positionFor(int offset) { // TODO write this method
-    // Arrays.binarySearch(lines., null, null)
-    // }
-
     @Override
     public void close() throws IOException {
         reader.close();
     }
+    
+    /**
+     * Converts a position given as a (line, column) into an offset.
+     * @param line in the associated stream
+     * @param column in the associated stream
+     * @return position as offset in the stream
+     */
+    public int positionFor(int line, int column) {
+        if (lines.size() < line)
+            return -1;
+
+        return lines.get(line - 1) + column; // Line and column starts at 1
+    }
+
+    /**
+     * Converts a position given as an offset into a (line, column) array.
+     * @param offset in the associated stream
+     * @return position as (line, column) in the stream
+     */
+    public int[] positionFor(int offset) { 
+    	int line = Arrays.binarySearch(lines.toArray(), offset);
+    	int off;
+
+    	if (line < 0) {
+    		line = -(line) - 1;        // If the offset is not in the lines array
+    		off = lines.get(line - 1); // Get offset of previous line
+    	}
+    	else {
+    		off = lines.get(line) - 1; // Get offset of current line - 1
+    	}
+    	
+    	int column = offset - off;
+    	return new int[] { line, column }; // Line and column starts at 1
+    }
+    
 }
