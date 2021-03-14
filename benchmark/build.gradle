@@ -8,6 +8,7 @@ dependencies {
 
 uploadArchives.enabled = false
 jar.enabled = false
+run.enabled = false
 
 task computeResults(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
