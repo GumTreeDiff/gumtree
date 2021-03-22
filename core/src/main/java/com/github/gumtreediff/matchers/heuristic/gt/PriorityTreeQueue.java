@@ -45,7 +45,6 @@ public interface PriorityTreeQueue {
     /**
      * Return the list of trees with the greatest priority, and place all
      * their children in the queue.
-     * @return
      */
     List<Tree> popOpen();
 
@@ -56,19 +55,16 @@ public interface PriorityTreeQueue {
 
     /**
      * Return the list of trees with the greatest priority.
-     * @return
      */
     List<Tree> pop();
 
     /**
      * Put the child of the tree into the priority queue.
-     * @return
      */
     void open(Tree tree);
 
     /**
      * Return the current greatest priority.
-     * @return
      */
     int currentPriority();
 
