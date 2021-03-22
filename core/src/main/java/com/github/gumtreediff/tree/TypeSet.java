@@ -29,6 +29,8 @@ import java.util.Map;
 public class TypeSet {
     private static final TypeFactoryImplementation implementation = new TypeFactoryImplementation();
 
+    private TypeSet() {}
+
     /**
      * Build a type with the provided name. If the provided name is null or
      * the empty string, the empty type will be returned.
