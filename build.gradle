@@ -25,6 +25,14 @@ subprojects {
         options.compilerArgs << '-Xlint:deprecation'
     }
 
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+    javadoc {
+        options.addBooleanOption('html5', true)
+    }
+
     apply plugin: 'checkstyle'
     checkstyle {
         toolVersion = '8.36'
