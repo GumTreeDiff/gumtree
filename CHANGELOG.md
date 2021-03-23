@@ -1,5 +1,7 @@
 # Changelog of GumTree
 
+## v3.0.0
+
 ## v3.0.0-beta2
 * Linereader can convert offset to line/column
 * Maven packages now include javadoc and source
