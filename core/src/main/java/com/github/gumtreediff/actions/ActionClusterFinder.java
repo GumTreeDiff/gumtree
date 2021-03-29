@@ -20,8 +20,7 @@
 package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.actions.model.*;
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.alg.ConnectivityInspector;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
@@ -29,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ActionClusterFinder {
-    private DirectedGraph<Action, DefaultEdge> graph;
+    private DefaultDirectedGraph<Action, DefaultEdge> graph;
 
     private List<Set<Action>> clusters;
 
