@@ -37,17 +37,10 @@ public class TestSequenceAlgorithms {
         String s1 = "abcdefg";
         String s2 = "agcefd";
         List<int[]> idx = SequenceAlgorithms.longestCommonSubsequence(s1, s2);
-        assertEquals(4, idx.size());
-        assertArrayEquals(new int[]{0, 0}, idx.get(0));
-        assertArrayEquals(new int[]{2, 2}, idx.get(1));
-        assertArrayEquals(new int[]{4, 3}, idx.get(2));
-        assertArrayEquals(new int[]{5, 4}, idx.get(3));
+        assertArrayEquals(new int[][] { {0, 0}, {2, 2}, {4, 3}, {5, 4} }, idx.toArray());
 
         List<int[]> hunks = SequenceAlgorithms.hunks(s1, s2);
-        assertEquals(3, hunks.size());
-        assertArrayEquals(new int[]{0, 1, 0, 1}, hunks.get(0));
-        assertArrayEquals(new int[]{2, 3, 2, 3}, hunks.get(1));
-        assertArrayEquals(new int[]{4, 6, 3, 5}, hunks.get(2));
+        assertArrayEquals(new int[][] { {0, 1, 0, 1}, {2, 3, 2, 3}, {4, 6, 3, 5} }, hunks.toArray());
     }
 
     @Test
@@ -70,11 +63,7 @@ public class TestSequenceAlgorithms {
                 new DefaultTree(TypeSet.type("d"))
         });
         List<int[]> idx = SequenceAlgorithms.longestCommonSubsequenceWithTypeAndLabel(l1, l2);
-        assertEquals(4, idx.size());
-        assertArrayEquals(new int[]{0, 0}, idx.get(0));
-        assertArrayEquals(new int[]{2, 2}, idx.get(1));
-        assertArrayEquals(new int[]{4, 3}, idx.get(2));
-        assertArrayEquals(new int[]{5, 4}, idx.get(3));
+        assertArrayEquals(new int[][] { {0, 0}, {2, 2}, {4, 3}, {5, 4} }, idx.toArray());
     }
 
     @Test
@@ -84,8 +73,8 @@ public class TestSequenceAlgorithms {
         Tree t2 = trees.second.getRoot();
         List<int[]> idx =
                 SequenceAlgorithms.longestCommonSubsequenceWithIsomorphism(t1.getChildren(), t2.getChildren());
-        assertEquals(1, idx.size());
-        assertArrayEquals(new int[] {1, 0}, idx.get(0));
+
+        assertArrayEquals(new int[][] { {1, 0} }, idx.toArray());
     }
 
     @Test
