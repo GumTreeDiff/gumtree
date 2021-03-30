@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -34,6 +35,8 @@ import com.github.gumtreediff.actions.ChawatheScriptGenerator;
 import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
+import com.github.gumtreediff.actions.model.TreeInsert;
 import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.CompositeMatchers.ClassicGumtree;
 import com.github.gumtreediff.matchers.ConfigurableMatcher;
@@ -424,6 +427,214 @@ public class TestJdtMatching {
         assertFalse(mappingsFromGreedy.isSrcMapped(leftContext.getRoot().getChild(1)));
         // PackageDecl
         assertFalse(mappingsFromGreedy.isSrcMapped(leftContext.getRoot().getChild(0)));
+
+    }
+
+    @Test
+    public void testCase_1_20391Classic() throws IOException {
+        String caseDir = "case_1_203910661b72775d1a983bf98c25ddde2d2898b9";
+        URL resourceSource = getClass().getClassLoader().getResource(
+                caseDir + "/1_203910661b72775d1a983bf98c25ddde2d2898b9_Producto_s.javaa");
+        URL resourceTarget = getClass().getClassLoader().getResource(
+                caseDir + "/1_203910661b72775d1a983bf98c25ddde2d2898b9_Producto_t.javaa");
+
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().file(resourceSource.getFile());
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
+
+        Matcher matcher = new CompositeMatchers.ClassicGumtree();
+
+        SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
+
+        MappingStore mappings = matcher.match(leftContext.getRoot(), rightContext.getRoot());
+
+        EditScript actions = edGenerator.computeActions(mappings);
+
+        List<Action> actionsAll = actions.asList();
+
+        // There is not failure but the output is incorrect
+        assertTrue(actionsAll.size() > 0);
+
+    }
+
+    @Test
+    public void testCase_1_20391_Complete_Int2Obj() throws IOException {
+
+        String foldercase = "case_1_203910661b72775d1a983bf98c25ddde2d2898b9";
+        URL resourceSource = getClass().getClassLoader()
+                .getResource(foldercase + "/1_203910661b72775d1a983bf98c25ddde2d2898b9_Producto_s.javaa");
+        URL resourceTarget = getClass().getClassLoader()
+                .getResource(foldercase + "/1_203910661b72775d1a983bf98c25ddde2d2898b9_Producto_t.javaa");
+
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().file(resourceSource.getFile());
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
+
+        Matcher matcher = new CompositeMatchers.CompleteGumtreeMatcher();
+
+        SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
+
+        MappingStore mappings = matcher.match(leftContext.getRoot(), rightContext.getRoot());
+
+        EditScript actions = edGenerator.computeActions(mappings);
+
+        List<Action> actionsAll = actions.asList();
+
+        // There is not failure but the output is incorrect
+        assertTrue(actionsAll.size() > 0);
+
+    }
+
+    @Test
+    public void testCase_1_0007_Simple() throws IOException {
+
+        String caseDir = "case_1_0007d191fec7fe2d6a0c4e87594cb286a553f92c_ASTInspector/";
+        String pathSource = caseDir + "1_0007d191fec7fe2d6a0c4e87594cb286a553f92c_ASTInspector_s.javaa";
+        String pathTarget = caseDir + "1_0007d191fec7fe2d6a0c4e87594cb286a553f92c_ASTInspector_t.javaa";
+
+        URL resourceSource = getClass().getClassLoader().getResource(pathSource);
+        URL resourceTarget = getClass().getClassLoader().getResource(pathTarget);
+
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().file(resourceSource.getFile());
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
+
+        Matcher matcher = new CompositeMatchers.SimpleGumtree();
+
+        SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
+
+        MappingStore mappings = matcher.match(leftContext.getRoot(), rightContext.getRoot());
+
+        EditScript actions = edGenerator.computeActions(mappings);
+
+        List<Action> actionsAll = actions.asList();
+
+        // There is not failure but the output is incorrect
+        assertTrue(actionsAll.size() > 0);
+
+        // It should be one.
+        assertEquals(1, actionsAll.size());
+
+        assertTrue(actionsAll.get(0) instanceof TreeInsert);
+
+        assertEquals("ExpressionStatement", actionsAll.get(0).getNode().getType().name);
+        assertEquals("SwitchStatement", actionsAll.get(0).getNode().getParent().getType().name);
+
+    }
+
+    @Test
+    public void testCase_1_0007_Classic() throws IOException {
+
+        String caseDir = "case_1_0007d191fec7fe2d6a0c4e87594cb286a553f92c_ASTInspector/";
+        String pathSource = caseDir + "1_0007d191fec7fe2d6a0c4e87594cb286a553f92c_ASTInspector_s.javaa";
+        String pathTarget = caseDir + "1_0007d191fec7fe2d6a0c4e87594cb286a553f92c_ASTInspector_t.javaa";
+
+        URL resourceSource = getClass().getClassLoader().getResource(pathSource);
+        URL resourceTarget = getClass().getClassLoader().getResource(pathTarget);
+
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().file(resourceSource.getFile());
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
+
+        Matcher matcher = new CompositeMatchers.ClassicGumtree();
+
+        SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
+
+        MappingStore mappings = matcher.match(leftContext.getRoot(), rightContext.getRoot());
+
+        EditScript actions = edGenerator.computeActions(mappings);
+
+        List<Action> actionsAll = actions.asList();
+
+        // There is not failure but the output is incorrect
+        assertTrue(actionsAll.size() > 0);
+
+    }
+
+    @Test
+    public void testNotSpurious1Complete() throws IOException {
+
+        URL resourceSource = getClass().getClassLoader().getResource("case_1_with_spurious/ClassA_s.javaa");
+        URL resourceTarget = getClass().getClassLoader().getResource("case_1_with_spurious/ClassA_t.javaa");
+
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().file(resourceSource.getFile());
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
+        assertFalse(leftContext.getRoot().isIsomorphicTo(rightContext.getRoot()));
+
+        CompositeMatchers.CompleteGumtreeMatcher matcher = new CompositeMatchers.CompleteGumtreeMatcher();
+        ChawatheScriptGenerator edGenerator = new ChawatheScriptGenerator();
+
+        MappingStore mappings = matcher.match(leftContext.getRoot(), rightContext.getRoot());
+
+        EditScript actions = edGenerator.computeActions(mappings);
+
+        List<Action> actionsAll = actions.asList();
+
+        assertTrue(actionsAll.size() > 0);
+
+    }
+
+    @Test
+    public void testCase_1_0a66_Simple() throws IOException {
+
+        String caseDir = "case_1_0a664d752c4b0e5a7fb6f06d005181a0c9dc2905/";
+        String pathSource = caseDir + "1_0a664d752c4b0e5a7fb6f06d005181a0c9dc2905_FlowControlService_s.javaa";
+        String pathTarget = caseDir + "1_0a664d752c4b0e5a7fb6f06d005181a0c9dc2905_FlowControlService_t.javaa";
+
+        URL resourceSource = getClass().getClassLoader().getResource(pathSource);
+        URL resourceTarget = getClass().getClassLoader().getResource(pathTarget);
+
+        assertTrue((new File(resourceSource.getFile())).exists());
+        assertTrue((new File(resourceTarget.getFile())).exists());
+
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().file(resourceSource.getFile());
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
+
+        Matcher matcher = new CompositeMatchers.SimpleGumtree();
+
+        SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
+
+        MappingStore mappings = matcher.match(leftContext.getRoot(), rightContext.getRoot());
+
+        EditScript actions = edGenerator.computeActions(mappings);
+
+        List<Action> actionsAll = actions.asList();
+
+        // There is not failure but the output is incorrect
+        assertTrue(actionsAll.size() > 0);
+
+        // It should be one.
+        assertEquals(1, actionsAll.size());
+
+        assertTrue(actionsAll.get(0) instanceof Insert);
+        assertEquals("ReturnStatement", actionsAll.get(0).getNode().getType().name);
+
+    }
+
+    @Test
+    public void testCase_1_0a66_CompleteGumtreeMatcher() throws IOException {
+
+        String caseDir = "case_1_0a664d752c4b0e5a7fb6f06d005181a0c9dc2905/";
+        String pathSource = caseDir + "1_0a664d752c4b0e5a7fb6f06d005181a0c9dc2905_FlowControlService_s.javaa";
+        String pathTarget = caseDir + "1_0a664d752c4b0e5a7fb6f06d005181a0c9dc2905_FlowControlService_t.javaa";
+
+        URL resourceSource = getClass().getClassLoader().getResource(pathSource);
+        URL resourceTarget = getClass().getClassLoader().getResource(pathTarget);
+
+        assertTrue((new File(resourceSource.getFile())).exists());
+        assertTrue((new File(resourceTarget.getFile())).exists());
+
+        TreeContext leftContext = new JdtTreeGenerator().generateFrom().file(resourceSource.getFile());
+        TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
+
+        Matcher matcher = new CompositeMatchers.CompleteGumtreeMatcher();
+
+        SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
+
+        MappingStore mappings = matcher.match(leftContext.getRoot(), rightContext.getRoot());
+
+        EditScript actions = edGenerator.computeActions(mappings);
+
+        List<Action> actionsAll = actions.asList();
+
+        // There is not failure but the output is incorrect
+        assertTrue(actionsAll.size() > 0);
 
     }
 
