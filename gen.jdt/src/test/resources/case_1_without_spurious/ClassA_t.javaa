@@ -1,0 +1,296 @@
+package gen.jdt;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ClassA {
+
+	public void a() {
+
+		String s = "complete";
+		List list = new ArrayList<>();
+		list.add(s);
+	}
+	
+	
+public void read(String pathResults, String pathMegadiff, String pathOut, boolean isJDTmodel) throws Exception {
+		BufferedReader reader;
+		ResultVisualizer rv = new ResultVisualizer();
+
+		try {
+			reader = new BufferedReader(new FileReader(pathResults));
+			String line = reader.readLine();
+			System.out.println("Ignore the first one: " + line);
+			line = reader.readLine();
+
+			// we store the hash of the lines and the distance
+			Map<String, Integer> linesAndDifferences = new HashMap<>();
+
+			while (line != null) {
+				// read next line
+
+				if (line.trim().isEmpty())
+					continue;
+
+				// get the distance
+				String distance = line.split(",")[5].replace(".0", "");
+
+				int nrchangesBest = new Integer(line.split(",")[2].replace(".0", ""));
+
+				if (nrchangesBest < 25) {
+
+					linesAndDifferences.put(line, new Integer(distance));
+
+				}
+				line = reader.readLine();
+			}
+			reader.close();
+
+			List<String> lines = new ArrayList(linesAndDifferences.keySet());
+
+			Collections.sort(lines, new Comparator<String>() {
+
+				@Override
+				public int compare(String o1, String o2) {
+
+					return Integer.compare(linesAndDifferences.get(o2), linesAndDifferences.get(o1));
+				}
+
+			});
+
+			System.out.println("total configs " + lines.size());
+
+			int i = 0;
+			int limit = 50;
+			List<String> savedlines = new ArrayList();
+
+			for (String iline : lines) {
+
+				System.out.println(iline + ", " + linesAndDifferences.get(iline));
+
+				System.out.println(i + "/" + limit);
+				boolean saved = rv.saveVisualizationRow(iline, pathMegadiff, pathOut, isJDTmodel);
+				if (saved)
+					savedlines.add(iline);
+
+				i++;
+
+				if (i > limit)
+					break;
+
+			}
+			System.out.println("\nResults: ");
+			// for (int j = 0; j < limit; j++) {
+			for (String iLines : savedlines) {
+				System.out.println(iLines + ", " + linesAndDifferences.get(iLines));
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+		@Test
+	public void testDiffForTestSpoonFromDataEquals() throws Exception {
+		String diffid = "nr_108_id_39_adb8bb2c8109c50d183a28e607165075fc137881_pchestPlayerListener_GTSPOON";
+		// "nr_48_id_40_8b1e497d0b847e5dcdd555155288ddc880487458_LanguageChooser_GTSPOON";
+		runDiffs(diffid);
+
+	}
+
+	@Test
+	public void testDiffForTestSpoonFromDataBestBetter() throws Exception {
+		String diffid = "nr_515_id_16_0923d69a8ca45222cabd82a80eaa88da9f132e9a_BrowserActivity_GTSPOON";
+		// "nr_48_id_40_8b1e497d0b847e5dcdd555155288ddc880487458_LanguageChooser_GTSPOON";
+		runDiffs(diffid);
+
+	}
+
+	@Test
+	public void testDiffForTestSpoonFromDataBestBetter2() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+	
+	@Test
+	public void testDiffForTestSpoonFromDataBestBetter3() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+
+@Test
+	public void testDiffForTestSpoonFromDataBestBetter4() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+	
+		@Test
+	public void testDiffForTestSpoonFromDataBestBetter5() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+
+@Test
+	public void testDiffForTestSpoonFromDataBestBetter6() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+	
+			@Test
+	public void testDiffForTestSpoonFromDataBestBetter7() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+
+@Test
+	public void testDiffForTestSpoonFromDataBestBetter8() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+				@Test
+	public void testDiffForTestSpoonFromDataBestBetter15() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+
+@Test
+	public void testDiffForTestSpoonFromDataBestBetter16() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+	
+			@Test
+	public void testDiffForTestSpoonFromDataBestBetter17() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+
+@Test
+	public void testDiffForTestSpoonFromDataBestBetter18() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+	
+					@Test
+	public void testDiffForTestSpoonFromDataBestBetter115() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+
+@Test
+	public void testDiffForTestSpoonFromDataBestBetter116() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+	
+			@Test
+	public void testDiffForTestSpoonFromDataBestBetter117() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+
+@Test
+	public void testDiffForTestSpoonFromDataBestBetter118() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+
+	}
+		@Test
+	public void testDiffForTestSpoonFromDataEquals() throws Exception {
+		String diffid = "nr_108_id_39_adb8bb2c8109c50d183a28e607165075fc137881_pchestPlayerListener_GTSPOON";
+		// "nr_48_id_40_8b1e497d0b847e5dcdd555155288ddc880487458_LanguageChooser_GTSPOON";
+		runDiffs(diffid);
+
+	}
+
+
+	@Test
+	public void testDiffForTestSpoonFromDataBestBetter() throws Exception {
+		String diffid = "nr_515_id_16_0923d69a8ca45222cabd82a80eaa88da9f132e9a_BrowserActivity_GTSPOON";
+		// "nr_48_id_40_8b1e497d0b847e5dcdd555155288ddc880487458_LanguageChooser_GTSPOON";
+		runDiffs(diffid);
+
+	}
+
+	@Test
+	public void testDiffForTestSpoonFromDataBestBetter2Over() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+		//runDiffs("dds1"+ "b" );
+
+	}
+	
+		@Test
+	public void testDiffForTestSpoonFromDataBestBetter2333() throws Exception {
+		String diffid = "nr_981_id_16_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+		runDiffs("dd");
+		runDiffs("dds");
+		runDiffs("dds");
+
+	}
+	
+		@Test
+	public void testDiffForTestSpoonFromDataBestBetter2334() throws Exception {
+		String diffid = "nr_933344446_1105f66802c4bcaef10ce4463bcc0868211d7639_AbstractPollingIoProcessor_GTSPOON";
+
+		runDiffs(diffid);
+		runDiffs("dd");
+		runDiffs("dds");
+		runDiffs("dds");
+
+	}
+	
+		@Test
+	public void testDiffForTestJDT() throws IOException {
+		//runDiffs("dds1"+ "b" );
+		String diffId = "1_0a664d752c4b0e5a7fb6f06d005181a0c9dc2905/FlowControlService";
+		
+		GumTreeProperties properies = new GumTreeProperties();
+
+		properies.getProperties().clear();
+		properies.put(ConfigurationOptions.GT_BUM_SMT, 0.7);
+		properies.put(ConfigurationOptions.GT_BUM_SZT, 1900);
+		properies.put(ConfigurationOptions.GT_STM_MH, 2);
+
+		Matcher matcher = new CompositeMatchers.ClassicGumtree();
+		File fout = new File("/Users/matias/Downloads/");
+		String name = "default";
+		ResultVisualizer rv = new ResultVisualizer();
+		rv.saveVisualization(fileLeftt, tl, fileRight, tr, properies, matcher, fout, diffId, name);
+		System.out.println("End");
+
+	}
+}

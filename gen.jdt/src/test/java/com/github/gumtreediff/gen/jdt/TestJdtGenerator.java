@@ -69,12 +69,12 @@ public class TestJdtGenerator {
     @Test
     public void testVarargs() throws IOException {
         String leftInput = "class Main {\n"
-                       + "    public foo(String a) {}\n"
-                       + "}\n";
+                + "    public foo(String a) {}\n"
+                + "}\n";
         TreeContext leftCtx = new JdtTreeGenerator().generateFrom().string(leftInput);
         String rightInput = "class Main {\n"
-                       + "    public foo(String... a) {}\n"
-                       + "}\n";
+                + "    public foo(String... a) {}\n"
+                + "}\n";
         TreeContext rightCtx = new JdtTreeGenerator().generateFrom().string(rightInput);
         assertFalse(rightCtx.getRoot().isIsomorphicTo(leftCtx.getRoot()));
     }
