@@ -88,7 +88,7 @@ public class JavaParserVisitor extends TreeVisitor {
             Position begin = n.getRange().get().begin;
             Position end = n.getRange().get().end;
             int startPos = reader.positionFor(begin.line, begin.column);
-            int length = reader.positionFor(end.line, end.column) - startPos + 2;
+            int length = reader.positionFor(end.line, end.column) - startPos + 1;
             push(nodeAsSymbol(n), label, startPos, length);
         }
         catch (NoSuchElementException ignore) { }

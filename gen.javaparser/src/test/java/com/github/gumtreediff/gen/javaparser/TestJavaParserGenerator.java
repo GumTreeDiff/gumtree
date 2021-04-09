@@ -60,7 +60,19 @@ public class TestJavaParserGenerator {
     }
 
     @Test
-    public void badSyntax() {
+    public void testRange() throws IOException {
+        String input = "public class Foo {}";
+        Tree tree = new JavaParserGenerator().generateFrom().string(input).getRoot();
+        assertEquals(0,tree.getPos());
+        assertEquals(19,tree.getLength());
+        assertEquals(0, tree.getChild("0.0").getPos()); // modifier pos
+        assertEquals(6, tree.getChild("0.0").getLength()); // modifier length
+        assertEquals(13, tree.getChild("0.1").getPos()); // identifier pos
+        assertEquals(3, tree.getChild("0.1").getLength()); // identifier length
+    }
+
+    @Test
+    public void testBadSyntax() {
         String input = "public clas Foo {}";
         assertThrows(SyntaxException.class, () -> {
             TreeContext ct = new JavaParserGenerator().generateFrom().string(input);
