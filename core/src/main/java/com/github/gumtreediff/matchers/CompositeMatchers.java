@@ -103,6 +103,22 @@ public class CompositeMatchers {
         }
     }
 
+    @Register(id = "gumtree-hybrid")
+    public static class HybridGumtree extends CompositeMatcher {
+        public HybridGumtree() {
+            super(new GreedySubtreeMatcher(),
+                    new HybridBottomUpMatcher());
+        }
+    }
+
+    @Register(id = "gumtree-hybrid-id")
+    public static class HybridIdGumtree extends CompositeMatcher {
+        public HybridIdGumtree() {
+            super(new IdMatcher(), new GreedySubtreeMatcher(),
+                    new HybridBottomUpMatcher());
+        }
+    }
+
     @Register(id = "gumtree-complete")
     public static class CompleteGumtreeMatcher extends CompositeMatcher {
         public CompleteGumtreeMatcher() {

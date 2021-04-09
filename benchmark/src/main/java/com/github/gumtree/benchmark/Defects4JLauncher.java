@@ -57,8 +57,8 @@ public class Defects4JLauncher {
 
     private static MatcherConfig[] configurations = new MatcherConfig[] {
             new MatcherConfig("SimpleId", () -> new CompositeMatchers.SimpleIdGumtree()),
-            new MatcherConfig("Simple", () -> new CompositeMatchers.SimpleGumtree()),
-            // new MatcherConfig("ClassicGumtree", () -> new CompositeMatchers.ClassicGumtree()),
+            //new MatcherConfig("Simple", () -> new CompositeMatchers.SimpleGumtree()),
+            new MatcherConfig("HybridId", () -> new CompositeMatchers.HybridIdGumtree()),
     };
 
     private static void handleFolder(File folder) throws IOException {

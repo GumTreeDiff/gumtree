@@ -79,6 +79,8 @@ public class Matchers extends Registry<String, Matcher, Register> {
         install(CompositeMatchers.ClassicGumtree.class);
         install(CompositeMatchers.SimpleGumtree.class);
         install(CompositeMatchers.SimpleIdGumtree.class);
+        install(CompositeMatchers.HybridGumtree.class);
+        install(CompositeMatchers.HybridIdGumtree.class);
         install(CompositeMatchers.ChangeDistiller.class);
         install(CompositeMatchers.XyMatcher.class);
         install(LcsMatcher.class);
