@@ -29,7 +29,9 @@ To use GumTree, you can start by consulting the [Getting Started](https://github
 
 ### The file diff viewer
 
-![Diff view](https://github.com/GumTreeDiff/gumtree/raw/main/doc/screenshots/screenshot-1.png)
+![Diff view on a CSS file](https://github.com/GumTreeDiff/gumtree/raw/main/doc/screenshots/screenshot-1.png)
+
+![Diff view on a Java file](https://github.com/GumTreeDiff/gumtree/raw/main/doc/screenshots/screenshot-2.png)
 
 ## Supported languages
 
