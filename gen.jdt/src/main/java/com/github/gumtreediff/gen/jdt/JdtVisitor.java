@@ -125,6 +125,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             d.getType().accept(this);
             popNode();
             d.getName().accept(this);
+            popNode();
             return false;
         }
         else

@@ -77,6 +77,13 @@ public class TestJdtGenerator {
                 + "}\n";
         TreeContext rightCtx = new JdtTreeGenerator().generateFrom().string(rightInput);
         assertFalse(rightCtx.getRoot().isIsomorphicTo(leftCtx.getRoot()));
+
+        String input = "class Main {\n"
+                + "    public foo(String... a) {}\n"
+                + "    public bar(String a) {}\n"
+                + "}\n";
+        TreeContext ctx = new JdtTreeGenerator().generateFrom().string(input);
+        assertEquals(4, ctx.getRoot().getChild(0).getChildren().size());
     }
 
     @Test
