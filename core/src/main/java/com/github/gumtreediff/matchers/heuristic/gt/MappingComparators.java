@@ -24,6 +24,8 @@ import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.SimilarityMetrics;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
 
 import java.util.*;
 
@@ -31,13 +33,13 @@ public class MappingComparators {
     public static class FullMappingComparator implements Comparator<Mapping> {
         private SiblingsSimilarityMappingComparator siblingsComparator;
         private ParentsSimilarityMappingComparator parentsComparator;
-        private PositionInParentSimilarityMappingComparator parentsPositionComparator;
+        private PositionInParentsSimilarityMappingComparator parentsPositionComparator;
         private AbsolutePositionDistanceMappingComparator positionComparator;
 
         public FullMappingComparator(MappingStore ms) {
             siblingsComparator = new SiblingsSimilarityMappingComparator(ms);
             parentsComparator = new ParentsSimilarityMappingComparator();
-            parentsPositionComparator = new PositionInParentSimilarityMappingComparator();
+            parentsPositionComparator = new PositionInParentsSimilarityMappingComparator();
             positionComparator = new AbsolutePositionDistanceMappingComparator();
         }
 
@@ -142,21 +144,36 @@ public class MappingComparators {
         }
     }
 
-    public static class PositionInParentSimilarityMappingComparator implements Comparator<Mapping> {
+    public static class PositionInParentsSimilarityMappingComparator implements Comparator<Mapping> {
         @Override
         public int compare(Mapping m1, Mapping m2) {
-            double m1PosSim = positionInParentSimilarity(m1.first, m1.second);
-            double m2PosSim = positionInParentSimilarity(m2.first, m2.second);
-            return Double.compare(m2PosSim, m1PosSim);
+            double m1Distance = distance(m1);
+            double m2Distance = distance(m2);
+            return Double.compare(m1Distance, m2Distance);
         }
 
-        private double positionInParentSimilarity(Tree src, Tree dst) {
-            double posSrc = (src.isRoot()) ? 1D :
-                    src.getParent().getChildPosition(src) + 1 / (double) src.getParent().getChildren().size();
-            double posDst = (dst.isRoot()) ? 1D :
-                    dst.getParent().getChildPosition(dst) + 1 / (double) dst.getParent().getChildren().size();
+        private double distance(Mapping m) {
+            DoubleList posVector1 = posVector(m.first);
+            DoubleList posVector2 = posVector(m.second);
+            double sum = 0;
+            for (int i = 0; i < Math.min(posVector1.size(), posVector2.size()); i++) {
+                sum += (posVector1.getDouble(i) - posVector2.getDouble(i))
+                        * (posVector1.getDouble(i) - posVector2.getDouble(i));
+            }
+            return Math.sqrt(sum);
+        }
 
-            return 1D - Math.abs(posSrc - posDst);
+        private DoubleList posVector(Tree src) {
+            DoubleList posVector = new DoubleArrayList();
+            Tree current = src;
+            while (current != null && current.getParent() != null) {
+                Tree parent = current.getParent();
+                double pos = (double) parent.getChildPosition(current)
+                        / (double) parent.getChildren().size();
+                posVector.add(pos);
+                current = parent;
+            }
+            return posVector;
         }
     }
 

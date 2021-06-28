@@ -87,7 +87,7 @@ public class TestGumtreeMatcher {
         matcher.setMinPriority(0);
         MappingStore ms = matcher.match(t1, t2);
         assertTrue(ms.has(a11, a21));
-        assertTrue(ms.has(a12, a22));
+        assertTrue(ms.has(a13, a22));
     }
 
     @Test

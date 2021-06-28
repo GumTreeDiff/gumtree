@@ -468,7 +468,7 @@ public class TestJdtMatching {
         TreeContext leftContext = new JdtTreeGenerator().generateFrom().file(resourceSource.getFile());
         TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
 
-        Matcher matcher = new CompositeMatchers.CompleteGumtreeMatcher();
+        Matcher matcher = new CompositeMatchers.PartitionGumtreeMatcher();
 
         SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
 
@@ -557,7 +557,7 @@ public class TestJdtMatching {
         TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
         assertFalse(leftContext.getRoot().isIsomorphicTo(rightContext.getRoot()));
 
-        CompositeMatchers.CompleteGumtreeMatcher matcher = new CompositeMatchers.CompleteGumtreeMatcher();
+        CompositeMatchers.PartitionGumtreeMatcher matcher = new CompositeMatchers.PartitionGumtreeMatcher();
         ChawatheScriptGenerator edGenerator = new ChawatheScriptGenerator();
 
         MappingStore mappings = matcher.match(leftContext.getRoot(), rightContext.getRoot());
@@ -623,7 +623,7 @@ public class TestJdtMatching {
         TreeContext leftContext = new JdtTreeGenerator().generateFrom().file(resourceSource.getFile());
         TreeContext rightContext = new JdtTreeGenerator().generateFrom().file(resourceTarget.getFile());
 
-        Matcher matcher = new CompositeMatchers.CompleteGumtreeMatcher();
+        Matcher matcher = new CompositeMatchers.PartitionGumtreeMatcher();
 
         SimplifiedChawatheScriptGenerator edGenerator = new SimplifiedChawatheScriptGenerator();
 

@@ -119,11 +119,11 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "gumtree-complete")
-    public static class CompleteGumtreeMatcher extends CompositeMatcher {
-        public CompleteGumtreeMatcher() {
-            super(new CliqueSubtreeMatcher(),
-                    new CompleteBottomUpMatcher());
+    @Register(id = "gumtree-partition-id")
+    public static class PartitionGumtreeMatcher extends CompositeMatcher {
+        public PartitionGumtreeMatcher() {
+            super(new IdMatcher(), new PartitionSubtreeMatcher(),
+                    new SimpleBottomUpMatcher());
         }
     }
 
