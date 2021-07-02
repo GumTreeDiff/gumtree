@@ -1,27 +1,6 @@
-buildscript {
-	repositories {
-		jcenter()
-	}
-	dependencies {
-		classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
-		classpath "org.codehaus.plexus:plexus-utils:3.3.0"
-	}
-}
-
-import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
-import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
-import org.codehaus.plexus.util.IOUtil
-
 plugins {
-	id 'com.github.johnrengelman.shadow' version '6.1.0'
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
 	id 'application'
-}
-
-class NoNewlineTransformer extends AppendingTransformer {
-	void transform(TransformerContext context) {
-		IOUtil.copy(context.is, data)
-		context.is.close()
-	}
 }
 
 dependencies {
@@ -46,27 +25,12 @@ dependencies {
 description = 'GumTree distribution.'
 
 shadowJar {
-
 	archiveBaseName.set('gumtree')
 	archiveClassifier.set('')
 	archiveVersion.set('')
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/annotations/com.github.gumtreediff.client.Register'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/annotations/com.github.gumtreediff.gen.Register'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/annotations/com.github.gumtreediff.matchers.Register'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/services/com.github.gumtreediff.client.Client'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/services/com.github.gumtreediff.gen.TreeGenerator'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/services/com.github.gumtreediff.matchers.Matcher'
+	mergeServiceFiles()
+	mergeServiceFiles {
+		path = 'META-INF/annotations'
 	}
 }
 
@@ -86,6 +50,5 @@ startScripts.enabled = false
 shadowDistTar.enabled = false
 
 jar.enabled = false
-uploadArchives.enabled = false
 
 build.finalizedBy installShadowDist

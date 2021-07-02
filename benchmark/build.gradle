@@ -6,13 +6,12 @@ dependencies {
     implementation project(':gen.jdt')
 }
 
-uploadArchives.enabled = false
 jar.enabled = false
 run.enabled = false
 
 task computeResults(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.github.gumtree.benchmark.Defects4JLauncher'
+    mainClass = 'com.github.gumtree.benchmark.Defects4JLauncher'
     args "${project.projectDir}/defects4j", "${project.buildDir}/reports/defects4j.csv"
 }
 

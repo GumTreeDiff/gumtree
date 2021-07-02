@@ -10,7 +10,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -103,9 +102,9 @@ configure(jacocoProjects) {
 
     jacocoTestReport {
         reports {
-            html.enabled = true
-            xml.enabled = true
-            csv.enabled = false
+            html.required = true
+            xml.required = true
+            csv.required = false
         }
     }
 }
@@ -120,8 +119,8 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     getExecutionData().from = files(jacocoProjects.jacocoTestReport.executionData)
 
     reports {
-        html.enabled = true
-        xml.enabled = true
+        html.required = true
+        xml.required = true
     }
 }
 
