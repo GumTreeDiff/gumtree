@@ -63,8 +63,9 @@ public class DirectoryComparator {
 
         if (!(Files.isDirectory(this.src) || Files.isDirectory(this.dst))) {
             this.modifiedFiles.add(new Pair<>(this.src.toFile(), this.dst.toFile()));
-            this.src = this.src.getParent();
-            this.dst = this.dst.getParent();
+
+            this.src = this.src.toAbsolutePath().getParent(); // avoid null parents
+            this.dst = this.dst.toAbsolutePath().getParent(); // avoid null parents
             this.dirMode = false;
         }
     }

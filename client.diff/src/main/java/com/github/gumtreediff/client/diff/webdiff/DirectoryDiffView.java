@@ -110,11 +110,13 @@ public class DirectoryDiffView implements Renderable {
             .table(class_("table card-table table-striped table-condensed mb-0"))
                 .tbody();
 
+
+
             int id = 0;
             for (Pair<File, File> file : files) {
                 tbody
                 .tr()
-                    .td().content(comparator.getSrc().relativize(file.first.toPath()).toString())
+                    .td().content(comparator.getSrc().toAbsolutePath().relativize(file.first.toPath().toAbsolutePath()).toString())
                     .td()
                         .div(class_("btn-toolbar justify-content-end"))
                             .div(class_("btn-group"))
