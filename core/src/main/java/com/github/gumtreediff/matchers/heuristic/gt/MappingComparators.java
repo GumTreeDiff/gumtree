@@ -177,6 +177,19 @@ public class MappingComparators {
         }
     }
 
+    public static class TextualPositionDistanceMappingComparator implements Comparator<Mapping> {
+        @Override
+        public int compare(Mapping m1, Mapping m2) {
+            int m1PosDist = textualPositionDistance(m1.first, m1.second);
+            int m2PosDist = textualPositionDistance(m2.first, m2.second);
+            return Integer.compare(m1PosDist, m2PosDist);
+        }
+
+        private int textualPositionDistance(Tree src, Tree dst) {
+            return Math.abs(src.getPos() - dst.getPos()) + Math.abs(src.getEndPos() - dst.getEndPos());
+        }
+    }
+
     public static class AbsolutePositionDistanceMappingComparator implements Comparator<Mapping> {
         @Override
         public int compare(Mapping m1, Mapping m2) {
