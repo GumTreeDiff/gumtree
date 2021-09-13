@@ -49,7 +49,10 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                     type("name"),
                     type("comment"),
                     type("literal"),
-                    type("operator")));
+                    type("operator"),
+                    type("file"),
+                    type("directive")
+            ));
 
     Type position = type("position");
 
