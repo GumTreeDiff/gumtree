@@ -32,5 +32,5 @@ task testRuntimeRegressions(type: Exec) {
 }
 
 task runBenchmark() {
-    dependsOn plotResults, testSizeRegressions, testRuntimeRegressions
+    dependsOn computeResults, plotResults, testSizeRegressions, testRuntimeRegressions
 }
