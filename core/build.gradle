@@ -1,3 +1,7 @@
+plugins {
+    id 'info.solidsoft.pitest' version '1.7.0'
+}
+
 description = 'GumTree core module.'
 
 dependencies {
@@ -5,6 +9,15 @@ dependencies {
 	implementation 'it.unimi.dsi:fastutil:8.3.1'
 	implementation 'com.google.code.gson:gson:2.8.2'
 	implementation 'org.jgrapht:jgrapht-core:1.5.1'
+}
+
+pitest {
+    targetClasses = ['com.github.gumtreediff.tree*']
+	targetTests = ['com.github.gumtreediff.test.TestTree', 'com.github.gumtreediff.test.TestMetadata', 'com.github.gumtreediff.test.TestTreeUtils']
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+    timestampedReports = false
+    junit5PluginVersion = '0.15'
 }
 
 allprojects {
