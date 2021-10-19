@@ -1,15 +1,14 @@
 # Changelog of GumTree
 
-## v3.0.0
+## v3.1.0
 
-## v3.0.0-beta2
+## v3.0.0 (Ficus)
+
 * Linereader can convert offset to line/column
 * Maven packages now include javadoc and source
 * New static html diff client (htmldiff) thanks to algomaster99
 * Improved API documentation
 * Monaco editor diff view now has 100% height 
-
-## v3.0.0-beta1
 * Fix missing positions in srcML parser
 * Switched from Travis to Github actions for the CI
 * Reworked benchmark to use defects4j and test for runtime and size regressions
