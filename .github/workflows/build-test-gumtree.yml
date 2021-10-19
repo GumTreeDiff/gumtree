@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
       - name: retrieve gumtree version
         id: version
-        run: echo "::set-output name=version::$(cat build.gradle | grep "version =" | cut -f 2 -d "'")"
+        run: echo "::set-output name=version::$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")"
         shell: bash
       - name: build gumtree
         run: ./gradlew build :benchmark:computeResults :benchmark:testSizeRegressions :benchmark:plotResults 
@@ -41,12 +41,16 @@ jobs:
         if: ${{ github.event_name == 'schedule' && contains(steps.version.outputs.version, 'SNAPSHOT') }}
         run: ./gradlew publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
       - name: upload release package
         if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
-        run: ./gradlew publish
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
+          ORG_GRADLE_PROJECT_gumtreeKey: ${{ secrets.GUMTREE_KEY }}
+          ORG_GRADLE_PROJECT_gumtreeKeyPassphrase: ${{ secrets.GUMTREE_KEY_PASSPHRASE }}
       - name: create github release
         if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
         uses: ncipollo/release-action@v1

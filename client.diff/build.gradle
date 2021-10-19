@@ -1,4 +1,4 @@
-description = 'GumTree diff client'
+description = 'GumTree diff client.'
 
 dependencies {
 	implementation project(':client')

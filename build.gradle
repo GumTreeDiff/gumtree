@@ -1,19 +1,27 @@
 plugins {
     id 'jacoco'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
+
+def projectsVersion = '3.0.0'
+def isReleaseVersion = !projectsVersion.endsWith("SNAPSHOT")
 
 allprojects {
     apply plugin: 'idea'
 
     group = 'com.github.gumtreediff'
-    version = '3.0.0-SNAPSHOT'
+    version = projectsVersion
 
     repositories {
         mavenCentral()
     }
 }
-
-ext.isRelease = !project.version.endsWith("SNAPSHOT")
 
 subprojects {
     apply plugin: 'java'
@@ -28,6 +36,7 @@ subprojects {
         withJavadocJar()
         withSourcesJar()
     }
+
     javadoc {
         options.addBooleanOption('html5', true)
     }
@@ -124,25 +133,82 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     }
 }
 
+def projectDescriptions = [
+    client: 'GumTree abstract client module.',
+    'client.diff': 'GumTree diff client.',
+    core: 'GumTree core module.', 'gen.antlr3': 'GumTree abstract AntLR module.',
+    'gen.antlr3-antlr': 'GumTree tree generator for AntLR grammars (AntLR based)',
+    'gen.antlr3-json': 'GumTree tree generator for JSON code (AntLR based).',
+    'gen.antlr3-php': 'GumTree tree generator for PHP code (AntLR based).',
+    'gen.antlr3-r': 'GumTree tree generator for R code (AntLR based).',
+    'gen.antlr3-xml': 'GumTree tree generator for XML code (AntLR based).',
+    'gen.antlr4': 'GumTree abstract AntLR4 module.',
+    'gen.antlr4-matlab': 'GumTree abstract AntLR4 module.',
+    'gen.c': 'GumTree tree generator for C code. Requires cgum.',
+    'gen.css': 'GumTree tree generator for CSS code based on ph-css.',
+    'gen.javaparser': 'GumTree tree generator for Java code (JavaParser based).',
+    'gen.jdt': 'GumTree tree generator for Java code (Eclipse JDT based).',
+    'gen.js': 'GumTree tree generator for JavaScript code (Rhino based).',
+    'gen.python': 'GumTree tree generator for Python. Requires pythonparser.',
+    'gen.ruby': 'GumTree tree generator for Ruby code (JRuby based).',
+    'gen.srcml': 'GumTree tree generator for C/C++, C# and Java code. Requires srcml.',
+]
+
 configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
     apply plugin: "maven-publish"
+    apply plugin: "signing"
 
-    publishing {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/GumTreeDiff/gumtree")
-                credentials {
-                    username = project.findProperty("gpr.actor") ?: System.getenv("GITHUB_ACTOR")
-                    password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+    publishing {        
+        publications {
+            gumtreeDist(MavenPublication) {
+                from(components.java)
+
+                pom {
+                    name = "GumTree ${subproject.name}"
+                    description = projectDescriptions[subproject.name]
+                    url = 'https://github.com/GumTreeDiff/gumtree/'
+
+                    scm {
+                        connection = 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+                        developerConnection = 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+                        url = 'https://github.com/GumTreeDiff/gumtree/'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'GNU Lesser General Public License v3.0'
+                            url = 'h ttps://www.gnu.org/copyleft/lesser.html'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'jre'
+                            name = 'Jean-Rémy Falleri'
+                            email = 'jr.falleri@gmail.com'
+                        }
+
+                        developer {
+                            id = 'flop'
+                            name = 'Floréal Morandat'
+                            email = 'florealm@gmail.com'
+                        }
+
+                        developer {
+                            id = 'matias'
+                            name = 'Matias Martinez'
+                            email = 'matias.sebastian.martinez@gmail.com'
+                        }
+                    }
                 }
             }
         }
-        publications {
-            gpr(MavenPublication) {
-                from(components.java)
-            }
-        }
+    }
+
+    signing {
+        required { isReleaseVersion }
+        useInMemoryPgpKeys(findProperty("gumtreeKey"), findProperty("gumtreeKeyPassphrase"))
+        sign publishing.publications.gumtreeDist
     }
 }
 
