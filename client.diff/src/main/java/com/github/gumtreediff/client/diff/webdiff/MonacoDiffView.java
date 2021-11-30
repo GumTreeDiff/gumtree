@@ -153,19 +153,24 @@ public class MonacoDiffView implements Renderable {
             .div(class_("col"))
                 .div(class_("btn-toolbar justify-content-end"))
                     .div(class_("btn-group mr-2"))
-                        .a(class_("btn btn-primary btn-sm").id("legend").href("#").add("data-toggle", "popover")
-                                .add("data-html", "true").add("data-placement", "bottom")
-                                .add("data-content", "<span class=&quot;deleted&quot;>&nbsp;&nbsp;</span> deleted<br>"
+                        .button(class_("btn btn-primary btn-sm").id("legend")
+                                .add("data-bs-container", "body")
+                                .add("data-bs-toggle", "popover")
+                                .add("data-bs-placement", "bottom")
+                                .add("data-bs-html", "true")
+                                .add("data-bs-content", "<span class=&quot;deleted&quot;>&nbsp;&nbsp;</span> deleted<br>"
                                         + "<span class=&quot;inserted&quot;>&nbsp;&nbsp;</span> inserted<br>"
                                         + "<span class=&quot;moved&quot;>&nbsp;&nbsp;</span> moved<br>"
                                         + "<span class=&quot;updated&quot;>&nbsp;&nbsp;</span> updated<br>", false)
-                                .add("data-original-title", "Legend").title("Legend").role("button")).content("Legend")
-                        .a(class_("btn btn-primary btn-sm").id("shortcuts").href("#").add("data-toggle", "popover")
-                                .add("data-html", "true").add("data-placement", "bottom")
-                                .add("data-content", "<b>q</b> quit<br><b>l</b> list<br>"
+                        ).content("Legend")
+                        .button(class_("btn btn-primary btn-sm").id("shortcuts")
+                                .add("data-bs-toggle", "popover")
+                                .add("data-bs-placement", "bottom")
+                                .add("data-bs-html", "true")
+                                .add("data-bs-content", "<b>q</b> quit<br><b>l</b> list<br>"
                                         + "<b>t</b> top<br><b>b</b> bottom", false)
-                                .add("data-original-title", "Shortcuts").title("Shortcuts").role("button"))
-                            .content("Shortcuts")
+                        )
+                        .content("Shortcuts")
                     ._div()
                     .div(class_("btn-group"))
                         .a(class_("btn btn-default btn-sm btn-primary").href("/list")).content("Back")
@@ -184,11 +189,10 @@ public class MonacoDiffView implements Renderable {
                     .meta(charset("utf8"))
                     .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
                     .title().content("GumTree")
-                    .macros().stylesheet("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
+                    .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
                     .macros().stylesheet("/dist/monaco.css")
-                    .macros().javascript("https://code.jquery.com/jquery-3.4.1.min.js")
-                    .macros().javascript("https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js")
-                    .macros().javascript("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js")
+                    .macros().javascript(WebDiff.JQUERY_JS_URL)
+                    .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
                 ._head();
         }
     }

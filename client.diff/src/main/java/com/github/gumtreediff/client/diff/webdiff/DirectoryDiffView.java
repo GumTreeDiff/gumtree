@@ -176,7 +176,6 @@ public class DirectoryDiffView implements Renderable {
                         .title().content("GumTree")
                         .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
                         .macros().javascript(WebDiff.JQUERY_JS_URL)
-                        .macros().javascript(WebDiff.POPPER_JS_URL)
                         .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
                         .macros().javascript("/dist/shortcuts.js")
                      ._head();

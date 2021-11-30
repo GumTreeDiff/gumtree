@@ -30,8 +30,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.charset.Charset;
 
 import static org.rendersnake.HtmlAttributesFactory.*;
@@ -88,19 +86,22 @@ public class VanillaDiffView implements Renderable {
             .div(class_("col"))
                 .div(class_("btn-toolbar justify-content-end"))
                     .div(class_("btn-group mr-2"))
-                        .a(class_("btn btn-primary btn-sm").id("legend").href("#").add("data-toggle", "popover")
-                                .add("data-html", "true").add("data-placement", "bottom")
-                                .add("data-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br>"
+                        .button(class_("btn btn-primary btn-sm").id("legend")
+                                .add("data-bs-toggle", "popover")
+                                .add("data-bs-placement", "bottom")
+                                .add("data-bs-html", "true")
+                                .add("data-bs-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br>"
                                         + "<span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br>"
                                         + "<span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br>"
                                         + "<span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>", false)
-                                .add("data-original-title", "Legend").title("Legend").role("button")).content("Legend")
-                        .a(class_("btn btn-primary btn-sm").id("shortcuts").href("#").add("data-toggle", "popover")
-                                .add("data-html", "true").add("data-placement", "bottom")
-                                .add("data-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br>"
+                        ).content("Legend")
+                        .button(class_("btn btn-primary btn-sm").id("shortcuts")
+                                .add("data-bs-toggle", "popover")
+                                .add("data-bs-placement", "bottom")
+                                .add("data-bs-html", "true")
+                                .add("data-bs-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br>"
                                         + "<b>t</b> top<br><b>b</b> bottom", false)
-                                .add("data-original-title", "Shortcuts").title("Shortcuts").role("button"))
-                            .content("Shortcuts")
+                        ).content("Shortcuts")
                     ._div()
                     .div(class_("btn-group"))
                         .a(class_("btn btn-default btn-sm btn-primary").href("/list")).content("Back")
@@ -130,7 +131,6 @@ public class VanillaDiffView implements Renderable {
                            .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
                            .macros().stylesheet("/dist/vanilla.css")
                            .macros().javascript(WebDiff.JQUERY_JS_URL)
-                           .macros().javascript(WebDiff.POPPER_JS_URL)
                            .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
                            .macros().javascript("/dist/shortcuts.js")
                            .macros().javascript("/dist/vanilla.js")
@@ -147,7 +147,6 @@ public class VanillaDiffView implements Renderable {
                            .write(readFile("web/dist/vanilla.css"))
                            ._style()
                            .macros().javascript(WebDiff.JQUERY_JS_URL)
-                           .macros().javascript(WebDiff.POPPER_JS_URL)
                            .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
                            .macros().script(readFile("web/dist/shortcuts.js"))
                            .macros().script(readFile("web/dist/vanilla.js"))

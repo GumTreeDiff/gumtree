@@ -32,9 +32,6 @@ import org.rendersnake.Renderable;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 @Register(name = "htmldiff", description = "Dump diff as HTML in stdout",
         options = HtmlDiff.HtmlDiffOptions.class)
