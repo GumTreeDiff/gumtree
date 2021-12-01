@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     container: gumtreediff/gumtree:latest
     environment: MavenCentral
-    if: ${{ github.event_name == 'pull_request' || !contains(github.event.head_commit.message, '[no ci]') || !startsWith(github.event.head_commit.message, 'doc') }}
+    if: "!contains(github.event.head_commit.message, '[no ci]') || !startsWith(github.event.head_commit.message, 'doc')"
     steps:
       - name: checkout gumtree
         uses: actions/checkout@v2
@@ -39,13 +39,13 @@ jobs:
           name: coverage-report
           path: build/reports/jacoco/jacocoRootReport/html/
       - name: upload snapshot package
-        if: ${{ github.event_name == 'schedule' && contains(steps.version.outputs.version, 'SNAPSHOT') }}
+        if: "github.event_name == 'schedule' && contains(steps.version.outputs.version, 'SNAPSHOT')"
         run: ./gradlew publish
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
       - name: upload release package
-        if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
+        if: "github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version)"
         run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
@@ -53,7 +53,7 @@ jobs:
           ORG_GRADLE_PROJECT_gumtreeKey: ${{ secrets.GUMTREE_KEY }}
           ORG_GRADLE_PROJECT_gumtreeKeyPassphrase: ${{ secrets.GUMTREE_KEY_PASSPHRASE }}
       - name: create github release
-        if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
+        if: "github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version)"
         uses: ncipollo/release-action@v1
         with:
           artifacts: "dist/build/distributions/gumtree*.zip"
