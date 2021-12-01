@@ -1,12 +1,14 @@
 # GumTree
 
+An awesome code differencing tool.
+
 ## Status
 
 ![Build and Test GumTree](https://github.com/GumTreeDiff/gumtree/workflows/Build,%20Test%20and%20Deploy%20GumTree/badge.svg?branch=main)
 
 ## Description
 
-GumTree is a complete framework to deal with source code as trees and compute differences between them. It includes possibilities such as:
+GumTree is a tool to deal with source code as trees and compute differences between them. It has the following features:
 * converting a source file into a language-agnostic tree format
 * export the produced trees in various formats
 * compute the differences between the trees
