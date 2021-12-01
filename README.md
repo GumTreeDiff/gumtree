@@ -15,7 +15,7 @@ GumTree is a tool to deal with source code as trees and compute differences betw
 * export these differences in various formats
 * visualize these differences graphically
 
-Compared to classical code differencing tools, it has two important particularities:
+It improves text-based diff tools in two important ways:
 * it works on a tree structure rather than a text structure,
 * it can detect moved or renamed elements in addition of deleted and inserted elements.
 
