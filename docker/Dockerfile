@@ -6,7 +6,7 @@ ENV TZ=GMT
 # Install all required packages
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends default-jdk wget git gdebi-core \
-	    build-essential ocaml libnum-ocaml-dev python3-pip \
+	    build-essential ocaml libnum-ocaml-dev python3-pip nodejs npm \
 	    tzdata ca-certificates p11-kit
 
 RUN pip3 install pandas plotnine scipy
@@ -27,6 +27,11 @@ RUN git clone https://github.com/GumTreeDiff/cgum.git /opt/cgum --depth 1 \
 RUN git clone https://github.com/GumTreeDiff/pythonparser.git /opt/pythonparser --depth 1 \
     && ln -s /opt/pythonparser/pythonparser /usr/bin/pythonparser \
     && pip3 install parso
+
+# Install jsparser
+RUN git clone https://github.com/GumTreeDiff/jsparser.git /opt/jsparser --depth 1 \
+    && ln -s /opt/jsparser/jsparser /usr/bin/jsparser \
+    && npm --prefix /opt/jsparser/jsparser install /opt/jsparser/jsparser
 
 # Install gumtree
 COPY . /opt/gumtree
