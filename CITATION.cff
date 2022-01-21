@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Falleri
+    given-names: Jean-Rémy
+    orcid: https://orcid.org/0000-0002-8284-7218
+  - family-names: Morandat
+    given-names: Floréal
+  - family-names: Blanc
+    given-names: Xavier
+  - family-names: Martinez
+    given-names: Matias
+    orcid: https://orcid.org/0000-0002-2945-866X
+  - family-names: Monperrus
+    given-names: Martin
+    orcid: https://orcid.org/0000-0003-3505-3383
+title: "Fine-grained and accurate source code differencing"
+version: 2.0.4
+doi: 10.1145/2642937.2642982
+date-released: 2014-09-15
