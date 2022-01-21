@@ -17,6 +17,7 @@ dependencies {
 	implementation project(':gen.javaparser')
 	implementation project(':gen.jdt')
 	implementation project(':gen.js')
+	implementation project(':gen.js-acorn')
 	implementation project(':gen.python')
 	implementation project(':gen.ruby')
 	implementation project(':gen.srcml')

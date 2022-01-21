@@ -15,6 +15,7 @@ include 'benchmark',
         'gen.javaparser',
         'gen.jdt',
         'gen.js',
+        'gen.js-acorn',
         'gen.python',
         'gen.ruby',
         'gen.srcml'
