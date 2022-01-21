@@ -33,7 +33,7 @@ import org.mozilla.javascript.ast.AstRoot;
 import java.io.IOException;
 import java.io.Reader;
 
-@Register(id = "js-rhino", accept = "\\.js$", priority = Registry.Priority.MAXIMUM)
+@Register(id = "js-rhino", accept = "\\.js$", priority = Registry.Priority.HIGH)
 public class RhinoTreeGenerator extends TreeGenerator {
     @Override
     public TreeContext generate(Reader r) throws IOException {
