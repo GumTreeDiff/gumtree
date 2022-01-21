@@ -64,6 +64,8 @@ subprojects {
             exceptionFormat = 'full'
             events "passed", "skipped", "failed"
         }
+
+        reports.html.required = false
     }
 }
 
@@ -113,6 +115,11 @@ configure(jacocoProjects) {
             csv.required = false
         }
     }
+}
+
+task testReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn subprojects*.test
 }
 
 task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
