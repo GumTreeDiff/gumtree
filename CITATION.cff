@@ -51,27 +51,3 @@ preferred-citation:
   end: 324
   title: "Fine-grained and accurate source code differencing"
   year: 2014
-
-
-
-  @inproceedings{DBLP:conf/kbse/FalleriMBMM14,
-  author    = {Jean{-}R{\'{e}}my Falleri and
-               Flor{\'{e}}al Morandat and
-               Xavier Blanc and
-               Matias Martinez and
-               Martin Monperrus},
-  editor    = {Ivica Crnkovic and
-               Marsha Chechik and
-               Paul Gr{\"{u}}nbacher},
-  title     = {Fine-grained and accurate source code differencing},
-  booktitle = {{ACM/IEEE} International Conference on Automated Software Engineering,
-               {ASE} '14, Vasteras, Sweden - September 15 - 19, 2014},
-  pages     = {313--324},
-  publisher = {{ACM}},
-  year      = {2014},
-  url       = {https://doi.org/10.1145/2642937.2642982},
-  doi       = {10.1145/2642937.2642982},
-  timestamp = {Sun, 25 Oct 2020 23:06:39 +0100},
-  biburl    = {https://dblp.org/rec/conf/kbse/FalleriMBMM14.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
-}
