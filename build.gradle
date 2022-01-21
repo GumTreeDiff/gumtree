@@ -105,9 +105,6 @@ def jacocoProjectsNames = ['core', 'gen.jdt', 'gen.c', 'gen.ruby', 'gen.js', 'ge
 def jacocoProjects = subprojects.findAll { it.name in jacocoProjectsNames }
 configure(jacocoProjects) {
     apply plugin: 'jacoco'
-    jacoco {
-        toolVersion = '0.8.6'
-    }
 
     jacocoTestReport {
         reports {
