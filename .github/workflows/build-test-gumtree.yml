@@ -38,6 +38,13 @@ jobs:
         with:
           name: coverage-report
           path: build/reports/jacoco/jacocoRootReport/html/
+      - name: generate test report
+        run: ./gradlew testReport
+      - name: upload test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: build/reports/tests
       - name: upload snapshot package
         if: "github.event_name == 'schedule' && contains(steps.version.outputs.version, 'SNAPSHOT')"
         run: ./gradlew publish
