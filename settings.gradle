@@ -18,6 +18,7 @@ include 'benchmark',
         'gen.js-acorn',
         'gen.python',
         'gen.ruby',
-        'gen.srcml'
+        'gen.srcml',
+        'gen.treesitter'
 
 rootProject.name = "gumtree"

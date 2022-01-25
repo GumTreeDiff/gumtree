@@ -21,6 +21,7 @@ dependencies {
 	implementation project(':gen.python')
 	implementation project(':gen.ruby')
 	implementation project(':gen.srcml')
+	implementation project(':gen.treesitter')
 }
 
 description = 'GumTree distribution.'
