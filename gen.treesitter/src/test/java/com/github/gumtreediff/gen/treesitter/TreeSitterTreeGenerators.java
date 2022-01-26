@@ -46,6 +46,14 @@ public class TreeSitterTreeGenerators {
     }
 
     @Test
+    public void testTs() throws IOException {
+        String input = "let message: string = 'Hello, World!';";
+        TreeContext ctx = new TypeScriptTreeSitterTreeGenerator().generateFrom().string(input);
+        Tree t = ctx.getRoot();
+        assertEquals(15, t.getMetrics().size);
+    }
+
+    @Test
     public void testJava() throws IOException {
         String input = "public class Foo { int foo(int a, int b) { return a + b; } }";
         TreeContext ctx = new JavaTreeSitterTreeGenerator().generateFrom().string(input);
