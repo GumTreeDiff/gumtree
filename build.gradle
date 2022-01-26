@@ -219,6 +219,6 @@ configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproj
 evaluationDependsOnChildren()
 
 configure(subprojects) {
-    if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
+    if (!project.hasProperty('testNative') && it.hasProperty('isNative') && it.isNative == true)
         it.test.enabled = false
 }

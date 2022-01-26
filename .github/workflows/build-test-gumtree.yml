@@ -25,7 +25,7 @@ jobs:
         run: echo "::set-output name=version::$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")"
         shell: bash
       - name: build gumtree
-        run: ./gradlew build :benchmark:computeResults :benchmark:testSizeRegressions :benchmark:plotResults 
+        run: ./gradlew -PtestNative build :benchmark:computeResults :benchmark:testSizeRegressions :benchmark:plotResults
       - name: upload defects4j results
         uses: actions/upload-artifact@v2
         with:
