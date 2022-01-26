@@ -40,7 +40,7 @@ RUN git clone --recurse-submodules https://github.com/GumTreeDiff/tree-sitter-pa
 
 # Install gumtree
 COPY . /opt/gumtree
-RUN /opt/gumtree/gradlew -p /opt/gumtree build \
+RUN /opt/gumtree/gradlew -PtestNative -p /opt/gumtree build \
 	&& ln -s /opt/gumtree/dist/build/install/gumtree/bin/gumtree /usr/bin/gumtree
 
 # Define volume diff to make available files to diff
