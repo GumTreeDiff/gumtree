@@ -116,11 +116,11 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOption
             throw new Option.OptionException("Error loading file or folder: " + opts.dstPath);
     }
 
-    protected Diff getDiff() throws IOException {
+    public Diff getDiff() throws IOException {
         return getDiff(opts.srcPath, opts.dstPath);
     }
 
-    protected Diff getDiff(String src, String dst) throws IOException {
+    public Diff getDiff(String src, String dst) throws IOException {
         return Diff.compute(src, dst, opts.treeGeneratorId, opts.matcherId, opts.properties);
     }
 }

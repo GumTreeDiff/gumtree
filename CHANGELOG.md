@@ -1,6 +1,7 @@
 # Changelog of GumTree
 
 ## v3.1.0
+* Vastly improved swing client with directory comparison, syntax highlighting, and more
 * Update monaco to 0.30.1
 * Update bootstrap to 5.1.3
 * Update mergely

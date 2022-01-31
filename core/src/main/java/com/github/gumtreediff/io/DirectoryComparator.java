@@ -40,7 +40,7 @@ public class DirectoryComparator {
 
     private Set<File> deletedFiles;
 
-    private  Set<File> addedFiles;
+    private Set<File> addedFiles;
 
     private boolean dirMode = true;
 
