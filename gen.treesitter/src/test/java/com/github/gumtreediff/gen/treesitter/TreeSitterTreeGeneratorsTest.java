@@ -22,6 +22,7 @@ package com.github.gumtreediff.gen.treesitter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
@@ -34,10 +35,17 @@ public class TreeSitterTreeGeneratorsTest {
         String input = "int main() {\n"
                 + "\treturn 0;\n"
                 + "}";
-        System.out.println(input);
         TreeContext ctx = new CTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
         assertEquals(15, t.getMetrics().size);
+    }
+
+    @Test
+    public void testCError() throws IOException {
+        String input = "int main(";
+        assertThrows(SyntaxException.class, () -> {
+            new CTreeSitterTreeGenerator().generateFrom().string(input);
+        });
     }
 
     @Test
@@ -49,11 +57,27 @@ public class TreeSitterTreeGeneratorsTest {
     }
 
     @Test
+    public void testRError() throws IOException {
+        String input = "print(";
+        assertThrows(SyntaxException.class, () -> {
+            new RTreeSitterTreeGenerator().generateFrom().string(input);
+        });
+    }
+
+    @Test
     public void testJs() throws IOException {
         String input = "let f = (a, b) => a + b";
         TreeContext ctx = new JavaScriptTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
         assertEquals(18, t.getMetrics().size);
+    }
+
+    @Test
+    public void testJsError() {
+        String input = "function foo((bar) {}";
+        assertThrows(SyntaxException.class, () -> {
+            new JavaScriptTreeSitterTreeGenerator().generateFrom().string(input);
+        });
     }
 
     @Test
@@ -65,11 +89,27 @@ public class TreeSitterTreeGeneratorsTest {
     }
 
     @Test
+    public void testTsError() {
+        String input = "function foo((bar) {}";
+        assertThrows(SyntaxException.class, () -> {
+            new TypeScriptTreeSitterTreeGenerator().generateFrom().string(input);
+        });
+    }
+
+    @Test
     public void testJava() throws IOException {
         String input = "public class Foo { int foo(int a, int b) { return a + b; } }";
         TreeContext ctx = new JavaTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
         assertEquals(35, t.getMetrics().size);
+    }
+
+    @Test
+    public void testJavaError() throws IOException {
+        String input = "public clazz Foo {";
+        assertThrows(SyntaxException.class, () -> {
+            new JavaTreeSitterTreeGenerator().generateFrom().string(input);
+        });
     }
 
     @Test
@@ -81,10 +121,26 @@ public class TreeSitterTreeGeneratorsTest {
     }
 
     @Test
+    public void testOcamlError() throws IOException {
+        String input = "let return x x";
+        assertThrows(SyntaxException.class, () -> {
+            new OcamlTreeSitterTreeGenerator().generateFrom().string(input);
+        });
+    }
+
+    @Test
     public void testPython() throws IOException {
         String input = "l = [1, 2, 3]";
         TreeContext ctx = new PythonTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
         assertEquals(13, t.getMetrics().size);
+    }
+
+    @Test
+    public void testPythonError() throws IOException {
+        String input = "l = [1, 2, 3";
+        assertThrows(SyntaxException.class, () -> {
+            new PythonTreeSitterTreeGenerator().generateFrom().string(input);
+        });
     }
 }

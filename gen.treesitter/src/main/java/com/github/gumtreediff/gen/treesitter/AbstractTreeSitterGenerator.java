@@ -20,7 +20,9 @@
 package com.github.gumtreediff.gen.treesitter;
 
 import com.github.gumtreediff.gen.ExternalProcessTreeGenerator;
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.io.TreeIoUtils;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
@@ -33,7 +35,15 @@ public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGen
     @Override
     protected TreeContext generate(Reader r) throws IOException {
         String output = readStandardOutput(r);
-        return TreeIoUtils.fromXml().generateFrom().string(output);
+        TreeContext context = TreeIoUtils.fromXml().generateFrom().string(output);
+
+        for (Tree t : context.getRoot().preOrder())
+            if (t.getType().name.equals("ERROR"))
+                throw new SyntaxException(this, r,
+                        new IllegalArgumentException("Syntax error at pos: " + t.getPos()));
+
+
+        return context;
     }
 
     public abstract String getParserName();
