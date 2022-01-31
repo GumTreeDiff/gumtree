@@ -31,9 +31,9 @@ import java.io.IOException;
 public class TreeSitterTreeGeneratorsTest {
     @Test
     public void testC() throws IOException {
-        String input = "int main() {\n" +
-                "\treturn 0;\n" +
-                "}";
+        String input = "int main() {\n"
+                + "\treturn 0;\n"
+                + "}";
         System.out.println(input);
         TreeContext ctx = new CTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
