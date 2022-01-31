@@ -4,6 +4,14 @@
 * Update monaco to 0.30.1
 * Update bootstrap to 5.1.3
 * Update mergely
+* New Acorn based tree generator for JS that replaces rhino as default JS generator
+* New tree-sitter based tree generator with support for a wide range of languages
+* Docker image now comes installed with the Acord and tree-sitter parsers
+* Benchmark now displays size differences on a boxplot
+* Dotdiff displays actions on nodes using colors
+* Default build command no longer test generators requiring native tools
+* Test reports are uploaded in the CI
+* Added citation file
 
 ## v3.0.0 (Ficus)
 
