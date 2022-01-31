@@ -28,7 +28,18 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class TreeSitterTreeGenerators {
+public class TreeSitterTreeGeneratorsTest {
+    @Test
+    public void testC() throws IOException {
+        String input = "int main() {\n" +
+                "\treturn 0;\n" +
+                "}";
+        System.out.println(input);
+        TreeContext ctx = new CTreeSitterTreeGenerator().generateFrom().string(input);
+        Tree t = ctx.getRoot();
+        assertEquals(15, t.getMetrics().size);
+    }
+
     @Test
     public void testR() throws IOException {
         String input = "print(paste(\"How\",\"are\",\"you?\"))";
