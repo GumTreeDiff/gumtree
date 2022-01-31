@@ -30,9 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -47,25 +45,29 @@ import com.github.gumtreediff.actions.TreeClassifier;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 public class MappingsPanel extends JPanel implements TreeSelectionListener {
-
     private static final long serialVersionUID = 1L;
 
-    private TreeContext src;
-    private TreeContext dst;
-    private TreeClassifier classifyTrees;
-    private MappingStore mappings;
+    private final TreeContext src;
+    private final TreeContext dst;
+    private final TreeClassifier classifyTrees;
+    private final MappingStore mappings;
 
-    private TreePanel panSrc;
-    private TreePanel panDst;
-    private JTextArea txtSrc;
-    private JTextArea txtDst;
+    private final TreePanel panSrc;
+    private final TreePanel panDst;
+    private final RSyntaxTextArea txtSrc;
+    private final RSyntaxTextArea txtDst;
 
     private static final Color DEL_COLOR = new Color(190, 0, 0);
     private static final Color ADD_COLOR = new Color(0, 158, 0);
     private static final Color UPD_COLOR = new Color(189, 162, 0);
     private static final Color MV_COLOR = new Color(128, 0, 128);
+
+    private boolean inProcess = false;
 
     public MappingsPanel(String srcPath, String dstPath, Diff diff)  {
         super(new GridLayout(1, 0));
@@ -77,8 +79,10 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         this.panSrc.getJTree().addTreeSelectionListener(this);
         this.panDst = new TreePanel(this.dst, new MappingsCellRenderer(false));
         this.panDst.getJTree().addTreeSelectionListener(this);
-        this.txtSrc = new JTextArea();
-        this.txtDst = new JTextArea();
+        this.txtSrc = new RSyntaxTextArea();
+        configureEditor(srcPath, this.txtSrc);
+        this.txtDst = new RSyntaxTextArea();
+        configureEditor(dstPath, this.txtDst);
 
         JPanel top = new JPanel();
         top.setLayout(new GridLayout(1, 2));
@@ -86,21 +90,18 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         top.add(panDst);
         JPanel bottom = new JPanel();
         bottom.setLayout(new GridLayout(1, 2));
-        bottom.add(new JScrollPane(txtSrc));
-        bottom.add(new JScrollPane(txtDst));
+        bottom.add(new RTextScrollPane(txtSrc));
+        bottom.add(new RTextScrollPane(txtDst));
 
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, top, bottom);
-        split.setDividerLocation(650);
+        split.setDividerLocation(384);
         add(split);
 
         try {
-            //FIXME a checkstyle issue induced the strange indentation
-            txtSrc
-                    .getUI()
+            txtSrc.getUI()
                     .getEditorKit(txtSrc)
                     .read(new StringReader(readFileAsString(srcPath)), txtSrc.getDocument(), 0);
-            txtDst
-                    .getUI()
+            txtDst.getUI()
                     .getEditorKit(txtDst)
                     .read(new StringReader(readFileAsString(dstPath)), txtDst.getDocument(), 0);
         } catch (IOException | BadLocationException e) {
@@ -122,12 +123,18 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
     }
 
     private void openNodes() {
-        for (Tree t: classifyTrees.getDeletedSrcs()) openNode(panSrc, t);
-        for (Tree t: classifyTrees.getInsertedDsts()) openNode(panDst, t);
-        for (Tree t: classifyTrees.getUpdatedSrcs()) openNode(panSrc, t);
-        for (Tree t: classifyTrees.getUpdatedDsts()) openNode(panDst, t);
-        for (Tree t: classifyTrees.getMovedSrcs()) openNode(panSrc, t);
-        for (Tree t: classifyTrees.getMovedDsts()) openNode(panDst, t);
+        for (Tree t: classifyTrees.getDeletedSrcs())
+            openNode(panSrc, t);
+        for (Tree t: classifyTrees.getInsertedDsts())
+            openNode(panDst, t);
+        for (Tree t: classifyTrees.getUpdatedSrcs())
+            openNode(panSrc, t);
+        for (Tree t: classifyTrees.getUpdatedDsts())
+            openNode(panDst, t);
+        for (Tree t: classifyTrees.getMovedSrcs())
+            openNode(panSrc, t);
+        for (Tree t: classifyTrees.getMovedDsts())
+            openNode(panDst, t);
         panSrc.getJTree().scrollPathToVisible(new TreePath(panSrc.getTrees().get(src.getRoot()).getPath()));
         panDst.getJTree().scrollPathToVisible(new TreePath(panDst.getTrees().get(dst.getRoot()).getPath()));
     }
@@ -137,16 +144,47 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
         p.getJTree().scrollPathToVisible(new TreePath(n.getPath()));
     }
 
+    private void configureEditor(String path, RSyntaxTextArea editor) {
+        editor.setEditable(false);
+        editor.setCodeFoldingEnabled(true);
+        editor.setHighlightCurrentLine(false);
+
+        if (path.endsWith("java"))
+            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        else if (path.endsWith("js"))
+            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        else if (path.endsWith("ts"))
+            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT);
+        else if (path.endsWith("py"))
+            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PYTHON);
+        else if (path.endsWith("rb"))
+            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_RUBY);
+        else if (path.endsWith("c") || path.endsWith("h"))
+            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
+        else if (path.endsWith("css"))
+            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CSS);
+        else if (path.endsWith("cpp"))
+            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+        else if (path.endsWith("cs"))
+            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CSHARP);
+    }
+
     @Override
     public void valueChanged(TreeSelectionEvent e) {
+        if (inProcess) // Avoid firing two events in case of move and update
+            return;
+
+        inProcess = true;
+
         JTree jtree = (JTree) e.getSource();
-        if (jtree.getSelectionPath() == null) return;
+        if (jtree.getSelectionPath() == null)
+            return;
         Tree sel = (Tree) ((DefaultMutableTreeNode) jtree.getLastSelectedPathComponent()).getUserObject();
-        JTextArea selJTextArea;
+        RSyntaxTextArea selJTextArea;
         boolean isMapped = false;
         Tree match = null;
         TreePanel matchTreePanel;
-        JTextArea matchJTextArea;
+        RSyntaxTextArea matchJTextArea;
 
         if (jtree == panSrc.getJTree()) {
             selJTextArea = txtSrc;
@@ -169,14 +207,26 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
             updateJTreeAndJTextArea(sel, selJTextArea, isMapped, match, matchTreePanel, matchJTextArea);
         } catch (BadLocationException ex) {
             ex.printStackTrace();
+        } finally {
+            inProcess = false;
         }
     }
 
-    private void updateJTreeAndJTextArea(Tree sel, JTextArea selJTextArea, boolean isMapped,
+    private void updateJTreeAndJTextArea(Tree sel, RSyntaxTextArea selJTextArea, boolean isMapped,
                                          Tree match, TreePanel matchTreePanel,
-                                         JTextArea matchJTextArea) throws BadLocationException {
+                                         RSyntaxTextArea matchJTextArea) throws BadLocationException {
+        Color color = Color.lightGray;
+        if (classifyTrees.getUpdatedSrcs().contains(sel) || classifyTrees.getUpdatedDsts().contains(sel))
+            color = UPD_COLOR;
+        else if (classifyTrees.getMovedSrcs().contains(sel) || classifyTrees.getMovedDsts().contains(sel))
+            color = new Color(MV_COLOR.getRed(), MV_COLOR.getGreen(), MV_COLOR.getBlue(), 60);
+        else if (classifyTrees.getDeletedSrcs().contains(sel))
+            color = new Color(DEL_COLOR.getRed(), DEL_COLOR.getGreen(), DEL_COLOR.getBlue(), 60);
+        else if (classifyTrees.getInsertedDsts().contains(sel))
+            color = new Color(ADD_COLOR.getRed(), ADD_COLOR.getGreen(), ADD_COLOR.getBlue(), 60);
         selJTextArea.getHighlighter().removeAllHighlights();
-        selJTextArea.getHighlighter().addHighlight(sel.getPos(), sel.getEndPos(), DefaultHighlighter.DefaultPainter);
+        selJTextArea.getHighlighter().addHighlight(
+                sel.getPos(), sel.getEndPos(), new DefaultHighlighter.DefaultHighlightPainter(color));
         selJTextArea.setCaretPosition(sel.getPos());
 
         if (isMapped) {
@@ -185,7 +235,7 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
             matchTreePanel.getJTree().setSelectionPath(new TreePath(node.getPath()));
             matchJTextArea.getHighlighter().removeAllHighlights();
             matchJTextArea.getHighlighter().addHighlight(
-                    match.getPos(), match.getEndPos(), DefaultHighlighter.DefaultPainter);
+                    match.getPos(), match.getEndPos(), new DefaultHighlighter.DefaultHighlightPainter(color));
             matchJTextArea.setCaretPosition(match.getPos());
         } else {
             matchTreePanel.getJTree().clearSelection();
@@ -196,7 +246,7 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
     private class MappingsCellRenderer extends DefaultTreeCellRenderer {
         private static final long serialVersionUID = 1L;
 
-        private boolean isSrc;
+        private final boolean isSrc;
 
         public MappingsCellRenderer(boolean left) {
             this.isSrc = left;
@@ -208,12 +258,18 @@ public class MappingsPanel extends JPanel implements TreeSelectionListener {
                                                       boolean leaf, int row, boolean hasFocus) {
             super.getTreeCellRendererComponent(jtree, value, selected, expanded, leaf, row, hasFocus);
             Tree tree = (Tree) ((DefaultMutableTreeNode) value).getUserObject();
-            if (isSrc && classifyTrees.getDeletedSrcs().contains(tree)) setForeground(DEL_COLOR);
-            else if (!isSrc && classifyTrees.getInsertedDsts().contains(tree)) setForeground(ADD_COLOR);
-            else if (isSrc && classifyTrees.getUpdatedSrcs().contains(tree)) setForeground(UPD_COLOR);
-            else if (!isSrc && classifyTrees.getUpdatedDsts().contains(tree)) setForeground(UPD_COLOR);
-            else if (isSrc && classifyTrees.getMovedSrcs().contains(tree)) setForeground(MV_COLOR);
-            else if (!isSrc && classifyTrees.getMovedDsts().contains(tree)) setForeground(MV_COLOR);
+            if (isSrc && classifyTrees.getDeletedSrcs().contains(tree))
+                setForeground(DEL_COLOR);
+            else if (!isSrc && classifyTrees.getInsertedDsts().contains(tree))
+                setForeground(ADD_COLOR);
+            else if (isSrc && classifyTrees.getUpdatedSrcs().contains(tree))
+                setForeground(UPD_COLOR);
+            else if (!isSrc && classifyTrees.getUpdatedDsts().contains(tree))
+                setForeground(UPD_COLOR);
+            else if (isSrc && classifyTrees.getMovedSrcs().contains(tree))
+                setForeground(MV_COLOR);
+            else if (!isSrc && classifyTrees.getMovedDsts().contains(tree))
+                setForeground(MV_COLOR);
             return this;
         }
     }
