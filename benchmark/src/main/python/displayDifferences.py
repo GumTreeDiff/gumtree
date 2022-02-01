@@ -11,6 +11,7 @@ def main():
   displayDifferences(ref_file, file, difference_type)
 
 def displayDifferences(ref_file, file, difference_type):
+  print(difference_type)
   ref_data = pd.read_csv(ref_file, decimal=",", sep=";")
   data = pd.read_csv(file, decimal=",", sep=";")
   ref_algorithms = set(pd.unique(ref_data['algorithm']).tolist())
@@ -24,8 +25,8 @@ def displayDifferences(ref_file, file, difference_type):
       actual_value = data[(data['algorithm'] == algorithm) & (data['case'] == case)][difference_type].item()
       if (ref_value != actual_value):
         print("Detected " + difference_type + " difference for algorithm: " + algorithm + " on case: " + case)
-        print(ref_value)
-        print(actual_value)
+        print("Reference value: " + str(ref_value))
+        print("Obtained value: " + str(actual_value))
 
 if __name__ == "__main__":
     main()
