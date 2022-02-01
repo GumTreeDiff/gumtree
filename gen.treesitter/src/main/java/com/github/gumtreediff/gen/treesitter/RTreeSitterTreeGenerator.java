@@ -22,7 +22,7 @@ package com.github.gumtreediff.gen.treesitter;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 
-@Register(id = "python-treesitter", accept = {"\\.r"}, priority = Registry.Priority.HIGH)
+@Register(id = "r-treesitter", accept = "\\.[rR]$", priority = Registry.Priority.HIGH)
 public final class RTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {
     private static final String R_PARSER_NAME = "r";
 
