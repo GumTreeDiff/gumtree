@@ -99,65 +99,76 @@ public class SimpleBottomUpMatcher implements Matcher {
     protected void lastChanceMatch(MappingStore mappings, Tree src, Tree dst) {
         lcsEqualMatching(mappings, src, dst);
         lcsStructureMatching(mappings, src, dst);
-        if (src.isRoot() && dst.isRoot())
-            histogramMatching(mappings, src, dst);
-        else if (!(src.isRoot() || dst.isRoot()))
-            if (src.getParent().getType() == dst.getParent().getType())
-                histogramMatching(mappings, src, dst);
+        histogramMatching(mappings, src, dst);
     }
 
     protected void lcsEqualMatching(MappingStore mappings, Tree src, Tree dst) {
-        List<Tree> srcChildren = src.getChildren();
-        List<Tree> dstChildren = dst.getChildren();
+        List<Tree> unmappedSrcChildren = new ArrayList<>();
+        for (Tree c : src.getChildren())
+            if (!mappings.isSrcMapped(c))
+                unmappedSrcChildren.add(c);
 
-        List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithIsomorphism(srcChildren, dstChildren);
+        List<Tree> unmappedDstChildren = new ArrayList<>();
+        for (Tree c : dst.getChildren())
+            if (!mappings.isDstMapped(c))
+                unmappedDstChildren.add(c);
+
+        List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithIsomorphism(
+                unmappedSrcChildren, unmappedDstChildren);
         for (int[] x : lcs) {
-            var t1 = srcChildren.get(x[0]);
-            var t2 = dstChildren.get(x[1]);
-            if (mappings.areSrcsUnmapped(TreeUtils.preOrder(t1)) && mappings.areDstsUnmapped(TreeUtils.preOrder(t2)))
+            var t1 = unmappedSrcChildren.get(x[0]);
+            var t2 = unmappedDstChildren.get(x[1]);
+            if (mappings.areSrcsUnmapped(TreeUtils.preOrder(t1)) && mappings.areDstsUnmapped(
+                    TreeUtils.preOrder(t2)))
                 mappings.addMappingRecursively(t1, t2);
         }
     }
 
     protected void lcsStructureMatching(MappingStore mappings, Tree src, Tree dst) {
-        List<Tree> srcChildren = src.getChildren();
-        List<Tree> dstChildren = dst.getChildren();
+        List<Tree> unmappedSrcChildren = new ArrayList<>();
+        for (Tree c : src.getChildren())
+            if (!mappings.isSrcMapped(c))
+                unmappedSrcChildren.add(c);
 
-        List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithIsostructure(srcChildren, dstChildren);
+        List<Tree> unmappedDstChildren = new ArrayList<>();
+        for (Tree c : dst.getChildren())
+            if (!mappings.isDstMapped(c))
+                unmappedDstChildren.add(c);
+
+        List<int[]> lcs = SequenceAlgorithms.longestCommonSubsequenceWithIsostructure(
+                unmappedSrcChildren, unmappedDstChildren);
         for (int[] x : lcs) {
-            var t1 = srcChildren.get(x[0]);
-            var t2 = dstChildren.get(x[1]);
-            if (mappings.areSrcsUnmapped(TreeUtils.preOrder(t1)) && mappings.areDstsUnmapped(TreeUtils.preOrder(t2)))
+            var t1 = unmappedSrcChildren.get(x[0]);
+            var t2 = unmappedDstChildren.get(x[1]);
+            if (mappings.areSrcsUnmapped(
+                    TreeUtils.preOrder(t1)) && mappings.areDstsUnmapped(TreeUtils.preOrder(t2)))
                 mappings.addMappingRecursively(t1, t2);
         }
     }
 
     protected void histogramMatching(MappingStore mappings, Tree src, Tree dst) {
-        List<Tree> srcChildren = src.getChildren();
-        List<Tree> dstChildren = dst.getChildren();
-
         Map<Type, List<Tree>> srcHistogram = new HashMap<>();
-        for (var c : srcChildren) {
-            if (!srcHistogram.containsKey(c.getType()))
-                srcHistogram.put(c.getType(), new ArrayList<>());
+        for (var c :  src.getChildren()) {
+            if (mappings.isSrcMapped(c))
+                continue;
+            srcHistogram.putIfAbsent(c.getType(), new ArrayList<>());
             srcHistogram.get(c.getType()).add(c);
         }
 
         Map<Type, List<Tree>> dstHistogram = new HashMap<>();
-        for (var c : dstChildren) {
-            if (!dstHistogram.containsKey(c.getType()))
-                dstHistogram.put(c.getType(), new ArrayList<>());
+        for (var c : dst.getChildren()) {
+            if (mappings.isDstMapped(c))
+                continue;
+            dstHistogram.putIfAbsent(c.getType(), new ArrayList<>());
             dstHistogram.get(c.getType()).add(c);
         }
 
         for (Type t : srcHistogram.keySet()) {
             if (dstHistogram.containsKey(t) && srcHistogram.get(t).size() == 1 && dstHistogram.get(t).size() == 1) {
-                var t1 = srcHistogram.get(t).get(0);
-                var t2 = dstHistogram.get(t).get(0);
-                if (mappings.areBothUnmapped(t1, t2)) {
-                    mappings.addMapping(t1, t2);
-                    lastChanceMatch(mappings, t1, t2);
-                }
+                var srcChild = srcHistogram.get(t).get(0);
+                var dstChild = dstHistogram.get(t).get(0);
+                mappings.addMapping(srcChild, dstChild);
+                lastChanceMatch(mappings, srcChild, dstChild);
             }
         }
     }
