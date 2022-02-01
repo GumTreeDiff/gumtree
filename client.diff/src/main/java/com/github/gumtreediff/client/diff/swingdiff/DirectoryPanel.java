@@ -31,6 +31,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class DirectoryPanel extends JPanel implements ListSelectionListener {
     private final DirectoryComparator comparator;
@@ -38,7 +39,7 @@ public class DirectoryPanel extends JPanel implements ListSelectionListener {
     private final AbstractDiffClient client;
 
     public DirectoryPanel(String src, String dst, AbstractDiffClient client) {
-        super(new GridLayout(1, 3));
+        super(new GridLayout(3, 1));
         this.client = client;
         this.comparator = new DirectoryComparator(src, dst);
         comparator.compare();
@@ -55,8 +56,9 @@ public class DirectoryPanel extends JPanel implements ListSelectionListener {
         File[] addedFilesArray = new File[comparator.getAddedFiles().size()];
         comparator.getAddedFiles().toArray(addedFilesArray);
         JList<File> listAdded = new JList<>(addedFilesArray);
+        listAdded.setSelectionModel(new DisabledItemSelectionModel());
         listAdded.setBackground(new Color(0, 255, 0, 128));
-        listAdded.setCellRenderer(new DefaultListCellRenderer());
+        listAdded.setCellRenderer(new FileCellRenderer(comparator.getDst()));
         JScrollPane panAdded = new JScrollPane(listAdded);
         this.add(panAdded);
 
@@ -64,7 +66,8 @@ public class DirectoryPanel extends JPanel implements ListSelectionListener {
         comparator.getDeletedFiles().toArray(deletedFilesArray);
         JList<File> listDeleted = new JList<>(deletedFilesArray);
         listDeleted.setBackground(new Color(255, 0, 0, 128));
-        listDeleted.setCellRenderer(new DefaultListCellRenderer());
+        listDeleted.setCellRenderer(new FileCellRenderer(comparator.getSrc()));
+        listDeleted.setSelectionModel(new DisabledItemSelectionModel());
         JScrollPane panDeleted = new JScrollPane(listDeleted);
         this.add(panDeleted);
 
@@ -98,7 +101,7 @@ public class DirectoryPanel extends JPanel implements ListSelectionListener {
         });
     }
 
-    private static class PairFileCellRenderer extends DefaultListCellRenderer {
+    private class PairFileCellRenderer extends DefaultListCellRenderer {
         public Component getListCellRendererComponent(
                 JList<?> list,
                 Object value,
@@ -106,9 +109,45 @@ public class DirectoryPanel extends JPanel implements ListSelectionListener {
                 boolean isSelected,
                 boolean cellHasFocus) {
             Component res = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            setText(((Pair<File, File>) value).first.toString());
+            Pair<File, File> files = (Pair<File, File>) value;
+            String fileName = comparator.getSrc().toAbsolutePath()
+                    .relativize(files.first.toPath().toAbsolutePath()).toString();
+            setText((fileName));
             return res;
         }
     }
 
+    private class FileCellRenderer extends DefaultListCellRenderer {
+        private Path root;
+
+        public FileCellRenderer(Path root) {
+            this.root = root;
+        }
+
+        public Component getListCellRendererComponent(
+                JList<?> list,
+                Object value,
+                int index,
+                boolean isSelected,
+                boolean cellHasFocus) {
+            Component res = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            File file = (File) value;
+            String fileName = root.toAbsolutePath()
+                    .relativize(file.toPath().toAbsolutePath()).toString();
+            setText((fileName));
+            return res;
+        }
+    }
+
+    private class DisabledItemSelectionModel extends DefaultListSelectionModel {
+        @Override
+        public void setSelectionInterval(int index0, int index1) {
+            super.setSelectionInterval(-1, -1);
+        }
+
+        @Override
+        public void addSelectionInterval(int index0, int index1)  {
+            super.setSelectionInterval(-1, -1);
+        }
+    }
 }
