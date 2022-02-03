@@ -22,7 +22,7 @@ package com.github.gumtreediff.gen.treesitter;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 
-@Register(id = "java-treesitter", accept = {"\\.java$"}, priority = Registry.Priority.HIGH)
+@Register(id = "java-treesitter", accept = "\\.java$", priority = Registry.Priority.HIGH)
 public final class JavaTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {
     private static final String JAVA_PARSER_NAME = "java";
 

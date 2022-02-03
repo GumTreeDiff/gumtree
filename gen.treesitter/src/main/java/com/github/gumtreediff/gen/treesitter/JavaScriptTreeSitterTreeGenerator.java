@@ -22,7 +22,7 @@ package com.github.gumtreediff.gen.treesitter;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 
-@Register(id = "js-treesitter", accept = {"\\.js"}, priority = Registry.Priority.HIGH)
+@Register(id = "js-treesitter", accept = "\\.js$", priority = Registry.Priority.HIGH)
 public final class JavaScriptTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {
     private static final String JAVASCRIPT_PARSER_NAME = "javascript";
 

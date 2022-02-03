@@ -22,7 +22,7 @@ package com.github.gumtreediff.gen.treesitter;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 
-@Register(id = "ts-treesitter", accept = {"\\.ts"}, priority = Registry.Priority.MAXIMUM)
+@Register(id = "ts-treesitter", accept = {"\\.ts$"}, priority = Registry.Priority.MAXIMUM)
 public final class TypeScriptTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {
     private static final String TYPESCRIPT_PARSER_NAME = "typescript";
 

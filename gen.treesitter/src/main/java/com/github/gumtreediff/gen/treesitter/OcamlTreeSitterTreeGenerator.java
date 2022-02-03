@@ -22,7 +22,7 @@ package com.github.gumtreediff.gen.treesitter;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 
-@Register(id = "ocaml-treesitter", accept = {"\\.ml"}, priority = Registry.Priority.MAXIMUM)
+@Register(id = "ocaml-treesitter", accept = "\\.ml$", priority = Registry.Priority.MAXIMUM)
 public final class OcamlTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {
     private static final String OCAML_PARSER_NAME = "ocaml";
 

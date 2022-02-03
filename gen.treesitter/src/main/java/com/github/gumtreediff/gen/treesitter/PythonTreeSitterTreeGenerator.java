@@ -22,7 +22,7 @@ package com.github.gumtreediff.gen.treesitter;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 
-@Register(id = "python-treesitter", accept = {"\\.php"}, priority = Registry.Priority.MAXIMUM)
+@Register(id = "python-treesitter", accept = "\\.py$", priority = Registry.Priority.MAXIMUM)
 public final class PythonTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {
     private static final String PYTHON_PARSER_NAME = "python";
 
