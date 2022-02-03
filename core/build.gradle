@@ -12,8 +12,12 @@ dependencies {
 }
 
 pitest {
-    targetClasses = ['com.github.gumtreediff.tree*']
-	targetTests = ['com.github.gumtreediff.test.TestTree', 'com.github.gumtreediff.test.TestMetadata', 'com.github.gumtreediff.test.TestTreeUtils']
+    targetClasses = ['com.github.gumtreediff.*']
+	targetTests = ['com.github.gumtreediff.test.TestTree',
+				   'com.github.gumtreediff.test.TestMetadata',
+				   'com.github.gumtreediff.test.TestTreeUtils',
+				   'com.github.gumtreediff.test.TestMappingStore',
+				   'com.github.gumtreediff.test.TestTreeClassifier']
     threads = 4
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
