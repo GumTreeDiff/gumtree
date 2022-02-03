@@ -19,12 +19,22 @@
 
 package com.github.gumtreediff.test;
 
+import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.gen.TreeGenerator;
+import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
+import com.github.gumtreediff.tree.DefaultTree;
+import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.TypeSet;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.IOException;
+import java.io.Reader;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TestRegistry {
     @Test
@@ -33,5 +43,42 @@ public class TestRegistry {
         assertEquals(CompositeMatchers.ClassicGumtree.class, m1.getClass());
         Matcher m2 = Matchers.getInstance().getMatcher("longestCommonSequence");
         assertEquals(LcsMatcher.class, m2.getClass());
+    }
+
+    @Test
+    public void testTreeGenerators() {
+        TreeGenerators generators = TreeGenerators.getInstance();
+        assertFalse(generators.has("foo"));
+        assertFalse(generators.has("bar"));
+        generators.install(FooTreeGenerator.class, FooTreeGenerator.class.getAnnotation(com.github.gumtreediff.gen.Register.class));
+        assertTrue(generators.has("foo"));
+        assertFalse(generators.has("bar"));
+        assertTrue(generators.hasGeneratorForFile("foo.foo"));
+        assertEquals(FooTreeGenerator.class, generators.get("foo.foo").getClass());
+        generators.install(BarTreeGenerator.class, BarTreeGenerator.class.getAnnotation(com.github.gumtreediff.gen.Register.class));
+        assertTrue(generators.has("foo"));
+        assertTrue(generators.has("bar"));
+        assertTrue(generators.hasGeneratorForFile("foo.foo"));
+        assertEquals(BarTreeGenerator.class, generators.get("foo.foo").getClass());
+    }
+
+    @com.github.gumtreediff.gen.Register(id = "foo", accept = "\\.foo$", priority = Registry.Priority.HIGH)
+    public static class FooTreeGenerator extends TreeGenerator {
+        @Override
+        protected TreeContext generate(Reader r) throws IOException {
+            TreeContext ctx = new TreeContext();
+            ctx.setRoot(new DefaultTree(TypeSet.type("foo")));
+            return ctx;
+        }
+    }
+
+    @Register(id = "bar", accept = "\\.foo$", priority = Registry.Priority.MAXIMUM)
+    public static class BarTreeGenerator extends TreeGenerator {
+        @Override
+        protected TreeContext generate(Reader r) throws IOException {
+            TreeContext ctx = new TreeContext();
+            ctx.setRoot(new DefaultTree(TypeSet.type("bar")));
+            return ctx;
+        }
     }
 }
