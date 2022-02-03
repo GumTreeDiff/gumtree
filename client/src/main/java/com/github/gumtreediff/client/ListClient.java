@@ -28,14 +28,15 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collection;
 
-@Register(description = "List matchers, generators, clients and properties")
-public class List extends Client {
-
-    public static final String SYNTAX = "Syntax: list " + Arrays.toString(Listable.values());
+@Register(name = "list", description = "List matchers, generators, clients and properties")
+public class ListClient extends Client {
+    private static final String SYNTAX = "Syntax: list " + Arrays.toString(Listable.values());
     private final Listable item;
+    private Options opts = new Options();
 
-    public List(String[] args) {
+    public ListClient(String[] args) {
         super(args);
+        args = Option.processCommandLine(args, opts);
 
         if (args.length == 0)
             throw new Option.OptionException(SYNTAX);
@@ -45,6 +46,21 @@ public class List extends Client {
             item = listable;
         } catch (Exception e) {
             throw new Option.OptionException(SYNTAX);
+        }
+    }
+
+    public static class Options implements Option.Context {
+        @Override
+        public Option[] values() {
+            return new Option[] {
+                new Option.Help(this) {
+                    @Override
+                    public void process(String name, String[] args) {
+                        System.out.println(SYNTAX);
+                        super.process(name, args);
+                    }
+                }
+            };
         }
     }
 

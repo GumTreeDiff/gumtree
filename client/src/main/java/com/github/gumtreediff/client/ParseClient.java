@@ -31,9 +31,36 @@ import java.nio.file.Files;
 import java.util.Arrays;
 
 @Register(name = "parse", description = "Parse file and dump result.")
-public class Serializer extends Client {
+public class ParseClient extends Client {
+    private static final String SYNTAX = "Syntax: parse [options] file ...";
+    private Options opts = new Options();
 
-    public static final String SYNTAX = "Syntax: parse [options] file ...";
+    public ParseClient(String[] args) {
+        super(args);
+        args = Option.processCommandLine(args, opts);
+        if (args.length == 0)
+            throw new Option.OptionException(SYNTAX);
+
+        opts.files = args;
+    }
+
+    @Override
+    public void run() throws Exception {
+        final boolean multiple = opts.files.length > 1;
+        if (multiple && opts.output != null)
+            Files.createDirectories(FileSystems.getDefault().getPath(opts.output));
+
+        for (String file : opts.files) {
+            TreeContext tc = getTreeContext(file);
+            opts.format.getSerializer(tc).writeTo(opts.output == null
+                    ? System.out
+                    : new FileOutputStream(opts.output));
+        }
+    }
+
+    private TreeContext getTreeContext(String file) throws IOException {
+        return TreeGenerators.getInstance().getTree(file, opts.generator);
+    }
 
     static class Options implements Option.Context {
         protected OutputFormat format = OutputFormat.TEXT;
@@ -64,6 +91,13 @@ public class Serializer extends Client {
                         @Override
                         protected void process(String name, String[] args) {
                             generator = args[0];
+                        }
+                    },
+                    new Option.Help(this) {
+                        @Override
+                        public void process(String name, String[] args) {
+                            System.out.println(SYNTAX);
+                            super.process(name, args);
                         }
                     }
             };
@@ -109,34 +143,5 @@ public class Serializer extends Client {
         };
 
         abstract TreeIoUtils.TreeSerializer getSerializer(TreeContext ctx);
-    }
-
-    Options opts = new Options();
-
-    public Serializer(String[] args) {
-        super(args);
-        args = Option.processCommandLine(args, opts);
-        if (args.length == 0)
-            throw new Option.OptionException(SYNTAX);
-
-        opts.files = args;
-    }
-
-    @Override
-    public void run() throws Exception {
-        final boolean multiple = opts.files.length > 1;
-        if (multiple && opts.output != null)
-            Files.createDirectories(FileSystems.getDefault().getPath(opts.output));
-
-        for (String file : opts.files) {
-            TreeContext tc = getTreeContext(file);
-            opts.format.getSerializer(tc).writeTo(opts.output == null
-                    ? System.out
-                    : new FileOutputStream(opts.output));
-        }
-    }
-
-    private TreeContext getTreeContext(String file) throws IOException {
-        return TreeGenerators.getInstance().getTree(file, opts.generator);
     }
 }
