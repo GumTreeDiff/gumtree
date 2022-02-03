@@ -50,12 +50,14 @@ public class TestRegistry {
         TreeGenerators generators = TreeGenerators.getInstance();
         assertFalse(generators.has("foo"));
         assertFalse(generators.has("bar"));
-        generators.install(FooTreeGenerator.class, FooTreeGenerator.class.getAnnotation(com.github.gumtreediff.gen.Register.class));
+        generators.install(FooTreeGenerator.class,
+                FooTreeGenerator.class.getAnnotation(com.github.gumtreediff.gen.Register.class));
         assertTrue(generators.has("foo"));
         assertFalse(generators.has("bar"));
         assertTrue(generators.hasGeneratorForFile("foo.foo"));
         assertEquals(FooTreeGenerator.class, generators.get("foo.foo").getClass());
-        generators.install(BarTreeGenerator.class, BarTreeGenerator.class.getAnnotation(com.github.gumtreediff.gen.Register.class));
+        generators.install(BarTreeGenerator.class,
+                BarTreeGenerator.class.getAnnotation(com.github.gumtreediff.gen.Register.class));
         assertTrue(generators.has("foo"));
         assertTrue(generators.has("bar"));
         assertTrue(generators.hasGeneratorForFile("foo.foo"));
