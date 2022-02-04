@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation project(':gen.jdt')
+    implementation project(':gen.python')
 }
 
 jar.enabled = false
@@ -11,8 +12,8 @@ run.enabled = false
 
 task computeResults(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.github.gumtree.benchmark.Defects4JLauncher'
-    args "${project.projectDir}/defects4j", "${project.buildDir}/reports/defects4j.csv"
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args "${project.projectDir}/datasets/defects4j", "${project.buildDir}/reports/defects4j.csv"
 }
 
 task plotResults(type: Exec) {
