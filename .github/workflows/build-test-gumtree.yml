@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: checkout gumtree
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: retrieve gumtree version
         id: version
         run: echo "::set-output name=version::$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")"
