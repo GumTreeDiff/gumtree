@@ -21,11 +21,11 @@ task plotResults(type: Exec) {
 }
 
 task testSizeRegressions(type: Exec) {
-    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
 }
 
 task displaySizeDifferences(type: Exec) {
-    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
+    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
 }
 
 task testRuntimeRegressions(type: Exec) {
