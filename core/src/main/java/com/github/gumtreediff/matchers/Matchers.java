@@ -76,23 +76,10 @@ public class Matchers extends Registry<String, Matcher, Register> {
     }
 
     private Matchers() {
-        install(CompositeMatchers.ClassicGumtree.class);
-        install(CompositeMatchers.SimpleGumtree.class);
-        install(CompositeMatchers.SimpleIdGumtree.class);
-        install(CompositeMatchers.HybridGumtree.class);
-        install(CompositeMatchers.HybridIdGumtree.class);
-        install(CompositeMatchers.PartitionGumtreeMatcher.class);
-        install(CompositeMatchers.ChangeDistiller.class);
-        install(CompositeMatchers.XyMatcher.class);
-        install(LcsMatcher.class);
-        install(CompositeMatchers.ClassicGumtreeTheta.class);
-        install(CompositeMatchers.Theta.class);
-        install(CompositeMatchers.ChangeDistillerTheta.class);
-        install(CompositeMatchers.SimpleIdGumtreeTheta.class);
     }
 
-    private void install(Class<? extends Matcher> clazz) {
-        Register a = clazz.getAnnotation(Register.class);
+    @Override
+    public void install(Class<? extends Matcher> clazz, Register a) {
         if (a == null)
             throw new IllegalArgumentException("Expecting @Register annotation on " + clazz.getName());
         if (defaultMatcherFactory == null) {
@@ -104,7 +91,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
             lowestPriority = a.priority();
         }
 
-        install(clazz, a);
+        super.install(clazz, a);
     }
 
     protected String getName(Register annotation, Class<? extends Matcher> clazz) {

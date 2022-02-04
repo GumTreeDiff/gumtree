@@ -23,9 +23,11 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.gen.TreeGenerators;
-import com.github.gumtreediff.matchers.*;
-import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
+import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.DefaultTree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TypeSet;
 import org.junit.jupiter.api.Test;
@@ -37,14 +39,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TestRegistry {
-    @Test
-    public void testMatcherRegistry() {
-        Matcher m1 = Matchers.getInstance().getMatcher();
-        assertEquals(CompositeMatchers.ClassicGumtree.class, m1.getClass());
-        Matcher m2 = Matchers.getInstance().getMatcher("longestCommonSequence");
-        assertEquals(LcsMatcher.class, m2.getClass());
-    }
-
     @Test
     public void testTreeGenerators() {
         TreeGenerators generators = TreeGenerators.getInstance();
@@ -64,7 +58,23 @@ public class TestRegistry {
         assertEquals(BarTreeGenerator.class, generators.get("foo.foo").getClass());
     }
 
-    @com.github.gumtreediff.gen.Register(id = "foo", accept = "\\.foo$", priority = Registry.Priority.HIGH)
+    @Test
+    public void testMatchers() {
+        Matchers matchers = Matchers.getInstance();
+        assertNull(matchers.getMatcher("foo"));
+        assertNull(matchers.getMatcher("bar"));
+        matchers.install(FooMatcher.class,
+                FooMatcher.class.getAnnotation(com.github.gumtreediff.matchers.Register.class));
+        assertNotNull(matchers.getMatcher("foo"));
+        assertNull(matchers.getMatcher("bar"));
+        matchers.install(BarMatcher.class,
+                BarMatcher.class.getAnnotation(com.github.gumtreediff.matchers.Register.class));
+        assertNotNull(matchers.getMatcher("foo"));
+        assertNotNull(matchers.getMatcher("bar"));
+        assertNotNull(matchers.getMatcherWithFallback("baz"));
+    }
+
+    @Register(id = "foo", accept = "\\.foo$", priority = Registry.Priority.HIGH)
     public static class FooTreeGenerator extends TreeGenerator {
         @Override
         protected TreeContext generate(Reader r) throws IOException {
@@ -81,6 +91,22 @@ public class TestRegistry {
             TreeContext ctx = new TreeContext();
             ctx.setRoot(new DefaultTree(TypeSet.type("bar")));
             return ctx;
+        }
+    }
+
+    @com.github.gumtreediff.matchers.Register(id = "foo")
+    public static class FooMatcher implements Matcher {
+        @Override
+        public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
+            return null;
+        }
+    }
+
+    @com.github.gumtreediff.matchers.Register(id = "bar", defaultMatcher = true)
+    public static class BarMatcher implements Matcher {
+        @Override
+        public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
+            return null;
         }
     }
 }

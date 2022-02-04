@@ -23,6 +23,8 @@ package com.github.gumtreediff.client;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.gen.TreeGenerator;
+import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.Matchers;
 import org.atteo.classindex.ClassIndex;
 
 import java.io.PrintStream;
@@ -60,6 +62,16 @@ public class Run {
                 });
     }
 
+    public static void initMatchers() {
+        ClassIndex.getSubclasses(Matcher.class).forEach(
+                gen -> {
+                    com.github.gumtreediff.matchers.Register a =
+                            gen.getAnnotation(com.github.gumtreediff.matchers.Register.class);
+                    if (a != null)
+                        Matchers.getInstance().install(gen, a);
+                });
+    }
+
     public static void initClients() {
         ClassIndex.getSubclasses(Client.class).forEach(
                 cli -> {
@@ -72,6 +84,7 @@ public class Run {
 
     static {
         initGenerators();
+        initMatchers();
     }
 
     public static void startClient(String name, Registry.Factory<? extends Client> client, String[] args) {
