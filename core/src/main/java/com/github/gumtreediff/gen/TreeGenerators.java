@@ -20,9 +20,11 @@
 
 package com.github.gumtreediff.gen;
 
+import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -71,6 +73,23 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
                 return e.instantiate(null).generateFrom().file(file);
 
         throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
+    }
+
+    public TreeContext getTreeFromCommand(String file, String command) throws IOException {
+        TreeGenerator g = new ExternalProcessTreeGenerator() {
+            @Override
+            protected String[] getCommandLine(String file) {
+                return command.replace("$FILE", file).split(" ");
+            }
+
+            @Override
+            protected TreeContext generate(Reader r) throws IOException {
+                String output = readStandardOutput(r);
+                TreeContext ctx = TreeIoUtils.fromXml().generateFrom().string(output);
+                return ctx;
+            }
+        };
+        return g.generateFrom().file(file);
     }
 
     /**

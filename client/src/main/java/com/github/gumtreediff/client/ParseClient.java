@@ -59,7 +59,10 @@ public class ParseClient extends Client {
     }
 
     private TreeContext getTreeContext(String file) throws IOException {
-        return TreeGenerators.getInstance().getTree(file, opts.generator);
+        if (opts.command == null)
+            return TreeGenerators.getInstance().getTree(file, opts.generator);
+        else
+            return TreeGenerators.getInstance().getTreeFromCommand(file, opts.command);
     }
 
     static class Options implements Option.Context {
@@ -67,6 +70,7 @@ public class ParseClient extends Client {
         protected String generator = null;
         protected String output = null;
         protected String[] files;
+        protected String command = null;
 
         @Override
         public Option[] values() {
@@ -91,6 +95,12 @@ public class ParseClient extends Client {
                         @Override
                         protected void process(String name, String[] args) {
                             generator = args[0];
+                        }
+                    },
+                    new Option("-x", "Executable command to use (of the form COMMAND $FILE).", 1) {
+                        @Override
+                        protected void process(String name, String[] args) {
+                            command = args[0];
                         }
                     },
                     new Option.Help(this) {

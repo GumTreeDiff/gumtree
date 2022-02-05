@@ -89,6 +89,27 @@ public class Diff {
      * Compute and return a diff.
      * @param srcFile The path to the source file.
      * @param dstFile The path to the destination file.
+     * @param command The executable command in the form: command $FILE.
+     * @param matcher The id of the the matcher to use.
+     * @param properties The set of options.
+     * @throws IOException an IO exception is raised in case of IO problems related to the source
+     *     or destination file.
+     */
+    public static Diff computeWithCommand(String srcFile, String dstFile, String command,
+                               String matcher, GumtreeProperties properties) throws IOException {
+        TreeContext src = TreeGenerators.getInstance().getTreeFromCommand(srcFile, command);
+        TreeContext dst = TreeGenerators.getInstance().getTreeFromCommand(dstFile, command);
+        Matcher m = Matchers.getInstance().getMatcherWithFallback(matcher);
+        m.configure(properties);
+        MappingStore mappings = m.match(src.getRoot(), dst.getRoot());
+        EditScript editScript = new SimplifiedChawatheScriptGenerator().computeActions(mappings);
+        return new Diff(src, dst, mappings, editScript);
+    }
+
+    /**
+     * Compute and return a diff.
+     * @param srcFile The path to the source file.
+     * @param dstFile The path to the destination file.
      * @param treeGenerator The id of the tree generator to use.
      * @param matcher The id of the the matcher to use.
      * @throws IOException an IO exception is raised in case of IO problems related to the source
