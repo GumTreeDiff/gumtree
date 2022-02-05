@@ -27,7 +27,11 @@ def testRegressions(ref_file, file, regression_type):
     ref_algorithm_data = ref_data[ref_data['algorithm'] == algorithm]
     algorithm_data = data[data['algorithm'] == algorithm]
     algorithm_data['rel_value'] = algorithm_data[regression_type] - ref_algorithm_data[regression_type]
-    plot = pn.ggplot(algorithm_data, pn.aes(0, 'rel_value')) + pn.geom_jitter() + pn.ylim(min(*algorithm_data['rel_value'], -3), max(*algorithm_data['rel_value'], 3)) + pn.geom_text(x=0, y=2, label = "worse", color = "red") + pn.geom_text(x=0, y=-2, label="better", color = "red")
+    plot = pn.ggplot(algorithm_data, pn.aes(0, 'rel_value')) \
+        + pn.geom_jitter() \
+        + pn.ylim(min(*algorithm_data['rel_value'], -3), max(*algorithm_data['rel_value'], 3)) \
+        + pn.geom_text(x = 0, y = max(*algorithm_data['rel_value'], 3), label = "worse", color = "red") \
+        + pn.geom_text(x = 0, y = min(*algorithm_data['rel_value'], -3), label = "better", color = "red")
     plot.save(file + "_regression_" + algorithm + "_" + regression_type + ".pdf")
     stat, p = mannwhitneyu(ref_algorithm_data[regression_type], algorithm_data[regression_type])
     if p < 0.05:

@@ -29,7 +29,7 @@ task displaySizeDifferences(type: Exec) {
 }
 
 task testRuntimeRegressions(type: Exec) {
-    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "runtime"
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "runtime"
 }
 
 task runBenchmark() {
