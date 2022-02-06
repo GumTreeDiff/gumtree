@@ -21,7 +21,7 @@
 package com.github.gumtreediff.gen.jdt.cd;
 
 import com.github.gumtreediff.gen.Register;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.gen.jdt.AbstractJdtVisitor;
 import com.github.gumtreediff.gen.jdt.AbstractJdtTreeGenerator;
 import org.eclipse.jdt.core.compiler.IScanner;

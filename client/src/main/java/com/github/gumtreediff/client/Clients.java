@@ -20,7 +20,7 @@
 
 package com.github.gumtreediff.client;
 
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 
 public class Clients extends Registry<String, Client, Register> {
     private static Clients registry;

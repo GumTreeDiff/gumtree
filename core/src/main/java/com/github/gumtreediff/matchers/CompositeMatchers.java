@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.matchers.heuristic.IdMatcher;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;

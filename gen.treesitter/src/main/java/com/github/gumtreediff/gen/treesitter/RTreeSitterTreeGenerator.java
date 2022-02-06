@@ -20,7 +20,7 @@
 package com.github.gumtreediff.gen.treesitter;
 
 import com.github.gumtreediff.gen.Register;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 
 @Register(id = "r-treesitter", accept = "\\.[rR]$", priority = Registry.Priority.HIGH)
 public final class RTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {

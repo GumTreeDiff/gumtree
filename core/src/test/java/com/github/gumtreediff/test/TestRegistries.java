@@ -20,7 +20,7 @@
 package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.gen.Register;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.matchers.MappingStore;
@@ -38,7 +38,7 @@ import java.io.Reader;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class TestRegistry {
+public class TestRegistries {
     @Test
     public void testTreeGenerators() {
         TreeGenerators generators = TreeGenerators.getInstance();
@@ -67,11 +67,12 @@ public class TestRegistry {
                 FooMatcher.class.getAnnotation(com.github.gumtreediff.matchers.Register.class));
         assertNotNull(matchers.getMatcher("foo"));
         assertNull(matchers.getMatcher("bar"));
+        assertEquals(FooMatcher.class, matchers.getMatcherWithFallback("baz").getClass());
         matchers.install(BarMatcher.class,
                 BarMatcher.class.getAnnotation(com.github.gumtreediff.matchers.Register.class));
         assertNotNull(matchers.getMatcher("foo"));
         assertNotNull(matchers.getMatcher("bar"));
-        assertNotNull(matchers.getMatcherWithFallback("baz"));
+        assertEquals(BarMatcher.class, matchers.getMatcherWithFallback("baz").getClass());
     }
 
     @Register(id = "foo", accept = "\\.foo$", priority = Registry.Priority.HIGH)
@@ -102,7 +103,7 @@ public class TestRegistry {
         }
     }
 
-    @com.github.gumtreediff.matchers.Register(id = "bar", defaultMatcher = true)
+    @com.github.gumtreediff.matchers.Register(id = "bar", priority = Registry.Priority.MAXIMUM)
     public static class BarMatcher implements Matcher {
         @Override
         public MappingStore match(Tree src, Tree dst, MappingStore mappings) {

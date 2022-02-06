@@ -18,16 +18,14 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.gen;
-
+package com.github.gumtreediff.utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public abstract class Registry<K, C, A> {
-
-    Set<Entry> entries = new TreeSet<>((o1, o2) -> {
+    protected Set<Entry> entries = new TreeSet<>((o1, o2) -> {
         int cmp = o1.priority - o2.priority;
         if (cmp == 0)
             cmp = o1.id.compareToIgnoreCase(o2.id); // FIXME or not ... is id a good unique stuff

@@ -21,7 +21,7 @@
 package com.github.gumtreediff.client;
 
 import com.github.gumtreediff.gen.TreeGenerators;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;

@@ -19,15 +19,17 @@
 
 package com.github.gumtreediff.gen.treesitter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.github.gumtreediff.gen.SyntaxException;
+import com.github.gumtreediff.gen.TreeGenerator;
+import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.optimal.TopDownMatcher;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TreeSitterTreeGeneratorsTest {
     @Test
@@ -53,12 +55,12 @@ public class TreeSitterTreeGeneratorsTest {
         String input = "print(paste(\"How\",\"are\",\"you?\"))";
         TreeContext ctx = new RTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
-        assertEquals(18, t.getMetrics().size);
+        assertEquals(16, t.getMetrics().size);
     }
 
     @Test
     public void testRError() throws IOException {
-        String input = "print(";
+        String input = "print)";
         assertThrows(SyntaxException.class, () -> {
             new RTreeSitterTreeGenerator().generateFrom().string(input);
         });
@@ -85,7 +87,7 @@ public class TreeSitterTreeGeneratorsTest {
         String input = "let message: string = 'Hello, World!';";
         TreeContext ctx = new TypeScriptTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
-        assertEquals(15, t.getMetrics().size);
+        assertEquals(12, t.getMetrics().size);
     }
 
     @Test
@@ -117,7 +119,7 @@ public class TreeSitterTreeGeneratorsTest {
         String input = "print_string \"Hello world!\\n\";;\n";
         TreeContext ctx = new OcamlTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
-        assertEquals(11, t.getMetrics().size);
+        assertEquals(7, t.getMetrics().size);
     }
 
     @Test

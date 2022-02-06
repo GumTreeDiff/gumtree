@@ -20,7 +20,7 @@
 package com.github.gumtreediff.gen.treesitter;
 
 import com.github.gumtreediff.gen.Register;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 
 @Register(id = "php-treesitter", accept = "\\.php$", priority = Registry.Priority.MAXIMUM)
 public final class PhpTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {

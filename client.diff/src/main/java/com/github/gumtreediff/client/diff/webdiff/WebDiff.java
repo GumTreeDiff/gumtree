@@ -24,7 +24,7 @@ import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.utils.Pair;
 import org.rendersnake.HtmlCanvas;

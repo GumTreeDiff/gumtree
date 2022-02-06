@@ -22,7 +22,7 @@ package com.github.gumtreediff.gen.jdt;
 
 
 import com.github.gumtreediff.gen.Register;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import org.eclipse.jdt.core.compiler.IScanner;
 
 @Register(id = "java-jdt", accept = "\\.java$", priority = Registry.Priority.MAXIMUM)
