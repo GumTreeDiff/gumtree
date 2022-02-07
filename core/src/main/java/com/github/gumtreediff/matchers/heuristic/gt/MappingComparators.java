@@ -31,46 +31,53 @@ import java.util.*;
 
 public class MappingComparators {
     public static class FullMappingComparator implements Comparator<Mapping> {
-        private SiblingsSimilarityMappingComparator siblingsComparator;
-        private ParentsSimilarityMappingComparator parentsComparator;
-        private PositionInParentsSimilarityMappingComparator parentsPositionComparator;
-        private AbsolutePositionDistanceMappingComparator positionComparator;
+        private final SiblingsSimilarityMappingComparator siblingsComparator;
+        private final ParentsSimilarityMappingComparator parentsComparator;
+        private final PositionInParentsSimilarityMappingComparator parentsPositionComparator;
+        private final TextualPositionDistanceMappingComparator textualPositionComparator;
+        private final AbsolutePositionDistanceMappingComparator positionComparator;
 
         public FullMappingComparator(MappingStore ms) {
             siblingsComparator = new SiblingsSimilarityMappingComparator(ms);
             parentsComparator = new ParentsSimilarityMappingComparator();
             parentsPositionComparator = new PositionInParentsSimilarityMappingComparator();
+            textualPositionComparator = new TextualPositionDistanceMappingComparator();
             positionComparator = new AbsolutePositionDistanceMappingComparator();
         }
 
         @Override
         public int compare(Mapping m1, Mapping m2) {
-            //System.out.println("compare with siblings.");
+            // compare with matched siblings similarity
             int result = siblingsComparator.compare(m1, m2);
             if (result != 0)
                 return result;
 
-            //System.out.println("compare with parents.");
+            // compare with ancestors similarity
             result = parentsComparator.compare(m1, m2);
             if (result != 0)
                 return result;
 
-            //System.out.println("compare with relative pos.");
+            // compare with relative position similarity
             result = parentsPositionComparator.compare(m1, m2);
             if (result != 0)
                 return result;
 
-            //System.out.println("compare with absolute pos.");
+            // compare with relative pos
+            result = textualPositionComparator.compare(m1, m2);
+            if (result != 0)
+                return result;
+
+            // compare with absolute pos
             return positionComparator.compare(m1, m2);
         }
     }
 
     public static class SiblingsSimilarityMappingComparator implements Comparator<Mapping> {
-        private MappingStore ms;
+        private final MappingStore ms;
 
-        private Map<Tree, Set<Tree>> srcDescendants = new HashMap<>();
-        private Map<Tree, Set<Tree>> dstDescendants = new HashMap<>();
-        private Map<Mapping, Double> cachedSimilarities = new HashMap<>();
+        private final Map<Tree, Set<Tree>> srcDescendants = new HashMap<>();
+        private final Map<Tree, Set<Tree>> dstDescendants = new HashMap<>();
+        private final Map<Mapping, Double> cachedSimilarities = new HashMap<>();
 
         public SiblingsSimilarityMappingComparator(MappingStore ms) {
             this.ms = ms;
@@ -98,10 +105,8 @@ public class MappingComparators {
         }
 
         private int commonDescendantsNb(Tree src, Tree dst) {
-            if (!srcDescendants.containsKey(src))
-                srcDescendants.put(src, new HashSet<>(src.getDescendants()));
-            if (!dstDescendants.containsKey(dst))
-                dstDescendants.put(dst, new HashSet<>(dst.getDescendants()));
+            srcDescendants.putIfAbsent(src, new HashSet<>(src.getDescendants()));
+            dstDescendants.putIfAbsent(dst, new HashSet<>(dst.getDescendants()));
 
             int common = 0;
 
@@ -116,7 +121,7 @@ public class MappingComparators {
     }
 
     public static class ParentsSimilarityMappingComparator implements Comparator<Mapping> {
-        private Map<Mapping, Double> cachedSimilarities = new HashMap<>();
+        private final Map<Mapping, Double> cachedSimilarities = new HashMap<>();
 
         @Override
         public int compare(Mapping m1, Mapping m2) {
