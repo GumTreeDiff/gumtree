@@ -20,20 +20,20 @@
 package com.github.gumtreediff.matchers.heuristic.gt;
 
 import com.github.gumtreediff.tree.Tree;
+import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectSortedMap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.function.Function;
 
 public class DefaultPriorityTreeQueue implements PriorityTreeQueue {
     private Function<Tree, Integer> priorityCalculator;
-    private SortedMap<Integer, List<Tree>> trees;
+    private final Int2ObjectSortedMap<List<Tree>> trees;
     private int minimumPriority;
 
     public DefaultPriorityTreeQueue(Tree root, int minimumPriority, Function<Tree, Integer> priorityCalculator) {
-        this.trees = new TreeMap<>();
+        this.trees = new Int2ObjectRBTreeMap<>();
         this.setMinimumPriority(minimumPriority);
         this.setPriorityCalculator(priorityCalculator);
         add(root);
@@ -65,7 +65,7 @@ public class DefaultPriorityTreeQueue implements PriorityTreeQueue {
 
     @Override
     public int currentPriority() {
-        return trees.lastKey();
+        return trees.lastIntKey();
     }
 
     @Override
@@ -93,8 +93,7 @@ public class DefaultPriorityTreeQueue implements PriorityTreeQueue {
         if (priority < this.getMinimumPriority())
             return;
 
-        if (trees.get(priority) == null)
-            trees.put(priority, new ArrayList<>());
+        trees.putIfAbsent(priority, new ArrayList<>());
         trees.get(priority).add(t);
     }
 }
