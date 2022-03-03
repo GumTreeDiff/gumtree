@@ -61,7 +61,7 @@ public class TestGumtreeMatcher {
     }
 
     @Test
-    public void testSiblingsMappingComparatorPosInParent() {
+    public void testMappingComparatorPosInParent() {
         Tree t1 = new DefaultTree(TypeSet.type("root"));
         Tree a11 = new DefaultTree(TypeSet.type("a"));
         t1.addChild(a11);
@@ -87,11 +87,11 @@ public class TestGumtreeMatcher {
         matcher.setMinPriority(0);
         MappingStore ms = matcher.match(t1, t2);
         assertTrue(ms.has(a11, a21));
-        assertTrue(ms.has(a13, a22));
+        assertTrue(ms.has(a12, a22));
     }
 
     @Test
-    public void testSiblingsMappingComparatorPosInTree() {
+    public void testMappingComparatorPosInTree() {
         Tree t1 = new DefaultTree(TypeSet.type("root"));
         Tree a11 = new DefaultTree(TypeSet.type("a"));
         t1.addChild(a11);
@@ -141,8 +141,6 @@ public class TestGumtreeMatcher {
         ms.addMapping(t1.getChild("0.2.3"), t2.getChild("0.2.3"));
 
         GreedyBottomUpMatcher matcher = new GreedyBottomUpMatcher();
-        GumtreeProperties properties = new GumtreeProperties();
-
         matcher.setSimThreshold(1.0);
         matcher.setSizeThreshold(0);
 

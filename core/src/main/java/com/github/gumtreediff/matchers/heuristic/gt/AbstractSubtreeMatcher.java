@@ -20,17 +20,12 @@
 
 package com.github.gumtreediff.matchers.heuristic.gt;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
-import com.github.gumtreediff.matchers.ConfigurationOptions;
-import com.github.gumtreediff.matchers.GumtreeProperties;
-import com.github.gumtreediff.matchers.Mapping;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.MultiMappingStore;
+import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.utils.Pair;
 import com.google.common.collect.Sets;
 
 public abstract class AbstractSubtreeMatcher implements Matcher {
@@ -61,54 +56,34 @@ public abstract class AbstractSubtreeMatcher implements Matcher {
         this.dst = dst;
         this.mappings = mappings;
 
-        var multiMappings = new MultiMappingStore();
+        List<Pair<Set<Tree>, Set<Tree>>> ambiguousMappings = new ArrayList<>();
+
         PriorityTreeQueue srcTrees = new DefaultPriorityTreeQueue(src, this.minPriority, this.priorityCalculator);
         PriorityTreeQueue dstTrees = new DefaultPriorityTreeQueue(dst, this.minPriority, this.priorityCalculator);
 
-        while (!(srcTrees.isEmpty() || dstTrees.isEmpty())) {
-            PriorityTreeQueue.synchronize(srcTrees, dstTrees);
-            if (srcTrees.isEmpty() || dstTrees.isEmpty())
-                break;
+        while (PriorityTreeQueue.synchronize(srcTrees, dstTrees)) {
+            var localHashMappings = new HashBasedMapper();
+            localHashMappings.addSrcs(srcTrees.pop());
+            localHashMappings.addDsts(dstTrees.pop());
 
-            var currentPrioritySrcTrees = srcTrees.pop();
-            var currentPriorityDstTrees = dstTrees.pop();
+            localHashMappings.unique().forEach(
+                    (pair) -> mappings.addMappingRecursively(
+                            pair.first.stream().findAny().get(), pair.second.stream().findAny().get()));
 
-            for (var currentSrc : currentPrioritySrcTrees)
-                for (var currentDst : currentPriorityDstTrees)
-                    if (currentSrc.getMetrics().hash == currentDst.getMetrics().hash)
-                        if (currentSrc.isIsomorphicTo(currentDst))
-                            multiMappings.addMapping(currentSrc, currentDst);
+            localHashMappings.ambiguous().forEach(
+                    (pair) -> ambiguousMappings.add(pair));
 
-            for (var t : currentPrioritySrcTrees)
-                if (!multiMappings.hasSrc(t))
-                    srcTrees.open(t);
-            for (var t : currentPriorityDstTrees)
-                if (!multiMappings.hasDst(t))
-                    dstTrees.open(t);
+            localHashMappings.unmapped().forEach((pair) -> {
+                pair.first.forEach(tree -> srcTrees.open(tree));
+                pair.second.forEach(tree -> dstTrees.open(tree));
+            });
         }
 
-        filterMappings(multiMappings);
+        handleAmbiguousMappings(ambiguousMappings);
         return this.mappings;
     }
 
-    public abstract void filterMappings(MultiMappingStore multiMappings);
-
-    protected int getMaxTreeSize() {
-        return Math.max(src.getMetrics().size, dst.getMetrics().size);
-    }
-
-    protected void retainBestMapping(List<Mapping> mappingList, Set<Tree> srcIgnored, Set<Tree> dstIgnored) {
-        while (mappingList.size() > 0) {
-            var mapping = mappingList.remove(0);
-            if (!(srcIgnored.contains(mapping.first) || dstIgnored.contains(mapping.second))) {
-                mappings.addMappingRecursively(mapping.first, mapping.second);
-                srcIgnored.add(mapping.first);
-                srcIgnored.addAll(mapping.first.getDescendants());
-                dstIgnored.add(mapping.second);
-                dstIgnored.addAll(mapping.second.getDescendants());
-            }
-        }
-    }
+    public abstract void handleAmbiguousMappings(List<Pair<Set<Tree>, Set<Tree>>> ambiguousMappings);
 
     public int getMinPriority() {
         return minPriority;
@@ -122,5 +97,4 @@ public abstract class AbstractSubtreeMatcher implements Matcher {
     public Set<ConfigurationOptions> getApplicableOptions() {
         return Sets.newHashSet(ConfigurationOptions.st_priocalc, ConfigurationOptions.st_minprio);
     }
-
 }
