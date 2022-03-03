@@ -119,14 +119,6 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "gumtree-partition-id")
-    public static class PartitionGumtreeMatcher extends CompositeMatcher {
-        public PartitionGumtreeMatcher() {
-            super(new IdMatcher(), new PartitionSubtreeMatcher(),
-                    new SimpleBottomUpMatcher());
-        }
-    }
-
     @Register(id = "change-distiller")
     public static class ChangeDistiller extends CompositeMatcher {
         public ChangeDistiller() {
