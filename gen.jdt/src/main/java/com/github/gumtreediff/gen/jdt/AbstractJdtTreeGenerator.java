@@ -53,12 +53,12 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public TreeContext generate(Reader r) throws IOException {
-        ASTParser parser = ASTParser.newParser(AST.JLS14);
+        ASTParser parser = ASTParser.newParser(AST.JLS16);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
         Map pOptions = JavaCore.getOptions();
-        pOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_14);
-        pOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_14);
-        pOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_14);
+        pOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_16);
+        pOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_16);
+        pOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_16);
         pOptions.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
         parser.setCompilerOptions(pOptions);
         char[] source = readerToCharArray(r);
