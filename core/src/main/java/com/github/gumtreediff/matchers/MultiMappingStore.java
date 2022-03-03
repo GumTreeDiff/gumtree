@@ -29,12 +29,6 @@ public class MultiMappingStore implements Iterable<Mapping> {
     private Map<Tree, Set<Tree>> srcToDsts;
     private Map<Tree, Set<Tree>> dstToSrcs;
 
-    public MultiMappingStore(Set<Mapping> mappings) {
-        this();
-        for (Mapping m: mappings)
-            addMapping(m.first, m.second);
-    }
-
     public MultiMappingStore() {
         srcToDsts = new  HashMap<>();
         dstToSrcs = new HashMap<>();
