@@ -41,7 +41,7 @@ import java.util.function.Supplier;
 
 public class RunOnDataset {
     private static final int TIME_MEASURES = 5;
-
+    private static String ROOT_FOLDER;
     private static FileWriter OUTPUT;
 
     public static void main(String[] args) throws IOException {
@@ -51,12 +51,14 @@ public class RunOnDataset {
                     + Arrays.toString(args));
             System.exit(1);
         }
+        ROOT_FOLDER = new File(args[0]).getAbsolutePath();
         TreeGenerators.getInstance().install(
                 JdtTreeGenerator.class, JdtTreeGenerator.class.getAnnotation(Register.class));
         TreeGenerators.getInstance().install(
                 PythonTreeGenerator.class, PythonTreeGenerator.class.getAnnotation(Register.class));
         OUTPUT = new FileWriter(args[1]);
         OUTPUT.append("case;algorithm;t1;t2;t3;t4;t5;size\n");
+
         DirectoryComparator comparator = new DirectoryComparator(args[0] + "/buggy", args[0] + "/fixed");
         comparator.compare();
         int done = 0;
@@ -80,7 +82,8 @@ public class RunOnDataset {
         TreeContext srcT = TreeGenerators.getInstance().getTree(src.getAbsolutePath());
         TreeContext dstT = TreeGenerators.getInstance().getTree(dst.getAbsolutePath());
         for (MatcherConfig config : configurations)
-            handleMatcher(src.getName(), config.name, config.matcherFactory.get(), srcT, dstT);
+            handleMatcher(src.getAbsolutePath().substring(ROOT_FOLDER.length() + 1),
+                    config.name, config.matcherFactory.get(), srcT, dstT);
     }
 
     private static void handleMatcher(String file, String matcher, Matcher m,

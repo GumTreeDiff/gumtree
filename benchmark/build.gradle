@@ -28,6 +28,10 @@ task displaySizeDifferences(type: Exec) {
     commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
 }
 
+task displayRuntimeDifferences(type: Exec) {
+    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "runtime"
+}
+
 task testRuntimeRegressions(type: Exec) {
     commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "runtime"
 }

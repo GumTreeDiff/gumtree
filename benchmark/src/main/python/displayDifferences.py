@@ -24,8 +24,8 @@ def displayDifferences(ref_file, file, difference_type):
   print("Selected algorithms " + repr(common_algorithms))
   for algorithm in common_algorithms:
     for case in common_cases:
-      ref_value = ref_data[(ref_data['algorithm'] == algorithm) & (ref_data['case'] == case)][difference_type].item()
-      actual_value = data[(data['algorithm'] == algorithm) & (data['case'] == case)][difference_type].item()
+      ref_value = ref_data[(ref_data['algorithm'] == algorithm) & (ref_data['case'] == case)][difference_type].tolist()
+      actual_value = data[(data['algorithm'] == algorithm) & (data['case'] == case)][difference_type].tolist()
       if (ref_value != actual_value):
         print("Detected " + difference_type + " difference for algorithm: " + algorithm + " on case: " + case)
         print("Reference value: " + str(ref_value))
