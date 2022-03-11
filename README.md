@@ -8,20 +8,13 @@ An awesome code differencing tool.
 
 ## Description
 
-GumTree is a tool to deal with source code as trees and compute differences between them. It has the following features:
-* converting a source file into a language-agnostic tree format
-* export the produced trees in various formats
-* compute the differences between the trees
-* export these differences in various formats
-* visualize these differences graphically
-
-It improves text-based diff tools in two important ways:
-* it works on a tree structure rather than a text structure,
-* it can detect moved or renamed elements in addition of deleted and inserted elements.
+GumTree is a syntax-aware diff tool. It improves text-based diff tools in two important ways:
+* the edit actions are always aligned with the syntax,
+* it can detect moved or renamed elements in addition of deleted and inserted code.
 
 ## Documentation
 
-To use GumTree, you can start by consulting the [Getting Started](https://github.com/GumTreeDiff/gumtree/wiki/Getting-Started) page from our [wiki](https://github.com/GumTreeDiff/gumtree/wiki).
+To use GumTree, you can start by consulting the [Getting Started](https://github.com/GumTreeDiff/gumtree/wiki/Getting-Started) page from our [wiki](https://github.com/GumTreeDiff/gumtree/wiki). If you have a question to ask, please use GitHub's [discussions](https://github.com/GumTreeDiff/gumtree/discussions) instead of opening an issue.
 
 ## Screenshots
 
