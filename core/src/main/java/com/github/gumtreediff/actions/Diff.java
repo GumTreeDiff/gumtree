@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2019 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2022 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2022 Raquel Pau <raquelpau@gmail.com>
  */
 
 package com.github.gumtreediff.actions;
@@ -27,6 +28,7 @@ import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
+import java.io.Reader;
 
 /**
  * Class to facilitate the computation of diffs between ASTs.
@@ -78,11 +80,34 @@ public class Diff {
                                String matcher, GumtreeProperties properties) throws IOException {
         TreeContext src = TreeGenerators.getInstance().getTree(srcFile, treeGenerator);
         TreeContext dst = TreeGenerators.getInstance().getTree(dstFile, treeGenerator);
+
+        return compute(src, dst, treeGenerator, matcher, properties);
+    }
+
+    private static Diff compute(TreeContext src, TreeContext dst, String treeGenerator,
+                               String matcher, GumtreeProperties properties) throws IOException {
         Matcher m = Matchers.getInstance().getMatcherWithFallback(matcher);
         m.configure(properties);
         MappingStore mappings = m.match(src.getRoot(), dst.getRoot());
         EditScript editScript = new SimplifiedChawatheScriptGenerator().computeActions(mappings);
         return new Diff(src, dst, mappings, editScript);
+    }
+
+    /**
+     * Compute and return a diff.
+     * @param srcReader The reader to the source file.
+     * @param dstReader The reader to the destination file.
+     * @param treeGenerator The id of the tree generator to use.
+     * @param matcher The id of the the matcher to use.
+     * @param properties The set of options.
+     * @throws IOException an IO exception is raised in case of IO problems related to the source
+     *     or destination file.
+     */
+    public static Diff compute(Reader srcReader, Reader dstReader, String treeGenerator,
+                               String matcher, GumtreeProperties properties) throws IOException {
+        TreeContext src = TreeGenerators.getInstance().getTree(srcReader, treeGenerator);
+        TreeContext dst = TreeGenerators.getInstance().getTree(dstReader, treeGenerator);
+        return compute(src, dst, treeGenerator, matcher, properties);
     }
 
     /**
