@@ -12,9 +12,9 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
+ * along with GumTree. If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2016 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2022 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
 package com.github.gumtreediff.gen.treesitter;
@@ -52,36 +52,37 @@ public class TreeSitterTreeGeneratorsTest {
 
     @Test
     public void testCSharp() throws IOException {
-        String input = "using System;\n" +
-                "\n" +
-                "namespace HelloWorld\n" +
-                "{\n" +
-                "  class Program\n" +
-                "  {\n" +
-                "    static void Main(string[] args)\n" +
-                "    {\n" +
-                "      Console.WriteLine(\"Hello World!\");\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
+        String input = "using System;\n"
+                + "\n"
+                + "namespace HelloWorld\n"
+                + "{\n"
+                + "  class Program\n"
+                + "  {\n"
+                + "    static void Main(string[] args)\n"
+                + "    {\n"
+                + "      Console.WriteLine(\"Hello World!\");\n"
+                + "    }\n"
+                + "  }\n"
+                + "}";
         TreeContext ctx = new CSharpTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
         assertEquals(49, t.getMetrics().size);
     }
+
     @Test
     public void testCSharpError() throws IOException {
-        String input = "using System\n" +
-                "\n" +
-                "namespace HelloWorld\n" +
-                "{\n" +
-                "  class Program\n" +
-                "  {\n" +
-                "    static void Main(string[] args)\n" +
-                "    {\n" +
-                "      Console.WriteLine(\"Hello World!\");\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
+        String input = "using System\n"
+                + "\n"
+                + "namespace HelloWorld\n"
+                + "{\n"
+                + "  class Program\n"
+                + "  {\n"
+                + "    static void Main(string[] args)\n"
+                + "    {\n"
+                + "      Console.WriteLine(\"Hello World!\");\n"
+                + "    }\n"
+                + "  }\n"
+                + "}";
         assertThrows(SyntaxException.class, () -> {
             new CSharpTreeSitterTreeGenerator().generateFrom().string(input);
         });
