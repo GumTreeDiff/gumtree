@@ -36,7 +36,7 @@ RUN git clone https://github.com/GumTreeDiff/jsparser.git /opt/jsparser --depth 
 # Install tree-sitter-parser
 RUN git clone --recurse-submodules https://github.com/GumTreeDiff/tree-sitter-parser.git /opt/tree-sitter-parser --depth 1 \
     && ln -s /opt/tree-sitter-parser/tree-sitter-parser.py /usr/bin/tree-sitter-parser.py \
-    && pip3 install tree_sitter
+    && pip3 install tree_sitter pyyaml
 
 # Install gumtree
 COPY . /opt/gumtree
