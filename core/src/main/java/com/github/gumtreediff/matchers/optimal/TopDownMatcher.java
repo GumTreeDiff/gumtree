@@ -41,6 +41,6 @@ public class TopDownMatcher implements Matcher {
 
         mappings.addMapping(src, dst);
         for (int i = 0; i < src.getChildren().size(); i++)
-            match(src.getChild(i), dst.getChild(i));
+            recursiveMatch(src.getChild(i), dst.getChild(i), mappings);
     }
 }
