@@ -51,6 +51,43 @@ public class TreeSitterTreeGeneratorsTest {
     }
 
     @Test
+    public void testCSharp() throws IOException {
+        String input = "using System;\n" +
+                "\n" +
+                "namespace HelloWorld\n" +
+                "{\n" +
+                "  class Program\n" +
+                "  {\n" +
+                "    static void Main(string[] args)\n" +
+                "    {\n" +
+                "      Console.WriteLine(\"Hello World!\");\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+        TreeContext ctx = new CSharpTreeSitterTreeGenerator().generateFrom().string(input);
+        Tree t = ctx.getRoot();
+        assertEquals(49, t.getMetrics().size);
+    }
+    @Test
+    public void testCSharpError() throws IOException {
+        String input = "using System\n" +
+                "\n" +
+                "namespace HelloWorld\n" +
+                "{\n" +
+                "  class Program\n" +
+                "  {\n" +
+                "    static void Main(string[] args)\n" +
+                "    {\n" +
+                "      Console.WriteLine(\"Hello World!\");\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+        assertThrows(SyntaxException.class, () -> {
+            new CSharpTreeSitterTreeGenerator().generateFrom().string(input);
+        });
+    }
+
+    @Test
     public void testR() throws IOException {
         String input = "print(paste(\"How\",\"are\",\"you?\"))";
         TreeContext ctx = new RTreeSitterTreeGenerator().generateFrom().string(input);
