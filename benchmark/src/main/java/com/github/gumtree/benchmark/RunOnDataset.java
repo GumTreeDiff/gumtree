@@ -74,7 +74,7 @@ public class RunOnDataset {
 
     private static final MatcherConfig[] configurations = new MatcherConfig[] {
             new MatcherConfig("SimpleId", CompositeMatchers.SimpleIdGumtree::new),
-            //new MatcherConfig("Simple", () -> new CompositeMatchers.SimpleGumtree()),
+            new MatcherConfig("Classic", CompositeMatchers.ClassicGumtree::new),
             //new MatcherConfig("HybridId", () -> new CompositeMatchers.HybridIdGumtree()),
     };
 
