@@ -93,7 +93,7 @@ public class TreeSitterTreeGeneratorsTest {
         String input = "print(paste(\"How\",\"are\",\"you?\"))";
         TreeContext ctx = new RTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
-        assertEquals(16, t.getMetrics().size);
+        assertEquals(22, t.getMetrics().size);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class TreeSitterTreeGeneratorsTest {
         String input = "let message: string = 'Hello, World!';";
         TreeContext ctx = new TypeScriptTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
-        assertEquals(12, t.getMetrics().size);
+        assertEquals(15, t.getMetrics().size);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class TreeSitterTreeGeneratorsTest {
         String input = "public class Foo { int foo(int a, int b) { return a + b; } }";
         TreeContext ctx = new JavaTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
-        assertEquals(35, t.getMetrics().size);
+        assertEquals(23, t.getMetrics().size);
     }
 
     @Test
