@@ -25,6 +25,7 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.matchers.*;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -68,7 +69,12 @@ public class TestDiff {
 
         assertNoChanges(resultWithReader.mappings);
         assertNoChanges(resultWithFiles.mappings);
+    }
 
+    @AfterAll
+    public static void clear() {
+        Matchers.getInstance().clear();
+        TreeGenerators.getInstance().clear();
     }
 
     private static void assertNoChanges(MappingStore mappings) {
