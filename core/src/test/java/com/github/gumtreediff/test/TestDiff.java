@@ -71,9 +71,9 @@ public class TestDiff {
 
     }
 
-   private static void assertNoChanges(MappingStore mappings) {
-       for (Mapping mapping: mappings){
-           assertEquals(mapping.first.toTreeString(), mapping.second.toTreeString());
-       }
-   }
+    private static void assertNoChanges(MappingStore mappings) {
+        for (Mapping mapping : mappings) {
+            assertEquals(mapping.first.toTreeString(), mapping.second.toTreeString());
+        }
+    }
 }
