@@ -118,12 +118,11 @@ public class RunOnDataset {
         Arrays.sort(times);
         EditScriptGenerator g = new SimplifiedChawatheScriptGenerator();
         EditScript s = g.computeActions(mappings);
-        int size = s.size();
+
         int nbIns = 0;
         int nbDel = 0;
         int nbMov = 0;
         int nbUpd = 0;
-
         for (Action a : s) {
             if (a instanceof Insert)
                 nbIns++;
@@ -135,11 +134,11 @@ public class RunOnDataset {
                 nbUpd++;
         }
 
-        String format = "%s;%s;" + "%d;".repeat(TIME_MEASURES) + "%d;%d;%d;%d;%d";
         OUTPUT.append(file + ";");
         OUTPUT.append(matcher + ";");
         for (int i = 0; i < TIME_MEASURES; i++)
             OUTPUT.append(times[i] + ";");
+        int size = s.size();
         OUTPUT.append(size + ";");
         OUTPUT.append(nbIns + ";");
         OUTPUT.append(nbDel + ";");
