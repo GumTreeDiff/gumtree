@@ -22,6 +22,7 @@ package com.github.gumtree.benchmark;
 import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
+import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
@@ -36,16 +37,20 @@ import com.github.gumtreediff.utils.Pair;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class RunOnDataset {
     private static final int TIME_MEASURES = 5;
     private static String ROOT_FOLDER;
     private static FileWriter OUTPUT;
+    private static List<MatcherConfig> configurations = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
-        if (args.length != 2) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        if (args.length < 2) {
             System.err.println(args.length);
             System.err.println("Wrong command. Expected arguments: INPUT_FOLDER OUTPUT_FILE. Got: "
                     + Arrays.toString(args));
@@ -57,7 +62,27 @@ public class RunOnDataset {
         TreeGenerators.getInstance().install(
                 PythonTreeGenerator.class, PythonTreeGenerator.class.getAnnotation(Register.class));
         OUTPUT = new FileWriter(args[1]);
-        OUTPUT.append("case;algorithm;t1;t2;t3;t4;t5;size\n");
+
+        String header = "case;algorithm;" + "t;".repeat(TIME_MEASURES) + "s;ni;nd;nu;nm";
+        OUTPUT.append(header + "\n");
+
+        for (int i = 2; i < args.length; i++) {
+            Class<? extends Matcher> matcherClass = (Class<? extends Matcher>) Class.forName(args[i]);
+            configurations.add(new MatcherConfig(matcherClass.getSimpleName(), () -> {
+                try {
+                    Constructor<? extends Matcher> matcherConstructor = matcherClass.getConstructor();
+                    return matcherConstructor.newInstance();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            }));
+        }
+
+        if (configurations.isEmpty()) {
+            configurations.add(new MatcherConfig("Simple", CompositeMatchers.SimpleGumtree::new));
+            configurations.add(new MatcherConfig("Hybrid", CompositeMatchers.HybridGumtree::new));
+        }
 
         DirectoryComparator comparator = new DirectoryComparator(args[0] + "/buggy", args[0] + "/fixed");
         comparator.compare();
@@ -71,12 +96,6 @@ public class RunOnDataset {
         }
         OUTPUT.close();
     }
-
-    private static final MatcherConfig[] configurations = new MatcherConfig[] {
-            new MatcherConfig("SimpleId", CompositeMatchers.SimpleIdGumtree::new),
-            //new MatcherConfig("Classic", CompositeMatchers.ClassicGumtree::new),
-            //new MatcherConfig("HybridId", () -> new CompositeMatchers.HybridIdGumtree()),
-    };
 
     private static void handleCase(File src, File dst) throws IOException {
         TreeContext srcT = TreeGenerators.getInstance().getTree(src.getAbsolutePath());
@@ -100,8 +119,32 @@ public class RunOnDataset {
         EditScriptGenerator g = new SimplifiedChawatheScriptGenerator();
         EditScript s = g.computeActions(mappings);
         int size = s.size();
-        OUTPUT.append(String.format("%s;%s;%d;%d;%d;%d;%d;%d\n", file, matcher,
-                times[0], times[1], times[2], times[3], times[4], size));
+        int nbIns = 0;
+        int nbDel = 0;
+        int nbMov = 0;
+        int nbUpd = 0;
+
+        for (Action a : s) {
+            if (a instanceof Insert)
+                nbIns++;
+            else if (a instanceof Delete)
+                nbDel++;
+            else if (a instanceof Move)
+                nbMov++;
+            else if (a instanceof Update)
+                nbUpd++;
+        }
+
+        String format = "%s;%s;" + "%d;".repeat(TIME_MEASURES) + "%d;%d;%d;%d;%d";
+        OUTPUT.append(file + ";");
+        OUTPUT.append(matcher + ";");
+        for (int i = 0; i < TIME_MEASURES; i++)
+            OUTPUT.append(times[i] + ";");
+        OUTPUT.append(size + ";");
+        OUTPUT.append(nbIns + ";");
+        OUTPUT.append(nbDel + ";");
+        OUTPUT.append(nbUpd + ";");
+        OUTPUT.append(nbMov + "\n");
     }
 
     private static class MatcherConfig {

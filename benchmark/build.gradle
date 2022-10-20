@@ -16,34 +16,54 @@ task runOnDefects4J(type: JavaExec) {
     args "${project.projectDir}/datasets/defects4j", "${project.buildDir}/reports/defects4j.csv"
 }
 
+task runOnDefects4JFull(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args "${project.projectDir}/datasets/defects4j",
+            "${project.buildDir}/reports/defects4j-full.csv",
+            "com.github.gumtreediff.matchers.CompositeMatchers\$SimpleGumtree",
+            "com.github.gumtreediff.matchers.CompositeMatchers\$ClassicGumtree",
+            "com.github.gumtreediff.matchers.CompositeMatchers\$HybridGumtree"
+}
+
 task runOnBugsInPy(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
     args "${project.projectDir}/datasets/bugsinpy", "${project.buildDir}/reports/bugsinpy.csv"
 }
 
+task runOnBugsInPyFull(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args "${project.projectDir}/datasets/bugsinpy",
+            "${project.buildDir}/reports/bugsinpy-full.csv",
+            "com.github.gumtreediff.matchers.CompositeMatchers\$SimpleGumtree",
+            "com.github.gumtreediff.matchers.CompositeMatchers\$ClassicGumtree",
+            "com.github.gumtreediff.matchers.CompositeMatchers\$HybridGumtree"
+}
+
 task localDefects4JAnalysis(type: Exec) {
     commandLine "python3", "${project.projectDir}/src/main/python/plotResults.py", "${project.buildDir}/reports/defects4j.csv"
-    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "s"
     commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "runtime"
-    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
+    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "s"
 }
 
 task ciDefects4JAnalysis(type: Exec) {
     commandLine "python3", "${project.projectDir}/src/main/python/plotResults.py", "${project.buildDir}/reports/defects4j.csv"
-    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
-    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "s"
+    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "s"
 }
 
 task localBugsInPyAnalysis(type: Exec) {
     commandLine "python3", "${project.projectDir}/src/main/python/plotResults.py", "${project.buildDir}/reports/bugsinpy.csv"
-    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/bugsinpy.csv", "${project.buildDir}/reports/bugsinpy.csv", "size"
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/bugsinpy.csv", "${project.buildDir}/reports/bugsinpy.csv", "s"
     commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/bugsinpy.csv", "${project.buildDir}/reports/bugsinpy.csv", "runtime"
-    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/bugsinpy.csv", "${project.buildDir}/reports/bugsinpy.csv", "size"
+    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/bugsinpy.csv", "${project.buildDir}/reports/bugsinpy.csv", "s"
 }
 
 task ciBugsInPyAnalysis(type: Exec) {
     commandLine "python3", "${project.projectDir}/src/main/python/plotResults.py", "${project.buildDir}/reports/bugsinpy.csv"
-    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/bugsinpy.csv", "${project.buildDir}/reports/bugsinpy.csv", "size"
-    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/bugsinpy.csv", "${project.buildDir}/reports/bugsinpy.csv", "size"
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/bugsinpy.csv", "${project.buildDir}/reports/bugsinpy.csv", "s"
+    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/bugsinpy.csv", "${project.buildDir}/reports/bugsinpy.csv", "s"
 }

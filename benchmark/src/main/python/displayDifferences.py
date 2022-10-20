@@ -14,9 +14,9 @@ def main():
 def displayDifferences(ref_file, file, difference_type):
   print(difference_type)
   ref_data = pd.read_csv(ref_file, decimal=",", sep=";")
-  ref_data['runtime'] = ref_data.apply (lambda row: statistics.median([row['t1'], row['t2'], row['t3'], row['t4'], row['t5']]), axis = 1)
+  ref_data['runtime'] = ref_data.apply (lambda row: statistics.median([row['t'], row['t.1'], row['t.2'], row['t.3'], row['t.4']]), axis = 1)
   data = pd.read_csv(file, decimal=",", sep=";")
-  data['runtime'] = data.apply (lambda row: statistics.median([row['t1'], row['t2'], row['t3'], row['t4'], row['t5']]), axis = 1)
+  data['runtime'] = data.apply (lambda row: statistics.median([row['t'], row['t.1'], row['t.2'], row['t.3'], row['t.4']]), axis = 1)
   ref_algorithms = set(pd.unique(ref_data['algorithm']).tolist())
   algorithms = set(pd.unique(data['algorithm']).tolist())
   common_algorithms = ref_algorithms.intersection(algorithms)
