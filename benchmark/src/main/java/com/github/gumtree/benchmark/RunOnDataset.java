@@ -24,13 +24,12 @@ import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
 import com.github.gumtreediff.gen.python.PythonTreeGenerator;
 import com.github.gumtreediff.io.DirectoryComparator;
-import com.github.gumtreediff.matchers.CompositeMatchers;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Pair;
 
@@ -82,9 +81,10 @@ public class RunOnDataset {
         if (configurations.isEmpty()) {
             configurations.add(new MatcherConfig("Simple", CompositeMatchers.SimpleGumtree::new));
             configurations.add(new MatcherConfig("Hybrid", CompositeMatchers.HybridGumtree::new));
+            configurations.add(new MatcherConfig("Classic", CompositeMatchers.ClassicGumtree::new));
         }
 
-        DirectoryComparator comparator = new DirectoryComparator(args[0] + "/buggy", args[0] + "/fixed");
+        DirectoryComparator comparator = new DirectoryComparator(args[0] + "/before", args[0] + "/after");
         comparator.compare();
         int done = 0;
         int size = comparator.getModifiedFiles().size();
@@ -92,7 +92,12 @@ public class RunOnDataset {
             done++;
             int pct = (int) (((float) done / (float) size) * 100);
             System.out.printf("\r%s %s  Done", displayBar(pct), pct);
-            handleCase(pair.first, pair.second);
+            try {
+                handleCase(pair.first, pair.second);
+            }
+            catch (SyntaxException e) {
+                System.out.println("Problem parsing " + pair.first.getPath());
+            }
         }
         OUTPUT.close();
     }
@@ -100,9 +105,12 @@ public class RunOnDataset {
     private static void handleCase(File src, File dst) throws IOException {
         TreeContext srcT = TreeGenerators.getInstance().getTree(src.getAbsolutePath());
         TreeContext dstT = TreeGenerators.getInstance().getTree(dst.getAbsolutePath());
-        for (MatcherConfig config : configurations)
+        for (MatcherConfig config : configurations) {
+            Matcher m = config.matcherFactory.get();
+            m.configure(getDefaultProperties());
             handleMatcher(src.getAbsolutePath().substring(ROOT_FOLDER.length() + 1),
-                    config.name, config.matcherFactory.get(), srcT, dstT);
+                    config.name, m, srcT, dstT);
+        }
     }
 
     private static void handleMatcher(String file, String matcher, Matcher m,
@@ -154,6 +162,12 @@ public class RunOnDataset {
             this.name = name;
             this.matcherFactory = matcherFactory;
         }
+    }
+
+    private static GumtreeProperties getDefaultProperties() {
+        GumtreeProperties props = new GumtreeProperties();
+        props.put(ConfigurationOptions.bu_minsize, 20);
+        return props;
     }
 
     private static String displayBar(int i) {
