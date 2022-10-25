@@ -6,6 +6,8 @@ import plotnine as pn
 import statistics
 from scipy.stats import mannwhitneyu
 
+pd.options.mode.chained_assignment = None
+
 def main():
   ref_file = sys.argv[1]
   file = sys.argv[2]
@@ -13,6 +15,7 @@ def main():
   testRegressions(ref_file, file, regression_type)
 
 def testRegressions(ref_file, file, regression_type):
+  print(f"Testing regressions for {regression_type}")
   ref_data = pd.read_csv(ref_file, decimal=",", sep=";")
   ref_data['runtime'] = ref_data.apply (lambda row: statistics.median([row['t'], row['t.1'], row['t.2'], row['t.3'], row['t.4']]), axis = 1)
   data = pd.read_csv(file, decimal=",", sep=";")
@@ -41,6 +44,7 @@ def testRegressions(ref_file, file, regression_type):
     else:
       print("No " + regression_type + " regressions for algorithm: " + algorithm)
   if regression == True:
+     print("Regression detected")
      sys.exit(1)
 
 if __name__ == "__main__":

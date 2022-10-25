@@ -3,7 +3,8 @@
 import sys
 import pandas as pd
 import statistics
-from scipy.stats import mannwhitneyu
+
+pd.options.mode.chained_assignment = None
 
 def main():
   ref_file = sys.argv[1]
@@ -12,6 +13,7 @@ def main():
   displayDifferences(ref_file, file, difference_type)
 
 def displayDifferences(ref_file, file, difference_type):
+  print(f"Analyzing differences for {difference_type}")
   print(difference_type)
   ref_data = pd.read_csv(ref_file, decimal=",", sep=";")
   ref_data['runtime'] = ref_data.apply (lambda row: statistics.median([row['t'], row['t.1'], row['t.2'], row['t.3'], row['t.4']]), axis = 1)
