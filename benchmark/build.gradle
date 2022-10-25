@@ -16,42 +16,6 @@ task runOnDefects4J(type: JavaExec) {
     args "${project.projectDir}/datasets/defects4j", "${project.buildDir}/reports/defects4j.csv"
 }
 
-task runOnGhJava(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.projectDir}/datasets/gh-java", "${project.buildDir}/reports/gh-java.csv"
-}
-
-task localGhJavaPlot(type: Exec) {
-    commandLine "python3", "${project.projectDir}/src/main/python/plotResults.py", "${project.buildDir}/reports/gh-java.csv"
-}
-
-task runOnDefects4JFull(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.projectDir}/datasets/defects4j",
-            "${project.buildDir}/reports/defects4j-full.csv",
-            "com.github.gumtreediff.matchers.CompositeMatchers\$SimpleGumtree",
-            "com.github.gumtreediff.matchers.CompositeMatchers\$ClassicGumtree",
-            "com.github.gumtreediff.matchers.CompositeMatchers\$HybridGumtree"
-}
-
-task runOnBugsInPy(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.projectDir}/datasets/bugsinpy", "${project.buildDir}/reports/bugsinpy.csv"
-}
-
-task runOnBugsInPyFull(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.projectDir}/datasets/bugsinpy",
-            "${project.buildDir}/reports/bugsinpy-full.csv",
-            "com.github.gumtreediff.matchers.CompositeMatchers\$SimpleGumtree",
-            "com.github.gumtreediff.matchers.CompositeMatchers\$ClassicGumtree",
-            "com.github.gumtreediff.matchers.CompositeMatchers\$HybridGumtree"
-}
-
 task localDefects4JAnalysis(type: Exec) {
     commandLine "python3", "${project.projectDir}/src/main/python/plotResults.py", "${project.buildDir}/reports/defects4j.csv"
     commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "s"
@@ -63,6 +27,32 @@ task ciDefects4JAnalysis(type: Exec) {
     commandLine "python3", "${project.projectDir}/src/main/python/plotResults.py", "${project.buildDir}/reports/defects4j.csv"
     commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "s"
     commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/reference/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "s"
+}
+
+task runOnGhJava(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args "${project.projectDir}/datasets/gh-java", "${project.buildDir}/reports/gh-java.csv"
+}
+
+task localGhJavaAnalysis(type: Exec) {
+    commandLine "python3", "${project.projectDir}/src/main/python/plotResults.py", "${project.buildDir}/reports/gh-java.csv"
+}
+
+task runOnGhPython(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args "${project.projectDir}/datasets/gh-python", "${project.buildDir}/reports/gh-python.csv"
+}
+
+task localGhPythonAnalysis(type: Exec) {
+    commandLine "python3", "${project.projectDir}/src/main/python/plotResults.py", "${project.buildDir}/reports/gh-python.csv"
+}
+
+task runOnBugsInPy(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args "${project.projectDir}/datasets/bugsinpy", "${project.buildDir}/reports/bugsinpy.csv"
 }
 
 task localBugsInPyAnalysis(type: Exec) {
