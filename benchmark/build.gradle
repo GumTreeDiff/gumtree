@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation project(':gen.jdt')
     implementation project(':gen.python')
+    implementation project(':gen.treesitter')
 }
 
 jar.enabled = false

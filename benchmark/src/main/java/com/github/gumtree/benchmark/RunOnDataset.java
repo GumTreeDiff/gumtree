@@ -28,6 +28,7 @@ import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
 import com.github.gumtreediff.gen.python.PythonTreeGenerator;
+import com.github.gumtreediff.gen.treesitter.PythonTreeSitterTreeGenerator;
 import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.tree.TreeContext;
@@ -58,8 +59,12 @@ public class RunOnDataset {
         ROOT_FOLDER = new File(args[0]).getAbsolutePath();
         TreeGenerators.getInstance().install(
                 JdtTreeGenerator.class, JdtTreeGenerator.class.getAnnotation(Register.class));
+        /*
         TreeGenerators.getInstance().install(
                 PythonTreeGenerator.class, PythonTreeGenerator.class.getAnnotation(Register.class));
+         */
+        TreeGenerators.getInstance().install(
+                PythonTreeSitterTreeGenerator.class, PythonTreeSitterTreeGenerator.class.getAnnotation(Register.class));
         OUTPUT = new FileWriter(args[1]);
 
         String header = "case;algorithm;" + "t;".repeat(TIME_MEASURES) + "s;ni;nd;nu;nm";
