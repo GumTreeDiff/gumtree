@@ -93,6 +93,12 @@ public class Matchers extends Registry<String, Matcher, Register> {
         super.install(clazz, a);
     }
 
+    @Override
+    public void clear() {
+        super.clear();
+        defaultMatcherFactory = null;
+    }
+
     protected String getName(Register annotation, Class<? extends Matcher> clazz) {
         return annotation.id();
     }
