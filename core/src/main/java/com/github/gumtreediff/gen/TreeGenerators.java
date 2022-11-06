@@ -76,6 +76,21 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
         throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
     }
 
+    /**
+     * Search the tree generator with the provided name , and use it
+     * to produce a TreeContext containing the AST.
+     *
+     * @param generator the tree generator's name. It can't be null
+     * @throws UnsupportedOperationException if no suitable generator is found
+     */
+    public TreeContext getTree(Reader stream, String generator) throws UnsupportedOperationException, IOException {
+        for (Entry e : entries)
+            if (e.id.equals(generator))
+                return e.instantiate(null).generateFrom().reader(stream);
+
+        throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
+    }
+
     public TreeContext getTreeFromCommand(String file, String command) throws IOException {
         TreeGenerator g = new ExternalProcessTreeGenerator() {
             @Override

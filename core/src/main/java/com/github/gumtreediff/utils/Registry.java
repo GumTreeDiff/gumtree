@@ -70,6 +70,10 @@ public abstract class Registry<K, C, A> {
         entries.add(entry);
     }
 
+    public void clear() {
+        entries.clear();
+    }
+
     protected abstract Entry newEntry(Class<? extends C> clazz, A annotation);
 
     protected Entry findEntry(K key) {
