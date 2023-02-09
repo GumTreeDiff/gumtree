@@ -141,10 +141,14 @@ public class RunOnDataset {
                 nbIns++;
             else if (a instanceof Delete)
                 nbDel++;
-            else if (a instanceof Move)
-                nbMov++;
             else if (a instanceof Update)
                 nbUpd++;
+            else if (a instanceof Move)
+                nbMov += a.getNode().getMetrics().size;
+            else if (a instanceof TreeInsert)
+                nbIns += a.getNode().getMetrics().size;
+            else if (a instanceof TreeDelete)
+                nbDel += a.getNode().getMetrics().size;
         }
 
         OUTPUT.append(file + ";");
