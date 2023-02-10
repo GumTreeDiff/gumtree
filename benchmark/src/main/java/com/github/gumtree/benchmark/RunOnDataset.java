@@ -47,7 +47,7 @@ public class RunOnDataset {
     private static final int TIME_MEASURES = 5;
     private static String ROOT_FOLDER;
     private static FileWriter OUTPUT;
-    private static List<MatcherConfig> configurations = new ArrayList<>();
+    private static final List<MatcherConfig> configurations = new ArrayList<>();
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         if (args.length < 2) {
@@ -84,9 +84,10 @@ public class RunOnDataset {
         }
 
         if (configurations.isEmpty()) {
-            configurations.add(new MatcherConfig("Simple", CompositeMatchers.SimpleGumtree::new));
-            configurations.add(new MatcherConfig("Hybrid", CompositeMatchers.HybridGumtree::new));
-            configurations.add(new MatcherConfig("Classic", CompositeMatchers.ClassicGumtree::new));
+            configurations.add(new MatcherConfig("simple", CompositeMatchers.SimpleGumtree::new));
+            configurations.add(new MatcherConfig("hybrid-20", CompositeMatchers.HybridGumtree::new, smallBuMinsize()));
+            configurations.add(new MatcherConfig("opt-20", CompositeMatchers.ClassicGumtree::new, smallBuMinsize()));
+            configurations.add(new MatcherConfig("opt-200", CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
         }
 
         DirectoryComparator comparator = new DirectoryComparator(args[0] + "/before", args[0] + "/after");
@@ -111,8 +112,7 @@ public class RunOnDataset {
         TreeContext srcT = TreeGenerators.getInstance().getTree(src.getAbsolutePath());
         TreeContext dstT = TreeGenerators.getInstance().getTree(dst.getAbsolutePath());
         for (MatcherConfig config : configurations) {
-            Matcher m = config.matcherFactory.get();
-            m.configure(getDefaultProperties());
+            Matcher m = config.instantiate();
             handleMatcher(src.getAbsolutePath().substring(ROOT_FOLDER.length() + 1),
                     config.name, m, srcT, dstT);
         }
@@ -165,17 +165,37 @@ public class RunOnDataset {
 
     private static class MatcherConfig {
         public final String name;
-        public final Supplier<Matcher> matcherFactory;
+        private final Supplier<Matcher> matcherFactory;
+        private final GumtreeProperties props;
+
+        public MatcherConfig(String name, Supplier<Matcher> matcherFactory, GumtreeProperties props) {
+            this.name = name;
+            this.matcherFactory = matcherFactory;
+            this.props = props;
+        }
 
         public MatcherConfig(String name, Supplier<Matcher> matcherFactory) {
             this.name = name;
             this.matcherFactory = matcherFactory;
+            this.props = new GumtreeProperties();
+        }
+
+        public Matcher instantiate() {
+            Matcher m = matcherFactory.get();
+            m.configure(props);
+            return m;
         }
     }
 
-    private static GumtreeProperties getDefaultProperties() {
+    private static GumtreeProperties smallBuMinsize() {
         GumtreeProperties props = new GumtreeProperties();
         props.put(ConfigurationOptions.bu_minsize, 20);
+        return props;
+    }
+
+    private static GumtreeProperties largeBuMinsize() {
+        GumtreeProperties props = new GumtreeProperties();
+        props.put(ConfigurationOptions.bu_minsize, 200);
         return props;
     }
 
