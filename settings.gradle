@@ -19,6 +19,7 @@ include 'benchmark',
         'gen.python',
         'gen.ruby',
         'gen.srcml',
-        'gen.treesitter'
+        'gen.treesitter',
+        'gen.yaml'
 
 rootProject.name = "gumtree"

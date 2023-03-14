@@ -1,0 +1,5 @@
+description = 'GumTree tree generator for YAML code (SnakeYAML based).'
+
+dependencies {
+	implementation 'org.yaml:snakeyaml:2.0'
+}
