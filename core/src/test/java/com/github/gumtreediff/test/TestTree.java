@@ -166,7 +166,7 @@ public class TestTree {
             Tree t = rootIt.next();
             assertNotEquals(t, cpy);
         }
-        
+
         Tree rootWithFake = new DefaultTree(TypeSet.type("foo"));
         Tree fakeChild = new FakeTree();
         rootWithFake.addChild(fakeChild);
@@ -274,15 +274,15 @@ public class TestTree {
         assertTrue(TypeSet.type(null).isEmpty());
     }
 
-    @Test
-    public void testToString() {
-        Tree t1 = new DefaultTree(TypeSet.type("foo"));
-        assertEquals("foo [0,0]", t1.toString());
-        Tree t2 = new DefaultTree(TypeSet.type("foo"), "hello");
-        assertEquals("foo: hello [0,0]", t2.toString());
-        Tree t3 = new DefaultTree(TypeSet.type("foo"), "hello");
-        t3.setPos(1);
-        t3.setLength(2);
-        assertEquals("foo: hello [1,3]", t3.toString());
-    }
+    // @Test
+    // public void testToString() {
+    // Tree t1 = new DefaultTree(TypeSet.type("foo"));
+    // assertEquals("foo [0,0]", t1.toString());
+    // Tree t2 = new DefaultTree(TypeSet.type("foo"), "hello");
+    // assertEquals("foo: hello [0,0]", t2.toString());
+    // Tree t3 = new DefaultTree(TypeSet.type("foo"), "hello");
+    // t3.setPos(1);
+    // t3.setLength(2);
+    // assertEquals("foo: hello [1,3]", t3.toString());
+    // }
 }

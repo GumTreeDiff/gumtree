@@ -43,8 +43,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.DiffOpt
         try {
             this.diff = getDiff();
             classifier = diff.createAllNodeClassifier();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -60,7 +59,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.DiffOpt
         writer.write("\tsubgraph cluster_dst {\n");
         writeTree(diff.dst, writer);
         writer.write("\t}\n");
-        for (Mapping m: diff.mappings)
+        for (Mapping m : diff.mappings)
             writer.write(String.format("\t%s -> %s [style=dashed];\n",
                     getDotId(diff.src, m.first), getDotId(diff.dst, m.second)));
         writer.write("}\n");
@@ -103,8 +102,8 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.DiffOpt
                     .replaceAll("\"", "")
                     .replaceAll("\\s", "")
                     .replaceAll("\\\\", "");
-        if (label.length() > 30)
-            label = label.substring(0, 20);
+        // if (label.length() > 30)
+        // label = label.substring(0, 20);
         return label;
     }
 
