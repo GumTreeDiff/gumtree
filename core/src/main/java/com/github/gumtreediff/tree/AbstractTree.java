@@ -21,6 +21,8 @@
 package com.github.gumtreediff.tree;
 
 import com.github.gumtreediff.io.TreeIoUtils;
+import com.google.gson.JsonObject;
+import com.google.gson.Gson;
 
 import java.util.*;
 
@@ -33,18 +35,16 @@ public abstract class AbstractTree implements Tree {
 
     @Override
     public String toString() {
-        // if (hasLabel())
-        // return String.format("%s: %s [%d,%d]",
-        // getType(), getLabel(), getPos(), getEndPos());
-        // else
-        // return String.format("%s [%d,%d]",
-        // getType(), getPos(), getEndPos());
-        if (hasLabel())
-            return String.format("%s,,, \n%s,,, \n%d,,, \n%d",
-                    getType(), getLabel(), getPos(), getEndPos());
-        else
-            return String.format("%s,,, \n,,, \n%d,,, \n%d",
-                    getType(), getPos(), getEndPos());
+        String jsonString = "GumTreeType: " + getType() ;
+        if (hasLabel()) { 
+            jsonString = jsonString + " GumTreeContent: " + getLabel();
+        } else {
+            jsonString = jsonString + " GumTreeContent: " + "";
+        }
+        jsonString = jsonString + " GumTreeSPos: " + getPos();
+        jsonString = jsonString + " GumTreeEPos: " + getEndPos();
+
+        return jsonString;
     }
 
     @Override
