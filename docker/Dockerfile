@@ -5,7 +5,7 @@ ENV TZ=GMT
 
 # Install all required packages
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends default-jdk wget git gdebi-core \
+	&& apt-get install -y --no-install-recommends openjdk-17-jdk wget git gdebi-core \
 	    build-essential ocaml libnum-ocaml-dev python3-pip python3-dev nodejs npm \
 	    tzdata ca-certificates p11-kit
 

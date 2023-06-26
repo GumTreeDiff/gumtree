@@ -5,7 +5,7 @@ plugins {
 description = 'GumTree core module.'
 
 dependencies {
-	implementation 'com.github.mpkorstanje:simmetrics-core:3.2.3'
+	implementation 'com.github.mpkorstanje:simmetrics-core:4.1.1'
 	implementation 'it.unimi.dsi:fastutil:8.3.1'
 	implementation 'com.google.code.gson:gson:2.8.2'
 	implementation 'org.jgrapht:jgrapht-core:1.5.1'

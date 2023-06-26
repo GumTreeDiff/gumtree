@@ -17,7 +17,7 @@ The classical way to run a GumTree's container is the command `docker run -v /my
 
 **Beware, the paths inputs to GumTree's commands are relative to the `/diff` path inside the container.** 
 
-## Git integration
+## Git integration 
 
 You can easily integrate GumTree's container with Git by adding the following configuration into the `$HOME/.gitconfig` file.
 
