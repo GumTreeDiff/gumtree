@@ -79,7 +79,7 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
     apply plugin: 'antlr'
 
     dependencies {
-        antlr 'org.antlr:antlr:3.5.2'
+        antlr 'org.antlr:antlr:3.5.3'
     }
 
     if (it.name.startsWith('gen.antlr3-')) {
@@ -87,19 +87,29 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
             implementation project(':gen.antlr3')
         }
     }
+
+    sourceSets.configureEach {
+        var generateGrammarSource = tasks.named(getTaskName("generate", "GrammarSource"))
+        java.srcDir(generateGrammarSource.map { files() })
+    }
 }
 
 configure(subprojects.findAll { it.name.startsWith('gen.antlr4') }) {
     apply plugin: 'antlr'
 
     dependencies {
-        antlr 'org.antlr:antlr4:4.5'
+        antlr 'org.antlr:antlr4:4.13.0'
     }
 
     if (it.name.startsWith('gen.antlr4-')) {
         dependencies {
             implementation project(':gen.antlr4')
         }
+    }
+
+    sourceSets.configureEach {
+        var generateGrammarSource = tasks.named(getTaskName("generate", "GrammarSource"))
+        java.srcDir(generateGrammarSource.map { files() })
     }
 }
 
