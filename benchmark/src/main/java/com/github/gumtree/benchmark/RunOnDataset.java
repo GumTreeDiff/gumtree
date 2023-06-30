@@ -86,8 +86,9 @@ public class RunOnDataset {
         if (configurations.isEmpty()) {
             configurations.add(new MatcherConfig("simple", CompositeMatchers.SimpleGumtree::new));
             configurations.add(new MatcherConfig("hybrid-20", CompositeMatchers.HybridGumtree::new, smallBuMinsize()));
-            configurations.add(new MatcherConfig("opt-20", CompositeMatchers.ClassicGumtree::new, smallBuMinsize()));
-            configurations.add(new MatcherConfig("opt-200", CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
+            configurations.add(new MatcherConfig("opt-10", CompositeMatchers.ClassicGumtree::new, smallBuMinsize()));
+            configurations.add(new MatcherConfig("opt-100", CompositeMatchers.ClassicGumtree::new, mediumBuMinsize()));
+            configurations.add(new MatcherConfig("opt-1000", CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
         }
 
         DirectoryComparator comparator = new DirectoryComparator(args[0] + "/before", args[0] + "/after");
@@ -189,13 +190,22 @@ public class RunOnDataset {
 
     private static GumtreeProperties smallBuMinsize() {
         GumtreeProperties props = new GumtreeProperties();
-        props.put(ConfigurationOptions.bu_minsize, 20);
+        props.put(ConfigurationOptions.bu_minsize, 10);
+        props.put(ConfigurationOptions.bu_minsim, 0.5);
+        return props;
+    }
+
+    private static GumtreeProperties mediumBuMinsize() {
+        GumtreeProperties props = new GumtreeProperties();
+        props.put(ConfigurationOptions.bu_minsize, 100);
+        props.put(ConfigurationOptions.bu_minsim, 0.5);
         return props;
     }
 
     private static GumtreeProperties largeBuMinsize() {
         GumtreeProperties props = new GumtreeProperties();
-        props.put(ConfigurationOptions.bu_minsize, 200);
+        props.put(ConfigurationOptions.bu_minsize, 1000);
+        props.put(ConfigurationOptions.bu_minsim, 0.5);
         return props;
     }
 
