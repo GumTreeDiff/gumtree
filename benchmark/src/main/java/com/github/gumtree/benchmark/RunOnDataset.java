@@ -59,12 +59,10 @@ public class RunOnDataset {
         ROOT_FOLDER = new File(args[0]).getAbsolutePath();
         TreeGenerators.getInstance().install(
                 JdtTreeGenerator.class, JdtTreeGenerator.class.getAnnotation(Register.class));
-        /*
+
         TreeGenerators.getInstance().install(
                 PythonTreeGenerator.class, PythonTreeGenerator.class.getAnnotation(Register.class));
-         */
-        TreeGenerators.getInstance().install(
-                PythonTreeSitterTreeGenerator.class, PythonTreeSitterTreeGenerator.class.getAnnotation(Register.class));
+
         OUTPUT = new FileWriter(args[1]);
 
         String header = "case;algorithm;" + "t;".repeat(TIME_MEASURES) + "s;ni;nd;nu;nm";
