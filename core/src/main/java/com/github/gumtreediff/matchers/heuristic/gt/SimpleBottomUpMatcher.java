@@ -34,7 +34,16 @@ import com.github.gumtreediff.tree.Type;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
 
 public class SimpleBottomUpMatcher implements Matcher {
+    private static final double DEFAULT_SIM_THRESHOLD = Double.NaN;
+
+    protected double simThreshold = DEFAULT_SIM_THRESHOLD;
+
     public SimpleBottomUpMatcher() {
+    }
+
+    @Override
+    public void configure(GumtreeProperties properties) {
+        simThreshold = properties.tryConfigure(ConfigurationOptions.bu_minsim, simThreshold);
     }
 
     @Override
@@ -52,7 +61,9 @@ public class SimpleBottomUpMatcher implements Matcher {
                 var tSize = t.getDescendants().size();
 
                 for (var candidate : candidates) {
-                    var threshold = 1D / (1D + Math.log(candidate.getDescendants().size() + tSize));
+                    var threshold = Double.isNaN(simThreshold)
+                            ? 1D / (1D + Math.log(candidate.getDescendants().size() + tSize))
+                            : simThreshold;
                     var sim = SimilarityMetrics.chawatheSimilarity(t, candidate, mappings);
                     if (sim > max && sim >= threshold) {
                         max = sim;
