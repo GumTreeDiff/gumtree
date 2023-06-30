@@ -86,7 +86,7 @@ public class RunOnDataset {
         if (configurations.isEmpty()) {
             configurations.add(new MatcherConfig("simple", CompositeMatchers.SimpleGumtree::new));
             configurations.add(new MatcherConfig("hybrid-20", CompositeMatchers.HybridGumtree::new, smallBuMinsize()));
-            configurations.add(new MatcherConfig("opt-10", CompositeMatchers.ClassicGumtree::new, smallBuMinsize()));
+            //configurations.add(new MatcherConfig("opt-10", CompositeMatchers.ClassicGumtree::new, smallBuMinsize()));
             configurations.add(new MatcherConfig("opt-100", CompositeMatchers.ClassicGumtree::new, mediumBuMinsize()));
             configurations.add(new MatcherConfig("opt-1000", CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
         }
