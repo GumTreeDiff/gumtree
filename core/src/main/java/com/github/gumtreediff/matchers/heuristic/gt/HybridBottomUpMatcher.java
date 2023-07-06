@@ -34,9 +34,13 @@ public class HybridBottomUpMatcher implements Matcher {
     private static final int DEFAULT_SIZE_THRESHOLD = 20;
     protected int sizeThreshold = DEFAULT_SIZE_THRESHOLD;
 
+    private static final double DEFAULT_SIM_THRESHOLD = Double.NaN;
+    protected double simThreshold = DEFAULT_SIM_THRESHOLD;
+
     @Override
     public void configure(GumtreeProperties properties) {
         sizeThreshold = properties.tryConfigure(ConfigurationOptions.bu_minsize, sizeThreshold);
+        simThreshold = properties.tryConfigure(ConfigurationOptions.bu_minsim, simThreshold);
     }
 
     @Override
@@ -54,7 +58,9 @@ public class HybridBottomUpMatcher implements Matcher {
                 var tSize = t.getDescendants().size();
 
                 for (var candidate : candidates) {
-                    var threshold = 1D / (1D + Math.log(candidate.getDescendants().size() + tSize));
+                    var threshold = Double.isNaN(simThreshold)
+                            ? 1D / (1D + Math.log(candidate.getDescendants().size() + tSize))
+                            : simThreshold;
                     var sim = SimilarityMetrics.chawatheSimilarity(t, candidate, mappings);
                     if (sim > max && sim >= threshold) {
                         max = sim;

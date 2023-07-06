@@ -61,7 +61,7 @@ public class RunOnDataset {
                 JdtTreeGenerator.class, JdtTreeGenerator.class.getAnnotation(Register.class));
 
         TreeGenerators.getInstance().install(
-                PythonTreeGenerator.class, PythonTreeGenerator.class.getAnnotation(Register.class));
+                PythonTreeSitterTreeGenerator.class, PythonTreeSitterTreeGenerator.class.getAnnotation(Register.class));
 
         OUTPUT = new FileWriter(args[1]);
 
@@ -82,11 +82,14 @@ public class RunOnDataset {
         }
 
         if (configurations.isEmpty()) {
-            configurations.add(new MatcherConfig("simple", CompositeMatchers.SimpleGumtree::new));
-            configurations.add(new MatcherConfig("hybrid-20", CompositeMatchers.HybridGumtree::new, smallBuMinsize()));
-            //configurations.add(new MatcherConfig("opt-10", CompositeMatchers.ClassicGumtree::new, smallBuMinsize()));
-            configurations.add(new MatcherConfig("opt-100", CompositeMatchers.ClassicGumtree::new, mediumBuMinsize()));
-            configurations.add(new MatcherConfig("opt-1000", CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
+            configurations.add(new MatcherConfig("simple",
+                    CompositeMatchers.SimpleGumtree::new, mediumMinSim()));
+            configurations.add(new MatcherConfig("hybrid-100",
+                    CompositeMatchers.HybridGumtree::new, mediumBuMinsize()));
+            configurations.add(new MatcherConfig("opt-100",
+                    CompositeMatchers.ClassicGumtree::new, mediumBuMinsize()));
+            configurations.add(new MatcherConfig("opt-1000",
+                    CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
         }
 
         DirectoryComparator comparator = new DirectoryComparator(args[0] + "/before", args[0] + "/after");
@@ -186,9 +189,8 @@ public class RunOnDataset {
         }
     }
 
-    private static GumtreeProperties smallBuMinsize() {
+    private static GumtreeProperties mediumMinSim() {
         GumtreeProperties props = new GumtreeProperties();
-        props.put(ConfigurationOptions.bu_minsize, 10);
         props.put(ConfigurationOptions.bu_minsim, 0.5);
         return props;
     }
