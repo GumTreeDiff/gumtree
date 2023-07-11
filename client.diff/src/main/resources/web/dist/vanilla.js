@@ -59,8 +59,9 @@ $(function() {
     $("body").keypress(function (event) {
         switch(event.which) {
             case 110:
-                var mapping = nextMapping();
-                $('html, body').animate({scrollTop: $(mapping).offset().top - 200}, 100);
+                const mapping = $(nextMapping());
+                const pre = mapping.parent();
+                pre.animate({scrollTop: pre.scrollTop() + mapping.position().top - 200}, 100);
                 break;
         }
     });
