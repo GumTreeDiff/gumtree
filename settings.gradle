@@ -20,6 +20,7 @@ include 'benchmark',
         'gen.ruby',
         'gen.srcml',
         'gen.treesitter',
-        'gen.yaml'
+        'gen.yaml',
+        'gen.xml'
 
 rootProject.name = "gumtree"
