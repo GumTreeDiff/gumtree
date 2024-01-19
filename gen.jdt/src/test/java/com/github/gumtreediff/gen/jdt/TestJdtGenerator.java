@@ -165,4 +165,26 @@ public class TestJdtGenerator {
         assertEquals(ct.getRoot().getChild("0.3").getMetadata("id"), "Method foo( int String)");
         assertEquals(ct.getRoot().getChild("0.4").getMetadata("id"), "Method bar()");
     }
+
+    @Test
+    public void testGenericFunctionWithTypeParameter() throws IOException {
+        String input = "class testStructure { void foo() { Collections.<String>emptyList(); } }";
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        String expected = "CompilationUnit [0,71]\n"
+                + "    TypeDeclaration [0,71]\n"
+                + "        TYPE_DECLARATION_KIND: class [0,5]\n"
+                + "        SimpleName: testStructure [6,19]\n"
+                + "        MethodDeclaration [22,69]\n"
+                + "            PrimitiveType: void [22,26]\n"
+                + "            SimpleName: foo [27,30]\n"
+                + "            Block [33,69]\n"
+                + "                ExpressionStatement [35,67]\n"
+                + "                    MethodInvocation [35,66]\n"
+                + "                        METHOD_INVOCATION_RECEIVER [35,46]\n"
+                + "                            SimpleName: Collections [35,46]\n"
+                + "                            SimpleType [48,54]\n"
+                + "                                SimpleName: String [48,54]\n"
+                + "                        SimpleName: emptyList [55,64]";
+        assertEquals(expected, ct.getRoot().toTreeString());
+    }
 }
