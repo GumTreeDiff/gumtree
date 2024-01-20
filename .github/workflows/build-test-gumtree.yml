@@ -51,23 +51,19 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
-          VERSION: ${{ steps.version.outputs.VERSION }}
-        if: "github.event_name == 'schedule' && contains(VERSION, 'SNAPSHOT')"
+        if: "github.event_name == 'schedule' && contains(steps.version.outputs.VERSION, 'SNAPSHOT')"
         run: ./gradlew publish
 
       - name: upload release package
+        if: "github.event_name == 'push' && !contains(steps.version.outputs.VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.VERSION)"
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
           ORG_GRADLE_PROJECT_gumtreeKey: ${{ secrets.GUMTREE_KEY }}
           ORG_GRADLE_PROJECT_gumtreeKeyPassphrase: ${{ secrets.GUMTREE_KEY_PASSPHRASE }}
-          VERSION: ${{ steps.version.outputs.VERSION }}
-        if: "github.event_name == 'push' && !contains(VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version)"
-        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
       - name: create github release
-        env:
-          VERSION: ${{ steps.version.outputs.VERSION }}
-        if: "github.event_name == 'push' && !contains(VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version)"
+        if: "github.event_name == 'push' && !contains(steps.version.outputs.VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.VERSION)"
         uses: ncipollo/release-action@v1
         with:
           artifacts: "dist/build/distributions/gumtree*.zip"
