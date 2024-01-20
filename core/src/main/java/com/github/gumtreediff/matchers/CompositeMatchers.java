@@ -95,6 +95,13 @@ public class CompositeMatchers {
         }
     }
 
+    @Register(id = "gumtree-simple-stable", priority = Registry.Priority.HIGH)
+    public static class SimpleGumtreeStable extends CompositeMatcher {
+        public SimpleGumtreeStable() {
+            super(new GreedySubtreeMatcher(), new SimpleMarriageBottomUpMatcher());
+        }
+    }
+
     @Register(id = "gumtree-simple-id", priority = Registry.Priority.HIGH)
     public static class SimpleIdGumtree extends CompositeMatcher {
         public SimpleIdGumtree() {
