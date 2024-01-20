@@ -24,7 +24,7 @@ jobs:
           submodules: recursive
       - name: retrieve gumtree version
         id: version
-        run: echo "::set-output name=version::$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")"
+        run: echo "VERSION=$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
         shell: bash
       - name: build gumtree
         run: ./gradlew -PtestNative build :benchmark:runOnDefects4J :benchmark:ciDefects4JAnalysis
@@ -48,21 +48,26 @@ jobs:
           name: test-report
           path: build/reports/tests
       - name: upload snapshot package
-        if: "github.event_name == 'schedule' && contains(steps.version.outputs.version, 'SNAPSHOT')"
-        run: ./gradlew publish
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        if: "github.event_name == 'schedule' && contains(VERSION, 'SNAPSHOT')"
+        run: ./gradlew publish
+
       - name: upload release package
-        if: "github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version)"
-        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
           ORG_GRADLE_PROJECT_gumtreeKey: ${{ secrets.GUMTREE_KEY }}
           ORG_GRADLE_PROJECT_gumtreeKeyPassphrase: ${{ secrets.GUMTREE_KEY_PASSPHRASE }}
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        if: "github.event_name == 'push' && !contains(VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version)"
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
       - name: create github release
-        if: "github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version)"
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        if: "github.event_name == 'push' && !contains(VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version)"
         uses: ncipollo/release-action@v1
         with:
           artifacts: "dist/build/distributions/gumtree*.zip"
