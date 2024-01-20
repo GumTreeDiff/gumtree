@@ -27,7 +27,6 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
-import com.github.gumtreediff.gen.python.PythonTreeGenerator;
 import com.github.gumtreediff.gen.treesitter.PythonTreeSitterTreeGenerator;
 import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.matchers.*;
@@ -84,12 +83,14 @@ public class RunOnDataset {
         if (configurations.isEmpty()) {
             configurations.add(new MatcherConfig("simple",
                     CompositeMatchers.SimpleGumtree::new, mediumMinSim()));
-            configurations.add(new MatcherConfig("hybrid-100",
-                    CompositeMatchers.HybridGumtree::new, mediumBuMinsize()));
-            configurations.add(new MatcherConfig("opt-100",
-                    CompositeMatchers.ClassicGumtree::new, mediumBuMinsize()));
-            configurations.add(new MatcherConfig("opt-1000",
-                    CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
+            //configurations.add(new MatcherConfig("hybrid-100",
+                    //CompositeMatchers.HybridGumtree::new, mediumBuMinsize()));
+            //configurations.add(new MatcherConfig("opt-100",
+                    //CompositeMatchers.ClassicGumtree::new, mediumBuMinsize()));
+            //configurations.add(new MatcherConfig("opt-1000",
+                    //CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
+            //configurations.add(new MatcherConfig("stable",
+                    //CompositeMatchers.SimpleGumtreeStable::new, mediumMinSim()));
         }
 
         DirectoryComparator comparator = new DirectoryComparator(args[0] + "/before", args[0] + "/after");
