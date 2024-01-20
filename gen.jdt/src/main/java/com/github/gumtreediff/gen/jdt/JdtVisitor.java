@@ -62,6 +62,9 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             push(i, METHOD_INVOCATION_RECEIVER, "", i.getExpression().getStartPosition(),
                     i.getExpression().getLength());
             i.getExpression().accept(this);
+            for (Object argument : i.typeArguments()) {
+                ((ASTNode) argument).accept(this);
+            }
             popNode();
         }
         pushNode(i.getName(), getLabel(i.getName()));
