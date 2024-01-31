@@ -1,3 +1,3 @@
-description = 'GumTree tree generator for Python. Requires pythonparser.'
+description = 'GumTree tree generator for Python. Requires tree-sitter-parser.'
 
 ext.isNative = true
