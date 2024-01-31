@@ -11,6 +11,10 @@ on:
     - cron: '59 23 * * SUN'
   workflow_dispatch:
 
+concurrency:
+  group: "build-${{ github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
@@ -19,9 +23,10 @@ jobs:
     if: "!(contains(github.event.head_commit.message, '[no ci]') || startsWith(github.event.head_commit.message, 'doc'))"
     steps:
       - name: checkout gumtree
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
+          show-progress: ''
       - name: retrieve gumtree version
         id: version
         run: echo "VERSION=$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
@@ -69,3 +74,42 @@ jobs:
           artifacts: "dist/build/distributions/gumtree*.zip"
           bodyFile: "CHANGELOG.md"
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: set up docker buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx
+      - name: Check secrets presence
+        id: checksecrets
+        shell: bash
+        run: |
+          if [ "$SECRET" == "" ]; then
+            echo "secretspresent=false" >> $GITHUB_OUTPUT
+          else
+            echo "secretspresent=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          SECRET: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        if: (steps.checksecrets.outputs.secretspresent == 'true')
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set Docker Image Tag
+        id: set-tag
+        if: (steps.checksecrets.outputs.secretspresent == 'true')
+        run: |
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            echo "IMAGE_TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')" >> $GITHUB_ENV
+          else
+            echo "IMAGE_TAG=latest" >> $GITHUB_ENV
+          fi
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          file: 'docker/Dockerfile'
+          push: ${{ steps.checksecrets.outputs.secretspresent }}
+          tags: gumtreediff/gumtree:${{ env.IMAGE_TAG }}
