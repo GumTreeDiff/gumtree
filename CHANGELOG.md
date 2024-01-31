@@ -1,18 +1,22 @@
 # Changelog of GumTree
 
-## v3.1.0
+## v4.0.0 (Ginkgo)
 * Vastly improved swing client with directory comparison, syntax highlighting, and more
-* Update monaco to 0.30.1
-* Update bootstrap to 5.1.3
+* Update monaco
+* Update bootstrap
 * Update mergely
 * New Acorn based tree generator for JS that replaces rhino as default JS generator
 * New tree-sitter based tree generator with support for a wide range of languages
-* Docker image now comes installed with the Acord and tree-sitter parsers
+* Docker image now comes installed with the Acorn and tree-sitter parsers
 * Benchmark now displays size differences on a boxplot
 * Dotdiff displays actions on nodes using colors
 * Default build command no longer test generators requiring native tools
 * Test reports are uploaded in the CI
 * Added citation file
+* Simple is now the default matcher
+* Native XML support
+* Native YAML support
+* Fix shortcuts in vanilla web diff view
 
 ## v3.0.0 (Ficus)
 
