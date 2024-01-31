@@ -11,6 +11,10 @@ on:
     - cron: '59 23 * * SUN'
   workflow_dispatch:
 
+concurrency:
+  group: "build-${{ github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
