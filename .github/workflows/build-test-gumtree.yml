@@ -86,6 +86,14 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx
+      - name: set docker image tag
+        id: set-tag
+        run: |
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            echo "IMAGE_TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')" >> $GITHUB_ENV
+          else
+            echo "IMAGE_TAG=latest" >> $GITHUB_ENV
+          fi
       - name: check secrets presence
         id: checksecrets
         shell: bash
@@ -103,15 +111,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: set docker image tag
-        id: set-tag
-        if: (steps.checksecrets.outputs.secretspresent == 'true')
-        run: |
-          if [[ $GITHUB_REF == refs/tags/v* ]]; then
-            echo "IMAGE_TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')" >> $GITHUB_ENV
-          else
-            echo "IMAGE_TAG=latest" >> $GITHUB_ENV
-          fi
       - name: build and push docker image
         uses: docker/build-push-action@v5
         with:
