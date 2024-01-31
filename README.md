@@ -38,7 +38,7 @@ More languages are coming soon, if you want to help contact [me](http://www.labr
 
 We are researchers, therefore if you use GumTree in an academic work we would be really glad if you cite our seminal paper using the following bibtex:
 
-```
+```bibtex
 @inproceedings{DBLP:conf/kbse/FalleriMBMM14,
   author    = {Jean{-}R{\'{e}}my Falleri and
                Flor{\'{e}}al Morandat and
