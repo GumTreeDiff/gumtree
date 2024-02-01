@@ -70,10 +70,10 @@ public class VanillaDiffView {
                                 "data-bs-html=\"true\" data-bs-content=\"<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom\">Shortcuts</button>")
                     ).withClass("btn-group mr-2"),
                     div(
-                        a("Back").withHref("/list").withClasses("btn btn-default", "btn-sm btn-primary"),
-                        a("Quit").withHref("/quit").withClasses("btn btn-default", "btn-sm btn-danger")
+                        a("Back").withHref("/list").withClasses("btn", "btn-default", "btn-sm", "btn-primary"),
+                        a("Quit").withHref("/quit").withClasses("btn", "btn-default", "btn-sm", "btn-danger")
                     ).withClass("btn-group")
-                ).withClasses("btn-toolbar","justify-content-end")
+                ).withClasses("btn-toolbar", "justify-content-end")
             ).withClass("col");
         }
     }

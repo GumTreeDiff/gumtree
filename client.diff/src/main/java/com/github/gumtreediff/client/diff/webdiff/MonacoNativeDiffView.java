@@ -38,16 +38,16 @@ public class MonacoNativeDiffView {
                 div(
                     div(
                         h5(srcFile.getName() + " -> " + dstFile.getName()),
-                        div().withId("container").withStyle("width:100%;height:600px;border:1px solid grey")
-                    ).withClass("col")
-                ).withClass("row")
-            ),
+                        div().withId("container").withStyle("width:100%;height:calc(100% - 80px);border:1px solid grey")
+                    ).withClasses("col", "h-100")
+                ).withClasses("row", "h-100")
+            ).withClass("h-100").withStyle("overflow: hidden;"),
             script("config = { left: " + getLeftJsConfig(id)
                     + ", right: " + getRightJsConfig(id)
                     + "};").withType("text/javascript"),
             script().withSrc("/monaco/min/vs/loader.js").withType("text/javascript"),
             script().withSrc("/dist/monaco-native.js").withType("text/javascript")
-        ).withLang("en");
+        ).withLang("en").withClass("h-100");
     }
 
     private static String getLeftJsConfig(int id) {
@@ -72,8 +72,8 @@ public class MonacoNativeDiffView {
             return div(
                 div(
                     div(
-                        a("Back").withHref("/list").withClasses("btn btn-default", "btn-sm btn-primary"),
-                        a("Quit").withHref("/quit").withClasses("btn btn-default", "btn-sm btn-danger")
+                        a("Back").withHref("/list").withClasses("btn", "btn-default", "btn-sm", "btn-primary"),
+                        a("Quit").withHref("/quit").withClasses("btn", "btn-default", "btn-sm", "btn-danger")
                     ).withClass("btn-group")
                 ).withClasses("btn-toolbar", "justify-content-end")
             ).withClass("col");

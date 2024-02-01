@@ -45,7 +45,7 @@ public class MonacoDiffView {
                         div(
                             h5(dstFile.getName()),
                             div().withId("right-container").withStyle("height: calc(100% - 80px); border:1px solid grey;")
-                        ).withClasses("col-6 h-100")
+                        ).withClasses("col-6", "h-100")
                     ).withClasses("row", "h-100")
                 ).withClasses("container-fluid", "h-100"),
                 script("config = { file: \"" + srcFile.getName() + "\", left: " + getLeftJsConfig(diff, id)
@@ -137,8 +137,8 @@ public class MonacoDiffView {
                                 "data-bs-html=\"true\" data-bs-content=\"<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom\">Shortcuts</button>")
                     ).withClass("btn-group mr-2"),
                     div(
-                        a("Back").withHref("/list").withClasses("btn btn-default", "btn-sm btn-primary"),
-                        a("Quit").withHref("/quit").withClasses("btn btn-default", "btn-sm btn-danger")
+                        a("Back").withHref("/list").withClasses("btn", "btn-default", "btn-sm", "btn-primary"),
+                        a("Quit").withHref("/quit").withClasses("btn", "btn-default", "btn-sm", "btn-danger")
                     ).withClass("btn-group")
                 ).withClasses("btn-toolbar","justify-content-end")
             ).withClass("col");

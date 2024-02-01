@@ -45,7 +45,7 @@ public class TextDiffView {
                                         small(String.format("%s -> %s", srcFile.getName(), dstFile.getName()))
                             )),
                             pre(ActionsIoUtils.toText(diff.src, diff.editScript,
-                                    diff.mappings).toString()).withClass("border p-2")
+                                    diff.mappings).toString()).withClasses("border", "p-2")
                         ).withClass("col")
                     ).withClass("row")
                 ).withClass("container-fluid")

@@ -48,7 +48,7 @@ public class DirectoryDiffView {
                                 div(
                                     h4(
                                         join("Modified files ",
-                                                span("" + comparator.getModifiedFiles().size()).withClass("badge badge-secondary"))
+                                                span("" + comparator.getModifiedFiles().size()).withClasses("badge", "badge-secondary"))
                                     ).withClasses("card-title", "mb-0")
                                 ).withClass("card-header"),
                                 iff(comparator.getModifiedFiles().size() > 0, ModifiedFiles.build(comparator.getModifiedFiles(), comparator))
@@ -78,7 +78,7 @@ public class DirectoryDiffView {
                                     iff(comparator.getAddedFiles().size() > 0, AddedOrDeletedFiles.build(comparator.getAddedFiles(), comparator.getSrc()))
                             ).withClass("card")
                         ).withClass("col")
-                    ).withClass("row mb-3")
+                    ).withClasses("row", "mb-3")
                 ).withClass("container-fluid")
             )).withLang("en");
     }
@@ -94,19 +94,19 @@ public class DirectoryDiffView {
                             div(
                                 div(
                                     iff(TreeGenerators.getInstance().hasGeneratorForFile(file.first.getAbsolutePath()), join(
-                                            a("monaco").withHref("/monaco-diff/" + id).withClasses("btn", "btn-primary btn-sm"),
-                                            a("classic").withHref("/vanilla-diff/" + id).withClasses("btn", "btn-primary btn-sm")
+                                            a("monaco").withHref("/monaco-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
+                                            a("classic").withHref("/vanilla-diff/" + id).withClasses("btn", "btn-primary", "btn-sm")
                                         )
                                     ),
-                                    a("monaco-native").withHref("/monaco-native-diff/" + id).withClasses("btn", "btn-primary btn-sm"),
-                                    a("mergely").withHref("/mergely-diff/" + id).withClasses("btn", "btn-primary btn-sm"),
-                                    a("raw").withHref("/raw-diff/" + id).withClasses("btn", "btn-primary btn-sm")
-                                ).withClasses("btn-group")
+                                    a("monaco-native").withHref("/monaco-native-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
+                                    a("mergely").withHref("/mergely-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
+                                    a("raw").withHref("/raw-diff/" + id).withClasses("btn", "btn-primary", "btn-sm")
+                                ).withClass("btn-group")
                             ).withClasses("btn-toolbar", "justify-content-end")
                         )
                     ))
                 )
-            ).withClasses("table card-table", "table-striped", "table-condensed mb-0");
+            ).withClasses("table", "card-table", "table-striped", "table-condensed", "mb-0");
         }
     }
 
@@ -117,7 +117,7 @@ public class DirectoryDiffView {
                 tbody(
                     each(files, file -> tr(td(root.relativize(file.toPath()).toString())))
                 )
-            ).withClasses("table", "card-table", "table-striped", "table-condensed mb-0");
+            ).withClasses("table", "card-table", "table-striped", "table-condensed", "mb-0");
         }
     }
 
@@ -141,7 +141,7 @@ public class DirectoryDiffView {
             return div(
                     div(
                         div(
-                            a("Quit").withHref("/quit").withClasses("btn btn-default", "btn-sm btn-danger")
+                            a("Quit").withHref("/quit").withClasses("btn", "btn-default", "btn-sm", "btn-danger")
                         ).withClass("btn-group")
                     ).withClasses("btn-toolbar", "justify-content-end")
             ).withClass("col");
