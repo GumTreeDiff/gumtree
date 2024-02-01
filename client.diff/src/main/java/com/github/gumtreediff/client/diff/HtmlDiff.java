@@ -26,9 +26,6 @@ import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.diff.webdiff.VanillaDiffView;
 
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
@@ -67,16 +64,14 @@ public class HtmlDiff extends AbstractDiffClient<HtmlDiff.HtmlDiffOptions> {
         DirectoryComparator comparator = new DirectoryComparator(opts.srcPath, opts.dstPath);
         Pair<File, File> pair = comparator.getModifiedFiles().get(0);
         Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
-        Renderable view = new VanillaDiffView(pair.first, pair.second, diff, true);
-        HtmlCanvas c = new HtmlCanvas();
-        view.renderOn(c);
+        var html = VanillaDiffView.build(pair.first, pair.second, diff, true);
         if (opts.output == null) {
-            System.out.println(c.toHtml());
+            System.out.println(html.render());
         }
         else {
             File htmlOutput = new File(opts.output);
             FileWriter writer = new FileWriter(htmlOutput);
-            writer.write(c.toHtml());
+            writer.write(html.render());
             writer.close();
         }
     }

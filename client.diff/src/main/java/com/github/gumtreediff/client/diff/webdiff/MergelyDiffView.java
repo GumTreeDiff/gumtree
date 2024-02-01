@@ -20,53 +20,42 @@
 
 package com.github.gumtreediff.client.diff.webdiff;
 
-import org.rendersnake.DocType;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
+import j2html.tags.Tag;
+import j2html.tags.specialized.HtmlTag;
 
-import java.io.IOException;
+import static j2html.TagCreator.*;
 
-import static org.rendersnake.HtmlAttributesFactory.*;
-
-public class MergelyDiffView implements Renderable {
-
-    private int id;
-
-    public MergelyDiffView(int id) {
-        this.id = id;
+public class MergelyDiffView {
+    public static HtmlTag build(int id) {
+        return html(
+            Header.build(),
+            body(
+                div(
+                    div(div().withId("mergely")).withClass("mergely-resizer")
+                ).withClass("mergely-full-screen-8"),
+                script("lhs_url = \"/left/" + id + "\";" + "rhs_url = \"/right/" + id + "\";")
+                        .withType("text/javascript"),
+                script().withSrc("/dist/launch-mergely.js").withType("text/javascript")
+            )
+        ).withLang("en");
     }
 
-    @Override
-    public void renderOn(HtmlCanvas html) throws IOException {
-        html
-        .render(DocType.HTML5)
-        .html(lang("en"))
-                .render(new Header())
-                .body()
-                    .div(class_("mergely-full-screen-8"))
-                        .div(class_("mergely-resizer"))
-                            .div(id("mergely"))._div()
-                        ._div()
-                    ._div()
-                    .macros().script("lhs_url = \"/left/" + id + "\";")
-                    .macros().script("rhs_url = \"/right/" + id + "\";")
-                    .macros().javascript("/dist/launch-mergely.js")
-                ._body()
-        ._html();
-    }
-
-    private static class Header implements Renderable {
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-            html
-                    .head()
-                        .macros().javascript(WebDiff.JQUERY_JS_URL)
-                        .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js")
-                        .macros().stylesheet("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.css")
-                        .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/search/searchcursor.min.js")
-                        .macros().javascript("/dist/mergely.js")
-                        .macros().stylesheet("/dist/mergely.css")
-                    ._head();
+    private static class Header {
+        public static final String CODE_MIRROR_JS_URL
+                = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js";
+        public final static String CODE_MIRROR_CSS_URL
+                = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.css";
+        public final static String SEARCH_CURSOR_JS_URL
+                = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/search/searchcursor.min.js";
+        public static Tag build() {
+            return head(
+                script().withSrc(WebDiff.JQUERY_JS_URL).withType("text/javascript"),
+                script().withSrc(CODE_MIRROR_JS_URL).withType("text/javascript"),
+                link().withHref(CODE_MIRROR_CSS_URL).withType("text/css").withRel("stylesheet"),
+                script().withSrc(SEARCH_CURSOR_JS_URL).withType("text/javascript"),
+                script().withSrc("/dist/mergely.js").withType("text/javascript"),
+                link().withHref("/dist/mergely.css").withType("text/css").withRel("stylesheet")
+            );
         }
     }
 }

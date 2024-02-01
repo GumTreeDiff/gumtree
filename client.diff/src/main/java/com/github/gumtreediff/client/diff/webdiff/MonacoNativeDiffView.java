@@ -19,16 +19,14 @@
 
 package com.github.gumtreediff.client.diff.webdiff;
 
-import org.rendersnake.DocType;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
+import j2html.tags.Tag;
+import j2html.tags.specialized.HtmlTag;
 
 import java.io.File;
-import java.io.IOException;
 
-import static org.rendersnake.HtmlAttributesFactory.*;
+import static j2html.TagCreator.*;
 
-public class MonacoNativeDiffView implements Renderable {
+public class MonacoNativeDiffView {
     private File srcFile;
     private File dstFile;
 
@@ -40,34 +38,29 @@ public class MonacoNativeDiffView implements Renderable {
         this.id = id;
     }
 
-    @Override
-    public void renderOn(HtmlCanvas html) throws IOException {
-    html
-        .render(DocType.HTML5)
-        .html(lang("en"))
-            .render(new Header())
-            .body()
-                .div(class_("container-fluid"))
-                    .div(class_("row"))
-                        .render(new MenuBar())
-                    ._div()
-                    .div(class_("row"))
-                        .div(class_("col"))
-                            .h5().content(srcFile.getName() + " -> " + dstFile.getName())
-                            .div(id("container").style("width:100%;height:600px;border:1px solid grey"))._div()
-                        ._div()
-                    ._div()
-                ._div()
-                .macros().script("config = { left: " + getLeftJsConfig()
-                                 + ", right: " + getRightJsConfig()
-                                 + "};")
-                .macros().javascript("/monaco/min/vs/loader.js")
-                .macros().javascript("/dist/monaco-native.js")
-            ._body()
-        ._html();
+    public static HtmlTag build(File srcFile, File dstFile, int id) {
+        return html(
+            Header.build(),
+            body(
+                div(
+                    div(MenuBar.build()).withClass("row")
+                ).withClass("container-fluid"),
+                div(
+                    div(
+                        h5(srcFile.getName() + " -> " + dstFile.getName()),
+                        div().withId("container").withStyle("width:100%;height:600px;border:1px solid grey")
+                    ).withClass("col")
+                ).withClass("row")
+            ),
+            script("config = { left: " + getLeftJsConfig(id)
+                    + ", right: " + getRightJsConfig(id)
+                    + "};").withType("text/javascript"),
+            script().withSrc("/monaco/min/vs/loader.js").withType("text/javascript"),
+            script().withSrc("/dist/monaco-native.js").withType("text/javascript")
+        ).withLang("en");
     }
 
-    private String getLeftJsConfig() {
+    private static String getLeftJsConfig(int id) {
         StringBuilder b = new StringBuilder();
         b.append("{");
         b.append("url:").append("\"/left/" + id + "\"").append(",");
@@ -75,7 +68,7 @@ public class MonacoNativeDiffView implements Renderable {
         return b.toString();
     }
 
-    private String getRightJsConfig() {
+    private static String getRightJsConfig(int id) {
         StringBuilder b = new StringBuilder();
         b.append("{");
         b.append("url:").append("\"/right/" + id + "\"").append(",");
@@ -83,35 +76,32 @@ public class MonacoNativeDiffView implements Renderable {
         return b.toString();
     }
 
-    private static class MenuBar implements Renderable {
+    private static class MenuBar  {
 
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-            html
-            .div(class_("col"))
-                .div(class_("btn-toolbar justify-content-end"))
-                    .div(class_("btn-group"))
-                        .a(class_("btn btn-default btn-sm btn-primary").href("/list")).content("Back")
-                        .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
-                    ._div()
-                ._div()
-            ._div();
+        public static Tag build() {
+            return div(
+                div(
+                    div(
+                        a("Back").withHref("/list").withClasses("btn btn-default", "btn-sm btn-primary"),
+                        a("Quit").withHref("/quit").withClasses("btn btn-default", "btn-sm btn-danger")
+                    ).withClass("btn-group")
+                ).withClasses("btn-toolbar", "justify-content-end")
+            ).withClass("col");
         }
     }
 
-    private static class Header implements Renderable {
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-            html
-                .head()
-                    .meta(charset("utf8"))
-                    .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
-                    .title().content("GumTree")
-                    .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
-                    .macros().javascript(WebDiff.JQUERY_JS_URL)
-                    .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
-                    .macros().javascript("/dist/shortcuts.js")
-                ._head();
+    private static class Header {
+
+        public static Tag build() {
+            return head(
+                meta().withCharset("utf8"),
+                meta().withName("viewport").withContent("width=device-width, initial-scale=1.0"),
+                title("GumTree"),
+                link().withRel("stylesheet").withType("text/css").withHref(WebDiff.BOOTSTRAP_CSS_URL),
+                script().withType("text/javascript").withSrc(WebDiff.JQUERY_JS_URL),
+                script().withType("text/javascript").withSrc(WebDiff.BOOTSTRAP_JS_URL),
+                script().withType("text/javascript").withSrc("/dist/shortcuts.js")
+            );
         }
     }
 }

@@ -22,63 +22,43 @@ package com.github.gumtreediff.client.diff.webdiff;
 import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.actions.TreeClassifier;
 import com.github.gumtreediff.tree.Tree;
-import org.rendersnake.DocType;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
+import j2html.tags.Tag;
+import j2html.tags.specialized.HtmlTag;
 
 import java.io.File;
-import java.io.IOException;
 
-import static org.rendersnake.HtmlAttributesFactory.*;
+import static j2html.TagCreator.*;
 
-public class MonacoDiffView implements Renderable {
-    private File srcFile;
-    private File dstFile;
+public class MonacoDiffView {
 
-    private Diff diff;
-
-    private int id;
-
-    public MonacoDiffView(File fSrc, File fDst, Diff diff, int id) {
-        this.srcFile = fSrc;
-        this.dstFile = fDst;
-        this.diff = diff;
-        this.id = id;
+    public static HtmlTag build(File srcFile, File dstFile, Diff diff, int id) {
+        return html(
+            Header.build(),
+            body(
+                div(
+                    div(MenuBar.build()).withClass("row"),
+                    div(
+                        div(
+                            h5(srcFile.getName()),
+                            div().withId("left-container").withStyle("height: calc(100% - 80px); border:1px solid grey;")
+                        ).withClasses("col-6 h-100"),
+                        div(
+                            h5(dstFile.getName()),
+                            div().withId("right-container").withStyle("height: calc(100% - 80px); border:1px solid grey;")
+                        ).withClasses("col-6 h-100")
+                    ).withClasses("row", "h-100")
+                ).withClasses("container-fluid", "h-100"),
+                script("config = { file: \"" + srcFile.getName() + "\", left: " + getLeftJsConfig(diff, id)
+                        + ", right: " + getRightJsConfig(diff, id)
+                        + ", mappings: " + getMappingsJsConfig(diff) + "};").withType("text/javascript"),
+                script().withSrc("/monaco/min/vs/loader.js").withType("text/javascript"),
+                script().withSrc("/dist/monaco.js").withType("text/javascript"),
+                script().withSrc("/dist/shortcuts.js").withType("text/javascript")
+            ).withClass("h-100").withStyle("overflow: hidden;")
+        ).withLang("en").withClass("h-100");
     }
 
-    @Override
-    public void renderOn(HtmlCanvas html) throws IOException {
-    html
-        .render(DocType.HTML5)
-        .html(lang("en").class_("h-100"))
-            .render(new Header())
-            .body(class_("h-100").style("overflow: hidden;"))
-                .div(class_("container-fluid h-100"))
-                    .div(class_("row"))
-                        .render(new MenuBar())
-                    ._div()
-                    .div(class_("row h-100"))
-                        .div(class_("col-6 h-100"))
-                            .h5().content(srcFile.getName())
-                            .div(id("left-container").style("height: calc(100% - 80px); border:1px solid grey;"))._div()
-                        ._div()
-                        .div(class_("col-6 h-100"))
-                            .h5().content(dstFile.getName())
-                            .div(id("right-container").style("height: calc(100% - 80px); border:1px solid grey;"))._div()
-                        ._div()
-                    ._div()
-                ._div()
-                .macros().script("config = { file: \"" + srcFile.getName() + "\", left: " + getLeftJsConfig()
-                                 + ", right: " + getRightJsConfig()
-                                 + ", mappings: " + getMappingsJsConfig() + "};")
-                .macros().javascript("/monaco/min/vs/loader.js")
-                .macros().javascript("/dist/monaco.js")
-                .macros().javascript("/dist/shortcuts.js")
-            ._body()
-        ._html();
-    }
-
-    private String getLeftJsConfig() {
+    private static String getLeftJsConfig(Diff diff, int id) {
         TreeClassifier c = diff.createRootNodesClassifier();
         StringBuilder b = new StringBuilder();
         b.append("{");
@@ -97,7 +77,7 @@ public class MonacoDiffView implements Renderable {
         return b.toString();
     }
 
-    private String getRightJsConfig() {
+    private static String getRightJsConfig(Diff diff, int id) {
         TreeClassifier c = diff.createRootNodesClassifier();
         StringBuilder b = new StringBuilder();
         b.append("{");
@@ -116,7 +96,7 @@ public class MonacoDiffView implements Renderable {
         return b.toString();
     }
 
-    private String getMappingsJsConfig() {
+    private static String getMappingsJsConfig(Diff diff) {
         TreeClassifier c = diff.createRootNodesClassifier();
         StringBuilder b = new StringBuilder();
         b.append("[");
@@ -130,7 +110,7 @@ public class MonacoDiffView implements Renderable {
         return b.toString();
     }
 
-    private void appendRange(StringBuilder b, Tree t, String kind) {
+    private static void appendRange(StringBuilder b, Tree t, String kind) {
         b.append("{")
                 .append("from: ").append(t.getPos())
                 .append(",").append("to: ").append(t.getEndPos()).append(",")
@@ -145,55 +125,38 @@ public class MonacoDiffView implements Renderable {
                 ? t.getParent().getType() + "/" + t.getType() : t.getType().toString();
     }
 
-    private static class MenuBar implements Renderable {
+    private static class MenuBar {
 
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-            html
-            .div(class_("col"))
-                .div(class_("btn-toolbar justify-content-end"))
-                    .div(class_("btn-group mr-2"))
-                        .button(class_("btn btn-primary btn-sm").id("legend")
-                                .add("data-bs-container", "body")
-                                .add("data-bs-toggle", "popover")
-                                .add("data-bs-placement", "bottom")
-                                .add("data-bs-html", "true")
-                                .add("data-bs-content", "<span class=&quot;deleted&quot;>&nbsp;&nbsp;</span> deleted<br>"
-                                        + "<span class=&quot;inserted&quot;>&nbsp;&nbsp;</span> inserted<br>"
-                                        + "<span class=&quot;moved&quot;>&nbsp;&nbsp;</span> moved<br>"
-                                        + "<span class=&quot;updated&quot;>&nbsp;&nbsp;</span> updated<br>", false)
-                        ).content("Legend")
-                        .button(class_("btn btn-primary btn-sm").id("shortcuts")
-                                .add("data-bs-toggle", "popover")
-                                .add("data-bs-placement", "bottom")
-                                .add("data-bs-html", "true")
-                                .add("data-bs-content", "<b>q</b> quit<br><b>l</b> list<br>"
-                                        + "<b>t</b> top<br><b>b</b> bottom", false)
-                        )
-                        .content("Shortcuts")
-                    ._div()
-                    .div(class_("btn-group"))
-                        .a(class_("btn btn-default btn-sm btn-primary").href("/list")).content("Back")
-                        .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
-                    ._div()
-                ._div()
-            ._div();
+        public static Tag build() {
+            return div(
+                div(
+                    div(
+                        rawHtml("<button class=\"btn btn-primary btn-sm\" id=\"legend\" data-bs-toggle=\"popover\" data-bs-placement=\"bottom\" " +
+                                    "data-bs-html=\"true\" data-bs-content=\"<span class='deleted'>&nbsp;&nbsp;</span> deleted<br><span class='inserted'>&nbsp;&nbsp;</span> added<br><span class='moved'>&nbsp;&nbsp;</span> moved<br><span class='updated';>&nbsp;&nbsp;</span> updated<br>\">Legend</button>"),
+                        rawHtml("<button class=\"btn btn-primary btn-sm\" id=\"shortcuts\" data-bs-toggle=\"popover\" data-bs-placement=\"bottom\" " +
+                                "data-bs-html=\"true\" data-bs-content=\"<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom\">Shortcuts</button>")
+                    ).withClass("btn-group mr-2"),
+                    div(
+                        a("Back").withHref("/list").withClasses("btn btn-default", "btn-sm btn-primary"),
+                        a("Quit").withHref("/quit").withClasses("btn btn-default", "btn-sm btn-danger")
+                    ).withClass("btn-group")
+                ).withClasses("btn-toolbar","justify-content-end")
+            ).withClass("col");
         }
     }
 
-    private static class Header implements Renderable {
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-            html
-                .head()
-                    .meta(charset("utf8"))
-                    .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
-                    .title().content("GumTree")
-                    .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
-                    .macros().stylesheet("/dist/monaco.css")
-                    .macros().javascript(WebDiff.JQUERY_JS_URL)
-                    .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
-                ._head();
+    private static class Header {
+
+        public static Tag build() {
+            return head(
+                meta().withCharset("utf8"),
+                meta().withName("viewport").withContent("width=device-width, initial-scale=1.0"),
+                title("GumTree"),
+                link().withRel("stylesheet").withType("text/css").withHref(WebDiff.BOOTSTRAP_CSS_URL),
+                link().withRel("stylesheet").withType("text/css").withHref("/dist/monaco.css"),
+                script().withType("text/javascript").withSrc(WebDiff.JQUERY_JS_URL),
+                script().withType("text/javascript").withSrc(WebDiff.BOOTSTRAP_JS_URL)
+            );
         }
     }
 }

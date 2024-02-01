@@ -17,6 +17,7 @@
 * Native XML support
 * Native YAML support
 * Fix shortcuts in vanilla web diff view
+* Replaced snakehtml by j2html for webdiff
 
 ## v3.0.0 (Ficus)
 

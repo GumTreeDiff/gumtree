@@ -6,8 +6,5 @@ dependencies {
 	implementation 'org.slf4j:slf4j-nop:2.0.9'
 	implementation 'it.unimi.dsi:fastutil:8.5.12'
 	implementation 'com.fifesoft:rsyntaxtextarea:3.3.4'
-	// exclude servlet-api 2.0 because it causes a bug with spark-core
-	implementation('org.rendersnake:rendersnake:1.9.0') {
-		exclude group: 'javax.servlet', module: 'servlet-api'
-	}
+	implementation 'com.j2html:j2html:1.6.0'
 }

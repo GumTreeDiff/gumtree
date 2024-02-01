@@ -21,9 +21,10 @@
 package com.github.gumtreediff.client.diff.webdiff;
 
 import com.github.gumtreediff.actions.Diff;
-import org.rendersnake.DocType;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
+import j2html.tags.Tag;
+import j2html.tags.specialized.HtmlTag;
+
+import static j2html.TagCreator.*;
 
 import java.io.File;
 import java.io.InputStream;
@@ -32,125 +33,91 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static org.rendersnake.HtmlAttributesFactory.*;
+public class VanillaDiffView {
 
-public class VanillaDiffView implements Renderable {
-    private VanillaDiffHtmlBuilder rawHtmlDiff;
-
-    private File srcFile;
-    private File dstFile;
-
-    private Diff diff;
-
-    private boolean dump;
-
-    public VanillaDiffView(File srcFile, File dstFile, Diff diff, boolean dump) throws IOException {
-        this.srcFile = srcFile;
-        this.dstFile = dstFile;
-        this.diff = diff;
-        this.dump = dump;
-        rawHtmlDiff = new VanillaDiffHtmlBuilder(srcFile, dstFile, diff);
+    public static HtmlTag build(File srcFile, File dstFile, Diff diff, boolean dump) throws IOException  {
+        var rawHtmlDiff = new VanillaDiffHtmlBuilder(srcFile, dstFile, diff);
         rawHtmlDiff.produce();
+        return html(
+            Header.build(dump),
+            body(
+                div(
+                    div(MenuBar.build()).withClass("row"),
+                    div(
+                        div(
+                            h5(srcFile.getName()),
+                            pre(rawHtml(rawHtmlDiff.getSrcDiff())).withClass("pre-scrollable")
+                        ).withClass("col-6"),
+                        div(
+                            h5(dstFile.getName()),
+                            pre(rawHtml(rawHtmlDiff.getDstDiff())).withClass("pre-scrollable")
+                        ).withClass("col-6")
+                    ).withClass("row")
+                ).withClass("container-fluid")
+            )
+        ).withLang("en");
     }
 
-    @Override
-    public void renderOn(HtmlCanvas html) throws IOException {
-        html
-        .render(DocType.HTML5)
-        .html(lang("en"))
-            .render(new Header(dump))
-            .body()
-                .div(class_("container-fluid"))
-                    .div(class_("row"))
-                        .render(new MenuBar())
-                    ._div()
-                    .div(class_("row"))
-                        .div(class_("col-6"))
-                            .h5().content(srcFile.getName())
-                            .pre(class_("pre-scrollable")).content(rawHtmlDiff.getSrcDiff(), false)
-                        ._div()
-                        .div(class_("col-6"))
-                            .h5().content(dstFile.getName())
-                            .pre(class_("pre-scrollable")).content(rawHtmlDiff.getDstDiff(), false)
-                        ._div()
-                    ._div()
-                ._div()
-            ._body()
-        ._html();
-    }
+    private static class MenuBar {
 
-    private static class MenuBar implements Renderable {
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-            html
-            .div(class_("col"))
-                .div(class_("btn-toolbar justify-content-end"))
-                    .div(class_("btn-group mr-2"))
-                        .button(class_("btn btn-primary btn-sm").id("legend")
-                                .add("data-bs-toggle", "popover")
-                                .add("data-bs-placement", "bottom")
-                                .add("data-bs-html", "true")
-                                .add("data-bs-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br>"
-                                        + "<span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br>"
-                                        + "<span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br>"
-                                        + "<span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>", false)
-                        ).content("Legend")
-                        .button(class_("btn btn-primary btn-sm").id("shortcuts")
-                                .add("data-bs-toggle", "popover")
-                                .add("data-bs-placement", "bottom")
-                                .add("data-bs-html", "true")
-                                .add("data-bs-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br>"
-                                        + "<b>t</b> top<br><b>b</b> bottom", false)
-                        ).content("Shortcuts")
-                    ._div()
-                    .div(class_("btn-group"))
-                        .a(class_("btn btn-default btn-sm btn-primary").href("/list")).content("Back")
-                        .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
-                    ._div()
-                ._div()
-            ._div();
+        public static Tag build() {
+            return div(
+                div(
+                    div(
+                        button("Legend")
+                            .withClasses("btn btn-primary", "btn-sm")
+                            .withId("legend").withData("data-bs-toggle", "popover")
+                            .withData("data-bs-placement", "bottom")
+                            .withData("data-bs-html", "true")
+                            .withData("data-bs-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br>"
+                                + "<span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br>"
+                                + "<span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br>"
+                                + "<span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>"),
+                        button("Shortcuts")
+                            .withClasses("btn btn-primary", "btn-sm")
+                            .withId("shortcuts")
+                            .withData("data-bs-placement", "bottom")
+                            .withData("data-bs-html", "true")
+                            .withData("data-bs-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br>"
+                                    + "<b>t</b> top<br><b>b</b> bottom")
+                    ).withClass("btn-group mr-2"),
+                    div(
+                        a("Back").withHref("/list").withClasses("btn btn-default", "btn-sm btn-primary"),
+                        a("Quit").withHref("/quit").withClasses("btn btn-default", "btn-sm btn-danger")
+                    ).withClass("btn-group")
+                ).withClasses("btn-toolbar","justify-content-end")
+            ).withClass("col");
         }
     }
 
-    private static class Header implements Renderable {
+    private static class Header {
 
-        private boolean dump;
-
-        public Header(boolean dump) throws IOException {
-            this.dump = dump;
-        }
-
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
+        public static Tag build(boolean dump) throws IOException {
             if (!dump) {
-                html
-                        .head()
-                           .meta(charset("utf8"))
-                           .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
-                           .title().content("GumTree")
-                           .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
-                           .macros().stylesheet("/dist/vanilla.css")
-                           .macros().javascript(WebDiff.JQUERY_JS_URL)
-                           .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
-                           .macros().javascript("/dist/shortcuts.js")
-                           .macros().javascript("/dist/vanilla.js")
-                        ._head();
+                return head(
+                   meta().withCharset("utf8"),
+                   meta().withName("viewport").withContent("width=device-width, initial-scale=1.0"),
+                   title("GumTree"),
+                   link().withRel("stylesheet").withType("text/css").withHref(WebDiff.BOOTSTRAP_CSS_URL),
+                   link().withRel("stylesheet").withType("text/css").withHref("/dist/vanilla.css"),
+                   script().withType("text/javascript").withSrc(WebDiff.JQUERY_JS_URL),
+                   script().withType("text/javascript").withSrc(WebDiff.BOOTSTRAP_JS_URL),
+                   script().withType("text/javascript").withSrc("/dist/shortcuts.js"),
+                   script().withType("text/javascript").withSrc("/dist/vanilla.js")
+                );
             }
             else {
-                html
-                        .head()
-                           .meta(charset("utf8"))
-                           .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
-                           .title().content("GumTree")
-                           .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
-                           .style(type("text/css"))
-                           .write(readFile("web/dist/vanilla.css"))
-                           ._style()
-                           .macros().javascript(WebDiff.JQUERY_JS_URL)
-                           .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
-                           .macros().script(readFile("web/dist/shortcuts.js"))
-                           .macros().script(readFile("web/dist/vanilla.js"))
-                        ._head();
+                return head(
+                    meta().withCharset("utf8"),
+                    meta().withName("viewport").withContent("width=device-width, initial-scale=1.0"),
+                    title("GumTree"),
+                    link().withRel("stylesheet").withType("text/css").withHref(WebDiff.BOOTSTRAP_CSS_URL),
+                    style(readFile("web/dist/vanilla.css")).withType("text/css"),
+                    script().withType("text/javascript").withSrc(WebDiff.JQUERY_JS_URL),
+                    script().withType("text/javascript").withSrc(WebDiff.BOOTSTRAP_JS_URL),
+                    script(readFile("/dist/shortcuts.js")).withType("text/javascript"),
+                    script(readFile("/dist/vanilla.js")).withType("text/javascript")
+                );
             }
         }
 
