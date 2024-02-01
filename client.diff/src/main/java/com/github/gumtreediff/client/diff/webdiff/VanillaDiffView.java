@@ -64,22 +64,10 @@ public class VanillaDiffView {
             return div(
                 div(
                     div(
-                        button("Legend")
-                            .withClasses("btn btn-primary", "btn-sm")
-                            .withId("legend").withData("data-bs-toggle", "popover")
-                            .withData("data-bs-placement", "bottom")
-                            .withData("data-bs-html", "true")
-                            .withData("data-bs-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br>"
-                                + "<span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br>"
-                                + "<span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br>"
-                                + "<span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>"),
-                        button("Shortcuts")
-                            .withClasses("btn btn-primary", "btn-sm")
-                            .withId("shortcuts")
-                            .withData("data-bs-placement", "bottom")
-                            .withData("data-bs-html", "true")
-                            .withData("data-bs-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br>"
-                                    + "<b>t</b> top<br><b>b</b> bottom")
+                        rawHtml("<button class=\"btn btn-primary btn-sm\" id=\"legend\" data-bs-toggle=\"popover\" data-bs-placement=\"bottom\" " +
+                                "data-bs-html=\"true\" data-bs-content=\"<span class='del'>&nbsp;&nbsp;</span> deleted<br><span class='add'>&nbsp;&nbsp;</span> added<br><span class='mv'>&nbsp;&nbsp;</span> moved<br><span class='upd';>&nbsp;&nbsp;</span> updated<br>\">Legend</button>"),
+                        rawHtml("<button class=\"btn btn-primary btn-sm\" id=\"shortcuts\" data-bs-toggle=\"popover\" data-bs-placement=\"bottom\" " +
+                                "data-bs-html=\"true\" data-bs-content=\"<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom\">Shortcuts</button>")
                     ).withClass("btn-group mr-2"),
                     div(
                         a("Back").withHref("/list").withClasses("btn btn-default", "btn-sm btn-primary"),
