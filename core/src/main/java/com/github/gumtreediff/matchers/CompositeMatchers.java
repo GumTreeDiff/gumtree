@@ -81,7 +81,7 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "gumtree-simple", priority = Registry.Priority.HIGH)
+    @Register(id = "gumtree-simple", priority = Registry.Priority.MAXIMUM)
     public static class SimpleGumtree extends CompositeMatcher {
         public SimpleGumtree() {
             super(new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
@@ -163,7 +163,7 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "classic-gumtree-theta")
+    @Register(id = "gumtree-classic-theta")
     public static class ClassicGumtreeTheta extends CompositeMatcher {
         /**
          * Instantiates GumTree with Theta B-F.
