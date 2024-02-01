@@ -31,30 +31,24 @@ public class MergelyDiffView {
             Header.build(),
             body(
                 div(
-                    div(div().withId("mergely")).withClass("mergely-resizer")
-                ).withClass("mergely-full-screen-8"),
-                script("lhs_url = \"/left/" + id + "\";" + "rhs_url = \"/right/" + id + "\";")
-                        .withType("text/javascript"),
+                    div().withId("compare").withStyle("width: 100%; height: 100%;")
+                ),
+                script("lhs_url = \"/left/" + id + "\";" + "rhs_url = \"/right/" + id + "\";").withType("text/javascript"),
                 script().withSrc("/dist/launch-mergely.js").withType("text/javascript")
             )
         ).withLang("en");
     }
 
     private static class Header {
-        public static final String CODE_MIRROR_JS_URL
-                = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js";
-        public final static String CODE_MIRROR_CSS_URL
-                = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.css";
-        public final static String SEARCH_CURSOR_JS_URL
-                = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/search/searchcursor.min.js";
+        public final static String MERGELY_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/mergely/5.0.0/mergely.min.js";
+
+        public final static String MERGELY_CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/mergely/5.0.0/mergely.css";
+
+
         public static Tag build() {
             return head(
-                script().withSrc(WebDiff.JQUERY_JS_URL).withType("text/javascript"),
-                script().withSrc(CODE_MIRROR_JS_URL).withType("text/javascript"),
-                link().withHref(CODE_MIRROR_CSS_URL).withType("text/css").withRel("stylesheet"),
-                script().withSrc(SEARCH_CURSOR_JS_URL).withType("text/javascript"),
-                script().withSrc("/dist/mergely.js").withType("text/javascript"),
-                link().withHref("/dist/mergely.css").withType("text/css").withRel("stylesheet")
+                script().withSrc(MERGELY_JS_URL).withType("text/javascript"),
+                link().withHref(MERGELY_CSS_URL).withType("text/css").withRel("stylesheet")
             );
         }
     }
