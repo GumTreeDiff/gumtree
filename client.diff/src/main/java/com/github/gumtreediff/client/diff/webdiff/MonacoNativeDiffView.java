@@ -27,16 +27,6 @@ import java.io.File;
 import static j2html.TagCreator.*;
 
 public class MonacoNativeDiffView {
-    private File srcFile;
-    private File dstFile;
-
-    private int id;
-
-    public MonacoNativeDiffView(File srcFile, File dstFile, int id) {
-        this.srcFile = srcFile;
-        this.dstFile = dstFile;
-        this.id = id;
-    }
 
     public static HtmlTag build(File srcFile, File dstFile, int id) {
         return html(
