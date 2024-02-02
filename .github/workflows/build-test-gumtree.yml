@@ -31,6 +31,8 @@ jobs:
         id: version
         run: echo "VERSION=$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
         shell: bash
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - name: build gumtree
         run: ./gradlew -PtestNative build :benchmark:runOnDefects4J :benchmark:ciDefects4JAnalysis
       - name: upload defects4j results
