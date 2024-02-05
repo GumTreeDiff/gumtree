@@ -27,6 +27,9 @@ import java.util.List;
 import com.github.gumtreediff.tree.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTree {
@@ -284,5 +287,26 @@ public class TestTree {
         t3.setPos(1);
         t3.setLength(2);
         assertEquals("foo: hello [1,3]", t3.toString());
+    }
+
+    @Test
+    public void testTypeThreading() throws InterruptedException {
+        int n = 20;
+        ExecutorService exec = Executors.newFixedThreadPool(n);
+        List<Type> types = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            exec.submit(() -> {
+                types.add(TypeSet.type("foo"));
+            });
+        }
+
+        exec.awaitTermination(1, java.util.concurrent.TimeUnit.SECONDS);
+
+        for (Type t1 : types) {
+            for (Type t2: types) {
+                assertSame(t1, t2);
+            }
+        }
     }
 }
