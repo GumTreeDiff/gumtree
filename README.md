@@ -1,6 +1,6 @@
 # GumTree
 
-An awesome code differencing tool.
+An awesome code differencing tool that you can [integrate with Git](https://github.com/GumTreeDiff/gumtree/wiki/VCS-Integration)!
 
 ## Status
 
