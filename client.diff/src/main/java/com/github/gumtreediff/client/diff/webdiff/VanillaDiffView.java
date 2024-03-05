@@ -103,8 +103,8 @@ public class VanillaDiffView {
                     style(readFile("web/dist/vanilla.css")).withType("text/css"),
                     script().withType("text/javascript").withSrc(WebDiff.JQUERY_JS_URL),
                     script().withType("text/javascript").withSrc(WebDiff.BOOTSTRAP_JS_URL),
-                    script(readFile("/dist/shortcuts.js")).withType("text/javascript"),
-                    script(readFile("/dist/vanilla.js")).withType("text/javascript")
+                    script(readFile("web/dist/shortcuts.js")).withType("text/javascript"),
+                    script(readFile("web/dist/vanilla.js")).withType("text/javascript")
                 );
             }
         }
