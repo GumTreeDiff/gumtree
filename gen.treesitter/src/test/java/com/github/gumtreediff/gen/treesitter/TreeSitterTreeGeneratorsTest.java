@@ -66,7 +66,7 @@ public class TreeSitterTreeGeneratorsTest {
                 + "}";
         TreeContext ctx = new CSharpTreeSitterTreeGenerator().generateFrom().string(input);
         Tree t = ctx.getRoot();
-        assertEquals(49, t.getMetrics().size);
+        assertEquals(50, t.getMetrics().size);
     }
 
     @Test
