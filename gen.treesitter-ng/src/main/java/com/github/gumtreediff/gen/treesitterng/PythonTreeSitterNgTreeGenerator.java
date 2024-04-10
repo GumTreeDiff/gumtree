@@ -17,17 +17,25 @@
  * Copyright 2021 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.gen.treesitter;
+package com.github.gumtreediff.gen.treesitterng;
 
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.utils.Registry;
+import org.treesitter.TSLanguage;
+import org.treesitter.TreeSitterPython;
 
-@Register(id = "kotlin-treesitter", accept = "\\.kt$", priority = Registry.Priority.MAXIMUM)
-public class KotlinTreeSitterGenerator extends AbstractTreeSitterGenerator {
-    private static final String KOTLIN_PARSER_NAME = "kotlin";
+@Register(id = "python-treesitter-ng", accept = "\\.py$", priority = Registry.Priority.MAXIMUM)
+public final class PythonTreeSitterNgTreeGenerator extends AbstractTreeSitterNgGenerator {
+    public static final TSLanguage PYTHON_TREE_SITTER_LANGUAGE = new TreeSitterPython();
+    private static final String PYTHON_LANGUAGE_NAME = "python";
 
     @Override
-    public String getParserName() {
-        return KOTLIN_PARSER_NAME;
+    protected TSLanguage getTreeSitterLanguage() {
+        return PYTHON_TREE_SITTER_LANGUAGE;
+    }
+
+    @Override
+    protected String getLanguageName() {
+        return PYTHON_LANGUAGE_NAME;
     }
 }
