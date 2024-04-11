@@ -20,11 +20,10 @@
 package com.github.gumtreediff.gen.treesitter;
 
 import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.utils.Registry;
 
-
-@Register(id = "kotlin-treesitter", accept = "\\.kt$")
-public final class KotlinTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {
-
+@Register(id = "kotlin-treesitter", accept = "\\.kt$", priority = Registry.Priority.MAXIMUM)
+public class KotlinTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {
     private static final String KOTLIN_PARSER_NAME = "kotlin";
 
     @Override
@@ -32,4 +31,3 @@ public final class KotlinTreeSitterTreeGenerator extends AbstractTreeSitterGener
         return KOTLIN_PARSER_NAME;
     }
 }
-
