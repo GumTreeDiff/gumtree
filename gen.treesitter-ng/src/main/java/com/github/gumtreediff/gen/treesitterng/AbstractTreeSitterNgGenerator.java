@@ -65,20 +65,42 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         int endRow = node.getEndPoint().getRow();
         int endColumn = node.getEndPoint().getColumn();
         List<String> substringLines;
+        // tree-sitter handles string by byte array, so we need this.
+        String startRowStr = contentLines.get(startRow);
+        byte[] startRowBytes = startRowStr.getBytes();
         if (startRow == endRow) {
-            substringLines = Collections.singletonList(contentLines.get(startRow).substring(
-                    startColumn, endColumn));
+            // endColumn == startRowBytes.length + 1 when the label in tree-sitter contains line separator
+            if (endColumn == startRowBytes.length + 1) {
+                substringLines = Collections.singletonList(startRowStr);
+            } else {
+                substringLines = Collections.singletonList(new String(
+                        startRowBytes, startColumn, endColumn - startColumn));
+            }
         } else {
             substringLines = new ArrayList<>();
-            String startLineSubstring = contentLines.get(startRow).substring(startColumn);
+            String endRowStr = contentLines.get(endRow);
+            byte[] endRowBytes = endRowStr.getBytes();
+            String startLineSubstring;
+            if (startColumn > startRowBytes.length) {
+                // usually, line separator is not the start char of a tree node label
+                // if this situation happened, just put an empty string at start
+                startLineSubstring = "";
+            } else {
+                startLineSubstring = new String(startRowBytes, 0, startColumn);
+            }
             List<String> middleLines = contentLines.subList(startRow + 1, endRow);
-            String endLineSubstring = contentLines.get(endRow).substring(0, endColumn);
+            String endLineSubstring;
+            if (endColumn > endRowStr.length()) {
+                endLineSubstring = endRowStr;
+            } else {
+                endLineSubstring = new String(endRowBytes, 0, endColumn);
+            }
             substringLines.add(startLineSubstring);
             substringLines.addAll(middleLines);
             substringLines.add(endLineSubstring);
         }
 
-        return String.join("\n", substringLines);
+        return String.join(System.lineSeparator(), substringLines);
     }
 
     private static int calculateOffset(List<String> contentLines, TSPoint point) {
