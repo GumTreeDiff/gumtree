@@ -56,7 +56,7 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         String content = String.join(System.lineSeparator(), contentLines);
         TSTree tree = parser.parseString(null, content);
         Map<String, Object> currentRule = RULES.getOrDefault(getLanguageName(), new HashMap<>());
-        return generateFromTressSitterTree(contentLines, currentRule, tree);
+        return generateFromTreeSitterTree(contentLines, currentRule, tree);
     }
 
     private static String getLabel(List<String> contentLines, TSNode node) {
@@ -114,42 +114,70 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         return offset;
     }
 
+    /**
+     * try match node's type or node and its ancestors' types in given ruleSet.
+     *
+     * @param ruleSet a rule's list or rule's ketSet if the rule is a map.
+     * @param node    the node being to match.
+     * @return matched types. null if not matched.
+     */
+    protected static String matchNodeOrAncestorTypes(Collection<String> ruleSet, TSNode node) {
+        int depth = 1;
+        String nodeType = node.getType();
+        StringBuilder typesBuilder = new StringBuilder(nodeType);
+        TSNode ancestor = node.getParent();
+        int maxDepthInRuleSet = 1;
+        for (String rule : ruleSet) {
+            String[] ruleTypes = rule.split(" ");
+            if (ruleTypes.length > maxDepthInRuleSet) {
+                maxDepthInRuleSet = ruleTypes.length;
+            }
+            if (ruleTypes.length == 1 && rule.equals(nodeType)) {
+                // matched directly
+                return nodeType;
+            }
+        }
+        while (!ancestor.isNull() && depth <= maxDepthInRuleSet) {
+            typesBuilder.insert(0, ' ');
+            typesBuilder.insert(0, ancestor.getType());
+            String typesString = typesBuilder.toString();
+            if (ruleSet.contains(typesString)) {
+                return typesString;
+            }
+            ancestor = ancestor.getParent();
+            depth++;
+        }
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
     protected static Pair<Tree, Boolean> tsNode2GumTree(
             List<String> contentLines, Map<String, Object> currentRule, TreeContext context, TSNode node) {
         String type = node.getType();
-        TSNode parent = node.getParent();
-        String parentAndChildType = parent.isNull() ? type : (parent.getType() + " " + type);
         String label = getLabel(contentLines, node);
         if (currentRule.containsKey(YAML_IGNORED)) {
             List<String> ignores = (List<String>) currentRule.get(YAML_IGNORED);
-            if (ignores.contains(type)) {
-                return null;
-            }
-            if (ignores.contains(parentAndChildType)) {
+            if (matchNodeOrAncestorTypes(ignores, node) != null) {
                 return null;
             }
         }
         if (currentRule.containsKey(YAML_LABEL_IGNORED)) {
             List<String> ignores = (List<String>) currentRule.get(YAML_LABEL_IGNORED);
-            if (ignores.contains(label)) {
+            if (matchNodeOrAncestorTypes(ignores, node) != null) {
                 return null;
             }
         }
         if (currentRule.containsKey(YAML_ALIASED)) {
             Map<String, String> alias = (Map<String, String>) currentRule.get(YAML_ALIASED);
-            if (alias.containsKey(type)) {
-                type = alias.get(type);
-            } else if (alias.containsKey(parentAndChildType)) {
-                type = alias.get(parentAndChildType);
+            String matchedTypes = matchNodeOrAncestorTypes(alias.keySet(), node);
+            if (matchedTypes != null) {
+                type = alias.get(matchedTypes);
             }
         }
         boolean flatten = false;
         if (currentRule.containsKey(YAML_FLATTENED)) {
-            List<String> flattenMap = (List<String>) currentRule.get(YAML_FLATTENED);
-            if (flattenMap.contains(type)) {
-                flatten = true;
-            } else if (flattenMap.contains(parentAndChildType)) {
+            List<String> flattenList = (List<String>) currentRule.get(YAML_FLATTENED);
+            if (matchNodeOrAncestorTypes(flattenList, node) != null) {
                 flatten = true;
             }
         }
@@ -164,7 +192,7 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         return new Pair<>(tree, flatten);
     }
 
-    private static TreeContext generateFromTressSitterTree(
+    private static TreeContext generateFromTreeSitterTree(
             List<String> contentLines, Map<String, Object> currentRule, TSTree tree) {
         TSNode rootNode = tree.getRootNode();
         TreeContext context = new TreeContext();
