@@ -18,6 +18,7 @@
  */
 package com.github.gumtreediff.gen.treesitterng;
 
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
 
@@ -49,4 +50,28 @@ public class JavaTreeSitterNgTreeGeneratorTest {
         assertTrue(TreeSitterNgTestUtils.onlyOneUpdate(src.getRoot(), dst.getRoot()));
     }
 
+    @Test
+    public void testAffectationOperatorChange() throws IOException {
+        Tree src = generator.generateFrom().string(
+                "class Foo { void foo() { a = b; } }").getRoot();
+        Tree dst = generator.generateFrom().string(
+                "class Foo { void foo() { a += b; } }").getRoot();
+        assertTrue(TreeSitterNgTestUtils.onlyOneUpdate(src, dst));
+        dst = generator.generateFrom().string(
+                "class Foo { void foo() { a -= b; } }").getRoot();
+        assertTrue(TreeSitterNgTestUtils.onlyOneUpdate(src, dst));
+        dst = generator.generateFrom().string(
+                "class Foo { void foo() { a *= b; } }").getRoot();
+        assertTrue(TreeSitterNgTestUtils.onlyOneUpdate(src, dst));
+        dst = generator.generateFrom().string(
+                "class Foo { void foo() { a /= b; } }").getRoot();
+        assertTrue(TreeSitterNgTestUtils.onlyOneUpdate(src, dst));
+        dst = generator.generateFrom().string(
+                "class Foo { void foo() { a |= b; } }").getRoot();
+        assertTrue(TreeSitterNgTestUtils.onlyOneUpdate(src, dst));
+        dst = generator.generateFrom().string(
+                "class Foo { void foo() { a ^= b; } }").getRoot();
+        assertTrue(TreeSitterNgTestUtils.onlyOneUpdate(src, dst));
+    }
+    
 }
