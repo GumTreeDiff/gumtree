@@ -32,8 +32,6 @@ public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGen
     private static final String TREESITTER_CMD = System.getProperty("gt.ts.path",
             "tree-sitter-parser.py");
 
-    private static final String SYSTEM_TYPE = System.getProperty("os.name");
-
     @Override
     protected TreeContext generate(Reader r) throws IOException {
         String output = readStandardOutput(r);
@@ -52,10 +50,6 @@ public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGen
 
     @Override
     protected String[] getCommandLine(String file) {
-        if (SYSTEM_TYPE.startsWith("Windows") && TREESITTER_CMD.endsWith(".py")) {
-            return new String[]{"python", TREESITTER_CMD, file, getParserName()};
-        } else {
-            return new String[]{TREESITTER_CMD, file, getParserName()};
-        }
+        return new String[]{TREESITTER_CMD, file, getParserName()};
     }
 }
