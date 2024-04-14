@@ -25,25 +25,13 @@ import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 
 public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGenerator {
-    // On windows, python commands are usually used to execute the python interpreter
-    // if python is configured in the PATH environment variable
-    public static final String PYTHON = "python";
-    /* In Linux or macOS, Python2 is usually built in for compatibility reasons,
-     * and Python commands are also occupied by Python2 (although Python2 has been removed
-     * from newer distributions), so Python3 commands are usually used to call Python3 interpreters,
-     * although this is not absolute
-     */
-    public static final String PYTHON3 = "python3";
-
     private static final String TREESITTER_CMD = System.getProperty("gt.ts.path",
             "tree-sitter-parser.py");
-    private static final String CUSTOM_PYTHON_PATH = System.getProperty("gt.ts.py.path");
-    private static final String SYSTEM_TYPE = System.getProperty("os.name").toLowerCase();
+    private static final String PYTHON_CMD = System.getProperty("gt.py.path");
 
     @Override
     protected TreeContext generate(Reader r) throws IOException {
@@ -63,25 +51,8 @@ public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGen
 
     @Override
     protected String[] getCommandLine(String file) {
-        if (!TREESITTER_CMD.endsWith(".py")) {
-            return new String[]{TREESITTER_CMD, file, getParserName()};
-        } else {
-            if (CUSTOM_PYTHON_PATH != null) {
-                return new String[]{CUSTOM_PYTHON_PATH, TREESITTER_CMD, file, getParserName()};
-            } else {
-                if (SYSTEM_TYPE.startsWith("windows")) {
-                    return new String[]{PYTHON, TREESITTER_CMD, file, getParserName()};
-                } else {
-                    File pyScript = new File(TREESITTER_CMD);
-                    /* If the python script exists in the user-specified directory or the default directory,
-                    * directly use the python command to call it.
-                    * Conversely, the script may be available in environment variables
-                     */
-                    return pyScript.exists()
-                            ? new String[]{PYTHON3, TREESITTER_CMD, file, getParserName()}
-                            : new String[]{TREESITTER_CMD, file, getParserName()};
-                }
-            }
-        }
+        return PYTHON_CMD == null
+                ? new String[]{TREESITTER_CMD, file, getParserName()}
+                : new String[]{PYTHON_CMD, TREESITTER_CMD, file, getParserName(), getParserName()};
     }
 }
