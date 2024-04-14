@@ -29,10 +29,20 @@ import java.io.IOException;
 import java.io.Reader;
 
 public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGenerator {
+    // On windows, python commands are usually used to execute the python interpreter
+    // if python is configured in the PATH environment variable
+    public static final String PYTHON = "python";
+    /* In Linux or macOS, Python2 is usually built in for compatibility reasons,
+     * and Python commands are also occupied by Python2 (although Python2 has been removed
+     * from newer distributions), so Python3 commands are usually used to call Python3 interpreters,
+     * although this is not absolute
+     */
+    public static final String PYTHON3 = "python3";
+
     private static final String TREESITTER_CMD = System.getProperty("gt.ts.path",
             "tree-sitter-parser.py");
-
-    private static final String SYSTEM_TYPE = System.getProperty("os.name");
+    private static final String CUSTOM_PYTHON_PATH = System.getProperty("gt.ts.py.path");
+    private static final String SYSTEM_TYPE = System.getProperty("os.name").toLowerCase();
 
     @Override
     protected TreeContext generate(Reader r) throws IOException {
@@ -52,10 +62,16 @@ public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGen
 
     @Override
     protected String[] getCommandLine(String file) {
-        if (SYSTEM_TYPE.startsWith("Windows") && TREESITTER_CMD.endsWith(".py")) {
-            return new String[]{"python", TREESITTER_CMD, file, getParserName()};
-        } else {
+        if (!TREESITTER_CMD.endsWith(".py")) {
             return new String[]{TREESITTER_CMD, file, getParserName()};
+        } else {
+            if (CUSTOM_PYTHON_PATH != null) {
+                return new String[]{CUSTOM_PYTHON_PATH, TREESITTER_CMD, file, getParserName()};
+            } else {
+                return SYSTEM_TYPE.startsWith("windows")
+                        ? new String[]{PYTHON, TREESITTER_CMD, file, getParserName()} :
+                        new String[]{PYTHON3, TREESITTER_CMD, file, getParserName()};
+            }
         }
     }
 }
