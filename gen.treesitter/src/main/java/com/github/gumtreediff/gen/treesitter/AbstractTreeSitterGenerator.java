@@ -25,6 +25,7 @@ import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -68,9 +69,18 @@ public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGen
             if (CUSTOM_PYTHON_PATH != null) {
                 return new String[]{CUSTOM_PYTHON_PATH, TREESITTER_CMD, file, getParserName()};
             } else {
-                return SYSTEM_TYPE.startsWith("windows")
-                        ? new String[]{PYTHON, TREESITTER_CMD, file, getParserName()} :
-                        new String[]{PYTHON3, TREESITTER_CMD, file, getParserName()};
+                if (SYSTEM_TYPE.startsWith("windows")) {
+                    return new String[]{PYTHON, TREESITTER_CMD, file, getParserName()};
+                } else {
+                    File pyScript = new File(TREESITTER_CMD);
+                    /* If the python script exists in the user-specified directory or the default directory,
+                    * directly use the python command to call it.
+                    * Conversely, the script may be available in environment variables
+                     */
+                    return pyScript.exists()
+                            ? new String[]{PYTHON3, TREESITTER_CMD, file, getParserName()}
+                            : new String[]{TREESITTER_CMD, file, getParserName()};
+                }
             }
         }
     }
