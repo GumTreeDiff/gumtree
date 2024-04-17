@@ -53,6 +53,6 @@ public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGen
     protected String[] getCommandLine(String file) {
         return PYTHON_CMD == null
                 ? new String[]{TREESITTER_CMD, file, getParserName()}
-                : new String[]{PYTHON_CMD, TREESITTER_CMD, file, getParserName(), getParserName()};
+                : new String[]{PYTHON_CMD, TREESITTER_CMD, file, getParserName()};
     }
 }
