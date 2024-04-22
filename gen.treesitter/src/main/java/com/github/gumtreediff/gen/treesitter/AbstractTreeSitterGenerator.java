@@ -31,6 +31,7 @@ import java.io.Reader;
 public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGenerator {
     private static final String TREESITTER_CMD = System.getProperty("gt.ts.path",
             "tree-sitter-parser.py");
+    private static final String PYTHON_CMD = System.getProperty("gt.py.path");
 
     @Override
     protected TreeContext generate(Reader r) throws IOException {
@@ -50,6 +51,8 @@ public abstract class AbstractTreeSitterGenerator extends ExternalProcessTreeGen
 
     @Override
     protected String[] getCommandLine(String file) {
-        return new String[]{TREESITTER_CMD, file, getParserName()};
+        return PYTHON_CMD == null
+                ? new String[]{TREESITTER_CMD, file, getParserName()}
+                : new String[]{PYTHON_CMD, TREESITTER_CMD, file, getParserName()};
     }
 }
