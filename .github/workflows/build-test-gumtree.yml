@@ -34,7 +34,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: build gumtree and run benchmarks
-        run: ./gradlew -PtestNative build :benchmark:runOnDefects4J :runOnGhJava execNotebook
+        run: ./gradlew -PtestNative build :benchmark:runOnDefects4J :benchmark:runOnGhJava :benchmark:execNotebook
       - name: upload benchmarks results
         uses: actions/upload-artifact@v4
         with:
