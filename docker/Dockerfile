@@ -9,7 +9,7 @@ RUN apt-get update \
 	    build-essential ocaml libnum-ocaml-dev python3-pip python3-dev nodejs npm \
 	    tzdata ca-certificates p11-kit
 
-RUN pip3 install pandas plotnine scipy
+RUN pip3 install pandas plotnine scipy jupyter
 
 # Set locale
 ENV LANG C.UTF-8

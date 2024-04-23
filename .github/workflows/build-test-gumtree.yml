@@ -33,24 +33,24 @@ jobs:
         shell: bash
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-      - name: build gumtree
-        run: ./gradlew -PtestNative build :benchmark:runOnDefects4J :benchmark:ciDefects4JAnalysis
-      - name: upload defects4j results
-        uses: actions/upload-artifact@v2
+      - name: build gumtree and run benchmarks
+        run: ./gradlew -PtestNative build :benchmark:runOnDefects4J :runOnGhJava execNotebook
+      - name: upload benchmarks results
+        uses: actions/upload-artifact@v4
         with:
-          name: defects4j-report
-          path: benchmark/build/reports/defects4j*
+          name: benchmark-report
+          path: benchmark/build/reports/analysis.html
       - name: generate jacoco report
         run: ./gradlew jacocoRootReport
       - name: upload coverage report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: build/reports/jacoco/jacocoRootReport/html/
       - name: generate test report
         run: ./gradlew testReport
       - name: upload test report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: build/reports/tests
@@ -60,7 +60,6 @@ jobs:
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
         if: ${{ github.event_name == 'schedule' && contains(steps.version.outputs.VERSION, 'SNAPSHOT') }}
         run: ./gradlew publish
-
       - name: upload release package
         if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.VERSION) }}
         run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository

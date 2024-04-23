@@ -25,6 +25,7 @@ import java.util.*;
 import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
+import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.matchers.heuristic.IdMatcher;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
@@ -120,6 +121,35 @@ public class CompositeMatchers {
             for (double minSim = 0.3; minSim <= 0.7; minSim += 0.1) {
                 for (int minPrio = 5; minPrio >= 1; minPrio -= 1) {
                     GumtreeProperties prop = new GumtreeProperties();
+                    prop.put(ConfigurationOptions.st_minprio, minPrio);
+                    prop.put(ConfigurationOptions.bu_minsim, minSim);
+                    properties.add(prop);
+                }
+            }
+            return properties;
+        }
+    }
+
+    @Register(id = "gumtree-simple-auto-mt", priority = Registry.Priority.HIGH)
+    public static class SimpleGumtreeAutoMt implements Matcher {
+        @Override
+        public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
+            return getProperties().parallelStream().map( props -> {
+                Matcher matcher = new SimpleGumtreeStable();
+                matcher.configure(props);
+                MappingStore curMappings = matcher.match(src, dst);
+                EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator();
+                EditScript script = editScriptGenerator.computeActions(curMappings);
+                return new Pair<>(curMappings, script.size());
+            }).min(Comparator.comparingInt(pair -> pair.second)).get().first;
+        }
+
+        private List<GumtreeProperties> getProperties() {
+            ArrayList<GumtreeProperties> properties = new ArrayList<>();
+            for (double minSim = 0.3; minSim <= 0.7; minSim += 0.1) {
+                for (int minPrio = 5; minPrio >= 1; minPrio -= 1) {
+                    GumtreeProperties prop = new GumtreeProperties();
+                    prop.put(ConfigurationOptions.st_priocalc, "size");
                     prop.put(ConfigurationOptions.st_minprio, minPrio);
                     prop.put(ConfigurationOptions.bu_minsim, minSim);
                     properties.add(prop);

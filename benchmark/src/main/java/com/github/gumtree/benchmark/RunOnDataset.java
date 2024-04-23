@@ -83,6 +83,8 @@ public class RunOnDataset {
         if (configurations.isEmpty()) {
             configurations.add(new MatcherConfig("simple",
                     CompositeMatchers.SimpleGumtree::new, mediumMinSim()));
+            //configurations.add(new MatcherConfig("auto",
+                    //CompositeMatchers.SimpleGumtreeAutoMt::new, new GumtreeProperties()));
             //configurations.add(new MatcherConfig("hybrid-100",
                     //CompositeMatchers.HybridGumtree::new, mediumBuMinsize()));
             //configurations.add(new MatcherConfig("opt-100",
