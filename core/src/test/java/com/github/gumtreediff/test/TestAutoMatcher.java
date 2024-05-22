@@ -19,10 +19,9 @@
 
 package com.github.gumtreediff.test;
 
-import com.github.gumtreediff.matchers.CompositeMatchers;
+import com.github.gumtreediff.matchers.AutoMatchers;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.heuristic.IdMatcher;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Pair;
@@ -37,7 +36,7 @@ public class TestAutoMatcher {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();
         Tree t1 = trees.first.getRoot();
         Tree t2 = trees.second.getRoot();
-        Matcher matcher = new CompositeMatchers.SimpleGumtreeAuto();
+        Matcher matcher = new AutoMatchers.SimpleGumtreeAuto();
         MappingStore ms = matcher.match(t1, t2);
     }
 }
