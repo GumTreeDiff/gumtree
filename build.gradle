@@ -173,7 +173,7 @@ def projectDescriptions = [
     'gen.yaml': 'GumTree tree generator for YAML code (SnakeYAML based).',
 ]
 
-configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
+configure(subprojects.findAll { !(it.name in ['dist', 'dist-native', 'benchmark']) }) { subproject ->
     apply plugin: "maven-publish"
     apply plugin: "signing"
 
