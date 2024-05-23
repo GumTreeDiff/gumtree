@@ -188,7 +188,8 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
             tree = context.createTree(TypeSet.type(type));
         }
         tree.setPos(calculateOffset(contentLines, node.getStartPoint()));
-        tree.setLength(label.length());
+        int endOffset = calculateOffset(contentLines, node.getEndPoint());
+        tree.setLength(endOffset - tree.getPos());
         return new Pair<>(tree, flatten);
     }
 
