@@ -1,0 +1,20 @@
+FROM openjdk:21-slim as build-stage
+
+# Compiles gumtree
+COPY . /opt/gumtree
+RUN /opt/gumtree/gradlew -p /opt/gumtree build
+
+FROM openjdk:21-slim as final-stage
+
+# Copy gumtree-native distributino from build-stage.
+COPY --from=build-stage /opt/gumtree/dist-native/build/install/gumtree/ /opt/gumtree
+
+# Define volume diff to make available files to diff
+RUN mkdir -p /diff/left /diff/right
+WORKDIR /diff
+VOLUME /diff/left /diff/right
+
+# Expose port 4567 for webdiff
+EXPOSE 4567
+
+ENTRYPOINT ["/opt/gumtree/bin/gumtree"]

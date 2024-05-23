@@ -1,0 +1,45 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version "8.1.1"
+	id 'application'
+}
+
+dependencies {
+	implementation project(':client')
+	implementation project(':client.diff')
+	implementation project(':gen.css')
+	implementation project(':gen.jdt')
+	implementation project(':gen.treesitter-ng')
+	implementation project(':gen.xml')
+	implementation project(':gen.yaml')
+}
+
+description = 'GumTree distribution.'
+
+shadowJar {
+	archiveBaseName.set('gumtree')
+	archiveClassifier.set('')
+	archiveVersion.set('')
+	mergeServiceFiles()
+	mergeServiceFiles {
+		path = 'META-INF/annotations'
+	}
+}
+
+distributions {
+	shadow {
+		distributionBaseName = 'gumtree'
+	}
+}
+
+mainClassName = 'com.github.gumtreediff.client.Run'
+applicationName = 'gumtree'
+archivesBaseName = 'gumtree'
+shadowDistZip.enabled = true
+distTar.enabled = false
+distZip.enabled = false
+startScripts.enabled = false
+shadowDistTar.enabled = false
+
+jar.enabled = false
+
+build.finalizedBy installShadowDist
