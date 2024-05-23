@@ -1,6 +1,7 @@
 # Changelog of GumTree
 
 ## v4.0.0 (Ginkgo)
+* New native distribution with zero dependencies apart from JDK 21
 * Vastly improved swing client with directory comparison, syntax highlighting, and more
 * Update monaco
 * Update bootstrap
@@ -8,6 +9,7 @@
 * New Acorn based tree generator for JS that replaces rhino as default JS generator
 * New tree-sitter based tree generator with support for a wide range of languages with both a python and a java implementation.
 * Docker image now comes installed with the Acorn and tree-sitter parsers
+* Very light docker image with the native distribution
 * Benchmark now displays size differences on a boxplot
 * Dotdiff displays actions on nodes using colors
 * Default build command no longer test generators requiring native tools
