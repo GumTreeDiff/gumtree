@@ -20,6 +20,7 @@ include 'benchmark',
         'gen.ruby',
         'gen.srcml',
         'gen.treesitter',
+        'gen.treesitter-ng',
         'gen.yaml',
         'gen.xml'
 

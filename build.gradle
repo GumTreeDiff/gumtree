@@ -168,6 +168,7 @@ def projectDescriptions = [
     'gen.ruby': 'GumTree tree generator for Ruby code (JRuby based).',
     'gen.srcml': 'GumTree tree generator for C/C++, C# and Java code. Requires srcml.',
     'gen.treesitter': 'GumTree tree generator for Python. Requires tree-sitter-parser.',
+    'gen.treesitter-ng': 'GumTree tree generator for tree-sitter-ng.',
     'gen.xml': 'GumTree tree generator for XML code (JSoup based).',
     'gen.yaml': 'GumTree tree generator for YAML code (SnakeYAML based).',
 ]
