@@ -72,7 +72,7 @@ jobs:
         if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.VERSION) }}
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "dist/build/distributions/gumtree*.zip"
+          artifacts: "dist-native/build/distributions/gumtree*.zip"
           bodyFile: "CHANGELOG.md"
           token: ${{ secrets.GITHUB_TOKEN }}
   docker:
