@@ -6,7 +6,7 @@
 * Update bootstrap
 * Update mergely
 * New Acorn based tree generator for JS that replaces rhino as default JS generator
-* New tree-sitter based tree generator with support for a wide range of languages
+* New tree-sitter based tree generator with support for a wide range of languages with both a python and a java implementation.
 * Docker image now comes installed with the Acorn and tree-sitter parsers
 * Benchmark now displays size differences on a boxplot
 * Dotdiff displays actions on nodes using colors
@@ -14,6 +14,7 @@
 * Test reports are uploaded in the CI
 * Added citation file
 * Simple is now the default matcher
+* Added auto matchers which automatically select the best parameters for the input
 * Native XML support
 * Native YAML support
 * Fix shortcuts in vanilla web diff view
