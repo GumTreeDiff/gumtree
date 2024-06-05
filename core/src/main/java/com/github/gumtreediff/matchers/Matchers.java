@@ -32,7 +32,6 @@ public class Matchers extends Registry<String, Matcher, Register> {
 
     /**
      * Return the matcher registry instance (singleton pattern).
-     * @return
      */
     public static Matchers getInstance() {
         if (registry == null)

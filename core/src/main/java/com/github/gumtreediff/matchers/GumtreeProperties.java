@@ -43,8 +43,7 @@ public class GumtreeProperties {
      * as argument
      *
      * @param propertyName name of the property to check
-     * @param value        value to put in properties if the name does not exist.
-     * @return
+     * @param value value to put in properties if the name does not exist.
      */
     private Object setIfNotPresent(String propertyName, Object value) {
         if (!properties.containsKey(propertyName)) {

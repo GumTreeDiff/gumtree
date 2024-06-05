@@ -91,13 +91,13 @@ public class MappingComparators {
                 return 0;
 
             if (!cachedSimilarities.containsKey(m1))
-            cachedSimilarities.put(m1, SimilarityMetrics.diceCoefficient(commonDescendantsNb(m1.first.getParent(),
+                cachedSimilarities.put(m1, SimilarityMetrics.diceCoefficient(commonDescendantsNb(m1.first.getParent(),
                         m1.second.getParent()),
                         srcDescendants.get(m1.first.getParent()).size(),
                         dstDescendants.get(m1.second.getParent()).size()));
 
             if (!cachedSimilarities.containsKey(m2))
-            cachedSimilarities.put(m2, SimilarityMetrics.diceCoefficient(commonDescendantsNb(m2.first.getParent(),
+                cachedSimilarities.put(m2, SimilarityMetrics.diceCoefficient(commonDescendantsNb(m2.first.getParent(),
                         m2.second.getParent()),
                         srcDescendants.get(m2.first.getParent()).size(),
                         dstDescendants.get(m2.second.getParent()).size()));
