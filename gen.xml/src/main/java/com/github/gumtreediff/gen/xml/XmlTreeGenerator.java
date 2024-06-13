@@ -71,17 +71,16 @@ public class XmlTreeGenerator extends TreeGenerator {
     private class GumtreeNodeVisitor implements NodeVisitor {
         @Override
         public void head(Node node, int depth) {
-            Tree tree;
+            Tree tree = null;
             if (node instanceof Element)
                 tree = asTree((Element) node);
             else if (node instanceof DataNode)
                 tree = asTree((DataNode) node);
             else if (node instanceof TextNode)
                 tree = asTree((TextNode) node);
-            else
-                throw new IllegalArgumentException();
 
-            insertTree(tree);
+            if (tree != null)
+                insertTree(tree);
         }
 
         private void insertTree(Tree tree) {
@@ -102,7 +101,8 @@ public class XmlTreeGenerator extends TreeGenerator {
 
         @Override
         public void tail(Node node, int depth) {
-            Tree tree = trees.pop();
+            if (node instanceof Element  || node instanceof DataNode || node instanceof TextNode)
+                trees.pop();
         }
 
         private Tree asTree(Element element) {

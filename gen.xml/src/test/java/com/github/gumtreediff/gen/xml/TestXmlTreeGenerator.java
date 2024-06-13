@@ -41,4 +41,11 @@ public class TestXmlTreeGenerator {
         Tree t = new XmlTreeGenerator().generateFrom().string(input).getRoot();
         System.out.println(t.toTreeString());
     }
+
+    @Test
+    public void testXmlDeclaration() throws IOException {
+        String input = "<?xml version=\"1.0\" encoding=\"utf-8\"?><root><foo arg=\"bar\"/><baz></baz></root>";
+        Tree t = new XmlTreeGenerator().generateFrom().string(input).getRoot();
+        System.out.println(t.toTreeString());
+    }
 }
