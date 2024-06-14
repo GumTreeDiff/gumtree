@@ -36,7 +36,7 @@ import java.io.Reader;
 import java.util.Map;
 
 public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
-    private final static String JAVA_VERSION = JavaCore.latestSupportedJavaVersion();
+    private static final String JAVA_VERSION = JavaCore.latestSupportedJavaVersion();
 
     private static char[] readerToCharArray(Reader r) throws IOException {
         StringBuilder fileData = new StringBuilder();
