@@ -187,4 +187,19 @@ public class TestJdtGenerator {
                 + "                        SimpleName: emptyList [55,64]";
         assertEquals(expected, ct.getRoot().toTreeString());
     }
+
+    @Test
+    public void testTagElement() throws IOException {
+        String input = "/** @author john */ class C {}";
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        String expected = "CompilationUnit [0,30]\n"
+                + "    TypeDeclaration [0,30]\n"
+                + "        Javadoc [0,19]\n"
+                + "            TagElement [4,17]\n"
+                + "                TAG_NAME: @author [4,11]\n"
+                + "                TextElement:  john  [11,17]\n"
+                + "        TYPE_DECLARATION_KIND: class [20,25]\n"
+                + "        SimpleName: C [26,27]";
+        assertEquals(expected, ct.getRoot().toTreeString());
+    }
 }
