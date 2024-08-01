@@ -206,7 +206,7 @@ public interface Tree {
     }
 
     /**
-     * Make a deep copy of the tree. Deep copy of node however shares Metadata
+     * Make a deep copy of the tree. Metadata is not copied over.
      */
     Tree deepCopy();
 
