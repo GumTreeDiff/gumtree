@@ -202,4 +202,26 @@ public class TestJdtGenerator {
                 + "        SimpleName: C [26,27]";
         assertEquals(expected, ct.getRoot().toTreeString());
     }
+
+    @Test
+    public void testComments() throws IOException {
+        String input = "class bar {\n"
+                + "        void foo(/*int a*/)\n"
+                + "        {\n"
+                + "                //run();\n"
+                + "        }\n"
+                + "}\n";
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        String expected = "CompilationUnit [0,87]\n"
+                + "    TypeDeclaration [0,86]\n"
+                + "        TYPE_DECLARATION_KIND: class [0,5]\n"
+                + "        SimpleName: bar [6,9]\n"
+                + "        MethodDeclaration [20,84]\n"
+                + "            PrimitiveType: void [20,24]\n"
+                + "            SimpleName: foo [25,28]\n"
+                + "            BlockComment: /*int a*/ [29,38]\n"
+                + "            Block [48,84]\n"
+                + "                LineComment: //run(); [66,74]";
+        assertEquals(expected, ct.getRoot().toTreeString());
+    }
 }

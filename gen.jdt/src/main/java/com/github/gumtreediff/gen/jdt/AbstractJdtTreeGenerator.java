@@ -29,13 +29,17 @@ import org.eclipse.jdt.core.compiler.IScanner;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
+    protected boolean includeComments = Boolean.parseBoolean(System.getProperty("gumtree.jdt.includeComments", "true"));
+
     private static final String JAVA_VERSION = JavaCore.latestSupportedJavaVersion();
 
     private static char[] readerToCharArray(Reader r) throws IOException {
@@ -72,6 +76,15 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         if ((node.getFlags() & ASTNode.MALFORMED) != 0) // bitwise flag to check if the node has a syntax error
             throw new SyntaxException(this, r, null);
         node.accept(v);
+        if (includeComments) {
+            if (node instanceof CompilationUnit) {
+                List commentList = ((CompilationUnit) node).getCommentList();
+                for (Object o : commentList) {
+                    ASTNode comment = (ASTNode) o;
+                    comment.accept(new JdtCommentVisitor(scanner, v.getTreeContext()));
+                }
+            }
+        }
         return v.getTreeContext();
     }
 
