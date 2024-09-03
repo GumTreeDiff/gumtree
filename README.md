@@ -36,7 +36,7 @@ More languages are coming soon, if you want to help contact [me](http://www.labr
 
 ## Citing GumTree
 
-We are researchers, therefore if you use GumTree in an academic work we would be really glad if you cite our seminal paper using the following bibtex:
+We are researchers, therefore if you use GumTree in an academic work we would be really glad if you cite the relevant articles among the ones in the following bibtex:
 
 ```bibtex
 @inproceedings{DBLP:conf/kbse/FalleriMBMM14,
@@ -52,5 +52,38 @@ We are researchers, therefore if you use GumTree in an academic work we would be
   year      = {2014},
   url       = {http://doi.acm.org/10.1145/2642937.2642982},
   doi       = {10.1145/2642937.2642982}
+}
+
+@article{DBLP:journals/tse/MartinezFM23,
+  author       = {Matias Martinez and
+                  Jean{-}R{\'{e}}my Falleri and
+                  Martin Monperrus},
+  title        = {Hyperparameter Optimization for {AST} Differencing},
+  journal      = {{IEEE} Trans. Software Eng.},
+  volume       = {49},
+  number       = {10},
+  pages        = {4814--4828},
+  year         = {2023},
+  url          = {https://doi.org/10.1109/TSE.2023.3315935},
+  doi          = {10.1109/TSE.2023.3315935},
+  timestamp    = {Thu, 09 Nov 2023 21:13:48 +0100},
+  biburl       = {https://dblp.org/rec/journals/tse/MartinezFM23.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/icse/FalleriM24,
+  author       = {Jean{-}R{\'{e}}my Falleri and
+                  Matias Martinez},
+  title        = {Fine-grained, accurate and scalable source differencing},
+  booktitle    = {Proceedings of the 46th {IEEE/ACM} International Conference on Software
+                  Engineering, {ICSE} 2024, Lisbon, Portugal, April 14-20, 2024},
+  pages        = {231:1--231:12},
+  publisher    = {{ACM}},
+  year         = {2024},
+  url          = {https://doi.org/10.1145/3597503.3639148},
+  doi          = {10.1145/3597503.3639148},
+  timestamp    = {Mon, 24 Jun 2024 15:20:25 +0200},
+  biburl       = {https://dblp.org/rec/conf/icse/FalleriM24.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
 ```
