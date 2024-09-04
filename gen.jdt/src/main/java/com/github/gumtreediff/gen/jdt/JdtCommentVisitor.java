@@ -29,11 +29,9 @@ import java.util.List;
 /* Created by pourya on 2024-08-28*/
 class JdtCommentVisitor extends JdtVisitor {
     final TreeContext context;
-    final char[] source;
 
     public JdtCommentVisitor(IScanner scanner, TreeContext context) {
         super(scanner);
-        this.source = scanner.getSource();
         this.context = context;
     }
 
@@ -45,11 +43,17 @@ class JdtCommentVisitor extends JdtVisitor {
         return visitComment(node);
     }
 
+    public boolean visit(Javadoc node) {
+        if (node.getParent() == null) //Then it is not a normal java doc, it is a comment
+            return visitComment(node);
+        return true;
+    }
+
     public boolean visitComment(Comment node) {
         int start = node.getStartPosition();
         int end = start + node.getLength();
         Tree parent = findMostInnerEnclosingParent(context.getRoot(), start, end);
-        Tree t = context.createTree(nodeAsSymbol(node), new String(source, start, end - start));
+        Tree t = context.createTree(nodeAsSymbol(node), new String(scanner.getSource(), start, end - start));
         t.setPos(start);
         t.setLength(node.getLength());
         insertChildProperly(parent, t);

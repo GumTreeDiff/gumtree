@@ -224,4 +224,43 @@ public class TestJdtGenerator {
                 + "                LineComment: //run(); [66,74]";
         assertEquals(expected, ct.getRoot().toTreeString());
     }
+
+    @Test
+    public void testComments2() throws IOException {
+        String input = "/**\n"
+                + "         * test\n"
+                + "         */\n"
+                + "public class X {\n"
+                + "    void A(boolean b\n"
+                + "    ) {\n"
+                + "        /**\n"
+                + "         * test2 \n"
+                + "         */\n"
+                + "        sleep();\n"
+                + "    }\n"
+                + "}\n";
+        String expected = "CompilationUnit [0,145]\n"
+                + "    TypeDeclaration [0,144]\n"
+                + "        Javadoc [0,31]\n"
+                + "            TagElement [15,19]\n"
+                + "                TextElement: test [15,19]\n"
+                + "        Modifier: public [32,38]\n"
+                + "        TYPE_DECLARATION_KIND: class [39,44]\n"
+                + "        SimpleName: X [45,46]\n"
+                + "        MethodDeclaration [53,142]\n"
+                + "            PrimitiveType: void [53,57]\n"
+                + "            SimpleName: A [58,59]\n"
+                + "            SingleVariableDeclaration [60,69]\n"
+                + "                PrimitiveType: boolean [60,67]\n"
+                + "                SimpleName: b [68,69]\n"
+                + "            Block [76,142]\n"
+                + "                Javadoc: /**\n"
+                + "         * test2 \n"
+                + "         */ [86,119]\n"
+                + "                ExpressionStatement [128,136]\n"
+                + "                    MethodInvocation [128,135]\n"
+                + "                        SimpleName: sleep [128,133]";
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        assertEquals(expected, ct.getRoot().toTreeString());
+    }
 }
