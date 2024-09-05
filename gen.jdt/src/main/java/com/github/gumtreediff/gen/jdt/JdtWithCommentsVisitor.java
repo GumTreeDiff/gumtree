@@ -52,7 +52,11 @@ public class JdtWithCommentsVisitor extends JdtVisitor {
         }
 
         public boolean visit(Javadoc node) {
-            if (node.getParent() == null) //Then it is not a normal java doc, it is a comment
+            //We have to check if the java doc is attached to any program element or not
+            //The attached ones, have been already visited, and we do not want to add them twice.
+            if (node.getParent() == null)
+                //Then it is javadoc which is attached to any program element,
+                //So it will be visited as same as the other comments but with JavaDoc label
                 return visitComment(node);
             return true;
         }

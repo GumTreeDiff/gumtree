@@ -23,10 +23,6 @@ package com.github.gumtreediff.gen.jdt;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.utils.Registry;
 import org.eclipse.jdt.core.compiler.IScanner;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-
-import java.util.List;
 
 
 /* Created by pourya on 2024-09-05*/
