@@ -21,17 +21,11 @@
 package com.github.gumtreediff.gen.jdt;
 
 import com.github.gumtreediff.gen.Register;
-import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Registry;
-import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.compiler.IScanner;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.List;
 
 
@@ -40,19 +34,7 @@ import java.util.List;
 public class JdtWithCommentsTreeGenerator extends AbstractJdtTreeGenerator {
     @Override
     protected AbstractJdtVisitor createVisitor(IScanner scanner) {
-        return new JdtVisitor(scanner);
-    }
-
-    @Override
-    protected void postProcess(ASTNode node, IScanner scanner, AbstractJdtVisitor v) {
-        if (node instanceof CompilationUnit)
-        {
-            List commentList = ((CompilationUnit) node).getCommentList();
-            for (Object o : commentList) {
-                ASTNode comment = (ASTNode) o;
-                comment.accept(new JdtCommentVisitor(scanner, v.getTreeContext()));
-            }
-        }
+        return new JdtWithCommentsVisitor(scanner);
     }
 }
 
