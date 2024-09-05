@@ -42,7 +42,7 @@ import java.util.Map;
 
 
 /* Created by pourya on 2024-09-05*/
-@Register(id = "java-jdtc", accept = "\\.java$", priority = Registry.Priority.MAXIMUM)
+@Register(id = "java-jdtc", accept = "\\.java$", priority = Registry.Priority.HIGH)
 public class JdtWithCommentsTreeGenerator extends AbstractJdtTreeGenerator {
     @Override
     protected AbstractJdtVisitor createVisitor(IScanner scanner) {
