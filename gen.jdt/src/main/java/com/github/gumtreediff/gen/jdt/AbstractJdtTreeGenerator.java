@@ -72,7 +72,12 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         if ((node.getFlags() & ASTNode.MALFORMED) != 0) // bitwise flag to check if the node has a syntax error
             throw new SyntaxException(this, r, null);
         node.accept(v);
+        postProcess(node, scanner, v);
         return v.getTreeContext();
+    }
+
+    protected void postProcess(ASTNode node, IScanner scanner, AbstractJdtVisitor v) {
+        //Left for subclasses to implement
     }
 
     protected abstract AbstractJdtVisitor createVisitor(IScanner scanner);

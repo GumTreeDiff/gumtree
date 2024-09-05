@@ -24,10 +24,8 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Registry;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.compiler.IScanner;
-import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -35,10 +33,6 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
-import java.util.Map;
-
-
-
 
 
 /* Created by pourya on 2024-09-05*/
@@ -50,25 +44,7 @@ public class JdtWithCommentsTreeGenerator extends AbstractJdtTreeGenerator {
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public TreeContext generate(Reader r) throws IOException {
-        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
-        parser.setKind(ASTParser.K_COMPILATION_UNIT);
-        Map pOptions = JavaCore.getOptions();
-        pOptions.put(JavaCore.COMPILER_COMPLIANCE, JAVA_VERSION);
-        pOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JAVA_VERSION);
-        pOptions.put(JavaCore.COMPILER_SOURCE, JAVA_VERSION);
-        pOptions.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
-        parser.setCompilerOptions(pOptions);
-        char[] source = readerToCharArray(r);
-        parser.setSource(source);
-        IScanner scanner = ToolFactory.createScanner(false, false, false, false);
-        scanner.setSource(source);
-        AbstractJdtVisitor v = createVisitor(scanner);
-        ASTNode node = parser.createAST(null);
-        if ((node.getFlags() & ASTNode.MALFORMED) != 0) // bitwise flag to check if the node has a syntax error
-            throw new SyntaxException(this, r, null);
-        node.accept(v);
+    protected void postProcess(ASTNode node, IScanner scanner, AbstractJdtVisitor v) {
         if (node instanceof CompilationUnit)
         {
             List commentList = ((CompilationUnit) node).getCommentList();
@@ -77,7 +53,6 @@ public class JdtWithCommentsTreeGenerator extends AbstractJdtTreeGenerator {
                 comment.accept(new JdtCommentVisitor(scanner, v.getTreeContext()));
             }
         }
-        return v.getTreeContext();
     }
 }
 
