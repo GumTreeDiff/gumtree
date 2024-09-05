@@ -211,7 +211,7 @@ public class TestJdtGenerator {
                 + "                //run();\n"
                 + "        }\n"
                 + "}\n";
-        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        TreeContext ct = new JdtWithCommentsTreeGenerator().generateFrom().string(input);
         String expected = "CompilationUnit [0,87]\n"
                 + "    TypeDeclaration [0,86]\n"
                 + "        TYPE_DECLARATION_KIND: class [0,5]\n"
@@ -260,7 +260,7 @@ public class TestJdtGenerator {
                 + "                ExpressionStatement [128,136]\n"
                 + "                    MethodInvocation [128,135]\n"
                 + "                        SimpleName: sleep [128,133]";
-        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        TreeContext ct = new JdtWithCommentsTreeGenerator().generateFrom().string(input);
         assertEquals(expected, ct.getRoot().toTreeString());
     }
 }

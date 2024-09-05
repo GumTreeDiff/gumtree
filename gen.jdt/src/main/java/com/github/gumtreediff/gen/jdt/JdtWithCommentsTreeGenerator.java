@@ -20,36 +20,33 @@
 
 package com.github.gumtreediff.gen.jdt;
 
+import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.utils.Registry;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.compiler.IScanner;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
-    protected static final String JAVA_VERSION = JavaCore.latestSupportedJavaVersion();
 
-    protected static char[] readerToCharArray(Reader r) throws IOException {
-        StringBuilder fileData = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(r)) {
-            char[] buf = new char[10];
-            int numRead = 0;
-            while ((numRead = br.read(buf)) != -1) {
-                String readData = String.valueOf(buf, 0, numRead);
-                fileData.append(readData);
-                buf = new char[1024];
-            }
-        }
-        return  fileData.toString().toCharArray();
+
+
+
+/* Created by pourya on 2024-09-05*/
+@Register(id = "java-jdtc", accept = "\\.java$", priority = Registry.Priority.MAXIMUM)
+public class JdtWithCommentsTreeGenerator extends AbstractJdtTreeGenerator {
+    @Override
+    protected AbstractJdtVisitor createVisitor(IScanner scanner) {
+        return new JdtVisitor(scanner);
     }
 
     @Override
@@ -72,8 +69,16 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         if ((node.getFlags() & ASTNode.MALFORMED) != 0) // bitwise flag to check if the node has a syntax error
             throw new SyntaxException(this, r, null);
         node.accept(v);
+        if (node instanceof CompilationUnit)
+        {
+            List commentList = ((CompilationUnit) node).getCommentList();
+            for (Object o : commentList) {
+                ASTNode comment = (ASTNode) o;
+                comment.accept(new JdtCommentVisitor(scanner, v.getTreeContext()));
+            }
+        }
         return v.getTreeContext();
     }
-
-    protected abstract AbstractJdtVisitor createVisitor(IScanner scanner);
 }
+
+
