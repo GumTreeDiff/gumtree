@@ -46,7 +46,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private static final Type ARRAY_INITIALIZER = nodeAsSymbol(ASTNode.ARRAY_INITIALIZER);
     private static final Type SIMPLE_NAME = nodeAsSymbol(ASTNode.SIMPLE_NAME);
 
-    private IScanner scanner;
+    protected IScanner scanner;
 
     public JdtVisitor(IScanner scanner) {
         super();

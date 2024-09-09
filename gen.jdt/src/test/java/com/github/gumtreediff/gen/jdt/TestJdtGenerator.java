@@ -202,4 +202,65 @@ public class TestJdtGenerator {
                 + "        SimpleName: C [26,27]";
         assertEquals(expected, ct.getRoot().toTreeString());
     }
+
+    @Test
+    public void testComments() throws IOException {
+        String input = "class bar {\n"
+                + "        void foo(/*int a*/)\n"
+                + "        {\n"
+                + "                //run();\n"
+                + "        }\n"
+                + "}\n";
+        TreeContext ct = new JdtWithCommentsTreeGenerator().generateFrom().string(input);
+        String expected = "CompilationUnit [0,87]\n"
+                + "    TypeDeclaration [0,86]\n"
+                + "        TYPE_DECLARATION_KIND: class [0,5]\n"
+                + "        SimpleName: bar [6,9]\n"
+                + "        MethodDeclaration [20,84]\n"
+                + "            PrimitiveType: void [20,24]\n"
+                + "            SimpleName: foo [25,28]\n"
+                + "            BlockComment: /*int a*/ [29,38]\n"
+                + "            Block [48,84]\n"
+                + "                LineComment: //run(); [66,74]";
+        assertEquals(expected, ct.getRoot().toTreeString());
+    }
+
+    @Test
+    public void testComments2() throws IOException {
+        String input = "/**\n"
+                + "         * test\n"
+                + "         */\n"
+                + "public class X {\n"
+                + "    void A(boolean b\n"
+                + "    ) {\n"
+                + "        /**\n"
+                + "         * test2 \n"
+                + "         */\n"
+                + "        sleep();\n"
+                + "    }\n"
+                + "}\n";
+        String expected = "CompilationUnit [0,145]\n"
+                + "    TypeDeclaration [0,144]\n"
+                + "        Javadoc [0,31]\n"
+                + "            TagElement [15,19]\n"
+                + "                TextElement: test [15,19]\n"
+                + "        Modifier: public [32,38]\n"
+                + "        TYPE_DECLARATION_KIND: class [39,44]\n"
+                + "        SimpleName: X [45,46]\n"
+                + "        MethodDeclaration [53,142]\n"
+                + "            PrimitiveType: void [53,57]\n"
+                + "            SimpleName: A [58,59]\n"
+                + "            SingleVariableDeclaration [60,69]\n"
+                + "                PrimitiveType: boolean [60,67]\n"
+                + "                SimpleName: b [68,69]\n"
+                + "            Block [76,142]\n"
+                + "                Javadoc: /**\n"
+                + "         * test2 \n"
+                + "         */ [86,119]\n"
+                + "                ExpressionStatement [128,136]\n"
+                + "                    MethodInvocation [128,135]\n"
+                + "                        SimpleName: sleep [128,133]";
+        TreeContext ct = new JdtWithCommentsTreeGenerator().generateFrom().string(input);
+        assertEquals(expected, ct.getRoot().toTreeString());
+    }
 }
