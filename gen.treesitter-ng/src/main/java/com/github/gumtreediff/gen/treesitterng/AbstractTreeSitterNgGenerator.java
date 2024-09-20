@@ -161,10 +161,11 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
                 return null;
             }
         }
+        boolean ignoreLabel = false;
         if (currentRule.containsKey(YAML_LABEL_IGNORED)) {
             List<String> ignores = (List<String>) currentRule.get(YAML_LABEL_IGNORED);
             if (matchNodeOrAncestorTypes(ignores, node) != null) {
-                return null;
+                ignoreLabel = true;
             }
         }
         if (currentRule.containsKey(YAML_ALIASED)) {
@@ -182,9 +183,11 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
             }
         }
         Tree tree;
-        if (node.getChildCount() == 0) {
+        // attach label for non ignore-label leafs or flattened nodes
+        if ((node.getChildCount() == 0 && !ignoreLabel) || flatten) {
             tree = context.createTree(TypeSet.type(type), label);
-        } else {
+        }
+        else {
             tree = context.createTree(TypeSet.type(type));
         }
         tree.setPos(calculateOffset(contentLines, node.getStartPoint()));
@@ -209,7 +212,7 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         while (!tsNodeStack.isEmpty()) {
             TSNode tsNodeNow = tsNodeStack.pop();
             Pair<Tree, Boolean> treeNow = treeStack.pop();
-            // flatten here
+            // if node was flattened, ignore children
             if (treeNow.second) {
                 continue;
             }
