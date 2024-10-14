@@ -72,11 +72,13 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
             // endColumn == startRowBytes.length + 1 when the label in tree-sitter contains line separator
             if (endColumn == startRowBytes.length + 1) {
                 substringLines = Collections.singletonList(startRowStr);
-            } else {
+            }
+            else {
                 substringLines = Collections.singletonList(new String(
                         startRowBytes, startColumn, endColumn - startColumn));
             }
-        } else {
+        }
+        else {
             substringLines = new ArrayList<>();
             String endRowStr = contentLines.get(endRow);
             byte[] endRowBytes = endRowStr.getBytes();
@@ -92,14 +94,14 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
             String endLineSubstring;
             if (endColumn > endRowStr.length()) {
                 endLineSubstring = endRowStr;
-            } else {
+            }
+            else {
                 endLineSubstring = new String(endRowBytes, 0, endColumn);
             }
             substringLines.add(startLineSubstring);
             substringLines.addAll(middleLines);
             substringLines.add(endLineSubstring);
         }
-
         return String.join(System.lineSeparator(), substringLines);
     }
 
@@ -118,7 +120,7 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
      * try match node's type or node and its ancestors' types in given ruleSet.
      *
      * @param ruleSet a rule's list or rule's ketSet if the rule is a map.
-     * @param node    the node being to match.
+     * @param node the node to match.
      * @return matched types. null if not matched.
      */
     protected static String matchNodeOrAncestorTypes(Collection<String> ruleSet, TSNode node) {
@@ -154,7 +156,6 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
     protected static Pair<Tree, Boolean> tsNode2GumTree(
             List<String> contentLines, Map<String, Object> currentRule, TreeContext context, TSNode node) {
         String type = node.getType();
-        String label = getLabel(contentLines, node);
         if (currentRule.containsKey(YAML_IGNORED)) {
             List<String> ignores = (List<String>) currentRule.get(YAML_IGNORED);
             if (matchNodeOrAncestorTypes(ignores, node) != null) {
@@ -185,6 +186,7 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         Tree tree;
         // attach label for non ignore-label leafs or flattened nodes
         if ((node.getChildCount() == 0 && !ignoreLabel) || flatten) {
+            String label = getLabel(contentLines, node);
             tree = context.createTree(TypeSet.type(type), label);
         }
         else {
