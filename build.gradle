@@ -127,7 +127,7 @@ configure(jacocoProjects) {
 }
 
 task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
+    destinationDirectory.set(file("$layout.buildDirectory/reports/tests"))
     reportOn subprojects*.test
 }
 
