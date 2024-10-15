@@ -9,7 +9,7 @@ nexusPublishing {
     }
 }
 
-def projectsVersion = '4.0.0-beta3'
+def projectsVersion = '4.0.0-beta4-SNAPSHOT'
 def isReleaseVersion = !projectsVersion.endsWith("SNAPSHOT")
 
 allprojects {
