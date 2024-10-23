@@ -8,7 +8,7 @@ go:
     - '{'
     - '}'
     - '.'
-  aliased: []
+  aliased: {}
   label_ignored: []
 java:
   flattened:
@@ -93,20 +93,31 @@ java:
 ocaml:
   flattened:
     - string
-  aliased: []
+  aliased: {}
   ignored: []
   label_ignored: []
 python:
   flattened:
     - string
   aliased:
-    '==': comparison_operator
-    '<=': comparison_operator
-    '>=': comparison_operator
-    '!=': comparison_operator
-    '<': comparison_operator
-    '>': comparison_operator
-    '<>': comparison_operator
+    '==': comparison_operator_literal
+    '<=': comparison_operator_literal
+    '>=': comparison_operator_literal
+    '!=': comparison_operator_literal
+    '<': comparison_operator_literal
+    '>': comparison_operator_literal
+    '<>': comparison_operator_literal
+    'and': logical_operator_literal
+    'or': logical_operator_literal
+    'augmented_assignment': assignment
+    '=': assignment_operator_literal
+    '-=': assignment_operator_literal
+    '+=': assignment_operator_literal
+    '*=': assignment_operator_literal
+    '/=': assignment_operator_literal
+    '//=': assignment_operator_literal
+    '%=': assignment_operator_literal
+    '**=': assignment_operator_literal
   ignored:
     - '('
     - ')'
@@ -118,13 +129,12 @@ python:
     - ':'
     - ','
     - 'default_parameter ='
-    - 'import'
+    - 'wildcard_import *'
     - 'def'
     - 'for'
     - 'in'
     - 'if'
     - 'with'
-    - 'as'
     - 'return'
   label_ignored: []
 rust:

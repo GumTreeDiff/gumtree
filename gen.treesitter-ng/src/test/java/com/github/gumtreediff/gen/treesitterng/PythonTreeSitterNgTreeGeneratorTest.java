@@ -18,14 +18,14 @@
  */
 package com.github.gumtreediff.gen.treesitterng;
 
-import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PythonTreeSitterNgTreeGeneratorTest {
     private final PythonTreeSitterNgTreeGenerator generator = new PythonTreeSitterNgTreeGenerator();
@@ -35,5 +35,26 @@ public class PythonTreeSitterNgTreeGeneratorTest {
         TreeContext src = generator.generateFrom().file("testData/python/foo.py");
         assertEquals(12, src.getRoot().getMetrics().size);
     }
-    
+
+    @ParameterizedTest
+    @ValueSource(strings = { "<", "<=", ">", ">=", "==", "!=" })
+    public void testComparisonOperators(String operator) throws IOException {
+        TreeContext src = generator.generateFrom().string("3 " + operator + " 2");
+        assertEquals("comparison_operator_literal", src.getRoot().getChild("0.0.1").getType().name);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "and", "or"})
+    public void testBooleanOperators(String operator) throws IOException {
+        TreeContext src = generator.generateFrom().string("true " + operator + " false");
+        assertEquals("logical_operator_literal", src.getRoot().getChild("0.0.1").getType().name);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "=", "+=", "-=", "*=", "/=", "//=", "%=", "**="})
+    public void testAssignmentOperators(String operator) throws IOException {
+        TreeContext src = generator.generateFrom().string("x " + operator + " 12");
+        assertEquals("assignment", src.getRoot().getChild("0.0").getType().name);
+        assertEquals("assignment_operator_literal", src.getRoot().getChild("0.0.1").getType().name);
+    }
 }
