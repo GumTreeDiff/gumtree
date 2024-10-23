@@ -24,10 +24,21 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JavaTreeSitterNgTreeGeneratorTest {
     private final JavaTreeSitterNgTreeGenerator generator = new JavaTreeSitterNgTreeGenerator();
+
+    @Test
+    public void testHelloWorld() throws IOException {
+        TreeContext src = generator.generateFrom().string("class HelloWorld {\n"
+                + "    public static void main(String[] args) {\n"
+                + "        System.out.println(\"Hello World!\"); \n"
+                + "    }\n"
+                + "}");
+        assertEquals(27, src.getRoot().getMetrics().size);
+    }
 
     @Test
     public void testCommentLine() throws IOException {

@@ -31,6 +31,12 @@ public class PythonTreeSitterNgTreeGeneratorTest {
     private final PythonTreeSitterNgTreeGenerator generator = new PythonTreeSitterNgTreeGenerator();
 
     @Test
+    public void testHelloWorld() throws IOException {
+        TreeContext src = generator.generateFrom().string("print(\"Hello World!\")");
+        assertEquals(6, src.getRoot().getMetrics().size);
+    }
+
+    @Test
     public void testString() throws IOException {
         TreeContext src = generator.generateFrom().file("testData/python/foo.py");
         assertEquals(12, src.getRoot().getMetrics().size);

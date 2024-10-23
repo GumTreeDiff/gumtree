@@ -20,23 +20,17 @@ package com.github.gumtreediff.gen.treesitterng;
 
 import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GoTreeSitterNgTreeGeneratorTest {
-    private final GoTreeSitterNgTreeGenerator generator = new GoTreeSitterNgTreeGenerator();
+public class OcamlTreeSitterNgTreeGeneratorTest {
+    private final OcamlTreeSitterNgTreeGenerator generator = new OcamlTreeSitterNgTreeGenerator();
 
     @Test
     public void testHelloWorld() throws IOException {
-        TreeContext src = generator.generateFrom().string("package main\n"
-                + "import \"fmt\"\n"
-                + "func main() {\n"
-                + "    fmt.Println(\"hello world\")\n"
-                + "}");
-        assertEquals(20, src.getRoot().getMetrics().size);
+        TreeContext src = generator.generateFrom().string("let () = print_endline \"Hello, World!\"");
+        assertEquals(12, src.getRoot().getMetrics().size);
     }
 }

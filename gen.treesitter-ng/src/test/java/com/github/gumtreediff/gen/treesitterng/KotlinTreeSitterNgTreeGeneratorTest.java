@@ -25,10 +25,19 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static com.github.gumtreediff.gen.treesitterng.TreeSitterNgTestUtils.onlyOneUpdate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class KotlinTreeSitterNgTreeGeneratorTest {
     private final KotlinTreeSitterNgTreeGenerator generator = new KotlinTreeSitterNgTreeGenerator();
+
+    @Test
+    public void testHelloWorld() throws IOException {
+        TreeContext src = generator.generateFrom().string("fun main(args : Array<String>) {\n"
+                        + "    println(\"Hello, World!\")\n"
+                        + "}");
+        assertEquals(21, src.getRoot().getMetrics().size);
+    }
 
     @Test
     public void testAffectationOperatorChange() throws IOException {
