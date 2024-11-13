@@ -40,20 +40,6 @@ jobs:
         with:
           name: benchmark-report
           path: benchmark/build/reports/analysis.html
-      - name: generate jacoco report
-        run: ./gradlew jacocoRootReport
-      - name: upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: build/reports/jacoco/jacocoRootReport/html/
-      - name: generate test report
-        run: ./gradlew testReport
-      - name: upload test report
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-report
-          path: build/reports/tests
       - name: upload snapshot package
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}

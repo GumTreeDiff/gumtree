@@ -1,5 +1,5 @@
 plugins {
-	id 'com.github.johnrengelman.shadow' version "8.1.1"
+	id 'com.gradleup.shadow' version '8.3.5'
 	id 'application'
 }
 
@@ -31,9 +31,15 @@ distributions {
 	}
 }
 
-mainClassName = 'com.github.gumtreediff.client.Run'
-applicationName = 'gumtree'
-archivesBaseName = 'gumtree'
+application {
+	mainClass = 'com.github.gumtreediff.client.Run'
+	applicationName = 'gumtree'
+}
+
+tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+	archiveBaseName.set('gumtree')
+}
+
 shadowDistZip.enabled = true
 distTar.enabled = false
 distZip.enabled = false

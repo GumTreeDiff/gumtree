@@ -1,5 +1,5 @@
 plugins {
-    id 'info.solidsoft.pitest' version '1.7.0'
+	id 'jacoco'
 }
 
 description = 'GumTree core module.'
@@ -11,23 +11,15 @@ dependencies {
 	implementation 'org.jgrapht:jgrapht-core:1.5.1'
 }
 
-pitest {
-    targetClasses = ['com.github.gumtreediff.*']
-	targetTests = ['com.github.gumtreediff.test.TestTree',
-				   'com.github.gumtreediff.test.TestMetadata',
-				   'com.github.gumtreediff.test.TestTreeUtils',
-				   'com.github.gumtreediff.test.TestMappingStore',
-				   'com.github.gumtreediff.test.TestTreeClassifier']
-    threads = 4
-    outputFormats = ['XML', 'HTML']
-    timestampedReports = false
-    junit5PluginVersion = '0.15'
+test {
+	finalizedBy jacocoTestReport
 }
 
-allprojects {
-	gradle.projectsEvaluated {
-		tasks.withType(JavaCompile) {
-			options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-		}
+jacocoTestReport {
+	dependsOn test
+	reports {
+		html.required = true
+		xml.required = false
+		csv.required = false
 	}
 }
