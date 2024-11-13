@@ -1,7 +1,5 @@
 description = 'GumTree tree generator for tree-sitter-ng.'
 
-ext.isNative = true
-
 dependencies {
     implementation("org.yaml:snakeyaml:2.0")
     implementation("io.github.bonede:tree-sitter:0.22.2")
