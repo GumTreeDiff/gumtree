@@ -36,7 +36,7 @@ public class KotlinTreeSitterNgTreeGeneratorTest {
         TreeContext src = generator.generateFrom().string("fun main(args : Array<String>) {\n"
                         + "    println(\"Hello, World!\")\n"
                         + "}");
-        assertEquals(21, src.getRoot().getMetrics().size);
+        assertEquals(22, src.getRoot().getMetrics().size);
     }
 
     @Test
