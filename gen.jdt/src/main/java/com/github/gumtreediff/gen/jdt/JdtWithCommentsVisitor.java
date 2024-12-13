@@ -52,11 +52,11 @@ public class JdtWithCommentsVisitor extends JdtVisitor {
         }
 
         public boolean visit(Javadoc node) {
-            //We have to check if the java doc is attached to any program element or not
+            //We have to check if the Javadoc is attached to any program element or not
             //The attached ones, have been already visited, and we do not want to add them twice.
             if (node.getParent() == null)
-                //Then it is javadoc which is attached to any program element,
-                //So it will be visited as same as the other comments but with JavaDoc label
+                //Then it is Javadoc attached to any program element,
+                //So we do as the same as the other Javadocs in the original visitors
                 return visitComment(node);
             return true;
         }
@@ -65,6 +65,15 @@ public class JdtWithCommentsVisitor extends JdtVisitor {
             int start = node.getStartPosition();
             int end = start + node.getLength();
             Tree parent = findMostInnerEnclosingParent(context.getRoot(), start, end);
+            if (node instanceof Javadoc) {
+                trees.push(parent);
+                node.accept(JdtWithCommentsVisitor.this);
+                Tree wrongOrderChild = parent.getChild(parent.getChildren().size() - 1);
+                parent.getChildren().remove(wrongOrderChild);
+                insertChildProperly(parent, wrongOrderChild);
+                trees.pop();
+                return true;
+            }
             Tree t = context.createTree(nodeAsSymbol(node), new String(scanner.getSource(), start, end - start));
             t.setPos(start);
             t.setLength(node.getLength());

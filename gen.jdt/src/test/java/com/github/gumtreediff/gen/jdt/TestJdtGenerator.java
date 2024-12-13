@@ -254,9 +254,9 @@ public class TestJdtGenerator {
                 + "                PrimitiveType: boolean [60,67]\n"
                 + "                SimpleName: b [68,69]\n"
                 + "            Block [76,142]\n"
-                + "                Javadoc: /**\n"
-                + "         * test2 \n"
-                + "         */ [86,119]\n"
+                + "                Javadoc [86,119]\n"
+                + "                    TagElement [101,107]\n"
+                + "                        TextElement: test2  [101,107]\n"
                 + "                ExpressionStatement [128,136]\n"
                 + "                    MethodInvocation [128,135]\n"
                 + "                        SimpleName: sleep [128,133]";
