@@ -97,12 +97,7 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.DiffOpt
     }
 
     private String getDotLabel(Tree tree) {
-        String label = tree.toString();
-        if (label.contains("\"") || label.contains("\\s"))
-            label = label
-                    .replaceAll("\"", "")
-                    .replaceAll("\\s", "")
-                    .replaceAll("\\\\", "");
+        String label = tree.toString().replaceAll("[^A-Za-z0-9_]", "");
         if (label.length() > 30)
             label = label.substring(0, 20);
         return label;
