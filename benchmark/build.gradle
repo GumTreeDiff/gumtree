@@ -14,29 +14,29 @@ run.enabled = false
 
 task execNotebook(type: Exec) {
     // jupyter nbconvert --execute --to html benchmark.ipynb
-    commandLine "jupyter", "nbconvert", "--execute", "--to", "html", "${project.layout.projectDirectory}/src/main/python/analysis.ipynb", "--output-dir='${project.layout.buildDirectory}/reports'"
+    commandLine "jupyter", "nbconvert", "--execute", "--to", "html", "${project.layout.projectDirectory.file("src/main/python/analysis.ipynb")}", "--output-dir='${project.layout.buildDirectory.get()}/reports'"
 }
 
 task runOnDefects4J(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.layout.projectDirectory}/datasets/defects4j", "${project.layout.buildDirectory}/reports/defects4j.csv"
+    args = [ project.layout.projectDirectory.dir("datasets/defects4j"), "${project.layout.buildDirectory.get()}/reports/defects4j.csv" ]
 }
 
 task runOnGhJava(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.layout.projectDirectory}/datasets/gh-java", "${project.layout.buildDirectory}/reports/gh-java.csv"
+    args = [ project.layout.projectDirectory.dir("datasets/gh-java"), "${project.layout.buildDirectory.get()}/reports/gh-java.csv" ]
 }
 
 task runOnGhPython(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.layout.projectDirectory}/datasets/gh-python", "${project.layout.buildDirectory}/reports/gh-python.csv"
+    args = [ project.layout.projectDirectory.dir("datasets/gh-python"), "${project.layout.buildDirectory.get()}/reports/gh-java.csv" ]
 }
 
 task runOnBugsInPy(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.layout.projectDirectory}/datasets/bugsinpy", "${project.layout.buildDirectory}/reports/bugsinpy.csv"
+    args = [project.layout.projectDirectory.dir("datasets/gh-python"), "${project.layout.buildDirectory.get()}/reports/bugsinpy.csv" ]
 }

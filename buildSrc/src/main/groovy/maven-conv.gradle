@@ -53,7 +53,7 @@ publishing {
 }
 
 signing {
-    required { isReleaseVersion }
+    required = isReleaseVersion
     useInMemoryPgpKeys(findProperty("gumtreeKey"), findProperty("gumtreeKeyPassphrase"))
     sign publishing.publications.gumtreeDist
 }
