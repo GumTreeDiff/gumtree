@@ -27,7 +27,7 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
-import com.github.gumtreediff.gen.treesitter.PythonTreeSitterTreeGenerator;
+import com.github.gumtreediff.gen.treesitterng.PythonTreeSitterNgTreeGenerator;
 import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.tree.TreeContext;
@@ -60,7 +60,9 @@ public class RunOnDataset {
                 JdtTreeGenerator.class, JdtTreeGenerator.class.getAnnotation(Register.class));
 
         TreeGenerators.getInstance().install(
-                PythonTreeSitterTreeGenerator.class, PythonTreeSitterTreeGenerator.class.getAnnotation(Register.class));
+                PythonTreeSitterNgTreeGenerator.class,
+                PythonTreeSitterNgTreeGenerator.class.getAnnotation(Register.class)
+        );
 
         OUTPUT = new FileWriter(args[1]);
 

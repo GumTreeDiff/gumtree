@@ -6,8 +6,7 @@ plugins {
 dependencies {
     implementation project(':core')
     implementation project(':gen.jdt')
-    implementation project(':gen.python')
-    implementation project(':gen.treesitter')
+    implementation project(':gen.treesitter-ng')
 }
 
 jar.enabled = false
@@ -15,29 +14,29 @@ run.enabled = false
 
 task execNotebook(type: Exec) {
     // jupyter nbconvert --execute --to html benchmark.ipynb
-    commandLine "jupyter", "nbconvert", "--execute", "--to", "html", "${project.projectDir}/src/main/python/analysis.ipynb", "--output-dir='${project.buildDir}/reports'"
+    commandLine "jupyter", "nbconvert", "--execute", "--to", "html", "${project.layout.projectDirectory}/src/main/python/analysis.ipynb", "--output-dir='${project.layout.buildDirectory}/reports'"
 }
 
 task runOnDefects4J(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.projectDir}/datasets/defects4j", "${project.buildDir}/reports/defects4j.csv"
+    args "${project.layout.projectDirectory}/datasets/defects4j", "${project.layout.buildDirectory}/reports/defects4j.csv"
 }
 
 task runOnGhJava(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.projectDir}/datasets/gh-java", "${project.buildDir}/reports/gh-java.csv"
+    args "${project.layout.projectDirectory}/datasets/gh-java", "${project.layout.buildDirectory}/reports/gh-java.csv"
 }
 
 task runOnGhPython(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.projectDir}/datasets/gh-python", "${project.buildDir}/reports/gh-python.csv"
+    args "${project.layout.projectDirectory}/datasets/gh-python", "${project.layout.buildDirectory}/reports/gh-python.csv"
 }
 
 task runOnBugsInPy(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args "${project.projectDir}/datasets/bugsinpy", "${project.buildDir}/reports/bugsinpy.csv"
+    args "${project.layout.projectDirectory}/datasets/bugsinpy", "${project.layout.buildDirectory}/reports/bugsinpy.csv"
 }
