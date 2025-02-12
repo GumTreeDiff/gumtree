@@ -1,8 +1,10 @@
 plugins {
+    id 'java-conv'
     id 'application'
 }
 
 dependencies {
+    implementation project(':core')
     implementation project(':gen.jdt')
     implementation project(':gen.python')
     implementation project(':gen.treesitter')

@@ -1,1 +1,6 @@
+plugins {
+    id 'antlr4-conv'
+    id 'maven-conv'
+}
+
 description = 'GumTree abstract AntLR4 module.'

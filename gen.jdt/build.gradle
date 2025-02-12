@@ -1,5 +1,11 @@
+plugins {
+	id 'java-conv'
+	id 'maven-conv'
+}
+
 description = 'GumTree tree generator for Java code (Eclipse JDT based).'
 
 dependencies {
+	implementation project(':core')
 	implementation 'org.eclipse.jdt:org.eclipse.jdt.core:3.38.0'
 }

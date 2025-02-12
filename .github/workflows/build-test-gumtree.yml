@@ -29,7 +29,7 @@ jobs:
           show-progress: ''
       - name: retrieve gumtree version
         id: version
-        run: echo "VERSION=$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(cat java-conv.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
         shell: bash
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3

@@ -1,9 +1,11 @@
 plugins {
+	id 'java-conv'
 	id 'com.gradleup.shadow' version '8.3.5'
 	id 'application'
 }
 
 dependencies {
+	implementation project(':core')
 	implementation project(':client')
 	implementation project(':client.diff')
 	implementation project(':gen.css')

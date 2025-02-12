@@ -1,5 +1,11 @@
+plugins {
+	id 'java-conv'
+	id 'maven-conv'
+}
+
 description = 'GumTree tree generator for JavaScript code (Rhino based).'
 
 dependencies {
-	implementation 'org.mozilla:rhino:1.7.14'
+	implementation project(':core')
+	implementation 'org.mozilla:rhino:1.8.0'
 }

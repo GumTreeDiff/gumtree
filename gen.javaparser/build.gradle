@@ -1,5 +1,11 @@
+plugins {
+	id 'java-conv'
+	id 'maven-conv'
+}
+
 description = 'GumTree tree generator for Java code (JavaParser based).'
 
 dependencies {
-	implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.25.1'
+	implementation project(':core')
+	implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.26.3'
 }

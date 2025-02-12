@@ -41,7 +41,6 @@ public class RhinoTreeGenerator extends TreeGenerator {
         env.setRecordingLocalJsDocComments(true);
         env.setAllowSharpComments(true);
         env.setRecordingComments(true);
-        env.setLanguageVersion(Context.VERSION_ES6);
         Parser p = new Parser(env);
         try {
             AstRoot root = p.parse(r, null, 1);

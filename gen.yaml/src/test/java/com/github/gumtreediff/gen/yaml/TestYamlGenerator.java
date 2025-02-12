@@ -25,6 +25,8 @@ import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.snakeyaml.engine.v2.api.Load;
+import org.snakeyaml.engine.v2.api.LoadSettings;
 
 import static com.github.gumtreediff.tree.TypeSet.type;
 import static org.junit.jupiter.api.Assertions.*;

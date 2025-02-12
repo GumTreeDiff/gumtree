@@ -1,1 +1,10 @@
+plugins {
+    id 'java-conv'
+    id 'maven-conv'
+}
+
 description = 'GumTree abstract client module.'
+
+dependencies {
+    implementation project(':core')
+}

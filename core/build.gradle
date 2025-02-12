@@ -1,4 +1,6 @@
 plugins {
+	id 'java-conv'
+	id 'maven-conv'
 	id 'jacoco'
 }
 

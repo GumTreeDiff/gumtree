@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'checkstyle'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+compileJava {
+    options.compilerArgs << '-Xlint:deprecation'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    options.addBooleanOption('html5', true)
+}
+
+checkstyle {
+    configFile = rootProject.file('gumtree_checkstyle.xml')
+    configProperties = [suppressionFile: "${rootProject.file('checkstyle_ignore.xml')}"]
+    ignoreFailures = false
+    showViolations = true
+}
+
+dependencies {
+    annotationProcessor 'org.atteo.classindex:classindex:3.13'
+    implementation 'org.atteo.classindex:classindex:3.13'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        exceptionFormat = 'full'
+        events "passed", "skipped", "failed"
+    }
+
+    reports.html.required = false
+}
+
+if (project.hasProperty('native')) {
+    println("native project " + project.name)
+    test.onlyIf { rootProject.hasProperty('testNative') }
+}

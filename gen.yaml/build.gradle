@@ -1,5 +1,11 @@
+plugins {
+	id 'java-conv'
+	id 'maven-conv'
+}
+
 description = 'GumTree tree generator for YAML code (SnakeYAML based).'
 
 dependencies {
-	implementation 'org.yaml:snakeyaml:2.0'
+	implementation project(':core')
+	implementation 'org.snakeyaml:snakeyaml-engine:2.9'
 }

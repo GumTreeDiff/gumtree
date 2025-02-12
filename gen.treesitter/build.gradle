@@ -1,3 +1,9 @@
+plugins {
+    id 'java-native-conv'
+}
+
 description = 'GumTree tree generator for Python. Requires tree-sitter-parser.'
 
-ext.isNative = true
+dependencies {
+    implementation project(':core')
+}

@@ -1,5 +1,11 @@
+plugins {
+	id 'java-conv'
+	id 'maven-conv'
+}
+
 description = 'GumTree tree generator for CSS code based on ph-css.'
 
 dependencies {
-	implementation 'com.helger:ph-css:7.0.0'
+	implementation project(':core')
+	implementation 'com.helger:ph-css:7.0.3'
 }

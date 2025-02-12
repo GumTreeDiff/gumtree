@@ -1,0 +1,20 @@
+plugins {
+    id 'java-conv'
+    id 'antlr'
+}
+
+dependencies {
+    implementation project(':core')
+    antlr 'org.antlr:antlr:3.5.3'
+}
+
+if (project.name.startsWith('gen.antlr3-')) {
+    dependencies {
+        implementation project(':gen.antlr3')
+    }
+}
+
+sourceSets.configureEach {
+    var generateGrammarSource = tasks.named(getTaskName("generate", "GrammarSource"))
+    java.srcDir(generateGrammarSource.map { files() })
+}

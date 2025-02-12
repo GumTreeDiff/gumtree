@@ -1,0 +1,10 @@
+plugins {
+    id 'java-conv'
+}
+
+description = 'GumTree tree generator for JSON code (Jackson based).'
+
+dependencies {
+    implementation project(':core')
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.18.2'
+}

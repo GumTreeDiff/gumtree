@@ -1,6 +1,11 @@
+plugins {
+    id 'java-conv'
+}
+
 description = 'GumTree tree generator for tree-sitter-ng.'
 
 dependencies {
+    implementation project(':core')
     implementation("org.yaml:snakeyaml:2.0")
     implementation("io.github.bonede:tree-sitter:0.24.3")
     implementation("io.github.bonede:tree-sitter-c:0.20.7a")

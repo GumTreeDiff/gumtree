@@ -1,0 +1,59 @@
+plugins {
+    id 'maven-publish'
+    id 'signing'
+}
+
+def isReleaseVersion = !rootProject.version.endsWith("SNAPSHOT")
+
+publishing {
+    publications {
+        gumtreeDist(MavenPublication) {
+            from(components.java)
+
+            pom {
+                name = "GumTree ${project.name}"
+                description = project.description
+                url = 'https://github.com/GumTreeDiff/gumtree/'
+
+                scm {
+                    connection = 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+                    developerConnection = 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+                    url = 'https://github.com/GumTreeDiff/gumtree/'
+                }
+
+                licenses {
+                    license {
+                        name = 'GNU Lesser General Public License v3.0'
+                        url = 'https://www.gnu.org/copyleft/lesser.html'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'jre'
+                        name = 'Jean-Rémy Falleri'
+                        email = 'jr.falleri@gmail.com'
+                    }
+
+                    developer {
+                        id = 'flop'
+                        name = 'Floréal Morandat'
+                        email = 'florealm@gmail.com'
+                    }
+
+                    developer {
+                        id = 'matias'
+                        name = 'Matias Martinez'
+                        email = 'matias.sebastian.martinez@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+signing {
+    required { isReleaseVersion }
+    useInMemoryPgpKeys(findProperty("gumtreeKey"), findProperty("gumtreeKeyPassphrase"))
+    sign publishing.publications.gumtreeDist
+}

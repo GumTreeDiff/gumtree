@@ -1,6 +1,12 @@
+plugins {
+	id 'java-conv'
+	id 'maven-conv'
+}
+
 description = 'GumTree diff client.'
 
 dependencies {
+	implementation project(':core')
 	implementation project(':client')
 	implementation 'com.sparkjava:spark-core:2.9.4'
 	implementation 'org.slf4j:slf4j-nop:2.0.9'

@@ -1,0 +1,5 @@
+plugins {
+    id 'java-conv'
+}
+
+test.onlyIf { rootProject.hasProperty('testNative') }
