@@ -29,10 +29,10 @@ jobs:
           show-progress: ''
       - name: retrieve gumtree version
         id: version
-        run: echo "VERSION=$(cat java-conv.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
         shell: bash
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: build gumtree and run benchmarks
         run: ./gradlew -PtestNative build :benchmark:runOnDefects4J :benchmark:runOnGhJava :benchmark:execNotebook
       - name: upload benchmarks results
@@ -58,7 +58,7 @@ jobs:
         if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.VERSION) }}
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "dist-native/build/distributions/gumtree*.zip"
+          artifacts: "dist-minimal/build/distributions/gumtree*.zip"
           bodyFile: "CHANGELOG.md"
           token: ${{ secrets.GITHUB_TOKEN }}
   docker:

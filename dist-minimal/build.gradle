@@ -13,6 +13,7 @@ dependencies {
 	implementation project(':gen.treesitter-ng')
 	implementation project(':gen.xml')
 	implementation project(':gen.yaml')
+	implementation project(':gen.json')
 }
 
 description = 'GumTree distribution.'
