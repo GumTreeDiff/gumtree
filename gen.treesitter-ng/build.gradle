@@ -1,5 +1,6 @@
 plugins {
     id 'java-conv'
+    id "com.github.ben-manes.versions" version '0.52.0'
 }
 
 description = 'GumTree tree generator for tree-sitter-ng.'
@@ -7,20 +8,20 @@ description = 'GumTree tree generator for tree-sitter-ng.'
 dependencies {
     implementation project(':core')
     implementation("org.yaml:snakeyaml:2.0")
-    implementation("io.github.bonede:tree-sitter:0.24.3")
-    implementation("io.github.bonede:tree-sitter-c:0.20.7a")
+    implementation("io.github.bonede:tree-sitter:0.24.4")
+    implementation("io.github.bonede:tree-sitter-c:0.23.2")
     implementation("io.github.bonede:tree-sitter-cmake:0.4.1a")
-    implementation("io.github.bonede:tree-sitter-c-sharp:0.20.0a")
-    implementation("io.github.bonede:tree-sitter-go:0.21.0a")
-    implementation("io.github.bonede:tree-sitter-javascript:0.21.2")
+    implementation("io.github.bonede:tree-sitter-c-sharp:0.23.1")
+    implementation("io.github.bonede:tree-sitter-go:0.23.3")
+    implementation("io.github.bonede:tree-sitter-javascript:0.23.1")
     implementation("io.github.bonede:tree-sitter-kotlin:0.3.8.1")
-    implementation("io.github.bonede:tree-sitter-java:0.21.0a")
-    implementation("io.github.bonede:tree-sitter-ocaml:0.22.0a")
-    implementation("io.github.bonede:tree-sitter-php:0.22.4")
-    implementation("io.github.bonede:tree-sitter-python:0.21.0a")
+    implementation("io.github.bonede:tree-sitter-java:0.23.4")
+    implementation("io.github.bonede:tree-sitter-ocaml:0.23.2")
+    implementation("io.github.bonede:tree-sitter-php:0.23.11")
+    implementation("io.github.bonede:tree-sitter-python:0.23.4")
     implementation("io.github.bonede:tree-sitter-r:main-a")
-    implementation("io.github.bonede:tree-sitter-ruby:0.21.0")
-    implementation("io.github.bonede:tree-sitter-rust:0.21.2")
+    implementation("io.github.bonede:tree-sitter-ruby:0.23.1")
+    implementation("io.github.bonede:tree-sitter-rust:0.23.1")
     implementation("io.github.bonede:tree-sitter-swift:0.5.0")
     implementation("io.github.bonede:tree-sitter-typescript:0.21.1")
 }
