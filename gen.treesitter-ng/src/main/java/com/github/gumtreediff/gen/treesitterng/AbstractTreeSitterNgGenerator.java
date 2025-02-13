@@ -53,6 +53,9 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         parser.setLanguage(language);
         BufferedReader bufferedReader = new BufferedReader(r);
         List<String> contentLines = bufferedReader.lines().toList();
+        if (contentLines.isEmpty())
+            return emptyContext();
+
         String content = String.join(System.lineSeparator(), contentLines);
         TSTree tree = parser.parseString(null, content);
         Map<String, Object> currentRule = RULES.getOrDefault(getLanguageName(), new HashMap<>());
@@ -235,4 +238,13 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
     protected abstract TSLanguage getTreeSitterLanguage();
 
     protected abstract String getLanguageName();
+
+    private TreeContext emptyContext() {
+        TreeContext ctx = new TreeContext();
+        Tree root = ctx.createTree(TypeSet.type("empty_root"));
+        root.setPos(0);
+        root.setLength(0);
+        ctx.setRoot(root);
+        return ctx;
+    }
 }
