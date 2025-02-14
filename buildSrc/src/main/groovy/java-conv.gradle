@@ -51,8 +51,3 @@ test {
 
     reports.html.required = false
 }
-
-if (project.hasProperty('native')) {
-    println("native project " + project.name)
-    test.onlyIf { rootProject.hasProperty('testNative') }
-}
