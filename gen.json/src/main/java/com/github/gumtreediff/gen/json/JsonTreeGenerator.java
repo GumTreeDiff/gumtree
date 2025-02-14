@@ -88,16 +88,26 @@ public class JsonTreeGenerator extends TreeGenerator {
             tree.setLength((int) loc.getCharOffset() - tree.getPos());
         }
         else if (tk.id() == JsonTokenId.ID_FIELD_NAME) {
+            Tree synth = ctx.createTree(type("FieldDefinition"));
+            synth.setParentAndUpdateChildren(trees.peek());
+            synth.setPos((int) loc.getCharOffset());
+            trees.push(synth);
+
             Tree tree = ctx.createTree(type("Field"), p.currentName());
-            tree.setParentAndUpdateChildren(trees.peek());
+            tree.setParentAndUpdateChildren(synth);
             tree.setPos((int) loc.getCharOffset());
             tree.setLength(p.currentName().length());
         }
-        else {
+        else { // here the token is a value
             Tree tree = ctx.createTree(type("Value"), p.getValueAsString());
             tree.setParentAndUpdateChildren(trees.peek());
             tree.setPos((int) loc.getCharOffset());
             tree.setLength( p.getValueAsString().length());
+
+            if (trees.peek().getType().equals(type("FieldDefinition"))) {
+                Tree synth = trees.pop();
+                synth.setLength(tree.getEndPos() - synth.getPos());
+            }
         }
     }
 }
