@@ -23,6 +23,7 @@ java {
 
 javadoc {
     options.addBooleanOption('html5', true)
+    options.addBooleanOption("Xdoclint:none", true)
 }
 
 checkstyle {
