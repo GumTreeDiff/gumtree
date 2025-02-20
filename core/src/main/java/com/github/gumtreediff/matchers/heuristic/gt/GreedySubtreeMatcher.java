@@ -56,7 +56,7 @@ public class GreedySubtreeMatcher extends AbstractSubtreeMatcher {
         @Override
         public int compare(Pair<Set<Tree>, Set<Tree>> m1, Pair<Set<Tree>, Set<Tree>> m2) {
             int s1 = m1.first.stream().max(Comparator.comparingInt(t -> t.getMetrics().size)).get().getMetrics().size;
-            int s2 = m1.first.stream().max(Comparator.comparingInt(t -> t.getMetrics().size)).get().getMetrics().size;
+            int s2 = m2.first.stream().max(Comparator.comparingInt(t -> t.getMetrics().size)).get().getMetrics().size;
             return Integer.compare(s2, s1);
         }
     }
