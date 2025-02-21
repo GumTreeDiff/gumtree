@@ -4,6 +4,8 @@ plugins {
 	id 'application'
 }
 
+description = 'GumTree minimal distribution.'
+
 dependencies {
 	implementation project(':core')
 	implementation project(':client')
@@ -15,8 +17,6 @@ dependencies {
 	implementation project(':gen.yaml')
 	implementation project(':gen.json')
 }
-
-description = 'GumTree distribution.'
 
 shadowJar {
 	archiveBaseName.set('gumtree')
