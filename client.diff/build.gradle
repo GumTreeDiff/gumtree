@@ -11,6 +11,6 @@ dependencies {
 	implementation 'com.sparkjava:spark-core:2.9.4'
 	implementation 'org.slf4j:slf4j-nop:2.0.9'
 	implementation 'it.unimi.dsi:fastutil:8.5.12'
-	implementation 'com.fifesoft:rsyntaxtextarea:3.3.4'
+	implementation 'com.fifesoft:rsyntaxtextarea:3.5.4'
 	implementation 'com.j2html:j2html:1.6.0'
 }

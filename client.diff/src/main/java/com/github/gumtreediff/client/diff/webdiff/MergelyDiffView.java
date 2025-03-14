@@ -40,9 +40,9 @@ public class MergelyDiffView {
     }
 
     private static class Header {
-        public final static String MERGELY_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/mergely/5.0.0/mergely.min.js";
+        public final static String MERGELY_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/mergely/5.3.6/mergely.min.js";
 
-        public final static String MERGELY_CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/mergely/5.0.0/mergely.css";
+        public final static String MERGELY_CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/mergely/5.3.6/mergely.min.css";
 
 
         public static Tag build() {
