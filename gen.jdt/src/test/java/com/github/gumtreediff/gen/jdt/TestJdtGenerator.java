@@ -25,6 +25,7 @@ import java.io.IOException;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.*;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -170,21 +171,22 @@ public class TestJdtGenerator {
     public void testGenericFunctionWithTypeParameter() throws IOException {
         String input = "class testStructure { void foo() { Collections.<String>emptyList(); } }";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        String expected = "CompilationUnit [0,71]\n"
-                + "    TypeDeclaration [0,71]\n"
-                + "        TYPE_DECLARATION_KIND: class [0,5]\n"
-                + "        SimpleName: testStructure [6,19]\n"
-                + "        MethodDeclaration [22,69]\n"
-                + "            PrimitiveType: void [22,26]\n"
-                + "            SimpleName: foo [27,30]\n"
-                + "            Block [33,69]\n"
-                + "                ExpressionStatement [35,67]\n"
-                + "                    MethodInvocation [35,66]\n"
-                + "                        METHOD_INVOCATION_RECEIVER [35,46]\n"
-                + "                            SimpleName: Collections [35,46]\n"
-                + "                            SimpleType [48,54]\n"
-                + "                                SimpleName: String [48,54]\n"
-                + "                        SimpleName: emptyList [55,64]";
+        String expected = """
+                CompilationUnit [0,71]
+                    TypeDeclaration [0,71]
+                        TYPE_DECLARATION_KIND: class [0,5]
+                        SimpleName: testStructure [6,19]
+                        MethodDeclaration [22,69]
+                            PrimitiveType: void [22,26]
+                            SimpleName: foo [27,30]
+                            Block [33,69]
+                                ExpressionStatement [35,67]
+                                    MethodInvocation [35,66]
+                                        METHOD_INVOCATION_RECEIVER [35,46]
+                                            SimpleName: Collections [35,46]
+                                            SimpleType [48,54]
+                                                SimpleName: String [48,54]
+                                        SimpleName: emptyList [55,64]""";
         assertEquals(expected, ct.getRoot().toTreeString());
     }
 
@@ -192,74 +194,81 @@ public class TestJdtGenerator {
     public void testTagElement() throws IOException {
         String input = "/** @author john */ class C {}";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
-        String expected = "CompilationUnit [0,30]\n"
-                + "    TypeDeclaration [0,30]\n"
-                + "        Javadoc [0,19]\n"
-                + "            TagElement [4,17]\n"
-                + "                TAG_NAME: @author [4,11]\n"
-                + "                TextElement:  john  [11,17]\n"
-                + "        TYPE_DECLARATION_KIND: class [20,25]\n"
-                + "        SimpleName: C [26,27]";
+        String expected = """
+                CompilationUnit [0,30]
+                    TypeDeclaration [0,30]
+                        Javadoc [0,19]
+                            TagElement [4,17]
+                                TAG_NAME: @author [4,11]
+                                TextElement:  john  [11,17]
+                        TYPE_DECLARATION_KIND: class [20,25]
+                        SimpleName: C [26,27]""";
         assertEquals(expected, ct.getRoot().toTreeString());
     }
 
     @Test
     public void testComments() throws IOException {
-        String input = "class bar {\n"
-                + "        void foo(/*int a*/)\n"
-                + "        {\n"
-                + "                //run();\n"
-                + "        }\n"
-                + "}\n";
+        String input = """
+                class bar {
+                        void foo(/*int a*/)
+                        {
+                                //run();
+                        }
+                }
+                """;
         TreeContext ct = new JdtWithCommentsTreeGenerator().generateFrom().string(input);
-        String expected = "CompilationUnit [0,87]\n"
-                + "    TypeDeclaration [0,86]\n"
-                + "        TYPE_DECLARATION_KIND: class [0,5]\n"
-                + "        SimpleName: bar [6,9]\n"
-                + "        MethodDeclaration [20,84]\n"
-                + "            PrimitiveType: void [20,24]\n"
-                + "            SimpleName: foo [25,28]\n"
-                + "            BlockComment: /*int a*/ [29,38]\n"
-                + "            Block [48,84]\n"
-                + "                LineComment: //run(); [66,74]";
+        String expected = """
+                CompilationUnit [0,87]
+                    TypeDeclaration [0,86]
+                        TYPE_DECLARATION_KIND: class [0,5]
+                        SimpleName: bar [6,9]
+                        MethodDeclaration [20,84]
+                            PrimitiveType: void [20,24]
+                            SimpleName: foo [25,28]
+                            BlockComment: /*int a*/ [29,38]
+                            Block [48,84]
+                                LineComment: //run(); [66,74]""";
         assertEquals(expected, ct.getRoot().toTreeString());
     }
 
     @Test
     public void testComments2() throws IOException {
-        String input = "/**\n"
-                + "         * test\n"
-                + "         */\n"
-                + "public class X {\n"
-                + "    void A(boolean b\n"
-                + "    ) {\n"
-                + "        /**\n"
-                + "         * test2 \n"
-                + "         */\n"
-                + "        sleep();\n"
-                + "    }\n"
-                + "}\n";
-        String expected = "CompilationUnit [0,145]\n"
-                + "    TypeDeclaration [0,144]\n"
-                + "        Javadoc [0,31]\n"
-                + "            TagElement [15,19]\n"
-                + "                TextElement: test [15,19]\n"
-                + "        Modifier: public [32,38]\n"
-                + "        TYPE_DECLARATION_KIND: class [39,44]\n"
-                + "        SimpleName: X [45,46]\n"
-                + "        MethodDeclaration [53,142]\n"
-                + "            PrimitiveType: void [53,57]\n"
-                + "            SimpleName: A [58,59]\n"
-                + "            SingleVariableDeclaration [60,69]\n"
-                + "                PrimitiveType: boolean [60,67]\n"
-                + "                SimpleName: b [68,69]\n"
-                + "            Block [76,142]\n"
-                + "                Javadoc [86,119]\n"
-                + "                    TagElement [101,107]\n"
-                + "                        TextElement: test2  [101,107]\n"
-                + "                ExpressionStatement [128,136]\n"
-                + "                    MethodInvocation [128,135]\n"
-                + "                        SimpleName: sleep [128,133]";
+        String input = """
+                /**
+                         * test
+                         */
+                public class X {
+                    void A(boolean b
+                    ) {
+                        /**
+                         * test2\s
+                         */
+                        sleep();
+                    }
+                }
+                """;
+        String expected = """
+                CompilationUnit [0,145]
+                    TypeDeclaration [0,144]
+                        Javadoc [0,31]
+                            TagElement [15,19]
+                                TextElement: test [15,19]
+                        Modifier: public [32,38]
+                        TYPE_DECLARATION_KIND: class [39,44]
+                        SimpleName: X [45,46]
+                        MethodDeclaration [53,142]
+                            PrimitiveType: void [53,57]
+                            SimpleName: A [58,59]
+                            SingleVariableDeclaration [60,69]
+                                PrimitiveType: boolean [60,67]
+                                SimpleName: b [68,69]
+                            Block [76,142]
+                                Javadoc [86,119]
+                                    TagElement [101,107]
+                                        TextElement: test2  [101,107]
+                                ExpressionStatement [128,136]
+                                    MethodInvocation [128,135]
+                                        SimpleName: sleep [128,133]""";
         TreeContext ct = new JdtWithCommentsTreeGenerator().generateFrom().string(input);
         assertEquals(expected, ct.getRoot().toTreeString());
     }
