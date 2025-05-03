@@ -263,4 +263,33 @@ public class TestJdtGenerator {
         TreeContext ct = new JdtWithCommentsTreeGenerator().generateFrom().string(input);
         assertEquals(expected, ct.getRoot().toTreeString());
     }
+
+    @Test
+    public void testJdtPropertyKeywords() throws IOException {
+        String input = """
+                package bug.missingSubtrees;
+                
+                public sealed class test permits A {
+                    void X() throws RuntimeException{
+                        sleep(3);
+                    }
+                }
+                class B extends A {
+                    void m2();
+                }
+                
+                class C implements I {
+                    void m1();
+                }
+                """;
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        String treeString = ct.getRoot().toTreeString();
+        //Check permits, implements, extends, throws keywords
+        assertTrue(treeString.contains("permits"), "Expected 'permits' keyword in tree string");
+        assertTrue(treeString.contains("implements"), "Expected 'implements' keyword in tree string");
+        assertTrue(treeString.contains("extends"), "Expected 'extends' keyword in tree string");
+        assertTrue(treeString.contains("throws"), "Expected 'throws' keyword in tree string");
+
+
+    }
 }
