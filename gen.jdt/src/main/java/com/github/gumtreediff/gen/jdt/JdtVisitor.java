@@ -198,7 +198,6 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         }
         t.insertChild(keywordSubtree, index);
     }
-    
 
     private void handlePostVisit(MethodDeclaration n) {
         //Add throws keyword in case of having any exceptions
