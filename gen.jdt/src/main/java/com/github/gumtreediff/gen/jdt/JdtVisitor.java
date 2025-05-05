@@ -159,9 +159,46 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             handlePostVisit((ArrayCreation) n);
         else if (n instanceof MethodDeclaration)
             handlePostVisit((MethodDeclaration) n);
+        else if (n instanceof RecordDeclaration)
+            handlePostVisit((RecordDeclaration) n);
+        else if (n instanceof EnumDeclaration)
+            handlePostVisit((EnumDeclaration) n);
 
         popNode();
     }
+
+    private void handlePostVisit(EnumDeclaration n) {
+        if (!n.superInterfaceTypes().isEmpty()) {
+            handleImplementsKeywordForDeclarations(n);
+        }
+    }
+
+    private void handlePostVisit(RecordDeclaration n) {
+        if (!n.superInterfaceTypes().isEmpty()) {
+            handleImplementsKeywordForDeclarations(n);
+        }
+    }
+
+    private void handleImplementsKeywordForDeclarations(AbstractTypeDeclaration n) {
+        String keyword = "implements";
+        Tree keywordSubtree = context.createTree(TYPE_INHERITANCE_KEYWORD, keyword);
+        PosAndLength keywordPl = searchKeywordPosition(n, keyword);
+        keywordSubtree.setPos(keywordPl.pos);
+        keywordSubtree.setLength(keywordPl.length);
+        Tree t = this.trees.peek();
+        if (t == null || t.getChildren() == null) return;
+        int index = 0;
+        for (Tree c : t.getChildren()) {
+            if (c.getType() != SIMPLE_NAME)
+                index++;
+            else {
+                index += 1;
+                break;
+            }
+        }
+        t.insertChild(keywordSubtree, index);
+    }
+    
 
     private void handlePostVisit(MethodDeclaration n) {
         //Add throws keyword in case of having any exceptions

@@ -420,7 +420,7 @@ public class TestJdtGenerator {
                     RecordDeclaration [0,35]
                         Modifier: public [0,6]
                         SimpleName: test [14,18]
-                        TYPE_INHERITANCE_KEYWORD: implements [19,29]
+                        TYPE_INHERITANCE_KEYWORD: implements [21,31]
                         SimpleType [32,33]
                             SimpleName: X [32,33]""";
         assertEquals(expected, treeString);
