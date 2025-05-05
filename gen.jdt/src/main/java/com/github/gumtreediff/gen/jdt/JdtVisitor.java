@@ -42,7 +42,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private static final Type PREFIX_EXPRESSION_OPERATOR = type("PREFIX_EXPRESSION_OPERATOR");
     private static final Type POSTFIX_EXPRESSION_OPERATOR = type("POSTFIX_EXPRESSION_OPERATOR");
     private static final Type TAG_NAME = type("TAG_NAME");
-    private static final Type CLASS_INHERITANCE_KEYWORD = type("CLASS_INHERITANCE_KEYWORD");
+    private static final Type TYPE_INHERITANCE_KEYWORD = type("TYPE_INHERITANCE_KEYWORD");
     private static final Type PERMITS_KEYWORD = type("PERMITS_KEYWORD");
     private static final Type THROWS_KEYWORD = type("THROWS_KEYWORD");
 
@@ -338,7 +338,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         if (d.getSuperclassType() != null)
         {
             String keyword = "extends";
-            Tree keywordSubtree = context.createTree(CLASS_INHERITANCE_KEYWORD, keyword);
+            Tree keywordSubtree = context.createTree(TYPE_INHERITANCE_KEYWORD, keyword);
             PosAndLength keywordPl = searchKeywordPosition(d, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
@@ -347,7 +347,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         }
         if (!d.superInterfaceTypes().isEmpty()) {
             String keyword = "implements";
-            Tree keywordSubtree = context.createTree(CLASS_INHERITANCE_KEYWORD, keyword);
+            Tree keywordSubtree = context.createTree(TYPE_INHERITANCE_KEYWORD, keyword);
             PosAndLength keywordPl = searchKeywordPosition(d, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
