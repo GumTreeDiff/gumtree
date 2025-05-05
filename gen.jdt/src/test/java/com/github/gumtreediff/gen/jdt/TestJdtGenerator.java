@@ -378,6 +378,7 @@ public class TestJdtGenerator {
                             SimpleName: P2 [92,94]""";
         assertEquals(expected, treeString);
     }
+
     @Test
     public void testJdtPropertyKeywords3() throws IOException {
         String input = """

@@ -165,7 +165,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
 
     private void handlePostVisit(MethodDeclaration n) {
         //Add throws keyword in case of having any exceptions
-        if (!n.thrownExceptionTypes().isEmpty()){
+        if (!n.thrownExceptionTypes().isEmpty()) {
             String keyword = "throws";
             Tree keywordSubtree = context.createTree(THROWS_KEYWORD, keyword);
             PosAndLength keywordPl = searchKeywordPosition(n, keyword);
@@ -379,8 +379,8 @@ public class JdtVisitor  extends AbstractJdtVisitor {
                 if (token == ITerminalSymbols.TokenNameEOF)
                     break;
                 if ((keyword.equals("implements") && token == ITerminalSymbols.TokenNameimplements)
-                    || (keyword.equals("extends") && token == ITerminalSymbols.TokenNameextends)
-                    || (keyword.equals("throws") && token == ITerminalSymbols.TokenNamethrows)
+                        || (keyword.equals("extends") && token == ITerminalSymbols.TokenNameextends)
+                        || (keyword.equals("throws") && token == ITerminalSymbols.TokenNamethrows)
                 ) {
                     pos = scanner.getCurrentTokenStartPosition();
                     length = scanner.getCurrentTokenEndPosition() - pos + 1;
