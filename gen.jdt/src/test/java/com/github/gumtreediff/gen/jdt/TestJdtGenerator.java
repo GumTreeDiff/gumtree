@@ -299,6 +299,66 @@ public class TestJdtGenerator {
         assertTrue(treeString.contains("extends"), "Expected 'extends' keyword in tree string");
         assertTrue(treeString.contains("throws"), "Expected 'throws' keyword in tree string");
 
+    }
 
+    @Test
+    public void testJdtPropertyKeywords2() throws IOException {
+        String input = """
+                public sealed class MyClass extends BaseClass implements InterfaceA, InterfaceB permits P1, P2 {
+                    // class body
+                }
+                """;
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        String treeString = ct.getRoot().toTreeString();
+        String expected = """
+                CompilationUnit [0,117]
+                    TypeDeclaration [0,116]
+                        Modifier: public [0,6]
+                        Modifier: sealed [7,13]
+                        TYPE_DECLARATION_KIND: class [14,19]
+                        SimpleName: MyClass [20,27]
+                        CLASS_INHERITANCE_KEYWORD: extends [28,35]
+                        SimpleType [36,45]
+                            SimpleName: BaseClass [36,45]
+                        CLASS_INHERITANCE_KEYWORD: implements [46,56]
+                        SimpleType [57,67]
+                            SimpleName: InterfaceA [57,67]
+                        SimpleType [69,79]
+                            SimpleName: InterfaceB [69,79]
+                        PERMITS_KEYWORD: permits [80,87]
+                        SimpleType [88,90]
+                            SimpleName: P1 [88,90]
+                        SimpleType [92,94]
+                            SimpleName: P2 [92,94]""";
+        assertEquals(expected, treeString);
+    }
+    @Test
+    public void testJdtPropertyKeywords3() throws IOException {
+        String input = """
+                public sealed class MyClass implements InterfaceA, InterfaceB permits P1, P2 {
+                    // class body
+                }
+                """;
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        String treeString = ct.getRoot().toTreeString();
+        //Check permits, implements, extends, throws keywords
+        String expected = """
+                CompilationUnit [0,99]
+                    TypeDeclaration [0,98]
+                        Modifier: public [0,6]
+                        Modifier: sealed [7,13]
+                        TYPE_DECLARATION_KIND: class [14,19]
+                        SimpleName: MyClass [20,27]
+                        CLASS_INHERITANCE_KEYWORD: implements [28,38]
+                        SimpleType [39,49]
+                            SimpleName: InterfaceA [39,49]
+                        SimpleType [51,61]
+                            SimpleName: InterfaceB [51,61]
+                        PERMITS_KEYWORD: permits [62,69]
+                        SimpleType [70,72]
+                            SimpleName: P1 [70,72]
+                        SimpleType [74,76]
+                            SimpleName: P2 [74,76]""";
+        assertEquals(expected, treeString);
     }
 }

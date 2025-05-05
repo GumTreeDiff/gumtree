@@ -30,6 +30,8 @@ import org.eclipse.jdt.core.compiler.ITerminalSymbols;
 import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jdt.core.dom.*;
 
+import java.util.List;
+
 import static com.github.gumtreediff.tree.TypeSet.type;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
@@ -42,6 +44,8 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private static final Type PREFIX_EXPRESSION_OPERATOR = type("PREFIX_EXPRESSION_OPERATOR");
     private static final Type POSTFIX_EXPRESSION_OPERATOR = type("POSTFIX_EXPRESSION_OPERATOR");
     private static final Type TAG_NAME = type("TAG_NAME");
+    private static final Type CLASS_INHERITANCE_KEYWORD = type("CLASS_INHERITANCE_KEYWORD");
+    private static final Type PERMITS_KEYWORD = type("PERMITS_KEYWORD");
 
     private static final Type ARRAY_INITIALIZER = nodeAsSymbol(ASTNode.ARRAY_INITIALIZER);
     private static final Type SIMPLE_NAME = nodeAsSymbol(ASTNode.SIMPLE_NAME);
@@ -139,6 +143,8 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         else
             return true;
     }
+
+
 
     @Override
     public void postVisit(ASTNode n) {
@@ -313,6 +319,71 @@ public class JdtVisitor  extends AbstractJdtVisitor {
                 break;
         }
         t.insertChild(s, index);
+        index += 2;
+        if (d.getSuperclassType() != null)
+        {
+            String keyword = "extends";
+            Tree keywordSubtree = context.createTree(CLASS_INHERITANCE_KEYWORD, keyword);
+            PosAndLength keywordPl = searchTypeDeclarationKeywordPosition(d, keyword);
+            keywordSubtree.setPos(keywordPl.pos);
+            keywordSubtree.setLength(keywordPl.length);
+            t.insertChild(keywordSubtree, index);
+            index += 1 + 1; //There is only one superclass always (can be simplified to 2)
+        }
+        if (!d.superInterfaceTypes().isEmpty()) {
+            String keyword = "implements";
+            Tree keywordSubtree = context.createTree(CLASS_INHERITANCE_KEYWORD, keyword);
+            PosAndLength keywordPl = searchTypeDeclarationKeywordPosition(d, keyword);
+            keywordSubtree.setPos(keywordPl.pos);
+            keywordSubtree.setLength(keywordPl.length);
+            t.insertChild(keywordSubtree, index);
+            //There might be more than one interface
+            index += 1 + d.superInterfaceTypes().size();
+        }
+        if (!d.permittedTypes().isEmpty())
+        {
+            String keyword = "permits";
+            Tree keywordSubtree = context.createTree(PERMITS_KEYWORD, keyword);
+            PosAndLength keywordPl = searchTypeDeclarationKeywordPosition(d, keyword);
+            keywordSubtree.setPos(keywordPl.pos);
+            keywordSubtree.setLength(keywordPl.length);
+            t.insertChild(keywordSubtree, index);
+        }
+    }
+
+    private PosAndLength searchTypeDeclarationKeywordPosition(TypeDeclaration d, String keyword) {
+        int start = d.getStartPosition();
+        int end = start + d.getLength();
+        scanner.resetTo(start, end);
+        int pos = 0;
+        int length = 0;
+
+        try {
+            while (true) {
+                int token = scanner.getNextToken();
+                if (token == ITerminalSymbols.TokenNameEOF)
+                    break;
+                if ((keyword.equals("implements") && token == ITerminalSymbols.TokenNameimplements)
+                    || (keyword.equals("extends") && token == ITerminalSymbols.TokenNameextends)) {
+                    pos = scanner.getCurrentTokenStartPosition();
+                    length = scanner.getCurrentTokenEndPosition() - pos + 1;
+                    break;
+                }
+                // Fallback for 'permits' (not tokenized in older JDT versions)
+                if (token == ITerminalSymbols.TokenNameIdentifier) {
+                    char[] tokenChars = scanner.getCurrentTokenSource();
+                    if (String.valueOf(tokenChars).equals(keyword)) {
+                        pos = scanner.getCurrentTokenStartPosition();
+                        length = scanner.getCurrentTokenEndPosition() - pos + 1;
+                        break;
+                    }
+                }
+            }
+        } catch (InvalidInputException e) {
+            throw new SyntaxException(null, null, e);
+        }
+
+        return new PosAndLength(pos, length);
     }
 
     private PosAndLength searchTypeDeclarationKindPosition(TypeDeclaration d) {
