@@ -30,8 +30,6 @@ import org.eclipse.jdt.core.compiler.ITerminalSymbols;
 import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jdt.core.dom.*;
 
-import java.util.List;
-
 import static com.github.gumtreediff.tree.TypeSet.type;
 
 public class JdtVisitor  extends AbstractJdtVisitor {
@@ -46,6 +44,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private static final Type TAG_NAME = type("TAG_NAME");
     private static final Type CLASS_INHERITANCE_KEYWORD = type("CLASS_INHERITANCE_KEYWORD");
     private static final Type PERMITS_KEYWORD = type("PERMITS_KEYWORD");
+    private static final Type THROWS_KEYWORD = type("THROWS_KEYWORD");
 
     private static final Type ARRAY_INITIALIZER = nodeAsSymbol(ASTNode.ARRAY_INITIALIZER);
     private static final Type SIMPLE_NAME = nodeAsSymbol(ASTNode.SIMPLE_NAME);
@@ -144,8 +143,6 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             return true;
     }
 
-
-
     @Override
     public void postVisit(ASTNode n) {
         if (n instanceof TypeDeclaration)
@@ -160,8 +157,26 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             handlePostVisit((PostfixExpression) n);
         else if (n instanceof ArrayCreation)
             handlePostVisit((ArrayCreation) n);
+        else if (n instanceof MethodDeclaration)
+            handlePostVisit((MethodDeclaration) n);
 
         popNode();
+    }
+
+    private void handlePostVisit(MethodDeclaration n) {
+        //Add throws keyword in case of having any exceptions
+        if (!n.thrownExceptionTypes().isEmpty()){
+            String keyword = "throws";
+            Tree keywordSubtree = context.createTree(THROWS_KEYWORD, keyword);
+            PosAndLength keywordPl = searchKeywordPosition(n, keyword);
+            keywordSubtree.setPos(keywordPl.pos);
+            keywordSubtree.setLength(keywordPl.length);
+            Tree t = this.trees.peek();
+            if (t == null || t.getChildren() == null) return;
+            int index = t.getChildren().size() - 1;
+            index -= n.thrownExceptionTypes().size();
+            t.insertChild(keywordSubtree, index);
+        }
     }
 
     private void handlePostVisit(ArrayCreation c) {
@@ -324,7 +339,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         {
             String keyword = "extends";
             Tree keywordSubtree = context.createTree(CLASS_INHERITANCE_KEYWORD, keyword);
-            PosAndLength keywordPl = searchTypeDeclarationKeywordPosition(d, keyword);
+            PosAndLength keywordPl = searchKeywordPosition(d, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
             t.insertChild(keywordSubtree, index);
@@ -333,7 +348,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         if (!d.superInterfaceTypes().isEmpty()) {
             String keyword = "implements";
             Tree keywordSubtree = context.createTree(CLASS_INHERITANCE_KEYWORD, keyword);
-            PosAndLength keywordPl = searchTypeDeclarationKeywordPosition(d, keyword);
+            PosAndLength keywordPl = searchKeywordPosition(d, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
             t.insertChild(keywordSubtree, index);
@@ -344,14 +359,14 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         {
             String keyword = "permits";
             Tree keywordSubtree = context.createTree(PERMITS_KEYWORD, keyword);
-            PosAndLength keywordPl = searchTypeDeclarationKeywordPosition(d, keyword);
+            PosAndLength keywordPl = searchKeywordPosition(d, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
             t.insertChild(keywordSubtree, index);
         }
     }
 
-    private PosAndLength searchTypeDeclarationKeywordPosition(TypeDeclaration d, String keyword) {
+    private PosAndLength searchKeywordPosition(ASTNode d, String keyword) {
         int start = d.getStartPosition();
         int end = start + d.getLength();
         scanner.resetTo(start, end);
@@ -364,7 +379,9 @@ public class JdtVisitor  extends AbstractJdtVisitor {
                 if (token == ITerminalSymbols.TokenNameEOF)
                     break;
                 if ((keyword.equals("implements") && token == ITerminalSymbols.TokenNameimplements)
-                    || (keyword.equals("extends") && token == ITerminalSymbols.TokenNameextends)) {
+                    || (keyword.equals("extends") && token == ITerminalSymbols.TokenNameextends)
+                    || (keyword.equals("throws") && token == ITerminalSymbols.TokenNamethrows)
+                ) {
                     pos = scanner.getCurrentTokenStartPosition();
                     length = scanner.getCurrentTokenEndPosition() - pos + 1;
                     break;

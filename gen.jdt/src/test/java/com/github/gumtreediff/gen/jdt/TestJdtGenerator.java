@@ -276,10 +276,8 @@ public class TestJdtGenerator {
     @Test
     public void testJdtPropertyKeywords() throws IOException {
         String input = """
-                package bug.missingSubtrees;
-                
                 public sealed class test permits A {
-                    void X() throws RuntimeException{
+                    void X(A a, int x) throws RuntimeException{
                         sleep(3);
                     }
                 }
@@ -299,6 +297,54 @@ public class TestJdtGenerator {
         assertTrue(treeString.contains("extends"), "Expected 'extends' keyword in tree string");
         assertTrue(treeString.contains("throws"), "Expected 'throws' keyword in tree string");
 
+        String excpected = """
+                CompilationUnit [0,189]
+                    TypeDeclaration [0,110]
+                        Modifier: public [0,6]
+                        Modifier: sealed [7,13]
+                        TYPE_DECLARATION_KIND: class [14,19]
+                        SimpleName: test [20,24]
+                        PERMITS_KEYWORD: permits [25,32]
+                        MethodDeclaration [41,108]
+                            PrimitiveType: void [41,45]
+                            SimpleName: X [46,47]
+                            SingleVariableDeclaration [48,51]
+                                SimpleType [48,49]
+                                    SimpleName: A [48,49]
+                                SimpleName: a [50,51]
+                            SingleVariableDeclaration [53,58]
+                                PrimitiveType: int [53,56]
+                                SimpleName: x [57,58]
+                            THROWS_KEYWORD: throws [60,66]
+                            SimpleType [67,83]
+                                SimpleName: RuntimeException [67,83]
+                            Block [83,108]
+                                ExpressionStatement [93,102]
+                                    MethodInvocation [93,101]
+                                        SimpleName: sleep [93,98]
+                                        METHOD_INVOCATION_ARGUMENTS [99,100]
+                                            NumberLiteral: 3 [99,100]
+                        SimpleType [33,34]
+                            SimpleName: A [33,34]
+                    TypeDeclaration [111,147]
+                        TYPE_DECLARATION_KIND: class [111,116]
+                        SimpleName: B [117,118]
+                        CLASS_INHERITANCE_KEYWORD: extends [119,126]
+                        SimpleType [127,128]
+                            SimpleName: A [127,128]
+                        MethodDeclaration [135,145]
+                            PrimitiveType: void [135,139]
+                            SimpleName: m2 [140,142]
+                    TypeDeclaration [149,188]
+                        TYPE_DECLARATION_KIND: class [149,154]
+                        SimpleName: C [155,156]
+                        CLASS_INHERITANCE_KEYWORD: implements [157,167]
+                        SimpleType [168,169]
+                            SimpleName: I [168,169]
+                        MethodDeclaration [176,186]
+                            PrimitiveType: void [176,180]
+                            SimpleName: m1 [181,183]""";
+        assertEquals(excpected, treeString);
     }
 
     @Test
