@@ -25,7 +25,6 @@ import java.io.IOException;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.*;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -274,7 +273,7 @@ public class TestJdtGenerator {
     }
 
     @Test
-    public void testJdtPropertyKeywords() throws IOException {
+    public void testClassReservedKeywords() throws IOException {
         String input = """
                 public sealed class test permits A {
                     void X(A a, int x) throws RuntimeException{
@@ -348,7 +347,7 @@ public class TestJdtGenerator {
     }
 
     @Test
-    public void testJdtPropertyKeywords2() throws IOException {
+    public void testClassReservedKeywords2() throws IOException {
         String input = """
                 public sealed class MyClass extends BaseClass implements InterfaceA, InterfaceB permits P1, P2 {
                     // class body
@@ -380,7 +379,7 @@ public class TestJdtGenerator {
     }
 
     @Test
-    public void testJdtPropertyKeywords3() throws IOException {
+    public void testClassReservedKeywords3() throws IOException {
         String input = """
                 public sealed class MyClass implements InterfaceA, InterfaceB permits P1, P2 {
                     // class body
@@ -406,6 +405,45 @@ public class TestJdtGenerator {
                             SimpleName: P1 [70,72]
                         SimpleType [74,76]
                             SimpleName: P2 [74,76]""";
+        assertEquals(expected, treeString);
+    }
+
+    @Test
+    public void testRecordReservedKeywords() throws IOException {
+        String input = """
+                public record test() implements X{}
+                """;
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        String treeString = ct.getRoot().toTreeString();
+        String expected = """
+                CompilationUnit [0,36]
+                    RecordDeclaration [0,35]
+                        Modifier: public [0,6]
+                        SimpleName: test [14,18]
+                        TYPE_INHERITANCE_KEYWORD: implements [19,29]
+                        SimpleType [32,33]
+                            SimpleName: X [32,33]""";
+        assertEquals(expected, treeString);
+    }
+
+    @Test
+    public void testEnumReservedKeywords() throws IOException {
+        String input = """
+                enum A implements B { X,Y}
+                """;
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        String treeString = ct.getRoot().toTreeString();
+        String expected = """
+                CompilationUnit [0,27]
+                    EnumDeclaration [0,26]
+                        SimpleName: A [5,6]
+                        TYPE_INHERITANCE_KEYWORD: implements [7,17]
+                        SimpleType [18,19]
+                            SimpleName: B [18,19]
+                        EnumConstantDeclaration [22,23]
+                            SimpleName: X [22,23]
+                        EnumConstantDeclaration [24,25]
+                            SimpleName: Y [24,25]""";
         assertEquals(expected, treeString);
     }
 }
