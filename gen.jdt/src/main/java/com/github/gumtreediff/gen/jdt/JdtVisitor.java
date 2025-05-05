@@ -182,11 +182,11 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private void handleImplementsKeywordForDeclarations(AbstractTypeDeclaration n) {
         String keyword = "implements";
         Tree keywordSubtree = context.createTree(TYPE_INHERITANCE_KEYWORD, keyword);
+        Tree t = this.trees.peek();
+        if (t == null || t.getChildren() == null) return;
         PosAndLength keywordPl = searchKeywordPosition(n, keyword);
         keywordSubtree.setPos(keywordPl.pos);
         keywordSubtree.setLength(keywordPl.length);
-        Tree t = this.trees.peek();
-        if (t == null || t.getChildren() == null) return;
         int index = 0;
         for (Tree c : t.getChildren()) {
             if (c.getType() != SIMPLE_NAME)
@@ -203,12 +203,12 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         //Add throws keyword in case of having any exceptions
         if (!n.thrownExceptionTypes().isEmpty()) {
             String keyword = "throws";
+            Tree t = this.trees.peek();
+            if (t == null || t.getChildren() == null) return;
             Tree keywordSubtree = context.createTree(THROWS_KEYWORD, keyword);
             PosAndLength keywordPl = searchKeywordPosition(n, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
-            Tree t = this.trees.peek();
-            if (t == null || t.getChildren() == null) return;
             int index = t.getChildren().size() - 1;
             index -= n.thrownExceptionTypes().size();
             t.insertChild(keywordSubtree, index);
