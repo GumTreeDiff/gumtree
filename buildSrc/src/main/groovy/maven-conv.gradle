@@ -8,11 +8,14 @@ def isReleaseVersion = !rootProject.version.endsWith("SNAPSHOT")
 publishing {
     publications {
         gumtreeDist(MavenPublication) {
-            from(components.java)
+            from components.java
 
             pom {
                 name = "GumTree ${project.name}"
-                description = project.description
+                afterEvaluate {
+                    description = project.description
+                }
+                
                 url = 'https://github.com/GumTreeDiff/gumtree/'
 
                 scm {
