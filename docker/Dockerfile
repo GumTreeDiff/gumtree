@@ -15,7 +15,7 @@ RUN pip3 install pandas plotnine scipy jupyter
 ENV LANG=C.UTF-8
 
 # Install srcML
-RUN wget http://131.123.42.38/lmcrs/v1.0.0/srcml_1.0.0-1_ubuntu20.04.deb \
+RUN wget https://github.com/srcML/srcML/releases/download/v1.0.0/srcml_1.0.0-1_ubuntu20.04.deb \
 	&& gdebi srcml_1.0.0-1_ubuntu20.04.deb -n
 
 # Install cgum
