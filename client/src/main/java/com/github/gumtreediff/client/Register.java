@@ -40,6 +40,7 @@ public @interface Register {
     Class<? extends Option.Context> options() default NoOption.class;
 
     String no_value = "";
+
     class NoOption implements Option.Context {
         @Override
         public Option[] values() {
