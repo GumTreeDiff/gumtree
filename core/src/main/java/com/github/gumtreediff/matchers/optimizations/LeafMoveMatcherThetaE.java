@@ -194,6 +194,12 @@ public class LeafMoveMatcherThetaE implements Matcher {
                 for (Tree child : firstParent.getChildren()) {
                     if (child.isLeaf() && !mappings.isDstMapped(child) && child.getType() == pair.second.getType()
                             && child.getLabel().equals(pair.second.getLabel())) {
+                        Tree dstForSrc = mappings.getDstForSrc(child);
+                        if (dstForSrc != null)
+                            mappings.removeMapping(child, dstForSrc);
+                        Tree srcForDst = mappings.getSrcForDst(pair.second);
+                        if (srcForDst != null)
+                            mappings.removeMapping(srcForDst, pair.second);
                         mappings.addMapping(child, pair.second);
                         break;
                     }
