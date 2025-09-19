@@ -100,8 +100,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: build and push docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
+          platforms: linux/amd64,linux/arm64
           file: 'docker/Dockerfile'
           push: ${{ steps.checksecrets.outputs.secretspresent }}
           tags: gumtreediff/gumtree:${{ env.IMAGE_TAG }}
