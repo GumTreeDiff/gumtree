@@ -23,6 +23,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 public abstract class ExternalProcessTreeGenerator extends TreeGenerator {
 
@@ -52,7 +53,7 @@ public abstract class ExternalProcessTreeGenerator extends TreeGenerator {
     }
 
     private File dumpReaderInTempFile(Reader r) throws IOException {
-        File f = File.createTempFile("gumtree", "");
+        File f = File.createTempFile("gumtree", ".txt");
         try (
                 Writer w = Files.newBufferedWriter(f.toPath(), Charset.forName("UTF-8"))
         ) {
