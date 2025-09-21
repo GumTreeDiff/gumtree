@@ -30,6 +30,10 @@ jobs:
         id: version
         run: echo "VERSION=$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
         shell: bash
+      - uses: actions/setup-python@v6
+        with:
+          cache: 'pip'
+      - run: pip install jupyter
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: build gumtree and run benchmarks
