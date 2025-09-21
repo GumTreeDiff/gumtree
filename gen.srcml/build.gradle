@@ -1,5 +1,5 @@
 plugins {
-    id 'java-native-conv'
+    id 'java-external-conv'
     id 'maven-conv'
 }
 

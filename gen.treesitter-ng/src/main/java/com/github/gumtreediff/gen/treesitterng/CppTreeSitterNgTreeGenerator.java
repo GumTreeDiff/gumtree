@@ -17,17 +17,25 @@
  * Copyright 2021 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package com.github.gumtreediff.gen.treesitter;
+package com.github.gumtreediff.gen.treesitterng;
 
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.utils.Registry;
+import org.treesitter.TSLanguage;
+import org.treesitter.TreeSitterCpp;
 
-@Register(id = "go-treesitter", accept = "\\.go$", priority = Registry.Priority.MAXIMUM)
-public final class GoTreeSitterTreeGenerator extends AbstractTreeSitterGenerator {
-    private static final String GO_PARSER_NAME = "go";
+@Register(id = "cpp-treesitter-ng", accept = "\\.[ch]pp$", priority = Registry.Priority.HIGH)
+public final class CppTreeSitterNgTreeGenerator extends AbstractTreeSitterNgGenerator {
+    private static final TSLanguage CPP_TREE_SITTER_LANGUAGE = new TreeSitterCpp();
+    private static final String CPP_LANGUAGE_NAME = "cpp";
 
     @Override
-    public String getParserName() {
-        return GO_PARSER_NAME;
+    protected TSLanguage getTreeSitterLanguage() {
+        return CPP_TREE_SITTER_LANGUAGE;
+    }
+
+    @Override
+    protected String getLanguageName() {
+        return CPP_LANGUAGE_NAME;
     }
 }

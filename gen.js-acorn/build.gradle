@@ -1,9 +1,0 @@
-plugins {
-    id 'java-native-conv'
-}
-
-description = 'GumTree tree generator for JS. Requires jsparser.'
-
-dependencies {
-    implementation project(':core')
-}

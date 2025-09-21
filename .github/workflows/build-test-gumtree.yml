@@ -17,13 +17,13 @@ concurrency:
 
 jobs:
   build-test-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container: gumtreediff/gumtree:latest
     environment: MavenCentral
     if: ${{ !(contains(github.event.head_commit.message, '[no ci]') || startsWith(github.event.head_commit.message, 'doc')) }}
     steps:
       - name: checkout gumtree
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
           show-progress: ''
@@ -34,7 +34,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: build gumtree and run benchmarks
-        run: ./gradlew -PtestNative build :benchmark:runOnDefects4J :benchmark:runOnGhJava :benchmark:execNotebook
+        run: ./gradlew build :benchmark:runOnDefects4J :benchmark:runOnGhJava :benchmark:execNotebook
       - name: upload benchmarks results
         uses: actions/upload-artifact@v4
         with:
@@ -70,7 +70,7 @@ jobs:
       - name: set up docker buildx
         uses: docker/setup-buildx-action@v3
       - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx
