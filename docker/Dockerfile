@@ -1,10 +1,10 @@
-FROM openjdk:21-slim as build-stage
+FROM openjdk:21-slim AS build-stage
 
 # Compiles gumtree
 COPY . /opt/gumtree
 RUN /opt/gumtree/gradlew -p /opt/gumtree build
 
-FROM openjdk:21-slim as final-stage
+FROM openjdk:21-slim AS final-stage
 
 # Copy gumtree-native distribution from build-stage.
 COPY --from=build-stage /opt/gumtree/dist-minimal/build/install/gumtree/ /opt/gumtree
