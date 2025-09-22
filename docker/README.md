@@ -16,8 +16,6 @@ To use GumTree's image, You need to:
 The classical way to run a GumTree's container is the command `docker run --rm -v /my/original-folder:/left -v /my/modified-folder:/right -p 4567:4567 gumtreediff/gumtree webdiff /left /right`.
 You can consult the diff at the URL `http://localhost:4567`. Of course, all other GumTree's commands are available.
 
-**Beware, the paths inputs to GumTree's commands are relative to the `/diff` path inside the container.** 
-
 ## Git integration 
 
 You can easily integrate GumTree's container with Git by adding the following configuration into the `$HOME/.gitconfig` file.
