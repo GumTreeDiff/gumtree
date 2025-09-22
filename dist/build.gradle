@@ -1,19 +1,56 @@
 plugins {
-	id 'java-dist-conv'
+    id 'java-conv'
+    id 'com.gradleup.shadow' version '9.0.0-rc3'
+    id 'application'
 }
 
 description = 'GumTree distribution.'
 
 dependencies {
-	implementation project(':core')
-	implementation project(':client')
-	implementation project(':client.diff')
-	implementation project(':gen.css')
-	implementation project(':gen.javaparser')
-	implementation project(':gen.jdt')
-	implementation project(':gen.js')
-	implementation project(':gen.srcml')
-	implementation project(':gen.treesitter-ng')
-	implementation project(':gen.xml')
-	implementation project(':gen.yaml')
+    implementation project(':core')
+    implementation project(':client')
+    implementation project(':client.diff')
+    implementation project(':gen.css')
+    implementation project(':gen.javaparser')
+    implementation project(':gen.jdt')
+    implementation project(':gen.js')
+    implementation project(':gen.srcml')
+    implementation project(':gen.treesitter-ng')
+    implementation project(':gen.xml')
+    implementation project(':gen.yaml')
 }
+
+shadowJar {
+    archiveBaseName.set('gumtree')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+    mergeServiceFiles()
+    mergeServiceFiles {
+        path = 'META-INF/annotations'
+    }
+}
+
+distributions {
+    shadow {
+        distributionBaseName = 'gumtree'
+    }
+}
+
+application {
+    mainClass = 'com.github.gumtreediff.client.Run'
+    applicationName = 'gumtree'
+}
+
+tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    archiveBaseName.set('gumtree')
+}
+
+shadowDistZip.enabled = true
+distTar.enabled = false
+distZip.enabled = false
+startScripts.enabled = false
+shadowDistTar.enabled = false
+
+jar.enabled = false
+
+build.finalizedBy installShadowDist
