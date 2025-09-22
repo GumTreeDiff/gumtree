@@ -23,7 +23,7 @@ import com.github.gumtreediff.utils.Registry;
 import org.treesitter.TSLanguage;
 import org.treesitter.TreeSitterJava;
 
-@Register(id = "java-treesitter-ng", accept = "\\.java$", priority = Registry.Priority.MAXIMUM)
+@Register(id = "java-treesitter-ng", accept = "\\.java$", priority = Registry.Priority.HIGH)
 public final class JavaTreeSitterNgTreeGenerator extends AbstractTreeSitterNgGenerator {
     public static final TSLanguage JAVA_TREE_SITTER_LANGUAGE = new TreeSitterJava();
     private static final String JAVA_LANGUAGE_NAME = "java";
