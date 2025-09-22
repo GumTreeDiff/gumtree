@@ -25,12 +25,13 @@ import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeContext.MetadataSerializers;
 import com.github.gumtreediff.tree.TreeContext.MetadataUnserializers;
+import com.github.gumtreediff.utils.Registry;
 
 import java.io.*;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-@Register(id = "c-srcml", accept = "\\.[ch]$")
+@Register(id = "c-srcml", accept = "\\.[ch]$", priority = Registry.Priority.LOW)
 public class SrcmlCTreeGenerator extends AbstractSrcmlTreeGenerator {
 
     @Override

@@ -24,7 +24,7 @@ import com.github.gumtreediff.utils.Registry;
 import org.treesitter.TSLanguage;
 import org.treesitter.TreeSitterCpp;
 
-@Register(id = "cpp-treesitter-ng", accept = "\\.[ch]pp$", priority = Registry.Priority.HIGH)
+@Register(id = "cpp-treesitter-ng", accept = "\\.(CC?|cpp|cc|hh?|hpp)$")
 public final class CppTreeSitterNgTreeGenerator extends AbstractTreeSitterNgGenerator {
     private static final TSLanguage CPP_TREE_SITTER_LANGUAGE = new TreeSitterCpp();
     private static final String CPP_LANGUAGE_NAME = "cpp";

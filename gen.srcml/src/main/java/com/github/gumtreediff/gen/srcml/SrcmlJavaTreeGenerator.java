@@ -20,8 +20,9 @@
 package com.github.gumtreediff.gen.srcml;
 
 import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.utils.Registry;
 
-@Register(id = "java-srcml", accept = "\\.java$")
+@Register(id = "java-srcml", accept = "\\.java$", priority = Registry.Priority.LOW)
 public class SrcmlJavaTreeGenerator extends AbstractSrcmlTreeGenerator {
 
     @Override

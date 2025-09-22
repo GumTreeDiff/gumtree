@@ -21,12 +21,13 @@ package com.github.gumtreediff.gen.srcml;
 
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.utils.Registry;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-@Register(id = "cs-srcml", accept = "\\.cs$")
+@Register(id = "cs-srcml", accept = "\\.cs$", priority = Registry.Priority.LOW)
 public class SrcmlCsTreeGenerator extends AbstractSrcmlTreeGenerator {
 
     @Override
