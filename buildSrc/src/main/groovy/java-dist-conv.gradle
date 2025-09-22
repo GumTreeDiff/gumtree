@@ -1,0 +1,34 @@
+plugins {
+    id 'java-conv'
+    id 'com.gradleup.shadow'
+    id 'application'
+}
+
+shadowJar {
+    archiveBaseName.set('gumtree')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+    mergeServiceFiles()
+    mergeServiceFiles {
+        path = 'META-INF/annotations'
+    }
+}
+
+application {
+    mainClass = 'com.github.gumtreediff.client.Run'
+    applicationName = 'gumtree'
+}
+
+tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    archiveBaseName.set('gumtree')
+}
+
+shadowDistZip.enabled = true
+distTar.enabled = false
+distZip.enabled = false
+startScripts.enabled = false
+shadowDistTar.enabled = false
+
+jar.enabled = false
+
+build.finalizedBy installShadowDist

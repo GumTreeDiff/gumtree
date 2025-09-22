@@ -28,7 +28,7 @@ ENV TZ=GMT
 ENV LANG=C.UTF-8
 
 # Copy gumtree distribution from build-stage.
-COPY --from=build-stage /opt/gumtree/dist/build/install/gumtree/ /opt/gumtree
+COPY --from=build-stage /opt/gumtree/dist/build/install/dist-shadow/ /opt/gumtree
 # Copy srcml package from build-stage.
 COPY --from=build-stage /*.deb /opt
 
