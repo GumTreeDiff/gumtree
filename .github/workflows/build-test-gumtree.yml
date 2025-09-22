@@ -32,6 +32,7 @@ jobs:
         shell: bash
       - uses: actions/setup-python@v6
         with:
+          python-version: '3.12'
           cache: 'pip'
       - run: pip install pandas plotnine scipy jupyter
       - name: Setup Gradle
