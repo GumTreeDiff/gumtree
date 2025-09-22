@@ -9,10 +9,6 @@ RUN apt-get update \
 	&& apt-get install -y --no-install-recommends openjdk-17-jdk wget git gdebi-core \
 	    build-essential tzdata ca-certificates p11-kit
 
-RUN python3 -m venv /opt/venv
-
-ENV PATH="/opt/venv/bin:$PATH"
-
 ENV LANG=C.UTF-8
 
 # Install srcML
