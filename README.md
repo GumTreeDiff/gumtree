@@ -4,7 +4,7 @@ An awesome code differencing tool that you can [integrate with Git](https://gith
 
 ## Status
 
-![Build and Test GumTree](https://github.com/GumTreeDiff/gumtree/workflows/Build,%20Test%20and%20Deploy%20GumTree/badge.svg?branch=main)
+[![Build, Test and Deploy GumTree](https://github.com/GumTreeDiff/gumtree/actions/workflows/build-test-gumtree.yml/badge.svg)](https://github.com/GumTreeDiff/gumtree/actions/workflows/build-test-gumtree.yml)
 
 ## Description
 
