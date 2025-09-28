@@ -32,7 +32,6 @@ import org.snakeyaml.engine.v2.parser.Parser;
 import org.snakeyaml.engine.v2.parser.ParserImpl;
 import org.snakeyaml.engine.v2.scanner.StreamReader;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.util.Stack;
 
@@ -41,7 +40,7 @@ import static com.github.gumtreediff.tree.TypeSet.type;
 @Register(id = "yaml-snakeyaml", accept = {"\\.yml$", "\\.yaml$"}, priority = Registry.Priority.MAXIMUM)
 public class YamlTreeGenerator extends TreeGenerator {
     @Override
-    public TreeContext generate(Reader r) throws IOException {
+    public TreeContext generate(Reader r) {
         TreeContext ctx = new TreeContext();
         try {
             LoadSettings settings = LoadSettings.builder().build();

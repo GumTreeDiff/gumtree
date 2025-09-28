@@ -35,11 +35,10 @@ import static com.github.gumtreediff.tree.TypeSet.type;
 @Register(id = "json-jackson", accept = {"\\.json"}, priority = Registry.Priority.MAXIMUM)
 public class JsonTreeGenerator extends TreeGenerator {
     private Stack<Tree> trees;
-    private TreeContext ctx;
 
     @Override
     public TreeContext generate(Reader r) throws IOException {
-        ctx = new TreeContext();
+        TreeContext ctx = new TreeContext();
         trees = new Stack<>();
         JsonFactory factory = JsonFactory.builder().build();
         JsonParser p = factory.createParser(r);

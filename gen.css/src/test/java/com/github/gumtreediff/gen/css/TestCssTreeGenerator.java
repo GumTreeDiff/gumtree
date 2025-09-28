@@ -31,23 +31,21 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCssTreeGenerator {
     @Test
     public void testSimple() throws Exception {
-        Reader r = new StringReader("@import url(\"bluish.css\") projection, tv;\n"
+        String input = "@import url(\"bluish.css\") projection, tv;\n"
                 + "body {\n"
                 + "\tfont-size: 11pt;\n"
                 + "}\n"
                 + "ul li {\n"
                 + "\tbackground-color: black;\n"
-                + "}");
-        TreeContext ctx = new CssTreeGenerator().generateFrom().reader(r);
+                + "}";
+        TreeContext ctx = new CssTreeGenerator().generateFrom().string(input);
         Tree tree = ctx.getRoot();
         assertEquals(10, tree.getMetrics().size);
     }
 
     @Test
-    public void badSyntax() throws IOException {
+    public void badSyntax() {
         String input = ".foo \"toto {\nfont-size: 11pt;\n}";
-        assertThrows(SyntaxException.class, () -> {
-            TreeContext ct = new CssTreeGenerator().generateFrom().string(input);
-        });
+        assertThrows(SyntaxException.class, () -> new CssTreeGenerator().generateFrom().string(input));
     }
 }

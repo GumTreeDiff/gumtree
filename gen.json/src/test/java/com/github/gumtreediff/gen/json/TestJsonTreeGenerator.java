@@ -44,21 +44,21 @@ public class TestJsonTreeGenerator {
     }
 
     @Test
-    public void testSyntaxError1() throws IOException {
+    public void testSyntaxError1() {
         String input = "{ \"foo\": \"bar\" ";
         Assertions.assertThrows(SyntaxException.class,
                 () -> new JsonTreeGenerator().generateFrom().string(input));
     }
 
     @Test
-    public void testSyntaxError2() throws IOException {
+    public void testSyntaxError2() {
         String input = "{ foo: \"bar\" }";
         Assertions.assertThrows(SyntaxException.class,
                 () -> new JsonTreeGenerator().generateFrom().string(input));
     }
 
     @Test
-    public void testSyntaxError3() throws IOException {
+    public void testSyntaxError3() {
         String input = "{ \"foo\" = \"bar\" }";
         Assertions.assertThrows(SyntaxException.class,
                 () -> new JsonTreeGenerator().generateFrom().string(input));

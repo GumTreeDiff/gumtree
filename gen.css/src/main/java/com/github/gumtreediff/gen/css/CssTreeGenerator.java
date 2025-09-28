@@ -25,7 +25,6 @@ import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.io.LineReader;
 import com.github.gumtreediff.tree.TreeContext;
-import com.helger.css.ECSSVersion;
 import com.helger.css.decl.CascadingStyleSheet;
 import com.helger.css.decl.visit.CSSVisitor;
 import com.helger.css.handler.CSSHandler;
@@ -47,7 +46,6 @@ public class CssTreeGenerator extends TreeGenerator {
         p.setBrowserCompliantMode(false);
         try {
             CascadingStyleSheet sheet = CSSHandler.readCascadingStyleSheetFromNode(
-                    ECSSVersion.LATEST,
                     CSSReader.getDefaultInterpretErrorHandler(),
                     true,
                     p.styleSheet());

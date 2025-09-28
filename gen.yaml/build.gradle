@@ -7,5 +7,5 @@ description = 'GumTree tree generator for YAML code (SnakeYAML based).'
 
 dependencies {
 	implementation project(':core')
-	implementation 'org.snakeyaml:snakeyaml-engine:2.9'
+	implementation 'org.snakeyaml:snakeyaml-engine:2.10'
 }

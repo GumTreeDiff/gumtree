@@ -30,23 +30,19 @@ import com.helger.css.ICSSWriterSettings;
 import com.helger.css.decl.*;
 import com.helger.css.decl.visit.ICSSVisitor;
 import com.helger.css.writer.CSSWriterSettings;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.util.ArrayDeque;
 
 public class GtCssVisitor implements ICSSVisitor {
-    private TreeContext ctx;
-    private ArrayDeque<Tree> trees;
-    private LineReader lr;
-    private ICSSWriterSettings settings;
+    private final TreeContext ctx;
+    private final ArrayDeque<Tree> trees;
+    private final LineReader lr;
+    private final ICSSWriterSettings settings;
 
-    private CascadingStyleSheet sheet;
-
-    public GtCssVisitor(CascadingStyleSheet sheet, LineReader lr) throws IOException {
+    public GtCssVisitor(CascadingStyleSheet sheet, LineReader lr) {
         this.lr = lr;
         this.settings = new CSSWriterSettings();
-        this.sheet = sheet;
         this.ctx = new TreeContext();
         this.trees = new ArrayDeque<>();
         Tree root = this.ctx.createTree(symbol(sheet), Tree.NO_LABEL);
@@ -172,6 +168,12 @@ public class GtCssVisitor implements ICSSVisitor {
 
     @Override
     public void onEndSupportsRule(@Nonnull CSSSupportsRule aSupportsRule) {}
+
+    @Override
+    public void onBeginLayerRule(@Nonnull CSSLayerRule aLayerRule) {}
+
+    @Override
+    public void onEndLayerRule(@Nonnull CSSLayerRule aLayerRule) {}
 
     @Override
     public void onUnknownRule(@Nonnull CSSUnknownRule aUnknownRule) {}

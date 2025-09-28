@@ -7,5 +7,6 @@ description = 'GumTree tree generator for CSS code based on ph-css.'
 
 dependencies {
 	implementation project(':core')
-	implementation 'com.helger:ph-css:7.0.3'
+	implementation 'com.helger:ph-css:8.0.0'
+    implementation 'jakarta.annotation:jakarta.annotation-api:3.0.0'
 }

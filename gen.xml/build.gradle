@@ -7,5 +7,5 @@ description = 'GumTree tree generator for XML code (JSoup based).'
 
 dependencies {
     implementation project(':core')
-    implementation 'org.jsoup:jsoup:1.18.3'
+    implementation 'org.jsoup:jsoup:1.21.2'
 }
