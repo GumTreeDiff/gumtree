@@ -11,7 +11,7 @@ nexusPublishing {
     }
 }
 
-def projectsVersion = '4.0.0-beta6'
+def projectsVersion = '4.0.0-beta7-SNAPSHOT'
 
 allprojects {
     group = 'com.github.gumtreediff'
