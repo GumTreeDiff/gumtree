@@ -1,6 +1,7 @@
 plugins {
     id 'java-conv'
-    id "com.github.ben-manes.versions" version '0.52.0'
+    id 'maven-conv'
+    // id "com.github.ben-manes.versions" version '0.52.0'
 }
 
 description = 'GumTree tree generator for tree-sitter-ng.'
