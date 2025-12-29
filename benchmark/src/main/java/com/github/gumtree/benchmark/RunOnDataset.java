@@ -19,9 +19,7 @@
 
 package com.github.gumtree.benchmark;
 
-import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.actions.EditScriptGenerator;
-import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
+import com.github.gumtreediff.actions.*;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.SyntaxException;
@@ -30,7 +28,6 @@ import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
 import com.github.gumtreediff.gen.treesitterng.PythonTreeSitterNgTreeGenerator;
 import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.matchers.*;
-import com.github.gumtreediff.matchers.heuristic.RwsDiffMatcher;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Pair;
 
@@ -86,8 +83,6 @@ public class RunOnDataset {
         if (configurations.isEmpty()) {
             configurations.add(new MatcherConfig("simple",
                     CompositeMatchers.SimpleGumtree::new, mediumMinSim()));
-            configurations.add(new MatcherConfig("rws",
-                    RwsDiffMatcher::new, new GumtreeProperties()));
             //configurations.add(new MatcherConfig("auto",
                     //CompositeMatchers.SimpleGumtreeAutoMt::new, new GumtreeProperties()));
             //configurations.add(new MatcherConfig("hybrid-100",
