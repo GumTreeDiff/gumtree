@@ -133,6 +133,21 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
             return readFile(pair.second.getAbsolutePath(), Charset.defaultCharset());
         });
+        post("/pair-files", (request, response) -> {
+            String srcPath = request.queryParams("src");
+            String dstPath = request.queryParams("dst");
+            File srcFile = new File(comparator.getSrc().toFile(), srcPath);
+            File dstFile = new File(comparator.getDst().toFile(), dstPath);
+            comparator.pairFiles(srcFile, dstFile);
+            response.redirect("/list");
+            return "";
+        });
+        post("/unpair-files", (request, response) -> {
+            int id = Integer.parseInt(request.queryParams("id"));
+            comparator.unpairFiles(id);
+            response.redirect("/list");
+            return "";
+        });
         get("/quit", (request, response) -> {
             System.exit(0);
             return "";
