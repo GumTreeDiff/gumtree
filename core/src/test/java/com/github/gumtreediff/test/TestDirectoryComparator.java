@@ -22,6 +22,8 @@ package com.github.gumtreediff.test;
 import com.github.gumtreediff.io.DirectoryComparator;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDirectoryComparator {
@@ -69,5 +71,51 @@ public class TestDirectoryComparator {
             DirectoryComparator cmp = new DirectoryComparator("src/test/resources/action_v0.xml",
                     "src/test/resources");
         });
+    }
+
+    @Test
+    public void testPairAndUnpairFiles() {
+        DirectoryComparator cmp = new DirectoryComparator("src/test/resources/diff/left",
+                "src/test/resources/diff/right");
+        cmp.compare();
+        assertEquals(1, cmp.getModifiedFiles().size());
+        assertEquals(2, cmp.getDeletedFiles().size());
+        assertEquals(2, cmp.getAddedFiles().size());
+
+        File srcFile = cmp.getDeletedFiles().stream()
+                .filter(f -> f.getName().equals("renamedLeft")).findFirst().get();
+        File dstFile = cmp.getAddedFiles().stream()
+                .filter(f -> f.getName().equals("renamedRight")).findFirst().get();
+
+        cmp.pairFiles(srcFile, dstFile);
+        assertEquals(2, cmp.getModifiedFiles().size());
+        assertEquals(1, cmp.getDeletedFiles().size());
+        assertEquals(1, cmp.getAddedFiles().size());
+        assertEquals("renamedLeft", cmp.getModifiedFiles().get(1).first.getName());
+        assertEquals("renamedRight", cmp.getModifiedFiles().get(1).second.getName());
+
+        cmp.unpairFiles(1);
+        assertEquals(1, cmp.getModifiedFiles().size());
+        assertEquals(2, cmp.getDeletedFiles().size());
+        assertEquals(2, cmp.getAddedFiles().size());
+    }
+
+    @Test
+    public void testPairFilesInvalidArguments() {
+        DirectoryComparator cmp = new DirectoryComparator("src/test/resources/diff/left",
+                "src/test/resources/diff/right");
+        cmp.compare();
+
+        File validDeleted = cmp.getDeletedFiles().iterator().next();
+        File validAdded = cmp.getAddedFiles().iterator().next();
+
+        assertThrows(IllegalArgumentException.class, () ->
+                cmp.pairFiles(new File("nonexistent"), validAdded));
+        assertThrows(IllegalArgumentException.class, () ->
+                cmp.pairFiles(validDeleted, new File("nonexistent")));
+        assertThrows(IllegalArgumentException.class, () ->
+                cmp.unpairFiles(-1));
+        assertThrows(IllegalArgumentException.class, () ->
+                cmp.unpairFiles(999));
     }
 }

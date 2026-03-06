@@ -64,7 +64,8 @@ public class DirectoryDiffView {
                                                 span("" + comparator.getDeletedFiles().size()).withClasses("badge", "badge-secondary"))
                                     ).withClasses("card-title", "mb-0")
                                 ).withClasses("card-header", "bg-danger"),
-                                iff(comparator.getDeletedFiles().size() > 0, AddedOrDeletedFiles.build(comparator.getDeletedFiles(), comparator.getSrc()))
+                                iff(comparator.getDeletedFiles().size() > 0,
+                                        DeletedFiles.build(comparator.getDeletedFiles(), comparator.getSrc()))
                             ).withClass("card")
                         ).withClass("col"),
                         div(
@@ -75,7 +76,8 @@ public class DirectoryDiffView {
                                                 span("" + comparator.getAddedFiles().size()).withClasses("badge", "badge-secondary"))
                                     ).withClasses("card-title", "mb-0")
                                 ).withClasses("card-header", "bg-success"),
-                                    iff(comparator.getAddedFiles().size() > 0, AddedOrDeletedFiles.build(comparator.getAddedFiles(), comparator.getSrc()))
+                                    iff(comparator.getAddedFiles().size() > 0,
+                                            AddedFiles.build(comparator.getAddedFiles(), comparator.getDst()))
                             ).withClass("card")
                         ).withClass("col")
                     ).withClasses("row", "mb-3")
@@ -88,34 +90,75 @@ public class DirectoryDiffView {
         public static Tag build(List<Pair<File, File>> files, DirectoryComparator comparator) {
             return table(
                 tbody(
-                    each(files, (id, file) -> tr(
-                        td(comparator.getSrc().toAbsolutePath().relativize(file.first.toPath().toAbsolutePath()).toString()),
-                        td(
-                            div(
+                    each(files, (id, file) -> {
+                        String srcRelPath = comparator.getSrc().toAbsolutePath()
+                                .relativize(file.first.toPath().toAbsolutePath()).toString();
+                        String dstRelPath = comparator.getDst().toAbsolutePath()
+                                .relativize(file.second.toPath().toAbsolutePath()).toString();
+                        boolean isRenamed = !srcRelPath.equals(dstRelPath);
+                        return tr(
+                            td(
+                                isRenamed
+                                    ? join(text(srcRelPath), rawHtml(" &rarr; "), text(dstRelPath))
+                                    : text(srcRelPath)
+                            ),
+                            td(
                                 div(
-                                    iff(TreeGenerators.getInstance().hasGeneratorForFile(file.first.getAbsolutePath()), join(
-                                            a("monaco").withHref("/monaco-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
-                                            a("classic").withHref("/vanilla-diff/" + id).withClasses("btn", "btn-primary", "btn-sm")
-                                        )
-                                    ),
-                                    a("monaco-native").withHref("/monaco-native-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
-                                    a("mergely").withHref("/mergely-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
-                                    a("raw").withHref("/raw-diff/" + id).withClasses("btn", "btn-primary", "btn-sm")
-                                ).withClass("btn-group")
-                            ).withClasses("btn-toolbar", "justify-content-end")
-                        )
-                    ))
+                                    div(
+                                        iff(TreeGenerators.getInstance().hasGeneratorForFile(file.first.getAbsolutePath()), join(
+                                                a("monaco").withHref("/monaco-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
+                                                a("classic").withHref("/vanilla-diff/" + id).withClasses("btn", "btn-primary", "btn-sm")
+                                            )
+                                        ),
+                                        a("monaco-native").withHref("/monaco-native-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
+                                        a("mergely").withHref("/mergely-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
+                                        a("raw").withHref("/raw-diff/" + id).withClasses("btn", "btn-primary", "btn-sm"),
+                                        iff(isRenamed,
+                                            button("unpair").withClasses("btn", "btn-warning", "btn-sm", "ms-2")
+                                                    .attr("onclick", "unpairFiles(" + id + ")"))
+                                    ).withClass("btn-group")
+                                ).withClasses("btn-toolbar", "justify-content-end")
+                            )
+                        );
+                    })
                 )
             ).withClasses("table", "card-table", "table-striped", "table-condensed", "mb-0");
         }
     }
 
-    private static class AddedOrDeletedFiles  {
+    private static class DeletedFiles {
 
         public static Tag build(Set<File> files, Path root) {
             return table(
                 tbody(
-                    each(files, file -> tr(td(root.relativize(file.toPath()).toString())))
+                    each(files, file -> {
+                        String relPath = root.relativize(file.toPath()).toString();
+                        return tr(
+                            td(relPath)
+                        ).attr("draggable", "true")
+                         .attr("data-path", relPath)
+                         .attr("data-side", "deleted")
+                         .withClass("draggable-file");
+                    })
+                )
+            ).withClasses("table", "card-table", "table-striped", "table-condensed", "mb-0");
+        }
+    }
+
+    private static class AddedFiles {
+
+        public static Tag build(Set<File> files, Path root) {
+            return table(
+                tbody(
+                    each(files, file -> {
+                        String relPath = root.relativize(file.toPath()).toString();
+                        return tr(
+                            td(relPath)
+                        ).attr("draggable", "true")
+                         .attr("data-path", relPath)
+                         .attr("data-side", "added")
+                         .withClass("draggable-file");
+                    })
                 )
             ).withClasses("table", "card-table", "table-striped", "table-condensed", "mb-0");
         }
@@ -130,7 +173,12 @@ public class DirectoryDiffView {
                 title("GumTree"),
                 link().withRel("stylesheet").withType("text/css").withHref(WebDiff.BOOTSTRAP_CSS_URL),
                 script().withType("text/javascript").withSrc(WebDiff.BOOTSTRAP_JS_URL),
-                script().withType("text/javascript").withSrc("/dist/shortcuts.js")
+                script().withType("text/javascript").withSrc("/dist/shortcuts.js"),
+                script().withType("text/javascript").withSrc("/dist/dragdrop.js").attr("defer", "defer"),
+                rawHtml("<style>"
+                        + "tr.draggable-file { transition: background-color 0.15s; }"
+                        + "tr.drag-over { background-color: #ffc107 !important; }"
+                        + "</style>")
             );
         }
     }

@@ -128,6 +128,22 @@ public class DirectoryComparator {
         return addedFiles;
     }
 
+    public void pairFiles(File srcFile, File dstFile) {
+        if (!deletedFiles.remove(srcFile))
+            throw new IllegalArgumentException("File " + srcFile + " is not in the deleted files set.");
+        if (!addedFiles.remove(dstFile))
+            throw new IllegalArgumentException("File " + dstFile + " is not in the added files set.");
+        modifiedFiles.add(new Pair<>(srcFile, dstFile));
+    }
+
+    public void unpairFiles(int id) {
+        if (id < 0 || id >= modifiedFiles.size())
+            throw new IllegalArgumentException("Invalid pair id: " + id);
+        Pair<File, File> pair = modifiedFiles.remove(id);
+        deletedFiles.add(pair.first);
+        addedFiles.add(pair.second);
+    }
+
     private File toSrcFile(String s) {
         return new File(src.toFile(), s);
     }
