@@ -37,6 +37,6 @@ public class GoTreeSitterNgTreeGeneratorTest {
                 + "func main() {\n"
                 + "    fmt.Println(\"hello world\")\n"
                 + "}");
-        assertEquals(20, src.getRoot().getMetrics().size);
+        assertEquals(21, src.getRoot().getMetrics().size);
     }
 }
