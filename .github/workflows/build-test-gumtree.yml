@@ -36,7 +36,7 @@ jobs:
           cache: 'pip'
       - run: pip install pandas plotnine scipy jupyter
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
       - name: build gumtree and run benchmarks
         run: ./gradlew build :benchmark:runOnDefects4J :benchmark:runOnGhJava :benchmark:execNotebook
       - name: upload benchmarks results
