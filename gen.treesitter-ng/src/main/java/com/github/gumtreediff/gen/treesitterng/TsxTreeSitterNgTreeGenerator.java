@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2021 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2026 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
 package com.github.gumtreediff.gen.treesitterng;
@@ -23,20 +23,19 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.utils.Registry;
 import org.treesitter.TSLanguage;
 import org.treesitter.TreeSitterTsx;
-import org.treesitter.TreeSitterTypescript;
 
 @Register(id = "tsx-treesitter-ng", accept = {"\\.tsx$"}, priority = Registry.Priority.MAXIMUM)
 public final class TsxTreeSitterNgTreeGenerator extends AbstractTreeSitterNgGenerator {
-    public static final TSLanguage TYPESCRIPT_TREE_SITTER_LANGUAGE = new TreeSitterTsx();
-    private static final String TYPESCRIPT_LANGUAGE_NAME = "tsx";
+    public static final TSLanguage TSX_TREE_SITTER_LANGUAGE = new TreeSitterTsx();
+    private static final String TSX_LANGUAGE_NAME = "tsx";
 
     @Override
     protected TSLanguage getTreeSitterLanguage() {
-        return TYPESCRIPT_TREE_SITTER_LANGUAGE;
+        return TSX_TREE_SITTER_LANGUAGE;
     }
 
     @Override
     protected String getLanguageName() {
-        return TYPESCRIPT_LANGUAGE_NAME;
+        return TSX_LANGUAGE_NAME;
     }
 }

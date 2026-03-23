@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree. If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2024 Jean-Rémy Falleri <jr.falleri@gmail.com>
+ * Copyright 2026 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 package com.github.gumtreediff.gen.treesitterng;
 
@@ -30,7 +30,8 @@ public class TsxTreeSitterNgTreeGeneratorTest {
 
     @Test
     public void testHelloWorld() throws IOException {
-        TreeContext src = generator.generateFrom().string("const root = ReactDOM.createRoot(document.getElementById('root'));\n" +
+        TreeContext src = generator.generateFrom().string(
+                "const root = ReactDOM.createRoot(document.getElementById('root'));\n" +
                 "root.render(<h1>Hello, world!</h1>);");
         assertEquals(47, src.getRoot().getMetrics().size);
     }
