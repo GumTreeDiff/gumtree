@@ -40,7 +40,7 @@ jobs:
       - name: build gumtree and run benchmarks
         run: ./gradlew build :benchmark:runOnDefects4J :benchmark:runOnGhJava :benchmark:execNotebook
       - name: upload benchmarks results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: benchmark-report
           path: benchmark/build/reports/analysis.html
