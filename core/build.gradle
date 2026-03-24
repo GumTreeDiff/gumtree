@@ -10,7 +10,7 @@ dependencies {
 	implementation 'com.github.mpkorstanje:simmetrics-core:4.1.1'
 	implementation 'it.unimi.dsi:fastutil:8.5.12'
 	implementation 'com.google.code.gson:gson:2.13.2'
-	implementation 'org.jgrapht:jgrapht-core:1.5.1'
+	implementation 'org.jgrapht:jgrapht-core:1.5.2'
 }
 
 test {
