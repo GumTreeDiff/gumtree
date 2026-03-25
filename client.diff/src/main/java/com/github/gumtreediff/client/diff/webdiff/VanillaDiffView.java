@@ -112,13 +112,14 @@ public class VanillaDiffView {
         private static String readFile(String resourceName)  throws IOException {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
             InputStream inputStream = classloader.getResourceAsStream(resourceName);
-            InputStreamReader streamReader = new InputStreamReader(inputStream, Charset.defaultCharset());
-            BufferedReader reader = new BufferedReader(streamReader);
-            String content = "";
-            for (String line; (line = reader.readLine()) != null;) {
-                content += line + "\n";
+            try (InputStreamReader streamReader = new InputStreamReader(inputStream, Charset.defaultCharset())) {
+                BufferedReader reader = new BufferedReader(streamReader);
+                String content = "";
+                for (String line; (line = reader.readLine()) != null;) {
+                    content += line + "\n";
+                }
+                return content;
             }
-            return content;
         }
     }
 }
