@@ -21,12 +21,12 @@ dependencies {
 }
 
 shadowJar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     archiveBaseName.set('gumtree')
     archiveClassifier.set('')
     archiveVersion.set('')
-    mergeServiceFiles()
     mergeServiceFiles {
-        path = 'META-INF/annotations'
+        include('META-INF/annotations/*')
     }
 }
 
