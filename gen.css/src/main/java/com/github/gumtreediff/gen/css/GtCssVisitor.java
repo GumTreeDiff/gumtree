@@ -31,6 +31,7 @@ import com.helger.css.decl.*;
 import com.helger.css.decl.visit.ICSSVisitor;
 import com.helger.css.writer.CSSWriterSettings;
 import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayDeque;
 
@@ -100,6 +101,9 @@ public class GtCssVisitor implements ICSSVisitor {
         }
         */
     }
+
+    @Override
+    public void onPropertyRuleDeclaration(@NonNull CSSPropertyRuleDeclaration aDeclaration) {}
 
     @Override
     public void onBeginStyleRule(@Nonnull CSSStyleRule s) {
@@ -174,6 +178,18 @@ public class GtCssVisitor implements ICSSVisitor {
 
     @Override
     public void onEndLayerRule(@Nonnull CSSLayerRule aLayerRule) {}
+
+    @Override
+    public void onBeginPropertyRule(@NonNull CSSPropertyRule aPropertyRule) {}
+
+    @Override
+    public void onEndPropertyRule(@NonNull CSSPropertyRule aPropertyRule) {}
+
+    @Override
+    public void onBeginNestedDeclarations(@NonNull CSSNestedDeclarations aNestedDeclarations) {}
+
+    @Override
+    public void onEndNestedDeclarations(@NonNull CSSNestedDeclarations aNestedDeclarations) {}
 
     @Override
     public void onUnknownRule(@Nonnull CSSUnknownRule aUnknownRule) {}
