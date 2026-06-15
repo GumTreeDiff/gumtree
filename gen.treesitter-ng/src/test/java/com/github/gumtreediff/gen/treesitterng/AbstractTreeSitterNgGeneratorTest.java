@@ -18,8 +18,11 @@
  */
 package com.github.gumtreediff.gen.treesitterng;
 
+import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.TreeContext;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,47 @@ import static com.github.gumtreediff.gen.treesitterng.AbstractTreeSitterNgGenera
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AbstractTreeSitterNgGeneratorTest {
+    private final PythonTreeSitterNgTreeGenerator generator = new PythonTreeSitterNgTreeGenerator();
+
+    @Test
+    public void OffsetConsistency_testLFOffsets() throws IOException {
+        // Line 1: "x = 1\n" (5 chars + 1 LF = 6 bytes)
+        // Line 2: "y = 2"
+        String content = "x = 1\ny = 2";
+        TreeContext ctx = generator.generateFrom().string(content);
+
+        // Find the second assignment (y = 2)
+        // Root (module) -> children[1] (expression_statement)
+        Tree yAssignment = ctx.getRoot().getChild(1);
+        assertEquals("expression_statement", yAssignment.getType().name);
+        assertEquals(6, yAssignment.getPos(), "Line 2 should start at byte offset 6 for LF content");
+    }
+
+    @Test
+    public void OffsetConsistency_testCRLFOffsets() throws IOException {
+        // Line 1: "x = 1\r\n" (5 chars + 2 CRLF = 7 bytes)
+        // Line 2: "y = 2"
+        String content = "x = 1\r\ny = 2";
+        TreeContext ctx = generator.generateFrom().string(content);
+
+        Tree yAssignment = ctx.getRoot().getChild(1);
+        assertEquals("expression_statement", yAssignment.getType().name);
+        assertEquals(7, yAssignment.getPos(), "Line 2 should start at byte offset 7 for CRLF content");
+    }
+
+    @Test
+    public void OffsetConsistency_testMultiByteOffsets() throws IOException {
+        // Line 1: "# 🐍\n"
+        // '#' (1) + ' ' (1) + '🐍' (4 bytes in UTF-8) + '\n' (1) = 7 bytes total
+        // Line 2: "x = 1"
+        String content = "# 🐍\nx = 1";
+        TreeContext ctx = generator.generateFrom().string(content);
+
+        Tree xAssignment = ctx.getRoot().getChild(1);
+        assertEquals("expression_statement", xAssignment.getType().name);
+        assertEquals(7, xAssignment.getPos(), "Line 2 should start at byte offset 7 after a 4-byte emoji and LF");
+    }
+
     @Test
     public void testMatchNodeOrAncestorTypes() {
         MockTypeOnlyTreeSitterNode root = new MockTypeOnlyTreeSitterNode();
