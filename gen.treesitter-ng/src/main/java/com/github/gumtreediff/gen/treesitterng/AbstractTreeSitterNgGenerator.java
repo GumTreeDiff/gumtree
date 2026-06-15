@@ -28,10 +28,12 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.BufferedReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
 
+    private static final String LF = "\n";
     private static final String RULES_FILE = "rules.yml";
 
     private static final String YAML_IGNORED = "ignored";
@@ -47,16 +49,22 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
     }
 
     @Override
-    protected TreeContext generate(Reader r) {
+    protected TreeContext generate(Reader r) throws java.io.IOException {
         TSParser parser = new TSParser();
         TSLanguage language = getTreeSitterLanguage();
         parser.setLanguage(language);
-        BufferedReader bufferedReader = new BufferedReader(r);
-        List<String> contentLines = bufferedReader.lines().toList();
-        if (contentLines.isEmpty())
+
+        StringBuilder sb = new StringBuilder();
+        char[] buf = new char[8192];
+        int n;
+        while ((n = r.read(buf)) != -1) {
+            sb.append(buf, 0, n);
+        }
+        String content = sb.toString();
+        if (content.isEmpty())
             return emptyContext();
 
-        String content = String.join(System.lineSeparator(), contentLines);
+        List<String> contentLines = Arrays.asList(content.split(LF, -1));
         TSTree tree = parser.parseString(null, content);
         Map<String, Object> currentRule = RULES.getOrDefault(getLanguageName(), new HashMap<>());
         return generateFromTreeSitterTree(contentLines, currentRule, tree);
@@ -70,7 +78,7 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         List<String> substringLines;
         // tree-sitter handles string by byte array, so we need this.
         String startRowStr = contentLines.get(startRow);
-        byte[] startRowBytes = startRowStr.getBytes();
+        byte[] startRowBytes = startRowStr.getBytes(StandardCharsets.UTF_8);
         if (startRow == endRow) {
             // endColumn == startRowBytes.length + 1 when the label in tree-sitter contains line separator
             if (endColumn == startRowBytes.length + 1) {
@@ -78,20 +86,20 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
             }
             else {
                 substringLines = Collections.singletonList(new String(
-                        startRowBytes, startColumn, endColumn - startColumn));
+                        startRowBytes, startColumn, endColumn - startColumn, StandardCharsets.UTF_8));
             }
         }
         else {
             substringLines = new ArrayList<>();
             String endRowStr = contentLines.get(endRow);
-            byte[] endRowBytes = endRowStr.getBytes();
+            byte[] endRowBytes = endRowStr.getBytes(StandardCharsets.UTF_8);
             String startLineSubstring;
             if (startColumn > startRowBytes.length) {
                 // usually, line separator is not the start char of a tree node label
                 // if this situation happened, just put an empty string at start
                 startLineSubstring = "";
             } else {
-                startLineSubstring = new String(startRowBytes, 0, startColumn);
+                startLineSubstring = new String(startRowBytes, 0, startColumn, StandardCharsets.UTF_8);
             }
             List<String> middleLines = contentLines.subList(startRow + 1, endRow);
             String endLineSubstring;
@@ -99,13 +107,13 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
                 endLineSubstring = endRowStr;
             }
             else {
-                endLineSubstring = new String(endRowBytes, 0, endColumn);
+                endLineSubstring = new String(endRowBytes, 0, endColumn, StandardCharsets.UTF_8);
             }
             substringLines.add(startLineSubstring);
             substringLines.addAll(middleLines);
             substringLines.add(endLineSubstring);
         }
-        return String.join(System.lineSeparator(), substringLines);
+        return String.join(LF, substringLines);
     }
 
     private static int calculateOffset(List<String> contentLines, TSPoint point) {
@@ -113,7 +121,10 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         int startColumn = point.getColumn();
         int offset = 0;
         for (int i = 0; i < startRow; i++) {
-            offset += contentLines.get(i).length() + System.lineSeparator().length();
+            // Each line in contentLines (except maybe the last) was terminated by LF (\n).
+            // If the original was CRLF, the CR (\r) is still at the end of the line string.
+            // .getBytes().length + 1 correctly counts [LineContent] + [LF].
+            offset += contentLines.get(i).getBytes(StandardCharsets.UTF_8).length + 1;
         }
         offset += startColumn;
         return offset;
