@@ -123,8 +123,9 @@ public abstract class AbstractTreeSitterNgGenerator extends TreeGenerator {
         for (int i = 0; i < startRow; i++) {
             // Each line in contentLines (except maybe the last) was terminated by LF (\n).
             // If the original was CRLF, the CR (\r) is still at the end of the line string.
-            // .getBytes().length + 1 correctly counts [LineContent] + [LF].
-            offset += contentLines.get(i).getBytes(StandardCharsets.UTF_8).length + 1;
+            // offset must be a char (UTF-16 code unit) index, matching how consumers (e.g.
+            // VanillaDiffHtmlBuilder) walk the source, so use .length() and not byte length.
+            offset += contentLines.get(i).length() + 1;
         }
         offset += startColumn;
         return offset;

@@ -61,14 +61,17 @@ public class AbstractTreeSitterNgGeneratorTest {
     @Test
     public void testMultiByteOffsetConsistency() throws IOException {
         // Line 1: "# 🐍\n"
-        // '#' (1) + ' ' (1) + '🐍' (4 bytes in UTF-8) + '\n' (1) = 7 bytes total
+        // '#' (1) + ' ' (1) + '🐍' (2 UTF-16 chars, surrogate pair) + '\n' (1) = 5 chars total
         // Line 2: "x = 1"
+        // Offsets must be char-based (UTF-16 code units) to match how the rest of GumTree
+        // (e.g. AbstractJdtVisitor, VanillaDiffHtmlBuilder) indexes source text, not UTF-8 bytes.
         String content = "# 🐍\nx = 1";
         TreeContext ctx = generator.generateFrom().string(content);
 
         Tree xAssignment = ctx.getRoot().getChild(1);
         assertEquals("expression_statement", xAssignment.getType().name);
-        assertEquals(7, xAssignment.getPos(), "Line 2 should start at byte offset 7 after a 4-byte emoji and LF");
+        assertEquals(5, xAssignment.getPos(),
+                "Line 2 should start at char offset 5 after a surrogate-pair emoji and LF");
     }
 
     @Test
