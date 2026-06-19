@@ -33,7 +33,7 @@ public class AbstractTreeSitterNgGeneratorTest {
     private final PythonTreeSitterNgTreeGenerator generator = new PythonTreeSitterNgTreeGenerator();
 
     @Test
-    public void OffsetConsistency_testLFOffsets() throws IOException {
+    public void testLfOffsetConsistency() throws IOException {
         // Line 1: "x = 1\n" (5 chars + 1 LF = 6 bytes)
         // Line 2: "y = 2"
         String content = "x = 1\ny = 2";
@@ -47,7 +47,7 @@ public class AbstractTreeSitterNgGeneratorTest {
     }
 
     @Test
-    public void OffsetConsistency_testCRLFOffsets() throws IOException {
+    public void testCrlfOffsetConsistency() throws IOException {
         // Line 1: "x = 1\r\n" (5 chars + 2 CRLF = 7 bytes)
         // Line 2: "y = 2"
         String content = "x = 1\r\ny = 2";
@@ -59,7 +59,7 @@ public class AbstractTreeSitterNgGeneratorTest {
     }
 
     @Test
-    public void OffsetConsistency_testMultiByteOffsets() throws IOException {
+    public void testMultiByteOffsetConsistency() throws IOException {
         // Line 1: "# 🐍\n"
         // '#' (1) + ' ' (1) + '🐍' (4 bytes in UTF-8) + '\n' (1) = 7 bytes total
         // Line 2: "x = 1"
