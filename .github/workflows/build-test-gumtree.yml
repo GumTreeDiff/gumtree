@@ -30,7 +30,7 @@ jobs:
         id: version
         run: echo "VERSION=$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
         shell: bash
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
           cache: 'pip'
