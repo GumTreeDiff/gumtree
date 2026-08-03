@@ -98,7 +98,7 @@ jobs:
         env:
           SECRET: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: login to Docker Hub
-        uses: docker/login-action@v4.5.2
+        uses: docker/login-action@v4.6.0
         if: (steps.checksecrets.outputs.secretspresent == 'true')
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
