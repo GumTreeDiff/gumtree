@@ -20,7 +20,8 @@ tasks.register('execNotebook', Exec) {
 tasks.register('runOnDefects4J', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args = [project.layout.projectDirectory.dir("datasets/defects4j"), "${project.layout.buildDirectory.get()}/reports/defects4j.csv"]
+    args = [project.layout.projectDirectory.dir("datasets/defects4j"), "${project.layout.buildDirectory.get()}/reports/defects4j.csv"] +
+            providers.gradleProperty("matchers").map { it.split(",").toList() }.getOrElse([])
 }
 
 tasks.register('runOnGhJava', JavaExec) {
