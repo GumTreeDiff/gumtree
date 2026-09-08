@@ -30,20 +30,15 @@ jobs:
         id: version
         run: echo "VERSION=$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
         shell: bash
-      - uses: actions/setup-python@v7
-        with:
-          python-version: '3.12'
-          cache: 'pip'
-      - run: pip install pandas plotnine scipy jupyter
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6.3.0
       - name: build gumtree and run benchmarks
-        run: ./gradlew build :benchmark:runOnDefects4J :benchmark:runOnGhJava :benchmark:execNotebook
+        run: ./gradlew build :benchmark:runBenchmark -Pbenchmarks=d4j,ghj
       - name: upload benchmarks results
         uses: actions/upload-artifact@v7
         with:
           name: benchmark-report
-          path: benchmark/build/reports/analysis.html
+          path: benchmark/build/reports/benchmark/analysis.html
       - name: upload snapshot package
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
