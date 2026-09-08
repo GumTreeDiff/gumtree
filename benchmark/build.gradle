@@ -12,31 +12,92 @@ dependencies {
 jar.enabled = false
 run.enabled = false
 
-tasks.register('execNotebook', Exec) {
-    // jupyter nbconvert --execute --to html benchmark.ipynb
-    commandLine "jupyter", "nbconvert", "--execute", "--to", "html", "${project.layout.projectDirectory.file("src/main/python/analysis.ipynb")}", "--output-dir='${project.layout.buildDirectory.get()}/reports'"
-}
+def datasetDefinitions = [
+    runOnDefects4J: [
+        dir: 'datasets/defects4j',
+        aliases: ['defects4j', 'd4j']
+    ],
+    runOnGhJava: [
+        dir: 'datasets/gh-java',
+        aliases: ['gh-java', 'ghj']
+    ],
+    runOnGhPython: [
+        dir: 'datasets/gh-python',
+        aliases: ['gh-python', 'ghp']
+    ],
+    runOnBugsInPy: [
+        dir: 'datasets/bugsinpy',
+        aliases: ['bugsinpy', 'bip']
+    ]
+]
 
-tasks.register('runOnDefects4J', JavaExec) {
+tasks.register('listMatchers', JavaExec) {
+    group = 'benchmark'
+    description = 'Lists all available benchmark matcher presets and registered IDs.'
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args = [project.layout.projectDirectory.dir("datasets/defects4j"), "${project.layout.buildDirectory.get()}/reports/defects4j.csv"]
+    args = ['--list-matchers']
 }
 
-tasks.register('runOnGhJava', JavaExec) {
+tasks.register('runBenchmark', JavaExec) {
+    group = 'benchmark'
+    description = 'Runs benchmarks on selected or all datasets (use -Pbenchmarks=d4j,bip,... and -Pmatchers=...).'
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args = [project.layout.projectDirectory.dir("datasets/gh-java"), "${project.layout.buildDirectory.get()}/reports/gh-java.csv"]
+    mainClass = 'com.github.gumtree.benchmark.RunBenchmarks'
+    doFirst {
+        file("${project.layout.buildDirectory.get()}/reports").mkdirs()
+        def selectedBenchmarks = project.findProperty('benchmarks') ?: project.findProperty('datasets') ?: 'all'
+        def requested = selectedBenchmarks.toString().split(',').collect { it.trim().toLowerCase() }.findAll { !it.isEmpty() }
+        def tasksToRun = []
+        if (requested.contains('all')) {
+            tasksToRun = datasetDefinitions.keySet() as List
+        } else {
+            datasetDefinitions.each { taskName, defn ->
+                if (requested.contains(taskName.toLowerCase()) || defn.aliases.any { requested.contains(it) }) {
+                    tasksToRun.add(taskName)
+                }
+            }
+            if (tasksToRun.isEmpty()) {
+                throw new IllegalArgumentException("Unknown benchmark(s): ${requested}. Available: all, defects4j (d4j), bugsinpy (bip), gh-java (ghjava), gh-python (ghpython)")
+            }
+        }
+        def taskArgs = [ "${project.layout.buildDirectory.get()}/reports/benchmark-${new Date().format('yyyyMMdd-HHmmssSSS')}.csv" ]
+        taskArgs.addAll(tasksToRun.collect { project.layout.projectDirectory.dir(datasetDefinitions[it].dir) })
+        taskArgs.add('--matchers')
+        if (project.hasProperty('matchers')) {
+            taskArgs.addAll(project.property('matchers').toString().split(',')
+                    .collect { it.trim() }.findAll { !it.isEmpty() })
+        } else {
+            taskArgs.add('simple')
+        }
+        setArgs(taskArgs)
+        if (project.hasProperty('limit')) {
+            systemProperty 'gumtree.benchmark.limit', project.property('limit')
+        }
+    }
 }
 
-tasks.register('runOnGhPython', JavaExec) {
+tasks.register('analyzeBenchmark', JavaExec) {
+    group = 'benchmark'
+    description = 'Analyzes benchmark CSV files and outputs a standalone HTML report.'
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args = [project.layout.projectDirectory.dir("datasets/gh-python"), "${project.layout.buildDirectory.get()}/reports/gh-java.csv"]
+    mainClass = 'com.github.gumtree.benchmark.AnalyzeBenchmarks'
+    onlyIf {
+        !tasks.named('runBenchmark').get().state.failure
+    }
+    doFirst {
+        file("${project.layout.buildDirectory.get()}/reports").mkdirs()
+    }
+    args = ["${project.layout.buildDirectory.get()}/reports",
+            "${project.layout.buildDirectory.get()}/reports/analysis.html"]
 }
 
-tasks.register('runOnBugsInPy', JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
-    args = [project.layout.projectDirectory.dir("datasets/gh-python"), "${project.layout.buildDirectory.get()}/reports/bugsinpy.csv"]
+tasks.named('runBenchmark').configure {
+    finalizedBy 'analyzeBenchmark'
+}
+
+tasks.register('benchmarkAndAnalyze') {
+    group = 'benchmark'
+    description = 'Runs selected benchmarks and then analyzes the results.'
+    dependsOn 'runBenchmark'
 }

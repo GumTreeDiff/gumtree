@@ -30,14 +30,13 @@ import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.matchers.*;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Pair;
+import org.atteo.classindex.ClassIndex;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class RunOnDataset {
@@ -46,11 +45,20 @@ public class RunOnDataset {
     private static FileWriter OUTPUT;
     private static final List<MatcherConfig> configurations = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException {
+        configurations.clear();
+        initMatchers();
+
+        if (args.length > 0 && (args[0].equals("--list-matchers") || args[0].equals("-l")
+                || args[0].equals("--help") || args[0].equals("-h"))) {
+            printAvailableMatchers();
+            return;
+        }
+
         if (args.length < 2) {
-            System.err.println(args.length);
-            System.err.println("Wrong command. Expected arguments: INPUT_FOLDER OUTPUT_FILE. Got: "
+            System.err.println("Wrong command. Expected arguments: INPUT_FOLDER OUTPUT_FILE [MATCHERS...]. Got: "
                     + Arrays.toString(args));
+            printAvailableMatchers();
             System.exit(1);
         }
         ROOT_FOLDER = new File(args[0]).getAbsolutePath();
@@ -62,55 +70,175 @@ public class RunOnDataset {
                 PythonTreeSitterNgTreeGenerator.class.getAnnotation(Register.class)
         );
 
-        OUTPUT = new FileWriter(args[1]);
+        File outputFile = new File(args[1]);
+        if (outputFile.getParentFile() != null) {
+            outputFile.getParentFile().mkdirs();
+        }
+        boolean append = Boolean.getBoolean("gumtree.benchmark.append");
+        OUTPUT = new FileWriter(outputFile, append);
 
-        String header = "case;algorithm;" + "t;".repeat(TIME_MEASURES) + "s;ni;nd;nu;nm";
-        OUTPUT.append(header + "\n");
+        if (!append) {
+            StringBuilder header = new StringBuilder("dataset;case;algorithm;");
+            for (int i = 1; i <= TIME_MEASURES; i++) {
+                header.append("t").append(i).append(";");
+            }
+            header.append("s;ni;nd;nu;nm");
+            OUTPUT.append(header + "\n");
+        }
 
         for (int i = 2; i < args.length; i++) {
-            Class<? extends Matcher> matcherClass = (Class<? extends Matcher>) Class.forName(args[i]);
-            configurations.add(new MatcherConfig(matcherClass.getSimpleName(), () -> {
-                try {
-                    Constructor<? extends Matcher> matcherConstructor = matcherClass.getConstructor();
-                    return matcherConstructor.newInstance();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+            String arg = args[i];
+            if (arg.contains(",")) {
+                for (String part : arg.split(",")) {
+                    if (!part.trim().isEmpty()) {
+                        configurations.add(resolveMatcher(part));
+                    }
                 }
-
-            }));
+            } else if (!arg.trim().isEmpty()) {
+                configurations.add(resolveMatcher(arg));
+            }
         }
 
         if (configurations.isEmpty()) {
-            configurations.add(new MatcherConfig("simple",
-                    CompositeMatchers.SimpleGumtree::new, mediumMinSim()));
-            //configurations.add(new MatcherConfig("auto",
-                    //CompositeMatchers.SimpleGumtreeAutoMt::new, new GumtreeProperties()));
-            //configurations.add(new MatcherConfig("hybrid-100",
-                    //CompositeMatchers.HybridGumtree::new, mediumBuMinsize()));
-            //configurations.add(new MatcherConfig("opt-100",
-                    //CompositeMatchers.ClassicGumtree::new, mediumBuMinsize()));
-            //configurations.add(new MatcherConfig("opt-1000",
-                    //CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
-            //configurations.add(new MatcherConfig("stable",
-                    //CompositeMatchers.SimpleGumtreeStable::new, mediumMinSim()));
+            configurations.add(resolveMatcher("simple"));
         }
 
+        int limit = Integer.getInteger("gumtree.benchmark.limit", -1);
         DirectoryComparator comparator = new DirectoryComparator(args[0] + "/before", args[0] + "/after");
         comparator.compare();
         int done = 0;
         int size = comparator.getModifiedFiles().size();
+        int totalToRun = (limit > 0 && limit < size) ? limit : size;
         for (Pair<File, File> pair : comparator.getModifiedFiles()) {
+            if (limit > 0 && done >= limit) {
+                break;
+            }
             done++;
-            int pct = (int) (((float) done / (float) size) * 100);
-            System.out.printf("\r%s %s  Done", displayBar(pct), pct);
+            int pct = (int) (((float) done / (float) totalToRun) * 100);
+            System.out.printf("\r%s %s%%  Done (%d/%d)", displayBar(pct), pct, done, totalToRun);
             try {
                 handleCase(pair.first, pair.second);
-            }
-            catch (SyntaxException e) {
-                System.out.println("Problem parsing " + pair.first.getPath());
+            } catch (SyntaxException e) {
+                System.out.println("\nProblem parsing " + pair.first.getPath());
             }
         }
+        System.out.println();
         OUTPUT.close();
+    }
+
+    private static void initMatchers() {
+        ClassIndex.getSubclasses(Matcher.class).forEach(gen -> {
+            com.github.gumtreediff.matchers.Register a =
+                    gen.getAnnotation(com.github.gumtreediff.matchers.Register.class);
+            if (a != null) {
+                Matchers.getInstance().install(gen, a);
+            }
+        });
+    }
+
+    private static Map<String, Supplier<MatcherConfig>> getPresets() {
+        Map<String, Supplier<MatcherConfig>> presets = new LinkedHashMap<>();
+        presets.put("simple", () -> new MatcherConfig("simple",
+                CompositeMatchers.SimpleGumtree::new, mediumMinSim()));
+        presets.put("auto", () -> new MatcherConfig("auto",
+                AutoMatchers.SimpleGumtreeAutoMt::new, new GumtreeProperties()));
+        presets.put("auto-st", () -> new MatcherConfig("auto-st",
+                AutoMatchers.SimpleGumtreeAuto::new, new GumtreeProperties()));
+        presets.put("hybrid", () -> new MatcherConfig("hybrid",
+                CompositeMatchers.HybridGumtree::new, mediumBuMinsize()));
+        presets.put("hybrid-100", () -> new MatcherConfig("hybrid-100",
+                CompositeMatchers.HybridGumtree::new, mediumBuMinsize()));
+        presets.put("classic", () -> new MatcherConfig("classic",
+                CompositeMatchers.ClassicGumtree::new, mediumBuMinsize()));
+        presets.put("opt-100", () -> new MatcherConfig("opt-100",
+                CompositeMatchers.ClassicGumtree::new, mediumBuMinsize()));
+        presets.put("opt-1000", () -> new MatcherConfig("opt-1000",
+                CompositeMatchers.ClassicGumtree::new, largeBuMinsize()));
+        presets.put("stable", () -> new MatcherConfig("stable",
+                CompositeMatchers.SimpleGumtreeStable::new, mediumMinSim()));
+        presets.put("simple-id", () -> new MatcherConfig("simple-id",
+                CompositeMatchers.SimpleIdGumtree::new, mediumMinSim()));
+        presets.put("hybrid-id", () -> new MatcherConfig("hybrid-id",
+                CompositeMatchers.HybridIdGumtree::new, mediumBuMinsize()));
+        presets.put("cd", () -> new MatcherConfig("change-distiller",
+                CompositeMatchers.ChangeDistiller::new));
+        presets.put("change-distiller", () -> new MatcherConfig("change-distiller",
+                CompositeMatchers.ChangeDistiller::new));
+        presets.put("xy", () -> new MatcherConfig("xy",
+                CompositeMatchers.XyMatcher::new));
+        return presets;
+    }
+
+    private static MatcherConfig resolveMatcher(String name) {
+        String trimmed = name.trim();
+        String key = trimmed.toLowerCase();
+        Map<String, Supplier<MatcherConfig>> presets = getPresets();
+        if (presets.containsKey(key)) {
+            return presets.get(key).get();
+        }
+
+        Matcher m = Matchers.getInstance().getMatcher(trimmed);
+        if (m != null) {
+            return new MatcherConfig(trimmed, () -> Matchers.getInstance().getMatcher(trimmed));
+        }
+        m = Matchers.getInstance().getMatcher(key);
+        if (m != null) {
+            return new MatcherConfig(key, () -> Matchers.getInstance().getMatcher(key));
+        }
+
+        Class<? extends Matcher> matcherClass = tryLoadClass(trimmed);
+        if (matcherClass != null) {
+            return new MatcherConfig(matcherClass.getSimpleName(), () -> {
+                try {
+                    Constructor<? extends Matcher> ctor = matcherClass.getConstructor();
+                    return ctor.newInstance();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        throw new IllegalArgumentException("Unknown matcher: '" + name + "'. Available presets/matchers: "
+                + String.join(", ", getAvailableMatcherNames()));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Class<? extends Matcher> tryLoadClass(String className) {
+        String[] candidates = new String[] {
+            className,
+            "com.github.gumtreediff.matchers." + className,
+            "com.github.gumtreediff.matchers.CompositeMatchers$" + className,
+            "com.github.gumtreediff.matchers.AutoMatchers$" + className
+        };
+        for (String candidate : candidates) {
+            try {
+                Class<?> clazz = Class.forName(candidate);
+                if (Matcher.class.isAssignableFrom(clazz)) {
+                    return (Class<? extends Matcher>) clazz;
+                }
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
+        return null;
+    }
+
+    private static List<String> getAvailableMatcherNames() {
+        Set<String> names = new LinkedHashSet<>(getPresets().keySet());
+        for (var entry : Matchers.getInstance().getEntries()) {
+            names.add(entry.id);
+        }
+        return new ArrayList<>(names);
+    }
+
+    public static void printAvailableMatchers() {
+        System.out.println("Available matcher presets:");
+        for (String preset : getPresets().keySet()) {
+            System.out.println("  - " + preset);
+        }
+        System.out.println("\nAvailable registered matcher IDs:");
+        for (var entry : Matchers.getInstance().getEntries()) {
+            System.out.println("  - " + entry.id);
+        }
     }
 
     private static void handleCase(File src, File dst) throws IOException {
@@ -156,6 +284,7 @@ public class RunOnDataset {
                 nbDel += a.getNode().getMetrics().size;
         }
 
+        OUTPUT.append(new File(ROOT_FOLDER).getName() + ";");
         OUTPUT.append(file + ";");
         OUTPUT.append(matcher + ";");
         for (int i = 0; i < TIME_MEASURES; i++)
@@ -224,4 +353,3 @@ public class RunOnDataset {
         return sb.toString();
     }
 }
-
