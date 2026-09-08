@@ -19,25 +19,46 @@
 
 package com.github.gumtree.benchmark;
 
-import com.github.gumtreediff.actions.*;
-import com.github.gumtreediff.actions.model.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
+
+import org.atteo.classindex.ClassIndex;
+
+import com.github.gumtreediff.actions.EditScript;
+import com.github.gumtreediff.actions.EditScriptGenerator;
+import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
+import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Delete;
+import com.github.gumtreediff.actions.model.Insert;
+import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.actions.model.TreeDelete;
+import com.github.gumtreediff.actions.model.TreeInsert;
+import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
 import com.github.gumtreediff.gen.treesitterng.PythonTreeSitterNgTreeGenerator;
 import com.github.gumtreediff.io.DirectoryComparator;
-import com.github.gumtreediff.matchers.*;
+import com.github.gumtreediff.matchers.AutoMatchers;
+import com.github.gumtreediff.matchers.CompositeMatchers;
+import com.github.gumtreediff.matchers.ConfigurationOptions;
+import com.github.gumtreediff.matchers.GumtreeProperties;
+import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.Matcher;
+import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Pair;
-import org.atteo.classindex.ClassIndex;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.util.*;
-import java.util.function.Supplier;
 
 public class RunOnDataset {
     private static final int TIME_MEASURES = 5;
@@ -160,6 +181,8 @@ public class RunOnDataset {
                 CompositeMatchers.SimpleIdGumtree::new, mediumMinSim()));
         presets.put("hybrid-id", () -> new MatcherConfig("hybrid-id",
                 CompositeMatchers.HybridIdGumtree::new, mediumBuMinsize()));
+        presets.put("pq", () -> new MatcherConfig("pq",
+                CompositeMatchers.PqGumtree::new, mediumMinSim()));
         presets.put("cd", () -> new MatcherConfig("change-distiller",
                 CompositeMatchers.ChangeDistiller::new));
         presets.put("change-distiller", () -> new MatcherConfig("change-distiller",
