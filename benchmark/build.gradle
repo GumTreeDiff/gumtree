@@ -45,7 +45,7 @@ tasks.register('runBenchmark', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.github.gumtree.benchmark.RunBenchmarks'
     doFirst {
-        file("${project.layout.buildDirectory.get()}/reports").mkdirs()
+        file("${project.layout.buildDirectory.get()}/reports/benchmark").mkdirs()
         def selectedBenchmarks = project.findProperty('benchmarks') ?: project.findProperty('datasets') ?: 'all'
         def requested = selectedBenchmarks.toString().split(',').collect { it.trim().toLowerCase() }.findAll { !it.isEmpty() }
         def tasksToRun = []
@@ -61,7 +61,7 @@ tasks.register('runBenchmark', JavaExec) {
                 throw new IllegalArgumentException("Unknown benchmark(s): ${requested}. Available: all, defects4j (d4j), bugsinpy (bip), gh-java (ghjava), gh-python (ghpython)")
             }
         }
-        def taskArgs = [ "${project.layout.buildDirectory.get()}/reports/benchmark-${new Date().format('yyyyMMdd-HHmmssSSS')}.csv" ]
+        def taskArgs = [ "${project.layout.buildDirectory.get()}/reports/benchmark/benchmark-${new Date().format('yyyyMMdd-HHmmssSSS')}.csv" ]
         taskArgs.addAll(tasksToRun.collect { project.layout.projectDirectory.dir(datasetDefinitions[it].dir) })
         taskArgs.add('--matchers')
         if (project.hasProperty('matchers')) {
@@ -86,18 +86,12 @@ tasks.register('analyzeBenchmark', JavaExec) {
         !tasks.named('runBenchmark').get().state.failure
     }
     doFirst {
-        file("${project.layout.buildDirectory.get()}/reports").mkdirs()
+        file("${project.layout.buildDirectory.get()}/reports/benchmark").mkdirs()
     }
-    args = ["${project.layout.buildDirectory.get()}/reports",
-            "${project.layout.buildDirectory.get()}/reports/analysis.html"]
+    args = ["${project.layout.buildDirectory.get()}/reports/benchmark",
+            "${project.layout.buildDirectory.get()}/reports/benchmark/analysis.html"]
 }
 
 tasks.named('runBenchmark').configure {
     finalizedBy 'analyzeBenchmark'
-}
-
-tasks.register('benchmarkAndAnalyze') {
-    group = 'benchmark'
-    description = 'Runs selected benchmarks and then analyzes the results.'
-    dependsOn 'runBenchmark'
 }
