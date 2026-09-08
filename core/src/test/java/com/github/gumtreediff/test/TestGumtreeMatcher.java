@@ -30,13 +30,40 @@ import org.junit.jupiter.api.Test;
 import com.github.gumtreediff.matchers.GumtreeProperties;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
+import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
+import com.github.gumtreediff.matchers.heuristic.gt.PqGramBottomUpMatcher;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.utils.Pair;
 
 public class TestGumtreeMatcher {
+    @Test
+    public void testPqMatcherMapsRoots() {
+        Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
+
+        MappingStore mappings = new CompositeMatchers.PqGumtree().match(src, dst);
+
+        assertTrue(mappings.has(src, dst));
+    }
+
+    @Test
+    public void testPqBottomUpPreservesProvidedMappings() {
+        Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();
+        Tree src = trees.first.getRoot();
+        Tree dst = trees.second.getRoot();
+        MappingStore mappings = new MappingStore(src, dst);
+        mappings.addMapping(src.getChild(1), dst.getChild(0));
+
+        MappingStore result = new PqGramBottomUpMatcher().match(src, dst, mappings);
+
+        assertEquals(mappings, result);
+        assertTrue(result.has(src.getChild(1), dst.getChild(0)));
+    }
+
     @Test
     public void testMinHeightThreshold() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getGumtreePair();

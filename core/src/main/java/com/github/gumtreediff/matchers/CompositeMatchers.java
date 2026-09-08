@@ -85,6 +85,13 @@ public class CompositeMatchers {
         }
     }
 
+    @Register(id = "gumtree-pq", priority = Registry.Priority.HIGH)
+    public static class PqGumtree extends CompositeMatcher {
+        public PqGumtree() {
+            super(new GreedySubtreeMatcher(), new PqGramBottomUpMatcher());
+        }
+    }
+
     @Register(id = "gumtree-classic", priority = Registry.Priority.HIGH)
     public static class ClassicGumtree extends CompositeMatcher {
         public ClassicGumtree() {
