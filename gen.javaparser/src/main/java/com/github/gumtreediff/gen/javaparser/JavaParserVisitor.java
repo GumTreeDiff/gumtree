@@ -58,7 +58,7 @@ public class JavaParserVisitor extends TreeVisitor {
     public void visitPreOrder(Node node) {
         process(node);
         new ArrayList<>(node.getChildNodes()).forEach(this::visitPreOrder);
-        if (trees.size() > 0)
+        if (trees.size() > 0 && node.getRange().isPresent())
             trees.pop();
     }
 
