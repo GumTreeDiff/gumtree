@@ -34,7 +34,7 @@ Tests use JUnit Jupiter. The common `java-conv` convention in `buildSrc` applies
 ./gradlew -PtestExternal :gen.srcml:test
 ```
 
-The CI workflow also runs the dataset benchmarks and notebook analysis. Benchmark tasks accept comma-separated matcher IDs and an optional limit; run only selected datasets when possible:
+The CI workflow runs `./gradlew build :benchmark:runBenchmark -Pbenchmarks=d4j,ghj`; `runBenchmark` also finalizes `analyzeBenchmark` to produce the HTML report. Benchmark tasks accept comma-separated dataset aliases, matcher IDs, and an optional limit; run only selected datasets when possible:
 
 ```bash
 ./gradlew :benchmark:listMatchers
@@ -46,9 +46,9 @@ The benchmark datasets are external inputs and may not be present in every check
 
 ## Architecture
 
-GumTree is a Gradle multi-project Java application:
+GumTree is a Gradle multi-project Java application. A normal diff flows through the core API: a language-specific generator parses each input into a `TreeContext`; a matcher creates a `MappingStore` between the trees; and the Chawathe edit-script generator turns those mappings into insert, delete, update, and move actions. The `Diff` class coordinates this pipeline.
 
-- `core` is the reusable differencing engine. It owns the tree model and I/O, tree generators, matchers and mapping stores, edit-action generation, and core algorithms.
+- `core` is the reusable differencing engine. It owns the tree model and I/O, generator/matcher registries, mapping stores, edit-action generation, and core algorithms.
 - `gen.*` projects provide language-specific tree generators. Most depend on `core`; JavaParser, JDT, Rhino, CSS, JSON, XML, YAML, and Tree-sitter-NG are in-process generators. `gen.srcml` adapts the external `srcml` process, while `gen.antlr3` and `gen.antlr4` provide shared grammar/build support.
 - `client` defines the command-line client framework and `client.diff` supplies diff clients and views (text, HTML/web, Swing, DOT, and directory comparison).
 - `dist` assembles the runnable CLI using `com.github.gumtreediff.client.Run` as its application entry point. Its Shadow distribution packages the selected generators and clients into the GumTree command-line archive.
