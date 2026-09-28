@@ -1,5 +1,8 @@
 # Changelog of GumTree
 
+## v4.1.0
+* Added the contextual matcher (`gumtree-contextual`) to reduce edit script size
+
 ## v4.0.0 (Ginkgo)
 * New minimal distribution with zero non-java dependencies
 * Vastly improved swing client with directory comparison, syntax highlighting, and more
