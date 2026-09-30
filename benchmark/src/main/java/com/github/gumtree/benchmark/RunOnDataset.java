@@ -183,6 +183,8 @@ public class RunOnDataset {
                 CompositeMatchers.HybridIdGumtree::new, mediumBuMinsize()));
         presets.put("pq", () -> new MatcherConfig("pq",
                 CompositeMatchers.PqGumtree::new, mediumMinSim()));
+        presets.put("assignment", () -> new MatcherConfig("assignment",
+                CompositeMatchers.AssignmentGumtree::new, mediumMinSim()));
         presets.put("cd", () -> new MatcherConfig("change-distiller",
                 CompositeMatchers.ChangeDistiller::new));
         presets.put("change-distiller", () -> new MatcherConfig("change-distiller",

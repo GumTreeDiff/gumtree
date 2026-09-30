@@ -92,6 +92,10 @@ public class CompositeMatchers {
         }
     }
 
+    @Register(id = "gumtree-assignment", priority = Registry.Priority.HIGH)
+    public static class AssignmentGumtree extends AssignmentMatcher {
+    }
+
     @Register(id = "gumtree-classic", priority = Registry.Priority.HIGH)
     public static class ClassicGumtree extends CompositeMatcher {
         public ClassicGumtree() {

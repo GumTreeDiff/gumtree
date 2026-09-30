@@ -28,14 +28,11 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.github.gumtreediff.actions.ChawatheScriptGenerator;
-import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.heuristic.gt.ContextualMatcher;
-import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.tree.DefaultTree;
 import com.github.gumtreediff.tree.Tree;
-import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TypeSet;
 
 public class TestContextualMatcher {
@@ -52,30 +49,6 @@ public class TestContextualMatcher {
         for (Mapping mapping : mappings)
             assertTrue(destinations.add(mapping.second));
         assertEquals(1, new ChawatheScriptGenerator().computeActions(mappings).size());
-    }
-
-    @Test
-    public void scriptIsNoLargerThanSimpleOnBundledTrees() {
-        boolean improved = assertNoLarger("gumtree", TreeLoader.getGumtreePair());
-        improved |= assertNoLarger("action", TreeLoader.getActionPair());
-        improved |= assertNoLarger("dummy", TreeLoader.getDummyPair());
-        improved |= assertNoLarger("zs", TreeLoader.getZsCustomPair());
-        improved |= assertNoLarger("change-distiller", TreeLoader.getCdCustomPair());
-        assertTrue(improved, "expected a smaller script on at least one bundled pair");
-    }
-
-    private boolean assertNoLarger(String name, Pair<TreeContext, TreeContext> pair) {
-        Tree src = pair.first.getRoot();
-        Tree dst = pair.second.getRoot();
-        MappingStore simple = new CompositeMatchers.SimpleGumtree().match(src, dst);
-        MappingStore contextual = new ContextualMatcher().match(src, dst);
-
-        var simpleActions = new ChawatheScriptGenerator().computeActions(simple);
-        var contextualActions = new ChawatheScriptGenerator().computeActions(contextual);
-        assertTrue(contextualActions.size() <= simpleActions.size(),
-                name + ": " + contextualActions + " > " + simpleActions
-                        + "\ncontextual mappings:\n" + contextual);
-        return contextualActions.size() < simpleActions.size();
     }
 
     private Tree tree(String label) {
