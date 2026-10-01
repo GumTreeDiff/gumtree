@@ -76,6 +76,7 @@ public class MonacoNativeDiffView {
                         a("Quit").withHref("/quit").withClasses("btn", "btn-default", "btn-sm", "btn-danger")
                     ).withClass("btn-group")
                 ).withClasses("btn-toolbar", "justify-content-end")
+                        .withStyle("min-height: 31px; align-items: center;")
             ).withClass("col");
         }
     }

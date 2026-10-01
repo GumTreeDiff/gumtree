@@ -36,13 +36,18 @@ import java.nio.charset.Charset;
 public class VanillaDiffView {
 
     public static HtmlTag build(File srcFile, File dstFile, Diff diff, boolean dump) throws IOException  {
+        return build(srcFile, dstFile, diff, dump, null, -1);
+    }
+
+    public static HtmlTag build(File srcFile, File dstFile, Diff diff, boolean dump,
+                                String selectedMatcherId, int id) throws IOException {
         var rawHtmlDiff = new VanillaDiffHtmlBuilder(srcFile, dstFile, diff);
         rawHtmlDiff.produce();
         return html(
             Header.build(dump),
             body(
                 div(
-                    div(MenuBar.build()).withClass("row"),
+                    div(MenuBar.build(selectedMatcherId, id)).withClass("row"),
                     div(
                         div(
                             h5(srcFile.getName()),
@@ -60,9 +65,10 @@ public class VanillaDiffView {
 
     private static class MenuBar {
 
-        public static Tag build() {
+        public static Tag build(String selectedMatcherId, int id) {
             return div(
                 div(
+                    iff(id >= 0, MatcherSelector.build(selectedMatcherId, "/vanilla-diff/" + id)),
                     div(
                         rawHtml("<button class=\"btn btn-primary btn-sm\" id=\"legend\" data-bs-toggle=\"popover\" data-bs-placement=\"bottom\" " +
                                 "data-bs-html=\"true\" data-bs-content=\"<span class='del'>&nbsp;&nbsp;</span> deleted<br><span class='add'>&nbsp;&nbsp;</span> added<br><span class='mv'>&nbsp;&nbsp;</span> moved<br><span class='upd';>&nbsp;&nbsp;</span> updated<br>\">Legend</button>"),
@@ -73,7 +79,8 @@ public class VanillaDiffView {
                         a("Back").withHref("/list").withClasses("btn", "btn-default", "btn-sm", "btn-primary"),
                         a("Quit").withHref("/quit").withClasses("btn", "btn-default", "btn-sm", "btn-danger")
                     ).withClass("btn-group")
-                ).withClasses("btn-toolbar", "justify-content-end")
+                ).withClasses("btn-toolbar", "justify-content-end", "gap-2")
+                        .withStyle("min-height: 31px; align-items: center;")
             ).withClass("col");
         }
     }

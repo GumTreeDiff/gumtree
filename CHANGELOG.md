@@ -4,6 +4,7 @@
 * Registries discover annotated matchers, generators, and clients when first accessed
 * Added the contextual matcher (`gumtree-contextual`) to reduce edit script size
 * Added the assignment matcher (`gumtree-assignment`), which uses global sibling alignment
+* Webdiff pages can select the matcher used to compute diffs
 
 ## v4.0.0 (Ginkgo)
 * New minimal distribution with zero non-java dependencies

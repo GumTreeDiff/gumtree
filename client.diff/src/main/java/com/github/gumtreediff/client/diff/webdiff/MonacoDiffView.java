@@ -32,11 +32,15 @@ import static j2html.TagCreator.*;
 public class MonacoDiffView {
 
     public static HtmlTag build(File srcFile, File dstFile, Diff diff, int id) {
+        return build(srcFile, dstFile, diff, id, null);
+    }
+
+    public static HtmlTag build(File srcFile, File dstFile, Diff diff, int id, String selectedMatcherId) {
         return html(
             Header.build(),
             body(
                 div(
-                    div(MenuBar.build()).withClass("row"),
+                    div(MenuBar.build(selectedMatcherId, id)).withClass("row"),
                     div(
                         div(
                             h5(srcFile.getName()),
@@ -127,9 +131,10 @@ public class MonacoDiffView {
 
     private static class MenuBar {
 
-        public static Tag build() {
+        public static Tag build(String selectedMatcherId, int id) {
             return div(
                 div(
+                    MatcherSelector.build(selectedMatcherId, "/monaco-diff/" + id),
                     div(
                         rawHtml("<button class=\"btn btn-primary btn-sm\" id=\"legend\" data-bs-toggle=\"popover\" data-bs-placement=\"bottom\" " +
                                     "data-bs-html=\"true\" data-bs-content=\"<span class='deleted'>&nbsp;&nbsp;</span> deleted<br><span class='inserted'>&nbsp;&nbsp;</span> added<br><span class='moved'>&nbsp;&nbsp;</span> moved<br><span class='updated';>&nbsp;&nbsp;</span> updated<br>\">Legend</button>"),
@@ -140,7 +145,8 @@ public class MonacoDiffView {
                         a("Back").withHref("/list").withClasses("btn", "btn-default", "btn-sm", "btn-primary"),
                         a("Quit").withHref("/quit").withClasses("btn", "btn-default", "btn-sm", "btn-danger")
                     ).withClass("btn-group")
-                ).withClasses("btn-toolbar","justify-content-end")
+                ).withClasses("btn-toolbar", "justify-content-end", "gap-2")
+                        .withStyle("min-height: 31px; align-items: center;")
             ).withClass("col");
         }
     }

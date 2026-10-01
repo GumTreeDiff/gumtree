@@ -37,11 +37,15 @@ import static j2html.TagCreator.*;
 public class DirectoryDiffView {
 
     public static HtmlTag build(DirectoryComparator comparator) {
+        return build(comparator, null);
+    }
+
+    public static HtmlTag build(DirectoryComparator comparator, String selectedMatcherId) {
         return html(
             Header.build(),
             body(
                 div(
-                    div(MenuBar.build()).withClass("row"),
+                    div(MenuBar.build(selectedMatcherId)).withClass("row"),
                     div(
                         div(
                             div(
@@ -185,13 +189,15 @@ public class DirectoryDiffView {
 
     private static class MenuBar  {
 
-        public static Tag build() {
+        public static Tag build(String selectedMatcherId) {
             return div(
                     div(
+                        MatcherSelector.build(selectedMatcherId, "/list"),
                         div(
                             a("Quit").withHref("/quit").withClasses("btn", "btn-default", "btn-sm", "btn-danger")
                         ).withClass("btn-group")
-                    ).withClasses("btn-toolbar", "justify-content-end")
+                    ).withClasses("btn-toolbar", "justify-content-end", "gap-2")
+                            .withStyle("min-height: 31px; align-items: center;")
             ).withClass("col");
         }
     }

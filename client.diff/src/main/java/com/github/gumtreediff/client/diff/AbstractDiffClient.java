@@ -128,9 +128,13 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOption
     }
 
     public Diff getDiff(String src, String dst) throws IOException {
+        return getDiff(src, dst, opts.matcherId);
+    }
+
+    protected Diff getDiff(String src, String dst, String matcherId) throws IOException {
         if (opts.command == null)
-            return Diff.compute(src, dst, opts.treeGeneratorId, opts.matcherId, opts.properties);
+            return Diff.compute(src, dst, opts.treeGeneratorId, matcherId, opts.properties);
         else
-            return Diff.computeWithCommand(src, dst, opts.command, opts.matcherId, opts.properties);
+            return Diff.computeWithCommand(src, dst, opts.command, matcherId, opts.properties);
     }
 }

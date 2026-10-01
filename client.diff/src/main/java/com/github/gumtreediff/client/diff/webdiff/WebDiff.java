@@ -27,6 +27,7 @@ import com.github.gumtreediff.client.diff.AbstractDiffClient;
 import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.utils.Pair;
+import com.github.gumtreediff.matchers.Matchers;
 
 import spark.Spark;
 
@@ -35,17 +36,24 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 import static spark.Spark.*;
 
 @Register(description = "Web diff client", options = WebDiff.WebDiffOptions.class, priority = Registry.Priority.HIGH)
 public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
+    private static final Pattern MATCHER_RETURN_PATH =
+            Pattern.compile("^/(list|monaco-diff/\\d+|vanilla-diff/\\d+|raw-diff/\\d+)$");
+
     public static final String JQUERY_JS_URL = "https://code.jquery.com/jquery-3.4.1.min.js";
     public static final String BOOTSTRAP_CSS_URL = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css";
     public static final String BOOTSTRAP_JS_URL = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js";
 
+    private volatile String selectedMatcherId;
+
     public WebDiff(String[] args) {
         super(args);
+        selectedMatcherId = opts.matcherId;
     }
 
     public static class WebDiffOptions extends AbstractDiffClient.DiffOptions {
@@ -94,19 +102,21 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
             return "";
         });
         get("/list", (request, response) -> {
-            return DirectoryDiffView.build(comparator).renderFormatted();
+            return DirectoryDiffView.build(comparator, selectedMatcherId).renderFormatted();
         });
         get("/vanilla-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
-            return VanillaDiffView.build(pair.first, pair.second, diff, false).renderFormatted();
+            String matcherId = selectedMatcherId;
+            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(), matcherId);
+            return VanillaDiffView.build(pair.first, pair.second, diff, false, matcherId, id).renderFormatted();
         });
         get("/monaco-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
-            return MonacoDiffView.build(pair.first, pair.second, diff, id).renderFormatted();
+            String matcherId = selectedMatcherId;
+            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(), matcherId);
+            return MonacoDiffView.build(pair.first, pair.second, diff, id, matcherId).renderFormatted();
         });
         get("/monaco-native-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
@@ -120,8 +130,9 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
         get("/raw-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
-            return TextDiffView.build(pair.first, pair.second, diff).renderFormatted();
+            String matcherId = selectedMatcherId;
+            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(), matcherId);
+            return TextDiffView.build(pair.first, pair.second, diff, matcherId, id).renderFormatted();
         });
         get("/left/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
@@ -146,6 +157,24 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
             int id = Integer.parseInt(request.queryParams("id"));
             comparator.unpairFiles(id);
             response.redirect("/list");
+            return "";
+        });
+        post("/matcher", (request, response) -> {
+            String returnTo = request.queryParams("returnTo");
+            if (returnTo == null || !MATCHER_RETURN_PATH.matcher(returnTo).matches()) {
+                response.status(400);
+                return "Invalid return path.";
+            }
+
+            String matcherId = request.queryParams("matcher");
+            if (matcherId != null && !matcherId.isEmpty()
+                    && Matchers.getInstance().findById(matcherId) == null) {
+                response.status(400);
+                return "Unknown matcher: " + matcherId;
+            }
+
+            selectedMatcherId = matcherId == null || matcherId.isEmpty() ? null : matcherId;
+            response.redirect(returnTo);
             return "";
         });
         get("/quit", (request, response) -> {
