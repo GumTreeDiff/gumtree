@@ -31,7 +31,7 @@ jobs:
         run: echo "VERSION=$(cat build.gradle | grep "projectsVersion =" | cut -f 2 -d "'")" >> $GITHUB_OUTPUT
         shell: bash
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6.3.0
+        uses: gradle/actions/setup-gradle@v6.4.0
       - name: build gumtree and run benchmarks
         run: ./gradlew build :benchmark:runBenchmark -Pbenchmarks=d4j,ghj
       - name: upload benchmarks results
