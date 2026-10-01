@@ -25,10 +25,19 @@ import com.github.gumtreediff.utils.Registry;
 public class Clients extends Registry<String, Client, Register> {
     private static Clients registry;
 
-    public static Clients getInstance() {
-        if (registry == null)
+    public static synchronized Clients getInstance() {
+        if (registry == null) {
             registry = new Clients();
+            registry.discoverEntries();
+        }
         return registry;
+    }
+
+    /**
+     * Discovers and installs clients available on the classpath.
+     */
+    public synchronized void discoverEntries() {
+        installAnnotatedSubclasses(Client.class, Register.class);
     }
 
     protected String getName(Register annotation, Class<? extends Client> clazz) {

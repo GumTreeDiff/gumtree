@@ -39,10 +39,19 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
     /**
      * Return the tree generators registry instance (singleton pattern).
      */
-    public static TreeGenerators getInstance() {
-        if (registry == null)
+    public static synchronized TreeGenerators getInstance() {
+        if (registry == null) {
             registry = new TreeGenerators();
+            registry.discoverEntries();
+        }
         return registry;
+    }
+
+    /**
+     * Discovers and installs tree generators available on the classpath.
+     */
+    public synchronized void discoverEntries() {
+        installAnnotatedSubclasses(TreeGenerator.class, Register.class);
     }
 
     /**
@@ -69,7 +78,7 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
         if (generator == null)
             return getTree(file);
 
-        for (Entry e : entries)
+        for (Entry e : getEntries())
             if (e.id.equals(generator))
                 return e.instantiate(null).generateFrom().file(file);
 
@@ -84,7 +93,7 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
      * @throws UnsupportedOperationException if no suitable generator is found
      */
     public TreeContext getTree(Reader stream, String generator) throws UnsupportedOperationException, IOException {
-        for (Entry e : entries)
+        for (Entry e : getEntries())
             if (e.id.equals(generator))
                 return e.instantiate(null).generateFrom().reader(stream);
 

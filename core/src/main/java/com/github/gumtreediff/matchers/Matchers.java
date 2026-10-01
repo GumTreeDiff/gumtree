@@ -33,17 +33,26 @@ public class Matchers extends Registry<String, Matcher, Register> {
     /**
      * Return the matcher registry instance (singleton pattern).
      */
-    public static Matchers getInstance() {
-        if (registry == null)
+    public static synchronized Matchers getInstance() {
+        if (registry == null) {
             registry = new Matchers();
+            registry.discoverEntries();
+        }
         return registry;
+    }
+
+    /**
+     * Discovers and installs matchers available on the classpath.
+     */
+    public synchronized void discoverEntries() {
+        installAnnotatedSubclasses(Matcher.class, Register.class);
     }
 
     /**
      * Return the matcher with the given id. If the id do not corresponding to an existing matcher,
      * null is returned.
      */
-    public Matcher getMatcher(String id) {
+    public synchronized Matcher getMatcher(String id) {
         return get(id);
     }
 
@@ -53,7 +62,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
      *
      * @see #getMatcher()
      */
-    public Matcher getMatcherWithFallback(String id) {
+    public synchronized Matcher getMatcherWithFallback(String id) {
         if (id == null)
             return getMatcher();
 
@@ -69,7 +78,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
      *
      * @see Register#priority()
      */
-    public Matcher getMatcher() {
+    public synchronized Matcher getMatcher() {
         return defaultMatcherFactory.instantiate(new Object[]{});
     }
 
@@ -77,7 +86,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
     }
 
     @Override
-    public void install(Class<? extends Matcher> clazz, Register a) {
+    public synchronized void install(Class<? extends Matcher> clazz, Register a) {
         if (a == null)
             throw new IllegalArgumentException("Expecting @Register annotation on " + clazz.getName());
         if (defaultMatcherFactory == null) {
@@ -93,7 +102,7 @@ public class Matchers extends Registry<String, Matcher, Register> {
     }
 
     @Override
-    public void clear() {
+    public synchronized void clear() {
         super.clear();
         defaultMatcherFactory = null;
     }

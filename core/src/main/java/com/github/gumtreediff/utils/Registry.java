@@ -20,15 +20,25 @@
 
 package com.github.gumtreediff.utils;
 
+import org.atteo.classindex.ClassIndex;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public abstract class Registry<K, C, A> {
-    protected Set<Entry> entries = new TreeSet<>((o1, o2) -> {
-        int cmp = o1.priority - o2.priority;
+/**
+ * Registry of components that can be looked up and instantiated by a key.
+ *
+ * @param <K> the type of lookup key
+ * @param <C> the type of component managed by this registry
+ * @param <A> the type of annotation containing component registration metadata
+ */
+public abstract class Registry<K, C, A extends Annotation> {
+    private final NavigableSet<Entry> entries = new TreeSet<>((o1, o2) -> {
+        int cmp = Integer.compare(o1.priority, o2.priority);
         if (cmp == 0)
-            cmp = o1.id.compareToIgnoreCase(o2.id); // FIXME or not ... is id a good unique stuff
+            cmp = o1.id.compareTo(o2.id);
         return cmp;
     });
 
@@ -40,62 +50,131 @@ public abstract class Registry<K, C, A> {
         public static final int MINIMUM = 100;
     }
 
-    public C get(K key, Object... args) {
+    /**
+     * Creates an instance registered under the given key.
+     *
+     * @param key the key used to find a registered component
+     * @param args arguments passed to the component's factory
+     * @return the created component, or {@code null} if no component is registered for the key
+     *     or instantiation fails
+     */
+    public synchronized C get(K key, Object... args) {
         Factory<? extends C> factory = getFactory(key);
         if (factory != null)
             return factory.instantiate(args);
         return null;
     }
 
-    public Factory<? extends C> getFactory(K key) {
+    /**
+     * Finds the factory for the given key.
+     *
+     * @param key the key used to find a registered component
+     * @return the component factory, or {@code null} if no component is registered for the key
+     */
+    public synchronized Factory<? extends C> getFactory(K key) {
         Entry entry = find(key);
         if (entry != null)
             return entry.factory;
         return null;
     }
 
-    public Entry find(K key) {
+    /**
+     * Finds the entry whose key-matching logic accepts the given key.
+     *
+     * @param key the key to search for
+     * @return the matching entry, or {@code null} if no entry matches
+     */
+    public synchronized Entry find(K key) {
         return findEntry(key);
     }
 
-    public Entry findById(String id) {
+    /**
+     * Finds an entry by its identifier.
+     *
+     * @param id the identifier to search for
+     * @return the entry with that identifier, or {@code null} if none is found
+     */
+    public synchronized Entry findById(String id) {
         for (Entry e: entries)
             if (e.id.equals(id))
                 return e;
         return null;
     }
 
-    public void install(Class<? extends C> clazz, A annotation) {
+    /**
+     * Creates and adds an entry for a component class and its registration metadata.
+     *
+     * @param clazz the component class to register
+     * @param annotation the metadata used to create the registry entry
+     */
+    public synchronized void install(Class<? extends C> clazz, A annotation) {
         Entry entry = newEntry(clazz, annotation);
         entries.add(entry);
     }
 
-    public void clear() {
+    /**
+     * Removes all entries from this registry.
+     */
+    public synchronized void clear() {
         entries.clear();
     }
 
     protected abstract Entry newEntry(Class<? extends C> clazz, A annotation);
 
-    protected Entry findEntry(K key) {
+    /**
+     * Discovers subclasses indexed for the given component type and installs those annotated
+     * with the given registration annotation.
+     *
+     * @param componentType the base component type to discover
+     * @param annotationType the annotation that supplies registration metadata
+     */
+    protected final synchronized void installAnnotatedSubclasses(
+            Class<C> componentType, Class<A> annotationType) {
+        ClassIndex.getSubclasses(componentType).forEach(clazz -> {
+            A annotation = clazz.getAnnotation(annotationType);
+            if (annotation != null)
+                install(clazz, annotation);
+        });
+    }
+
+    protected synchronized Entry findEntry(K key) {
         for (Entry e: entries)
             if (e.handle(key))
                 return e;
         return null;
     }
 
-    public Entry findByClass(Class<? extends C> aClass) {
+    /**
+     * Finds an entry by its component class.
+     *
+     * @param aClass the component class to search for
+     * @return the entry for that class, or {@code null} if none is found
+     */
+    public synchronized Entry findByClass(Class<? extends C> aClass) {
         for (Entry e: entries)
             if (e.clazz.equals(aClass))
                 return e;
         return null;
     }
 
-    public Set<Entry> getEntries() {
-        return Collections.unmodifiableSet(entries);
+    /**
+     * Returns a snapshot of the entries currently in this registry in registry order.
+     *
+     * @return an unmodifiable snapshot of the registry entries
+     */
+    public synchronized Set<Entry> getEntries() {
+        Set<Entry> snapshot = new TreeSet<>(entries.comparator());
+        snapshot.addAll(entries);
+        return Collections.unmodifiableSet(snapshot);
     }
 
+    /**
+     * An entry describing a registered component and how to instantiate it.
+     */
     public abstract class Entry {
+        /** The identifier associated with this entry. */
         public final String id;
+        /** The priority used to order this entry in the registry. */
         public final int priority;
         final Class<? extends C> clazz;
         final Factory<? extends C> factory;
@@ -107,6 +186,12 @@ public abstract class Registry<K, C, A> {
             this.priority = priority;
         }
 
+        /**
+         * Creates a component instance using this entry's factory.
+         *
+         * @param args arguments passed to the factory
+         * @return the created component, or {@code null} if instantiation fails
+         */
         public C instantiate(Object[] args) {
             try {
                 return factory.newInstance(args);
@@ -117,6 +202,11 @@ public abstract class Registry<K, C, A> {
 
         protected abstract boolean handle(K key);
 
+        /**
+         * Returns this entry's identifier.
+         *
+         * @return this entry's identifier
+         */
         @Override
         public String toString() {
             return id;
@@ -134,9 +224,29 @@ public abstract class Registry<K, C, A> {
         }
     }
 
+    /**
+     * Creates instances of a registered component.
+     *
+     * @param <C> the type of component created by this factory
+     */
     public interface Factory<C> {
+        /**
+         * Creates a component instance.
+         *
+         * @param args arguments used to create the component
+         * @return the created component
+         * @throws IllegalAccessException if the component constructor is inaccessible
+         * @throws InvocationTargetException if the component constructor throws an exception
+         * @throws InstantiationException if the component cannot be instantiated
+         */
         C newInstance(Object[] args) throws IllegalAccessException, InvocationTargetException, InstantiationException;
 
+        /**
+         * Creates a component instance, returning {@code null} if instantiation fails.
+         *
+         * @param args arguments used to create the component
+         * @return the created component, or {@code null} if instantiation fails
+         */
         default C instantiate(Object[] args) {
             try {
                 return newInstance(args);

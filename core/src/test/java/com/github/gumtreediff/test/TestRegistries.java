@@ -30,15 +30,42 @@ import com.github.gumtreediff.tree.DefaultTree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TypeSet;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TestRegistries {
+    @BeforeEach
+    public void clearRegistries() {
+        Matchers.getInstance().clear();
+        TreeGenerators.getInstance().clear();
+    }
+
+    @AfterEach
+    public void rediscoverRegistries() {
+        Matchers.getInstance().discoverEntries();
+        TreeGenerators.getInstance().discoverEntries();
+    }
+
+    @Test
+    public void testAnnotatedEntryDiscovery() {
+        Matchers matchers = Matchers.getInstance();
+        TreeGenerators generators = TreeGenerators.getInstance();
+
+        matchers.discoverEntries();
+        generators.discoverEntries();
+
+        assertNotNull(matchers.getMatcher("gumtree-simple"));
+        assertTrue(generators.has("xml"));
+    }
+
     @Test
     public void testTreeGenerators() {
         TreeGenerators generators = TreeGenerators.getInstance();
@@ -73,6 +100,14 @@ public class TestRegistries {
         assertNotNull(matchers.getMatcher("foo"));
         assertNotNull(matchers.getMatcher("bar"));
         assertEquals(BarMatcher.class, matchers.getMatcherWithFallback("baz").getClass());
+
+        final Set<?> snapshot = matchers.getEntries();
+        matchers.install(UppercaseFooMatcher.class,
+                UppercaseFooMatcher.class.getAnnotation(com.github.gumtreediff.matchers.Register.class));
+        assertNotNull(matchers.findById("foo"));
+        assertNotNull(matchers.findById("FOO"));
+        assertFalse(snapshot.stream().anyMatch(entry -> entry.toString().equals("FOO")));
+        assertThrows(UnsupportedOperationException.class, snapshot::clear);
     }
 
     @Register(id = "foo", accept = "\\.foo$", priority = Registry.Priority.HIGH)
@@ -105,6 +140,14 @@ public class TestRegistries {
 
     @com.github.gumtreediff.matchers.Register(id = "bar", priority = Registry.Priority.MAXIMUM)
     public static class BarMatcher implements Matcher {
+        @Override
+        public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
+            return null;
+        }
+    }
+
+    @com.github.gumtreediff.matchers.Register(id = "FOO")
+    public static class UppercaseFooMatcher implements Matcher {
         @Override
         public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
             return null;
