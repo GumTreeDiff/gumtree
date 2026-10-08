@@ -18,6 +18,8 @@ concurrency:
 jobs:
   build-test-deploy:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
     environment: MavenCentral
     if: ${{ !(contains(github.event.head_commit.message, '[no ci]') || startsWith(github.event.head_commit.message, 'doc')) }}
     steps:
@@ -53,13 +55,45 @@ jobs:
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
           ORG_GRADLE_PROJECT_gumtreeKey: ${{ secrets.GUMTREE_KEY }}
           ORG_GRADLE_PROJECT_gumtreeKeyPassphrase: ${{ secrets.GUMTREE_KEY_PASSPHRASE }}
+      - name: prepare release notes
+        if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.VERSION) }}
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: |
+          awk -v version="$VERSION" '
+            /^## v/ {
+              if (found) exit
+              heading = "## v" version
+              if ($0 == heading || index($0, heading " ") == 1) found = 1
+            }
+            found { print }
+            END { if (!found) exit 1 }
+          ' CHANGELOG.md > release-notes.md
       - name: create github release
         if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.VERSION, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.VERSION) }}
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.21.0
         with:
           artifacts: "dist/build/distributions/gumtree*.zip"
-          bodyFile: "CHANGELOG.md"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          artifactErrorsFailBuild: true
+          bodyFile: "release-notes.md"
+      - name: create nightly github release
+        if: ${{ github.event_name == 'schedule' }}
+        uses: ncipollo/release-action@v1.21.0
+        with:
+          artifacts: "dist/build/distributions/gumtree*.zip"
+          artifactErrorsFailBuild: true
+          allowUpdates: true
+          removeArtifacts: true
+          replacesArtifacts: true
+          tag: nightly
+          commit: ${{ github.sha }}
+          name: Nightly distribution
+          body: "Nightly distribution built from commit ${{ github.sha }}."
+          prerelease: true
+          makeLatest: false
+      - name: move nightly tag to current commit
+        if: ${{ github.event_name == 'schedule' }}
+        run: git push --force origin "${GITHUB_SHA}:refs/tags/nightly"
   docker:
     runs-on: ubuntu-24.04
     needs: build-test-deploy
