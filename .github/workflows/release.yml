@@ -1,0 +1,110 @@
+name: Release GumTree
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "release-${{ github.ref }}"
+  cancel-in-progress: false
+
+jobs:
+  version:
+    runs-on: ubuntu-24.04
+    outputs:
+      matches_tag: ${{ steps.version.outputs.matches_tag }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout GumTree
+        uses: actions/checkout@v7
+        with:
+          show-progress: ''
+      - name: Check release tag
+        id: version
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          version=$(sed -n "s/^def projectsVersion = '\\([^']*\\)'.*/\\1/p" build.gradle)
+          if [[ -z "$version" ]]; then
+            echo "Could not determine projectsVersion from build.gradle" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [[ "$version" != *SNAPSHOT && "v$version" == "$RELEASE_TAG" ]]; then
+            echo "matches_tag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "matches_tag=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: version
+    if: ${{ needs.version.outputs.matches_tag == 'true' }}
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      upload_distribution: true
+    permissions:
+      contents: read
+
+  publish-maven:
+    needs: [ build, version ]
+    if: ${{ needs.version.outputs.matches_tag == 'true' }}
+    runs-on: ubuntu-24.04
+    environment: MavenCentral
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout GumTree
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          show-progress: ''
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6.4.0
+      - name: Publish release package
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+        env:
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
+          ORG_GRADLE_PROJECT_gumtreeKey: ${{ secrets.GUMTREE_KEY }}
+          ORG_GRADLE_PROJECT_gumtreeKeyPassphrase: ${{ secrets.GUMTREE_KEY_PASSPHRASE }}
+
+  github-release:
+    needs: [ build, version, publish-maven ]
+    if: ${{ needs.version.outputs.matches_tag == 'true' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout GumTree
+        uses: actions/checkout@v7
+        with:
+          show-progress: ''
+      - name: Download distribution
+        uses: actions/download-artifact@v7
+        with:
+          name: gumtree-dist
+          path: dist/build/distributions
+      - name: Prepare release notes
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          awk -v version="$VERSION" '
+            /^## v/ {
+              if (found) exit
+              heading = "## v" version
+              if ($0 == heading || index($0, heading " ") == 1) found = 1
+            }
+            found { print }
+            END { if (!found) exit 1 }
+          ' CHANGELOG.md > release-notes.md
+      - name: Create GitHub release
+        uses: ncipollo/release-action@v1.21.0
+        with:
+          artifacts: dist/build/distributions/gumtree*.zip
+          artifactErrorsFailBuild: true
+          bodyFile: release-notes.md
