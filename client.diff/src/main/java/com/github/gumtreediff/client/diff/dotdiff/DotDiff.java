@@ -23,6 +23,7 @@ package com.github.gumtreediff.client.diff.dotdiff;
 import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.actions.TreeClassifier;
 
+import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
 import com.github.gumtreediff.matchers.Mapping;
@@ -33,8 +34,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-@Register(description = "A dot diff client", options = AbstractDiffClient.DiffOptions.class)
-public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.DiffOptions> {
+@Register(description = "A dot diff client", options = DotDiff.DotDiffOptions.class)
+public final class DotDiff extends AbstractDiffClient<DotDiff.DotDiffOptions> {
     private final Diff diff;
     private final TreeClassifier classifier;
 
@@ -67,6 +68,28 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.DiffOpt
         System.out.println(writer);
     }
 
+    public static class DotDiffOptions extends AbstractDiffClient.DiffOptions {
+        int maxLabelLength = 30;
+
+        @Override
+        public Option[] values() {
+            return Option.Context.addValue(super.values(),
+                    new Option("--max-label-length", "Maximum label length (0 for unlimited).", 1) {
+                        @Override
+                        protected void process(String name, String[] args) {
+                            try {
+                                maxLabelLength = Integer.parseInt(args[0]);
+                            } catch (NumberFormatException e) {
+                                throw new Option.OptionException("Label length must be a non-negative integer.", e);
+                            }
+                            if (maxLabelLength < 0)
+                                throw new Option.OptionException("Label length must be a non-negative integer.");
+                        }
+                    }
+            );
+        }
+    }
+
     private void writeTree(TreeContext context, Writer writer) throws Exception {
         for (Tree tree : context.getRoot().preOrder()) {
             String fillColor = getDotColor(tree);
@@ -97,14 +120,45 @@ public final class DotDiff extends AbstractDiffClient<AbstractDiffClient.DiffOpt
     }
 
     private String getDotLabel(Tree tree) {
-        String label = tree.toString().replaceAll("[^A-Za-z0-9_]", "");
-        if (label.length() > 30)
-            label = label.substring(0, 20);
-        return label;
+        return formatLabel(tree.toString(), opts.maxLabelLength);
+    }
+
+    static String formatLabel(String label, int maxLength) {
+        int codePointCount = label.codePointCount(0, label.length());
+        if (maxLength > 0 && codePointCount > maxLength) {
+            int prefixLength = maxLength > 3 ? maxLength - 3 : maxLength;
+            int end = label.offsetByCodePoints(0, prefixLength);
+            label = label.substring(0, end) + (maxLength > 3 ? "..." : "");
+        }
+
+        StringBuilder escaped = new StringBuilder(label.length());
+        for (int i = 0; i < label.length(); i++) {
+            char c = label.charAt(i);
+            switch (c) {
+                case '\\':
+                    escaped.append("\\\\");
+                    break;
+                case '"':
+                    escaped.append("\\\"");
+                    break;
+                case '\n':
+                    escaped.append("\\n");
+                    break;
+                case '\r':
+                    escaped.append("\\r");
+                    break;
+                case '\t':
+                    escaped.append("\\t");
+                    break;
+                default:
+                    escaped.append(c);
+            }
+        }
+        return escaped.toString();
     }
 
     @Override
-    protected DiffOptions newOptions() {
-        return new DiffOptions();
+    protected DotDiffOptions newOptions() {
+        return new DotDiffOptions();
     }
 }

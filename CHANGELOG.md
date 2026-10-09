@@ -2,6 +2,7 @@
 
 ## Unreleased
 * Fix plugin discovery and restore the JSON generator in the CLI distribution
+* Make DOT diff labels configurable and preserve their original content
 
 ## v4.1.0
 * Registries discover annotated matchers, generators, and clients when first accessed
