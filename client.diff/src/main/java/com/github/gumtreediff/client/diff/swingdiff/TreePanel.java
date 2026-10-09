@@ -24,7 +24,6 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
@@ -34,9 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TreePanel extends JPanel {
-
     private static final long serialVersionUID = 1L;
-    private JTree jtree;
+    private JTree jTree;
     private TreeContext tree;
     private Map<Tree, DefaultMutableTreeNode> trees;
 
@@ -51,7 +49,7 @@ public class TreePanel extends JPanel {
         for (Tree child: root.getChildren())
             createNodes(top, child);
 
-        jtree = new JTree(top) {
+        jTree = new JTree(top) {
             private static final long serialVersionUID = 1L;
             
             @Override
@@ -65,10 +63,10 @@ public class TreePanel extends JPanel {
                 return "";
             }
         };
-        jtree.setCellRenderer(renderer);
-        jtree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        jTree.setCellRenderer(renderer);
+        jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        JScrollPane treeView = new JScrollPane(jtree);
+        JScrollPane treeView = new JScrollPane(jTree);
         Dimension minimumSize = new Dimension(100, 50);
         treeView.setMinimumSize(minimumSize);
 
@@ -80,7 +78,7 @@ public class TreePanel extends JPanel {
     }
 
     public JTree getJTree() {
-        return jtree;
+        return jTree;
     }
 
     public Map<Tree, DefaultMutableTreeNode> getTrees() {
@@ -89,13 +87,6 @@ public class TreePanel extends JPanel {
 
     public TreeContext getTree() {
         return this.tree;
-    }
-
-    public void valueChanged(TreeSelectionEvent e) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) jtree.getLastSelectedPathComponent();
-        if (node == null) return;
-        Object nodeInfo = node.getUserObject();
-        System.out.println(nodeInfo);
     }
 
     private void createNodes(DefaultMutableTreeNode parent, Tree tree) {

@@ -27,7 +27,8 @@ import java.util.List;
 import com.github.gumtreediff.tree.*;
 import org.junit.jupiter.api.Test;
 
-import javax.lang.model.type.ArrayType;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,6 +51,27 @@ public class TestTree {
         otherSubtree.addChild(new DefaultTree(TypeSet.type("b")));
         results = root.searchSubtree(otherSubtree);
         assertEquals(0, results.size());
+    }
+
+    @Test
+    public void testIsRoot() {
+        Tree tree = new DefaultTree(TypeSet.type("a"));
+        tree.addChild(new DefaultTree(TypeSet.type("b")));
+        tree.addChild(new DefaultTree(TypeSet.type("c"), "foo"));
+        assertTrue(tree.isRoot());
+        assertFalse(tree.getChild(0).isRoot());
+        assertFalse(tree.getChild(1).isRoot());
+    }
+
+    @Test
+    public void testInsertChild() {
+        Tree tree = new DefaultTree(TypeSet.type("a"));
+        tree.addChild(new DefaultTree(TypeSet.type("b")));
+        tree.addChild(new DefaultTree(TypeSet.type("c"), "foo"));
+        System.out.println(tree.getChildren().size());
+        tree.insertChild(new DefaultTree(TypeSet.type("m")), 1);
+        assertEquals(TypeSet.type("m"), tree.getChild(1).getType());
+        assertEquals(tree, tree.getChild(1).getParent());
     }
 
     @Test
@@ -179,7 +201,9 @@ public class TestTree {
         assertTrue(root.isIsoStructuralTo(rootCpy));
         rootCpy.getChild("0.0").setLabel("foo");
         assertTrue(root.isIsoStructuralTo(rootCpy));
-        root.getChild("0.0").setLabel("foo");
+        rootCpy.getChild("0.1").setType(TypeSet.type("foo"));
+        assertFalse(root.isIsoStructuralTo(rootCpy));
+        root.getChild("0.1").setType(TypeSet.type("foo"));
         assertTrue(root.isIsoStructuralTo(rootCpy));
         root.addChild(new FakeTree());
         assertFalse(root.isIsoStructuralTo(rootCpy));
@@ -232,6 +256,13 @@ public class TestTree {
 
     @Test
     public void testTypesAndLabels() {
+        Type origType = TypeSet.type("anewtype");
+        Type otherType = TypeSet.type("othernewtype");
+        Type origCopyType = TypeSet.type("anewtype");
+        assertNotNull(origType);
+        assertSame(origType, origCopyType);
+        assertNotEquals(origType, otherType);
+        assertEquals("anewtype", origType.name);
         Tree t1 = new DefaultTree(TypeSet.type("foo"));
         Tree t2 = new DefaultTree(TypeSet.type("foo"));
         assertTrue(t1.hasSameType(t2));
@@ -256,5 +287,26 @@ public class TestTree {
         t3.setPos(1);
         t3.setLength(2);
         assertEquals("foo: hello [1,3]", t3.toString());
+    }
+
+    @Test
+    public void testTypeThreading() throws InterruptedException {
+        int n = 20;
+        ExecutorService exec = Executors.newFixedThreadPool(n);
+        List<Type> types = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            exec.submit(() -> {
+                types.add(TypeSet.type("foo"));
+            });
+        }
+
+        exec.awaitTermination(1, java.util.concurrent.TimeUnit.SECONDS);
+
+        for (Type t1 : types) {
+            for (Type t2: types) {
+                assertSame(t1, t2);
+            }
+        }
     }
 }

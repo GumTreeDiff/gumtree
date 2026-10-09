@@ -36,11 +36,10 @@ public final class SwingDiff extends AbstractDiffClient<AbstractDiffClient.DiffO
 
     @Override
     public void run() throws IOException {
-        Diff diff = getDiff();
         javax.swing.SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("GumTree");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.add(new MappingsPanel(opts.srcPath, opts.dstPath, diff));
+            frame.add(new DirectoryPanel(opts.srcPath, opts.dstPath, this));
             frame.pack();
             frame.setVisible(true);
         });

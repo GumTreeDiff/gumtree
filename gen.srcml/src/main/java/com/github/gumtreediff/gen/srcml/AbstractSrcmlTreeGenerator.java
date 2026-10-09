@@ -49,7 +49,11 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
                     type("name"),
                     type("comment"),
                     type("literal"),
-                    type("operator")));
+                    type("operator"),
+                    type("file"),
+                    type("directive"),
+                    type("modifier")
+            ));
 
     Type position = type("position");
 
@@ -159,6 +163,6 @@ public abstract class AbstractSrcmlTreeGenerator extends ExternalProcessTreeGene
     public abstract String getLanguage();
 
     public String[] getCommandLine(String file) {
-        return new String[]{SRCML_CMD, "-l", getLanguage(), "--position", file, "--tabs=1"};
+        return new String[]{SRCML_CMD, "--register-ext", "txt=" + getLanguage(), "--position", file, "--tabs=1"};
     }
 }

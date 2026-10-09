@@ -122,6 +122,26 @@ public final class SequenceAlgorithms {
 
     /**
      * Returns the longest common subsequence between the two list of nodes. This version use
+     *     type to ensure equality.
+     *
+     * @see Tree#hasSameType(Tree)
+     * @return a list of size 2 int arrays that corresponds
+     *     to match of index in sequence 1 to index in sequence 2.
+     */
+    public static List<int[]> longestCommonSubsequenceWithType(List<Tree> s0, List<Tree> s1) {
+        int[][] lengths = new int[s0.size() + 1][s1.size() + 1];
+        for (int i = 0; i < s0.size(); i++)
+            for (int j = 0; j < s1.size(); j++)
+                if (s0.get(i).hasSameType(s1.get(j)))
+                    lengths[i + 1][j + 1] = lengths[i][j] + 1;
+                else
+                    lengths[i + 1][j + 1] = Math.max(lengths[i + 1][j], lengths[i][j + 1]);
+
+        return extractIndexes(lengths, s0.size(), s1.size());
+    }
+
+    /**
+     * Returns the longest common subsequence between the two list of nodes. This version use
      *     isomorphism to ensure equality.
      *
      * @see Tree#isIsomorphicTo(Tree)

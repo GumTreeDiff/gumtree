@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,9 +40,7 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.AbstractSubtreeMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
 
@@ -108,7 +105,7 @@ class TestGumtreeProperties {
     void testChangeDistillerLeavesMatcher() {
         ChangeDistillerLeavesMatcher matcher = new ChangeDistillerLeavesMatcher();
         GumtreeProperties properties = new GumtreeProperties();
-        final Double anotherValue = 0.99999;
+        final double anotherValue = 0.99999;
 
         properties.put(ConfigurationOptions.cd_labsim, anotherValue);
         matcher.configure(properties);
@@ -120,10 +117,10 @@ class TestGumtreeProperties {
     }
 
     @Test
-    void testAbstractBottomUpMatcher() {
-        AbstractBottomUpMatcher matcher = new CompleteBottomUpMatcher();
+    void testGreedyBottomUpMatcher() {
+        GreedyBottomUpMatcher matcher = new GreedyBottomUpMatcher();
         GumtreeProperties properties = new GumtreeProperties();
-        final Double anotherValue = 0.99;
+        final double anotherValue = 0.99;
 
         properties.put(ConfigurationOptions.bu_minsim, anotherValue);
         matcher.configure(properties);

@@ -20,53 +20,36 @@
 
 package com.github.gumtreediff.client.diff.webdiff;
 
-import org.rendersnake.DocType;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
+import j2html.tags.Tag;
+import j2html.tags.specialized.HtmlTag;
 
-import java.io.IOException;
+import static j2html.TagCreator.*;
 
-import static org.rendersnake.HtmlAttributesFactory.*;
-
-public class MergelyDiffView implements Renderable {
-
-    private int id;
-
-    public MergelyDiffView(int id) {
-        this.id = id;
+public class MergelyDiffView {
+    public static HtmlTag build(int id) {
+        return html(
+            Header.build(),
+            body(
+                div(
+                    div().withId("compare").withStyle("width: 100%; height: 100%;")
+                ),
+                script("lhs_url = \"/left/" + id + "\";" + "rhs_url = \"/right/" + id + "\";").withType("text/javascript"),
+                script().withSrc("/dist/launch-mergely.js").withType("text/javascript")
+            )
+        ).withLang("en");
     }
 
-    @Override
-    public void renderOn(HtmlCanvas html) throws IOException {
-        html
-        .render(DocType.HTML5)
-        .html(lang("en"))
-                .render(new Header())
-                .body()
-                    .div(class_("mergely-full-screen-8"))
-                        .div(class_("mergely-resizer"))
-                            .div(id("mergely"))._div()
-                        ._div()
-                    ._div()
-                    .macros().script("lhs_url = \"/left/" + id + "\";")
-                    .macros().script("rhs_url = \"/right/" + id + "\";")
-                    .macros().javascript("/dist/launch-mergely.js")
-                ._body()
-        ._html();
-    }
+    private static class Header {
+        public final static String MERGELY_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/mergely/5.3.6/mergely.min.js";
 
-    private static class Header implements Renderable {
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-            html
-                    .head()
-                        .macros().javascript(WebDiff.JQUERY_JS_URL)
-                        .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js")
-                        .macros().stylesheet("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.css")
-                        .macros().javascript("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/search/searchcursor.min.js")
-                        .macros().javascript("/dist/mergely.js")
-                        .macros().stylesheet("/dist/mergely.css")
-                    ._head();
+        public final static String MERGELY_CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/mergely/5.3.6/mergely.min.css";
+
+
+        public static Tag build() {
+            return head(
+                script().withSrc(MERGELY_JS_URL).withType("text/javascript"),
+                link().withHref(MERGELY_CSS_URL).withType("text/css").withRel("stylesheet")
+            );
         }
     }
 }

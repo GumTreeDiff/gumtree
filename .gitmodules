@@ -1,0 +1,3 @@
+[submodule "benchmark/datasets"]
+	path = benchmark/datasets
+	url = https://github.com/GumTreeDiff/datasets.git

@@ -1,0 +1,285 @@
+go:
+  flattened:
+    - interpreted_string_literal
+  ignored:
+    - "\n"
+    - (
+    - )
+    - '{'
+    - '}'
+    - '.'
+  aliased: {}
+  label_ignored: []
+java:
+  flattened:
+    - scoped_identifier
+    - integral_type
+    - array_type
+    - generic_type
+    - scoped_type_identifier
+    - type_parameter
+  aliased:
+    +=: affectation_operator
+    -=: affectation_operator
+    '*=': affectation_operator
+    /=: affectation_operator
+    =: affectation_operator
+    '|=': affectation_operator
+    '&=': affectation_operator
+    ^=: affectation_operator
+    '-': arithmetic_operator
+    +: arithmetic_operator
+    /: arithmetic_operator
+    '*': arithmetic_operator
+    ==: comparison_operator
+    'binary_expression <': comparison_operator
+    <=: comparison_operator
+    'binary_expression >': comparison_operator
+    '>=': comparison_operator
+    '!=': comparison_operator
+    '&&': logical_operator
+    '||': logical_operator
+    ++: increment_operator
+    --: increment_operator
+    '&': bitwise_operator
+    '|': bitwise_operator
+    ^: bitwise_operator
+    scoped_identifier: identifier
+    public: visibility
+    protected: visibility
+    private: visibility
+    class_declaration: type_declaration
+    interface_declaration: type_declaration
+    enum_declaration: type_declaration
+    integral_type: type
+    type_identifier: type
+    array_type: type
+    generic_type: type
+    void_type: type
+    boolean_type: type
+    scoped_type_identifier: type
+    enhanced_for_statement: for_statement
+    'enhanced_for_statement :': for_iterated
+    class: type_keyword
+    interface: type_keyword
+    enum: type_keyword
+    class_body: type_body
+    interface_body: type_body
+    enum_body: type_body
+  ignored:
+    - ;
+    - '.'
+    - ','
+    - '{'
+    - '}'
+    - (
+    - )
+    - '['
+    - ']'
+    - import
+    - return
+    - for
+    - if
+    - else
+    - while
+    - break
+    - yield
+    - do
+    - break
+    - throw
+    - 'type_parameters <'
+    - 'type_parameters >'
+  label_ignored: []
+ocaml:
+  flattened:
+    - string
+  aliased: {}
+  ignored: []
+  label_ignored: []
+python:
+  flattened:
+    - string
+  aliased:
+    '==': comparison_operator_literal
+    '<=': comparison_operator_literal
+    '>=': comparison_operator_literal
+    '!=': comparison_operator_literal
+    '<': comparison_operator_literal
+    '>': comparison_operator_literal
+    '<>': comparison_operator_literal
+    'and': logical_operator_literal
+    'or': logical_operator_literal
+    'augmented_assignment': assignment
+    '=': assignment_operator_literal
+    '-=': assignment_operator_literal
+    '+=': assignment_operator_literal
+    '*=': assignment_operator_literal
+    '/=': assignment_operator_literal
+    '//=': assignment_operator_literal
+    '%=': assignment_operator_literal
+    '**=': assignment_operator_literal
+  ignored:
+    - '('
+    - ')'
+    - '{'
+    - '}'
+    - '['
+    - ']'
+    - '.'
+    - ':'
+    - ','
+    - 'default_parameter ='
+    - 'wildcard_import *'
+    - 'def'
+    - 'for'
+    - 'in'
+    - 'if'
+    - 'with'
+    - 'return'
+  label_ignored: []
+rust:
+  flattened:
+    - string_literal
+    - scoped_identifier
+    - visibility_modifier
+  aliased:
+    scoped_identifier: identifier
+  ignored:
+    - ;
+    - '.'
+    - ','
+    - (
+    - )
+    - '{'
+    - '}'
+    - '['
+    - ']'
+    - '::'
+    - ':'
+    - fn
+    - '->'
+  label_ignored: []
+kotlin:
+  flattened: [ ]
+  aliased:
+    class: type_keyword
+    interface: type_keyword
+    class_body: type_body
+    interface_body: type_body
+    enum_class_body: type_body
+    object: type_keyword
+    return: jump_keyword
+    throw: jump_keyword
+    break: jump_keyword
+    continue: jump_keyword
+    public: visibility_modifier
+    protected: visibility_modifier
+    private: visibility_modifier
+    internal: visibility_modifier
+    sealed: class_modifier
+    data: class_modifier
+    inner: class_modifier
+    enum: class_modifier
+    annotation: class_modifier
+    tailrec: function_modifier
+    operator: function_modifier
+    inline: function_modifier
+    infix: function_modifier
+    suspend : function_modifier
+    external: function_modifier
+    open: inherit_modifier
+    abstract: inherit_modifier
+    final: inherit_modifier
+    const: property_modifier
+    override: member_modifier
+    lateinit: member_modifier
+    vararg: parameter_modifier
+    noinline: parameter_modifier
+    crossinline: parameter_modifier
+    reified: reification_modifier
+    expect: platform_modifier
+    actual: platform_modifier
+    fun: function_keyword
+    by: delegate_keyword
+    init: initializer_keyword
+    typealias: typealias_keyword
+    super: super_expression_keyword
+    typeof: reserved_keyword
+    constructor: constructor_keyword
+    dynamic: dynamic_keyword
+    '>=': comparison_operator
+    '!=': comparison_operator
+    '&&': logical_operator
+    '||': logical_operator
+    ++: increment_operator
+    --: increment_operator
+    '&': bitwise_operator
+    '|': bitwise_operator
+    ^: bitwise_operator
+    +=: affectation_operator
+    -=: affectation_operator
+    '*=': affectation_operator
+    /=: affectation_operator
+    =: affectation_operator
+    '|=': affectation_operator
+    '&=': affectation_operator
+    ^=: affectation_operator
+    '-': arithmetic_operator
+    +: arithmetic_operator
+    /: arithmetic_operator
+    '*': arithmetic_operator
+    ==: comparison_operator
+    ===: comparison_operator
+    '!==': comparison_operator
+    'comparison_expression <': comparison_operator
+    'comparison_expression >': comparison_operator
+    val: property_declaration_keyword
+    var: property_declaration_keyword
+    '..': range_creation_operator
+    '..<': range_creation_operator
+    '!!': non-null_assertion_operator
+    '?.': null_safe_call_operator
+    'as': type_conversion_or_type_alias_keyword
+    'as?': null_safe_type_conversion_keyword
+    'is': type_check_operator
+    '!is': type_check_operator
+    '::': reference_extraction_operator
+    '?:': elvis_operator
+    '->': arrow
+    '@': at
+    '_': anonymous_parameter
+    '.*': import_all_identifier
+    'variance_modifier in': inverter_keyword
+    'variance_modifier out': covariance_keyword
+    'check_expression in': collection_contains
+    'check_expression !in': collection_not_contains
+    'range_test in': collection_contains
+    'range_test !in': collection_not_contains
+    'for_statement in': collection_iterated
+  ignored:
+    - ;
+    - .
+    - )
+    - (
+    - ':'
+    - ','
+    - '}'
+    - '{'
+    - $
+    - if
+    - for
+    - try
+    - catch
+    - finally
+    - else
+    - while
+    - do
+    - when
+    - import
+    - 'setter set'
+    - 'getter get'
+    - 'type_arguments <'
+    - 'type_arguments >'
+    - 'type_parameters <'
+    - 'type_parameters >'
+  label_ignored: []

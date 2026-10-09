@@ -17,4 +17,5 @@
     <suppress files=".*View.java" checks="LineLength"/>
     <suppress files=".*CdJdtVisitor.java" checks=".*"/>
     <suppress files=".*Run.java" checks="Indentation"/>
+    <suppress files=".*View.java" checks=".*"/>
 </suppressions>

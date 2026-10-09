@@ -35,7 +35,7 @@ public class TypeSet {
      * Build a type with the provided name. If the provided name is null or
      * the empty string, the empty type will be returned.
      */
-    public static Type type(String value) {
+    public static synchronized Type type(String value) {
         return implementation.makeOrGetType(value);
     }
 

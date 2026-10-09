@@ -27,7 +27,8 @@ import java.util.function.Function;
 /**
  * A priority queue for trees. Priority must be a metric such as the value of a child tree is always
  * less than the value of its parent. Also, if two trees are isomorphic, they must have
- * the same priority. Trees with a priority inferior than
+ * the same priority. Trees for which the metric value is less than minimumPriority are not appended
+ * to the queue.
  */
 public interface PriorityTreeQueue {
     Function<Tree, Integer> HEIGHT_PRIORITY_CALCULATOR = (Tree t) -> t.getMetrics().height;
@@ -89,22 +90,24 @@ public interface PriorityTreeQueue {
     void clear();
 
     /**
-     * Pop the provided queues until their current priorities are equal or they are empty.
+     * Pop the provided queues until their current priorities are equals.
+     * @return true if there are elements with a same priority in the queues
+     *     false as soon as one queue is empty, in which case both queues are cleared.
      */
-    static void synchronize(PriorityTreeQueue q1, PriorityTreeQueue q2) {
+    static boolean synchronize(PriorityTreeQueue q1, PriorityTreeQueue q2) {
+        while (!(q1.isEmpty() || q2.isEmpty()) && q1.currentPriority() != q2.currentPriority()) {
+            if (q1.currentPriority() > q2.currentPriority())
+                q1.popOpen();
+            else
+                q2.popOpen();
+        }
+
         if (q1.isEmpty() || q2.isEmpty()) {
             q1.clear();
             q2.clear();
-            return;
+            return false;
         }
-
-        while (q1.currentPriority() != q2.currentPriority()) {
-            List<Tree> pop = (q1.currentPriority() > q2.currentPriority()) ? q1.popOpen() : q2.popOpen();
-            if (q1.isEmpty() || q2.isEmpty()) {
-                q1.clear();
-                q2.clear();
-                return;
-            }
-        }
+        else
+            return true;
     }
 }

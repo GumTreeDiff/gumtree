@@ -22,7 +22,7 @@ package com.github.gumtreediff.client.diff;
 
 import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Option;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.client.Register;
 

@@ -20,11 +20,9 @@
 
 package com.github.gumtreediff.matchers;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.matchers.heuristic.IdMatcher;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
@@ -39,7 +37,6 @@ import com.github.gumtreediff.matchers.optimizations.LcsOptMatcherThetaB;
 import com.github.gumtreediff.matchers.optimizations.LeafMoveMatcherThetaE;
 import com.github.gumtreediff.matchers.optimizations.UnmappedLeavesMatcherThetaC;
 import com.github.gumtreediff.tree.Tree;
-import com.google.common.collect.Sets;
 
 /**
  * A class defining the CompositeMatcher class, which is a pipeline of matchers.
@@ -73,7 +70,7 @@ public class CompositeMatchers {
 
         @Override
         public Set<ConfigurationOptions> getApplicableOptions() {
-            Set<ConfigurationOptions> allOptions = Sets.newHashSet();
+            Set<ConfigurationOptions> allOptions = new HashSet<>();
             for (Matcher matcher : matchers)
                 allOptions.addAll(matcher.getApplicableOptions());
 
@@ -81,17 +78,35 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "gumtree", priority = Registry.Priority.MAXIMUM)
+    @Register(id = "gumtree-simple", priority = Registry.Priority.MAXIMUM)
+    public static class SimpleGumtree extends CompositeMatcher {
+        public SimpleGumtree() {
+            super(new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
+        }
+    }
+
+    @Register(id = "gumtree-pq", priority = Registry.Priority.HIGH)
+    public static class PqGumtree extends CompositeMatcher {
+        public PqGumtree() {
+            super(new GreedySubtreeMatcher(), new PqGramBottomUpMatcher());
+        }
+    }
+
+    @Register(id = "gumtree-assignment", priority = Registry.Priority.HIGH)
+    public static class AssignmentGumtree extends AssignmentMatcher {
+    }
+
+    @Register(id = "gumtree-classic", priority = Registry.Priority.HIGH)
     public static class ClassicGumtree extends CompositeMatcher {
         public ClassicGumtree() {
             super(new GreedySubtreeMatcher(), new GreedyBottomUpMatcher());
         }
     }
 
-    @Register(id = "gumtree-simple", priority = Registry.Priority.HIGH)
-    public static class SimpleGumtree extends CompositeMatcher {
-        public SimpleGumtree() {
-            super(new GreedySubtreeMatcher(), new SimpleBottomUpMatcher());
+    @Register(id = "gumtree-simple-stable", priority = Registry.Priority.HIGH)
+    public static class SimpleGumtreeStable extends CompositeMatcher {
+        public SimpleGumtreeStable() {
+            super(new GreedySubtreeMatcher(), new SimpleMarriageBottomUpMatcher());
         }
     }
 
@@ -103,11 +118,19 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "gumtree-complete")
-    public static class CompleteGumtreeMatcher extends CompositeMatcher {
-        public CompleteGumtreeMatcher() {
-            super(new CliqueSubtreeMatcher(),
-                    new CompleteBottomUpMatcher());
+    @Register(id = "gumtree-hybrid")
+    public static class HybridGumtree extends CompositeMatcher {
+        public HybridGumtree() {
+            super(new GreedySubtreeMatcher(),
+                    new HybridBottomUpMatcher());
+        }
+    }
+
+    @Register(id = "gumtree-hybrid-id")
+    public static class HybridIdGumtree extends CompositeMatcher {
+        public HybridIdGumtree() {
+            super(new IdMatcher(), new GreedySubtreeMatcher(),
+                    new HybridBottomUpMatcher());
         }
     }
 
@@ -148,7 +171,7 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "classic-gumtree-theta")
+    @Register(id = "gumtree-classic-theta")
     public static class ClassicGumtreeTheta extends CompositeMatcher {
         /**
          * Instantiates GumTree with Theta B-F.

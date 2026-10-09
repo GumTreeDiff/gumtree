@@ -20,9 +20,12 @@
 
 package com.github.gumtreediff.gen;
 
+import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.utils.Registry;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -36,10 +39,19 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
     /**
      * Return the tree generators registry instance (singleton pattern).
      */
-    public static TreeGenerators getInstance() {
-        if (registry == null)
+    public static synchronized TreeGenerators getInstance() {
+        if (registry == null) {
             registry = new TreeGenerators();
+            registry.discoverEntries();
+        }
         return registry;
+    }
+
+    /**
+     * Discovers and installs tree generators available on the classpath.
+     */
+    public synchronized void discoverEntries() {
+        installAnnotatedSubclasses(TreeGenerator.class, Register.class);
     }
 
     /**
@@ -66,11 +78,43 @@ public class TreeGenerators extends Registry<String, TreeGenerator, Register> {
         if (generator == null)
             return getTree(file);
 
-        for (Entry e : entries)
+        for (Entry e : getEntries())
             if (e.id.equals(generator))
                 return e.instantiate(null).generateFrom().file(file);
 
         throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
+    }
+
+    /**
+     * Search the tree generator with the provided name , and use it
+     * to produce a TreeContext containing the AST.
+     *
+     * @param generator the tree generator's name. It can't be null
+     * @throws UnsupportedOperationException if no suitable generator is found
+     */
+    public TreeContext getTree(Reader stream, String generator) throws UnsupportedOperationException, IOException {
+        for (Entry e : getEntries())
+            if (e.id.equals(generator))
+                return e.instantiate(null).generateFrom().reader(stream);
+
+        throw new UnsupportedOperationException("No generator \"" + generator + "\" found.");
+    }
+
+    public TreeContext getTreeFromCommand(String file, String command) throws IOException {
+        TreeGenerator g = new ExternalProcessTreeGenerator() {
+            @Override
+            protected String[] getCommandLine(String file) {
+                return command.replace("$FILE", file).split(" ");
+            }
+
+            @Override
+            protected TreeContext generate(Reader r) throws IOException {
+                String output = readStandardOutput(r);
+                TreeContext ctx = TreeIoUtils.fromXml().generateFrom().string(output);
+                return ctx;
+            }
+        };
+        return g.generateFrom().file(file);
     }
 
     /**

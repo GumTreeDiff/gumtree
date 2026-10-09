@@ -23,15 +23,15 @@ public enum ConfigurationOptions {
     /**
      * Property defining the minimum similarity threshold in bottom-up
      * matchers to match two inner nodes. It has a double value.
-     * @see com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher
-     * @see com.github.gumtreediff.matchers.heuristic.gt.SimpleBottomUpMatcher
+     * @see com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher
      */
     bu_minsim,
 
     /**
      * Property defining the minimum size threshold in bottom-up
      * in order to have the last chance match applied. It has an integer value.
-     * @see com.github.gumtreediff.matchers.heuristic.gt.AbstractBottomUpMatcher
+     * @see com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher
+     * @see com.github.gumtreediff.matchers.heuristic.gt.HybridBottomUpMatcher
      */
     bu_minsize,
 

@@ -1,84 +1,87 @@
-buildscript {
-	repositories {
-		jcenter()
-	}
-	dependencies {
-		classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
-		classpath "org.codehaus.plexus:plexus-utils:3.3.0"
-	}
-}
-
-import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
-import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
-import org.codehaus.plexus.util.IOUtil
-
 plugins {
-	id 'com.github.johnrengelman.shadow' version '6.1.0'
-	id 'application'
-}
-
-class NoNewlineTransformer extends AppendingTransformer {
-	void transform(TransformerContext context) {
-		IOUtil.copy(context.is, data)
-		context.is.close()
-	}
-}
-
-dependencies {
-	implementation project(':client')
-	implementation project(':client.diff')
-	implementation project(':gen.antlr3')
-	implementation project(':gen.antlr3-antlr')
-	implementation project(':gen.antlr3-json')
-	implementation project(':gen.antlr3-php')
-	implementation project(':gen.antlr3-r')
-	implementation project(':gen.antlr3-xml')
-	implementation project(':gen.c')
-	implementation project(':gen.css')
-	implementation project(':gen.javaparser')
-	implementation project(':gen.jdt')
-	implementation project(':gen.js')
-	implementation project(':gen.python')
-	implementation project(':gen.ruby')
-	implementation project(':gen.srcml')
+    id 'java-conv'
+    id 'com.gradleup.shadow' version '9.6.1'
+    id 'application'
 }
 
 description = 'GumTree distribution.'
 
-shadowJar {
+dependencies {
+    implementation project(':core')
+    implementation project(':client')
+    implementation project(':client.diff')
+    implementation project(':gen.css')
+    implementation project(':gen.javaparser')
+    implementation project(':gen.jdt')
+    implementation project(':gen.json')
+    implementation project(':gen.js')
+    implementation project(':gen.srcml')
+    implementation project(':gen.treesitter-ng')
+    implementation project(':gen.xml')
+    implementation project(':gen.yaml')
+}
 
-	archiveBaseName.set('gumtree')
-	archiveClassifier.set('')
-	archiveVersion.set('')
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/annotations/com.github.gumtreediff.client.Register'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/annotations/com.github.gumtreediff.gen.Register'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/annotations/com.github.gumtreediff.matchers.Register'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/services/com.github.gumtreediff.client.Client'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/services/com.github.gumtreediff.gen.TreeGenerator'
-	}
-	transform(NoNewlineTransformer.class) {
-		resource = 'META-INF/services/com.github.gumtreediff.matchers.Matcher'
-	}
+shadowJar {
+    archiveBaseName.set('gumtree')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+
+    // Do NOT use DuplicatesStrategy.EXCLUDE here: it makes shadow drop the
+    // service-file transformer's merged output in favor of the first plain
+    // duplicate, silently breaking plugin discovery. INCLUDE keeps the merge;
+    // the redundant packaging metadata is handled by the exclude rules below.
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    // Every module produces its own classindex ServiceLoader index
+    // (META-INF/services/<fqn>). They must be merged or plugin discovery will
+    // only see the first module on the classpath. The classindex annotation
+    // indexes (META-INF/annotations/<fqn>) are merged the same way; they are
+    // not read by GumTree's own registries (those use ClassIndex.getSubclasses)
+    // but keeping them complete costs nothing.
+    //
+    // Note: never add an extra `include(...)` to these transformers. The
+    // service-file transformer relocates everything it matches relative to its
+    // `path`, so including the annotation files under `META-INF/services`
+    // silently moved them to a bogus path where nothing reads them (the
+    // regression this file used to ship).
+    mergeServiceFiles()
+    mergeServiceFiles {
+        path = 'META-INF/annotations'
+    }
+
+    // Unused packaging metadata.
+    exclude('META-INF/maven/**')
+    exclude('META-INF/buildinfo.xml')
+    exclude('META-INF/eclipse.inf')
+    exclude('META-INF/p2.inf')
+    exclude('META-INF/versions/*/OSGI-INF/**')
+    // Eclipse/OSGi bundle metadata (e.g. shipped by the JDT jars).
+    exclude('**/about.html')
+    exclude('**/about_files/**')
+    exclude('**/plugin.properties')
+    exclude('**/plugin.xml')
+    exclude('**/.api_description')
+    exclude('**/.options')
+    // Modular jar descriptors cannot be honored from a fat jar.
+    exclude('**/module-info.class')
+    exclude('META-INF/versions/*/module-info.class')
 }
 
 distributions {
-	shadow {
-		distributionBaseName = 'gumtree'
-	}
+    shadow {
+        distributionBaseName = 'gumtree'
+    }
 }
 
-mainClassName = 'com.github.gumtreediff.client.Run'
-applicationName = 'gumtree'
-archivesBaseName = 'gumtree'
+application {
+    mainClass = 'com.github.gumtreediff.client.Run'
+    applicationName = 'gumtree'
+}
+
+tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    archiveBaseName.set('gumtree')
+}
+
 shadowDistZip.enabled = true
 distTar.enabled = false
 distZip.enabled = false
@@ -86,6 +89,124 @@ startScripts.enabled = false
 shadowDistTar.enabled = false
 
 jar.enabled = false
-uploadArchives.enabled = false
 
 build.finalizedBy installShadowDist
+
+// Verifies that the shadow jar keeps the classindex indexes usable for plugin
+// discovery. Guards against shadow plugin upgrades silently breaking the
+// distribution (as happened when the annotation indexes were relocated under
+// META-INF/services and when EXCLUDE dropped the merged output).
+def verifyShadowJar = tasks.register('verifyShadowJar') {
+    group = 'verification'
+    description = 'Verifies the shadow jar contents (classindex indexes usable for plugin discovery).'
+    dependsOn tasks.shadowJar
+    doLast {
+        def jarFile = tasks.shadowJar.archiveFile.get().asFile
+
+        // Only materialize the index files we actually check, to keep memory low
+        // on the fat jar (it contains tens of thousands of entries).
+        def names = []
+        def contents = [:]
+        def indexFiles = ['META-INF/services/com.github.gumtreediff.gen.TreeGenerator',
+                          'META-INF/services/com.github.gumtreediff.matchers.Matcher',
+                          'META-INF/services/com.github.gumtreediff.client.Client',
+                          'META-INF/annotations/com.github.gumtreediff.gen.Register',
+                          'META-INF/annotations/com.github.gumtreediff.matchers.Register',
+                          'META-INF/annotations/com.github.gumtreediff.client.Register'] as Set
+        new java.util.zip.ZipFile(jarFile).withCloseable { zip ->
+            zip.entries().each { entry ->
+                names.add(entry.name)
+                if (indexFiles.contains(entry.name))
+                    contents[entry.name] = new String(zip.getInputStream(entry).readAllBytes(),
+                            java.nio.charset.StandardCharsets.UTF_8)
+            }
+        }
+
+        def service = { name -> contents["META-INF/services/${name}"] }
+        def annotationIndex = { name -> contents["META-INF/annotations/${name}"] }
+
+        // The ServiceLoader-style indexes, one merged file per indexed class.
+        ['com.github.gumtreediff.gen.TreeGenerator',
+         'com.github.gumtreediff.matchers.Matcher',
+         'com.github.gumtreediff.client.Client'].each { name ->
+            if (service(name) == null)
+                throw new GradleException("Missing 'META-INF/services/${name}' in the shadow jar.")
+        }
+
+        // One representative generator per module included in the distribution.
+        def generatorIndex = service('com.github.gumtreediff.gen.TreeGenerator')
+        ['com.github.gumtreediff.gen.css.CssTreeGenerator',
+         'com.github.gumtreediff.gen.javaparser.JavaParserGenerator',
+         'com.github.gumtreediff.gen.jdt.JdtTreeGenerator',
+         'com.github.gumtreediff.gen.json.JsonTreeGenerator',
+         'com.github.gumtreediff.gen.json.XmlTreeGenerator',
+         'com.github.gumtreediff.gen.js.RhinoTreeGenerator',
+         'com.github.gumtreediff.gen.srcml.SrcmlJavaTreeGenerator',
+         'com.github.gumtreediff.gen.treesitterng.JavaTreeSitterNgTreeGenerator',
+         'com.github.gumtreediff.gen.yaml.YamlTreeGenerator'].each { clazz ->
+            if (!generatorIndex.contains(clazz))
+                throw new GradleException("Generator index is missing '${clazz}'.")
+        }
+
+        // Representative matchers, including the ones added in recent releases.
+        def matcherIndex = service('com.github.gumtreediff.matchers.Matcher')
+        ['com.github.gumtreediff.matchers.CompositeMatchers$SimpleGumtree',
+         'com.github.gumtreediff.matchers.AutoMatchers$SimpleGumtreeAuto',
+         'com.github.gumtreediff.matchers.heuristic.gt.AssignmentMatcher',
+         'com.github.gumtreediff.matchers.heuristic.gt.ContextualMatcher',
+         'com.github.gumtreediff.matchers.optimal.rted.RtedMatcher'].each { clazz ->
+            if (!matcherIndex.contains(clazz))
+                throw new GradleException("Matcher index is missing '${clazz}'.")
+        }
+
+        // Representatives of both client modules.
+        def clientIndex = service('com.github.gumtreediff.client.Client')
+        ['com.github.gumtreediff.client.ListClient',
+         'com.github.gumtreediff.client.ParseClient',
+         'com.github.gumtreediff.client.diff.webdiff.WebDiff',
+         'com.github.gumtreediff.client.diff.swingdiff.SwingDiff',
+         'com.github.gumtreediff.client.diff.dotdiff.DotDiff',
+         'com.github.gumtreediff.client.diff.HtmlDiff',
+         'com.github.gumtreediff.client.diff.TextDiff',
+         'com.github.gumtreediff.client.diff.AnnotatedXmlDiff',
+         'com.github.gumtreediff.client.diff.ClusterDiff'].each { clazz ->
+            if (!clientIndex.contains(clazz))
+                throw new GradleException("Client index is missing '${clazz}'.")
+        }
+
+        // The annotation indexes must sit at their canonical location.
+        ['com.github.gumtreediff.gen.Register',
+         'com.github.gumtreediff.matchers.Register',
+         'com.github.gumtreediff.client.Register'].each { name ->
+            if (annotationIndex(name) == null)
+                throw new GradleException("Missing 'META-INF/annotations/${name}' in the shadow jar.")
+        }
+
+        // The annotation indexes are also merged by the service-file transformer
+        // (path = 'META-INF/annotations'). Check that the merge actually combined
+        // entries from distinct modules, or a future shadow change could silently
+        // collapse them back to the first module's copy.
+        def mergedGenRegister = annotationIndex('com.github.gumtreediff.gen.Register')
+        if (!mergedGenRegister.contains('com.github.gumtreediff.io.TreeIoUtils$XmlInternalGenerator')
+                || !mergedGenRegister.contains('com.github.gumtreediff.gen.css.CssTreeGenerator'))
+            throw new GradleException('Annotation index for generators was not merged across modules.')
+        def mergedClientRegister = annotationIndex('com.github.gumtreediff.client.Register')
+        if (!mergedClientRegister.contains('com.github.gumtreediff.client.ListClient')
+                || !mergedClientRegister.contains('com.github.gumtreediff.client.diff.webdiff.WebDiff'))
+            throw new GradleException('Annotation index for clients was not merged across modules.')
+
+        // Regression check: the old configuration relocated annotation indexes
+        // under META-INF/services, where they are never read.
+        def misplaced = names.findAll { it.startsWith('META-INF/services/META-INF/') }
+        if (!misplaced.isEmpty())
+            throw new GradleException("Classindex files relocated under META-INF/services: ${misplaced}")
+
+        // Packaging metadata that should have been excluded.
+        def junk = names.findAll {
+            it.startsWith('META-INF/maven/') || it.endsWith('module-info.class')
+        }
+        if (!junk.isEmpty())
+            throw new GradleException("Unexpected entries in the shadow jar: ${junk}")
+    }
+}
+check.dependsOn verifyShadowJar

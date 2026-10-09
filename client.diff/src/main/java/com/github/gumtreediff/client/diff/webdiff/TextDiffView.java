@@ -22,81 +22,69 @@ package com.github.gumtreediff.client.diff.webdiff;
 
 import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.io.ActionsIoUtils;
-import org.rendersnake.DocType;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
+import j2html.tags.Tag;
+import j2html.tags.specialized.HtmlTag;
+
+import static j2html.TagCreator.*;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.rendersnake.HtmlAttributesFactory.*;
+public class TextDiffView {
 
-public class TextDiffView implements Renderable {
-    private File srcFile;
-    private File dstFile;
-
-    private Diff diff;
-
-    public TextDiffView(File srcFile, File dstFile, Diff diff) {
-        this.srcFile = srcFile;
-        this.dstFile = dstFile;
-        this.diff = diff;
+    public static HtmlTag build(File srcFile, File dstFile, Diff diff) throws IOException {
+        return build(srcFile, dstFile, diff, null, -1);
     }
 
-    @Override
-    public void renderOn(HtmlCanvas html) throws IOException {
-        html
-            .render(DocType.HTML5)
-            .html(lang("en"))
-                .render(new Header())
-                .body()
-                    .div(class_("container-fluid"))
-                        .div(class_("row"))
-                            .render(new MenuBar())
-                        ._div()
-                        .div(class_("row"))
-                            .div(class_("col"))
-                                .h3()
-                                    .write("Raw edit script ")
-                                    .small().content(String.format("%s -> %s", srcFile.getName(), dstFile.getName()))
-                                ._h3()
-                                .pre(class_("border p-2")).content(ActionsIoUtils.toText(diff.src, diff.editScript, diff.mappings).toString())
-                            ._div()
-                        ._div()
-                    ._div()
-                ._body()
-            ._html();
+    public static HtmlTag build(File srcFile, File dstFile, Diff diff,
+                                String selectedMatcherId, int id) throws IOException {
+        return html(
+            Header.build(),
+            body(
+                div(
+                    div(MenuBar.build(selectedMatcherId, id)).withClass("row"),
+                    div(
+                        div(
+                            h3(
+                                join("Raw edit script",
+                                        small(String.format("%s -> %s", srcFile.getName(), dstFile.getName()))
+                            )),
+                            pre(ActionsIoUtils.toText(diff.src, diff.editScript,
+                                    diff.mappings).toString()).withClasses("border", "p-2")
+                        ).withClass("col")
+                    ).withClass("row")
+                ).withClass("container-fluid")
+            )
+        );
     }
 
-    private static class Header implements Renderable {
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-             html
-                     .head()
-                        .meta(charset("utf8"))
-                        .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
-                        .title().content("GumTree")
-                        .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
-                        .macros().javascript(WebDiff.JQUERY_JS_URL)
-                        .macros().javascript(WebDiff.POPPER_JS_URL)
-                        .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
-                        .macros().javascript("/dist/shortcuts.js")
-                     ._head();
+    private static class Header {
+
+        public static Tag build() {
+            return head(
+                meta().withCharset("utf8"),
+                meta().withName("viewport").withContent("width=device-width, initial-scale=1.0"),
+                title("GumTree"),
+                link().withRel("stylesheet").withType("text/css").withHref(WebDiff.BOOTSTRAP_CSS_URL),
+                script().withType("text/javascript").withSrc(WebDiff.BOOTSTRAP_JS_URL),
+                script().withType("text/javascript").withSrc("/dist/shortcuts.js")
+            );
         }
     }
 
-    private static class MenuBar implements Renderable {
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-            html
-                    .div(class_("col"))
-                        .div(class_("btn-toolbar justify-content-end"))
-                            .div(class_("btn-group"))
-                                .a(class_("btn btn-default btn-sm btn-primary").href("/list")).content("Back")
-                                .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
-                            ._div()
-                        ._div()
-                    ._div();
+    private static class MenuBar  {
+
+        public static Tag build(String selectedMatcherId, int id) {
+            return div(
+                div(
+                    iff(id >= 0, MatcherSelector.build(selectedMatcherId, "/raw-diff/" + id)),
+                    div(
+                        a("Back").withHref("/list").withClasses("btn btn-default", "btn-sm btn-primary"),
+                        a("Quit").withHref("/quit").withClasses("btn btn-default", "btn-sm btn-danger")
+                    ).withClass("btn-group")
+                ).withClasses("btn-toolbar", "justify-content-end", "gap-2")
+                        .withStyle("min-height: 31px; align-items: center;")
+            ).withClass("col");
         }
     }
 }

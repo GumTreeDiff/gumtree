@@ -16,3 +16,4 @@ samples/
 build/
 out/
 .vagrant/
+.DS_Store

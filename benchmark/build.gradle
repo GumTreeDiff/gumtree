@@ -1,37 +1,97 @@
 plugins {
+    id 'java-conv'
     id 'application'
 }
 
 dependencies {
+    implementation project(':core')
     implementation project(':gen.jdt')
+    implementation project(':gen.treesitter-ng')
 }
 
-uploadArchives.enabled = false
 jar.enabled = false
 run.enabled = false
 
-task computeResults(type: JavaExec) {
+def datasetDefinitions = [
+    runOnDefects4J: [
+        dir: 'datasets/defects4j',
+        aliases: ['defects4j', 'd4j']
+    ],
+    runOnGhJava: [
+        dir: 'datasets/gh-java',
+        aliases: ['gh-java', 'ghj']
+    ],
+    runOnGhPython: [
+        dir: 'datasets/gh-python',
+        aliases: ['gh-python', 'ghp']
+    ],
+    runOnBugsInPy: [
+        dir: 'datasets/bugsinpy',
+        aliases: ['bugsinpy', 'bip']
+    ]
+]
+
+tasks.register('listMatchers', JavaExec) {
+    group = 'benchmark'
+    description = 'Lists all available benchmark matcher presets and registered IDs.'
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.github.gumtree.benchmark.Defects4JLauncher'
-    args "${project.projectDir}/defects4j", "${project.buildDir}/reports/defects4j.csv"
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args = ['--list-matchers']
 }
 
-task plotResults(type: Exec) {
-    commandLine "python3", "${project.projectDir}/src/main/python/plotDefects4J.py", "${project.buildDir}/reports/defects4j.csv"
+tasks.register('runBenchmark', JavaExec) {
+    group = 'benchmark'
+    description = 'Runs benchmarks on selected or all datasets (use -Pbenchmarks=d4j,bip,... and -Pmatchers=...).'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunBenchmarks'
+    doFirst {
+        file("${project.layout.buildDirectory.get()}/reports/benchmark").mkdirs()
+        def selectedBenchmarks = project.findProperty('benchmarks') ?: project.findProperty('datasets') ?: 'all'
+        def requested = selectedBenchmarks.toString().split(',').collect { it.trim().toLowerCase() }.findAll { !it.isEmpty() }
+        def tasksToRun = []
+        if (requested.contains('all')) {
+            tasksToRun = datasetDefinitions.keySet() as List
+        } else {
+            datasetDefinitions.each { taskName, defn ->
+                if (requested.contains(taskName.toLowerCase()) || defn.aliases.any { requested.contains(it) }) {
+                    tasksToRun.add(taskName)
+                }
+            }
+            if (tasksToRun.isEmpty()) {
+                throw new IllegalArgumentException("Unknown benchmark(s): ${requested}. Available: all, defects4j (d4j), bugsinpy (bip), gh-java (ghjava), gh-python (ghpython)")
+            }
+        }
+        def taskArgs = [ "${project.layout.buildDirectory.get()}/reports/benchmark/benchmark-${new Date().format('yyyyMMdd-HHmmssSSS')}.csv" ]
+        taskArgs.addAll(tasksToRun.collect { project.layout.projectDirectory.dir(datasetDefinitions[it].dir) })
+        taskArgs.add('--matchers')
+        if (project.hasProperty('matchers')) {
+            taskArgs.addAll(project.property('matchers').toString().split(',')
+                    .collect { it.trim() }.findAll { !it.isEmpty() })
+        } else {
+            taskArgs.add('simple')
+        }
+        setArgs(taskArgs)
+        if (project.hasProperty('limit')) {
+            systemProperty 'gumtree.benchmark.limit', project.property('limit')
+        }
+    }
 }
 
-task testSizeRegressions(type: Exec) {
-    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
+tasks.register('analyzeBenchmark', JavaExec) {
+    group = 'benchmark'
+    description = 'Analyzes benchmark CSV files and outputs a standalone HTML report.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.AnalyzeBenchmarks'
+    onlyIf {
+        !tasks.named('runBenchmark').get().state.failure
+    }
+    doFirst {
+        file("${project.layout.buildDirectory.get()}/reports/benchmark").mkdirs()
+    }
+    args = ["${project.layout.buildDirectory.get()}/reports/benchmark",
+            "${project.layout.buildDirectory.get()}/reports/benchmark/analysis.html"]
 }
 
-task displaySizeDifferences(type: Exec) {
-    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
-}
-
-task testRuntimeRegressions(type: Exec) {
-    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "runtime"
-}
-
-task runBenchmark() {
-    dependsOn plotResults, testSizeRegressions, testRuntimeRegressions
+tasks.named('runBenchmark').configure {
+    finalizedBy 'analyzeBenchmark'
 }

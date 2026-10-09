@@ -1,56 +1,23 @@
-name: Build, Test and Deploy GumTree
+name: Build and Test GumTree
 
 on:
   push:
     branches: [ main ]
-    tags:
-      - 'v*'
   pull_request:
     branches: [ main ]
-  schedule:
-    - cron: '59 23 * * SUN'
-  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "ci-${{ github.head_ref || github.ref }}"
+  cancel-in-progress: true
 
 jobs:
-  build-test-deploy:
-    runs-on: ubuntu-latest
-    container: gumtreediff/gumtree:latest
-    if: ${{ github.event_name == 'pull_request' || !contains(github.event.head_commit.message, '[no ci]') || !startsWith(github.event.head_commit.message, 'doc') }}
-    steps:
-      - name: checkout gumtree
-        uses: actions/checkout@v2
-      - name: retrieve gumtree version
-        id: version
-        run: echo "::set-output name=version::$(cat build.gradle | grep "version =" | cut -f 2 -d "'")"
-        shell: bash
-      - name: build gumtree
-        run: ./gradlew build :benchmark:computeResults :benchmark:testSizeRegressions :benchmark:plotResults 
-      - name: upload defects4j results
-        uses: actions/upload-artifact@v2
-        with:
-          name: defects4j-report
-          path: benchmark/build/reports/defects4j*
-      - name: generate jacoco report
-        run: ./gradlew jacocoRootReport
-      - name: upload coverage report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: build/reports/jacoco/jacocoRootReport/html/
-      - name: upload snapshot package
-        if: ${{ github.event_name == 'schedule' && contains(steps.version.outputs.version, 'SNAPSHOT') }}
-        run: ./gradlew publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: upload release package
-        if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
-        run: ./gradlew publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: create github release
-        if: ${{ github.event_name == 'push' && !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "dist/build/distributions/gumtree*.zip"
-          bodyFile: "CHANGELOG.md"
-          token: ${{ secrets.GITHUB_TOKEN }}
+  build:
+    if: ${{ !contains(github.event.head_commit.message || '', '[no ci]') && !startsWith(github.event.head_commit.message || '', 'doc') }}
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      upload_distribution: false
+    permissions:
+      contents: read

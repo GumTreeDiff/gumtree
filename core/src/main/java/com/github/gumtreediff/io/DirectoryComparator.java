@@ -40,7 +40,7 @@ public class DirectoryComparator {
 
     private Set<File> deletedFiles;
 
-    private  Set<File> addedFiles;
+    private Set<File> addedFiles;
 
     private boolean dirMode = true;
 
@@ -63,8 +63,9 @@ public class DirectoryComparator {
 
         if (!(Files.isDirectory(this.src) || Files.isDirectory(this.dst))) {
             this.modifiedFiles.add(new Pair<>(this.src.toFile(), this.dst.toFile()));
-            this.src = this.src.getParent();
-            this.dst = this.dst.getParent();
+
+            this.src = this.src.toAbsolutePath().getParent(); // avoid null parents
+            this.dst = this.dst.toAbsolutePath().getParent(); // avoid null parents
             this.dirMode = false;
         }
     }
@@ -125,6 +126,22 @@ public class DirectoryComparator {
 
     public Set<File> getAddedFiles() {
         return addedFiles;
+    }
+
+    public void pairFiles(File srcFile, File dstFile) {
+        if (!deletedFiles.remove(srcFile))
+            throw new IllegalArgumentException("File " + srcFile + " is not in the deleted files set.");
+        if (!addedFiles.remove(dstFile))
+            throw new IllegalArgumentException("File " + dstFile + " is not in the added files set.");
+        modifiedFiles.add(new Pair<>(srcFile, dstFile));
+    }
+
+    public void unpairFiles(int id) {
+        if (id < 0 || id >= modifiedFiles.size())
+            throw new IllegalArgumentException("Invalid pair id: " + id);
+        Pair<File, File> pair = modifiedFiles.remove(id);
+        deletedFiles.add(pair.first);
+        addedFiles.add(pair.second);
     }
 
     private File toSrcFile(String s) {

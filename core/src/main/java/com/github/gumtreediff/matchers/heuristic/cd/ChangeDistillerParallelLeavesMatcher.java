@@ -34,7 +34,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import org.simmetrics.StringMetrics;
+import org.simmetrics.metrics.StringMetrics;
 
 import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;

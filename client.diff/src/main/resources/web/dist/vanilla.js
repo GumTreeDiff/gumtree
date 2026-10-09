@@ -59,8 +59,9 @@ $(function() {
     $("body").keypress(function (event) {
         switch(event.which) {
             case 110:
-                var mapping = nextMapping();
-                $('html, body').animate({scrollTop: $(mapping).offset().top - 200}, 100);
+                const mapping = $(nextMapping());
+                const pre = mapping.closest("pre");
+                pre.animate({scrollTop: pre.scrollTop() + mapping.position().top - 200}, 100);
                 break;
         }
     });
@@ -71,19 +72,16 @@ $(function() {
             $("span.mv.token, span.token.upd").removeClass("selected");
         } else {
             $("span.mv.token, span.token.upd").removeClass("selected");
-            var eltId = $(this).attr("id");
-            var refEltId = getMappedElement(eltId);
-            $("#" + refEltId).addClass("selected");
+            const refElt = $("#" + getMappedElement($(this).attr("id")));
             $(this).addClass("selected");
-            var sel = "#dst";
-            if (isSrc(refEltId))
-                var sel = "#src";
-            $div = $(sel);
-            $span = $("#" + refEltId);
+            refElt.addClass("selected");
+            const pre = refElt.closest("pre");
+            console.log(pre);
+            pre.animate({scrollTop: pre.scrollTop() + refElt.position().top - 200}, 100);
         }
         event.stopPropagation();
     });
-
+    
     $("span.add.token, span.token.del").click(function(event) {
         $("span.mv.token, span.token.upd").removeClass("selected");
         event.stopPropagation();

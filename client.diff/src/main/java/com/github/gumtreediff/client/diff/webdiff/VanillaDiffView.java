@@ -21,137 +21,98 @@
 package com.github.gumtreediff.client.diff.webdiff;
 
 import com.github.gumtreediff.actions.Diff;
-import org.rendersnake.DocType;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
+import j2html.tags.Tag;
+import j2html.tags.specialized.HtmlTag;
+
+import static j2html.TagCreator.*;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.charset.Charset;
 
-import static org.rendersnake.HtmlAttributesFactory.*;
+public class VanillaDiffView {
 
-public class VanillaDiffView implements Renderable {
-    private VanillaDiffHtmlBuilder rawHtmlDiff;
+    public static HtmlTag build(File srcFile, File dstFile, Diff diff, boolean dump) throws IOException  {
+        return build(srcFile, dstFile, diff, dump, null, -1);
+    }
 
-    private File srcFile;
-    private File dstFile;
-
-    private Diff diff;
-
-    private boolean dump;
-
-    public VanillaDiffView(File srcFile, File dstFile, Diff diff, boolean dump) throws IOException {
-        this.srcFile = srcFile;
-        this.dstFile = dstFile;
-        this.diff = diff;
-        this.dump = dump;
-        rawHtmlDiff = new VanillaDiffHtmlBuilder(srcFile, dstFile, diff);
+    public static HtmlTag build(File srcFile, File dstFile, Diff diff, boolean dump,
+                                String selectedMatcherId, int id) throws IOException {
+        var rawHtmlDiff = new VanillaDiffHtmlBuilder(srcFile, dstFile, diff);
         rawHtmlDiff.produce();
+        return html(
+            Header.build(dump),
+            body(
+                div(
+                    div(MenuBar.build(selectedMatcherId, id)).withClass("row"),
+                    div(
+                        div(
+                            h5(srcFile.getName()),
+                            pre(rawHtml(rawHtmlDiff.getSrcDiff())).withClass("pre-scrollable")
+                        ).withClass("col-6"),
+                        div(
+                            h5(dstFile.getName()),
+                            pre(rawHtml(rawHtmlDiff.getDstDiff())).withClass("pre-scrollable")
+                        ).withClass("col-6")
+                    ).withClass("row")
+                ).withClass("container-fluid")
+            )
+        ).withLang("en");
     }
 
-    @Override
-    public void renderOn(HtmlCanvas html) throws IOException {
-        html
-        .render(DocType.HTML5)
-        .html(lang("en"))
-            .render(new Header(dump))
-            .body()
-                .div(class_("container-fluid"))
-                    .div(class_("row"))
-                        .render(new MenuBar())
-                    ._div()
-                    .div(class_("row"))
-                        .div(class_("col-6"))
-                            .h5().content(srcFile.getName())
-                            .pre(class_("pre-scrollable")).content(rawHtmlDiff.getSrcDiff(), false)
-                        ._div()
-                        .div(class_("col-6"))
-                            .h5().content(dstFile.getName())
-                            .pre(class_("pre-scrollable")).content(rawHtmlDiff.getDstDiff(), false)
-                        ._div()
-                    ._div()
-                ._div()
-            ._body()
-        ._html();
-    }
+    private static class MenuBar {
 
-    private static class MenuBar implements Renderable {
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
-            html
-            .div(class_("col"))
-                .div(class_("btn-toolbar justify-content-end"))
-                    .div(class_("btn-group mr-2"))
-                        .a(class_("btn btn-primary btn-sm").id("legend").href("#").add("data-toggle", "popover")
-                                .add("data-html", "true").add("data-placement", "bottom")
-                                .add("data-content", "<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br>"
-                                        + "<span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br>"
-                                        + "<span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br>"
-                                        + "<span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>", false)
-                                .add("data-original-title", "Legend").title("Legend").role("button")).content("Legend")
-                        .a(class_("btn btn-primary btn-sm").id("shortcuts").href("#").add("data-toggle", "popover")
-                                .add("data-html", "true").add("data-placement", "bottom")
-                                .add("data-content", "<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br>"
-                                        + "<b>t</b> top<br><b>b</b> bottom", false)
-                                .add("data-original-title", "Shortcuts").title("Shortcuts").role("button"))
-                            .content("Shortcuts")
-                    ._div()
-                    .div(class_("btn-group"))
-                        .a(class_("btn btn-default btn-sm btn-primary").href("/list")).content("Back")
-                        .a(class_("btn btn-default btn-sm btn-danger").href("/quit")).content("Quit")
-                    ._div()
-                ._div()
-            ._div();
+        public static Tag build(String selectedMatcherId, int id) {
+            return div(
+                div(
+                    iff(id >= 0, MatcherSelector.build(selectedMatcherId, "/vanilla-diff/" + id)),
+                    div(
+                        rawHtml("<button class=\"btn btn-primary btn-sm\" id=\"legend\" data-bs-toggle=\"popover\" data-bs-placement=\"bottom\" " +
+                                "data-bs-html=\"true\" data-bs-content=\"<span class='del'>&nbsp;&nbsp;</span> deleted<br><span class='add'>&nbsp;&nbsp;</span> added<br><span class='mv'>&nbsp;&nbsp;</span> moved<br><span class='upd';>&nbsp;&nbsp;</span> updated<br>\">Legend</button>"),
+                        rawHtml("<button class=\"btn btn-primary btn-sm\" id=\"shortcuts\" data-bs-toggle=\"popover\" data-bs-placement=\"bottom\" " +
+                                "data-bs-html=\"true\" data-bs-content=\"<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom\">Shortcuts</button>")
+                    ).withClass("btn-group mr-2"),
+                    div(
+                        a("Back").withHref("/list").withClasses("btn", "btn-default", "btn-sm", "btn-primary"),
+                        a("Quit").withHref("/quit").withClasses("btn", "btn-default", "btn-sm", "btn-danger")
+                    ).withClass("btn-group")
+                ).withClasses("btn-toolbar", "justify-content-end", "gap-2")
+                        .withStyle("min-height: 31px; align-items: center;")
+            ).withClass("col");
         }
     }
 
-    private static class Header implements Renderable {
+    private static class Header {
 
-        private boolean dump;
-
-        public Header(boolean dump) throws IOException {
-            this.dump = dump;
-        }
-
-        @Override
-        public void renderOn(HtmlCanvas html) throws IOException {
+        public static Tag build(boolean dump) throws IOException {
             if (!dump) {
-                html
-                        .head()
-                           .meta(charset("utf8"))
-                           .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
-                           .title().content("GumTree")
-                           .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
-                           .macros().stylesheet("/dist/vanilla.css")
-                           .macros().javascript(WebDiff.JQUERY_JS_URL)
-                           .macros().javascript(WebDiff.POPPER_JS_URL)
-                           .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
-                           .macros().javascript("/dist/shortcuts.js")
-                           .macros().javascript("/dist/vanilla.js")
-                        ._head();
+                return head(
+                   meta().withCharset("utf8"),
+                   meta().withName("viewport").withContent("width=device-width, initial-scale=1.0"),
+                   title("GumTree"),
+                   link().withRel("stylesheet").withType("text/css").withHref(WebDiff.BOOTSTRAP_CSS_URL),
+                   link().withRel("stylesheet").withType("text/css").withHref("/dist/vanilla.css"),
+                   script().withType("text/javascript").withSrc(WebDiff.JQUERY_JS_URL),
+                   script().withType("text/javascript").withSrc(WebDiff.BOOTSTRAP_JS_URL),
+                   script().withType("text/javascript").withSrc("/dist/shortcuts.js"),
+                   script().withType("text/javascript").withSrc("/dist/vanilla.js")
+                );
             }
             else {
-                html
-                        .head()
-                           .meta(charset("utf8"))
-                           .meta(name("viewport").content("width=device-width, initial-scale=1.0"))
-                           .title().content("GumTree")
-                           .macros().stylesheet(WebDiff.BOOTSTRAP_CSS_URL)
-                           .style(type("text/css"))
-                           .write(readFile("web/dist/vanilla.css"))
-                           ._style()
-                           .macros().javascript(WebDiff.JQUERY_JS_URL)
-                           .macros().javascript(WebDiff.POPPER_JS_URL)
-                           .macros().javascript(WebDiff.BOOTSTRAP_JS_URL)
-                           .macros().script(readFile("web/dist/shortcuts.js"))
-                           .macros().script(readFile("web/dist/vanilla.js"))
-                        ._head();
+                return head(
+                    meta().withCharset("utf8"),
+                    meta().withName("viewport").withContent("width=device-width, initial-scale=1.0"),
+                    title("GumTree"),
+                    link().withRel("stylesheet").withType("text/css").withHref(WebDiff.BOOTSTRAP_CSS_URL),
+                    style(readFile("web/dist/vanilla.css")).withType("text/css"),
+                    script().withType("text/javascript").withSrc(WebDiff.JQUERY_JS_URL),
+                    script().withType("text/javascript").withSrc(WebDiff.BOOTSTRAP_JS_URL),
+                    script(readFile("web/dist/shortcuts.js")).withType("text/javascript"),
+                    script(readFile("web/dist/vanilla.js")).withType("text/javascript")
+                );
             }
         }
 

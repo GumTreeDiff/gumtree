@@ -24,11 +24,11 @@ import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.utils.Pair;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
+import com.github.gumtreediff.matchers.Matchers;
+
 import spark.Spark;
 
 import java.io.File;
@@ -36,18 +36,24 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 import static spark.Spark.*;
 
 @Register(description = "Web diff client", options = WebDiff.WebDiffOptions.class, priority = Registry.Priority.HIGH)
 public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
+    private static final Pattern MATCHER_RETURN_PATH =
+            Pattern.compile("^/(list|monaco-diff/\\d+|vanilla-diff/\\d+|raw-diff/\\d+)$");
+
     public static final String JQUERY_JS_URL = "https://code.jquery.com/jquery-3.4.1.min.js";
-    public static final String BOOTSTRAP_CSS_URL = "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css";
-    public static final String BOOTSTRAP_JS_URL = "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js";
-    public static final String POPPER_JS_URL = " https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js";
+    public static final String BOOTSTRAP_CSS_URL = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css";
+    public static final String BOOTSTRAP_JS_URL = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js";
+
+    private volatile String selectedMatcherId;
 
     public WebDiff(String[] args) {
         super(args);
+        selectedMatcherId = opts.matcherId;
     }
 
     public static class WebDiffOptions extends AbstractDiffClient.DiffOptions {
@@ -96,40 +102,37 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
             return "";
         });
         get("/list", (request, response) -> {
-            Renderable view = new DirectoryDiffView(comparator);
-            return render(view);
+            return DirectoryDiffView.build(comparator, selectedMatcherId).renderFormatted();
         });
         get("/vanilla-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
-            Renderable view = new VanillaDiffView(pair.first, pair.second, diff, false);
-            return render(view);
+            String matcherId = selectedMatcherId;
+            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(), matcherId);
+            return VanillaDiffView.build(pair.first, pair.second, diff, false, matcherId, id).renderFormatted();
         });
         get("/monaco-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
-            Renderable view = new MonacoDiffView(pair.first, pair.second, diff, id);
-            return render(view);
+            String matcherId = selectedMatcherId;
+            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(), matcherId);
+            return MonacoDiffView.build(pair.first, pair.second, diff, id, matcherId).renderFormatted();
         });
         get("/monaco-native-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new MonacoNativeDiffView(pair.first, pair.second, id);
-            return render(view);
+            return MonacoNativeDiffView.build(pair.first, pair.second, id).renderFormatted();
         });
         get("/mergely-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
-            Renderable view = new MergelyDiffView(id);
-            return render(view);
+            return MergelyDiffView.build(id).renderFormatted();
         });
         get("/raw-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath());
-            Renderable view = new TextDiffView(pair.first, pair.second, diff);
-            return render(view);
+            String matcherId = selectedMatcherId;
+            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(), matcherId);
+            return TextDiffView.build(pair.first, pair.second, diff, matcherId, id).renderFormatted();
         });
         get("/left/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
@@ -141,16 +144,43 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
             return readFile(pair.second.getAbsolutePath(), Charset.defaultCharset());
         });
+        post("/pair-files", (request, response) -> {
+            String srcPath = request.queryParams("src");
+            String dstPath = request.queryParams("dst");
+            File srcFile = new File(comparator.getSrc().toFile(), srcPath);
+            File dstFile = new File(comparator.getDst().toFile(), dstPath);
+            comparator.pairFiles(srcFile, dstFile);
+            response.redirect("/list");
+            return "";
+        });
+        post("/unpair-files", (request, response) -> {
+            int id = Integer.parseInt(request.queryParams("id"));
+            comparator.unpairFiles(id);
+            response.redirect("/list");
+            return "";
+        });
+        post("/matcher", (request, response) -> {
+            String returnTo = request.queryParams("returnTo");
+            if (returnTo == null || !MATCHER_RETURN_PATH.matcher(returnTo).matches()) {
+                response.status(400);
+                return "Invalid return path.";
+            }
+
+            String matcherId = request.queryParams("matcher");
+            if (matcherId != null && !matcherId.isEmpty()
+                    && Matchers.getInstance().findById(matcherId) == null) {
+                response.status(400);
+                return "Unknown matcher: " + matcherId;
+            }
+
+            selectedMatcherId = matcherId == null || matcherId.isEmpty() ? null : matcherId;
+            response.redirect(returnTo);
+            return "";
+        });
         get("/quit", (request, response) -> {
             System.exit(0);
             return "";
         });
-    }
-
-    private static String render(Renderable r) throws IOException {
-        HtmlCanvas c = new HtmlCanvas();
-        r.renderOn(c);
-        return c.toHtml();
     }
 
     private static String readFile(String path, Charset encoding)  throws IOException {

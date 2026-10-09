@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.simmetrics.StringMetrics;
+import org.simmetrics.metrics.StringMetrics;
 
 import com.github.gumtreediff.matchers.ConfigurableMatcher;
 import com.github.gumtreediff.matchers.ConfigurationOptions;

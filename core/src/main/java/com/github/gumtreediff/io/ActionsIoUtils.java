@@ -102,26 +102,29 @@ public final class ActionsIoUtils {
             // Write the actions
             fmt.startActions();
             for (Action a : actions) {
-                Tree src = a.getNode();
                 if (a instanceof Move) {
-                    Tree dst = mappings.getDstForSrc(src);
-                    fmt.moveAction((Move) a, src, dst.getParent(), ((Move) a).getPosition());
+                    Move m = (Move) a;
+                    fmt.moveAction(m, m.getNode(), m.getParent(), m.getPosition());
                 } else if (a instanceof Update) {
-                    Tree dst = mappings.getDstForSrc(src);
-                    fmt.updateAction((Update) a, src, dst);
+                    Update u = (Update) a;
+                    Tree dst = mappings.getDstForSrc(u.getNode());
+                    fmt.updateAction(u, u.getNode(), dst);
                 } else if (a instanceof Insert) {
+                    Insert ins = (Insert) a;
                     Tree dst = a.getNode();
                     if (dst.isRoot())
-                        fmt.insertRoot((Insert) a, src);
+                        fmt.insertRoot(ins, ins.getNode());
                     else
-                        fmt.insertAction((Insert) a, src, dst.getParent(), dst.getParent().getChildPosition(dst));
+                        fmt.insertAction(ins, ins.getNode(), ins.getParent(), ins.getPosition());
                 } else if (a instanceof Delete) {
-                    fmt.deleteAction((Delete) a, src);
+                    Delete del = (Delete) a;
+                    fmt.deleteAction(del, del.getNode());
                 } else if (a instanceof TreeInsert) {
-                    Tree dst = a.getNode();
-                    fmt.insertTreeAction((TreeInsert) a, src, dst.getParent(), dst.getParent().getChildPosition(dst));
+                    TreeInsert ins = (TreeInsert) a;
+                    fmt.insertTreeAction(ins, ins.getNode(), ins.getParent(), ins.getPosition());
                 } else if (a instanceof  TreeDelete) {
-                    fmt.deleteTreeAction((TreeDelete) a, src);
+                    TreeDelete del = (TreeDelete) a;
+                    fmt.deleteTreeAction(del, del.getNode());
                 }
 
             }

@@ -53,6 +53,20 @@ function getLanguage() {
         return "php";
     else if (extension == "c" || extension == "h" || extension == "cpp")
         return "cpp";
+    else if (extension == "ts")
+        return "typescript";
+    else if (extension == "rs")
+        return "rust";
+    else if (extension == "kt")
+        return "kotlin";
+    else if (extension == "xml")
+        return "xml";
+    else if (extension == "yaml")
+        return "yaml";
+    else if (extension == "go")
+        return "go";
+    else if (extension == "ml")
+        return "ocaml";
     else
         return undefined;
 }

@@ -1,16 +1,27 @@
+plugins {
+	id 'java-conv'
+	id 'maven-conv'
+	id 'jacoco'
+}
+
 description = 'GumTree core module.'
 
 dependencies {
-	implementation 'com.github.mpkorstanje:simmetrics-core:3.2.3'
-	implementation 'it.unimi.dsi:fastutil:8.3.1'
-	implementation 'com.google.code.gson:gson:2.8.2'
-	implementation 'org.jgrapht:jgrapht-core:1.5.1'
+	implementation 'com.github.mpkorstanje:simmetrics-core:4.1.1'
+	implementation 'it.unimi.dsi:fastutil:8.5.19'
+	implementation 'com.google.code.gson:gson:2.14.0'
+	implementation 'org.jgrapht:jgrapht-core:1.5.3'
 }
 
-allprojects {
-	gradle.projectsEvaluated {
-		tasks.withType(JavaCompile) {
-			options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-		}
+test {
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		html.required = true
+		xml.required = false
+		csv.required = false
 	}
 }

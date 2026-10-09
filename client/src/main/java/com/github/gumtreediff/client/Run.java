@@ -21,9 +21,8 @@
 package com.github.gumtreediff.client;
 
 import com.github.gumtreediff.gen.TreeGenerators;
-import com.github.gumtreediff.gen.Registry;
-import com.github.gumtreediff.gen.TreeGenerator;
-import org.atteo.classindex.ClassIndex;
+import com.github.gumtreediff.utils.Registry;
+import com.github.gumtreediff.matchers.Matchers;
 
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
@@ -51,27 +50,15 @@ public class Run {
     }
 
     public static void initGenerators() {
-        ClassIndex.getSubclasses(TreeGenerator.class).forEach(
-                gen -> {
-                    com.github.gumtreediff.gen.Register a =
-                            gen.getAnnotation(com.github.gumtreediff.gen.Register.class);
-                    if (a != null)
-                        TreeGenerators.getInstance().install(gen, a);
-                });
+        TreeGenerators.getInstance().discoverEntries();
+    }
+
+    public static void initMatchers() {
+        Matchers.getInstance().discoverEntries();
     }
 
     public static void initClients() {
-        ClassIndex.getSubclasses(Client.class).forEach(
-                cli -> {
-                    com.github.gumtreediff.client.Register a =
-                            cli.getAnnotation(com.github.gumtreediff.client.Register.class);
-                    if (a != null)
-                        Clients.getInstance().install(cli, a);
-                });
-    }
-
-    static {
-        initGenerators();
+        Clients.getInstance().discoverEntries();
     }
 
     public static void startClient(String name, Registry.Factory<? extends Client> client, String[] args) {
@@ -95,8 +82,6 @@ public class Run {
     public static void main(String[] origArgs) {
         Options opts = new Options();
         String[] args = Option.processCommandLine(origArgs, opts);
-
-        initClients();
 
         Registry.Factory<? extends Client> client;
         if (args.length == 0) {

@@ -20,11 +20,15 @@
 
 package com.github.gumtreediff.matchers.heuristic.gt;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.SimilarityMetrics;
+import com.github.gumtreediff.matchers.*;
+import com.github.gumtreediff.matchers.optimal.zs.ZsMatcher;
 import com.github.gumtreediff.tree.Tree;
+import com.google.common.collect.Sets;
 
 /**
  * Match the nodes using a bottom-up approach. It browses the nodes of the source
@@ -34,7 +38,19 @@ import com.github.gumtreediff.tree.Tree;
  * are mapped, an optimal TED algorithm is applied to look for possibly forgotten
  * nodes.
  */
-public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher {
+public class GreedyBottomUpMatcher implements Matcher {
+    private static final int DEFAULT_SIZE_THRESHOLD = 1000;
+    private static final double DEFAULT_SIM_THRESHOLD = 0.5;
+
+    protected int sizeThreshold = DEFAULT_SIZE_THRESHOLD;
+    protected double simThreshold = DEFAULT_SIM_THRESHOLD;
+
+    @Override
+    public void configure(GumtreeProperties properties) {
+        sizeThreshold = properties.tryConfigure(ConfigurationOptions.bu_minsize, sizeThreshold);
+        simThreshold = properties.tryConfigure(ConfigurationOptions.bu_minsim, simThreshold);
+    }
+
     @Override
     public MappingStore match(Tree src, Tree dst, MappingStore mappings) {
         for (Tree t : src.postOrder()) {
@@ -62,5 +78,62 @@ public class GreedyBottomUpMatcher extends AbstractBottomUpMatcher {
             }
         }
         return mappings;
+    }
+
+    protected List<Tree> getDstCandidates(MappingStore mappings, Tree src) {
+        List<Tree> seeds = new ArrayList<>();
+        for (Tree c : src.getDescendants()) {
+            if (mappings.isSrcMapped(c))
+                seeds.add(mappings.getDstForSrc(c));
+        }
+        List<Tree> candidates = new ArrayList<>();
+        Set<Tree> visited = new HashSet<>();
+        for (Tree seed : seeds) {
+            while (seed.getParent() != null) {
+                Tree parent = seed.getParent();
+                if (visited.contains(parent))
+                    break;
+                visited.add(parent);
+                if (parent.getType() == src.getType() && !(mappings.isDstMapped(parent) || parent.isRoot()))
+                    candidates.add(parent);
+                seed = parent;
+            }
+        }
+
+        return candidates;
+    }
+
+    protected void lastChanceMatch(MappingStore mappings, Tree src, Tree dst) {
+        if (src.getMetrics().size < sizeThreshold || dst.getMetrics().size < sizeThreshold) {
+            Matcher m = new ZsMatcher();
+            MappingStore zsMappings = m.match(src, dst, new MappingStore(src, dst));
+            for (Mapping candidate : zsMappings) {
+                Tree srcCand = candidate.first;
+                Tree dstCand = candidate.second;
+                if (mappings.isMappingAllowed(srcCand, dstCand))
+                    mappings.addMapping(srcCand, dstCand);
+            }
+        }
+    }
+
+    public int getSizeThreshold() {
+        return sizeThreshold;
+    }
+
+    public void setSizeThreshold(int sizeThreshold) {
+        this.sizeThreshold = sizeThreshold;
+    }
+
+    public double getSimThreshold() {
+        return simThreshold;
+    }
+
+    public void setSimThreshold(double simThreshold) {
+        this.simThreshold = simThreshold;
+    }
+
+    @Override
+    public Set<ConfigurationOptions> getApplicableOptions() {
+        return Sets.newHashSet(ConfigurationOptions.bu_minsize, ConfigurationOptions.bu_minsim);
     }
 }

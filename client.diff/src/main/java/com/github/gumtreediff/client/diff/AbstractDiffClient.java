@@ -44,6 +44,7 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOption
         public String srcPath;
         public String dstPath;
         public GumtreeProperties properties = new GumtreeProperties();
+        public String command = null;
 
         @Override
         public Option[] values() {
@@ -58,6 +59,12 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOption
                         @Override
                         protected void process(String name, String[] args) {
                             treeGeneratorId = args[0];
+                        }
+                    },
+                    new Option("-x", "Id of the tree generator to use (of the form COMMAND $FILE).", 1) {
+                        @Override
+                        protected void process(String name, String[] args) {
+                            command = args[0];
                         }
                     },
                     new Option("-M", "Add a matcher property (-M property value). Available: "
@@ -116,11 +123,18 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.DiffOption
             throw new Option.OptionException("Error loading file or folder: " + opts.dstPath);
     }
 
-    protected Diff getDiff() throws IOException {
+    public Diff getDiff() throws IOException {
         return getDiff(opts.srcPath, opts.dstPath);
     }
 
-    protected Diff getDiff(String src, String dst) throws IOException {
-        return Diff.compute(src, dst, opts.treeGeneratorId, opts.matcherId, opts.properties);
+    public Diff getDiff(String src, String dst) throws IOException {
+        return getDiff(src, dst, opts.matcherId);
+    }
+
+    protected Diff getDiff(String src, String dst, String matcherId) throws IOException {
+        if (opts.command == null)
+            return Diff.compute(src, dst, opts.treeGeneratorId, matcherId, opts.properties);
+        else
+            return Diff.computeWithCommand(src, dst, opts.command, matcherId, opts.properties);
     }
 }

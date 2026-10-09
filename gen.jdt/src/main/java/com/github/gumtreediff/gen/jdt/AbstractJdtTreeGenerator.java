@@ -36,6 +36,8 @@ import java.io.Reader;
 import java.util.Map;
 
 public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
+    private static final String JAVA_VERSION = JavaCore.latestSupportedJavaVersion();
+
     private static char[] readerToCharArray(Reader r) throws IOException {
         StringBuilder fileData = new StringBuilder();
         try (BufferedReader br = new BufferedReader(r)) {
@@ -53,12 +55,12 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public TreeContext generate(Reader r) throws IOException {
-        ASTParser parser = ASTParser.newParser(AST.JLS14);
+        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
         Map pOptions = JavaCore.getOptions();
-        pOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_11);
-        pOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_11);
-        pOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_11);
+        pOptions.put(JavaCore.COMPILER_COMPLIANCE, JAVA_VERSION);
+        pOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JAVA_VERSION);
+        pOptions.put(JavaCore.COMPILER_SOURCE, JAVA_VERSION);
         pOptions.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
         parser.setCompilerOptions(pOptions);
         char[] source = readerToCharArray(r);

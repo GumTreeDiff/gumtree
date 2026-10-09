@@ -20,20 +20,17 @@
 package com.github.gumtreediff.gen.js;
 
 import com.github.gumtreediff.gen.Register;
-import com.github.gumtreediff.gen.Registry;
+import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.tree.TreeContext;
-import org.mozilla.javascript.CompilerEnvirons;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.EvaluatorException;
-import org.mozilla.javascript.Parser;
+import org.mozilla.javascript.*;
 import org.mozilla.javascript.ast.AstRoot;
 
 import java.io.IOException;
 import java.io.Reader;
 
-@Register(id = "js-rhino", accept = "\\.js$", priority = Registry.Priority.MAXIMUM)
+@Register(id = "js-rhino", accept = "\\.js$")
 public class RhinoTreeGenerator extends TreeGenerator {
     @Override
     public TreeContext generate(Reader r) throws IOException {
@@ -41,10 +38,9 @@ public class RhinoTreeGenerator extends TreeGenerator {
         env.setRecordingLocalJsDocComments(true);
         env.setAllowSharpComments(true);
         env.setRecordingComments(true);
-        env.setLanguageVersion(Context.VERSION_ES6);
         Parser p = new Parser(env);
         try {
-            AstRoot root = p.parse(r, null, 1);
+            AstRoot root = p.parse(Kit.readReader(r), null, 1);
             RhinoTreeVisitor visitor = new RhinoTreeVisitor(root);
             root.visitAll(visitor);
             return visitor.getTreeContext();

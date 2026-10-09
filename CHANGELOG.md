@@ -1,15 +1,44 @@
 # Changelog of GumTree
 
-## v3.0.0
+## Unreleased
+* Fix plugin discovery and restore the JSON generator in the CLI distribution
 
-## v3.0.0-beta2
+## v4.1.0
+* Registries discover annotated matchers, generators, and clients when first accessed
+* Added the contextual matcher (`gumtree-contextual`) to reduce edit script size
+* Added the assignment matcher (`gumtree-assignment`), which uses global sibling alignment
+* Webdiff pages can select the matcher used to compute diffs
+
+## v4.0.0 (Ginkgo)
+* New minimal distribution with zero non-java dependencies
+* Vastly improved swing client with directory comparison, syntax highlighting, and more
+* Update monaco
+* Update bootstrap
+* Update mergely
+* New tree-sitter based tree generator with support for a wide range of languages with a java implementation
+* Dropped external parsers that have a tree-sitter counterpart (except srcml)
+* Vastly improved docker image of less than 300mb with a new arm64 version
+* Benchmark now displays size differences on a boxplot
+* Dotdiff displays actions on nodes using colors
+* Default build command no longer test generators requiring external tools
+* Test reports are uploaded in the CI
+* Added citation file
+* Simple is now the default matcher
+* Added auto matchers which automatically select the best parameters for the input
+* Native XML support
+* Native YAML support
+* Native JSON support
+* Fix shortcuts in vanilla web diff view
+* Replaced snakehtml by j2html for webdiff
+* Totally reworked build system
+
+## v3.0.0 (Ficus)
+
 * Linereader can convert offset to line/column
 * Maven packages now include javadoc and source
 * New static html diff client (htmldiff) thanks to algomaster99
 * Improved API documentation
 * Monaco editor diff view now has 100% height 
-
-## v3.0.0-beta1
 * Fix missing positions in srcML parser
 * Switched from Travis to Github actions for the CI
 * Reworked benchmark to use defects4j and test for runtime and size regressions

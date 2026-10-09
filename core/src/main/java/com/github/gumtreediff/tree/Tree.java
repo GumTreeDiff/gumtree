@@ -92,7 +92,7 @@ public interface Tree {
      * Return trees contained in a text positions interval
      * @param position the begin position
      * @param endPosition the end position (must be greater than position)
-     * @return
+     * @return the list of trees contained in the interval, possibly empty
      */
     default List<Tree> getTreesBetweenPositions(int position, int endPosition) {
         List<Tree> trees = new ArrayList<>();
@@ -206,7 +206,7 @@ public interface Tree {
     }
 
     /**
-     * Make a deep copy of the tree. Deep copy of node however shares Metadata
+     * Make a deep copy of the tree. Metadata is not copied over.
      */
     Tree deepCopy();
 

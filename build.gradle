@@ -1,155 +1,19 @@
 plugins {
-    id 'jacoco'
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
 }
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+        }
+    }
+}
+
+def projectsVersion = '4.2.0-SNAPSHOT'
 
 allprojects {
-    apply plugin: 'idea'
-
     group = 'com.github.gumtreediff'
-    version = '3.0.0-SNAPSHOT'
-
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-}
-
-ext.isRelease = !project.version.endsWith("SNAPSHOT")
-
-subprojects {
-    apply plugin: 'java'
-    sourceCompatibility = '11'
-    targetCompatibility = '11'
-
-    compileJava {
-        options.compilerArgs << '-Xlint:deprecation'
-    }
-
-    java {
-        withJavadocJar()
-        withSourcesJar()
-    }
-    javadoc {
-        options.addBooleanOption('html5', true)
-    }
-
-    apply plugin: 'checkstyle'
-    checkstyle {
-        toolVersion = '8.36'
-        configFile = rootProject.file('gumtree_checkstyle.xml')
-        configProperties = [suppressionFile: "${rootProject.file('checkstyle_ignore.xml')}"]
-        ignoreFailures = false
-        showViolations = true
-    }
-
-    dependencies {
-        annotationProcessor 'org.atteo.classindex:classindex:3.10'
-        implementation 'org.atteo.classindex:classindex:3.10'
-        testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
-        testImplementation 'org.hamcrest:hamcrest-library:2.1'
-    }
-
-    test {
-        useJUnitPlatform()
-
-        testLogging {
-            exceptionFormat = 'full'
-            events "passed", "skipped", "failed"
-        }
-    }
-}
-
-configure(subprojects.findAll { it.name != 'core' }) {
-    dependencies {
-        implementation project(':core')
-    }
-}
-
-configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
-    apply plugin: 'antlr'
-
-    dependencies {
-        antlr 'org.antlr:antlr:3.5.2'
-    }
-
-    if (it.name.startsWith('gen.antlr3-')) {
-        dependencies {
-            implementation project(':gen.antlr3')
-        }
-    }
-}
-
-configure(subprojects.findAll { it.name.startsWith('gen.antlr4') }) {
-    apply plugin: 'antlr'
-
-    dependencies {
-        antlr 'org.antlr:antlr4:4.5'
-    }
-
-    if (it.name.startsWith('gen.antlr4-')) {
-        dependencies {
-            implementation project(':gen.antlr4')
-        }
-    }
-}
-
-def jacocoProjectsNames = ['core', 'gen.jdt', 'gen.c', 'gen.ruby', 'gen.js', 'gen.srcml', 'gen.css']
-def jacocoProjects = subprojects.findAll { it.name in jacocoProjectsNames }
-configure(jacocoProjects) {
-    apply plugin: 'jacoco'
-    jacoco {
-        toolVersion = '0.8.6'
-    }
-
-    jacocoTestReport {
-        reports {
-            html.enabled = true
-            xml.enabled = true
-            csv.enabled = false
-        }
-    }
-}
-
-task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
-    description = 'Generates an aggregate report from all subprojects'
-    dependsOn(jacocoProjects.test)
-
-    getAdditionalSourceDirs().from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-    getSourceDirectories().from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-    getClassDirectories().from = files(jacocoProjects.sourceSets.main.output)
-    getExecutionData().from = files(jacocoProjects.jacocoTestReport.executionData)
-
-    reports {
-        html.enabled = true
-        xml.enabled = true
-    }
-}
-
-configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
-    apply plugin: "maven-publish"
-
-    publishing {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/GumTreeDiff/gumtree")
-                credentials {
-                    username = project.findProperty("gpr.actor") ?: System.getenv("GITHUB_ACTOR")
-                    password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
-                }
-            }
-        }
-        publications {
-            gpr(MavenPublication) {
-                from(components.java)
-            }
-        }
-    }
-}
-
-evaluationDependsOnChildren()
-
-configure(subprojects) {
-    if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
-        it.test.enabled = false
+    version = projectsVersion
 }

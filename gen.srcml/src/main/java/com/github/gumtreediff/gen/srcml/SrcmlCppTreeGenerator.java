@@ -20,8 +20,9 @@
 package com.github.gumtreediff.gen.srcml;
 
 import com.github.gumtreediff.gen.Register;
+import com.github.gumtreediff.utils.Registry;
 
-@Register(id = "cpp-srcml", accept = "\\.(CC?|cpp|cc|hh?|hpp)$")
+@Register(id = "cpp-srcml", accept = "\\.(CC?|cpp|cc|hh?|hpp)$", priority = Registry.Priority.LOW)
 public class SrcmlCppTreeGenerator extends AbstractSrcmlTreeGenerator {
 
     @Override

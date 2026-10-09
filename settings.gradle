@@ -4,19 +4,15 @@ include 'benchmark',
         'core',
         'dist',
         'gen.antlr3',
-        'gen.antlr3-antlr',
-        'gen.antlr3-json',
-        'gen.antlr3-php',
-        'gen.antlr3-r',
-        'gen.antlr3-xml',
         'gen.antlr4',
-        'gen.c',
         'gen.css',
         'gen.javaparser',
         'gen.jdt',
         'gen.js',
-        'gen.python',
-        'gen.ruby',
-        'gen.srcml'
+        'gen.json',
+        'gen.srcml',
+        'gen.treesitter-ng',
+        'gen.yaml',
+        'gen.xml'
 
-rootProject.name = "gumtree"
+rootProject.name = 'gumtree'
