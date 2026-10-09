@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import com.github.gumtreediff.gen.SyntaxException;
@@ -69,6 +71,20 @@ public class TestJavaParserGenerator {
         assertEquals(6, tree.getChild("0.0").getLength()); // modifier length
         assertEquals(13, tree.getChild("0.1").getPos()); // identifier pos
         assertEquals(3, tree.getChild("0.1").getLength()); // identifier length
+    }
+
+    @Test
+    public void testLambdaExpressionDepth() throws IOException {
+        String input = "class Foo { void foo() { bar(foo1 -> bar1, foo2 -> bar2); } }";
+        Tree root = new JavaParserGenerator().generateFrom().string(input).getRoot();
+        List<Tree> lambdas = new ArrayList<>();
+        for (Tree node : root.preOrder())
+            if (node.getType() == type("LambdaExpr"))
+                lambdas.add(node);
+
+        assertEquals(2, lambdas.size());
+        assertSame(lambdas.get(0).getParent(), lambdas.get(1).getParent());
+        assertEquals(type("MethodCallExpr"), lambdas.get(0).getParent().getType());
     }
 
     @Test
