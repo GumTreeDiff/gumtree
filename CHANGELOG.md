@@ -1,5 +1,8 @@
 # Changelog of GumTree
 
+## Unreleased
+* Fix plugin discovery and restore the JSON generator in the CLI distribution
+
 ## v4.1.0
 * Registries discover annotated matchers, generators, and clients when first accessed
 * Added the contextual matcher (`gumtree-contextual`) to reduce edit script size
