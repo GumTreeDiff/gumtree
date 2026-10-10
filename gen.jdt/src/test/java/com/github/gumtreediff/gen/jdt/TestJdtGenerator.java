@@ -23,6 +23,7 @@ package com.github.gumtreediff.gen.jdt;
 import java.io.IOException;
 
 import com.github.gumtreediff.gen.SyntaxException;
+import com.github.gumtreediff.gen.jdt.cd.CdJdtTreeGenerator;
 import com.github.gumtreediff.tree.*;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.junit.jupiter.api.Test;
@@ -445,5 +446,25 @@ public class TestJdtGenerator {
                         EnumConstantDeclaration [24,25]
                             SimpleName: Y [24,25]""";
         assertEquals(expected, treeString);
+    }
+
+    @Test
+    public void testChangeDistillerSwitchCaseLabels() throws IOException {
+        String input = """
+                class Foo {
+                    void test(int value) {
+                        switch (value) {
+                            case 1, 2:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                """;
+        String treeString = new CdJdtTreeGenerator().generateFrom().string(input)
+                .getRoot().toTreeString();
+        assertTrue(treeString.contains("SwitchCase: 1, 2"));
+        assertTrue(treeString.contains("SwitchCase: default"));
     }
 }

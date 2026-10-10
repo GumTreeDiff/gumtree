@@ -422,14 +422,12 @@ public class JdtVisitor  extends AbstractJdtVisitor {
                     length = scanner.getCurrentTokenEndPosition() - pos + 1;
                     break;
                 }
-                // Fallback for 'permits' (not tokenized in older JDT versions)
-                if (token == ITerminalSymbols.TokenNameIdentifier) {
-                    char[] tokenChars = scanner.getCurrentTokenSource();
-                    if (String.valueOf(tokenChars).equals(keyword)) {
-                        pos = scanner.getCurrentTokenStartPosition();
-                        length = scanner.getCurrentTokenEndPosition() - pos + 1;
-                        break;
-                    }
+                // Fallback for keywords not explicitly handled above, such as 'permits'.
+                char[] tokenChars = scanner.getCurrentTokenSource();
+                if (String.valueOf(tokenChars).equals(keyword)) {
+                    pos = scanner.getCurrentTokenStartPosition();
+                    length = scanner.getCurrentTokenEndPosition() - pos + 1;
+                    break;
                 }
             }
         } catch (InvalidInputException e) {

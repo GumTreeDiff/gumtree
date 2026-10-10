@@ -550,7 +550,18 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
 
     @Override
     public boolean visit(SwitchCase node) {
-        pushNode(node, node.getExpression() != null ? node.getExpression().toString() : "default");
+        StringBuilder label = new StringBuilder();
+        for (Object expression : node.expressions()) {
+            if (label.length() > 0)
+                label.append(", ");
+            label.append(expression);
+        }
+        if (node.isDefault()) {
+            if (label.length() > 0)
+                label.append(", ");
+            label.append("default");
+        }
+        pushNode(node, label.length() > 0 ? label.toString() : "default");
         return false;
     }
 
