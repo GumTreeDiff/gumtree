@@ -91,6 +91,29 @@ public class TestTreeIoUtils {
     }
 
     @Test
+    public void testLineReaderWithPartialReads() throws IOException {
+        StringReader reader = new StringReader("foo\nbar\nbaz\n") {
+            @Override
+            public int read(char[] cbuf, int off, int len) throws IOException {
+                return super.read(cbuf, off, Math.min(len, 2));
+            }
+        };
+        LineReader lr = new LineReader(reader);
+        char[] buffer = new char[8];
+        StringBuilder contents = new StringBuilder();
+        int count;
+
+        while ((count = lr.read(buffer, 0, buffer.length)) != -1)
+            contents.append(buffer, 0, count);
+
+        assertEquals("foo\nbar\nbaz\n", contents.toString());
+        assertEquals(4, lr.positionFor(2, 1));
+        assertEquals(8, lr.positionFor(3, 1));
+        assertArrayEquals(new int[] { 2, 1 }, lr.positionFor(4));
+        assertArrayEquals(new int[] { 3, 1 }, lr.positionFor(8));
+    }
+
+    @Test
     public void testPrintTextTree() throws Exception {
         TreeContext tc = getTreeContext();
         assertEquals("TYPE_0 [0,1000]\n"
