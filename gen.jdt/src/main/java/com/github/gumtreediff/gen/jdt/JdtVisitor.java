@@ -47,7 +47,6 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     private static final Type THROWS_KEYWORD = type("THROWS_KEYWORD");
 
     private static final Type ARRAY_INITIALIZER = nodeAsSymbol(ASTNode.ARRAY_INITIALIZER);
-    private static final Type SIMPLE_NAME = nodeAsSymbol(ASTNode.SIMPLE_NAME);
 
     protected IScanner scanner;
 
@@ -147,6 +146,8 @@ public class JdtVisitor  extends AbstractJdtVisitor {
     public void postVisit(ASTNode n) {
         if (n instanceof TypeDeclaration)
             handlePostVisit((TypeDeclaration) n);
+        else if (n instanceof AnnotationTypeDeclaration)
+            handlePostVisit((AnnotationTypeDeclaration) n);
         else if (n instanceof InfixExpression)
             handlePostVisit((InfixExpression) n);
         else if (n instanceof Assignment)
@@ -187,16 +188,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         PosAndLength keywordPl = searchKeywordPosition(n, keyword);
         keywordSubtree.setPos(keywordPl.pos);
         keywordSubtree.setLength(keywordPl.length);
-        int index = 0;
-        for (Tree c : t.getChildren()) {
-            if (c.getType() != SIMPLE_NAME)
-                index++;
-            else {
-                index += 1;
-                break;
-            }
-        }
-        t.insertChild(keywordSubtree, index);
+        insertChildInSourceOrder(t, keywordSubtree);
     }
 
     private void handlePostVisit(MethodDeclaration n) {
@@ -361,16 +353,8 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         PosAndLength pl = searchTypeDeclarationKindPosition(d);
         s.setPos(pl.pos);
         s.setLength(pl.length);
-        int index = 0;
         Tree t = this.trees.peek();
-        for (Tree c : t.getChildren()) {
-            if (c.getType() != SIMPLE_NAME)
-                index++;
-            else
-                break;
-        }
-        t.insertChild(s, index);
-        index += 2;
+        insertChildInSourceOrder(t, s);
         if (d.getSuperclassType() != null)
         {
             String keyword = "extends";
@@ -378,18 +362,15 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             PosAndLength keywordPl = searchKeywordPosition(d, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
-            t.insertChild(keywordSubtree, index);
-            index += 1 + 1; //There is only one superclass always (can be simplified to 2)
+            insertChildInSourceOrder(t, keywordSubtree);
         }
         if (!d.superInterfaceTypes().isEmpty()) {
-            String keyword = "implements";
+            String keyword = d.isInterface() ? "extends" : "implements";
             Tree keywordSubtree = context.createTree(TYPE_INHERITANCE_KEYWORD, keyword);
             PosAndLength keywordPl = searchKeywordPosition(d, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
-            t.insertChild(keywordSubtree, index);
-            //There might be more than one interface
-            index += 1 + d.superInterfaceTypes().size();
+            insertChildInSourceOrder(t, keywordSubtree);
         }
         if (!d.permittedTypes().isEmpty())
         {
@@ -398,8 +379,23 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             PosAndLength keywordPl = searchKeywordPosition(d, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
-            t.insertChild(keywordSubtree, index);
+            insertChildInSourceOrder(t, keywordSubtree);
         }
+    }
+
+    private void handlePostVisit(AnnotationTypeDeclaration d) {
+        Tree keyword = context.createTree(TYPE_DECLARATION_KIND, "@interface");
+        PosAndLength keywordPl = searchAnnotationTypeDeclarationKindPosition(d);
+        keyword.setPos(keywordPl.pos);
+        keyword.setLength(keywordPl.length);
+        insertChildInSourceOrder(this.trees.peek(), keyword);
+    }
+
+    private void insertChildInSourceOrder(Tree parent, Tree child) {
+        int index = 0;
+        while (index < parent.getChildren().size() && parent.getChild(index).getPos() <= child.getPos())
+            index++;
+        parent.insertChild(child, index);
     }
 
     private PosAndLength searchKeywordPosition(ASTNode d, String keyword) {
@@ -460,6 +456,32 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             throw new SyntaxException(null, null, e);
         }
         return new PosAndLength(pos, length);
+    }
+
+    private PosAndLength searchAnnotationTypeDeclarationKindPosition(AnnotationTypeDeclaration d) {
+        int start = d.getStartPosition();
+        int end = start + d.getLength();
+        scanner.resetTo(start, end);
+        int previousTokenStart = 0;
+        String previousToken = "";
+        try {
+            while (true) {
+                int token = scanner.getNextToken();
+                if (token == ITerminalSymbols.TokenNameEOF)
+                    break;
+                int pos = scanner.getCurrentTokenStartPosition();
+                String tokenSource = String.valueOf(scanner.getCurrentTokenSource());
+                if ("interface".equals(tokenSource) && "@".equals(previousToken)) {
+                    return new PosAndLength(previousTokenStart,
+                            scanner.getCurrentTokenEndPosition() - previousTokenStart + 1);
+                }
+                previousToken = tokenSource;
+                previousTokenStart = pos;
+            }
+        } catch (InvalidInputException e) {
+            throw new SyntaxException(null, null, e);
+        }
+        return new PosAndLength(0, 0);
     }
 
     public static class PosAndLength {

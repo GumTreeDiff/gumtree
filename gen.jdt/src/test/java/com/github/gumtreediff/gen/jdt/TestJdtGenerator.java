@@ -410,6 +410,22 @@ public class TestJdtGenerator {
     }
 
     @Test
+    public void testInterfaceAndAnnotationTypeKeywords() throws IOException {
+        String input = """
+                public interface Child<T> extends Parent<T>, Other {}
+                public @interface Marker {}
+                """;
+        String treeString = new JdtTreeGenerator().generateFrom().string(input)
+                .getRoot().toTreeString();
+
+        assertTrue(treeString.contains("TYPE_DECLARATION_KIND: interface"));
+        assertTrue(treeString.contains("TYPE_INHERITANCE_KEYWORD: extends"));
+        assertFalse(treeString.contains("TYPE_INHERITANCE_KEYWORD: implements"));
+        assertTrue(treeString.contains("TYPE_DECLARATION_KIND: @interface"));
+        assertTrue(treeString.indexOf("TypeParameter") < treeString.indexOf("TYPE_INHERITANCE_KEYWORD: extends"));
+    }
+
+    @Test
     public void testRecordReservedKeywords() throws IOException {
         String input = """
                 public record test() implements X{}
