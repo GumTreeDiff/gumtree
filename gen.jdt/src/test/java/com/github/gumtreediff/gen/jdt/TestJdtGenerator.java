@@ -25,7 +25,11 @@ import java.io.IOException;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.jdt.cd.CdJdtTreeGenerator;
 import com.github.gumtreediff.tree.*;
+import org.eclipse.jdt.core.ToolFactory;
+import org.eclipse.jdt.core.compiler.IScanner;
+import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -191,6 +195,22 @@ public class TestJdtGenerator {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    public void testMethodInvocationTypeArgumentsWithoutReceiver() {
+        AST ast = AST.newAST(AST.getJLSLatest(), false);
+        MethodInvocation invocation = ast.newMethodInvocation();
+        invocation.setName(ast.newSimpleName("f"));
+        invocation.typeArguments().add(ast.newSimpleType(ast.newSimpleName("String")));
+        IScanner scanner = ToolFactory.createScanner(false, false, false, false);
+        scanner.setSource(new char[0]);
+        JdtVisitor visitor = new JdtVisitor(scanner);
+
+        invocation.accept(visitor);
+
+        assertEquals("SimpleType", visitor.getTreeContext().getRoot().getChild(0).getType().name);
+    }
+
+    @Test
     public void testTagElement() throws IOException {
         String input = "/** @author john */ class C {}";
         TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
@@ -345,6 +365,16 @@ public class TestJdtGenerator {
                             PrimitiveType: void [176,180]
                             SimpleName: m1 [181,183]""";
         assertEquals(excpected, treeString);
+    }
+
+    @Test
+    public void testThrowsKeywordOrderingOnAbstractMethod() throws IOException {
+        String input = "interface I { void f(int value) throws java.io.IOException; }";
+        TreeContext ct = new JdtTreeGenerator().generateFrom().string(input);
+        Tree method = ct.getRoot().getChild(0).getChild(2);
+
+        assertEquals("THROWS_KEYWORD", method.getChild(3).getType().name);
+        assertEquals("SimpleType", method.getChild(4).getType().name);
     }
 
     @Test

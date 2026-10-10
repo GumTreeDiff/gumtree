@@ -69,6 +69,10 @@ public class JdtVisitor  extends AbstractJdtVisitor {
                 ((ASTNode) argument).accept(this);
             }
             popNode();
+        } else {
+            for (Object argument : i.typeArguments()) {
+                ((ASTNode) argument).accept(this);
+            }
         }
         pushNode(i.getName(), getLabel(i.getName()));
         popNode();
@@ -201,9 +205,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
             PosAndLength keywordPl = searchKeywordPosition(n, keyword);
             keywordSubtree.setPos(keywordPl.pos);
             keywordSubtree.setLength(keywordPl.length);
-            int index = t.getChildren().size() - 1;
-            index -= n.thrownExceptionTypes().size();
-            t.insertChild(keywordSubtree, index);
+            insertChildInSourceOrder(t, keywordSubtree);
         }
     }
 
