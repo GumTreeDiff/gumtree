@@ -1,6 +1,7 @@
 # Changelog of GumTree
 
 ## Unreleased
+* Add a Kotlin PSI-based tree generator alongside the Kotlin tree-sitter generator
 * Fix plugin discovery and restore the JSON generator in the CLI distribution
 * Make DOT diff labels configurable and preserve their original content
 

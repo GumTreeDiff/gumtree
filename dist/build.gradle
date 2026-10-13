@@ -16,6 +16,7 @@ dependencies {
     implementation project(':gen.json')
     implementation project(':gen.js')
     implementation project(':gen.srcml')
+    implementation project(':gen.kotlin')
     implementation project(':gen.treesitter-ng')
     implementation project(':gen.xml')
     implementation project(':gen.yaml')
@@ -142,6 +143,7 @@ def verifyShadowJar = tasks.register('verifyShadowJar') {
          'com.github.gumtreediff.gen.json.XmlTreeGenerator',
          'com.github.gumtreediff.gen.js.RhinoTreeGenerator',
          'com.github.gumtreediff.gen.srcml.SrcmlJavaTreeGenerator',
+         'com.github.gumtreediff.gen.kotlin.KotlinPsiTreeGenerator',
          'com.github.gumtreediff.gen.treesitterng.JavaTreeSitterNgTreeGenerator',
          'com.github.gumtreediff.gen.yaml.YamlTreeGenerator'].each { clazz ->
             if (!generatorIndex.contains(clazz))

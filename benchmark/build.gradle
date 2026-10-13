@@ -6,6 +6,7 @@ plugins {
 dependencies {
     implementation project(':core')
     implementation project(':gen.jdt')
+    implementation project(':gen.kotlin')
     implementation project(':gen.treesitter-ng')
 }
 
