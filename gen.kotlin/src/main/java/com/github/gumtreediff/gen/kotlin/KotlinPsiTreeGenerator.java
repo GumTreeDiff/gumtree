@@ -26,6 +26,8 @@ import com.github.gumtreediff.tree.TypeSet;
 import com.github.gumtreediff.utils.Registry;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
+import org.jetbrains.kotlin.cli.FrontendConfigurationKeysKt;
+import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar;
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer;
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange;
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement;
@@ -57,8 +59,11 @@ public final class KotlinPsiTreeGenerator extends TreeGenerator {
 
         var disposable = Disposer.newDisposable();
         try {
+            CompilerConfiguration configuration = new CompilerConfiguration();
+            FrontendConfigurationKeysKt.setExtensionsStorage(
+                    configuration, new CompilerPluginRegistrar.ExtensionStorage());
             KotlinCoreEnvironment environment = KotlinCoreEnvironment.createForProduction(
-                    disposable, new CompilerConfiguration(), EnvironmentConfigFiles.JVM_CONFIG_FILES);
+                    disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
             PsiFile psiFile = PsiFileFactory.getInstance(environment.getProject())
                     .createFileFromText("file.kt", KotlinLanguage.INSTANCE, content.toString());
             TreeContext context = new TreeContext();
