@@ -24,6 +24,7 @@ import com.github.gumtreediff.actions.Diff;
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
+import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.utils.Registry;
 import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.utils.Pair;
@@ -43,17 +44,20 @@ import static spark.Spark.*;
 @Register(description = "Web diff client", options = WebDiff.WebDiffOptions.class, priority = Registry.Priority.HIGH)
 public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
     private static final Pattern MATCHER_RETURN_PATH =
-            Pattern.compile("^/(list|monaco-diff/\\d+|vanilla-diff/\\d+|raw-diff/\\d+)$");
+            Pattern.compile("^/(monaco-diff/\\d+|vanilla-diff/\\d+|raw-diff/\\d+)$");
+    private static final Pattern DIFF_RETURN_PATH = MATCHER_RETURN_PATH;
 
     public static final String JQUERY_JS_URL = "https://code.jquery.com/jquery-3.4.1.min.js";
     public static final String BOOTSTRAP_CSS_URL = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css";
     public static final String BOOTSTRAP_JS_URL = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js";
 
     private volatile String selectedMatcherId;
+    private volatile String selectedGeneratorId;
 
     public WebDiff(String[] args) {
         super(args);
         selectedMatcherId = opts.matcherId;
+        selectedGeneratorId = opts.command == null ? opts.treeGeneratorId : null;
     }
 
     public static class WebDiffOptions extends AbstractDiffClient.DiffOptions {
@@ -102,21 +106,26 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
             return "";
         });
         get("/list", (request, response) -> {
-            return DirectoryDiffView.build(comparator, selectedMatcherId).renderFormatted();
+            return DirectoryDiffView.build(comparator).renderFormatted();
         });
         get("/vanilla-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
             String matcherId = selectedMatcherId;
-            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(), matcherId);
-            return VanillaDiffView.build(pair.first, pair.second, diff, false, matcherId, id).renderFormatted();
+            String generatorId = selectedGeneratorId;
+            Diff diff = getWebDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(),
+                    matcherId, generatorId);
+            return VanillaDiffView.build(pair.first, pair.second, diff, false,
+                    matcherId, generatorId, id).renderFormatted();
         });
         get("/monaco-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
             String matcherId = selectedMatcherId;
-            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(), matcherId);
-            return MonacoDiffView.build(pair.first, pair.second, diff, id, matcherId).renderFormatted();
+            String generatorId = selectedGeneratorId;
+            Diff diff = getWebDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(),
+                    matcherId, generatorId);
+            return MonacoDiffView.build(pair.first, pair.second, diff, id, matcherId, generatorId).renderFormatted();
         });
         get("/monaco-native-diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
@@ -131,8 +140,10 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
             String matcherId = selectedMatcherId;
-            Diff diff = getDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(), matcherId);
-            return TextDiffView.build(pair.first, pair.second, diff, matcherId, id).renderFormatted();
+            String generatorId = selectedGeneratorId;
+            Diff diff = getWebDiff(pair.first.getAbsolutePath(), pair.second.getAbsolutePath(),
+                    matcherId, generatorId);
+            return TextDiffView.build(pair.first, pair.second, diff, matcherId, generatorId, id).renderFormatted();
         });
         get("/left/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
@@ -177,10 +188,36 @@ public class WebDiff extends AbstractDiffClient<WebDiff.WebDiffOptions> {
             response.redirect(returnTo);
             return "";
         });
+        post("/generator", (request, response) -> {
+            String returnTo = request.queryParams("returnTo");
+            if (returnTo == null || !DIFF_RETURN_PATH.matcher(returnTo).matches()) {
+                response.status(400);
+                return "Invalid return path.";
+            }
+
+            String generatorId = request.queryParams("generator");
+            if (generatorId != null && !generatorId.isEmpty()
+                    && TreeGenerators.getInstance().findById(generatorId) == null) {
+                response.status(400);
+                return "Unknown tree generator: " + generatorId;
+            }
+
+            selectedGeneratorId = generatorId == null || generatorId.isEmpty() ? null : generatorId;
+            response.redirect(returnTo);
+            return "";
+        });
         get("/quit", (request, response) -> {
             System.exit(0);
             return "";
         });
+    }
+
+    private Diff getWebDiff(String src, String dst, String matcherId, String generatorId) throws IOException {
+        if (generatorId != null)
+            return Diff.compute(src, dst, generatorId, matcherId, opts.properties);
+        if (opts.command != null)
+            return Diff.computeWithCommand(src, dst, opts.command, matcherId, opts.properties);
+        return Diff.compute(src, dst, null, matcherId, opts.properties);
     }
 
     private static String readFile(String path, Charset encoding)  throws IOException {

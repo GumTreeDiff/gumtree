@@ -38,11 +38,16 @@ public class TextDiffView {
 
     public static HtmlTag build(File srcFile, File dstFile, Diff diff,
                                 String selectedMatcherId, int id) throws IOException {
+        return build(srcFile, dstFile, diff, selectedMatcherId, null, id);
+    }
+
+    public static HtmlTag build(File srcFile, File dstFile, Diff diff,
+                                String selectedMatcherId, String selectedGeneratorId, int id) throws IOException {
         return html(
             Header.build(),
             body(
                 div(
-                    div(MenuBar.build(selectedMatcherId, id)).withClass("row"),
+                    div(MenuBar.build(selectedMatcherId, selectedGeneratorId, id)).withClass("row"),
                     div(
                         div(
                             h3(
@@ -74,10 +79,11 @@ public class TextDiffView {
 
     private static class MenuBar  {
 
-        public static Tag build(String selectedMatcherId, int id) {
-            return div(
+        public static Tag build(String selectedMatcherId, String selectedGeneratorId, int id) {
+            return             div(
                 div(
-                    iff(id >= 0, MatcherSelector.build(selectedMatcherId, "/raw-diff/" + id)),
+                iff(id >= 0, MatcherSelector.build(selectedMatcherId, "/raw-diff/" + id)),
+                iff(id >= 0, GeneratorSelector.build(selectedGeneratorId, "/raw-diff/" + id)),
                     div(
                         a("Back").withHref("/list").withClasses("btn btn-default", "btn-sm btn-primary"),
                         a("Quit").withHref("/quit").withClasses("btn btn-default", "btn-sm btn-danger")
