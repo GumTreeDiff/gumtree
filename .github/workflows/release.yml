@@ -85,7 +85,7 @@ jobs:
         with:
           show-progress: ''
       - name: Download distribution
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: gumtree-dist
           path: dist/build/distributions
