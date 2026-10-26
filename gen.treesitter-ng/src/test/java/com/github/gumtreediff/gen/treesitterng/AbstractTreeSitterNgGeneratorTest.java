@@ -75,6 +75,85 @@ public class AbstractTreeSitterNgGeneratorTest {
     }
 
     @Test
+    public void testMultiByteOffsetOnSameLine() throws IOException {
+        // 'é' is 2 UTF-8 bytes but 1 char, so y is at char offset 9 (byte offset 10)
+        String content = "s = \"é\"; y = 1";
+        TreeContext ctx = generator.generateFrom().string(content);
+        assertSourceRanges(content, ctx.getRoot());
+        Tree y = findFirst(ctx.getRoot(), "identifier", "y");
+        assertNotNull(y);
+        assertEquals(9, y.getPos());
+        assertEquals(content.length(), ctx.getRoot().getEndPos());
+    }
+
+    @Test
+    public void testSurrogatePairOffsetOnSameLine() throws IOException {
+        // '🐍' is 4 UTF-8 bytes but 2 chars
+        String content = "s = \"🐍\"; y = 1";
+        TreeContext ctx = generator.generateFrom().string(content);
+        assertSourceRanges(content, ctx.getRoot());
+        assertEquals(10, findFirst(ctx.getRoot(), "identifier", "y").getPos());
+    }
+
+    @Test
+    public void testMultiLineLabel() throws IOException {
+        String content = "def f():\n    x = \"\"\"first\n    second\"\"\"\n";
+        TreeContext ctx = generator.generateFrom().string(content);
+        assertSourceRanges(content, ctx.getRoot());
+        Tree string = findFirst(ctx.getRoot(), "string", null);
+        assertNotNull(string);
+        assertEquals("\"\"\"first\n    second\"\"\"", string.getLabel());
+    }
+
+    @Test
+    public void testMultiLineLabelCrlf() throws IOException {
+        String content = "def f():\r\n    x = \"\"\"é\r\n    second\"\"\"\r\n";
+        TreeContext ctx = generator.generateFrom().string(content);
+        assertSourceRanges(content, ctx.getRoot());
+        assertEquals("\"\"\"é\r\n    second\"\"\"", findFirst(ctx.getRoot(), "string", null).getLabel());
+    }
+
+    @Test
+    public void testByteOrderMark() throws IOException {
+        // tree-sitter-ng TSParser.parseString drops U+FEFF, which shifted all the following nodes
+        String content = "﻿x = 1\ny = 2";
+        TreeContext ctx = generator.generateFrom().string(content);
+        assertSourceRanges(content, ctx.getRoot());
+        assertEquals(1, findFirst(ctx.getRoot(), "identifier", "x").getPos());
+        assertEquals(7, findFirst(ctx.getRoot(), "identifier", "y").getPos());
+    }
+
+    @Test
+    public void testFlattenedAndAncestorRules() throws IOException {
+        // rules.yml flattens python strings, and ignores parentheses, commas and "default_parameter ="
+        String content = "def g(a=1):\n    print(f\"a {b} c\", 'é')\n";
+        TreeContext ctx = generator.generateFrom().string(content);
+        assertSourceRanges(content, ctx.getRoot());
+        Tree string = findFirst(ctx.getRoot(), "string", null);
+        assertEquals("f\"a {b} c\"", string.getLabel());
+        assertTrue(string.isLeaf());
+        assertNull(findFirst(ctx.getRoot(), "(", null));
+        assertNull(findFirst(ctx.getRoot(), ",", null));
+        Tree defaultParameter = findFirst(ctx.getRoot(), "default_parameter", null);
+        assertEquals(2, defaultParameter.getChildren().size());
+    }
+
+    private static void assertSourceRanges(String content, Tree root) {
+        for (Tree t : root.preOrder()) {
+            assertTrue(t.getPos() >= 0 && t.getEndPos() <= content.length(), t.toString());
+            if (t.isLeaf() && !t.getLabel().isEmpty())
+                assertEquals(content.substring(t.getPos(), t.getEndPos()), t.getLabel(), t.toString());
+        }
+    }
+
+    private static Tree findFirst(Tree root, String type, String label) {
+        for (Tree t : root.preOrder())
+            if (t.getType().name.equals(type) && (label == null || label.equals(t.getLabel())))
+                return t;
+        return null;
+    }
+
+    @Test
     public void testMatchNodeOrAncestorTypes() {
         MockTypeOnlyTreeSitterNode root = new MockTypeOnlyTreeSitterNode();
         root.setType("root");

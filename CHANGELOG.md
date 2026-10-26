@@ -5,6 +5,7 @@
 * Add a Kotlin PSI-based tree generator alongside the Kotlin tree-sitter generator
 * Fix plugin discovery and restore the JSON generator in the CLI distribution
 * Make DOT diff labels configurable and preserve their original content
+* Tree-sitter generators are 2–10× faster, label multi-line nodes with their source text, and compute correct offsets after non-ASCII characters and byte order marks
 
 ## v4.1.0
 * Registries discover annotated matchers, generators, and clients when first accessed
