@@ -1,6 +1,7 @@
 # Changelog of GumTree
 
 ## Unreleased
+* Add an Eclipse CDT-based generator for C and C++ code
 * Webdiff matcher and tree generator selection is available only on GumTree diff views
 * Add a Kotlin PSI-based tree generator alongside the Kotlin tree-sitter generator
 * Fix plugin discovery and restore the JSON generator in the CLI distribution

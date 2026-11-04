@@ -10,6 +10,7 @@ dependencies {
     implementation project(':core')
     implementation project(':client')
     implementation project(':client.diff')
+    implementation project(':gen.cdt')
     implementation project(':gen.css')
     implementation project(':gen.javaparser')
     implementation project(':gen.jdt')
@@ -26,6 +27,7 @@ shadowJar {
     archiveBaseName.set('gumtree')
     archiveClassifier.set('')
     archiveVersion.set('')
+    zip64 = true
 
     // Do NOT use DuplicatesStrategy.EXCLUDE here: it makes shadow drop the
     // service-file transformer's merged output in favor of the first plain
@@ -137,6 +139,8 @@ def verifyShadowJar = tasks.register('verifyShadowJar') {
         // One representative generator per module included in the distribution.
         def generatorIndex = service('com.github.gumtreediff.gen.TreeGenerator')
         ['com.github.gumtreediff.gen.css.CssTreeGenerator',
+         'com.github.gumtreediff.gen.cdt.CCdtTreeGenerator',
+         'com.github.gumtreediff.gen.cdt.CppCdtTreeGenerator',
          'com.github.gumtreediff.gen.javaparser.JavaParserGenerator',
          'com.github.gumtreediff.gen.jdt.JdtTreeGenerator',
          'com.github.gumtreediff.gen.json.JsonTreeGenerator',
