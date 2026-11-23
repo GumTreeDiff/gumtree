@@ -7,6 +7,6 @@ description = 'GumTree tree generator for C and C++ code (Eclipse CDT based).'
 
 dependencies {
     implementation project(':core')
-    implementation 'io.joern:eclipse-cdt-core:8.4.0.202401242025_1'
+    implementation 'io.joern:eclipse-cdt-core:8.5.0.202410191453'
     implementation 'org.eclipse.platform:org.eclipse.core.runtime:3.35.0'
 }
